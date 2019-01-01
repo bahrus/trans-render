@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <template id="test">
+            <detail>
+                <summary></summary>
+            </detail>
+            <script transform>
+            ({
+                'detail': ctx => {
+                    ctx.matchChildren = true;
+                },
+                'summary': ctx => {
+                    ctx.leaf.textContent = ctx.input.summaryText
+                },
+            })
+            </script>
+        </template>
+        <div id="target">
+
+        </div>
+        <script type="module">
+            import {render} from '../trans-render.js';
+            const ctx = {
+                input:{
+                    summaryText: 'hello'
+                }
+            };
+            render(test, ctx);
+            target.appendChild(ctx.template);
+        </script>
+    </div>
+
+</body>
+</html>
