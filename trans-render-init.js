@@ -62,4 +62,4 @@ function process(context) {
         }
     }
 }
-//# sourceMappingURL=trans-render-api.js.map
+//# sourceMappingURL=trans-render-init.js.map
