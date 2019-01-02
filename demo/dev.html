@@ -14,11 +14,11 @@
             </detail>
             <script transform>
             ({
-                'detail': ctx => {
-                    ctx.matchChildren = true;
+                'detail': t => {
+                    t.ctx.matchChildren = true;
                 },
-                'summary': ctx => {
-                    ctx.leaf.textContent = ctx.input.summaryText
+                'summary': t => {
+                    t.target.textContent = t.ctx.model.summaryText
                 },
             })
             </script>
@@ -29,7 +29,7 @@
         <script type="module">
             import {render} from '../trans-render.js';
             const ctx = {
-                input:{
+                model:{
                     summaryText: 'hello'
                 }
             };

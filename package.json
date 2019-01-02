@@ -6,6 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "devDependencies": {
+    "jiife":"0.0.11"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bahrus/trans-render.git"

@@ -10,17 +10,19 @@ export function render(template, ctx) {
     const children = clonedTemplate.children;
     for (let i = 0, ii = children.length; i < ii; i++) {
         const child = children[i];
+        const base = {
+            model: ctx.model,
+            leaf: child,
+        };
+        Object.assign(ctx, base);
         ctx.level = 0;
-        ctx.stack = [];
-        ctx.leaf = child;
-        process(ctx.leaf, ctx);
+        ctx.stack = [base];
+        process(ctx);
     }
-    clonedTemplate.childNodes.forEach(node => {
-        process(ctx.leaf, ctx);
-    });
     return ctx;
 }
-function process(target, context) {
+function process(context) {
+    const target = context.leaf;
     if (target.matches === undefined)
         return;
     const transform = context.transform;
@@ -31,25 +33,29 @@ function process(target, context) {
             const transformTemplate = transform[selector];
             context.matchChildren = false;
             //context.template = target;
-            transformTemplate(context);
+            transformTemplate({
+                target: target,
+                ctx: context
+            });
             if (context.matchChildren && childCount > 0) {
                 context.level++;
-                const s = context.stack;
-                s.push(target);
-                context.leaf = target;
+                //const s = context.stack;
+                //s.push(target);
+                //context.leaf = target;
                 for (let i = 0; i < childCount; i++) {
                     const child = children[i];
                     //const s = context.stack;
                     //s.push(child);
                     //context.level++;
-                    //context.leaf = child;
-                    process(child, context);
-                    s.pop();
-                    context.level;
+                    context.leaf = child;
+                    process(context);
+                    context.leaf = target;
+                    //s.pop();
+                    //context.level
                 }
-                s.pop();
+                //s.pop();               
                 context.level--;
-                context.leaf = s.length > 0 ? s[s.length - 1] : null;
+                //context.leaf = s.length > 0 ? s[s.length -1] : null;
             }
         }
     }
