@@ -14,11 +14,11 @@
             </detail>
             <script transform>
             ({
-                'detail': t => {
-                    t.ctx.matchChildren = true;
+                'detail': i => {
+                    i.ctx.matchChildren = true;
                 },
-                'summary': t => {
-                    t.target.textContent = t.ctx.model.summaryText
+                'summary': i => {
+                    i.target.textContent = i.ctx.model.summaryText;
                 },
             })
             </script>
