@@ -1,11 +1,13 @@
 export function render(template, ctx) {
+    const transformScriptSelector = 'script[transform]';
     const clonedTemplate = template.content.cloneNode(true);
     ctx.template = clonedTemplate;
     if (!ctx.transform) {
-        const scriptTransform = clonedTemplate.querySelector('script[transform]');
+        const scriptTransform = clonedTemplate.querySelector(transformScriptSelector);
         if (scriptTransform === null)
             throw "Transform Required";
         ctx.transform = eval(scriptTransform.innerHTML);
+        scriptTransform.remove();
     }
     const children = clonedTemplate.children;
     for (let i = 0, ii = children.length; i < ii; i++) {
