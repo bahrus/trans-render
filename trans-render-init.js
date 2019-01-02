@@ -1,4 +1,4 @@
-export function render(template, ctx) {
+export function init(template, ctx) {
     const transformScriptSelector = 'script[transform]';
     const clonedTemplate = template.content.cloneNode(true);
     ctx.template = clonedTemplate;

@@ -27,13 +27,13 @@
 
         </div>
         <script type="module">
-            import {render} from '../trans-render-init.js';
+            import {init} from '../trans-render-init.js';
             const ctx = {
                 model:{
                     summaryText: 'hello'
                 }
             };
-            render(test, ctx);
+            init(test, ctx);
             target.appendChild(ctx.template);
         </script>
     </div>
