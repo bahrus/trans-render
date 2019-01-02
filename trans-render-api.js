@@ -60,4 +60,4 @@ function process(context) {
         }
     }
 }
-//# sourceMappingURL=trans-render.js.map
+//# sourceMappingURL=trans-render-api.js.map
