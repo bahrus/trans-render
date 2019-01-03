@@ -15,7 +15,7 @@ export interface IContext extends IBaseContext{
     level: number,
 }
 
-export function init(template: HTMLTemplateElement, ctx: IContext){
+export function init(template: HTMLTemplateElement, ctx: IContext, target: HTMLElement){
     const transformScriptSelector = 'script[transform]';
     const clonedTemplate = template.content.cloneNode(true) as DocumentFragment;
     ctx.template = clonedTemplate;
@@ -37,7 +37,7 @@ export function init(template: HTMLTemplateElement, ctx: IContext){
         ctx.stack = [base];
         process(ctx);
     }
-
+    target.appendChild(ctx.template);
 
     return ctx;
 }

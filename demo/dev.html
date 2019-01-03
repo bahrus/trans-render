@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
+
 <body>
     <div>
         <template id="test">
@@ -13,30 +15,115 @@
                 <summary></summary>
             </detail>
             <script transform>
-            ({
-                'detail': i => {
-                    i.ctx.matchChildren = true;
-                },
-                'summary': i => {
-                    i.target.textContent = i.ctx.model.summaryText;
-                },
-            })
+                ({
+                    'detail': i => {
+                        i.ctx.matchChildren = true;
+                    },
+                    'summary': i => {
+                        i.target.textContent = i.ctx.model.summaryText;
+                    },
+                })
             </script>
         </template>
         <div id="target">
 
         </div>
         <script type="module">
-            import {init} from '../trans-render-init.js';
+            import { init } from '../trans-render-init.js';
             const ctx = {
-                model:{
+                model: {
                     summaryText: 'hello'
                 }
             };
-            init(test, ctx);
-            target.appendChild(ctx.template);
+            init(test, ctx, target);
+            //target.appendChild(ctx.template);
         </script>
     </div>
+    
+    <template id="F">
+        It's Friday I'm in love
+    </template>
+    <template id="M-F">
+        <div jsname="U8S5sf" class="UH8R2">
+            <span jsname="YS01Ge M">I don't care if Monday's blue</span><br>
+            <span jsname="YS01Ge TueW">Tuesday's gray and Wednesday too</span><br>
+            <span jsname="YS01Ge Th">Thursday I don't care about you</span><br>
+            <span jsname="YS01Ge F"></span>
+        </div>
+        <script transform>
+                ({
+                    '.F': i => {
+                        i.ctx.matchChildren = true;
+                    },
+                    'summary': i => {
+                        i.target.textContent = i.ctx.model.summaryText;
+                    },
+                })
+            </script>
+    </template>
 
+        <div jsname="U8S5sf" class="UH8R2">
+            <span jsname="YS01Ge">I don't care if Monday's blue</span><br>
+            <span jsname="YS01Ge">Tuesday's gray and Wednesday too</span><br>
+            <span jsname="YS01Ge">Thursday I don't care about you</span><br>
+            <span jsname="YS01Ge">It's Friday I'm in love</span>
+        </div>
+        <div jsname="U8S5sf" class="UH8R2">
+            <span jsname="YS01Ge">Monday you can fall apart</span><br>
+            <span jsname="YS01Ge">Tuesday Wednesday break my heart</span><br>
+            <span jsname="YS01Ge">Oh, Thursday doesn't even start</span><br>
+            <span jsname="YS01Ge">It's Friday I'm in love</span>
+        </div>
+        <div jsname="U8S5sf" class="UH8R2">
+            <span jsname="YS01Ge">Saturday wait</span><br>
+            <span jsname="YS01Ge">And Sunday always comes too late</span><br>
+            <span jsname="YS01Ge">But Friday never hesitate</span>
+        </div>
+        <div jsname="U8S5sf" class="UH8R2">
+            <span jsname="YS01Ge">I don't care if Monday's black</span><br>
+            <span jsname="YS01Ge">Tuesday, Wednesday heart attack</span><br>
+            <span jsname="YS01Ge">Thursday never looking back</span><br>
+            <span jsname="YS01Ge">It's Friday I'm in love</span>
+        </div>
+        <div jsname="U8S5sf" class="UH8R2">
+            <span jsname="YS01Ge">Monday you can hold your head</span><br>
+            <span jsname="YS01Ge">Tuesday, Wednesday stay in bed</span><br>
+            <span jsname="YS01Ge">Or Thursday watch the walls instead</span><br>
+            <span jsname="YS01Ge">It's Friday I'm in love</span>
+        </div>
+        <div jsname="U8S5sf" class="UH8R2">
+            <span jsname="YS01Ge">Saturday wait</span><br>
+            <span jsname="YS01Ge">And Sunday always comes too late</span><br>
+            <span jsname="YS01Ge">But Friday never hesitate</span>
+        </div>
+        <div jsname="U8S5sf" class="UH8R2">
+            <span jsname="YS01Ge">Dressed up to the eyes</span><br>
+            <span jsname="YS01Ge">It's a wonderful surprise</span><br>
+            <span jsname="YS01Ge">To see your shoes and your spirits rise</span><br>
+            <span jsname="YS01Ge">Throwing out your frown</span><br>
+            <span jsname="YS01Ge">And just smiling at the sound</span><br>
+            <span jsname="YS01Ge">And as sleek as a shriek</span><br>
+            <span jsname="YS01Ge">Spinning round and round</span><br>
+            <span jsname="YS01Ge">Always take a big bite</span><br>
+            <span jsname="YS01Ge">It's such a gorgeous sight</span><br>
+            <span jsname="YS01Ge">To see you in the middle of the night</span><br>
+            <span jsname="YS01Ge">You can never get enough</span><br>
+            <span jsname="YS01Ge">Enough of this stuff</span><br>
+            <span jsname="YS01Ge">It's Friday</span><br>
+            <span jsname="YS01Ge">I'm in love</span>
+        </div>
+        <div jsname="U8S5sf" class="UH8R2">
+            <span jsname="YS01Ge">I don't care if Monday's blue</span><br>
+            <span jsname="YS01Ge">Tuesday's gray and Wednesday too</span><br>
+            <span jsname="YS01Ge">Thursday I don't care about you</span><br>
+            <span jsname="YS01Ge">It's Friday I'm in love</span>
+        </div>
+        <div jsname="U8S5sf" class="UH8R2">
+            <span jsname="YS01Ge">Monday you can fall apart</span><br>
+            <span jsname="YS01Ge">Tuesday, Wednesday break my heart</span><br>
+            <span jsname="YS01Ge">Thursday doesn't even start</span><br>
+            <span jsname="YS01Ge">It's Friday I'm in love</span>
+        </div>
 </body>
+
 </html>

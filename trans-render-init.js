@@ -1,4 +1,4 @@
-export function init(template, ctx) {
+export function init(template, ctx, target) {
     const transformScriptSelector = 'script[transform]';
     const clonedTemplate = template.content.cloneNode(true);
     ctx.template = clonedTemplate;
@@ -21,6 +21,7 @@ export function init(template, ctx) {
         ctx.stack = [base];
         process(ctx);
     }
+    target.appendChild(ctx.template);
     return ctx;
 }
 function process(context) {
