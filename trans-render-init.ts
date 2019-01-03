@@ -10,10 +10,11 @@ export interface IBaseContext {
 export interface IContext extends IBaseContext{
     init: (template: HTMLTemplateElement, ctx: IContext, target: HTMLElement) => void,
     transform : {[key: string] : (arg: ITransformArg) => void },
-    stack: any[],
-    matchChildren: boolean,
+    //stack: any[],
+    matchFirstChild: boolean,
+    matchNextSib: boolean,
     template: DocumentFragment,
-    level: number,
+    //level: number,
 }
 
 export function init(template: HTMLTemplateElement, ctx: IContext, target: HTMLElement){
@@ -30,18 +31,17 @@ export function init(template: HTMLTemplateElement, ctx: IContext, target: HTMLE
 
     }
     if(ctx.transform){
-        const children = clonedTemplate.children;
-        for(let i = 0, ii = children.length; i < ii; i++){
-            const child = children[i];
+        const firstChild = clonedTemplate.firstElementChild;
+        if(firstChild !== null){
             const base = {
-                model: ctx.model,
-                leaf: child,
+                leaf: firstChild
             } as IBaseContext;
             Object.assign(ctx, base);
-            ctx.level = 0;
-            ctx.stack = [base];
+            //ctx.level = 0;
+            //ctx.stack = [base];
             process(ctx);
         }
+
     }
 
     target.appendChild(ctx.template);
@@ -53,40 +53,40 @@ function process(context: IContext){
     const target = context.leaf;
     if(target.matches === undefined) return;
     const transform = context.transform;
-
-    const children = target.children;
-    const childCount = children.length;
+    //const children = target.children;
+    //const childCount = children.length;
+    context.matchFirstChild = false;
+    context.matchNextSib = false;
+    
     for(const selector in transform){
         if(target.matches(selector)){
             const transformTemplate = transform[selector];
-            context.matchChildren = false;
+
             //context.template = target;
             transformTemplate({
                 target: target, 
                 ctx: context
             });
-            if(context.matchChildren && childCount > 0){
-                context.level++;
-                //const s = context.stack;
 
-                //s.push(target);
-                //context.leaf = target;
-                for(let i = 0; i <childCount; i++){
-                    const child = children[i];
-                    //const s = context.stack;
-                    //s.push(child);
-                    //context.level++;
-                    
-                    context.leaf = child;
-                    process(context);
-                    context.leaf = target;
-                    //s.pop();
-                    //context.level
-                } 
-                //s.pop();               
-                context.level--;
-                //context.leaf = s.length > 0 ? s[s.length -1] : null;
-            }
         }
     }
+    const matchNextSib = context.matchNextSib;
+    const matchFirstChild = context.matchFirstChild;
+    if(matchNextSib){
+        const nextSib = target.nextElementSibling;
+        if(nextSib !== null){
+            context.leaf = nextSib;
+            process(context);
+        }
+    }
+    if(matchFirstChild ){
+        const firstChild = target.firstElementChild;
+        if(firstChild !== null){
+            context.leaf = firstChild;
+            process(context);
+        }
+
+    }
+    context.matchFirstChild = matchFirstChild;
+    context.matchNextSib = matchNextSib;
 }

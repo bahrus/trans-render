@@ -17,7 +17,7 @@
             <script transform>
                 ({
                     'detail': i => {
-                        i.ctx.matchChildren = true;
+                        i.ctx.matchFirstChild = true;
                     },
                     'summary': i => {
                         i.target.textContent = i.ctx.model.summaryText;
@@ -44,18 +44,27 @@
     </template>
     <template id="MF">
         <div jsname="U8S5sf" class="UH8R2">
-            <span jsname="YS01Ge" class="M">I don't care if Monday's blue</span><br>
-            <span jsname="YS01Ge" class="TueW">Tuesday's gray and Wednesday too</span><br>
-            <span jsname="YS01Ge" class="Th">Thursday I don't care about you</span><br>
+            <span jsname="YS01Ge">I don't care if {Day1} blue</span><br>
+            <span jsname="YS01Ge">{Day2}'s gray and {Day3} too</span><br>
+            <span jsname="YS01Ge">{Day4} I don't care about you</span><br>
             <span jsname="YS01Ge" class="F"></span>
         </div>
         <script transform>
                 ({
                     '.F': i => {
+                        console.log(i);
                         i.ctx.init(F, {}, i.target);
                     },
                     'div': i => {
-                        i.ctx.matchChildren = true;
+                        console.log(i);
+                        i.ctx.matchFirstChild = true;
+                    },
+                    'span':i =>{
+                        console.log(i);
+                        i.ctx.matchNextSib = true;
+                    },
+                    'br': i =>{
+                        i.ctx.matchNextSib = true;
                     }
                 })
             </script>
@@ -65,7 +74,6 @@
     </div>
     <script type="module">
             import { init } from '../trans-render-init.js';
-            
             init(MF, {}, target2);
         </script>
     <template>
