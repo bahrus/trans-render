@@ -44,23 +44,21 @@
     </template>
     <template id="MF">
         <div jsname="U8S5sf" class="UH8R2">
-            <span jsname="YS01Ge">I don't care if {Day1} blue</span><br>
-            <span jsname="YS01Ge">{Day2}'s gray and {Day3} too</span><br>
-            <span jsname="YS01Ge">{Day4} I don't care about you</span><br>
+            <span jsname="YS01Ge">I don't care if |.Day1|'s blue</span><br>
+            <span jsname="YS01Ge">|.Day2|'s gray and |.Day3| too</span><br>
+            <span jsname="YS01Ge">|.Day4| I don't care about you</span><br>
             <span jsname="YS01Ge" class="F"></span>
         </div>
         <script transform>
                 ({
                     '.F': i => {
-                        console.log(i);
                         i.ctx.init(F, {}, i.target);
                     },
                     'div': i => {
-                        console.log(i);
                         i.ctx.matchFirstChild = true;
                     },
                     'span':i =>{
-                        console.log(i);
+                        i.ctx.leaf.textContent = i.ctx.interpolate(i.ctx.leaf.innerText, i.ctx);
                         i.ctx.matchNextSib = true;
                     },
                     'br': i =>{
@@ -74,7 +72,8 @@
     </div>
     <script type="module">
             import { init } from '../trans-render-init.js';
-            init(MF, {}, target2);
+            import {interpolate} from '../string-interpolate.js';
+            init(MF, {Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', interpolate: interpolate}, target2);
         </script>
     <template>
         <div jsname="U8S5sf" class="UH8R2">
