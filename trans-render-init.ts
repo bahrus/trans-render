@@ -8,6 +8,7 @@ export interface IBaseContext {
     leaf: Element,
 }
 export interface IContext extends IBaseContext{
+    init: (template: HTMLTemplateElement, ctx: IContext, target: HTMLElement) => void,
     transform : {[key: string] : (arg: ITransformArg) => void },
     stack: any[],
     matchChildren: boolean,
@@ -16,27 +17,33 @@ export interface IContext extends IBaseContext{
 }
 
 export function init(template: HTMLTemplateElement, ctx: IContext, target: HTMLElement){
+    ctx.init = init;
     const transformScriptSelector = 'script[transform]';
     const clonedTemplate = template.content.cloneNode(true) as DocumentFragment;
     ctx.template = clonedTemplate;
     if(!ctx.transform){
         const scriptTransform = clonedTemplate.querySelector(transformScriptSelector);
-        if(scriptTransform === null) throw "Transform Required";
-        ctx.transform = eval(scriptTransform.innerHTML);
-        scriptTransform.remove();
+        if(scriptTransform !== null){
+            ctx.transform = eval(scriptTransform.innerHTML);
+            scriptTransform.remove();
+        }
+
     }
-    const children = clonedTemplate.children;
-    for(let i = 0, ii = children.length; i < ii; i++){
-        const child = children[i];
-        const base = {
-            model: ctx.model,
-            leaf: child,
-        } as IBaseContext;
-        Object.assign(ctx, base);
-        ctx.level = 0;
-        ctx.stack = [base];
-        process(ctx);
+    if(ctx.transform){
+        const children = clonedTemplate.children;
+        for(let i = 0, ii = children.length; i < ii; i++){
+            const child = children[i];
+            const base = {
+                model: ctx.model,
+                leaf: child,
+            } as IBaseContext;
+            Object.assign(ctx, base);
+            ctx.level = 0;
+            ctx.stack = [base];
+            process(ctx);
+        }
     }
+
     target.appendChild(ctx.template);
 
     return ctx;
