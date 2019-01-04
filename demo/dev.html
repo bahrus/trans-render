@@ -16,9 +16,9 @@
             </detail>
             <script transform>
                 ({
-                    'detail': i => {
+                    '*': i => {
                         i.ctx.matchFirstChild = {
-                            'summary': i => {
+                            '*': i => {
                                 i.target.textContent = i.ctx.model.summaryText;
                             },
                         };
