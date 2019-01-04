@@ -17,11 +17,13 @@
             <script transform>
                 ({
                     'detail': i => {
-                        i.ctx.matchFirstChild = true;
+                        i.ctx.matchFirstChild = {
+                            'summary': i => {
+                                i.target.textContent = i.ctx.model.summaryText;
+                            },
+                        };
                     },
-                    'summary': i => {
-                        i.target.textContent = i.ctx.model.summaryText;
-                    },
+
                 })
             </script>
         </template>

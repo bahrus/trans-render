@@ -1,4 +1,5 @@
 
+type TransformRules = {[key: string] : (arg: ITransformArg) => void };
 export interface ITransformArg {
     target: Element,
     ctx: IContext,
@@ -9,10 +10,10 @@ export interface IBaseContext {
 }
 export interface IContext extends IBaseContext{
     init: (template: HTMLTemplateElement, ctx: IContext, target: HTMLElement) => void,
-    transform : {[key: string] : (arg: ITransformArg) => void },
+    transform : TransformRules,
     //stack: any[],
-    matchFirstChild: boolean,
-    matchNextSib: boolean,
+    matchFirstChild: boolean | TransformRules,
+    matchNextSib: boolean | TransformRules,
     template: DocumentFragment,
     //level: number,
 }
@@ -73,19 +74,28 @@ function process(context: IContext){
     const matchNextSib = context.matchNextSib;
     const matchFirstChild = context.matchFirstChild;
     if(matchNextSib){
+        let transform = context.transform;
+        if(typeof(matchNextSib) === 'object'){
+            context.transform = matchNextSib;
+        }
         const nextSib = target.nextElementSibling;
         if(nextSib !== null){
             context.leaf = nextSib;
             process(context);
         }
+        context.transform = transform;
     }
     if(matchFirstChild ){
+        let transform = context.transform;
+        if(typeof(matchFirstChild) === 'object'){
+            context.transform = matchFirstChild;
+        }
         const firstChild = target.firstElementChild;
         if(firstChild !== null){
             context.leaf = firstChild;
             process(context);
         }
-
+        context.transform = transform;
     }
     context.matchFirstChild = matchFirstChild;
     context.matchNextSib = matchNextSib;
