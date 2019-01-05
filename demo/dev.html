@@ -118,9 +118,8 @@
                         i.ctx.matchFirstChild = {
                             'span': i => {
                                 i.ctx.leaf.textContent = i.ctx.interpolate(i.ctx.leaf.innerText, i.ctx);
-                                i.ctx.matchNextSib = true;
                             },
-                            'br': i => {
+                            '*': i => {
                                 i.ctx.matchNextSib = true;
                             }
                         };
