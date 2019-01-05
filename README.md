@@ -127,10 +127,7 @@ Produces
                         i.ctx.init(Opening, Object.assign({}, i.ctx), i.ctx.leaf);
                         i.ctx.matchFirstChild = true;
                     },
-                    '.Friday': i => {
-                        i.ctx.init(Friday, {}, i.ctx.leaf);
 
-                    },
                     'div': i => {
                         i.ctx.matchFirstChild = {
                             'span': i => {
@@ -138,7 +135,10 @@ Produces
                             },
                             '*': i => {
                                 i.ctx.matchNextSib = true;
-                            }
+                            },
+                            '.Friday': i => {
+                                i.ctx.init(Friday, {}, i.ctx.leaf);
+                            },
                         };
                         i.ctx.matchNextSib = true;
                     },
