@@ -27,9 +27,7 @@
                 })
             </script>
         </template>
-        <div id="target">
-
-        </div>
+        <div id="target"></div>
         <script type="module">
             import { init } from '../trans-render-init.js';
             const ctx = {
@@ -105,10 +103,8 @@
             <script transform>
                 ({
                     '.opening': i => {
-                        //debugger;
                         i.ctx.init(Opening, Object.assign({}, i.ctx), i.ctx.leaf);
                         i.ctx.matchFirstChild = true;
-                        //i.ctx.matchNextSib = true;
                     },
                     '.Friday': i => {
                         i.ctx.init(Friday, {}, i.ctx.leaf);
@@ -130,9 +126,7 @@
                 })
             </script>
         </template>
-        <div id="target2">
-
-        </div>
+        <div id="target2"></div>
         <script type="module">
             import { init } from '../trans-render-init.js';
             import { interpolate } from '../string-interpolate.js';
