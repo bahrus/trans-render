@@ -129,9 +129,119 @@ These match statements can either be booleans, as illustrated above, or they can
 </script>
 ```
 
+# Use Case 1:  Applying the DRY principle to (post) punk rock lyrics
 
+## Example 1a (only viewable at [webcomponents.org](https://www.webcomponents.org/element/trans-render) )
 
-## Example 1 (only viewable at [webcomponents.org](https://www.webcomponents.org/element/trans-render) )
+<!--
+```
+<custom-element-demo>
+<template>
+    <div>
+        <template id="Title">Something's gone wrong again</template>
+        <template id="Title2">Something goes wrong again</template>
+        <template id="Again">And again</template>
+        <template id="Again2">And again, and again, again and something's gone wrong again</template>
+        <template id="Again3">And again, and again, again and something goes wrong again</template>
+        <template id="Main">
+            <div>
+                <span>Tried to find my sock</span><br>
+                <span>No good, it's lost</span><br>
+                <span data-init="Title"></span><br>
+                <span>Need a shave</span><br>
+                <span>Cut myself, need a new blade</span><br>
+                <span data-init="Title"></span>
+            </div>
+            <div>
+                <span data-init="Again"></span><br>
+                <span data-init="Again2"></span><br>
+                <span data-init="Title"></span>
+            </div>
+            <div>
+                <span>Tried to fry an egg</span><br>
+                <span>Broke the yolk, no joke</span><br>
+                <span data-init="Title"></span><br>
+                <span>Look at my watch, just to tell the time but the hand's come off mine</span><br>
+                <span data-init="Title"></span><br>
+                <span data-init="Title"></span>
+            </div>
+            <div>
+                <span data-init="Again"></span><br>
+                <span data-init="Again2"></span><br>
+                <span data-init="Title"></span>
+            </div>
+            <div>
+                <span>Nothing ever happens to people like us</span><br>
+                <span>'Cept we miss the bus, something goes wrong again</span><br>
+                <span>Need a smoke, use my last fifty P.</span><br>
+                <span>But the machine is broke, something's gone wrong again</span>
+            </div>
+            <div>
+                <span data-init="Title2"></span><br>
+                <span data-init="Again"></span><br>
+                <span data-init="Again3"></span><br>
+                <span data-init="Title2"></span>
+            </div>
+            <div>
+                <span data-init="Title2"></span><br>
+                <span data-init="Again"></span><br>
+                <span data-init="Again3"></span><br>
+                <span data-init="Title2"></span>
+            </div>
+            <div>
+                <span>Nothing ever happens to people like us</span><br>
+                <span>'Cept we miss the bus, something goes wrong again</span><br>
+                <span>Need a smoke, use my last fifty P.</span><br>
+                <span>But the machine is broke, something goes wrong again</span>
+            </div>
+            <div>
+                <span data-init="Title2"></span><br>
+                <span data-init="Again"></span><br>
+                <span data-init="Again3"></span><br>
+                <span data-init="Title2"></span>
+            </div>
+            <div>
+                <span>I turned up early in time for our date</span><br>
+                <span>But then you turn up late, something goes wrong again</span><br>
+                <span>Need a drink, go to the pub</span><br>
+                <span>But the bugger's shut, something goes wrong again</span>
+            </div>
+            <div>
+                <span data-init="Title2"></span><br>
+                <span data-init="Again"></span><br>
+                <span data-init="Again3"></span><br>
+                <span>Ah, something goes wrong again</span><br>
+                <span data-init="Title2"></span><br>
+                <span data-init="Title2"></span>
+            </div>
+            <style>
+                div{
+                    padding-top:20px;
+                }
+            </style>
+            <script transform>
+                ({
+                    '*':({ctx}) =>{
+                        ctx.matchNextSib = true;
+                        ctx.matchFirstChild = true;
+                    },
+                    '[data-init]': ({target, ctx}) =>{
+                        ctx.init(document.querySelector('#' + target.dataset.init), {}, target);
+                    }
+                })
+            </script>
+        </template>
+        <div id="target"></div>
+        <script type="module">
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.4/trans-render-init.js';
+            init(Main, {}, target);
+        </script>
+    </div>
+</template>
+</custom-element-demo>
+```
+
+## Example 1b (only viewable at [webcomponents.org](https://www.webcomponents.org/element/trans-render) )
 
 <!--
 ```
