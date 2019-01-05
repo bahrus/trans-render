@@ -102,24 +102,24 @@
         </style>
             <script transform>
                 ({
-                    '.opening': i => {
-                        i.ctx.init(Opening, Object.assign({}, i.ctx), i.ctx.leaf);
-                        i.ctx.matchFirstChild = true;
+                    '.opening': ({ctx}) => {
+                        ctx.init(Opening, Object.assign({}, ctx), ctx.leaf);
+                        ctx.matchFirstChild = true;
                     },
 
-                    'div': i => {
-                        i.ctx.matchFirstChild = {
-                            'span': i => {
-                                i.ctx.leaf.textContent = i.ctx.interpolate(i.ctx.leaf.innerText, i.ctx);
+                    'div': ({ctx}) => {
+                        ctx.matchFirstChild = {
+                            'span': ({ctx}) => {
+                                ctx.leaf.textContent = ctx.interpolate(ctx.leaf.innerText, ctx);
                             },
-                            '*': i => {
-                                i.ctx.matchNextSib = true;
+                            '*': ({ctx}) => {
+                                ctx.matchNextSib = true;
                             },
-                            '.Friday': i => {
-                                i.ctx.init(Friday, {}, i.ctx.leaf);
+                            '.Friday': ({ctx}) => {
+                                ctx.init(Friday, {}, ctx.leaf);
                             },
                         };
-                        i.ctx.matchNextSib = true;
+                        ctx.matchNextSib = true;
                     },
 
 

@@ -2,7 +2,8 @@
   "name": "trans-render",
   "version": "0.0.6",
   "description": "TBD",
-  "main": "trans-render.js",
+  "main": "trans-render-init.js",
+  "module": "trans-render-init.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
