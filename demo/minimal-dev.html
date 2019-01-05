@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <template id="test">
+            <detail>
+                <summary></summary>
+            </detail>
+            <script transform>
+            ({
+                '*': ({ ctx }) => {
+                    ctx.matchFirstChild = {
+                        '*': ({ target, ctx }) => {
+                            target.textContent = ctx.model.summaryText;
+                        },
+                    };
+                },
+
+            })
+            </script>
+        </template>
+        <div id="target"></div>
+        <script type="module">
+            import { init } from '../trans-render-init.js';
+            const ctx = {
+                model: {
+                    summaryText: 'hello'
+                }
+            };
+            init(test, ctx, target);
+        </script>
+    </div>
+</body>
+
+</html>

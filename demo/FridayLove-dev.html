@@ -10,35 +10,6 @@
 
 <body>
     <div>
-        <template id="test">
-            <detail>
-                <summary></summary>
-            </detail>
-            <script transform>
-                ({
-                    '*': ({ctx}) => {
-                        ctx.matchFirstChild = {
-                            '*': ({target, ctx}) => {
-                                target.textContent = ctx.model.summaryText;
-                            },
-                        };
-                    },
-
-                })
-            </script>
-        </template>
-        <div id="target"></div>
-        <script type="module">
-            import { init } from '../trans-render-init.js';
-            const ctx = {
-                model: {
-                    summaryText: 'hello'
-                }
-            };
-            init(test, ctx, target);
-        </script>
-
-
         <template id="Friday">
             It's Friday I'm in love
         </template>
@@ -127,7 +98,7 @@
                 })
             </script>
         </template>
-        <div id="target2"></div>
+        <div id="target"></div>
         <script type="module">
             import { init } from '../trans-render-init.js';
             import { interpolate } from '../string-interpolate.js';
@@ -135,7 +106,7 @@
                 Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
                 Day6: 'Saturday', Day7: 'Sunday',
                 interpolate: interpolate
-            }, target2);
+            }, target);
         </script>
     </div>
 </body>
