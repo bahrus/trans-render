@@ -10,7 +10,7 @@ trans-render provides an alternative way of instantiating a template.  It draws 
 
 XSLT can take pure XML with no formatting instructions as its input.  Generally, speaking, the XML that XSLT acts on isn't a bunch of meaningless div tag names, but rather a nice semantic document, whose intrinsic structure is enough to go on, in order to formulate a "transform" that doesn't feel like a hack.  
 
-Likewise, with the advent of custom elements, the template markup will tend to be much more semantic, like XML. trans-render tries to rely as much as possible on this intrinisic semantic nature of the template markup, to give enough clues on how to fill in the needed "potholes" like innerText's and property setting.  But trans-render is completely extensible, so it can certainly accomodate custom markup (like string interpolation, or common binding attributes) by using additional, optional helper libraries.  
+Likewise, with the advent of custom elements, the template markup will tend to be much more semantic, like XML. trans-render tries to rely as much as possible on this intrinisic semantic nature of the template markup, to give enough clues on how to fill in the needed "potholes" like innerText's and property setting.  But trans-render is completely extensible, so it can certainly accommodate custom markup (like string interpolation, or common binding attributes) by using additional, optional helper libraries.  
 
 This leaves the template markup quite pristine, but it does mean that the binding instructions will tend to require looking in two places, rather one.
 
