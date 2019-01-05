@@ -1,5 +1,6 @@
 # trans-render
 
+<img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/trans-render@0.0.5/dist/trans-render-init.iife.min.js?compression=gzip">
 
 trans-render provides an alternative way of instantiating a template.  It draws inspiration from the (least) popular features of xslt.  Like xslt, trans-render performs transforms on elements matching tests.
 
