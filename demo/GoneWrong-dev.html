@@ -10,6 +10,7 @@
 
 <body>
     <div>
+        <template id="Title">Something's gone wrong again</template>
         <template id="Main">
             <div>
                 <span>Tried to find my sock</span><br>
@@ -17,7 +18,7 @@
                 <span>Something's gone wrong again</span><br>
                 <span>Need a shave</span><br>
                 <span>Cut myself, need a new blade</span><br>
-                <span>Something's gone wrong again</span>
+                <span data-init="Title"></span>
             </div>
             <div>
                 <span>And again</span><br>
@@ -86,6 +87,17 @@
                     padding-top:20px;
                 }
             </style>
+            <script transform>
+                ({
+                    '*':({ctx}) =>{
+                        ctx.matchNextSib = true;
+                        ctx.matchFirstChild = true;
+                    },
+                    '[data-init]': ({target, ctx}) =>{
+                        ctx.init(Title, {}, target);
+                    }
+                })
+            </script>
         </template>
         <div id="target"></div>
         <script type="module">
