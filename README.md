@@ -52,6 +52,16 @@ One distinct advantage of separating the binding like this, is that one can plac
 </script>
 ```
 
+Produces
+
+```html
+<div id="target">
+    <detail>
+        <summary>hello</summary>
+    </detail>
+</div>
+```
+
 "ctx" stands for "context", a place to pass things throughout the processing process.  "target" is the HTML element we are populating.
 
 The transform script can also be nested, and it should be noted that the matches() function works with *.  So the transform above could be mofied to:
@@ -119,17 +129,9 @@ These match statements can either be booleans, as illustrated above, or they can
 </script>
 ```
 
-Produces
 
-```html
-<div id="target">
-    <detail>
-        <summary>hello</summary>
-    </detail>
-</div>
-```
 
-## Example 1
+## Example 1 (only viewable at [webcomponents.org](https://www.webcomponents.org/element/trans-render) )
 
 <!--
 ```
