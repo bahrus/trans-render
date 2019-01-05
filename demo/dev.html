@@ -50,7 +50,7 @@
             <span>|.Day4| I don't care about you</span><br>
             <span>It's Friday I'm in love</span>
         </template>
-        <template id="MF">
+        <template id="Main">
             <div class="UH8R2 opening"></div>
             <div class="UH8R2">
                 <span>|.Day6| wait</span><br>
@@ -115,16 +115,19 @@
 
                     },
                     'div': i => {
-                        i.ctx.matchFirstChild = true;
+                        i.ctx.matchFirstChild = {
+                            'span': i => {
+                                i.ctx.leaf.textContent = i.ctx.interpolate(i.ctx.leaf.innerText, i.ctx);
+                                i.ctx.matchNextSib = true;
+                            },
+                            'br': i => {
+                                i.ctx.matchNextSib = true;
+                            }
+                        };
                         i.ctx.matchNextSib = true;
                     },
-                    'span': i => {
-                        i.ctx.leaf.textContent = i.ctx.interpolate(i.ctx.leaf.innerText, i.ctx);
-                        i.ctx.matchNextSib = true;
-                    },
-                    'br': i => {
-                        i.ctx.matchNextSib = true;
-                    }
+
+
                 })
             </script>
         </template>
@@ -134,7 +137,7 @@
         <script type="module">
             import { init } from '../trans-render-init.js';
             import { interpolate } from '../string-interpolate.js';
-            init(MF, {
+            init(Main, {
                 Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
                 Day6: 'Saturday', Day7: 'Sunday',
                 interpolate: interpolate
