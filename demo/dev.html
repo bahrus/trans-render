@@ -16,10 +16,10 @@
             </detail>
             <script transform>
                 ({
-                    '*': i => {
-                        i.ctx.matchFirstChild = {
-                            '*': i => {
-                                i.target.textContent = i.ctx.model.summaryText;
+                    '*': ({ctx}) => {
+                        ctx.matchFirstChild = {
+                            '*': ({target, ctx}) => {
+                                target.textContent = ctx.model.summaryText;
                             },
                         };
                     },
@@ -43,34 +43,34 @@
             It's Friday I'm in love
         </template>
         <template id="Opening">
-            <span>I don't care if |.Day1|'s blue</span><br>
-            <span>|.Day2|'s gray and |.Day3| too</span><br>
-            <span>|.Day4| I don't care about you</span><br>
+            <span x-d>I don't care if |.Day1|'s blue</span><br>
+            <span x-d>|.Day2|'s gray and |.Day3| too</span><br>
+            <span x-d>|.Day4| I don't care about you</span><br>
             <span>It's Friday I'm in love</span>
         </template>
         <template id="Main">
             <div class="UH8R2 opening"></div>
             <div class="UH8R2">
-                <span>|.Day6| wait</span><br>
-                <span>And |.Day7| always comes too late</span><br>
-                <span>But |.Day5| never hesitate</span>
+                <span x-d>|.Day6| wait</span><br>
+                <span x-d>And |.Day7| always comes too late</span><br>
+                <span x-d>But |.Day5| never hesitate</span>
             </div>
             <div class="UH8R2">
-                <span>I don't care if |.Day1|'s black</span><br>
+                <span x-d>I don't care if |.Day1|'s black</span><br>
                 <span>Tuesday, Wednesday heart attack</span><br>
                 <span>Thursday never looking back</span><br>
                 <span class="Friday"></span>
             </div>
             <div class="UH8R2">
-                <span>|.Day1| you can hold your head</span><br>
-                <span>|.Day2|, |.Day3| stay in bed</span><br>
-                <span>Or |.Day4| watch the walls instead</span><br>
+                <span x-d>|.Day1| you can hold your head</span><br>
+                <span x-d>|.Day2|, |.Day3| stay in bed</span><br>
+                <span x-d>Or |.Day4| watch the walls instead</span><br>
                 <span class="Friday"></span>
             </div>
             <div class="UH8R2">
-                <span>|.Day6| wait</span><br>
-                <span>And |.Day7| always comes too late</span><br>
-                <span>But |.Day5| never hesitate</span>
+                <span x-d>|.Day6| wait</span><br>
+                <span x-d>And |.Day7| always comes too late</span><br>
+                <span x-d>But |.Day5| never hesitate</span>
             </div>
             <div class="UH8R2">
                 <span>Dressed up to the eyes</span><br>
@@ -85,14 +85,14 @@
                 <span>To see you in the middle of the night</span><br>
                 <span>You can never get enough</span><br>
                 <span>Enough of this stuff</span><br>
-                <span>It's |.Day5|</span><br>
+                <span x-d>It's |.Day5|</span><br>
                 <span>I'm in love</span>
             </div>
             <div class="UH8R2 opening"></div>
             <div class="UH8R2">
-                <span>|.Day1| you can fall apart</span><br>
-                <span>|.Day2|, |.Day3| break my heart</span><br>
-                <span>|.Day4| doesn't even start</span><br>
+                <span x-d>|.Day1| you can fall apart</span><br>
+                <span x-d>|.Day2|, |.Day3| break my heart</span><br>
+                <span x-d>|.Day4| doesn't even start</span><br>
                 <span class="Friday"></span>
             </div>
             <style>
@@ -102,22 +102,23 @@
         </style>
             <script transform>
                 ({
-                    '.opening': ({ctx}) => {
-                        ctx.init(Opening, Object.assign({}, ctx), ctx.leaf);
+                    '.opening': ({target, ctx}) => {
+                        ctx.init(Opening, Object.assign({}, ctx), target);
                         ctx.matchFirstChild = true;
                     },
 
                     'div': ({ctx}) => {
                         ctx.matchFirstChild = {
-                            'span': ({ctx}) => {
-                                ctx.leaf.textContent = ctx.interpolate(ctx.leaf.innerText, ctx);
+                            'span.Friday': ({target, ctx}) => {
+                                ctx.init(Friday, {}, target);
+                            },
+                            'span[x-d]': ({target, ctx}) => {
+                                target.textContent = ctx.interpolate(target.innerText, ctx);
                             },
                             '*': ({ctx}) => {
                                 ctx.matchNextSib = true;
                             },
-                            '.Friday': ({ctx}) => {
-                                ctx.init(Friday, {}, ctx.leaf);
-                            },
+
                         };
                         ctx.matchNextSib = true;
                     },
