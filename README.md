@@ -324,28 +324,36 @@ These match statements can either be booleans, as illustrated above, or they can
                 ({
                     'div': ({ctx}) => {
                         ctx.matchFirstChild = true;
-                        ctx.matchNextSib = true;
                     },
                     '*': ({ctx}) => {
                         ctx.matchNextSib = true;
                     },
                     '[x-d]': ({target, ctx}) => {
-                        target.textContent = ctx.interpolate(target.innerText, ctx.model);
+                        const ds = target.dataset;
+                        if(!ds.original) ds.original = target.textContent;
+                        target.textContent = ctx.interpolate(ds.original, ctx.model);
                     },
                     '[data-init]': ({target, ctx}) =>{
-                        ctx.init(ctx.$(target.dataset.init), {
-                            model: ctx.model, interpolate: ctx.interpolate, transform: ctx.transform, $: ctx.$
-                        }, target);
-                        ctx.matchFirstChild = false;
+                        if(ctx.update){
+                            ctx.matchFirstChild = true;
+                        }else{
+                            ctx.init(ctx.$(target.dataset.init), {
+                                model: ctx.model, interpolate: ctx.interpolate, transform: ctx.transform, $: ctx.$
+                            }, target);
+                            ctx.matchFirstChild = false;
+                        }
+
                     },
                 })
             </script>
         </template>
         <div id="target"></div>
+        <button id="changeDays">Change Days</button>
         <script type="module">
-            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.4/trans-render-init.js';
-            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.4/string-interpolate.js';
-            init(Main, {
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.14/trans-render-init.js';
+            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.14/string-interpolate.js';
+            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.14/trans-render-update.js';
+            const ctx = init(Main, {
                 model:{
                     Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
                     Day6: 'Saturday', Day7: 'Sunday',
@@ -353,6 +361,13 @@ These match statements can either be booleans, as illustrated above, or they can
                 interpolate: interpolate,
                 $: id => window[id],
             }, target);
+            changeDays.addEventListener('click', e=>{
+                ctx.model = {
+                    Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
+                    Day6: 'lördag', Day7: 'söndag',
+                }
+                update(ctx, target);
+            })
         </script>
     </div>
 </template>
@@ -360,8 +375,32 @@ These match statements can either be booleans, as illustrated above, or they can
 ```
 -->
 
-# Reapplying (some) of the transform [TODO]
+# Reapplying (some) of the transform
 
 Often, we want to reapply a transform, after something changes -- typically the source data.
+
+The ability to do this is illustrated in the previous example.  Critical syntax shown below:
+
+```html
+    <script type="module">
+        import { init } from '../trans-render-init.js';
+        import { interpolate } from '../string-interpolate.js';
+        import {update} from '../trans-render-update.js';
+        const ctx = init(Main, {
+            model:{
+                Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
+                Day6: 'Saturday', Day7: 'Sunday',
+            },
+            interpolate: interpolate,
+            $: id => window[id],
+        }, target);
+        changeDays.addEventListener('click', e=>{
+            ctx.model = {
+                Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
+                Day6: 'lördag', Day7: 'söndag',
+            }
+            update(ctx, target);
+        })
+    </script>
 
 
