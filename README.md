@@ -138,6 +138,7 @@ These match statements can either be booleans, as illustrated above, or they can
 <custom-element-demo>
 <template>
     <div>
+        <a href="https://www.youtube.com/watch?v=2-Lb-JhsaEk" target="_blank">Something's gone wrong again</a>
         <template id="Title">Something's gone wrong again</template>
         <template id="Title2">Something goes wrong again</template>
         <template id="Again">And again</template>
