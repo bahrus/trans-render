@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "TBD",
   "main": "trans-render-init.js",
   "module": "trans-render-init.js",
