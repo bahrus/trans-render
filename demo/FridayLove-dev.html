@@ -82,11 +82,6 @@
         </style>
             <script transform>
                 ({
-                    '[data-init]': ({target, ctx}) =>{
-                        ctx.init(ctx.$(target.dataset.init), {
-                            model: ctx.model, interpolate: ctx.interpolate, transform: ctx.transform, $: ctx.$
-                        }, target);
-                    },
                     'div': ({ctx}) => {
                         ctx.matchFirstChild = true;
                         ctx.matchNextSib = true;
@@ -96,6 +91,12 @@
                     },
                     '[x-d]': ({target, ctx}) => {
                         target.textContent = ctx.interpolate(target.innerText, ctx.model);
+                    },
+                    '[data-init]': ({target, ctx}) =>{
+                        ctx.init(ctx.$(target.dataset.init), {
+                            model: ctx.model, interpolate: ctx.interpolate, transform: ctx.transform, $: ctx.$
+                        }, target);
+                        ctx.matchFirstChild = false;
                     },
                 })
             </script>

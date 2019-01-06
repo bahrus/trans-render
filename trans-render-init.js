@@ -17,8 +17,6 @@ export function init(template, ctx, target) {
                 leaf: firstChild
             };
             Object.assign(ctx, base);
-            //ctx.level = 0;
-            //ctx.stack = [base];
             process(ctx);
         }
     }
@@ -30,14 +28,11 @@ function process(context) {
     if (target.matches === undefined)
         return;
     const transform = context.transform;
-    //const children = target.children;
-    //const childCount = children.length;
     context.matchFirstChild = false;
     context.matchNextSib = false;
     for (const selector in transform) {
         if (target.matches(selector)) {
             const transformTemplate = transform[selector];
-            //context.template = target;
             transformTemplate({
                 target: target,
                 ctx: context
