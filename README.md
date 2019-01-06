@@ -250,9 +250,10 @@ These match statements can either be booleans, as illustrated above, or they can
 <custom-element-demo>
 <template>
     <div>
-        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a>
+        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a><br>
+        <button id="changeDays">Wi not trei a holiday in Sweeden this yer</button>
         <template id="Friday">
-            It's Friday I'm in love
+            <span x-d>It's |.Day5| I'm in love</span>
         </template>
         <template id="Opening">
             <span x-d>I don't care if |.Day1|'s blue</span><br>
@@ -277,8 +278,8 @@ These match statements can either be booleans, as illustrated above, or they can
 
             <div class="stanza">
                 <span x-d>I don't care if |.Day1|'s black</span><br>
-                <span>Tuesday, Wednesday heart attack</span><br>
-                <span>Thursday never looking back</span><br>
+                <span x-d>|.Day2|, |.Day3| heart attack</span><br>
+                <span x-d>|.Day4| never looking back</span><br>
                 <span data-init="Friday"></span>
             </div>
             <div class="stanza">
@@ -348,7 +349,6 @@ These match statements can either be booleans, as illustrated above, or they can
             </script>
         </template>
         <div id="target"></div>
-        <button id="changeDays">Change Days</button>
         <script type="module">
             import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.14/trans-render-init.js';
             import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.14/string-interpolate.js';
