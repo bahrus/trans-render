@@ -359,3 +359,9 @@ These match statements can either be booleans, as illustrated above, or they can
 </custom-element-demo>
 ```
 -->
+
+# Reapplying (some) of the transform [TODO]
+
+Often, we want to reapply a transform, after something changes -- typically the source data.
+
+

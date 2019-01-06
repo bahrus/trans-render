@@ -2,14 +2,14 @@
 type TransformRules = {[key: string] : (arg: ITransformArg) => void };
 export interface ITransformArg {
     target: Element,
-    ctx: IContext,
+    ctx: IInitContext,
 }
 export interface IBaseContext {
     model: any,
     leaf: Element,
 }
-export interface IContext extends IBaseContext{
-    init: (template: HTMLTemplateElement, ctx: IContext, target: HTMLElement) => void,
+export interface IInitContext extends IBaseContext{
+    init: (template: HTMLTemplateElement, ctx: IInitContext, target: HTMLElement) => void,
     transform : TransformRules,
     //stack: any[],
     matchFirstChild: boolean | TransformRules,
@@ -18,7 +18,7 @@ export interface IContext extends IBaseContext{
     //level: number,
 }
 
-export function init(template: HTMLTemplateElement, ctx: IContext, target: HTMLElement){
+export function init(template: HTMLTemplateElement, ctx: IInitContext, target: HTMLElement){
     ctx.init = init;
     const transformScriptSelector = 'script[transform]';
     const clonedTemplate = template.content.cloneNode(true) as DocumentFragment;
@@ -34,21 +34,17 @@ export function init(template: HTMLTemplateElement, ctx: IContext, target: HTMLE
     if(ctx.transform){
         const firstChild = clonedTemplate.firstElementChild;
         if(firstChild !== null){
-            const base = {
-                leaf: firstChild
-            } as IBaseContext;
-            Object.assign(ctx, base);
+            ctx.leaf = firstChild;
             process(ctx);
         }
 
     }
 
     target.appendChild(ctx.template);
-
     return ctx;
 }
 
-function process(context: IContext){
+export function process(context: IInitContext){
     const target = context.leaf;
     if(target.matches === undefined) return;
     const transform = context.transform;

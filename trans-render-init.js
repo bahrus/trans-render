@@ -13,17 +13,14 @@ export function init(template, ctx, target) {
     if (ctx.transform) {
         const firstChild = clonedTemplate.firstElementChild;
         if (firstChild !== null) {
-            const base = {
-                leaf: firstChild
-            };
-            Object.assign(ctx, base);
+            ctx.leaf = firstChild;
             process(ctx);
         }
     }
     target.appendChild(ctx.template);
     return ctx;
 }
-function process(context) {
+export function process(context) {
     const target = context.leaf;
     if (target.matches === undefined)
         return;
