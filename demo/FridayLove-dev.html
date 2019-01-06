@@ -19,7 +19,7 @@
             <span x-d>|.Day2|'s gray and |.Day3| too</span><br>
             <span x-d>|.Day4| I don't care about you</span><br>
             <span data-init="Friday"></span>
-            <script transform>({
+            <!-- <script transform>({
                 '[data-init]': ({target, ctx}) =>{
                     ctx.init(document.querySelector('#' + target.dataset.init), {}, target);
                 },
@@ -29,7 +29,7 @@
                 '[x-d]': ({target, ctx}) => {
                     target.textContent = ctx.interpolate(target.innerText, ctx.model);
                 },               
-            })</script>
+            })</script> -->
         </template>
 
         <template id="Main">
@@ -38,7 +38,7 @@
                 <span x-d>|.Day1| you can fall apart</span><br>
                 <span x-d>|.Day2| |.Day3| break my heart</span><br>
                 <span x-d>Oh, |.Day4| doesn't even start</span><br>
-                <span class="Friday"></span>
+                <span data-init="Friday"></span>
             </div>
             <div class="stanza">
                 <span x-d>|.Day6| wait</span><br>
@@ -50,13 +50,13 @@
                 <span x-d>I don't care if |.Day1|'s black</span><br>
                 <span>Tuesday, Wednesday heart attack</span><br>
                 <span>Thursday never looking back</span><br>
-                <span class="Friday"></span>
+                <span data-init="Friday"></span>
             </div>
             <div class="stanza">
                 <span x-d>|.Day1| you can hold your head</span><br>
                 <span x-d>|.Day2|, |.Day3| stay in bed</span><br>
                 <span x-d>Or |.Day4| watch the walls instead</span><br>
-                <span class="Friday"></span>
+                <span data-init="Friday"></span>
             </div>
             <div class="stanza">
                 <span x-d>|.Day6| wait</span><br>
@@ -84,7 +84,7 @@
                 <span x-d>|.Day1| you can fall apart</span><br>
                 <span x-d>|.Day2|, |.Day3| break my heart</span><br>
                 <span x-d>|.Day4| doesn't even start</span><br>
-                <span class="Friday"></span>
+                <span data-init="Friday"></span>
             </div>
             <style>
                 .stanza{
@@ -94,26 +94,20 @@
             <script transform>
                 ({
                     '[data-init]': ({target, ctx}) =>{
-                        ctx.init(document.querySelector('#' + target.dataset.init), {model: ctx.model, interpolate: ctx.interpolate}, target);
+                        ctx.init(document.querySelector('#' + target.dataset.init), {
+                            model: ctx.model, interpolate: ctx.interpolate, transform: ctx.transform
+                        }, target);
                     },
                     'div': ({ctx}) => {
-                        ctx.matchFirstChild = {
-                            '*': ({ctx}) => {
-                                ctx.matchNextSib = true;
-                            },
-                            'span.Friday': ({target, ctx}) => {
-                                ctx.init(Friday, {}, target);
-                            },
-                            '[x-d]': ({target, ctx}) => {
-                                target.textContent = ctx.interpolate(target.innerText, ctx.model);
-                            },
-
-
-                        };
+                        ctx.matchFirstChild = true;
                         ctx.matchNextSib = true;
                     },
-
-
+                    '*': ({ctx}) => {
+                        ctx.matchNextSib = true;
+                    },
+                    '[x-d]': ({target, ctx}) => {
+                        target.textContent = ctx.interpolate(target.innerText, ctx.model);
+                    },
                 })
             </script>
         </template>
