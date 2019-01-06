@@ -19,17 +19,6 @@
             <span x-d>|.Day2|'s gray and |.Day3| too</span><br>
             <span x-d>|.Day4| I don't care about you</span><br>
             <span data-init="Friday"></span>
-            <!-- <script transform>({
-                '[data-init]': ({target, ctx}) =>{
-                    ctx.init(document.querySelector('#' + target.dataset.init), {}, target);
-                },
-                '*': ({ctx}) => {
-                    ctx.matchNextSib = true;
-                },
-                '[x-d]': ({target, ctx}) => {
-                    target.textContent = ctx.interpolate(target.innerText, ctx.model);
-                },               
-            })</script> -->
         </template>
 
         <template id="Main">
@@ -94,8 +83,8 @@
             <script transform>
                 ({
                     '[data-init]': ({target, ctx}) =>{
-                        ctx.init(document.querySelector('#' + target.dataset.init), {
-                            model: ctx.model, interpolate: ctx.interpolate, transform: ctx.transform
+                        ctx.init(ctx.$(target.dataset.init), {
+                            model: ctx.model, interpolate: ctx.interpolate, transform: ctx.transform, $: ctx.$
                         }, target);
                     },
                     'div': ({ctx}) => {
@@ -120,7 +109,8 @@
                     Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
                     Day6: 'Saturday', Day7: 'Sunday',
                 },
-                interpolate: interpolate
+                interpolate: interpolate,
+                $: id => window[id],
             }, target);
         </script>
     </div>
