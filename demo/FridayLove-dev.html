@@ -10,6 +10,7 @@
 
 <body>
     <div>
+        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a>
         <template id="Friday">
             It's Friday I'm in love
         </template>
@@ -17,33 +18,52 @@
             <span x-d>I don't care if |.Day1|'s blue</span><br>
             <span x-d>|.Day2|'s gray and |.Day3| too</span><br>
             <span x-d>|.Day4| I don't care about you</span><br>
-            <span>It's Friday I'm in love</span>
+            <span data-init="Friday"></span>
+            <script transform>({
+                '[data-init]': ({target, ctx}) =>{
+                    ctx.init(document.querySelector('#' + target.dataset.init), {}, target);
+                },
+                '*': ({ctx}) => {
+                    ctx.matchNextSib = true;
+                },
+                '[x-d]': ({target, ctx}) => {
+                    target.textContent = ctx.interpolate(target.innerText, ctx.model);
+                },               
+            })</script>
         </template>
+
         <template id="Main">
-            <div class="UH8R2 opening"></div>
-            <div class="UH8R2">
+            <div data-init="Opening" class="stanza"></div>
+            <div class="stanza">
+                <span x-d>|.Day1| you can fall apart</span><br>
+                <span x-d>|.Day2| |.Day3| break my heart</span><br>
+                <span x-d>Oh, |.Day4| doesn't even start</span><br>
+                <span class="Friday"></span>
+            </div>
+            <div class="stanza">
                 <span x-d>|.Day6| wait</span><br>
                 <span x-d>And |.Day7| always comes too late</span><br>
                 <span x-d>But |.Day5| never hesitate</span>
             </div>
-            <div class="UH8R2">
+
+            <div class="stanza">
                 <span x-d>I don't care if |.Day1|'s black</span><br>
                 <span>Tuesday, Wednesday heart attack</span><br>
                 <span>Thursday never looking back</span><br>
                 <span class="Friday"></span>
             </div>
-            <div class="UH8R2">
+            <div class="stanza">
                 <span x-d>|.Day1| you can hold your head</span><br>
                 <span x-d>|.Day2|, |.Day3| stay in bed</span><br>
                 <span x-d>Or |.Day4| watch the walls instead</span><br>
                 <span class="Friday"></span>
             </div>
-            <div class="UH8R2">
+            <div class="stanza">
                 <span x-d>|.Day6| wait</span><br>
                 <span x-d>And |.Day7| always comes too late</span><br>
                 <span x-d>But |.Day5| never hesitate</span>
             </div>
-            <div class="UH8R2">
+            <div class="stanza">
                 <span>Dressed up to the eyes</span><br>
                 <span>It's a wonderful surprise</span><br>
                 <span>To see your shoes and your spirits rise</span><br>
@@ -59,36 +79,35 @@
                 <span x-d>It's |.Day5|</span><br>
                 <span>I'm in love</span>
             </div>
-            <div class="UH8R2 opening"></div>
-            <div class="UH8R2">
+            <div data-init="Opening" class="stanza"></div>
+            <div class="stanza">
                 <span x-d>|.Day1| you can fall apart</span><br>
                 <span x-d>|.Day2|, |.Day3| break my heart</span><br>
                 <span x-d>|.Day4| doesn't even start</span><br>
                 <span class="Friday"></span>
             </div>
             <style>
-                .UH8R2{
+                .stanza{
                 padding-top: 20px;
             }
         </style>
             <script transform>
                 ({
-                    '.opening': ({target, ctx}) => {
-                        ctx.init(Opening, Object.assign({}, ctx), target);
-                        ctx.matchFirstChild = true;
+                    '[data-init]': ({target, ctx}) =>{
+                        ctx.init(document.querySelector('#' + target.dataset.init), {model: ctx.model, interpolate: ctx.interpolate}, target);
                     },
-
                     'div': ({ctx}) => {
                         ctx.matchFirstChild = {
-                            'span.Friday': ({target, ctx}) => {
-                                ctx.init(Friday, {}, target);
-                            },
-                            'span[x-d]': ({target, ctx}) => {
-                                target.textContent = ctx.interpolate(target.innerText, ctx);
-                            },
                             '*': ({ctx}) => {
                                 ctx.matchNextSib = true;
                             },
+                            'span.Friday': ({target, ctx}) => {
+                                ctx.init(Friday, {}, target);
+                            },
+                            '[x-d]': ({target, ctx}) => {
+                                target.textContent = ctx.interpolate(target.innerText, ctx.model);
+                            },
+
 
                         };
                         ctx.matchNextSib = true;
@@ -103,8 +122,10 @@
             import { init } from '../trans-render-init.js';
             import { interpolate } from '../string-interpolate.js';
             init(Main, {
-                Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
-                Day6: 'Saturday', Day7: 'Sunday',
+                model:{
+                    Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
+                    Day6: 'Saturday', Day7: 'Sunday',
+                },
                 interpolate: interpolate
             }, target);
         </script>
