@@ -4,7 +4,7 @@
 
 <a href="https://nodei.co/npm/trans-render/"><img src="https://nodei.co/npm/trans-render.png"></a>
 
-<img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/trans-render@0.0.5/dist/trans-render-init.iife.min.js?compression=gzip">
+<img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/trans-render@0.0.12/dist/trans-render-init.min.js?compression=gzip">
 
 trans-render provides an alternative way of instantiating a template.  It draws inspiration from the (least) popular features of xslt.  Like xslt, trans-render performs transforms on elements by matching tests on elements.  Whereas xslt uses xpath for its tests, trans-render uses the css matches() method.
 
@@ -249,6 +249,7 @@ These match statements can either be booleans, as illustrated above, or they can
 <custom-element-demo>
 <template>
     <div>
+        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a>
         <template id="Friday">
             It's Friday I'm in love
         </template>
@@ -256,33 +257,41 @@ These match statements can either be booleans, as illustrated above, or they can
             <span x-d>I don't care if |.Day1|'s blue</span><br>
             <span x-d>|.Day2|'s gray and |.Day3| too</span><br>
             <span x-d>|.Day4| I don't care about you</span><br>
-            <span>It's Friday I'm in love</span>
+            <span data-init="Friday"></span>
         </template>
+
         <template id="Main">
-            <div class="UH8R2 opening"></div>
-            <div class="UH8R2">
+            <div data-init="Opening" class="stanza"></div>
+            <div class="stanza">
+                <span x-d>|.Day1| you can fall apart</span><br>
+                <span x-d>|.Day2| |.Day3| break my heart</span><br>
+                <span x-d>Oh, |.Day4| doesn't even start</span><br>
+                <span data-init="Friday"></span>
+            </div>
+            <div class="stanza">
                 <span x-d>|.Day6| wait</span><br>
                 <span x-d>And |.Day7| always comes too late</span><br>
                 <span x-d>But |.Day5| never hesitate</span>
             </div>
-            <div class="UH8R2">
+
+            <div class="stanza">
                 <span x-d>I don't care if |.Day1|'s black</span><br>
                 <span>Tuesday, Wednesday heart attack</span><br>
                 <span>Thursday never looking back</span><br>
-                <span class="Friday"></span>
+                <span data-init="Friday"></span>
             </div>
-            <div class="UH8R2">
+            <div class="stanza">
                 <span x-d>|.Day1| you can hold your head</span><br>
                 <span x-d>|.Day2|, |.Day3| stay in bed</span><br>
                 <span x-d>Or |.Day4| watch the walls instead</span><br>
-                <span class="Friday"></span>
+                <span data-init="Friday"></span>
             </div>
-            <div class="UH8R2">
+            <div class="stanza">
                 <span x-d>|.Day6| wait</span><br>
                 <span x-d>And |.Day7| always comes too late</span><br>
                 <span x-d>But |.Day5| never hesitate</span>
             </div>
-            <div class="UH8R2">
+            <div class="stanza">
                 <span>Dressed up to the eyes</span><br>
                 <span>It's a wonderful surprise</span><br>
                 <span>To see your shoes and your spirits rise</span><br>
@@ -298,54 +307,51 @@ These match statements can either be booleans, as illustrated above, or they can
                 <span x-d>It's |.Day5|</span><br>
                 <span>I'm in love</span>
             </div>
-            <div class="UH8R2 opening"></div>
-            <div class="UH8R2">
+            <div data-init="Opening" class="stanza"></div>
+            <div class="stanza">
                 <span x-d>|.Day1| you can fall apart</span><br>
                 <span x-d>|.Day2|, |.Day3| break my heart</span><br>
                 <span x-d>|.Day4| doesn't even start</span><br>
-                <span class="Friday"></span>
+                <span data-init="Friday"></span>
             </div>
             <style>
-                .UH8R2{
-                        padding-top: 20px;
-                    }
-                </style>
+                .stanza{
+                padding-top: 20px;
+            }
+        </style>
             <script transform>
                 ({
-                    '.opening': ({ target, ctx }) => {
-                        ctx.init(Opening, Object.assign({}, ctx), target);
+                    'div': ({ctx}) => {
                         ctx.matchFirstChild = true;
-                    },
-
-                    'div': ({ ctx }) => {
-                        ctx.matchFirstChild = {
-                            'span.Friday': ({ target, ctx }) => {
-                                ctx.init(Friday, {}, target);
-                            },
-                            'span[x-d]': ({ target, ctx }) => {
-                                target.textContent = ctx.interpolate(target.innerText, ctx);
-                            },
-                            '*': ({ ctx }) => {
-                                ctx.matchNextSib = true;
-                            },
-
-                        };
                         ctx.matchNextSib = true;
                     },
-
-
+                    '*': ({ctx}) => {
+                        ctx.matchNextSib = true;
+                    },
+                    '[x-d]': ({target, ctx}) => {
+                        target.textContent = ctx.interpolate(target.innerText, ctx.model);
+                    },
+                    '[data-init]': ({target, ctx}) =>{
+                        ctx.init(ctx.$(target.dataset.init), {
+                            model: ctx.model, interpolate: ctx.interpolate, transform: ctx.transform, $: ctx.$
+                        }, target);
+                        ctx.matchFirstChild = false;
+                    },
                 })
             </script>
         </template>
-        <div id="target2"></div>
+        <div id="target"></div>
         <script type="module">
             import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.4/trans-render-init.js';
             import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.4/string-interpolate.js';
             init(Main, {
-                Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
-                Day6: 'Saturday', Day7: 'Sunday',
-                interpolate: interpolate
-            }, target2);
+                model:{
+                    Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
+                    Day6: 'Saturday', Day7: 'Sunday',
+                },
+                interpolate: interpolate,
+                $: id => window[id],
+            }, target);
         </script>
     </div>
 </template>

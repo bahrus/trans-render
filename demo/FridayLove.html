@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a>
+        <template id="Friday">
+            It's Friday I'm in love
+        </template>
+        <template id="Opening">
+            <span x-d>I don't care if |.Day1|'s blue</span><br>
+            <span x-d>|.Day2|'s gray and |.Day3| too</span><br>
+            <span x-d>|.Day4| I don't care about you</span><br>
+            <span data-init="Friday"></span>
+        </template>
+
+        <template id="Main">
+            <div data-init="Opening" class="stanza"></div>
+            <div class="stanza">
+                <span x-d>|.Day1| you can fall apart</span><br>
+                <span x-d>|.Day2| |.Day3| break my heart</span><br>
+                <span x-d>Oh, |.Day4| doesn't even start</span><br>
+                <span data-init="Friday"></span>
+            </div>
+            <div class="stanza">
+                <span x-d>|.Day6| wait</span><br>
+                <span x-d>And |.Day7| always comes too late</span><br>
+                <span x-d>But |.Day5| never hesitate</span>
+            </div>
+
+            <div class="stanza">
+                <span x-d>I don't care if |.Day1|'s black</span><br>
+                <span>Tuesday, Wednesday heart attack</span><br>
+                <span>Thursday never looking back</span><br>
+                <span data-init="Friday"></span>
+            </div>
+            <div class="stanza">
+                <span x-d>|.Day1| you can hold your head</span><br>
+                <span x-d>|.Day2|, |.Day3| stay in bed</span><br>
+                <span x-d>Or |.Day4| watch the walls instead</span><br>
+                <span data-init="Friday"></span>
+            </div>
+            <div class="stanza">
+                <span x-d>|.Day6| wait</span><br>
+                <span x-d>And |.Day7| always comes too late</span><br>
+                <span x-d>But |.Day5| never hesitate</span>
+            </div>
+            <div class="stanza">
+                <span>Dressed up to the eyes</span><br>
+                <span>It's a wonderful surprise</span><br>
+                <span>To see your shoes and your spirits rise</span><br>
+                <span>Throwing out your frown</span><br>
+                <span>And just smiling at the sound</span><br>
+                <span>And as sleek as a shriek</span><br>
+                <span>Spinning round and round</span><br>
+                <span>Always take a big bite</span><br>
+                <span>It's such a gorgeous sight</span><br>
+                <span>To see you in the middle of the night</span><br>
+                <span>You can never get enough</span><br>
+                <span>Enough of this stuff</span><br>
+                <span x-d>It's |.Day5|</span><br>
+                <span>I'm in love</span>
+            </div>
+            <div data-init="Opening" class="stanza"></div>
+            <div class="stanza">
+                <span x-d>|.Day1| you can fall apart</span><br>
+                <span x-d>|.Day2|, |.Day3| break my heart</span><br>
+                <span x-d>|.Day4| doesn't even start</span><br>
+                <span data-init="Friday"></span>
+            </div>
+            <style>
+                .stanza{
+                padding-top: 20px;
+            }
+        </style>
+            <script transform>
+                ({
+                    'div': ({ctx}) => {
+                        ctx.matchFirstChild = true;
+                        ctx.matchNextSib = true;
+                    },
+                    '*': ({ctx}) => {
+                        ctx.matchNextSib = true;
+                    },
+                    '[x-d]': ({target, ctx}) => {
+                        target.textContent = ctx.interpolate(target.innerText, ctx.model);
+                    },
+                    '[data-init]': ({target, ctx}) =>{
+                        ctx.init(ctx.$(target.dataset.init), {
+                            model: ctx.model, interpolate: ctx.interpolate, transform: ctx.transform, $: ctx.$
+                        }, target);
+                        ctx.matchFirstChild = false;
+                    },
+                })
+            </script>
+        </template>
+        <div id="target"></div>
+        <script type="module">
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.4/trans-render-init.js';
+            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.4/string-interpolate.js';
+            init(Main, {
+                model:{
+                    Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
+                    Day6: 'Saturday', Day7: 'Sunday',
+                },
+                interpolate: interpolate,
+                $: id => window[id],
+            }, target);
+        </script>
+    </div>
+</body>
+
+</html>
