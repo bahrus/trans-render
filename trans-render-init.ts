@@ -1,15 +1,15 @@
 
-type TransformRules = {[key: string] : (arg: ITransformArg) => void };
-export interface ITransformArg {
+type TransformRules = {[key: string] : (arg: TransformArg) => void };
+export interface TransformArg {
     target: Element,
-    ctx: IInitContext,
+    ctx: InitContext,
 }
-export interface IBaseContext {
+export interface BaseContext {
     model: any,
     leaf: Element,
 }
-export interface IInitContext extends IBaseContext{
-    init: (template: HTMLTemplateElement, ctx: IInitContext, target: HTMLElement) => void,
+export interface InitContext extends BaseContext{
+    init: (template: HTMLTemplateElement, ctx: InitContext, target: HTMLElement) => void,
     transform : TransformRules,
     //stack: any[],
     matchFirstChild: boolean | TransformRules,
@@ -18,7 +18,7 @@ export interface IInitContext extends IBaseContext{
     //level: number,
 }
 
-export function init(template: HTMLTemplateElement, ctx: IInitContext, target: HTMLElement){
+export function init(template: HTMLTemplateElement, ctx: InitContext, target: HTMLElement){
     ctx.init = init;
     const transformScriptSelector = 'script[transform]';
     const clonedTemplate = template.content.cloneNode(true) as DocumentFragment;
@@ -44,7 +44,7 @@ export function init(template: HTMLTemplateElement, ctx: IInitContext, target: H
     return ctx;
 }
 
-export function process(context: IInitContext){
+export function process(context: InitContext){
     const target = context.leaf;
     if(target.matches === undefined) return;
     const transform = context.transform;
