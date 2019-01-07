@@ -90,9 +90,7 @@
                         ctx.matchNextSib = true;
                     },
                     '[x-d]': ({target, ctx}) => {
-                        const ds = target.dataset;
-                        if(!ds.original) ds.original = target.textContent;
-                        target.textContent = ctx.interpolate(ds.original, ctx.model);
+                        ctx.interpolate(target, 'textContent', ctx.model);
                     },
                     '[data-init]': ({target, ctx}) =>{
                         if(ctx.update){
@@ -112,7 +110,7 @@
         
         <script type="module">
             import { init } from '../trans-render-init.js';
-            import { interpolate } from '../string-interpolate.js';
+            import { interpolate } from '../interpolate.js';
             import {update} from '../trans-render-update.js';
             const ctx = init(Main, {
                 model:{
