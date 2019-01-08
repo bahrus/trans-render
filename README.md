@@ -16,7 +16,7 @@ This leaves the template markup quite pristine, but it does mean that the bindin
 
 The transform can be provided in the function "init".  If the transform is not present in the call, then it looks for a script tag with attribute "transform" where it expects the instructions.
 
-Providing the transform inside the init function signature has the advantage that one could benefit from TypeScript typing of Custom and Native DOM elements.  On the other hand, specifing the transform inside the template tag keeps the binding closer to the markup, which many developers find convenient. In fact, this library, is already going against the grain by separating the binding from the markup.  One could argue that this is less declarative than static moustache style templating.  However, compared to  tagged template literals / JSX, it is unclear to me whether the syntax described here is more or less "declarative."  In my view, none of them are.  So there.
+Providing the transform inside the init function signature has the advantage that one could benefit from TypeScript typing of Custom and Native DOM elements.  On the other hand, specifing the transform inside the template tag keeps the binding closer to the markup, which many developers find convenient. In fact, this library is already going against the grain by separating the binding from the markup.  One could argue that this is less declarative than static moustache style templating.  However, compared to  tagged template literals / JSX, it is unclear to me whether the syntax described here is more or less "declarative."  In my view, none of them are.  So there.
 
 One distinct advantage of separating the binding like this, is that one can insert console.log's and/or breakpoints, in order to walk through the binding process.
 
@@ -42,7 +42,7 @@ One distinct advantage of separating the binding like this, is that one can inse
 
 </div>
 <script type="module">
-    import { init } from '../trans-render-init.js';
+    import { init } from '../init.js';
     const ctx = {
         model: {
             summaryText: 'hello'
@@ -234,7 +234,7 @@ These match statements can either be booleans, as illustrated above, or they can
         </template>
         <div id="target"></div>
         <script type="module">
-            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.4/trans-render-init.js';
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.17/init.js';
             init(Main, {}, target);
         </script>
     </div>
@@ -250,6 +250,7 @@ These match statements can either be booleans, as illustrated above, or they can
 <custom-element-demo>
 <template>
     <div>
+        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a>
         <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a><br>
         <button id="changeDays">Wi not trei a holiday in Sweeden this yer</button>
         <template id="Friday">
@@ -350,9 +351,9 @@ These match statements can either be booleans, as illustrated above, or they can
         </template>
         <div id="target"></div>
         <script type="module">
-            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.14/trans-render-init.js';
-            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.14/string-interpolate.js';
-            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.14/trans-render-update.js';
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.17/init.js';
+            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.17/interpolate.js';
+            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.17/update.js';
             const ctx = init(Main, {
                 model:{
                     Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
@@ -383,9 +384,9 @@ The ability to do this is illustrated in the previous example.  Critical syntax 
 
 ```html
     <script type="module">
-        import { init } from '../trans-render-init.js';
-        import { interpolate } from '../string-interpolate.js';
-        import {update} from '../trans-render-update.js';
+        import { init } from '../init.js';
+        import { interpolate } from '../interpolate.js';
+        import {update} from '../update.js';
         const ctx = init(Main, {
             model:{
                 Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',

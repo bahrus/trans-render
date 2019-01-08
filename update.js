@@ -1,4 +1,4 @@
-import { process } from './trans-render-init.js';
+import { process } from './init.js';
 export function update(ctx, target) {
     const updateCtx = ctx;
     updateCtx.update = update;
@@ -9,4 +9,4 @@ export function update(ctx, target) {
     }
     return updateCtx;
 }
-//# sourceMappingURL=trans-render-update.js.map
+//# sourceMappingURL=update.js.map

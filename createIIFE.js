@@ -1,3 +1,4 @@
 const jiife = require('jiife');
-//const xl = 'node_modules/xtal-latx/';
-jiife.processFiles(['trans-render-init.js'], 'dist/trans-render-init.js', true);
+jiife.processFiles(['init.js'], 'dist/init.js', true);
+jiife.processFiles(['update.js'], 'dist/update.js', true);
+jiife.processFiles(['interpolate.js'], 'dist/interpolate.js', true);
