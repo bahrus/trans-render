@@ -331,9 +331,7 @@ These match statements can either be booleans, as illustrated above, or they can
                         ctx.matchNextSib = true;
                     },
                     '[x-d]': ({target, ctx}) => {
-                        const ds = target.dataset;
-                        if(!ds.original) ds.original = target.textContent;
-                        target.textContent = ctx.interpolate(ds.original, ctx.model);
+                        ctx.interpolate(target, 'textContent', ctx.model);
                     },
                     '[data-init]': ({target, ctx}) =>{
                         if(ctx.update){
