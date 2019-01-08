@@ -16,7 +16,7 @@ This leaves the template markup quite pristine, but it does mean that the bindin
 
 The transform can be provided in the function "init".  If the transform is not present in the call, then it looks for a script tag with attribute "transform" where it expects the instructions.
 
-
+Providing the transform inside the init function signature has the advantage that one could benefit from TypeScript typing of Custom and Native DOM elements.  On the other hand, specifing the transform inside the template tag keeps the binding closer to the markup, which many developers find convenient. In fact, this library, is already going against the grain by separating the binding from the markup.  One could argue that this is less declarative than static moustache style templating.  However, compared to  tagged template literals / JSX, it is unclear to me whether the syntax described here is more or less "declarative."  In my view, none of them are.  So there.
 
 One distinct advantage of separating the binding like this, is that one can insert console.log's and/or breakpoints, in order to walk through the binding process.
 

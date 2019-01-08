@@ -11,11 +11,9 @@ export interface BaseContext {
 export interface InitContext extends BaseContext{
     init: (template: HTMLTemplateElement, ctx: InitContext, target: HTMLElement) => void,
     transform : TransformRules,
-    //stack: any[],
     matchFirstChild: boolean | TransformRules,
     matchNextSib: boolean | TransformRules,
     template: DocumentFragment,
-    //level: number,
 }
 
 export function init(template: HTMLTemplateElement, ctx: InitContext, target: HTMLElement){

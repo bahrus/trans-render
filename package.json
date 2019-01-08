@@ -1,7 +1,7 @@
 {
   "name": "trans-render",
   "version": "0.0.16",
-  "description": "TBD",
+  "description": "Instantiate an HTML Template",
   "main": "trans-render-init.js",
   "module": "trans-render-init.js",
   "scripts": {
@@ -14,7 +14,8 @@
     "type": "git",
     "url": "git+https://github.com/bahrus/trans-render.git"
   },
-  "author": "",
+  "author": "anderson.bruce.b@gmail.com",
+  "keywords": ["transform", "template", "render"],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/bahrus/trans-render/issues"
