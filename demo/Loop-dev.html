@@ -20,8 +20,14 @@
             import {repeatInit } from '../repeatInit.js';
             init(list, {
                 transform: {
-                    'ul': ({target, ctx, idx}) =>{
+                    'ul': ({target, ctx}) =>{
                         repeatInit(10, itemTemplate, target);
+                        ctx.matchFirstChild = {
+                            'li': ({target, ctx, idx}) =>{
+                                target.textContent = 'Hello ' + idx;
+                                ctx.matchNextSib = true;
+                            }
+                        }
                     }
                 }
             }, target);

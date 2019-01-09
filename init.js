@@ -32,7 +32,9 @@ export function process(context, idx, level) {
             const transformTemplate = transform[selector];
             transformTemplate({
                 target: target,
-                ctx: context
+                ctx: context,
+                idx: idx,
+                level: level
             });
         }
     }

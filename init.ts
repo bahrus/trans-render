@@ -3,6 +3,8 @@ type TransformRules = {[key: string] : (arg: TransformArg) => void };
 export interface TransformArg {
     target: Element,
     ctx: InitContext,
+    idx: number,
+    level: number,
 }
 export interface BaseContext {
     model: any,
@@ -56,7 +58,9 @@ export function process(context: InitContext, idx: number, level: number){
 
             transformTemplate({
                 target: target, 
-                ctx: context
+                ctx: context,
+                idx: idx,
+                level: level
             });
 
         }
