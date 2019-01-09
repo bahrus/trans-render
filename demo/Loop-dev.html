@@ -8,8 +8,23 @@
 </head>
 <body>
     <div>
+        <template id="itemTemplate">
+            <li></li>
+        </template>
+        <template id="list">
+            <ul></ul>
+        </template>
+        <div id="target"></div>
         <script type="module">
             import { init } from '../init.js';
+            import {repeatInit } from '../repeatInit.js';
+            init(list, {
+                transform: {
+                    'ul': ({target, ctx, idx}) =>{
+                        repeatInit(10, itemTemplate, target);
+                    }
+                }
+            }, target);
         </script>
     </div>
 </body>

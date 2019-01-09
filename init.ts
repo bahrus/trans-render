@@ -33,7 +33,7 @@ export function init(template: HTMLTemplateElement, ctx: InitContext, target: HT
         const firstChild = clonedTemplate.firstElementChild;
         if(firstChild !== null){
             ctx.leaf = firstChild;
-            process(ctx);
+            process(ctx, 0, 0);
         }
 
     }
@@ -42,10 +42,11 @@ export function init(template: HTMLTemplateElement, ctx: InitContext, target: HT
     return ctx;
 }
 
-export function process(context: InitContext){
+export function process(context: InitContext, idx: number, level: number){
     const target = context.leaf;
     if(target.matches === undefined) return;
     const transform = context.transform;
+    
     context.matchFirstChild = false;
     context.matchNextSib = false;
     
@@ -70,7 +71,7 @@ export function process(context: InitContext){
         const nextSib = target.nextElementSibling;
         if(nextSib !== null){
             context.leaf = nextSib;
-            process(context);
+            process(context, idx + 1, level);
         }
         context.transform = transform;
     }
@@ -82,7 +83,7 @@ export function process(context: InitContext){
         const firstChild = target.firstElementChild;
         if(firstChild !== null){
             context.leaf = firstChild;
-            process(context);
+            process(context, 0, level + 1);
         }
         context.transform = transform;
     }
