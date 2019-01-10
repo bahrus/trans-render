@@ -12,12 +12,14 @@
             <li></li>
         </template>
         <template id="list">
-            <ul></ul>
+            <ul id="container"></ul>
         </template>
         <div id="target"></div>
+        <button id="addItems">Add items</button>
         <script type="module">
             import { init } from '../init.js';
             import {repeatInit } from '../repeatInit.js';
+            import {repeatUpdate} from '../repeatUpdate.js';
             init(list, {
                 transform: {
                     'ul': ({target, ctx}) =>{
@@ -31,6 +33,9 @@
                     }
                 }
             }, target);
+            addItems.addEventListener('click', e =>{
+                repeatUpdate(15, itemTemplate, container);
+            });
         </script>
     </div>
 </body>

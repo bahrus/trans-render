@@ -12,7 +12,7 @@ XSLT can take pure XML with no formatting instructions as its input.  Generally 
 
 Likewise, with the advent of custom elements, the template markup will tend to be much more semantic, like XML. trans-render tries to rely as much as possible on this intrinisic semantic nature of the template markup, to give enough clues on how to fill in the needed "potholes" like innerText's and property setting.  But trans-render is completely extensible, so it can certainly accommodate custom markup (like string interpolation, or common binding attributes) by using additional, optional helper libraries.  
 
-This leaves the template markup quite pristine, but it does mean that the binding instructions will tend to require looking in two places, rather one.
+This leaves the template markup quite pristine, but it does mean that the binding instructions will tend to require looking in two places, rather than one.
 
 The transform can be provided in the function "init".  If the transform is not present in the call, then it looks for a script tag with attribute "transform" where it expects the instructions.
 
@@ -89,13 +89,13 @@ The transform script can also be nested, and it should be noted that the matches
 By design, trans-render is loathe to do any unnessary work.  Each transform can specify whether to proceed to the next sibling:
 
 ```JavaScript
-cts.matchNextSib = true;
+ctx.matchNextSib = true;
 ```
 
 And/or it can specify to match the first child:
 
 ```JavaScript
-cts.matchFirstChild = true;
+ctx.matchFirstChild = true;
 ```
 
 These match statements can either be booleans, as illustrated above, or they can provide a new transform match:
