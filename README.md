@@ -402,4 +402,50 @@ The ability to do this is illustrated in the previous example.  Critical syntax 
         })
     </script>
 
+    #  Loop support (NB:  Not yet optimized.)
+
+    The next big use case for this library is using it in conjunction with a [virtual scroller](https://valdrinkoshi.github.io/virtual-scroller/#more-examples). As far as I can see, the performance of this component should work quite well in that scenario.
+    
+    However, no self respecting rendering library would be complete without some internal support for repeating lists.  This library is no exception.  While the performance of the initial list is likely to be acceptable, no effort has yet been made to utilize state of the art tricks to make list updates keep the number of DOM changes at a minimum. 
+
+    Anyway the syntax is shown below:
+
+    ```html
+    <div>
+        <template id="itemTemplate">
+            <li></li>
+        </template>
+        <template id="list">
+            <ul id="container"></ul>
+        </template>
+        <div id="target"></div>
+        <button id="addItems">Add items</button>
+        <script type="module">
+            import { init } from '../init.js';
+            import {update} from '../update.js';
+            import {repeatInit } from '../repeatInit.js';
+            import {repeatUpdate} from '../repeatUpdate.js';
+            const ctx = init(list, {
+                transform: {
+                    'ul': ({target, ctx}) =>{
+                        if(!ctx.update){
+                            repeatInit(10, itemTemplate, target);
+                        }
+                        ctx.matchFirstChild = {
+                            'li': ({target, ctx, idx}) =>{
+                                target.textContent = 'Hello ' + idx;
+                                ctx.matchNextSib = true;
+                            }
+                        }
+                    }
+                }
+            }, target);
+            addItems.addEventListener('click', e =>{
+                repeatUpdate(15, itemTemplate, container);
+                update(ctx, target);
+            });
+        </script>
+    </div>
+    ```
+
 

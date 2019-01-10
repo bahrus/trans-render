@@ -24,7 +24,9 @@
             const ctx = init(list, {
                 transform: {
                     'ul': ({target, ctx}) =>{
-                        repeatInit(10, itemTemplate, target);
+                        if(!ctx.update){
+                            repeatInit(10, itemTemplate, target);
+                        }
                         ctx.matchFirstChild = {
                             'li': ({target, ctx, idx}) =>{
                                 target.textContent = 'Hello ' + idx;
