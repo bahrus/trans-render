@@ -81,30 +81,6 @@
                 padding-top: 20px;
             }
         </style>
-            <script transform>
-                ({
-                    'div': ({ctx}) => {
-                        ctx.matchFirstChild = true;
-                    },
-                    '*': ({ctx}) => {
-                        ctx.matchNextSib = true;
-                    },
-                    '[x-d]': ({target, ctx}) => {
-                        ctx.interpolate(target, 'textContent', ctx.model);
-                    },
-                    '[data-init]': ({target, ctx}) =>{
-                        if(ctx.update){
-                            ctx.matchFirstChild = true;
-                        }else{
-                            ctx.init(ctx.$(target.dataset.init), {
-                                model: ctx.model, interpolate: ctx.interpolate, transform: ctx.transform, $: ctx.$
-                            }, target);
-                            ctx.matchFirstChild = false;
-                        }
-
-                    },
-                })
-            </script>
         </template>
         <div id="target"></div>
         
@@ -112,16 +88,36 @@
             import { init } from '../init.js';
             import { interpolate } from '../interpolate.js';
             import {update} from '../update.js';
+            let model = {
+                Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
+                Day6: 'Saturday', Day7: 'Sunday',
+            };
             const ctx = init(Main, {
-                model:{
-                    Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
-                    Day6: 'Saturday', Day7: 'Sunday',
-                },
-                interpolate: interpolate,
-                $: id => window[id],
+                transform:{
+                    'div': ({ctx}) => {
+                        ctx.matchFirstChild = true;
+                    },
+                    '*': ({ctx}) => {
+                        ctx.matchNextSib = true;
+                    },
+                    '[x-d]': ({target, ctx}) => {
+                        interpolate(target, 'textContent', model);
+                    },
+                    '[data-init]': ({target, ctx}) =>{
+                        if(ctx.update){
+                            ctx.matchFirstChild = true;
+                        }else{
+                            ctx.init(self[target.dataset.init], {
+                                transform: ctx.transform
+                            }, target);
+                            ctx.matchFirstChild = false;
+                        }
+
+                    },
+                }
             }, target);
             changeDays.addEventListener('click', e=>{
-                ctx.model = {
+                model = {
                     Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
                     Day6: 'lördag', Day7: 'söndag',
                 }
