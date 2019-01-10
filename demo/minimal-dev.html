@@ -14,25 +14,22 @@
             <detail>
                 <summary></summary>
             </detail>
-            <script transform>
-            ({
-                '*': ({ ctx }) => {
-                    ctx.matchFirstChild = {
-                        '*': ({ target, ctx }) => {
-                            target.textContent = ctx.model.summaryText;
-                        },
-                    };
-                },
-
-            })
-            </script>
         </template>
         <div id="target"></div>
         <script type="module">
-            import { init } from '../trans-render-init.js';
+            import { init } from '../init.js';
+            const model = {
+                summaryText: 'hello'
+            }
             const ctx = {
-                model: {
-                    summaryText: 'hello'
+                transform: {
+                    '*': ({ ctx }) => {
+                        ctx.matchFirstChild = {
+                            '*': ({ target, ctx }) => {
+                                target.textContent = model.summaryText;
+                            },
+                        };
+                    },
                 }
             };
             init(test, ctx, target);

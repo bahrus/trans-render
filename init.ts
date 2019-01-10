@@ -20,17 +20,8 @@ export interface InitContext extends BaseContext{
 
 export function init(template: HTMLTemplateElement, ctx: InitContext, target: HTMLElement){
     ctx.init = init;
-    const transformScriptSelector = 'script[transform]';
     const clonedTemplate = template.content.cloneNode(true) as DocumentFragment;
     ctx.template = clonedTemplate;
-    if(!ctx.transform){
-        const scriptTransform = clonedTemplate.querySelector(transformScriptSelector);
-        if(scriptTransform !== null){
-            ctx.transform = eval(scriptTransform.innerHTML);
-            scriptTransform.remove();
-        }
-
-    }
     if(ctx.transform){
         const firstChild = clonedTemplate.firstElementChild;
         if(firstChild !== null){

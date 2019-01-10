@@ -10,15 +10,15 @@ trans-render provides an alternative way of instantiating a template.  It draws 
 
 XSLT can take pure XML with no formatting instructions as its input.  Generally speaking, the XML that XSLT acts on isn't a bunch of semantically  meaningless div tags, but rather a nice semantic document, whose intrinsic structure is enough to go on, in order to formulate a "transform" that doesn't feel like a hack.  
 
-Likewise, with the advent of custom elements, the template markup will tend to be much more semantic, like XML. trans-render tries to rely as much as possible on this intrinisic semantic nature of the template markup, to give enough clues on how to fill in the needed "potholes" like innerText's and property setting.  But trans-render is completely extensible, so it can certainly accommodate custom markup (like string interpolation, or common binding attributes) by using additional, optional helper libraries.  
+Likewise, with the advent of custom elements, the template markup will tend to be much more semantic, like XML. trans-render tries to rely as much as possible on this intrinisic semantic nature of the template markup, to give enough clues on how to fill in the needed "potholes" like textContent and property setting.  But trans-render is completely extensible, so it can certainly accommodate custom markup (like string interpolation, or common binding attributes) by using additional, optional helper libraries.  
 
 This leaves the template markup quite pristine, but it does mean that the binding instructions will tend to require looking in two places, rather than one.
 
-The transform can be provided in the function "init".  If the transform is not present in the call, then it looks for a script tag with attribute "transform" where it expects the instructions.
+By keeping the binding separate, the same template can thus be used to bind with different object structures.
 
-Providing the transform inside the init function signature has the advantage that one could benefit from TypeScript typing of Custom and Native DOM elements.  On the other hand, specifing the transform inside the template tag keeps the binding closer to the markup, which many developers find convenient. In fact, this library is already going against the grain by separating the binding from the markup.  One could argue that this is less declarative than static moustache style templating.  However, compared to  tagged template literals / JSX, it is unclear to me whether the syntax described here is more or less "declarative."  In my view, none of them are.  So there.
+Providing the binding transform inside the init function signature has the advantage that one can benefit from TypeScript typing of Custom and Native DOM elements.  
 
-One distinct advantage of separating the binding like this, is that one can insert console.log's and/or breakpoints, in order to walk through the binding process.
+Another advantage of separating the binding like this, is that one can insert comments, console.log's and/or breakpoints, in order to walk through the binding process.
 
 ## Syntax:
 
@@ -405,7 +405,7 @@ The ability to do this is illustrated in the previous example.  Critical syntax 
 
 #  Loop support (NB:  Not yet optimized.)
 
-The next big use case for this library is using it in conjunction with a [virtual scroller](https://valdrinkoshi.github.io/virtual-scroller/#more-examples). As far as I can see, the performance of this component should work quite well in that scenario.
+The next big use case for this library is using it in conjunction with a [virtual scroller](https://valdrinkoshi.github.io/virtual-scroller/#more-examples). As far as I can see, the performance of this library should work quite well in that scenario.
 
 However, no self respecting rendering library would be complete without some internal support for repeating lists.  This library is no exception.  While the performance of the initial list is likely to be acceptable, no effort has yet been made to utilize state of the art tricks to make list updates keep the number of DOM changes at a minimum. 
 
