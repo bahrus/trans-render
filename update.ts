@@ -10,7 +10,7 @@ export function update(ctx: InitContext, target: HTMLElement){
     const firstChild = target.firstElementChild;
     if(firstChild !== null){
         ctx.leaf = firstChild;
-        process(ctx);
+        process(ctx, 0, 0);
     }
     return updateCtx;
 }

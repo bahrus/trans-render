@@ -5,7 +5,7 @@ export function update(ctx, target) {
     const firstChild = target.firstElementChild;
     if (firstChild !== null) {
         ctx.leaf = firstChild;
-        process(ctx);
+        process(ctx, 0, 0);
     }
     return updateCtx;
 }

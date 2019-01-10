@@ -14,13 +14,13 @@ export function init(template, ctx, target) {
         const firstChild = clonedTemplate.firstElementChild;
         if (firstChild !== null) {
             ctx.leaf = firstChild;
-            process(ctx);
+            process(ctx, 0, 0);
         }
     }
     target.appendChild(ctx.template);
     return ctx;
 }
-export function process(context) {
+export function process(context, idx, level) {
     const target = context.leaf;
     if (target.matches === undefined)
         return;
@@ -32,7 +32,9 @@ export function process(context) {
             const transformTemplate = transform[selector];
             transformTemplate({
                 target: target,
-                ctx: context
+                ctx: context,
+                idx: idx,
+                level: level
             });
         }
     }
@@ -46,7 +48,7 @@ export function process(context) {
         const nextSib = target.nextElementSibling;
         if (nextSib !== null) {
             context.leaf = nextSib;
-            process(context);
+            process(context, idx + 1, level);
         }
         context.transform = transform;
     }
@@ -58,7 +60,7 @@ export function process(context) {
         const firstChild = target.firstElementChild;
         if (firstChild !== null) {
             context.leaf = firstChild;
-            process(context);
+            process(context, 0, level + 1);
         }
         context.transform = transform;
     }
