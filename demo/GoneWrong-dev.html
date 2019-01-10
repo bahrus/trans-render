@@ -92,8 +92,12 @@
                     padding-top:20px;
                 }
             </style>
-            <script transform>
-                ({
+        </template>
+        <div id="target"></div>
+        <script type="module">
+            import { init } from '../init.js';
+            init(Main, {
+                transform: {
                     '*':({ctx}) =>{
                         ctx.matchNextSib = true;
                         ctx.matchFirstChild = true;
@@ -101,13 +105,8 @@
                     '[data-init]': ({target, ctx}) =>{
                         ctx.init(document.querySelector('#' + target.dataset.init), {}, target);
                     }
-                })
-            </script>
-        </template>
-        <div id="target"></div>
-        <script type="module">
-            import { init } from '../init.js';
-            init(Main, {}, target);
+                }
+            }, target);
         </script>
     </div>
 </body>
