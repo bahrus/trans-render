@@ -18,9 +18,10 @@
         <button id="addItems">Add items</button>
         <script type="module">
             import { init } from '../init.js';
+            import {update} from '../update.js';
             import {repeatInit } from '../repeatInit.js';
             import {repeatUpdate} from '../repeatUpdate.js';
-            init(list, {
+            const ctx = init(list, {
                 transform: {
                     'ul': ({target, ctx}) =>{
                         repeatInit(10, itemTemplate, target);
@@ -35,6 +36,7 @@
             }, target);
             addItems.addEventListener('click', e =>{
                 repeatUpdate(15, itemTemplate, container);
+                update(ctx, target);
             });
         </script>
     </div>
