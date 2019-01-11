@@ -5,12 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Friday Love</title>
 </head>
 
 <body>
     <div>
-        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a>
         <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a><br>
         <button id="changeDays">Wi not trei a holiday in Sweeden this yer</button>
         <template id="Friday">
@@ -82,46 +81,45 @@
                 padding-top: 20px;
             }
         </style>
-            <script transform>
-                ({
-                    'div': ({ctx}) => {
-                        ctx.matchFirstChild = true;
-                    },
-                    '*': ({ctx}) => {
-                        ctx.matchNextSib = true;
-                    },
-                    '[x-d]': ({target, ctx}) => {
-                        ctx.interpolate(target, 'textContent', ctx.model);
-                    },
-                    '[data-init]': ({target, ctx}) =>{
-                        if(ctx.update){
-                            ctx.matchFirstChild = true;
-                        }else{
-                            ctx.init(ctx.$(target.dataset.init), {
-                                model: ctx.model, interpolate: ctx.interpolate, transform: ctx.transform, $: ctx.$
-                            }, target);
-                            ctx.matchFirstChild = false;
-                        }
-
-                    },
-                })
-            </script>
         </template>
         <div id="target"></div>
+
         <script type="module">
-            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.17/init.js';
-            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.17/interpolate.js';
-            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.17/update.js';
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.23/init.js';
+            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.23/interpolate.js';
+            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.23/update.js';
+            let model = {
+                Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
+                Day6: 'Saturday', Day7: 'Sunday',
+            };
             const ctx = init(Main, {
-                model:{
-                    Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
-                    Day6: 'Saturday', Day7: 'Sunday',
-                },
-                interpolate: interpolate,
-                $: id => window[id],
+                transform: {
+                    'div': ({ ctx }) => {
+                        ctx.matchFirstChild = {
+                            '*': ({ ctx }) => {
+                                ctx.matchNextSib = true;
+                            },
+                            '[x-d]': ({ target, ctx }) => {
+                                interpolate(target, 'textContent', model);
+                            },
+                            '[data-init]': ({ target, ctx }) => {
+                                if (ctx.update) {
+                                    ctx.matchFirstChild = true;
+                                } else {
+                                    ctx.init(self[target.dataset.init], {
+                                        transform: ctx.transform
+                                    }, target);
+                                    ctx.matchFirstChild = false;
+                                }
+
+                            },
+                        }
+                        ctx.matchNextSib = true;
+                    },
+                }
             }, target);
-            changeDays.addEventListener('click', e=>{
-                ctx.model = {
+            changeDays.addEventListener('click', e => {
+                model = {
                     Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
                     Day6: 'lördag', Day7: 'söndag',
                 }

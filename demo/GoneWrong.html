@@ -16,6 +16,23 @@
         <template id="Again">And again</template>
         <template id="Again2">And again, and again, again and something's gone wrong again</template>
         <template id="Again3">And again, and again, again and something goes wrong again</template>
+        <template id="Agains">
+            <span data-init="Again"></span><br>
+            <span data-init="Again2"></span><br>
+            <span data-init="Title"></span>
+        </template>
+        <template id="Agains2">
+            <span data-init="Title2"></span><br>
+            <span data-init="Again"></span><br>
+            <span data-init="Again3"></span><br>
+            <span data-init="Title2"></span>
+        </template>
+        <template id="bus">
+            <span>Nothing ever happens to people like us</span><br>
+            <span>'Cept we miss the bus, something goes wrong again</span><br>
+            <span>Need a smoke, use my last fifty P.</span><br>
+            <span>But the machine is broke, something's gone wrong again</span>
+        </template>
         <template id="Main">
             <div>
                 <span>Tried to find my sock</span><br>
@@ -25,11 +42,7 @@
                 <span>Cut myself, need a new blade</span><br>
                 <span data-init="Title"></span>
             </div>
-            <div>
-                <span data-init="Again"></span><br>
-                <span data-init="Again2"></span><br>
-                <span data-init="Title"></span>
-            </div>
+            <div data-init="Agains"></div>
             <div>
                 <span>Tried to fry an egg</span><br>
                 <span>Broke the yolk, no joke</span><br>
@@ -38,41 +51,12 @@
                 <span data-init="Title"></span><br>
                 <span data-init="Title"></span>
             </div>
-            <div>
-                <span data-init="Again"></span><br>
-                <span data-init="Again2"></span><br>
-                <span data-init="Title"></span>
-            </div>
-            <div>
-                <span>Nothing ever happens to people like us</span><br>
-                <span>'Cept we miss the bus, something goes wrong again</span><br>
-                <span>Need a smoke, use my last fifty P.</span><br>
-                <span>But the machine is broke, something's gone wrong again</span>
-            </div>
-            <div>
-                <span data-init="Title2"></span><br>
-                <span data-init="Again"></span><br>
-                <span data-init="Again3"></span><br>
-                <span data-init="Title2"></span>
-            </div>
-            <div>
-                <span data-init="Title2"></span><br>
-                <span data-init="Again"></span><br>
-                <span data-init="Again3"></span><br>
-                <span data-init="Title2"></span>
-            </div>
-            <div>
-                <span>Nothing ever happens to people like us</span><br>
-                <span>'Cept we miss the bus, something goes wrong again</span><br>
-                <span>Need a smoke, use my last fifty P.</span><br>
-                <span>But the machine is broke, something goes wrong again</span>
-            </div>
-            <div>
-                <span data-init="Title2"></span><br>
-                <span data-init="Again"></span><br>
-                <span data-init="Again3"></span><br>
-                <span data-init="Title2"></span>
-            </div>
+            <div data-init="Agains"></div>
+            <div data-init="bus"></div>
+            <div data-init="Agains2"></div>
+            <div data-init="Agains2"></div>
+            <div data-init="bus"></div>
+            <div data-init="Agains2"></div>
             <div>
                 <span>I turned up early in time for our date</span><br>
                 <span>But then you turn up late, something goes wrong again</span><br>
@@ -92,22 +76,21 @@
                     padding-top:20px;
                 }
             </style>
-            <script transform>
-                ({
+        </template>
+        <div id="target"></div>
+        <script type="module">
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.23/init.js';
+            init(Main, {
+                transform: {
                     '*':({ctx}) =>{
                         ctx.matchNextSib = true;
                         ctx.matchFirstChild = true;
                     },
                     '[data-init]': ({target, ctx}) =>{
-                        ctx.init(document.querySelector('#' + target.dataset.init), {}, target);
+                        ctx.init(self[target.dataset.init], {}, target);
                     }
-                })
-            </script>
-        </template>
-        <div id="target"></div>
-        <script type="module">
-            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.17/init.js';
-            init(Main, {}, target);
+                }
+            }, target);
         </script>
     </div>
 </body>

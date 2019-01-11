@@ -27,25 +27,22 @@ Another advantage of separating the binding like this, is that one can insert co
     <detail>
         <summary></summary>
     </detail>
-    <script transform>
-        ({
-            'detail': i => {
-                i.ctx.matchFirstChild = true;
-            },
-            'summary': i => {
-                i.target.textContent = i.ctx.model.summaryText;
-            },
-        })
-    </script>
 </template>
-<div id="target">
-
-</div>
+<div id="target"></div>
 <script type="module">
     import { init } from '../init.js';
+    const model = {
+        summaryText: 'hello'
+    }
     const ctx = {
-        model: {
-            summaryText: 'hello'
+        transform: {
+            '*': ({ ctx }) => {
+                ctx.matchFirstChild = {
+                    '*': ({ target, ctx }) => {
+                        target.textContent = model.summaryText;
+                    },
+                };
+            },
         }
     };
     init(test, ctx, target);
@@ -64,27 +61,7 @@ Produces
 
 "ctx" stands for "context", a place to pass things throughout the processing process.  "target" is the HTML element we are populating.
 
-The transform script can also be nested, and it should be noted that the matches() function works with *.  So the transform above could be mofied to:
 
-```html
-<template id="test">
-    <detail>
-        <summary></summary>
-    </detail>
-    <script transform>
-        ({
-            '*': ({ctx}) => {
-                ctx.matchFirstChild = {
-                    '*': ({target, ctx}) => {
-                        target.textContent = ctx.model.summaryText;
-                    },
-                };
-            },
-
-        })
-    </script>
-</template>
-```
 
 By design, trans-render is loathe to do any unnessary work.  Each transform can specify whether to proceed to the next sibling:
 
@@ -100,9 +77,8 @@ ctx.matchFirstChild = true;
 
 These match statements can either be booleans, as illustrated above, or they can provide a new transform match:
 
-```html
-<script transform>
-    ({
+```JavaScript
+    transform: {
         '.opening': ({ target, ctx }) => {
             ctx.init(Opening, Object.assign({}, ctx), target);
             ctx.matchFirstChild = true;
@@ -125,8 +101,7 @@ These match statements can either be booleans, as illustrated above, or they can
         },
 
 
-    })
-</script>
+    }
 ```
 
 # Use Case 1:  Applying the DRY principle to (post) punk rock lyrics
@@ -144,6 +119,23 @@ These match statements can either be booleans, as illustrated above, or they can
         <template id="Again">And again</template>
         <template id="Again2">And again, and again, again and something's gone wrong again</template>
         <template id="Again3">And again, and again, again and something goes wrong again</template>
+        <template id="Agains">
+            <span data-init="Again"></span><br>
+            <span data-init="Again2"></span><br>
+            <span data-init="Title"></span>
+        </template>
+        <template id="Agains2">
+            <span data-init="Title2"></span><br>
+            <span data-init="Again"></span><br>
+            <span data-init="Again3"></span><br>
+            <span data-init="Title2"></span>
+        </template>
+        <template id="bus">
+            <span>Nothing ever happens to people like us</span><br>
+            <span>'Cept we miss the bus, something goes wrong again</span><br>
+            <span>Need a smoke, use my last fifty P.</span><br>
+            <span>But the machine is broke, something's gone wrong again</span>
+        </template>
         <template id="Main">
             <div>
                 <span>Tried to find my sock</span><br>
@@ -153,11 +145,7 @@ These match statements can either be booleans, as illustrated above, or they can
                 <span>Cut myself, need a new blade</span><br>
                 <span data-init="Title"></span>
             </div>
-            <div>
-                <span data-init="Again"></span><br>
-                <span data-init="Again2"></span><br>
-                <span data-init="Title"></span>
-            </div>
+            <div data-init="Agains"></div>
             <div>
                 <span>Tried to fry an egg</span><br>
                 <span>Broke the yolk, no joke</span><br>
@@ -166,41 +154,12 @@ These match statements can either be booleans, as illustrated above, or they can
                 <span data-init="Title"></span><br>
                 <span data-init="Title"></span>
             </div>
-            <div>
-                <span data-init="Again"></span><br>
-                <span data-init="Again2"></span><br>
-                <span data-init="Title"></span>
-            </div>
-            <div>
-                <span>Nothing ever happens to people like us</span><br>
-                <span>'Cept we miss the bus, something goes wrong again</span><br>
-                <span>Need a smoke, use my last fifty P.</span><br>
-                <span>But the machine is broke, something's gone wrong again</span>
-            </div>
-            <div>
-                <span data-init="Title2"></span><br>
-                <span data-init="Again"></span><br>
-                <span data-init="Again3"></span><br>
-                <span data-init="Title2"></span>
-            </div>
-            <div>
-                <span data-init="Title2"></span><br>
-                <span data-init="Again"></span><br>
-                <span data-init="Again3"></span><br>
-                <span data-init="Title2"></span>
-            </div>
-            <div>
-                <span>Nothing ever happens to people like us</span><br>
-                <span>'Cept we miss the bus, something goes wrong again</span><br>
-                <span>Need a smoke, use my last fifty P.</span><br>
-                <span>But the machine is broke, something goes wrong again</span>
-            </div>
-            <div>
-                <span data-init="Title2"></span><br>
-                <span data-init="Again"></span><br>
-                <span data-init="Again3"></span><br>
-                <span data-init="Title2"></span>
-            </div>
+            <div data-init="Agains"></div>
+            <div data-init="bus"></div>
+            <div data-init="Agains2"></div>
+            <div data-init="Agains2"></div>
+            <div data-init="bus"></div>
+            <div data-init="Agains2"></div>
             <div>
                 <span>I turned up early in time for our date</span><br>
                 <span>But then you turn up late, something goes wrong again</span><br>
@@ -220,22 +179,21 @@ These match statements can either be booleans, as illustrated above, or they can
                     padding-top:20px;
                 }
             </style>
-            <script transform>
-                ({
+        </template>
+        <div id="target"></div>
+        <script type="module">
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.23/init.js';
+            init(Main, {
+                transform: {
                     '*':({ctx}) =>{
                         ctx.matchNextSib = true;
                         ctx.matchFirstChild = true;
                     },
                     '[data-init]': ({target, ctx}) =>{
-                        ctx.init(document.querySelector('#' + target.dataset.init), {}, target);
+                        ctx.init(self[target.dataset.init], {}, target);
                     }
-                })
-            </script>
-        </template>
-        <div id="target"></div>
-        <script type="module">
-            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.17/init.js';
-            init(Main, {}, target);
+                }
+            }, target);
         </script>
     </div>
 </template>
@@ -250,7 +208,6 @@ These match statements can either be booleans, as illustrated above, or they can
 <custom-element-demo>
 <template>
     <div>
-        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a>
         <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a><br>
         <button id="changeDays">Wi not trei a holiday in Sweeden this yer</button>
         <template id="Friday">
@@ -322,46 +279,45 @@ These match statements can either be booleans, as illustrated above, or they can
                 padding-top: 20px;
             }
         </style>
-            <script transform>
-                ({
-                    'div': ({ctx}) => {
-                        ctx.matchFirstChild = true;
-                    },
-                    '*': ({ctx}) => {
-                        ctx.matchNextSib = true;
-                    },
-                    '[x-d]': ({target, ctx}) => {
-                        ctx.interpolate(target, 'textContent', ctx.model);
-                    },
-                    '[data-init]': ({target, ctx}) =>{
-                        if(ctx.update){
-                            ctx.matchFirstChild = true;
-                        }else{
-                            ctx.init(ctx.$(target.dataset.init), {
-                                model: ctx.model, interpolate: ctx.interpolate, transform: ctx.transform, $: ctx.$
-                            }, target);
-                            ctx.matchFirstChild = false;
-                        }
-
-                    },
-                })
-            </script>
         </template>
         <div id="target"></div>
+
         <script type="module">
-            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.17/init.js';
-            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.17/interpolate.js';
-            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.17/update.js';
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.23/init.js';
+            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.23/interpolate.js';
+            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.23/update.js';
+            let model = {
+                Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
+                Day6: 'Saturday', Day7: 'Sunday',
+            };
             const ctx = init(Main, {
-                model:{
-                    Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
-                    Day6: 'Saturday', Day7: 'Sunday',
-                },
-                interpolate: interpolate,
-                $: id => window[id],
+                transform: {
+                    'div': ({ ctx }) => {
+                        ctx.matchFirstChild = {
+                            '*': ({ ctx }) => {
+                                ctx.matchNextSib = true;
+                            },
+                            '[x-d]': ({ target, ctx }) => {
+                                interpolate(target, 'textContent', model);
+                            },
+                            '[data-init]': ({ target, ctx }) => {
+                                if (ctx.update) {
+                                    ctx.matchFirstChild = true;
+                                } else {
+                                    ctx.init(self[target.dataset.init], {
+                                        transform: ctx.transform
+                                    }, target);
+                                    ctx.matchFirstChild = false;
+                                }
+
+                            },
+                        }
+                        ctx.matchNextSib = true;
+                    },
+                }
             }, target);
-            changeDays.addEventListener('click', e=>{
-                ctx.model = {
+            changeDays.addEventListener('click', e => {
+                model = {
                     Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
                     Day6: 'lördag', Day7: 'söndag',
                 }
