@@ -4,7 +4,7 @@
 
 <a href="https://nodei.co/npm/trans-render/"><img src="https://nodei.co/npm/trans-render.png"></a>
 
-<img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/trans-render@0.0.16/dist/trans-render-init.min.js?compression=gzip">
+<img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/trans-render@0.0.23/dist/init.min.js?compression=gzip">
 
 trans-render provides an alternative way of instantiating a template.  It draws inspiration from the (least) popular features of xslt.  Like xslt, trans-render performs transforms on elements by matching tests on elements.  Whereas xslt uses xpath for its tests, trans-render uses the css matches() method.
 
