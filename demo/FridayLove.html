@@ -103,13 +103,12 @@
                                 interpolate(target, 'textContent', model);
                             },
                             '[data-init]': ({ target, ctx }) => {
-                                if (ctx.update) {
+                                if (ctx.update !== undefined) {
                                     ctx.matchFirstChild = true;
                                 } else {
-                                    ctx.init(self[target.dataset.init], {
+                                    init(self[target.dataset.init], {
                                         transform: ctx.transform
                                     }, target);
-                                    ctx.matchFirstChild = false;
                                 }
 
                             },

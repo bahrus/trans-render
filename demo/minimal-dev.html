@@ -24,12 +24,11 @@
             const ctx = {
                 transform: {
                     '*': ({ ctx }) => {
-                        ctx.matchFirstChild = {
-                            '*': ({ target, ctx }) => {
-                                target.textContent = model.summaryText;
-                            },
-                        };
+                        ctx.drillTo = 'summary';
                     },
+                    'summary': ({target}) =>{
+                        target.textContent = model.summaryText;
+                    }
                 }
             };
             init(test, ctx, target);

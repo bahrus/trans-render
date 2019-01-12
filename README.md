@@ -6,7 +6,7 @@
 
 <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/trans-render@0.0.23/dist/init.min.js?compression=gzip">
 
-trans-render provides an alternative way of instantiating a template.  It draws inspiration from the (least) popular features of xslt.  Like xslt, trans-render performs transforms on elements by matching tests on elements.  Whereas xslt uses xpath for its tests, trans-render uses the css matches() method.
+trans-render provides an alternative way of instantiating a template.  It draws inspiration from the (least) popular features of xslt.  Like xslt, trans-render performs transforms on elements by matching tests on elements.  Whereas xslt uses xpath for its tests, trans-render uses the css matches() and querySelector() methods.
 
 XSLT can take pure XML with no formatting instructions as its input.  Generally speaking, the XML that XSLT acts on isn't a bunch of semantically  meaningless div tags, but rather a nice semantic document, whose intrinsic structure is enough to go on, in order to formulate a "transform" that doesn't feel like a hack.  
 
@@ -19,6 +19,8 @@ By keeping the binding separate, the same template can thus be used to bind with
 Providing the binding transform inside the init function signature has the advantage that one can benefit from TypeScript typing of Custom and Native DOM elements.  
 
 Another advantage of separating the binding like this, is that one can insert comments, console.log's and/or breakpoints, in order to walk through the binding process.
+
+trans-render provides helper functions for cloning a template, and then walking through the DOM, applying rules in document order.  You can instruct the processor to move to the next element sibling and/or the first child, where processing can resume.  You can also "cut to teh chase" by "drilling" inside based on querySelector, but there's no going back to previous elements once that's done.  The syntax for the third option is shown below for the simplest example.
 
 ## Syntax:
 
@@ -37,12 +39,11 @@ Another advantage of separating the binding like this, is that one can insert co
     const ctx = {
         transform: {
             '*': ({ ctx }) => {
-                ctx.matchFirstChild = {
-                    '*': ({ target, ctx }) => {
-                        target.textContent = model.summaryText;
-                    },
-                };
+                ctx.drillTo = 'summary';
             },
+            'summary': ({target}) =>{
+                target.textContent = model.summaryText;
+            }
         }
     };
     init(test, ctx, target);
@@ -61,9 +62,7 @@ Produces
 
 "ctx" stands for "context", a place to pass things throughout the processing process.  "target" is the HTML element we are populating.
 
-
-
-By design, trans-render is loathe to do any unnessary work.  Each transform can specify whether to proceed to the next sibling:
+By design, trans-render is loathe to do any unnessary work.  As mentioned earlier, each transform can specify whether to proceed to the next sibling, thusly:
 
 ```JavaScript
 ctx.matchNextSib = true;
@@ -73,6 +72,12 @@ And/or it can specify to match the first child:
 
 ```JavaScript
 ctx.matchFirstChild = true;
+```
+
+And, as we've seen, you can drill down until the first matching element is found (via querySelector)
+
+```JavaScript
+cts.drillTo = 'myCssQuery';
 ```
 
 These match statements can either be booleans, as illustrated above, or they can provide a new transform match:
@@ -337,26 +342,26 @@ Often, we want to reapply a transform, after something changes -- typically the 
 The ability to do this is illustrated in the previous example.  Critical syntax shown below:
 
 ```html
-    <script type="module">
-        import { init } from '../init.js';
-        import { interpolate } from '../interpolate.js';
-        import {update} from '../update.js';
-        const ctx = init(Main, {
-            model:{
-                Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
-                Day6: 'Saturday', Day7: 'Sunday',
-            },
-            interpolate: interpolate,
-            $: id => window[id],
-        }, target);
-        changeDays.addEventListener('click', e=>{
-            ctx.model = {
-                Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
-                Day6: 'lördag', Day7: 'söndag',
-            }
-            update(ctx, target);
-        })
-    </script>
+<script type="module">
+    import { init } from '../init.js';
+    import { interpolate } from '../interpolate.js';
+    import {update} from '../update.js';
+    const ctx = init(Main, {
+        model:{
+            Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
+            Day6: 'Saturday', Day7: 'Sunday',
+        },
+        interpolate: interpolate,
+        $: id => window[id],
+    }, target);
+    changeDays.addEventListener('click', e=>{
+        ctx.model = {
+            Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
+            Day6: 'lördag', Day7: 'söndag',
+        }
+        update(ctx, target);
+    })
+</script>
 ```
 
 #  Loop support (NB:  Not yet optimized.)
@@ -385,7 +390,7 @@ Anyway the syntax is shown below:
         const ctx = init(list, {
             transform: {
                 'ul': ({target, ctx}) =>{
-                    if(!ctx.update){
+                    if(ctx.update !== undefined){
                         repeatInit(10, itemTemplate, target);
                     }
                     ctx.matchFirstChild = {

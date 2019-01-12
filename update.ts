@@ -1,4 +1,4 @@
-import {InitContext,BaseContext, process} from './init.js';
+import {InitContext, process} from './init.js';
 
 export interface UpdateContext extends InitContext {
     update: (ctx: InitContext, target: HTMLElement) => UpdateContext;

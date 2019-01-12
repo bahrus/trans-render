@@ -6,15 +6,17 @@ export interface TransformArg {
     idx: number,
     level: number,
 }
-export interface BaseContext {
-    model: any,
-    leaf: Element,
-}
-export interface InitContext extends BaseContext{
+// export interface BaseContext {
+//     //model: any,
+//     leaf: Element,
+// }
+export interface InitContext{
     init: (template: HTMLTemplateElement, ctx: InitContext, target: HTMLElement) => void,
+    leaf: Element,
     transform : TransformRules,
     matchFirstChild: boolean | TransformRules,
     matchNextSib: boolean | TransformRules,
+    drillTo: string | null,
     template: DocumentFragment,
 }
 
@@ -42,7 +44,7 @@ export function process(context: InitContext, idx: number, level: number){
     
     context.matchFirstChild = false;
     context.matchNextSib = false;
-    
+    context.drillTo = null;
     for(const selector in transform){
         if(target.matches(selector)){
             const transformTemplate = transform[selector];
@@ -58,6 +60,7 @@ export function process(context: InitContext, idx: number, level: number){
     }
     const matchNextSib = context.matchNextSib;
     const matchFirstChild = context.matchFirstChild;
+    const drillTo = context.drillTo;
     if(matchNextSib){
         let transform = context.transform;
         if(typeof(matchNextSib) === 'object'){
@@ -70,14 +73,20 @@ export function process(context: InitContext, idx: number, level: number){
         }
         context.transform = transform;
     }
-    if(matchFirstChild ){
+    if(matchFirstChild || drillTo){
         let transform = context.transform;
         if(typeof(matchFirstChild) === 'object'){
             context.transform = matchFirstChild;
         }
-        const firstChild = target.firstElementChild;
-        if(firstChild !== null){
-            context.leaf = firstChild;
+        let nextChild : Element | null;
+        if(context.drillTo !== null){
+            nextChild = target.querySelector(context.drillTo);
+        }else{
+            nextChild = target.firstElementChild;
+        }
+        //const firstChild = target.firstElementChild;
+        if(nextChild !== null){
+            context.leaf = nextChild;
             process(context, 0, level + 1);
         }
         context.transform = transform;
