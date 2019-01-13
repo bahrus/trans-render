@@ -6,17 +6,14 @@ export interface TransformArg {
     idx: number,
     level: number,
 }
-// export interface BaseContext {
-//     //model: any,
-//     leaf: Element,
-// }
+
 export interface InitContext{
     init?: (template: HTMLTemplateElement, ctx: InitContext, target: HTMLElement) => InitContext,
     leaf?: Element,
-    transform? : TransformRules | undefined,
-    matchFirstChild?: boolean | TransformRules | undefined,
-    matchNextSib?: boolean | TransformRules | undefined,
-    drillTo?: string | null | undefined,
+    transform? : TransformRules,
+    matchFirstChild?: boolean | TransformRules,
+    matchNextSib?: boolean | TransformRules,
+    drill?: TransformRules | null,
     template?: DocumentFragment,
     update?: (ctx: InitContext, target: HTMLElement) => InitContext; 
 }
@@ -45,7 +42,7 @@ export function process(context: InitContext, idx: number, level: number){
     
     context.matchFirstChild = false;
     context.matchNextSib = false;
-    context.drillTo = null;
+    context.drill = null;
     for(const selector in transform){
         if(target.matches(selector)){
             const transformTemplate = transform[selector];
@@ -61,7 +58,7 @@ export function process(context: InitContext, idx: number, level: number){
     }
     const matchNextSib = context.matchNextSib;
     const matchFirstChild = context.matchFirstChild;
-    const drillTo = context.drillTo;
+    const drill = (<any>context.drill) as TransformRules | null;
     if(matchNextSib){
         let transform = context.transform;
         if(typeof(matchNextSib) === 'object'){
@@ -74,16 +71,20 @@ export function process(context: InitContext, idx: number, level: number){
         }
         context.transform = transform;
     }
-    if(matchFirstChild || drillTo){
+    
+    if(matchFirstChild || drill !== null){
         let transform = context.transform;
-        if(typeof(matchFirstChild) === 'object'){
-            context.transform = matchFirstChild;
-        }
+
         let nextChild : Element | null;
-        if(context.drillTo !== null){
-            nextChild = target.querySelector(context.drillTo);
+        if(drill !== null){
+            const keys = Object.keys(drill);
+            nextChild = target.querySelector(keys[0]);
+            context.transform = drill;
         }else{
             nextChild = target.firstElementChild;
+            if(typeof(matchFirstChild) === 'object'){
+                context.transform = matchFirstChild;
+            }
         }
         //const firstChild = target.firstElementChild;
         if(nextChild !== null){

@@ -21,17 +21,16 @@
             const model = {
                 summaryText: 'hello'
             }
-            const ctx = {
-                transform: {
-                    '*': ({ ctx }) => {
-                        ctx.drillTo = 'summary';
-                    },
-                    'summary': ({target}) =>{
-                        target.textContent = model.summaryText;
+            const transform = {
+                'detail': ({ ctx }) => {
+                    ctx.drill = {
+                        'summary': ({target}) =>{
+                                target.textContent = model.summaryText;
+                        }
                     }
-                }
+                },
             };
-            init(test, ctx, target);
+            init(test, {transform}, target);
         </script>
     </div>
 </body>

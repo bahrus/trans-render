@@ -19,7 +19,7 @@ export function process(context, idx, level) {
     const transform = context.transform;
     context.matchFirstChild = false;
     context.matchNextSib = false;
-    context.drillTo = null;
+    context.drill = null;
     for (const selector in transform) {
         if (target.matches(selector)) {
             const transformTemplate = transform[selector];
@@ -33,7 +33,7 @@ export function process(context, idx, level) {
     }
     const matchNextSib = context.matchNextSib;
     const matchFirstChild = context.matchFirstChild;
-    const drillTo = context.drillTo;
+    const drill = context.drill;
     if (matchNextSib) {
         let transform = context.transform;
         if (typeof (matchNextSib) === 'object') {
@@ -46,17 +46,19 @@ export function process(context, idx, level) {
         }
         context.transform = transform;
     }
-    if (matchFirstChild || drillTo) {
+    if (matchFirstChild || drill !== null) {
         let transform = context.transform;
-        if (typeof (matchFirstChild) === 'object') {
-            context.transform = matchFirstChild;
-        }
         let nextChild;
-        if (context.drillTo !== null) {
-            nextChild = target.querySelector(context.drillTo);
+        if (drill !== null) {
+            const keys = Object.keys(drill);
+            nextChild = target.querySelector(keys[0]);
+            context.transform = drill;
         }
         else {
             nextChild = target.firstElementChild;
+            if (typeof (matchFirstChild) === 'object') {
+                context.transform = matchFirstChild;
+            }
         }
         //const firstChild = target.firstElementChild;
         if (nextChild !== null) {

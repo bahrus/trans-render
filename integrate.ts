@@ -9,4 +9,4 @@ export function integrate(template: HTMLTemplateElement, target : Element, ctx: 
         }, target);
     }
 
-},
+}
