@@ -1,5 +1,5 @@
 
-type TransformRules = {[key: string] : (arg: TransformArg) => void };
+export type TransformRules = {[key: string] : (arg: TransformArg) => void };
 export interface TransformArg {
     target: Element,
     ctx: InitContext,
@@ -11,16 +11,17 @@ export interface TransformArg {
 //     leaf: Element,
 // }
 export interface InitContext{
-    init: (template: HTMLTemplateElement, ctx: InitContext, target: HTMLElement) => void,
-    leaf: Element,
-    transform : TransformRules,
-    matchFirstChild: boolean | TransformRules,
-    matchNextSib: boolean | TransformRules,
-    drillTo: string | null,
-    template: DocumentFragment,
+    init?: (template: HTMLTemplateElement, ctx: InitContext, target: HTMLElement) => InitContext,
+    leaf?: Element,
+    transform? : TransformRules | undefined,
+    matchFirstChild?: boolean | TransformRules | undefined,
+    matchNextSib?: boolean | TransformRules | undefined,
+    drillTo?: string | null | undefined,
+    template?: DocumentFragment,
+    update?: (ctx: InitContext, target: HTMLElement) => InitContext; 
 }
 
-export function init(template: HTMLTemplateElement, ctx: InitContext, target: HTMLElement){
+export function init(template: HTMLTemplateElement, ctx: InitContext, target: Element) : InitContext{
     ctx.init = init;
     const clonedTemplate = template.content.cloneNode(true) as DocumentFragment;
     ctx.template = clonedTemplate;
@@ -38,7 +39,7 @@ export function init(template: HTMLTemplateElement, ctx: InitContext, target: HT
 }
 
 export function process(context: InitContext, idx: number, level: number){
-    const target = context.leaf;
+    const target = context.leaf!;
     if(target.matches === undefined) return;
     const transform = context.transform;
     

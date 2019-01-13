@@ -88,6 +88,8 @@
             import { init } from '../init.js';
             import { interpolate } from '../interpolate.js';
             import { update } from '../update.js';
+            import { integrate } from '../integrate.js';
+
             let model = {
                 Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
                 Day6: 'Saturday', Day7: 'Sunday',
@@ -102,17 +104,7 @@
                             '[x-d]': ({ target, ctx }) => {
                                 interpolate(target, 'textContent', model);
                             },
-                            '[data-init]': ({ target, ctx }) => {
-                                if (ctx.update !== undefined) {
-                                    ctx.matchFirstChild = true;
-                                } else {
-                                    ctx.init(self[target.dataset.init], {
-                                        transform: ctx.transform
-                                    }, target);
-                                    ctx.matchFirstChild = false;
-                                }
-
-                            },
+                            '[data-init]': ({ target, ctx }) => integrate(self[target.dataset.init], target, ctx, ctx.transform),
                         }
                         ctx.matchNextSib = true;
                     },
