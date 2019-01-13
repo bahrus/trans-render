@@ -6,7 +6,7 @@
 
 <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/trans-render@0.0.23/dist/init.min.js?compression=gzip">
 
-trans-render provides an alternative way of instantiating a template.  It draws inspiration from the (least) popular features of xslt.  Like xslt, trans-render performs transforms on elements by matching tests on elements.  Whereas xslt uses xpath for its tests, trans-render uses the css matches() and querySelector() methods.
+trans-render provides an alternative way of instantiating a template.  It draws inspiration from the (least) popular features of xslt.  Like xslt, trans-render performs transforms on elements by matching tests on elements.  Whereas xslt uses xpath for its tests, trans-render uses css patth tests via the element.matches() and element.querySelector() methods.
 
 XSLT can take pure XML with no formatting instructions as its input.  Generally speaking, the XML that XSLT acts on isn't a bunch of semantically  meaningless div tags, but rather a nice semantic document, whose intrinsic structure is enough to go on, in order to formulate a "transform" that doesn't feel like a hack.  
 
@@ -14,13 +14,19 @@ Likewise, with the advent of custom elements, the template markup will tend to b
 
 This leaves the template markup quite pristine, but it does mean that the binding instructions will tend to require looking in two places, rather than one.
 
+## Advantages
+
 By keeping the binding separate, the same template can thus be used to bind with different object structures.
 
-Providing the binding transform inside the init function signature has the advantage that one can benefit from TypeScript typing of Custom and Native DOM elements.  
+Providing the binding transform in JS form inside the init function signature has the advantage that one can benefit from TypeScript typing of Custom and Native DOM elements with no additional IDE support.  
 
 Another advantage of separating the binding like this, is that one can insert comments, console.log's and/or breakpoints, in order to walk through the binding process.
 
-trans-render provides helper functions for cloning a template, and then walking through the DOM, applying rules in document order.  You can instruct the processor to move to the next element sibling and/or the first child, where processing can resume.  You can also "cut to teh chase" by "drilling" inside based on querySelector, but there's no going back to previous elements once that's done.  The syntax for the third option is shown below for the simplest example.
+## Workflow
+
+trans-render provides helper functions for cloning a template, and then walking through the DOM, applying rules in document order.  Note that the document can grow, as processing takes place (due, for example, to cloning sub templates).  It's critical, therefore, that the processing occur in a logical order, and that order is down the document tree.  That way it is fine to append nodes before continuing processing.  
+
+For each matching element, after modifying the node, you can instruct the processor to move to the next element sibling and/or the first child of the current one, where processing can continue.  You can also "cut to the chase" by "drilling" inside based on querySelector, but there's no going back to previous elements once that's done.  The syntax for the third option is shown below for the simplest example.  If you select the drill option, that trumps instructing trans-render to process the first child.
 
 ## Syntax:
 
@@ -36,17 +42,16 @@ trans-render provides helper functions for cloning a template, and then walking 
     const model = {
         summaryText: 'hello'
     }
-    const ctx = {
-        transform: {
-            '*': ({ ctx }) => {
-                ctx.drillTo = 'summary';
-            },
-            'summary': ({target}) =>{
-                target.textContent = model.summaryText;
+    const transform = {
+        'detail': ({ ctx }) => {
+            ctx.drill = {
+                'summary': ({target}) =>{
+                        target.textContent = model.summaryText;
+                }
             }
-        }
+        },
     };
-    init(test, ctx, target);
+    init(test, {transform}, target);
 </script>
 ```
 
@@ -77,10 +82,14 @@ ctx.matchFirstChild = true;
 And, as we've seen, you can drill down until the first matching element is found (via querySelector)
 
 ```JavaScript
-cts.drillTo = 'myCssQuery';
+cts.drill = {
+ 'myCssQuery':{
+     ...
+ }
+} ;
 ```
 
-These match statements can either be booleans, as illustrated above, or they can provide a new transform match:
+The first two match statements above can either be booleans, as illustrated above, or they can provide a new transform match:
 
 ```JavaScript
     transform: {
