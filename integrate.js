@@ -1,7 +1,7 @@
 import { init } from './init.js';
 export function integrate(template, target, ctx, transform) {
     if (ctx.update !== undefined) {
-        ctx.matchFirstChild = true;
+        //ctx.matchFirstChild = true;
     }
     else {
         init(template, {

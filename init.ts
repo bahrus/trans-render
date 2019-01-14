@@ -18,7 +18,7 @@ export interface InitContext{
     init?: (template: HTMLTemplateElement, ctx: InitContext, target: HTMLElement) => InitContext,
     leaf?: Element,
     transform? : TransformRules,
-    matchFirstChild?: boolean | TransformRules,
+    //matchFirstChild?: boolean | TransformRules,
     matchNextSib?: boolean | TransformRules,
     inheritMatches?: boolean,
     //drill?: TransformRules | null,
@@ -53,10 +53,11 @@ export function process(context: InitContext, idx: number, level: number){
     if(target.matches === undefined) return;
     const transform = context.transform;
     
-    context.matchFirstChild = false;
+    //context.matchFirstChild = false;
     context.matchNextSib = false;
     //context.drill = null;
     let drill: TransformRules | null = null;
+    let matchFirstChild : TransformRules | boolean = false;
     context.inheritMatches = false;
     for(const selector in transform){
         if(target.matches(selector)){
@@ -72,12 +73,28 @@ export function process(context: InitContext, idx: number, level: number){
                 if(resp.drill !== undefined){
                     drill = drill === null ? resp.drill : Object.assign(drill, resp.drill);
                 }
-                
+                if(resp.matchFirstChild !== undefined){
+                    switch(typeof resp.matchFirstChild){
+                        case 'boolean':
+                            if(typeof matchFirstChild === 'boolean' && resp.matchFirstChild){
+                                matchFirstChild = true;
+                            }
+                            break;
+                        case 'object':
+                            if(typeof matchFirstChild === 'object'){
+                                Object.assign(matchFirstChild, resp.matchFirstChild);
+                            }else{
+                                matchFirstChild = resp.matchFirstChild;
+                            }
+                            break;
+
+                    }
+                }
             }
         }
     }
     const matchNextSib = context.matchNextSib;
-    const matchFirstChild = context.matchFirstChild;
+    //const matchFirstChild = context.matchFirstChild;
     //const drill = (<any>context.drill) as TransformRules | null;
     if(matchNextSib){
         let transform = context.transform;
@@ -113,6 +130,6 @@ export function process(context: InitContext, idx: number, level: number){
         }
         context.transform = transform;
     }
-    context.matchFirstChild = matchFirstChild;
+    //context.matchFirstChild = matchFirstChild;
     context.matchNextSib = matchNextSib;
 }

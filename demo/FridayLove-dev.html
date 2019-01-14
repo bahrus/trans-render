@@ -88,7 +88,7 @@
             import { init } from '../init.js';
             import { interpolate } from '../interpolate.js';
             import { update } from '../update.js';
-            import { integrate } from '../integrate.js';
+            //import { integrate } from '../integrate.js';
 
             let model = {
                 Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
@@ -96,17 +96,28 @@
             };
             const ctx = init(Main, {
                 transform: {
-                    'div': ({ ctx }) => {
-                        ctx.matchFirstChild = {
-                            '*': ({ ctx }) => {
-                                ctx.matchNextSib = true;
-                            },
-                            '[x-d]': ({ target, ctx }) => {
-                                interpolate(target, 'textContent', model);
-                            },
-                            '[data-init]': ({ target, ctx }) => integrate(self[target.dataset.init], target, ctx, ctx.transform),
-                        }
+                    div: ({ ctx }) => {
+
                         ctx.matchNextSib = true;
+                        return {
+                            matchFirstChild: {
+                                '*': ({ ctx }) => {
+                                    ctx.matchNextSib = true;
+                                },
+                                '[x-d]': ({ target, ctx }) => {
+                                    interpolate(target, 'textContent', model);
+                                },
+                                '[data-init]': ({ target, ctx }) => {
+                                    if (ctx.update !== undefined) {
+                                        ctx.matchFirstChild = true;
+                                    } else {
+                                        init(self[target.dataset.init], {
+                                            transform: ctx.transform
+                                        }, target);
+                                    }
+                                },
+                            }
+                        }
                     },
                 }
             }, target);
