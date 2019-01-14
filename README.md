@@ -213,9 +213,11 @@ transform: {
             import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.23/init.js';
             init(Main, {
                 transform: {
-                    '*':({ctx}) =>{
-                        ctx.matchNextSib = true;
-                        ctx.matchFirstChild = true;
+                    '*': x  => {
+                        return{
+                            matchNextSib: true,
+                            matchFirstChild: true
+                        }
                     },
                     '[data-init]': ({target, ctx}) =>{
                         ctx.init(self[target.dataset.init], {}, target);
