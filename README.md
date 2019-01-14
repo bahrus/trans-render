@@ -37,7 +37,9 @@ At this point, only a synchronous workflow is provided.
 ```html
 <template id="test">
     <detail>
+        ...
         <summary></summary>
+        ...
     </detail>
 </template>
 <div id="target"></div>
@@ -63,12 +65,14 @@ Produces
 ```html
 <div id="target">
     <detail>
+        ...
         <summary>hello</summary>
+        ...
     </detail>
 </div>
 ```
 
-"target" is the HTML element we are populating.
+"target" is the HTML element we are populating.  The transform matches can return a string, which will be used to set the textContent of the target.  Or the transform can do its own manipulations on the target element, and then return an object specifying where to go next.
 
 By design, trans-render is loathe to do any unnessary work.  As mentioned earlier, each transform can specify whether to proceed to the next sibling, thusly:
 
@@ -102,11 +106,9 @@ transform: {
     div: x => ({
         matchNextSib: true,
         matchFirstChild: {
-            '*': x => {
-                return {
-                    matchNextSib: true
-                }
-            },
+            '*': x => ({
+                 matchNextSib: true
+            }),
             '[x-d]': ({ target}) => {
                 interpolate(target, 'textContent', model);
             },
