@@ -22,10 +22,10 @@
                 summaryText: 'hello'
             }
             const transform = {
-                'detail': x => {
+                detail: x => {
                     return {
                         drill: {
-                            'summary': ({ target }) => {
+                            summary: ({ target }) => {
                                 target.textContent = model.summaryText;
                             }
                         }
