@@ -25,22 +25,28 @@ export function process(context, idx, level) {
     const transform = context.transform;
     context.matchFirstChild = false;
     context.matchNextSib = false;
-    context.drill = null;
+    //context.drill = null;
+    let drill = null;
     context.inheritMatches = false;
     for (const selector in transform) {
         if (target.matches(selector)) {
             const transformTemplate = transform[selector];
-            transformTemplate({
+            const resp = transformTemplate({
                 target: target,
                 ctx: context,
                 idx: idx,
                 level: level
             });
+            if (resp !== undefined) {
+                if (resp.drill !== undefined) {
+                    drill = drill === null ? resp.drill : Object.assign(drill, resp.drill);
+                }
+            }
         }
     }
     const matchNextSib = context.matchNextSib;
     const matchFirstChild = context.matchFirstChild;
-    const drill = context.drill;
+    //const drill = (<any>context.drill) as TransformRules | null;
     if (matchNextSib) {
         let transform = context.transform;
         if (typeof (matchNextSib) === 'object') {

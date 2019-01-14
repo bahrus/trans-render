@@ -1,10 +1,17 @@
 
-export type TransformRules = {[key: string] : (arg: TransformArg) => void };
+export type TransformRules = {[key: string] : (arg: TransformArg) =>  NextSteps};
 export interface TransformArg {
     target: Element,
     ctx: InitContext,
     idx: number,
     level: number,
+}
+
+export interface NextSteps {
+    matchFirstChild?: boolean | TransformRules,
+    matchNextSib?: boolean | TransformRules,
+    drill?: TransformRules | null,
+    inheritMatches?: boolean,
 }
 
 export interface InitContext{
@@ -14,7 +21,7 @@ export interface InitContext{
     matchFirstChild?: boolean | TransformRules,
     matchNextSib?: boolean | TransformRules,
     inheritMatches?: boolean,
-    drill?: TransformRules | null,
+    //drill?: TransformRules | null,
     template?: DocumentFragment,
     update?: (ctx: InitContext, target: HTMLElement) => InitContext; 
 }
@@ -48,24 +55,30 @@ export function process(context: InitContext, idx: number, level: number){
     
     context.matchFirstChild = false;
     context.matchNextSib = false;
-    context.drill = null;
+    //context.drill = null;
+    let drill: TransformRules | null = null;
     context.inheritMatches = false;
     for(const selector in transform){
         if(target.matches(selector)){
             const transformTemplate = transform[selector];
 
-            transformTemplate({
+            const resp = transformTemplate({
                 target: target, 
                 ctx: context,
                 idx: idx,
                 level: level
             });
-
+            if(resp !== undefined){
+                if(resp.drill !== undefined){
+                    drill = drill === null ? resp.drill : Object.assign(drill, resp.drill);
+                }
+                
+            }
         }
     }
     const matchNextSib = context.matchNextSib;
     const matchFirstChild = context.matchFirstChild;
-    const drill = (<any>context.drill) as TransformRules | null;
+    //const drill = (<any>context.drill) as TransformRules | null;
     if(matchNextSib){
         let transform = context.transform;
         if(typeof(matchNextSib) === 'object'){
