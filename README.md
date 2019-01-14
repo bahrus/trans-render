@@ -28,7 +28,7 @@ trans-render provides helper functions for cloning a template, and then walking 
 
 For each matching element, after modifying the node, you can instruct the processor to move to the next element sibling and/or the first child of the current one, where processing can continue.  You can also "cut to the chase" by "drilling" inside based on querySelector, but there's no going back to previous elements once that's done.  The syntax for the third option is shown below for the simplest example.  If you select the drill option, that trumps instructing trans-render to process the first child.
 
-It is deeply unfortunate that the DOM Query Api doesn't provide a convenience function for [finding the next sibling](https://gomakethings.com/finding-the-next-and-previous-sibling-elements-that-match-a-selector-with-vanilla-js/) that matches a query, similar to querySelector. Just saying.  But some support for "cutting to the chase" laterally is planned [TODO].
+It is deeply unfortunate that the DOM Query Api doesn't provide a convenience function for [finding the next sibling](https://gomakethings.com/finding-the-next-and-previous-sibling-elements-that-match-a-selector-with-vanilla-js/) that matches a query, similar to querySelector. Just saying.  But some support for "cutting to the chase" laterally is provided.
 
 At this point, only a synchronous workflow is provided.
 
@@ -50,7 +50,7 @@ At this point, only a synchronous workflow is provided.
     }
     const transform = {
         detail: x => ({
-            drill: {
+            select: {
                 summary: x => model.summaryText
             }
         })
@@ -90,7 +90,7 @@ And, as we've seen, you can drill down until the first matching element is found
 
 ```JavaScript
 return {
-    drill: {
+    select: {
         'myCssQuery':{
             ...
         }
@@ -99,7 +99,7 @@ return {
 
 ```
 
-The first two match statements above can either be booleans, as illustrated above, or they can provide a new transform match:
+The matchFirstChild return statement above can either be a boolean, as illustrated above, or they it can provide a new transform match:
 
 ```JavaScript
 transform: {
@@ -127,6 +127,8 @@ transform: {
     }),
 }
 ```
+
+Another return property: "nextMatch" can be used to skip over the next set of siblings until it finds a node matching the value of nextMatch.
 
 # Use Case 1:  Applying the DRY principle to (post) punk rock lyrics
 

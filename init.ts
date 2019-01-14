@@ -1,3 +1,4 @@
+import { repeatInit } from "./repeatInit";
 
 export type TransformRules = { [key: string]: (arg: TransformArg) => NextSteps | string };
 export interface TransformArg {
@@ -9,7 +10,8 @@ export interface TransformArg {
 
 export interface NextSteps {
     matchFirstChild?: boolean | TransformRules,
-    matchNextSib?: boolean | TransformRules,
+    matchNextSib?: boolean,
+    nextMatch?: string,
     select?: TransformRules | null,
     inheritMatches?: boolean,
 }
@@ -51,8 +53,9 @@ export function process(context: InitContext, idx: number, level: number) {
 
     let drill: TransformRules | null = null;
     let matchFirstChild: TransformRules | boolean = false;
-    let matchNextSib: TransformRules | boolean = false;
+    let matchNextSib: boolean = false;
     let inherit = false;
+    let nextMatch = [];
     //context.inheritMatches = false;
     for (const selector in transform) {
         if (target.matches(selector)) {
@@ -92,21 +95,9 @@ export function process(context: InitContext, idx: number, level: number) {
 
                             }
                         }
-                        if (resp.matchNextSib !== undefined) {
-                            switch (typeof resp.matchNextSib) {
-                                case 'boolean':
-                                    if (typeof matchNextSib === 'boolean' && resp.matchNextSib) {
-                                        matchNextSib = true;
-                                    }
-                                    break;
-                                case 'object':
-                                    if (typeof matchNextSib === 'object') {
-                                        Object.assign(matchNextSib, resp.matchNextSib);
-                                    } else {
-                                        matchNextSib = resp.matchNextSib;
-                                    }
-                                    break;
-                            }
+                        if(resp.matchNextSib) matchNextSib = true;
+                        if(!matchNextSib && resp.nextMatch){
+                            nextMatch.push(resp.nextMatch);
                         }
                         break;
                 }
@@ -125,6 +116,17 @@ export function process(context: InitContext, idx: number, level: number) {
             process(context, idx + 1, level);
         }
         context.transform = transform;
+    }else if(nextMatch.length > 0){
+        const match = nextMatch.join(',');
+        let nextSib = target.nextElementSibling;
+        while(nextSib !== null){
+            if(nextSib.matches(match)){
+                context.leaf = nextSib;
+                process(context, idx + 1, level);
+                break;
+            }
+            nextSib = nextSib.nextElementSibling;
+        }
     }
 
     if (matchFirstChild || drill !== null) {

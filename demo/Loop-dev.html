@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
+
 <body>
     <div>
         <template id="itemTemplate">
@@ -16,32 +18,38 @@
             <button id="addItems">Add items</button>
         </template>
         <div id="target"></div>
-        
+
         <script type="module">
             import { init } from '../init.js';
-            import {update} from '../update.js';
-            import {repeatInit } from '../repeatInit.js';
-            import {repeatUpdate} from '../repeatUpdate.js';
+            import { update } from '../update.js';
+            import { repeatInit } from '../repeatInit.js';
+            import { repeatUpdate } from '../repeatUpdate.js';
             const ctx = init(list, {
                 transform: {
-                    'ul': ({target, ctx}) =>{
-                        if(!ctx.update){
+                    'ul': ({ target, ctx }) => {
+                        if (!ctx.update) {
                             repeatInit(10, itemTemplate, target);
                         }
-                        ctx.matchFirstChild = {
-                            'li': ({target, ctx, idx}) =>{
-                                target.textContent = 'Hello ' + idx;
-                                ctx.matchNextSib = true;
+                        return {
+                            matchFirstChild: {
+                                'li': ({ target, ctx, idx }) => {
+                                    target.textContent = 'Hello ' + idx;
+                                    return {
+                                        matchNextSib: true
+                                    }
+                                }
                             }
                         }
+
                     }
                 }
             }, target);
-            addItems.addEventListener('click', e =>{
+            addItems.addEventListener('click', e => {
                 repeatUpdate(15, itemTemplate, container);
                 update(ctx, target);
             });
         </script>
     </div>
 </body>
+
 </html>

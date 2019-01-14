@@ -27,6 +27,7 @@ export function process(context, idx, level) {
     let matchFirstChild = false;
     let matchNextSib = false;
     let inherit = false;
+    let nextMatch = [];
     //context.inheritMatches = false;
     for (const selector in transform) {
         if (target.matches(selector)) {
@@ -44,8 +45,8 @@ export function process(context, idx, level) {
                         break;
                     case 'object':
                         inherit = inherit || !!resp.inheritMatches;
-                        if (resp.drill !== undefined) {
-                            drill = drill === null ? resp.drill : Object.assign(drill, resp.drill);
+                        if (resp.select !== undefined) {
+                            drill = drill === null ? resp.select : Object.assign(drill, resp.select);
                         }
                         if (resp.matchFirstChild !== undefined) {
                             switch (typeof resp.matchFirstChild) {
@@ -64,22 +65,10 @@ export function process(context, idx, level) {
                                     break;
                             }
                         }
-                        if (resp.matchNextSib !== undefined) {
-                            switch (typeof resp.matchNextSib) {
-                                case 'boolean':
-                                    if (typeof matchNextSib === 'boolean' && resp.matchNextSib) {
-                                        matchNextSib = true;
-                                    }
-                                    break;
-                                case 'object':
-                                    if (typeof matchNextSib === 'object') {
-                                        Object.assign(matchNextSib, resp.matchNextSib);
-                                    }
-                                    else {
-                                        matchNextSib = resp.matchNextSib;
-                                    }
-                                    break;
-                            }
+                        if (resp.matchNextSib)
+                            matchNextSib = true;
+                        if (!matchNextSib && resp.nextMatch) {
+                            nextMatch.push(resp.nextMatch);
                         }
                         break;
                 }
@@ -97,6 +86,18 @@ export function process(context, idx, level) {
             process(context, idx + 1, level);
         }
         context.transform = transform;
+    }
+    else if (nextMatch.length > 0) {
+        const match = nextMatch.join(',');
+        let nextSib = target.nextElementSibling;
+        while (nextSib !== null) {
+            if (nextSib.matches(match)) {
+                context.leaf = nextSib;
+                process(context, idx + 1, level);
+                break;
+            }
+            nextSib = nextSib.nextElementSibling;
+        }
     }
     if (matchFirstChild || drill !== null) {
         let transform = context.transform;
