@@ -22,14 +22,12 @@
                 summaryText: 'hello'
             }
             const transform = {
-                detail: x => {
-                    return {
-                        drill: {
-                            summary: x => model.summaryText
-                        }
+                detail: x => ({
+                    drill: {
+                        summary: x => model.summaryText
                     }
+                })
 
-                },
             };
             init(test, { transform }, target);
         </script>
