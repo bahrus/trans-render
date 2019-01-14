@@ -13,6 +13,7 @@ export interface InitContext{
     transform? : TransformRules,
     matchFirstChild?: boolean | TransformRules,
     matchNextSib?: boolean | TransformRules,
+    inheritMatches?: boolean,
     drill?: TransformRules | null,
     template?: DocumentFragment,
     update?: (ctx: InitContext, target: HTMLElement) => InitContext; 
@@ -34,7 +35,12 @@ export function init(template: HTMLTemplateElement, ctx: InitContext, target: El
     target.appendChild(ctx.template);
     return ctx;
 }
-
+function inheritTemplate(context: InitContext, transform: TransformRules){
+    if(context.inheritMatches){
+        return Object.assign( Object.assign({}, context.transform), transform);
+    }
+    return transform;
+}
 export function process(context: InitContext, idx: number, level: number){
     const target = context.leaf!;
     if(target.matches === undefined) return;
@@ -43,6 +49,7 @@ export function process(context: InitContext, idx: number, level: number){
     context.matchFirstChild = false;
     context.matchNextSib = false;
     context.drill = null;
+    context.inheritMatches = false;
     for(const selector in transform){
         if(target.matches(selector)){
             const transformTemplate = transform[selector];
@@ -62,7 +69,7 @@ export function process(context: InitContext, idx: number, level: number){
     if(matchNextSib){
         let transform = context.transform;
         if(typeof(matchNextSib) === 'object'){
-            context.transform = matchNextSib;
+            context.transform = inheritTemplate(context, matchNextSib);
         }
         const nextSib = target.nextElementSibling;
         if(nextSib !== null){
@@ -79,11 +86,11 @@ export function process(context: InitContext, idx: number, level: number){
         if(drill !== null){
             const keys = Object.keys(drill);
             nextChild = target.querySelector(keys[0]);
-            context.transform = drill;
+            context.transform = inheritTemplate(context, drill);
         }else{
             nextChild = target.firstElementChild;
             if(typeof(matchFirstChild) === 'object'){
-                context.transform = matchFirstChild;
+                context.transform = inheritTemplate(context, matchFirstChild);
             }
         }
         //const firstChild = target.firstElementChild;
