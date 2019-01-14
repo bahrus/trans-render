@@ -37,9 +37,7 @@ At this point, only a synchronous workflow is provided.
 ```html
 <template id="test">
     <detail>
-        ...
         <summary></summary>
-        ...
     </detail>
 </template>
 <div id="target"></div>
@@ -49,15 +47,18 @@ At this point, only a synchronous workflow is provided.
         summaryText: 'hello'
     }
     const transform = {
-        'detail': ({ ctx }) => {
-            ctx.drill = {
-                'summary': ({target}) =>{
+        detail: x => {
+            return {
+                drill: {
+                    summary: ({ target }) => {
                         target.textContent = model.summaryText;
+                    }
                 }
             }
+
         },
     };
-    init(test, {transform}, target);
+    init(test, { transform }, target);
 </script>
 ```
 
@@ -71,57 +72,64 @@ Produces
 </div>
 ```
 
-"ctx" stands for "context", a place to pass things throughout the processing process.  "target" is the HTML element we are populating.
+"target" is the HTML element we are populating.
 
 By design, trans-render is loathe to do any unnessary work.  As mentioned earlier, each transform can specify whether to proceed to the next sibling, thusly:
 
 ```JavaScript
-ctx.matchNextSib = true;
+matchNextSib: true;
 ```
 
 And/or it can specify to match the first child:
 
 ```JavaScript
-ctx.matchFirstChild = true;
+matchFirstChild: true;
 ```
 
 And, as we've seen, you can drill down until the first matching element is found (via querySelector)
 
 ```JavaScript
-cts.drill = {
- 'myCssQuery':{
-     ...
- }
-} ;
+return {
+    drill: {
+        'myCssQuery':{
+            ...
+        }
+    }
+}
+
 ```
 
 The first two match statements above can either be booleans, as illustrated above, or they can provide a new transform match:
 
 ```JavaScript
-    transform: {
-        '.opening': ({ target, ctx }) => {
-            ctx.init(Opening, Object.assign({}, ctx), target);
-            ctx.matchFirstChild = true;
-        },
-
-        'div': ({ ctx }) => {
-            ctx.matchFirstChild = {
-                'span.Friday': ({ target, ctx }) => {
-                    ctx.init(Friday, {}, target);
+transform: {
+    div: x => {
+        return {
+            matchNextSib: true,
+            matchFirstChild: {
+                '*': x => {
+                    return {
+                        matchNextSib: true
+                    }
                 },
-                'span[x-d]': ({ target, ctx }) => {
-                    target.textContent = ctx.interpolate(target.innerText, ctx);
+                '[x-d]': ({ target}) => {
+                    interpolate(target, 'textContent', model);
                 },
-                '*': ({ ctx }) => {
-                    ctx.matchNextSib = true;
+                '[data-init]': ({ target, ctx }) => {
+                    if (ctx.update !== undefined) {
+                        return {
+                            matchFirstChild: true
+                        }
+                    } else {
+                        init(self[target.dataset.init], {
+                            transform: ctx.transform
+                        }, target);
+                    }
                 },
-
-            };
-            ctx.matchNextSib = true;
-        },
-
-
-    }
+            }
+        }
+    },
+}
 ```
 
 # Use Case 1:  Applying the DRY principle to (post) punk rock lyrics

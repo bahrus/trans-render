@@ -97,8 +97,6 @@
             const ctx = init(Main, {
                 transform: {
                     div: ({ ctx }) => {
-
-                        ctx.matchNextSib = true;
                         return {
                             matchNextSib: true,
                             matchFirstChild: {
@@ -107,7 +105,7 @@
                                         matchNextSib: true
                                     }
                                 },
-                                '[x-d]': ({ target, ctx }) => {
+                                '[x-d]': ({ target}) => {
                                     interpolate(target, 'textContent', model);
                                 },
                                 '[data-init]': ({ target, ctx }) => {
