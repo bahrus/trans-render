@@ -47,16 +47,12 @@ At this point, only a synchronous workflow is provided.
         summaryText: 'hello'
     }
     const transform = {
-        detail: x => {
-            return {
-                drill: {
-                    summary: ({ target }) => {
-                        target.textContent = model.summaryText;
-                    }
-                }
+        detail: x => ({
+            drill: {
+                summary: x => model.summaryText
             }
+        })
 
-        },
     };
     init(test, { transform }, target);
 </script>
@@ -103,32 +99,30 @@ The first two match statements above can either be booleans, as illustrated abov
 
 ```JavaScript
 transform: {
-    div: x => {
-        return {
-            matchNextSib: true,
-            matchFirstChild: {
-                '*': x => {
+    div: x => ({
+        matchNextSib: true,
+        matchFirstChild: {
+            '*': x => {
+                return {
+                    matchNextSib: true
+                }
+            },
+            '[x-d]': ({ target}) => {
+                interpolate(target, 'textContent', model);
+            },
+            '[data-init]': ({ target, ctx }) => {
+                if (ctx.update !== undefined) {
                     return {
-                        matchNextSib: true
+                        matchFirstChild: true
                     }
-                },
-                '[x-d]': ({ target}) => {
-                    interpolate(target, 'textContent', model);
-                },
-                '[data-init]': ({ target, ctx }) => {
-                    if (ctx.update !== undefined) {
-                        return {
-                            matchFirstChild: true
-                        }
-                    } else {
-                        init(self[target.dataset.init], {
-                            transform: ctx.transform
-                        }, target);
-                    }
-                },
-            }
+                } else {
+                    init(self[target.dataset.init], {
+                        transform: ctx.transform
+                    }, target);
+                }
+            },
         }
-    },
+    }),
 }
 ```
 
