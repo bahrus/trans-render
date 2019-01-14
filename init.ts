@@ -19,7 +19,7 @@ export interface InitContext{
     leaf?: Element,
     transform? : TransformRules,
     //matchFirstChild?: boolean | TransformRules,
-    matchNextSib?: boolean | TransformRules,
+    //matchNextSib?: boolean | TransformRules,
     inheritMatches?: boolean,
     //drill?: TransformRules | null,
     template?: DocumentFragment,
@@ -54,10 +54,11 @@ export function process(context: InitContext, idx: number, level: number){
     const transform = context.transform;
     
     //context.matchFirstChild = false;
-    context.matchNextSib = false;
+    //context.matchNextSib = false;
     //context.drill = null;
     let drill: TransformRules | null = null;
     let matchFirstChild : TransformRules | boolean = false;
+    let matchNextSib : TransformRules | boolean = false;
     context.inheritMatches = false;
     for(const selector in transform){
         if(target.matches(selector)){
@@ -90,10 +91,26 @@ export function process(context: InitContext, idx: number, level: number){
 
                     }
                 }
+                if(resp.matchNextSib !== undefined){
+                    switch(typeof resp.matchNextSib){
+                        case 'boolean':
+                            if(typeof matchNextSib === 'boolean' && resp.matchNextSib){
+                                matchNextSib =  true;
+                            }
+                            break;
+                        case 'object':
+                            if(typeof matchNextSib === 'object'){
+                                Object.assign(matchNextSib, resp.matchNextSib);
+                            }else{
+                                matchNextSib = resp.matchNextSib;
+                            }
+                            break;
+                    }
+                }
             }
         }
     }
-    const matchNextSib = context.matchNextSib;
+    //const matchNextSib = context.matchNextSib;
     //const matchFirstChild = context.matchFirstChild;
     //const drill = (<any>context.drill) as TransformRules | null;
     if(matchNextSib){
@@ -131,5 +148,5 @@ export function process(context: InitContext, idx: number, level: number){
         context.transform = transform;
     }
     //context.matchFirstChild = matchFirstChild;
-    context.matchNextSib = matchNextSib;
+    //context.matchNextSib = matchNextSib;
 }

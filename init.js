@@ -24,10 +24,11 @@ export function process(context, idx, level) {
         return;
     const transform = context.transform;
     //context.matchFirstChild = false;
-    context.matchNextSib = false;
+    //context.matchNextSib = false;
     //context.drill = null;
     let drill = null;
     let matchFirstChild = false;
+    let matchNextSib = false;
     context.inheritMatches = false;
     for (const selector in transform) {
         if (target.matches(selector)) {
@@ -59,10 +60,27 @@ export function process(context, idx, level) {
                             break;
                     }
                 }
+                if (resp.matchNextSib !== undefined) {
+                    switch (typeof resp.matchNextSib) {
+                        case 'boolean':
+                            if (typeof matchNextSib === 'boolean' && resp.matchNextSib) {
+                                matchNextSib = true;
+                            }
+                            break;
+                        case 'object':
+                            if (typeof matchNextSib === 'object') {
+                                Object.assign(matchNextSib, resp.matchNextSib);
+                            }
+                            else {
+                                matchNextSib = resp.matchNextSib;
+                            }
+                            break;
+                    }
+                }
             }
         }
     }
-    const matchNextSib = context.matchNextSib;
+    //const matchNextSib = context.matchNextSib;
     //const matchFirstChild = context.matchFirstChild;
     //const drill = (<any>context.drill) as TransformRules | null;
     if (matchNextSib) {
@@ -99,6 +117,6 @@ export function process(context, idx, level) {
         context.transform = transform;
     }
     //context.matchFirstChild = matchFirstChild;
-    context.matchNextSib = matchNextSib;
+    //context.matchNextSib = matchNextSib;
 }
 //# sourceMappingURL=init.js.map

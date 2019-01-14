@@ -100,16 +100,21 @@
 
                         ctx.matchNextSib = true;
                         return {
+                            matchNextSib: true,
                             matchFirstChild: {
-                                '*': ({ ctx }) => {
-                                    ctx.matchNextSib = true;
+                                '*': x => {
+                                    return {
+                                        matchNextSib: true
+                                    }
                                 },
                                 '[x-d]': ({ target, ctx }) => {
                                     interpolate(target, 'textContent', model);
                                 },
                                 '[data-init]': ({ target, ctx }) => {
                                     if (ctx.update !== undefined) {
-                                        ctx.matchFirstChild = true;
+                                        return {
+                                            matchFirstChild: true
+                                        }
                                     } else {
                                         init(self[target.dataset.init], {
                                             transform: ctx.transform
