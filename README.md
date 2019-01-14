@@ -400,30 +400,36 @@ Anyway the syntax is shown below:
     </template>
     <template id="list">
         <ul id="container"></ul>
+        <button id="addItems">Add items</button>
     </template>
     <div id="target"></div>
-    <button id="addItems">Add items</button>
+
     <script type="module">
         import { init } from '../init.js';
-        import {update} from '../update.js';
-        import {repeatInit } from '../repeatInit.js';
-        import {repeatUpdate} from '../repeatUpdate.js';
+        import { update } from '../update.js';
+        import { repeatInit } from '../repeatInit.js';
+        import { repeatUpdate } from '../repeatUpdate.js';
         const ctx = init(list, {
             transform: {
-                'ul': ({target, ctx}) =>{
-                    if(ctx.update !== undefined){
+                'ul': ({ target, ctx }) => {
+                    if (!ctx.update) {
                         repeatInit(10, itemTemplate, target);
                     }
-                    ctx.matchFirstChild = {
-                        'li': ({target, ctx, idx}) =>{
-                            target.textContent = 'Hello ' + idx;
-                            ctx.matchNextSib = true;
+                    return {
+                        matchFirstChild: {
+                            'li': ({ target, ctx, idx }) => {
+                                target.textContent = 'Hello ' + idx;
+                                return {
+                                    matchNextSib: true
+                                }
+                            }
                         }
                     }
+
                 }
             }
         }, target);
-        addItems.addEventListener('click', e =>{
+        addItems.addEventListener('click', e => {
             repeatUpdate(15, itemTemplate, container);
             update(ctx, target);
         });
