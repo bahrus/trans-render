@@ -23,14 +23,17 @@
             }
             const transform = {
                 'detail': ({ ctx }) => {
-                    ctx.drill = {
-                        'summary': ({target}) =>{
+                    return {
+                        drill: {
+                            'summary': ({ target }) => {
                                 target.textContent = model.summaryText;
+                            }
                         }
                     }
+
                 },
             };
-            init(test, {transform}, target);
+            init(test, { transform }, target);
         </script>
     </div>
 </body>
