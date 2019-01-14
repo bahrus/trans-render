@@ -25,9 +25,7 @@
                 detail: x => {
                     return {
                         drill: {
-                            summary: ({ target }) => {
-                                target.textContent = model.summaryText;
-                            }
+                            summary: x => model.summaryText
                         }
                     }
 

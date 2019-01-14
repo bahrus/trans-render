@@ -23,9 +23,6 @@ export function process(context, idx, level) {
     if (target.matches === undefined)
         return;
     const transform = context.transform;
-    //context.matchFirstChild = false;
-    //context.matchNextSib = false;
-    //context.drill = null;
     let drill = null;
     let matchFirstChild = false;
     let matchNextSib = false;
@@ -40,49 +37,53 @@ export function process(context, idx, level) {
                 level: level
             });
             if (resp !== undefined) {
-                if (resp.drill !== undefined) {
-                    drill = drill === null ? resp.drill : Object.assign(drill, resp.drill);
-                }
-                if (resp.matchFirstChild !== undefined) {
-                    switch (typeof resp.matchFirstChild) {
-                        case 'boolean':
-                            if (typeof matchFirstChild === 'boolean' && resp.matchFirstChild) {
-                                matchFirstChild = true;
+                switch (typeof resp) {
+                    case 'string':
+                        target.textContent = resp;
+                        break;
+                    case 'object':
+                        if (resp.drill !== undefined) {
+                            drill = drill === null ? resp.drill : Object.assign(drill, resp.drill);
+                        }
+                        if (resp.matchFirstChild !== undefined) {
+                            switch (typeof resp.matchFirstChild) {
+                                case 'boolean':
+                                    if (typeof matchFirstChild === 'boolean' && resp.matchFirstChild) {
+                                        matchFirstChild = true;
+                                    }
+                                    break;
+                                case 'object':
+                                    if (typeof matchFirstChild === 'object') {
+                                        Object.assign(matchFirstChild, resp.matchFirstChild);
+                                    }
+                                    else {
+                                        matchFirstChild = resp.matchFirstChild;
+                                    }
+                                    break;
                             }
-                            break;
-                        case 'object':
-                            if (typeof matchFirstChild === 'object') {
-                                Object.assign(matchFirstChild, resp.matchFirstChild);
+                        }
+                        if (resp.matchNextSib !== undefined) {
+                            switch (typeof resp.matchNextSib) {
+                                case 'boolean':
+                                    if (typeof matchNextSib === 'boolean' && resp.matchNextSib) {
+                                        matchNextSib = true;
+                                    }
+                                    break;
+                                case 'object':
+                                    if (typeof matchNextSib === 'object') {
+                                        Object.assign(matchNextSib, resp.matchNextSib);
+                                    }
+                                    else {
+                                        matchNextSib = resp.matchNextSib;
+                                    }
+                                    break;
                             }
-                            else {
-                                matchFirstChild = resp.matchFirstChild;
-                            }
-                            break;
-                    }
-                }
-                if (resp.matchNextSib !== undefined) {
-                    switch (typeof resp.matchNextSib) {
-                        case 'boolean':
-                            if (typeof matchNextSib === 'boolean' && resp.matchNextSib) {
-                                matchNextSib = true;
-                            }
-                            break;
-                        case 'object':
-                            if (typeof matchNextSib === 'object') {
-                                Object.assign(matchNextSib, resp.matchNextSib);
-                            }
-                            else {
-                                matchNextSib = resp.matchNextSib;
-                            }
-                            break;
-                    }
+                        }
+                        break;
                 }
             }
         }
     }
-    //const matchNextSib = context.matchNextSib;
-    //const matchFirstChild = context.matchFirstChild;
-    //const drill = (<any>context.drill) as TransformRules | null;
     if (matchNextSib) {
         let transform = context.transform;
         if (typeof (matchNextSib) === 'object') {

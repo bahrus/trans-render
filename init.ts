@@ -1,5 +1,5 @@
 
-export type TransformRules = {[key: string] : (arg: TransformArg) =>  NextSteps};
+export type TransformRules = { [key: string]: (arg: TransformArg) => NextSteps | string };
 export interface TransformArg {
     target: Element,
     ctx: InitContext,
@@ -14,25 +14,22 @@ export interface NextSteps {
     inheritMatches?: boolean,
 }
 
-export interface InitContext{
+export interface InitContext {
     init?: (template: HTMLTemplateElement, ctx: InitContext, target: HTMLElement) => InitContext,
     leaf?: Element,
-    transform? : TransformRules,
-    //matchFirstChild?: boolean | TransformRules,
-    //matchNextSib?: boolean | TransformRules,
+    transform?: TransformRules,
     inheritMatches?: boolean,
-    //drill?: TransformRules | null,
     template?: DocumentFragment,
-    update?: (ctx: InitContext, target: HTMLElement) => InitContext; 
+    update?: (ctx: InitContext, target: HTMLElement) => InitContext;
 }
 
-export function init(template: HTMLTemplateElement, ctx: InitContext, target: Element) : InitContext{
+export function init(template: HTMLTemplateElement, ctx: InitContext, target: Element): InitContext {
     ctx.init = init;
     const clonedTemplate = template.content.cloneNode(true) as DocumentFragment;
     ctx.template = clonedTemplate;
-    if(ctx.transform){
+    if (ctx.transform) {
         const firstChild = clonedTemplate.firstElementChild;
-        if(firstChild !== null){
+        if (firstChild !== null) {
             ctx.leaf = firstChild;
             process(ctx, 0, 0);
         }
@@ -42,106 +39,108 @@ export function init(template: HTMLTemplateElement, ctx: InitContext, target: El
     target.appendChild(ctx.template);
     return ctx;
 }
-function inheritTemplate(context: InitContext, transform: TransformRules){
-    if(context.inheritMatches){
-        return Object.assign( Object.assign({}, context.transform), transform);
+function inheritTemplate(context: InitContext, transform: TransformRules) {
+    if (context.inheritMatches) {
+        return Object.assign(Object.assign({}, context.transform), transform);
     }
     return transform;
 }
-export function process(context: InitContext, idx: number, level: number){
+export function process(context: InitContext, idx: number, level: number) {
     const target = context.leaf!;
-    if(target.matches === undefined) return;
+    if (target.matches === undefined) return;
     const transform = context.transform;
-    
-    //context.matchFirstChild = false;
-    //context.matchNextSib = false;
-    //context.drill = null;
+
     let drill: TransformRules | null = null;
-    let matchFirstChild : TransformRules | boolean = false;
-    let matchNextSib : TransformRules | boolean = false;
+    let matchFirstChild: TransformRules | boolean = false;
+    let matchNextSib: TransformRules | boolean = false;
     context.inheritMatches = false;
-    for(const selector in transform){
-        if(target.matches(selector)){
+    for (const selector in transform) {
+        if (target.matches(selector)) {
             const transformTemplate = transform[selector];
 
             const resp = transformTemplate({
-                target: target, 
+                target: target,
                 ctx: context,
                 idx: idx,
                 level: level
             });
-            if(resp !== undefined){
-                if(resp.drill !== undefined){
-                    drill = drill === null ? resp.drill : Object.assign(drill, resp.drill);
-                }
-                if(resp.matchFirstChild !== undefined){
-                    switch(typeof resp.matchFirstChild){
-                        case 'boolean':
-                            if(typeof matchFirstChild === 'boolean' && resp.matchFirstChild){
-                                matchFirstChild = true;
-                            }
-                            break;
-                        case 'object':
-                            if(typeof matchFirstChild === 'object'){
-                                Object.assign(matchFirstChild, resp.matchFirstChild);
-                            }else{
-                                matchFirstChild = resp.matchFirstChild;
-                            }
-                            break;
+            if (resp !== undefined) {
+                switch (typeof resp) {
+                    case 'string':
+                        target.textContent = resp;
+                        break;
+                    case 'object':
+                        if (resp.drill !== undefined) {
+                            drill = drill === null ? resp.drill : Object.assign(drill, resp.drill);
+                        }
+                        if (resp.matchFirstChild !== undefined) {
+                            switch (typeof resp.matchFirstChild) {
+                                case 'boolean':
+                                    if (typeof matchFirstChild === 'boolean' && resp.matchFirstChild) {
+                                        matchFirstChild = true;
+                                    }
+                                    break;
+                                case 'object':
+                                    if (typeof matchFirstChild === 'object') {
+                                        Object.assign(matchFirstChild, resp.matchFirstChild);
+                                    } else {
+                                        matchFirstChild = resp.matchFirstChild;
+                                    }
+                                    break;
 
-                    }
-                }
-                if(resp.matchNextSib !== undefined){
-                    switch(typeof resp.matchNextSib){
-                        case 'boolean':
-                            if(typeof matchNextSib === 'boolean' && resp.matchNextSib){
-                                matchNextSib =  true;
                             }
-                            break;
-                        case 'object':
-                            if(typeof matchNextSib === 'object'){
-                                Object.assign(matchNextSib, resp.matchNextSib);
-                            }else{
-                                matchNextSib = resp.matchNextSib;
+                        }
+                        if (resp.matchNextSib !== undefined) {
+                            switch (typeof resp.matchNextSib) {
+                                case 'boolean':
+                                    if (typeof matchNextSib === 'boolean' && resp.matchNextSib) {
+                                        matchNextSib = true;
+                                    }
+                                    break;
+                                case 'object':
+                                    if (typeof matchNextSib === 'object') {
+                                        Object.assign(matchNextSib, resp.matchNextSib);
+                                    } else {
+                                        matchNextSib = resp.matchNextSib;
+                                    }
+                                    break;
                             }
-                            break;
-                    }
+                        }
+                        break;
                 }
+
             }
         }
     }
-    //const matchNextSib = context.matchNextSib;
-    //const matchFirstChild = context.matchFirstChild;
-    //const drill = (<any>context.drill) as TransformRules | null;
-    if(matchNextSib){
+    if (matchNextSib) {
         let transform = context.transform;
-        if(typeof(matchNextSib) === 'object'){
+        if (typeof (matchNextSib) === 'object') {
             context.transform = inheritTemplate(context, matchNextSib);
         }
         const nextSib = target.nextElementSibling;
-        if(nextSib !== null){
+        if (nextSib !== null) {
             context.leaf = nextSib;
             process(context, idx + 1, level);
         }
         context.transform = transform;
     }
-    
-    if(matchFirstChild || drill !== null){
+
+    if (matchFirstChild || drill !== null) {
         let transform = context.transform;
 
-        let nextChild : Element | null;
-        if(drill !== null){
+        let nextChild: Element | null;
+        if (drill !== null) {
             const keys = Object.keys(drill);
             nextChild = target.querySelector(keys[0]);
             context.transform = inheritTemplate(context, drill);
-        }else{
+        } else {
             nextChild = target.firstElementChild;
-            if(typeof(matchFirstChild) === 'object'){
+            if (typeof (matchFirstChild) === 'object') {
                 context.transform = inheritTemplate(context, matchFirstChild);
             }
         }
         //const firstChild = target.firstElementChild;
-        if(nextChild !== null){
+        if (nextChild !== null) {
             context.leaf = nextChild;
             process(context, 0, level + 1);
         }
