@@ -44,8 +44,8 @@ export function process(context, idx, level) {
                         break;
                     case 'object':
                         inherit = inherit || !!resp.inheritMatches;
-                        if (resp.drill !== undefined) {
-                            drill = drill === null ? resp.drill : Object.assign(drill, resp.drill);
+                        if (resp.select !== undefined) {
+                            drill = drill === null ? resp.select : Object.assign(drill, resp.select);
                         }
                         if (resp.matchFirstChild !== undefined) {
                             switch (typeof resp.matchFirstChild) {
