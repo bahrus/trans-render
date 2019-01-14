@@ -206,15 +206,13 @@ transform: {
         </template>
         <div id="target"></div>
         <script type="module">
-            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.23/init.js';
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.26/init.js';
             init(Main, {
                 transform: {
-                    '*': x  => {
-                        return{
-                            matchNextSib: true,
-                            matchFirstChild: true
-                        }
-                    },
+                    '*': x  => ({
+                        matchNextSib: true,
+                        matchFirstChild: true
+                    }),
                     '[data-init]': ({target, ctx}) =>{
                         ctx.init(self[target.dataset.init], {}, target);
                     }
@@ -318,32 +316,28 @@ transform: {
             };
             const ctx = init(Main, {
                 transform: {
-                    div: ({ ctx }) => {
-                        return {
-                            matchNextSib: true,
-                            matchFirstChild: {
-                                '*': x => {
+                    div: ({ ctx }) => ({
+                        matchNextSib: true,
+                        matchFirstChild: {
+                            '*': x => ({
+                                matchNextSib: true
+                            }),
+                            '[x-d]': ({ target }) => {
+                                interpolate(target, 'textContent', model);
+                            },
+                            '[data-init]': ({ target, ctx }) => {
+                                if (ctx.update !== undefined) {
                                     return {
-                                        matchNextSib: true
+                                        matchFirstChild: true
                                     }
-                                },
-                                '[x-d]': ({ target}) => {
-                                    interpolate(target, 'textContent', model);
-                                },
-                                '[data-init]': ({ target, ctx }) => {
-                                    if (ctx.update !== undefined) {
-                                        return {
-                                            matchFirstChild: true
-                                        }
-                                    } else {
-                                        init(self[target.dataset.init], {
-                                            transform: ctx.transform
-                                        }, target);
-                                    }
-                                },
-                            }
+                                } else {
+                                    init(self[target.dataset.init], {
+                                        transform: ctx.transform
+                                    }, target);
+                                }
+                            },
                         }
-                    },
+                    }),
                 }
             }, target);
             changeDays.addEventListener('click', e => {

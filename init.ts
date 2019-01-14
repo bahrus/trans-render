@@ -18,13 +18,13 @@ export interface InitContext {
     init?: (template: HTMLTemplateElement, ctx: InitContext, target: HTMLElement) => InitContext,
     leaf?: Element,
     transform?: TransformRules,
-    inheritMatches?: boolean,
+    //inheritMatches?: boolean,
     template?: DocumentFragment,
     update?: (ctx: InitContext, target: HTMLElement) => InitContext;
 }
 
 export function init(template: HTMLTemplateElement, ctx: InitContext, target: Element): InitContext {
-    ctx.init = init;
+    //ctx.init = init;
     const clonedTemplate = template.content.cloneNode(true) as DocumentFragment;
     ctx.template = clonedTemplate;
     if (ctx.transform) {
@@ -35,12 +35,11 @@ export function init(template: HTMLTemplateElement, ctx: InitContext, target: El
         }
 
     }
-
     target.appendChild(ctx.template);
     return ctx;
 }
-function inheritTemplate(context: InitContext, transform: TransformRules) {
-    if (context.inheritMatches) {
+function inheritTemplate(context: InitContext, transform: TransformRules, inherit: boolean) {
+    if (inherit) {
         return Object.assign(Object.assign({}, context.transform), transform);
     }
     return transform;
@@ -53,7 +52,8 @@ export function process(context: InitContext, idx: number, level: number) {
     let drill: TransformRules | null = null;
     let matchFirstChild: TransformRules | boolean = false;
     let matchNextSib: TransformRules | boolean = false;
-    context.inheritMatches = false;
+    let inherit = false;
+    //context.inheritMatches = false;
     for (const selector in transform) {
         if (target.matches(selector)) {
             const transformTemplate = transform[selector];
@@ -64,12 +64,14 @@ export function process(context: InitContext, idx: number, level: number) {
                 idx: idx,
                 level: level
             });
+           
             if (resp !== undefined) {
                 switch (typeof resp) {
                     case 'string':
                         target.textContent = resp;
                         break;
                     case 'object':
+                        inherit = inherit || !!resp.inheritMatches;
                         if (resp.drill !== undefined) {
                             drill = drill === null ? resp.drill : Object.assign(drill, resp.drill);
                         }
@@ -115,7 +117,7 @@ export function process(context: InitContext, idx: number, level: number) {
     if (matchNextSib) {
         let transform = context.transform;
         if (typeof (matchNextSib) === 'object') {
-            context.transform = inheritTemplate(context, matchNextSib);
+            context.transform = inheritTemplate(context, matchNextSib, inherit);
         }
         const nextSib = target.nextElementSibling;
         if (nextSib !== null) {
@@ -132,11 +134,11 @@ export function process(context: InitContext, idx: number, level: number) {
         if (drill !== null) {
             const keys = Object.keys(drill);
             nextChild = target.querySelector(keys[0]);
-            context.transform = inheritTemplate(context, drill);
+            context.transform = inheritTemplate(context, drill, inherit);
         } else {
             nextChild = target.firstElementChild;
             if (typeof (matchFirstChild) === 'object') {
-                context.transform = inheritTemplate(context, matchFirstChild);
+                context.transform = inheritTemplate(context, matchFirstChild, inherit);
             }
         }
         //const firstChild = target.firstElementChild;

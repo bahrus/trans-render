@@ -94,32 +94,28 @@
             };
             const ctx = init(Main, {
                 transform: {
-                    div: ({ ctx }) => {
-                        return {
-                            matchNextSib: true,
-                            matchFirstChild: {
-                                '*': x => {
+                    div: ({ ctx }) => ({
+                        matchNextSib: true,
+                        matchFirstChild: {
+                            '*': x => ({
+                                matchNextSib: true
+                            }),
+                            '[x-d]': ({ target }) => {
+                                interpolate(target, 'textContent', model);
+                            },
+                            '[data-init]': ({ target, ctx }) => {
+                                if (ctx.update !== undefined) {
                                     return {
-                                        matchNextSib: true
+                                        matchFirstChild: true
                                     }
-                                },
-                                '[x-d]': ({ target}) => {
-                                    interpolate(target, 'textContent', model);
-                                },
-                                '[data-init]': ({ target, ctx }) => {
-                                    if (ctx.update !== undefined) {
-                                        return {
-                                            matchFirstChild: true
-                                        }
-                                    } else {
-                                        init(self[target.dataset.init], {
-                                            transform: ctx.transform
-                                        }, target);
-                                    }
-                                },
-                            }
+                                } else {
+                                    init(self[target.dataset.init], {
+                                        transform: ctx.transform
+                                    }, target);
+                                }
+                            },
                         }
-                    },
+                    }),
                 }
             }, target);
             changeDays.addEventListener('click', e => {

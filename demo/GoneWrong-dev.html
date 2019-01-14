@@ -82,14 +82,12 @@
             import { init } from '../init.js';
             init(Main, {
                 transform: {
-                    '*': x  => {
-                        return{
-                            matchNextSib: true,
-                            matchFirstChild: true
-                        }
-                    },
+                    '*': x  => ({
+                        matchNextSib: true,
+                        matchFirstChild: true
+                    }),
                     '[data-init]': ({target, ctx}) =>{
-                        ctx.init(self[target.dataset.init], {}, target);
+                        init(self[target.dataset.init], {}, target);
                     }
                 }
             }, target);
