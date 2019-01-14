@@ -4,7 +4,7 @@
 
 <a href="https://nodei.co/npm/trans-render/"><img src="https://nodei.co/npm/trans-render.png"></a>
 
-<img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/trans-render@0.0.25/dist/init.min.js?compression=gzip">
+<img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/trans-render@0.0.27/dist/init.min.js?compression=gzip">
 
 trans-render provides an alternative way of instantiating a template.  It draws inspiration from the (least) popular features of xslt.  Like xslt, trans-render performs transforms on elements by matching tests on elements.  Whereas xslt uses xpath for its tests, trans-render uses css patth tests via the element.matches() and element.querySelector() methods.
 
@@ -311,36 +311,40 @@ transform: {
         <div id="target"></div>
 
         <script type="module">
-            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.23/init.js';
-            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.23/interpolate.js';
-            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.23/update.js';
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.26/init.js';
+            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.26/interpolate.js';
+            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.26/update.js';
             let model = {
                 Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
                 Day6: 'Saturday', Day7: 'Sunday',
             };
             const ctx = init(Main, {
                 transform: {
-                    'div': ({ ctx }) => {
-                        ctx.matchFirstChild = {
-                            '*': ({ ctx }) => {
-                                ctx.matchNextSib = true;
-                            },
-                            '[x-d]': ({ target, ctx }) => {
-                                interpolate(target, 'textContent', model);
-                            },
-                            '[data-init]': ({ target, ctx }) => {
-                                if (ctx.update) {
-                                    ctx.matchFirstChild = true;
-                                } else {
-                                    ctx.init(self[target.dataset.init], {
-                                        transform: ctx.transform
-                                    }, target);
-                                    ctx.matchFirstChild = false;
-                                }
-
-                            },
+                    div: ({ ctx }) => {
+                        return {
+                            matchNextSib: true,
+                            matchFirstChild: {
+                                '*': x => {
+                                    return {
+                                        matchNextSib: true
+                                    }
+                                },
+                                '[x-d]': ({ target}) => {
+                                    interpolate(target, 'textContent', model);
+                                },
+                                '[data-init]': ({ target, ctx }) => {
+                                    if (ctx.update !== undefined) {
+                                        return {
+                                            matchFirstChild: true
+                                        }
+                                    } else {
+                                        init(self[target.dataset.init], {
+                                            transform: ctx.transform
+                                        }, target);
+                                    }
+                                },
+                            }
                         }
-                        ctx.matchNextSib = true;
                     },
                 }
             }, target);

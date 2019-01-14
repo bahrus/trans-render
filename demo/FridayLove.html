@@ -85,35 +85,40 @@
         <div id="target"></div>
 
         <script type="module">
-            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.23/init.js';
-            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.23/interpolate.js';
-            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.23/update.js';
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.26/init.js';
+            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.26/interpolate.js';
+            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.26/update.js';
             let model = {
                 Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
                 Day6: 'Saturday', Day7: 'Sunday',
             };
             const ctx = init(Main, {
                 transform: {
-                    'div': ({ ctx }) => {
-                        ctx.matchFirstChild = {
-                            '*': ({ ctx }) => {
-                                ctx.matchNextSib = true;
-                            },
-                            '[x-d]': ({ target, ctx }) => {
-                                interpolate(target, 'textContent', model);
-                            },
-                            '[data-init]': ({ target, ctx }) => {
-                                if (ctx.update !== undefined) {
-                                    ctx.matchFirstChild = true;
-                                } else {
-                                    init(self[target.dataset.init], {
-                                        transform: ctx.transform
-                                    }, target);
-                                }
-
-                            },
+                    div: ({ ctx }) => {
+                        return {
+                            matchNextSib: true,
+                            matchFirstChild: {
+                                '*': x => {
+                                    return {
+                                        matchNextSib: true
+                                    }
+                                },
+                                '[x-d]': ({ target}) => {
+                                    interpolate(target, 'textContent', model);
+                                },
+                                '[data-init]': ({ target, ctx }) => {
+                                    if (ctx.update !== undefined) {
+                                        return {
+                                            matchFirstChild: true
+                                        }
+                                    } else {
+                                        init(self[target.dataset.init], {
+                                            transform: ctx.transform
+                                        }, target);
+                                    }
+                                },
+                            }
                         }
-                        ctx.matchNextSib = true;
                     },
                 }
             }, target);
