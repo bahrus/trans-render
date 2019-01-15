@@ -32,7 +32,7 @@
                         }
                         return {
                             matchFirstChild: {
-                                'li': ({ target, ctx, idx }) => {
+                                'li': ({ target, idx }) => {
                                     target.textContent = 'Hello ' + idx;
                                     return {
                                         matchNextSib: true

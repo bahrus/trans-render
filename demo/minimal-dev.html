@@ -10,10 +10,10 @@
 
 <body>
     <div>
-        <template id="test">
-            <detail>
+        <template id="sourceTemplate">
+            <details>
                 <summary></summary>
-            </detail>
+            </details>
         </template>
         <div id="target"></div>
         <script type="module">
@@ -22,14 +22,14 @@
                 summaryText: 'hello'
             }
             const transform = {
-                detail: x => ({
+                details: x => ({
                     select: {
                         summary: x => model.summaryText
                     }
                 })
 
             };
-            init(test, { transform }, target);
+            init(sourceTemplate, { transform }, target);
         </script>
     </div>
 </body>
