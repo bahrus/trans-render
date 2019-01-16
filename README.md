@@ -22,9 +22,9 @@ Providing the binding transform in JS form inside the init function signature ha
 
 Another advantage of separating the binding like this, is that one can insert comments, console.log's and/or breakpoints, in order to walk through the binding process.
 
-<!--
-For more musings on the question of what is this good for, please see the section  "From the Department of Faulty Analogies" below
--->
+
+For more musings on the question of what is this good for, please see the [rambling section](https://github.com/bahrus/trans-render#ramblings-from-the-department-of-faulty-analogies) below.
+
 
 ## Workflow
 
@@ -320,32 +320,34 @@ Another return property: "nextMatch" can be used to skip over the next set of si
                 Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
                 Day6: 'Saturday', Day7: 'Sunday',
             };
-            const ctx = init(Main, {
+            const ctx = {
+                divTransform:{
+                    '*': x => ({
+                        matchNextSib: true
+                    }),
+                    '[x-d]': ({ target }) => {
+                        interpolate(target, 'textContent', model);
+                    },
+                    '[data-init]': ({ target, ctx }) => {
+                        if (ctx.update !== undefined) {
+                            return {
+                                matchFirstChild: true
+                            }
+                        } else {
+                            init(self[target.dataset.init], {
+                                transform: ctx.transform
+                            }, target);
+                        }
+                    },
+                },
                 transform: {
                     div: ({ ctx }) => ({
                         matchNextSib: true,
-                        matchFirstChild: {
-                            '*': x => ({
-                                matchNextSib: true
-                            }),
-                            '[x-d]': ({ target }) => {
-                                interpolate(target, 'textContent', model);
-                            },
-                            '[data-init]': ({ target, ctx }) => {
-                                if (ctx.update !== undefined) {
-                                    return {
-                                        matchFirstChild: true
-                                    }
-                                } else {
-                                    init(self[target.dataset.init], {
-                                        transform: ctx.transform
-                                    }, target);
-                                }
-                            },
-                        }
+                        matchFirstChild: ctx.divTransform
                     }),
                 }
-            }, target);
+            };
+            init(Main, ctx, target);
             changeDays.addEventListener('click', e => {
                 model = {
                     Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
@@ -389,7 +391,7 @@ The ability to do this is illustrated in the previous example.  Critical syntax 
 </script>
 ```
 
-#  Loop support (NB:  Not yet optimized.)
+#  Loop support (NB:  Not yet optimized, not thoroughly tested)
 
 The next big use case for this library is using it in conjunction with a [virtual scroller](https://valdrinkoshi.github.io/virtual-scroller/#more-examples). As far as I can see, the performance of this library should work quite well in that scenario.
 
@@ -518,4 +520,4 @@ const ctx = {
 init(Main, ctx, target);
 ```
 
-Then if the web component exposes the context parameter as a property, it would allow extending components / end users to extend / modify / remove the transform.
+Then if the web component exposes the context parameter as a property, it would allow extending components / end users to extend / modify / remove the default transform.
