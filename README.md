@@ -40,11 +40,11 @@ At this point, only a synchronous workflow is provided.
 
 ```html
 <template id="test">
-    <detail>
+    <details>
         ...
         <summary></summary>
         ...
-    </detail>
+    </details>
 </template>
 <div id="target"></div>
 <script type="module">
@@ -53,7 +53,7 @@ At this point, only a synchronous workflow is provided.
         summaryText: 'hello'
     }
     const transform = {
-        detail: x => ({
+        details: x => ({
             select: {
                 summary: x => model.summaryText
             }
@@ -454,7 +454,7 @@ Likewise, arguing for the benefits of this library is not in any way meant to di
 
 A question in my mind, is how does this rendering approach fit in with web components (I'm going to take a leap here and assume that [HTML Modules / Imports](https://github.com/w3c/webcomponents/issues/645) in some form makes it into browsers, even though I think the discussion still has some relevance without that).
 
-I think it can provide value, in that the binding rules are data elements.  A web component one main template, which includes other sattelite templates.  It can then define a base binding, which extending web components or even end consumers can then extend and/or override.
+I think this alternative approach can provide value, in that the binding rules are data elements.  A web component can use one main template, which references other sattelite templates.  It can then define a base binding, which extending web components or even end consumers can then extend and/or override.
 
 In order to do this to maximum effect, we should make each of the "sub matching transforms" something that can be overwritten.  In particular, rather than doing this:
 
