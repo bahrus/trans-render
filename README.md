@@ -22,7 +22,9 @@ Providing the binding transform in JS form inside the init function signature ha
 
 Another advantage of separating the binding like this, is that one can insert comments, console.log's and/or breakpoints, in order to walk through the binding process.
 
+<!--
 For more musings on the question of what is this good for, please see the section  "From the Department of Faulty Analogies" below
+-->
 
 ## Workflow
 
@@ -439,15 +441,81 @@ Anyway the syntax is shown below:
 </div>
 ```
 
-## From the Department of Faulty Analogies
+
+## Ramblings From the Department of Faulty Analogies
 
 When defining an HTML based user interface, the question arises whether styles should be inlined in the markup or kept separate in style tags and/or CSS files.
 
 The ability to keep the styles separate from the HTML does not invalidate support for inline styles.  The browser supports both, and probably always will.
 
-Likewise, arguing for the benefits of this library is not in any way meant to disparage the usefulness of the current prevailing orthodoxy of including the binding / formatting instructions in the markup.  I would be delighted to see the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with support for inline binding, added to the arsenal of tools developers could use.  Should that proposal come to fruition, this library, hovering under 1KB, would be in competition with one that is 0KB, with the full backing of Chrome, Safari, Firefox.  Why would anyone use this library then?
+Likewise, arguing for the benefits of this library is not in any way meant to disparage the usefulness of the current prevailing orthodoxy of including the binding / formatting instructions in the markup.  I would be delighted to see the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with support for inline binding, added to the arsenal of tools developers could use.  Should that proposal come to fruition, this library, hovering under 1KB, would be in competition with one that is 0KB, with the full backing / optimization work of Chrome, Safari, Firefox.  Why would anyone use this library then?
 
 A question in my mind, is how does this rendering approach fit in with web components (I'm going to take a leap here and assume that [HTML Modules / Imports](https://github.com/w3c/webcomponents/issues/645) in some form makes it into browsers, even though I think the discussion still has some relevance without that).
 
-If a web component's UI is based on a template, where the dynamic parts are totally bound to fixed properties / private fields of the web component, it is hard to see a use case for this library beyond those described in the Advantages section above.  But what if
+I think it can provide value, in that the binding rules are data elements.  A web component one main template, which includes other sattelite templates.  It can then define a base binding, which extending web components or even end consumers can then extend and/or override.
 
+In order to do this to maximum effect, we should make each of the "sub matching transforms" something that can be overwritten.  In particular, rather than doing this:
+
+```JavaScript
+const ctx = init(Main, {
+    transform: {
+        div: ({ ctx }) => ({
+            matchNextSib: true,
+            matchFirstChild: {
+                '*': x => ({
+                    matchNextSib: true
+                }),
+                '[x-d]': ({ target }) => {
+                    interpolate(target, 'textContent', model);
+                },
+                '[data-init]': ({ target, ctx }) => {
+                    if (ctx.update !== undefined) {
+                        return {
+                            matchFirstChild: true
+                        }
+                    } else {
+                        init(self[target.dataset.init], {
+                            transform: ctx.transform
+                        }, target);
+                    }
+                },
+            }
+        }),
+    }
+}, target);
+```
+
+Do this:
+
+```JavaScript
+const ctx = {
+    divTransform:{
+        '*': x => ({
+            matchNextSib: true
+        }),
+        '[x-d]': ({ target }) => {
+            interpolate(target, 'textContent', model);
+        },
+        '[data-init]': ({ target, ctx }) => {
+            if (ctx.update !== undefined) {
+                return {
+                    matchFirstChild: true
+                }
+            } else {
+                init(self[target.dataset.init], {
+                    transform: ctx.transform
+                }, target);
+            }
+        },
+    },
+    transform:{
+        div: ({ ctx }) => ({
+            matchNextSib: true,
+            matchFirstChild: ctx.divTransform
+        }),
+    }
+}
+init(Main, ctx, target);
+```
+
+Then if the web component exposes the context parameter as a property, it would allow extending components / end users to extend / modify / remove the transform.
