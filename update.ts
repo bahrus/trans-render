@@ -1,10 +1,10 @@
-import {InitContext, process} from './init.js';
+import {RenderContext, process} from './init.js';
 
-export interface UpdateContext extends InitContext {
-    update: (ctx: InitContext, target: HTMLElement) => UpdateContext;
+export interface UpdateContext extends RenderContext {
+    update: (ctx: RenderContext, target: HTMLElement) => UpdateContext;
 }
 
-export function update(ctx: InitContext, target: HTMLElement){
+export function update(ctx: RenderContext, target: HTMLElement){
     const updateCtx = ctx as UpdateContext;
     updateCtx.update = update;
     const firstChild = target.firstElementChild;

@@ -3,7 +3,7 @@ import { repeatInit } from "./repeatInit";
 export type TransformRules = { [key: string]: (arg: TransformArg) => NextSteps | string };
 export interface TransformArg {
     target: Element,
-    ctx: InitContext,
+    ctx: RenderContext,
     idx: number,
     level: number,
 }
@@ -16,16 +16,16 @@ export interface NextSteps {
     inheritMatches?: boolean,
 }
 
-export interface InitContext {
-    init?: (template: HTMLTemplateElement, ctx: InitContext, target: HTMLElement) => InitContext,
+export interface RenderContext {
+    init?: (template: HTMLTemplateElement, ctx: RenderContext, target: HTMLElement) => RenderContext,
     leaf?: Element,
     transform?: TransformRules,
     //inheritMatches?: boolean,
     template?: DocumentFragment,
-    update?: (ctx: InitContext, target: HTMLElement) => InitContext;
+    update?: (ctx: RenderContext, target: HTMLElement) => RenderContext;
 }
 
-export function init(template: HTMLTemplateElement, ctx: InitContext, target: Element): InitContext {
+export function init(template: HTMLTemplateElement, ctx: RenderContext, target: Element): RenderContext {
     //ctx.init = init;
     const clonedTemplate = template.content.cloneNode(true) as DocumentFragment;
     ctx.template = clonedTemplate;
@@ -40,13 +40,13 @@ export function init(template: HTMLTemplateElement, ctx: InitContext, target: El
     target.appendChild(ctx.template);
     return ctx;
 }
-function inheritTemplate(context: InitContext, transform: TransformRules, inherit: boolean) {
+function inheritTemplate(context: RenderContext, transform: TransformRules, inherit: boolean) {
     if (inherit) {
         return Object.assign(Object.assign({}, context.transform), transform);
     }
     return transform;
 }
-export function process(context: InitContext, idx: number, level: number) {
+export function process(context: RenderContext, idx: number, level: number) {
     const target = context.leaf!;
     if (target.matches === undefined) return;
     const transform = context.transform;
