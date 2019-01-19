@@ -1,4 +1,5 @@
-import {RenderContext, process} from './init.js';
+import {RenderContext} from './init.d.js';
+import {process} from './init.js';
 
 export interface UpdateContext extends RenderContext {
     update: (ctx: RenderContext, target: HTMLElement) => UpdateContext;
