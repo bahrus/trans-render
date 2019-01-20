@@ -15,10 +15,10 @@ export interface NextSteps {
 }
 
 export interface RenderContext {
-    init?: (template: HTMLTemplateElement, ctx: RenderContext, target: HTMLElement) => RenderContext,
+    init?: (template: HTMLTemplateElement, ctx: RenderContext, target: HTMLElement | DocumentFragment) => RenderContext,
     leaf?: Element,
     transform?: TransformRules,
     //inheritMatches?: boolean,
     template?: DocumentFragment,
-    update?: (ctx: RenderContext, target: HTMLElement) => RenderContext;
+    update?: (ctx: RenderContext, target: HTMLElement | DocumentFragment) => RenderContext;
 }
