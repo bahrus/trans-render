@@ -6,7 +6,7 @@
 
 <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/trans-render@0.0.30/dist/init.min.js?compression=gzip">
 
-<iframe src="https://bundlephobia.com/result?p=trans-render@0.0.35"></iframe>
+<img src="https://badgen.net/bundlephobia/minzip/trans-render">
 
 trans-render provides an alternative way of instantiating a template.  It draws inspiration from the (least) popular features of xslt.  Like xslt, trans-render performs transforms on elements by matching tests on elements.  Whereas xslt uses xpath for its tests, trans-render uses css path tests via the element.matches() and element.querySelector() methods.
 
