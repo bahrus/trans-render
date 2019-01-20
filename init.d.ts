@@ -21,4 +21,5 @@ export interface RenderContext {
     //inheritMatches?: boolean,
     template?: DocumentFragment,
     update?: (ctx: RenderContext, target: HTMLElement | DocumentFragment) => RenderContext;
+    prepend?: boolean;
 }

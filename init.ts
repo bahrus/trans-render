@@ -14,7 +14,8 @@ export function init(template: HTMLTemplateElement, ctx: RenderContext, target: 
         }
 
     }
-    target.appendChild(ctx.template);
+    const verb = ctx.prepend ? 'prepend' : 'appendChild';
+    (<any>target)[verb](ctx.template);
     return ctx;
 }
 function inheritTemplate(context: RenderContext, transform: TransformRules, inherit: boolean) {

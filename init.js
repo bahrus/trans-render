@@ -9,7 +9,8 @@ export function init(template, ctx, target) {
             process(ctx, 0, 0);
         }
     }
-    target.appendChild(ctx.template);
+    const verb = ctx.prepend ? 'prepend' : 'appendChild';
+    target[verb](ctx.template);
     return ctx;
 }
 function inheritTemplate(context, transform, inherit) {
