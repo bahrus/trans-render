@@ -1,4 +1,4 @@
-export function init(template, ctx, target) {
+export function init(template, ctx, target, options) {
     //ctx.init = init;
     const clonedTemplate = template.content.cloneNode(true);
     ctx.template = clonedTemplate;
@@ -9,7 +9,7 @@ export function init(template, ctx, target) {
             process(ctx, 0, 0);
         }
     }
-    const verb = ctx.prepend ? 'prepend' : 'appendChild';
+    const verb = (options && options.prepend) ? 'prepend' : 'appendChild';
     target[verb](ctx.template);
     return ctx;
 }
@@ -114,14 +114,11 @@ export function process(context, idx, level) {
                 context.transform = inheritTemplate(context, matchFirstChild, inherit);
             }
         }
-        //const firstChild = target.firstElementChild;
         if (nextChild !== null) {
             context.leaf = nextChild;
             process(context, 0, level + 1);
         }
         context.transform = transform;
     }
-    //context.matchFirstChild = matchFirstChild;
-    //context.matchNextSib = matchNextSib;
 }
 //# sourceMappingURL=init.js.map

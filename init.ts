@@ -1,8 +1,8 @@
-import { NextSteps, TransformRules, RenderContext, TransformArg } from "./init.d.js";
+import { NextSteps, TransformRules, RenderContext, TransformArg, RenderOptions } from "./init.d.js";
 
 
 
-export function init(template: HTMLTemplateElement, ctx: RenderContext, target: Element): RenderContext {
+export function init(template: HTMLTemplateElement, ctx: RenderContext, target: Element, options?: RenderOptions): RenderContext {
     //ctx.init = init;
     const clonedTemplate = template.content.cloneNode(true) as DocumentFragment;
     ctx.template = clonedTemplate;
@@ -14,7 +14,7 @@ export function init(template: HTMLTemplateElement, ctx: RenderContext, target: 
         }
 
     }
-    const verb = ctx.prepend ? 'prepend' : 'appendChild';
+    const verb =  (options && options.prepend) ? 'prepend' : 'appendChild';
     (<any>target)[verb](ctx.template);
     return ctx;
 }
@@ -121,13 +121,10 @@ export function process(context: RenderContext, idx: number, level: number) {
                 context.transform = inheritTemplate(context, matchFirstChild, inherit);
             }
         }
-        //const firstChild = target.firstElementChild;
         if (nextChild !== null) {
             context.leaf = nextChild;
             process(context, 0, level + 1);
         }
         context.transform = transform;
     }
-    //context.matchFirstChild = matchFirstChild;
-    //context.matchNextSib = matchNextSib;
 }
