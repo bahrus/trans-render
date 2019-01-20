@@ -1,4 +1,4 @@
-export type TransformRules = { [key: string]: (arg: TransformArg) => NextSteps | string };
+export type TransformRules = { [key: string]: (arg: TransformArg) => NextSteps | string | undefined};
 export interface TransformArg {
     target: Element,
     ctx: RenderContext,
