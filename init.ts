@@ -22,7 +22,7 @@ export function init(
     const firstChild = clonedTemplate.firstElementChild;
     if (firstChild !== null) {
       ctx.leaf = firstChild;
-      process(ctx, 0, 0);
+      process(ctx, 0, 0, options);
     }
   }
   const verb = options && options.prepend ? "prepend" : "appendChild";
@@ -39,7 +39,7 @@ function inheritTemplate(
   }
   return transform;
 }
-export function process(context: RenderContext, idx: number, level: number) {
+export function process(context: RenderContext, idx: number, level: number, options?: RenderOptions) {
   const target = context.leaf!;
   if (target.matches === undefined) return;
   const transform = context.transform;
@@ -125,7 +125,7 @@ export function process(context: RenderContext, idx: number, level: number) {
       }
     }
   }
-  if (matchNextSib) {
+  if (matchNextSib || (options && options.matchNext)) {
     let transform = context.transform;
     if (typeof matchNextSib === "object") {
       context.transform = inheritTemplate(context, matchNextSib, inherit);

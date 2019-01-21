@@ -7,7 +7,7 @@ export function init(template, ctx, target, options) {
         const firstChild = clonedTemplate.firstElementChild;
         if (firstChild !== null) {
             ctx.leaf = firstChild;
-            process(ctx, 0, 0);
+            process(ctx, 0, 0, options);
         }
     }
     const verb = options && options.prepend ? "prepend" : "appendChild";
@@ -20,7 +20,7 @@ function inheritTemplate(context, transform, inherit) {
     }
     return transform;
 }
-export function process(context, idx, level) {
+export function process(context, idx, level, options) {
     const target = context.leaf;
     if (target.matches === undefined)
         return;
@@ -108,7 +108,7 @@ export function process(context, idx, level) {
             }
         }
     }
-    if (matchNextSib) {
+    if (matchNextSib || (options && options.matchNext)) {
         let transform = context.transform;
         if (typeof matchNextSib === "object") {
             context.transform = inheritTemplate(context, matchNextSib, inherit);
