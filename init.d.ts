@@ -1,4 +1,4 @@
-export type TransformFn = (arg: TransformArg) => NextSteps | string | void;
+export type TransformFn = (arg: TransformArg) => TransformRules | NextSteps | string | void;
 export type TransformValueOptions =  TransformRules | TransformFn;
 export type TransformRules = { [key: string]: TransformValueOptions};
 export interface TransformArg {

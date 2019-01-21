@@ -1,3 +1,4 @@
+export const _rules = "_rules";
 export function init(template, ctx, target, options) {
     //ctx.init = init;
     const clonedTemplate = template.content.cloneNode(true);
@@ -31,6 +32,8 @@ export function process(context, idx, level) {
     let nextMatch = [];
     //context.inheritMatches = false;
     for (const selector in transform) {
+        if (selector === _rules)
+            continue;
         if (target.matches(selector)) {
             const transformTemplateVal = transform[selector];
             switch (typeof transformTemplateVal) {
@@ -56,35 +59,47 @@ export function process(context, idx, level) {
                                 target.textContent = resp;
                                 break;
                             case "object":
-                                inherit = inherit || !!resp.inheritMatches;
-                                if (resp.select !== undefined) {
-                                    drill =
-                                        drill === null
-                                            ? resp.select
-                                            : Object.assign(drill, resp.select);
-                                }
-                                if (resp.matchFirstChild !== undefined) {
-                                    switch (typeof resp.matchFirstChild) {
-                                        case "boolean":
-                                            if (typeof matchFirstChild === "boolean" &&
-                                                resp.matchFirstChild) {
-                                                matchFirstChild = true;
-                                            }
-                                            break;
-                                        case "object":
-                                            if (typeof matchFirstChild === "object") {
-                                                Object.assign(matchFirstChild, resp.matchFirstChild);
-                                            }
-                                            else {
-                                                matchFirstChild = resp.matchFirstChild;
-                                            }
-                                            break;
+                                if (resp[_rules]) {
+                                    const respAsTransformRules = resp;
+                                    if (typeof matchFirstChild === "object") {
+                                        Object.assign(matchFirstChild, respAsTransformRules);
+                                    }
+                                    else {
+                                        matchFirstChild = respAsTransformRules;
                                     }
                                 }
-                                if (resp.matchNextSib)
-                                    matchNextSib = true;
-                                if (!matchNextSib && resp.nextMatch) {
-                                    nextMatch.push(resp.nextMatch);
+                                else {
+                                    const respAsNextSteps = resp;
+                                    inherit = inherit || !!resp.inheritMatches;
+                                    if (respAsNextSteps.select !== undefined) {
+                                        drill =
+                                            drill === null
+                                                ? respAsNextSteps.select
+                                                : Object.assign(drill, resp.select);
+                                    }
+                                    if (resp.matchFirstChild !== undefined) {
+                                        switch (typeof resp.matchFirstChild) {
+                                            case "boolean":
+                                                if (typeof matchFirstChild === "boolean" &&
+                                                    resp.matchFirstChild) {
+                                                    matchFirstChild = true;
+                                                }
+                                                break;
+                                            case "object":
+                                                if (typeof matchFirstChild === "object") {
+                                                    Object.assign(matchFirstChild, resp.matchFirstChild);
+                                                }
+                                                else {
+                                                    matchFirstChild = resp.matchFirstChild;
+                                                }
+                                                break;
+                                        }
+                                    }
+                                    if (resp.matchNextSib)
+                                        matchNextSib = true;
+                                    if (!matchNextSib && resp.nextMatch) {
+                                        nextMatch.push(resp.nextMatch);
+                                    }
                                 }
                                 break;
                         }
