@@ -9,7 +9,7 @@ export function init(template, ctx, target, options) {
             process(ctx, 0, 0);
         }
     }
-    const verb = (options && options.prepend) ? 'prepend' : 'appendChild';
+    const verb = options && options.prepend ? "prepend" : "appendChild";
     target[verb](ctx.template);
     return ctx;
 }
@@ -32,53 +32,70 @@ export function process(context, idx, level) {
     //context.inheritMatches = false;
     for (const selector in transform) {
         if (target.matches(selector)) {
-            const transformTemplate = transform[selector];
-            const resp = transformTemplate({
-                target: target,
-                ctx: context,
-                idx: idx,
-                level: level
-            });
-            if (resp !== undefined) {
-                switch (typeof resp) {
-                    case 'string':
-                        target.textContent = resp;
-                        break;
-                    case 'object':
-                        inherit = inherit || !!resp.inheritMatches;
-                        if (resp.select !== undefined) {
-                            drill = drill === null ? resp.select : Object.assign(drill, resp.select);
-                        }
-                        if (resp.matchFirstChild !== undefined) {
-                            switch (typeof resp.matchFirstChild) {
-                                case 'boolean':
-                                    if (typeof matchFirstChild === 'boolean' && resp.matchFirstChild) {
-                                        matchFirstChild = true;
+            const transformTemplateVal = transform[selector];
+            switch (typeof transformTemplateVal) {
+                case "object":
+                    if (typeof matchFirstChild === "object") {
+                        Object.assign(matchFirstChild, transformTemplateVal);
+                    }
+                    else {
+                        matchFirstChild = transformTemplateVal;
+                    }
+                    break;
+                case "function":
+                    const transformTemplate = transformTemplateVal;
+                    const resp = transformTemplate({
+                        target: target,
+                        ctx: context,
+                        idx: idx,
+                        level: level
+                    });
+                    if (resp !== undefined) {
+                        switch (typeof resp) {
+                            case "string":
+                                target.textContent = resp;
+                                break;
+                            case "object":
+                                inherit = inherit || !!resp.inheritMatches;
+                                if (resp.select !== undefined) {
+                                    drill =
+                                        drill === null
+                                            ? resp.select
+                                            : Object.assign(drill, resp.select);
+                                }
+                                if (resp.matchFirstChild !== undefined) {
+                                    switch (typeof resp.matchFirstChild) {
+                                        case "boolean":
+                                            if (typeof matchFirstChild === "boolean" &&
+                                                resp.matchFirstChild) {
+                                                matchFirstChild = true;
+                                            }
+                                            break;
+                                        case "object":
+                                            if (typeof matchFirstChild === "object") {
+                                                Object.assign(matchFirstChild, resp.matchFirstChild);
+                                            }
+                                            else {
+                                                matchFirstChild = resp.matchFirstChild;
+                                            }
+                                            break;
                                     }
-                                    break;
-                                case 'object':
-                                    if (typeof matchFirstChild === 'object') {
-                                        Object.assign(matchFirstChild, resp.matchFirstChild);
-                                    }
-                                    else {
-                                        matchFirstChild = resp.matchFirstChild;
-                                    }
-                                    break;
-                            }
+                                }
+                                if (resp.matchNextSib)
+                                    matchNextSib = true;
+                                if (!matchNextSib && resp.nextMatch) {
+                                    nextMatch.push(resp.nextMatch);
+                                }
+                                break;
                         }
-                        if (resp.matchNextSib)
-                            matchNextSib = true;
-                        if (!matchNextSib && resp.nextMatch) {
-                            nextMatch.push(resp.nextMatch);
-                        }
-                        break;
-                }
+                    }
+                    break;
             }
         }
     }
     if (matchNextSib) {
         let transform = context.transform;
-        if (typeof (matchNextSib) === 'object') {
+        if (typeof matchNextSib === "object") {
             context.transform = inheritTemplate(context, matchNextSib, inherit);
         }
         const nextSib = target.nextElementSibling;
@@ -89,7 +106,7 @@ export function process(context, idx, level) {
         context.transform = transform;
     }
     else if (nextMatch.length > 0) {
-        const match = nextMatch.join(',');
+        const match = nextMatch.join(",");
         let nextSib = target.nextElementSibling;
         while (nextSib !== null) {
             if (nextSib.matches(match)) {
@@ -110,7 +127,7 @@ export function process(context, idx, level) {
         }
         else {
             nextChild = target.firstElementChild;
-            if (typeof (matchFirstChild) === 'object') {
+            if (typeof matchFirstChild === "object") {
                 context.transform = inheritTemplate(context, matchFirstChild, inherit);
             }
         }
