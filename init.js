@@ -116,7 +116,7 @@ export function process(context, idx, level, options) {
         const nextSib = target.nextElementSibling;
         if (nextSib !== null) {
             context.leaf = nextSib;
-            process(context, idx + 1, level);
+            process(context, idx + 1, level, options);
         }
         context.transform = transform;
     }
@@ -126,7 +126,7 @@ export function process(context, idx, level, options) {
         while (nextSib !== null) {
             if (nextSib.matches(match)) {
                 context.leaf = nextSib;
-                process(context, idx + 1, level);
+                process(context, idx + 1, level, options);
                 break;
             }
             nextSib = nextSib.nextElementSibling;
@@ -148,7 +148,7 @@ export function process(context, idx, level, options) {
         }
         if (nextChild !== null) {
             context.leaf = nextChild;
-            process(context, 0, level + 1);
+            process(context, 0, level + 1, options);
         }
         context.transform = transform;
     }

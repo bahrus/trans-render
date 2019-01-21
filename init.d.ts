@@ -26,6 +26,6 @@ export interface RenderContext {
 }
 
 export interface RenderOptions{
-    prepend: boolean | undefined;
-    matchNext: boolean | undefined;
+    prepend?: boolean | undefined;
+    matchNext?: boolean | undefined;
 }

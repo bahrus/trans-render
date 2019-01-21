@@ -133,7 +133,7 @@ export function process(context: RenderContext, idx: number, level: number, opti
     const nextSib = target.nextElementSibling;
     if (nextSib !== null) {
       context.leaf = nextSib;
-      process(context, idx + 1, level);
+      process(context, idx + 1, level, options);
     }
     context.transform = transform;
   } else if (nextMatch.length > 0) {
@@ -142,7 +142,7 @@ export function process(context: RenderContext, idx: number, level: number, opti
     while (nextSib !== null) {
       if (nextSib.matches(match)) {
         context.leaf = nextSib;
-        process(context, idx + 1, level);
+        process(context, idx + 1, level, options);
         break;
       }
       nextSib = nextSib.nextElementSibling;
@@ -165,7 +165,7 @@ export function process(context: RenderContext, idx: number, level: number, opti
     }
     if (nextChild !== null) {
       context.leaf = nextChild;
-      process(context, 0, level + 1);
+      process(context, 0, level + 1, options);
     }
     context.transform = transform;
   }
