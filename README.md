@@ -454,7 +454,7 @@ Likewise, arguing for the benefits of this library is not in any way meant to di
 
 A question in my mind, is how does this rendering approach fit in with web components (I'm going to take a leap here and assume that [HTML Modules / Imports](https://github.com/w3c/webcomponents/issues/645) in some form makes it into browsers, even though I think the discussion still has some relevance without that).
 
-I think this alternative approach can provide value, in that the binding rules are data elements.  A web component can be based one main template, but which requires inserting other satellite templates (repeatedly).  It can then define a base binding, which extending web components or even end consumers can then extend and/or override.
+I think this alternative approach can provide value, in that the binding rules are data elements.  A web component can be based on one main template, but which requires inserting other satellite templates (repeatedly).  It can then define a base binding, which extending web components or even end consumers can then extend and/or override.
 
 In order to do this to maximum effect, we should make each of the "sub matching transforms" something that can be overwritten.  In particular, rather than doing this:
 
