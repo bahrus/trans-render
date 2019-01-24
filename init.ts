@@ -12,7 +12,7 @@ export const _rules = "_rules";
 export function init(
   template: HTMLTemplateElement,
   ctx: RenderContext,
-  target: Element,
+  target: HTMLElement | DocumentFragment,
   options?: RenderOptions
 ): RenderContext {
   //ctx.init = init;
