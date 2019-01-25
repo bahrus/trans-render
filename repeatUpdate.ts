@@ -11,7 +11,7 @@ export function repeatUpdate(count: number, template: HTMLTemplateElement, targe
             //TODO:  mark children as needing initialization
             Array.from(clonedTemplate.children).forEach(c =>{
                 (<any>c)[idxKey] = childCount + i;
-                (c as HTMLElement).dataset.idxKey = childCount + i + '';
+                //(c as HTMLElement).dataset.idxKey = childCount + i + '';
             });
 
             target.appendChild(clonedTemplate);
@@ -20,7 +20,7 @@ export function repeatUpdate(count: number, template: HTMLTemplateElement, targe
     }else{
         for(let i = target.children.length - 1; i > -1; i--){
             const child = target.children[i];
-            if((<any>child)[idxKey] > count){
+            if((<any>child)[idxKey] >= count){
                 child.remove();
             }
         }

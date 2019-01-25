@@ -8,7 +8,7 @@ export function repeatInit(count: number, template: HTMLTemplateElement, target:
         Array.from(clonedTemplate.children).forEach(c =>{
             //c.setAttribute(initKey, '');
             (<any>c)[idxKey] = i;
-            (c as HTMLElement).dataset.idxKey = i + '';
+            //(c as HTMLElement).dataset.idxKey = i + '';
         })
         //TODO:  assign index to children
         target.appendChild(clonedTemplate);
