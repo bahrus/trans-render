@@ -25,6 +25,7 @@
             import { update } from '../update.js';
             import { repeatInit } from '../repeatInit.js';
             import { repeatUpdate } from '../repeatUpdate.js';
+            const options = {matchNext: true};
             const ctx = init(list, {
                 transform: {
                     ul: ({ target, ctx }) => {
@@ -36,17 +37,17 @@
                             li: ({ target, idx }) => {
                                 target.textContent = 'Hello ' + idx;
                                 return {
-                                    matchNextSib: true
+                                    //matchNextSib: true
                                 }
                             }
                         }
 
                     }
                 }
-            }, target, {matchNext: true});
+            }, target, options);
             addItems.addEventListener('click', e => {
                 repeatUpdate(15, itemTemplate, container);
-                update(ctx, target);
+                update(ctx, target, options);
             });
             removeItems.addEventListener('click', e =>{
                 repeatUpdate(5, null,  container);
