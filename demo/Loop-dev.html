@@ -27,16 +27,16 @@
             import { repeatUpdate } from '../repeatUpdate.js';
             const options = {matchNext: true};
             const ctx = init(list, {
+                liTransform: {
+                    _rules: true,
+                    li: ({ idx }) => 'Hello ' + idx,
+                },
                 transform: {
                     ul: ({ target, ctx }) => {
                         if (!ctx.update) {
                             repeatInit(10, itemTemplate, target);
                         }
-                        return {
-                            _rules: true,
-                            li: ({ idx }) => 'Hello ' + idx,
-                        }
-
+                        return ctx.liTransform
                     }
                 }
             }, target, options);
