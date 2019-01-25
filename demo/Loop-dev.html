@@ -34,12 +34,7 @@
                         }
                         return {
                             _rules: true,
-                            li: ({ target, idx }) => {
-                                target.textContent = 'Hello ' + idx;
-                                return {
-                                    //matchNextSib: true
-                                }
-                            }
+                            li: ({ idx }) => 'Hello ' + idx,
                         }
 
                     }
