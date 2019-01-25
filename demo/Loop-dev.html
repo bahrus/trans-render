@@ -16,6 +16,7 @@
         <template id="list">
             <ul id="container"></ul>
             <button id="addItems">Add items</button>
+            <button id="removeItems">Remove items</button>
         </template>
         <div id="target"></div>
 
@@ -48,6 +49,9 @@
                 repeatUpdate(15, itemTemplate, container);
                 update(ctx, target);
             });
+            removeItems.addEventListener('click', e =>{
+                repeatUpdate(5, null,  container);
+            })
         </script>
     </div>
 </body>

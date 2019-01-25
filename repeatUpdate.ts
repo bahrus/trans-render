@@ -1,4 +1,4 @@
-import {countKey} from './repeatInit.js';
+import {countKey, idxKey} from './repeatInit.js';
 
 //type HTMLFn = (el: HTMLElement) => void
 export function repeatUpdate(count: number, template: HTMLTemplateElement, target: HTMLElement){
@@ -9,10 +9,21 @@ export function repeatUpdate(count: number, template: HTMLTemplateElement, targe
         for(let i = 0; i < diff; i++){
             const clonedTemplate = template.content.cloneNode(true) as DocumentFragment;
             //TODO:  mark children as needing initialization
+            Array.from(clonedTemplate.children).forEach(c =>{
+                (<any>c)[idxKey] = childCount + i;
+                (c as HTMLElement).dataset.idxKey = childCount + i + '';
+            });
+
             target.appendChild(clonedTemplate);
+
         }
     }else{
-        
+        for(let i = target.children.length - 1; i > -1; i--){
+            const child = target.children[i];
+            if((<any>child)[idxKey] > count){
+                child.remove();
+            }
+        }
     }
     (<any>target)[countKey] = count;
 }
