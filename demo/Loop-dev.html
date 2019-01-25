@@ -27,24 +27,23 @@
             import { repeatUpdate } from '../repeatUpdate.js';
             const ctx = init(list, {
                 transform: {
-                    'ul': ({ target, ctx }) => {
+                    ul: ({ target, ctx }) => {
                         if (!ctx.update) {
                             repeatInit(10, itemTemplate, target);
                         }
                         return {
-                            matchFirstChild: {
-                                'li': ({ target, idx }) => {
-                                    target.textContent = 'Hello ' + idx;
-                                    return {
-                                        matchNextSib: true
-                                    }
+                            _rules: true,
+                            li: ({ target, idx }) => {
+                                target.textContent = 'Hello ' + idx;
+                                return {
+                                    matchNextSib: true
                                 }
                             }
                         }
 
                     }
                 }
-            }, target);
+            }, target, {matchNext: true});
             addItems.addEventListener('click', e => {
                 repeatUpdate(15, itemTemplate, container);
                 update(ctx, target);
