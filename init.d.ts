@@ -24,6 +24,7 @@ export interface RenderContext {
     Transform?: TransformRules,
     template?: DocumentFragment,
     update?: (ctx: RenderContext, target: HTMLElement | DocumentFragment) => RenderContext;
+    refs?: {[key: string] : any},
 }
 
 export interface RenderOptions{

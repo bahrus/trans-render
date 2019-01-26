@@ -12,7 +12,7 @@ XSLT can take pure XML with no formatting instructions as its input.  Generally 
 
 Likewise, with the advent of custom elements, the template markup will tend to be much more semantic, like XML. trans-render tries to rely as much as possible on this intrinisic semantic nature of the template markup, to give enough clues on how to fill in the needed "potholes" like textContent and property setting.  But trans-render is completely extensible, so it can certainly accommodate custom markup (like string interpolation, or common binding attributes) by using additional, optional helper libraries.  
 
-This leaves the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.
+This leaves the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may needed to make the binding rules in sync.  Much like how separate style rules would eed adjusting.
 
 ## Advantages
 
@@ -319,29 +319,31 @@ Do this:
 
 ```JavaScript
 const ctx = {
-    divTransform:{
-        '*': x => ({
-            matchNextSib: true
-        }),
-        '[x-d]': ({ target }) => {
-            interpolate(target, 'textContent', model);
-        },
-        '[data-init]': ({ target, ctx }) => {
-            if (ctx.update !== undefined) {
-                return {
-                    matchFirstChild: true
+    refs:{
+        divTransform:{
+            '*': x => ({
+                matchNextSib: true
+            }),
+            '[x-d]': ({ target }) => {
+                interpolate(target, 'textContent', model);
+            },
+            '[data-init]': ({ target, ctx }) => {
+                if (ctx.update !== undefined) {
+                    return {
+                        matchFirstChild: true
+                    }
+                } else {
+                    init(self[target.dataset.init], {
+                        transform: ctx.transform
+                    }, target);
                 }
-            } else {
-                init(self[target.dataset.init], {
-                    transform: ctx.transform
-                }, target);
-            }
+            },
         },
-    },
+    }
     transform:{
         div: ({ ctx }) => ({
             matchNextSib: true,
-            matchFirstChild: ctx.divTransform
+            matchFirstChild: ctx.refs.divTransform
         }),
     }
 }
