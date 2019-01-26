@@ -7,7 +7,6 @@ import {
   TransformFn
 } from "./init.d.js";
 
-//export const _rules = "_rules";
 
 export function init(
   template: HTMLTemplateElement,
@@ -29,16 +28,6 @@ export function init(
   (<any>target)[verb](ctx.template);
   return ctx;
 }
-// function inheritTemplate(
-//   context: RenderContext,
-//   transform: TransformRules,
-//   inherit: boolean
-// ) {
-//   if (inherit) {
-//     return Object.assign(Object.assign({}, context.Transform), transform);
-//   }
-//   return transform;
-// }
 export function process(
   context: RenderContext,
   idx: number,
@@ -49,14 +38,12 @@ export function process(
   if (target.matches === undefined) return;
   const transform = context.Transform;
 
-  //let drill: TransformRules | null = null;
   let nextTransform: TransformRules = {};
   let nextSelector = '';
   let firstSelector = true;
   let matchNextSib: boolean = true;
   let inherit = false;
   let nextMatch = [];
-  //context.inheritMatches = false;
   for (const selector in transform) {
     if (target.matches(selector)) {
       const transformTemplateVal = transform[selector];
@@ -83,7 +70,6 @@ export function process(
                   const respAsTransformRules = resp as TransformRules;
                   Object.assign(nextTransform, respAsTransformRules);
                 } else {
-                  //Next Step
                   const respAsNextStep = resp as NextStep;
                   inherit = inherit || !!resp.MergeTransforms;
                   nextSelector = (firstSelector ? '' : ',') + respAsNextStep.Select;
@@ -109,9 +95,6 @@ export function process(
   }
   if (matchNextSib) {
     let transform = context.Transform;
-    // if (typeof matchNextSib === "object") {
-    //   //context.Transform = inheritTemplate(context, matchNextSib, inherit);
-    // }
     const nextSib = target.nextElementSibling;
     if (nextSib !== null) {
       context.leaf = nextSib;

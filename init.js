@@ -1,4 +1,3 @@
-//export const _rules = "_rules";
 export function init(template, ctx, target, options) {
     //ctx.init = init;
     const clonedTemplate = template.content.cloneNode(true);
@@ -14,29 +13,17 @@ export function init(template, ctx, target, options) {
     target[verb](ctx.template);
     return ctx;
 }
-// function inheritTemplate(
-//   context: RenderContext,
-//   transform: TransformRules,
-//   inherit: boolean
-// ) {
-//   if (inherit) {
-//     return Object.assign(Object.assign({}, context.Transform), transform);
-//   }
-//   return transform;
-// }
 export function process(context, idx, level, options) {
     const target = context.leaf;
     if (target.matches === undefined)
         return;
     const transform = context.Transform;
-    //let drill: TransformRules | null = null;
     let nextTransform = {};
     let nextSelector = '';
     let firstSelector = true;
     let matchNextSib = true;
     let inherit = false;
     let nextMatch = [];
-    //context.inheritMatches = false;
     for (const selector in transform) {
         if (target.matches(selector)) {
             const transformTemplateVal = transform[selector];
@@ -63,7 +50,6 @@ export function process(context, idx, level, options) {
                                     Object.assign(nextTransform, respAsTransformRules);
                                 }
                                 else {
-                                    //Next Step
                                     const respAsNextStep = resp;
                                     inherit = inherit || !!resp.MergeTransforms;
                                     nextSelector = (firstSelector ? '' : ',') + respAsNextStep.Select;
@@ -90,9 +76,6 @@ export function process(context, idx, level, options) {
     }
     if (matchNextSib) {
         let transform = context.Transform;
-        // if (typeof matchNextSib === "object") {
-        //   //context.Transform = inheritTemplate(context, matchNextSib, inherit);
-        // }
         const nextSib = target.nextElementSibling;
         if (nextSib !== null) {
             context.leaf = nextSib;
