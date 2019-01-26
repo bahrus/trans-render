@@ -105,9 +105,10 @@ export function process(context, idx, level, options) {
         }
         if (nextChild !== null) {
             context.leaf = nextChild;
+            context.Transform = nextTransform;
             process(context, 0, level + 1, options);
+            context.Transform = transform;
         }
-        context.Transform = transform;
     }
 }
 //# sourceMappingURL=init.js.map

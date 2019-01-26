@@ -25,15 +25,14 @@
             const options = {matchNext: true};
             const ctx = x.i(list, {
                 liTransform: {
-                    _rules: true,
                     li: ({ idx }) => 'Hello ' + idx,
                 },
-                transform: {
+                Transform: {
                     ul: ({ target, ctx }) => {
                         if (!ctx.update) {
                             x.rpi(10, itemTemplate, target);
                         }
-                        return ctx.liTransform
+                        return ctx.liTransform;
                     }
                 }
             }, target, options);
