@@ -279,6 +279,16 @@ The ability to keep the styles separate from the HTML does not invalidate suppor
 
 Likewise, arguing for the benefits of this library is not in any way meant to disparage the usefulness of the current prevailing orthodoxy of including the binding / formatting instructions in the markup.  I would be delighted to see the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with support for inline binding, added to the arsenal of tools developers could use.  Should that proposal come to fruition, this library, hovering under 1KB, would be in competition with one that is 0KB, with the full backing / optimization work of Chrome, Safari, Firefox.  Why would anyone use this library then?
 
+And in fact, the library described here is quite open ended.  Portions of the templates can invoke any custom function to be populated.  Or it could use browser-provided template instantation up to a point, and this library for more light-touch "macro" binding.
+
+For example, in the second example above, this library has nothing to offer in terms of string interpolation, since CSS matching provides no help:
+
+```html
+<div>Hello {{Name}}</div>
+```
+
+As this is a fundamental use case for template instantiation, it could be used as a first round of processing.  And where it makes sense to tightly couple the binding to the template, use it there as well.  Just as the use of inline styles is thriving.  But supplment that binding with this library.
+
 A question in my mind, is how does this rendering approach fit in with web components (I'm going to take a leap here and assume that [HTML Modules / Imports](https://github.com/w3c/webcomponents/issues/645) in some form makes it into browsers, even though I think the discussion still has some relevance without that).
 
 I think this alternative approach can provide value, in that the binding rules are data elements.  A web component can be based on one main template, but which requires inserting other satellite templates (repeatedly).  It can then define a base binding, which extending web components or even end consumers can then extend and/or override.
@@ -316,7 +326,7 @@ const mainTemplate = createTemplate(/* html */ `
 `);
 ```
 
-*NB*  The syntax above will look much cleaner when HTML Modules are a thing.
+**NB**  The syntax above will look much cleaner when HTML Modules are a thing.
 
 The most "readable" binding is one which follows the structure of the output:
 
@@ -415,4 +425,16 @@ export class WCInfoBase extends XtalElement<WCSuiteInfo> {
     }
   };
 ```
+
+## Why not just create a method for each template, and allow consumers to override it?
+
+Of course, that's a respectable approach.  However:
+
+1.  This will only allow extending components, rather than web compositions that consume the web component, to override the default behavior.
+2.  It's difficult / impossible to insert something inside a method when overriding, only doing something before and/or after.
+
+Granted, in the (quite realistic) example provided above, overriding / extending the binding is not as easy as it could be in other circumstances -- 
+due to the fact that the sub template bindings are functions, as opposed to objects.  But I see a path where it would work, by invoking the function, and *then* massaging the TransformRules, which is now an easy to understand (?) JavaScript object, similar to a CSS Stylesheet.
+
+And to be sure, template literals also break down into (harder to understand?) pieces, based around bindings.  I'm a bit unclear here.  If Template Literal results are really as easy to customize as this approach, then the remaining advantage for this approach is simply the faster parsing speeds of HTML vs JavaScript strings -- something observable today with HTML heavy components / pages, and that *may* carry over to HTML modules.  
 
