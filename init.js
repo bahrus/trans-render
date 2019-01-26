@@ -29,6 +29,7 @@ export function process(context, idx, level, options) {
             const transformTemplateVal = transform[selector];
             switch (typeof transformTemplateVal) {
                 case "object":
+                    nextSelector = '*';
                     Object.assign(nextTransform, transformTemplateVal);
                     break;
                 case "function":
@@ -47,6 +48,7 @@ export function process(context, idx, level, options) {
                             case "object":
                                 if (resp["Select"] === undefined) {
                                     const respAsTransformRules = resp;
+                                    nextSelector = '*';
                                     Object.assign(nextTransform, respAsTransformRules);
                                 }
                                 else {
