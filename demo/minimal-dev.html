@@ -21,15 +21,12 @@
             const model = {
                 summaryText: 'hello'
             }
-            const transform = {
-                details: x => ({
-                    select: {
-                        summary: x => model.summaryText
-                    }
-                })
-
+            const Transform = {
+                details: {
+                    summary: x => model.summaryText
+                }
             };
-            init(sourceTemplate, { transform }, target);
+            init(sourceTemplate, { Transform }, target);
         </script>
     </div>
 </body>
