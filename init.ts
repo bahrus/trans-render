@@ -1,5 +1,5 @@
 import {
-  NextSteps,
+  NextStep,
   TransformRules,
   RenderContext,
   TransformArg,
@@ -7,7 +7,7 @@ import {
   TransformFn
 } from "./init.d.js";
 
-export const _rules = "_rules";
+//export const _rules = "_rules";
 
 export function init(
   template: HTMLTemplateElement,
@@ -18,7 +18,7 @@ export function init(
   //ctx.init = init;
   const clonedTemplate = template.content.cloneNode(true) as DocumentFragment;
   ctx.template = clonedTemplate;
-  if (ctx.transform) {
+  if (ctx.Transform) {
     const firstChild = clonedTemplate.firstElementChild;
     if (firstChild !== null) {
       ctx.leaf = firstChild;
@@ -29,38 +29,40 @@ export function init(
   (<any>target)[verb](ctx.template);
   return ctx;
 }
-function inheritTemplate(
+// function inheritTemplate(
+//   context: RenderContext,
+//   transform: TransformRules,
+//   inherit: boolean
+// ) {
+//   if (inherit) {
+//     return Object.assign(Object.assign({}, context.Transform), transform);
+//   }
+//   return transform;
+// }
+export function process(
   context: RenderContext,
-  transform: TransformRules,
-  inherit: boolean
+  idx: number,
+  level: number,
+  options?: RenderOptions
 ) {
-  if (inherit) {
-    return Object.assign(Object.assign({}, context.transform), transform);
-  }
-  return transform;
-}
-export function process(context: RenderContext, idx: number, level: number, options?: RenderOptions) {
   const target = context.leaf!;
   if (target.matches === undefined) return;
-  const transform = context.transform;
+  const transform = context.Transform;
 
-  let drill: TransformRules | null = null;
-  let matchFirstChild: TransformRules | boolean = false;
-  let matchNextSib: boolean = false;
+  //let drill: TransformRules | null = null;
+  let nextTransform: TransformRules = {};
+  let nextSelector = '';
+  let firstSelector = true;
+  let matchNextSib: boolean = true;
   let inherit = false;
   let nextMatch = [];
   //context.inheritMatches = false;
   for (const selector in transform) {
-    if(selector === _rules) continue;
     if (target.matches(selector)) {
       const transformTemplateVal = transform[selector];
       switch (typeof transformTemplateVal) {
         case "object":
-          if (typeof matchFirstChild === "object") {
-            Object.assign(matchFirstChild, transformTemplateVal);
-          } else {
-            matchFirstChild = transformTemplateVal;
-          }
+          Object.assign(nextTransform, transformTemplateVal);
           break;
         case "function":
           const transformTemplate = transformTemplateVal as TransformFn;
@@ -77,44 +79,24 @@ export function process(context: RenderContext, idx: number, level: number, opti
                 target.textContent = resp;
                 break;
               case "object":
-                if ((<any>resp)[_rules]) {
+                if ((<any>resp)["Select"] === undefined) {
                   const respAsTransformRules = resp as TransformRules;
-                  if (typeof matchFirstChild === "object") {
-                    Object.assign(matchFirstChild, respAsTransformRules);
-                  } else {
-                    matchFirstChild = respAsTransformRules;
-                  }                  
+                  Object.assign(nextTransform, respAsTransformRules);
                 } else {
-                  const respAsNextSteps = resp as NextSteps;
-                  inherit = inherit || !!resp.inheritMatches;
-                  if (respAsNextSteps.select !== undefined) {
-                    drill =
-                      drill === null
-                        ? respAsNextSteps.select
-                        : Object.assign(drill, resp.select);
+                  //Next Step
+                  const respAsNextStep = resp as NextStep;
+                  inherit = inherit || !!resp.MergeTransforms;
+                  nextSelector = (firstSelector ? '' : ',') + respAsNextStep.Select;
+                  firstSelector = false;
+                  const newTransform = respAsNextStep.Transform;
+                  if (newTransform === undefined) {
+                    Object.assign(nextTransform, context.Transform);
+                  } else {
+                    Object.assign(nextTransform, newTransform);
                   }
-                  if (resp.matchFirstChild !== undefined) {
-                    switch (typeof resp.matchFirstChild) {
-                      case "boolean":
-                        if (
-                          typeof matchFirstChild === "boolean" &&
-                          resp.matchFirstChild
-                        ) {
-                          matchFirstChild = true;
-                        }
-                        break;
-                      case "object":
-                        if (typeof matchFirstChild === "object") {
-                          Object.assign(matchFirstChild, resp.matchFirstChild);
-                        } else {
-                          matchFirstChild = resp.matchFirstChild;
-                        }
-                        break;
-                    }
-                  }
-                  if (resp.matchNextSib) matchNextSib = true;
-                  if (!matchNextSib && resp.nextMatch) {
-                    nextMatch.push(resp.nextMatch);
+                  if (respAsNextStep.SkipSibs) matchNextSib = false;
+                  if (!matchNextSib && resp.NextMatch) {
+                    nextMatch.push(resp.NextMatch);
                   }
                 }
 
@@ -125,17 +107,17 @@ export function process(context: RenderContext, idx: number, level: number, opti
       }
     }
   }
-  if (matchNextSib || (options && options.matchNext)) {
-    let transform = context.transform;
-    if (typeof matchNextSib === "object") {
-      context.transform = inheritTemplate(context, matchNextSib, inherit);
-    }
+  if (matchNextSib) {
+    let transform = context.Transform;
+    // if (typeof matchNextSib === "object") {
+    //   //context.Transform = inheritTemplate(context, matchNextSib, inherit);
+    // }
     const nextSib = target.nextElementSibling;
     if (nextSib !== null) {
       context.leaf = nextSib;
       process(context, idx + 1, level, options);
     }
-    context.transform = transform;
+    context.Transform = transform;
   } else if (nextMatch.length > 0) {
     const match = nextMatch.join(",");
     let nextSib = target.nextElementSibling;
@@ -149,24 +131,17 @@ export function process(context: RenderContext, idx: number, level: number, opti
     }
   }
 
-  if (matchFirstChild || drill !== null) {
-    let transform = context.transform;
+  if (nextSelector.length > 0) {
+    let transform = context.Transform;
 
-    let nextChild: Element | null;
-    if (drill !== null) {
-      const keys = Object.keys(drill);
-      nextChild = target.querySelector(keys[0]);
-      context.transform = inheritTemplate(context, drill, inherit);
-    } else {
-      nextChild = target.firstElementChild;
-      if (typeof matchFirstChild === "object") {
-        context.transform = inheritTemplate(context, matchFirstChild, inherit);
-      }
+    const nextChild = target.querySelector(nextSelector);
+    if(inherit){
+      Object.assign(nextTransform, context.Transform);
     }
     if (nextChild !== null) {
       context.leaf = nextChild;
       process(context, 0, level + 1, options);
     }
-    context.transform = transform;
+    context.Transform = transform;
   }
 }

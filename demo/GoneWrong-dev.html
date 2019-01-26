@@ -81,10 +81,9 @@
         <script type="module">
             import { init } from '../init.js';
             init(Main, {
-                transform: {
+                Transform: {
                     '*': x  => ({
-                        matchNextSib: true,
-                        matchFirstChild: true
+                        Select: '*'
                     }),
                     '[data-init]': ({target, ctx}) =>{
                         init(self[target.dataset.init], {}, target);
