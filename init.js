@@ -111,4 +111,3 @@ export function process(context, idx, level, options) {
         }
     }
 }
-//# sourceMappingURL=init.js.map

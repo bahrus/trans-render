@@ -75,7 +75,7 @@ Produces
 
 "target" is the HTML element we are populating.  The transform matches can return a string, which will be used to set the textContent of the target.  Or the transform can do its own manipulations on the target element, and then return an object specifying where to go next.
 
-[More documentation to follow]
+Note the unusual casing, in the JavaScript arena:  property Transform uses a capital T.  As we will see, this pattern is to allow the interpreter to distinguish between css matches and a "NextStep" JS object.
 
 
 # Use Case 1:  Applying the DRY principle to (post) punk rock lyrics
@@ -174,6 +174,18 @@ Produces
 ```
 -->
 
+Note the transform rule above (if viewed from webcomponents.org):
+
+```JavaScript
+Transform: {
+    '*': x  => ({
+        Select: '*'
+    }),
+```
+
+* is a match for all css elements.  What this is saying is "for any element regardless of css characters, continue processing its first child (Select => querySelector).  This, combined with the default setting to match all the next siblings means that, for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
+
+[More documentation to follow]
 
 <!--
 # Reapplying (some) of the transform

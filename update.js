@@ -9,4 +9,3 @@ export function update(ctx, target, options) {
     }
     return updateCtx;
 }
-//# sourceMappingURL=update.js.map

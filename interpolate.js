@@ -14,4 +14,3 @@ export function interpolate(target, prop, obj, isAttr = false) {
         target[prop] = newVal;
     }
 }
-//# sourceMappingURL=interpolate.js.map
