@@ -283,73 +283,136 @@ A question in my mind, is how does this rendering approach fit in with web compo
 
 I think this alternative approach can provide value, in that the binding rules are data elements.  A web component can be based on one main template, but which requires inserting other satellite templates (repeatedly).  It can then define a base binding, which extending web components or even end consumers can then extend and/or override.
 
-<!--
-In order to do this to maximum effect, we should make each of the "sub matching transforms" something that can be overwritten.  In particular, rather than doing this:
+Adding the ability for downstream consumers to override "sub templates" should probably come towards the end of development, together with optimizing, as it could break up the rhythm somewhat in following along the flow of the markup.  Nevertheless, in the markup below, based from this [custom element](https://www.webcomponents.org/element/wc-info) we provide suggestions for how this can be done.  
+
+The web component needs to display two nested lists inside a main component -- the list of web components contained inside an npm package, and for each web component, a list of the attributes.  It is natural to separate each list container into a sub template:
 
 ```JavaScript
-const ctx = init(Main, {
-    transform: {
-        div: ({ ctx }) => ({
-            matchNextSib: true,
-            matchFirstChild: {
-                '*': x => ({
-                    matchNextSib: true
-                }),
-                '[x-d]': ({ target }) => {
-                    interpolate(target, 'textContent', model);
-                },
-                '[data-init]': ({ target, ctx }) => {
-                    if (ctx.update !== undefined) {
-                        return {
-                            matchFirstChild: true
-                        }
-                    } else {
-                        init(self[target.dataset.init], {
-                            transform: ctx.transform
-                        }, target);
-                    }
-                },
+const attribTemplate = createTemplate(/* html */ `
+    <dt></dt><dd></dd>
+`);
+
+const WCInfoTemplate = createTemplate(/* html */ `
+<section class="WCInfo card">
+    <header>
+        <div class="WCLabel"></div>
+        <div class="WCDesc"></div>
+    </header>
+    <details>
+        <summary>attributes</summary>
+        <dl></dl>
+    </details> 
+</section>`);
+
+
+const mainTemplate = createTemplate(/* html */ `
+<header>
+    <mark></mark>
+    <nav>
+        <a target="_blank">⚙️</a>
+    </nav>
+</header>
+<main></main>
+`);
+```
+
+*NB*  The syntax above will look much cleaner when HTML Modules are a thing.
+
+The most "readable" binding is one which follows the structure of the output:
+
+```TypeScript
+  {
+    Transform: {
+      header: {
+        mark: x => this.packageName,
+        nav: {
+          a: ({ target }) => {
+            (target as HTMLAnchorElement).href = this._href!;
+          }
+        }
+      } as TransformRules,
+      main: ({ target }) => {
+        const tags = this.viewModel.tags;
+        repeatInit(tags.length, WCInfoTemplate, target);
+        return {
+          section: ({ idx }) => ({
+            header: {
+              ".WCLabel": x => tags[idx].label,
+              ".WCDesc": ({ target }) => {
+                target.innerHTML = tags[idx].description;
+              }
+            },
+            details: {
+              dl: ({ target }) => {
+                const attrbs = tags[idx].attributes;
+                if (!attrbs) return;
+                repeatInit(attrbs.length, attribTemplate, target);
+                return {
+                  dt: ({ idx }) => attrbs[Math.floor(idx / 2)].label,
+                  dd: ({ idx }) => attrbs[Math.floor(idx / 2)].description
+                };
+              }
             }
-        }),
-    }
-}, target);
+          })
+        };
+      }
+    } as TransformRules
+  };
+
 ```
 
-Do this:
+However, this would be difficult for extending or consuming components to finesse (if say they want to bind some additional information inside one of the existing tags).
 
-```JavaScript
-const ctx = {
+The rule of thumb I suggest is to break things down by template, thusly:
+
+```TypeScript
+export const subTemplates = {
+  attribTransform:'attribTransform',
+  WCInfo: 'WCInfo'
+} 
+export class WCInfoBase extends XtalElement<WCSuiteInfo> {
+  _renderContext: RenderContext = {
+    init: init,
     refs:{
-        divTransform:{
-            '*': x => ({
-                matchNextSib: true
-            }),
-            '[x-d]': ({ target }) => {
-                interpolate(target, 'textContent', model);
-            },
-            '[data-init]': ({ target, ctx }) => {
-                if (ctx.update !== undefined) {
-                    return {
-                        matchFirstChild: true
-                    }
-                } else {
-                    init(self[target.dataset.init], {
-                        transform: ctx.transform
-                    }, target);
-                }
-            },
-        },
+      [subTemplates.attribTransform]: (attrbs: AttribInfo[]) => ({
+        dt: ({ idx }) => attrbs[Math.floor(idx / 2)].label,
+        dd: ({ idx }) => attrbs[Math.floor(idx / 2)].description
+      } as TransformRules),
+      [subTemplates.WCInfo]: (tags: WCInfo[], idx: number) =>({
+        
+          header: {
+            ".WCLabel": x => tags[idx].label,
+            ".WCDesc": ({ target }) => {
+              target.innerHTML = tags[idx].description;
+            }
+          },
+          details: {
+            dl: ({ target, ctx }) => {
+              const attrbs = tags[idx].attributes;
+              if (!attrbs) return;
+              repeatInit(attrbs.length, attribTemplate, target);
+              return ctx.refs![subTemplates.attribTransform](attrbs); 
+            }
+          }
+      } as TransformRules)
+    },
+    Transform: {
+      header: {
+        mark: x => this.packageName,
+        nav: {
+          a: ({ target }) => {
+            (target as HTMLAnchorElement).href = this._href!;
+          }
+        }
+      } as TransformRules,
+      main: ({ target }) => {
+        const tags = this.viewModel.tags;
+        repeatInit(tags.length, WCInfoTemplate, target);
+        return ({
+          section: ({ idx, ctx }) => ctx.refs![subTemplates.WCInfo](tags, idx),
+        })
+      }
     }
-    transform:{
-        div: ({ ctx }) => ({
-            matchNextSib: true,
-            matchFirstChild: ctx.refs.divTransform
-        }),
-    }
-}
-init(Main, ctx, target);
+  };
 ```
-
-Then if the web component exposes the context parameter as a property, it would allow extending components / end users to extend / modify / remove the default transform.
--->
 
