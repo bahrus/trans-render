@@ -413,6 +413,8 @@ As this is a fundamental use case for template instantiation, it could be used a
 
 A question in my mind, is how does this rendering approach fit in with web components (I'm going to take a leap here and assume that [HTML Modules / Imports](https://github.com/w3c/webcomponents/issues/645) in some form makes it into browsers, even though I think the discussion still has some relevance without that).
 
-I think this alternative approach can provide value, in that the binding starts with an HTML template element, and produces transformed markup using init.  Then consuming / extending web components could insert additional bindings using update, providing their own transformation.
+I think this alternative approach can provide value, by providing a process for "Pipeline Rendering":  Rendering starts with an HTML template element, which produces transformed markup using init.  Then consuming / extending web components could insert additional bindings using update, providing their own transformation.
+
+To aid with this process, the init and update functions provide a rendering options parameter, which contains an optional "initializedCallback" and "updatedCallback" option.
 
 

@@ -29,4 +29,6 @@ export interface RenderContext {
 
 export interface RenderOptions{
     prepend?: boolean | undefined;
+    initializedCallback?: (ctx: RenderContext, target: HTMLElement | DocumentFragment, options?: RenderOptions) => RenderContext | void,
+    updatedCallback?: (ctx: RenderContext, target: HTMLElement | DocumentFragment, options?: RenderOptions) => RenderContext | void,
 }
