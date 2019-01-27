@@ -22,7 +22,6 @@ Providing the binding transform in JS form inside the init function signature ha
 
 Another advantage of separating the binding like this, is that one can insert comments, console.log's and/or breakpoints, in order to walk through the binding process.
 
-
 For more musings on the question of what is this good for, please see the [rambling section](https://github.com/bahrus/trans-render#ramblings-from-the-department-of-faulty-analogies) below.
 
 
@@ -185,9 +184,8 @@ Transform: {
 
 * is a match for all css elements.  What this is saying is "for any element regardless of css characters, continue processing its first child (Select => querySelector).  This, combined with the default setting to match all the next siblings means that, for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
 
-[More documentation to follow]
 
-<!--
+
 # Reapplying (some) of the transform
 
 Often, we want to reapply a transform, after something changes -- typically the source data.
@@ -218,58 +216,54 @@ The ability to do this is illustrated in the previous example.  Critical syntax 
 ```
 
 
-#  Loop support (NB:  Not yet optimized, not thoroughly tested)
+#  Loop support (NB:  Not yet optimized)
 
 The next big use case for this library is using it in conjunction with a [virtual scroller](https://valdrinkoshi.github.io/virtual-scroller/#more-examples). As far as I can see, the performance of this library should work quite well in that scenario.
 
 However, no self respecting rendering library would be complete without some internal support for repeating lists.  This library is no exception.  While the performance of the initial list is likely to be acceptable, no effort has yet been made to utilize state of the art tricks to make list updates keep the number of DOM changes at a minimum. 
 
-Anyway the syntax is shown below:
+Anyway the syntax is shown below.  What's notable is a sub template is cloned repeatedly, then populated using the simple init / update methods.
 
 ```html
-<div>
-    <template id="itemTemplate">
-        <li></li>
-    </template>
-    <template id="list">
-        <ul id="container"></ul>
-        <button id="addItems">Add items</button>
-    </template>
-    <div id="target"></div>
+    <div>
+        <template id="itemTemplate">
+            <li></li>
+        </template>
+        <template id="list">
+            <ul id="container"></ul>
+            <button id="addItems">Add items</button>
+            <button id="removeItems">Remove items</button>
+        </template>
+        <div id="target"></div>
 
-    <script type="module">
-        import { init } from '../init.js';
-        import { update } from '../update.js';
-        import { repeatInit } from '../repeatInit.js';
-        import { repeatUpdate } from '../repeatUpdate.js';
-        const ctx = init(list, {
-            transform: {
-                'ul': ({ target, ctx }) => {
-                    if (!ctx.update) {
-                        repeatInit(10, itemTemplate, target);
-                    }
-                    return {
-                        matchFirstChild: {
-                            'li': ({ target, idx }) => {
-                                target.textContent = 'Hello ' + idx;
-                                return {
-                                    matchNextSib: true
-                                }
-                            }
+        <script type="module">
+            import { init } from '../init.js';
+            import { repeatInit } from '../repeatInit.js';
+            import {repeatUpdate} from '../repeatUpdate.js';
+            import {update} from '../update.js';
+            const options = {matchNext: true};
+            const ctx = init(list, {
+                Transform: {
+                    ul: ({ target, ctx }) => {
+                        if (!ctx.update) {
+                            repeatInit(10, itemTemplate, target);
                         }
+                        return ({
+                            li: ({ idx }) => 'Hello ' + idx,
+                        });
                     }
-
                 }
-            }
-        }, target);
-        addItems.addEventListener('click', e => {
-            repeatUpdate(15, itemTemplate, container);
-            update(ctx, target);
-        });
-    </script>
-</div>
+            }, target, options);
+            addItems.addEventListener('click', e => {
+                repeatUpdate(15, itemTemplate, container);
+                update(ctx, target, options);
+            });
+            removeItems.addEventListener('click', e =>{
+                repeatUpdate(5, null,  container);
+            })
+        </script>
+    </div>
 ```
--->
 
 ## Ramblings From the Department of Faulty Analogies
 
@@ -287,154 +281,10 @@ For example, in the second example above, this library has nothing to offer in t
 <div>Hello {{Name}}</div>
 ```
 
-As this is a fundamental use case for template instantiation, it could be used as a first round of processing.  And where it makes sense to tightly couple the binding to the template, use it there as well.  Just as the use of inline styles is thriving.  But supplment that binding with this library.
+As this is a fundamental use case for template instantiation, it could be used as a first round of processing.  And where it makes sense to tightly couple the binding to the template, use it there as well, followed by a binding step using this library.  Just as use of inline styles, supplmented by css style tags/files is something seen quite often.
 
 A question in my mind, is how does this rendering approach fit in with web components (I'm going to take a leap here and assume that [HTML Modules / Imports](https://github.com/w3c/webcomponents/issues/645) in some form makes it into browsers, even though I think the discussion still has some relevance without that).
 
-I think this alternative approach can provide value, in that the binding rules are data elements.  A web component can be based on one main template, but which requires inserting other satellite templates (repeatedly).  It can then define a base binding, which extending web components or even end consumers can then extend and/or override.
+I think this alternative approach can provide value, in that the binding starts with an HTML template element, and produces transformed markup using init.  Then consuming / extending web components could insert additional bindings using update, providing their own transformation.
 
-Adding the ability for downstream consumers to override "sub templates" should probably come towards the end of development, together with optimizing, as it could break up the rhythm somewhat in following along the flow of the markup.  Nevertheless, in the markup below, based from this [custom element](https://www.webcomponents.org/element/wc-info) we provide suggestions for how this can be done.  
-
-The web component needs to display two nested lists inside a main component -- the list of web components contained inside an npm package, and for each web component, a list of the attributes.  It is natural to separate each list container into a sub template:
-
-```JavaScript
-const attribTemplate = createTemplate(/* html */ `
-    <dt></dt><dd></dd>
-`);
-
-const WCInfoTemplate = createTemplate(/* html */ `
-<section class="WCInfo card">
-    <header>
-        <div class="WCLabel"></div>
-        <div class="WCDesc"></div>
-    </header>
-    <details>
-        <summary>attributes</summary>
-        <dl></dl>
-    </details> 
-</section>`);
-
-
-const mainTemplate = createTemplate(/* html */ `
-<header>
-    <mark></mark>
-    <nav>
-        <a target="_blank">⚙️</a>
-    </nav>
-</header>
-<main></main>
-`);
-```
-
-**NB**  The syntax above will look much cleaner when HTML Modules are a thing.
-
-The most "readable" binding is one which follows the structure of the output:
-
-```TypeScript
-  {
-    Transform: {
-      header: {
-        mark: x => this.packageName,
-        nav: {
-          a: ({ target }) => {
-            (target as HTMLAnchorElement).href = this._href!;
-          }
-        }
-      } as TransformRules,
-      main: ({ target }) => {
-        const tags = this.viewModel.tags;
-        repeatInit(tags.length, WCInfoTemplate, target);
-        return {
-          section: ({ idx }) => ({
-            header: {
-              ".WCLabel": x => tags[idx].label,
-              ".WCDesc": ({ target }) => {
-                target.innerHTML = tags[idx].description;
-              }
-            },
-            details: {
-              dl: ({ target }) => {
-                const attrbs = tags[idx].attributes;
-                if (!attrbs) return;
-                repeatInit(attrbs.length, attribTemplate, target);
-                return {
-                  dt: ({ idx }) => attrbs[Math.floor(idx / 2)].label,
-                  dd: ({ idx }) => attrbs[Math.floor(idx / 2)].description
-                };
-              }
-            }
-          })
-        };
-      }
-    } as TransformRules
-  };
-
-```
-
-However, this would be difficult for extending or consuming components to finesse (if say they want to bind some additional information inside one of the existing tags).
-
-The rule of thumb I suggest is to break things down by template, thusly:
-
-```TypeScript
-export const subTemplates = {
-  attribTransform:'attribTransform',
-  WCInfo: 'WCInfo'
-} 
-export class WCInfoBase extends XtalElement<WCSuiteInfo> {
-  _renderContext: RenderContext = {
-    init: init,
-    refs:{
-      [subTemplates.attribTransform]: (attrbs: AttribInfo[]) => ({
-        dt: ({ idx }) => attrbs[Math.floor(idx / 2)].label,
-        dd: ({ idx }) => attrbs[Math.floor(idx / 2)].description
-      } as TransformRules),
-      [subTemplates.WCInfo]: (tags: WCInfo[], idx: number) =>({
-        
-          header: {
-            ".WCLabel": x => tags[idx].label,
-            ".WCDesc": ({ target }) => {
-              target.innerHTML = tags[idx].description;
-            }
-          },
-          details: {
-            dl: ({ target, ctx }) => {
-              const attrbs = tags[idx].attributes;
-              if (!attrbs) return;
-              repeatInit(attrbs.length, attribTemplate, target);
-              return ctx.refs![subTemplates.attribTransform](attrbs); 
-            }
-          }
-      } as TransformRules)
-    },
-    Transform: {
-      header: {
-        mark: x => this.packageName,
-        nav: {
-          a: ({ target }) => {
-            (target as HTMLAnchorElement).href = this._href!;
-          }
-        }
-      } as TransformRules,
-      main: ({ target }) => {
-        const tags = this.viewModel.tags;
-        repeatInit(tags.length, WCInfoTemplate, target);
-        return ({
-          section: ({ idx, ctx }) => ctx.refs![subTemplates.WCInfo](tags, idx),
-        })
-      }
-    }
-  };
-```
-
-## Why not just create a method for each template, and allow consumers to override it?
-
-Of course, that's a respectable approach.  However:
-
-1.  This will only allow extending components, rather than web compositions that consume the web component, to override the default behavior.
-2.  It's difficult / impossible to insert something inside a method when overriding, only doing something before and/or after.
-
-Granted, in the (quite realistic) example provided above, overriding / extending the binding is not as easy as it could be in other circumstances -- 
-due to the fact that the sub template bindings are functions, as opposed to objects.  But I see a path where it would work, by invoking the function, and *then* massaging the TransformRules, which is now an easy to understand (?) JavaScript object, similar to a CSS Stylesheet.
-
-And to be sure, template literals also break down into (harder to understand?) pieces, based around bindings.  I'm a bit unclear here.  If Template Literal results are really as easy to customize as this approach, then the remaining advantage for this approach is simply the faster parsing speeds of HTML vs JavaScript strings -- something observable today with HTML heavy components / pages, and that *may* carry over to HTML modules.  
 

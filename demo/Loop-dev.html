@@ -21,27 +21,29 @@
         <div id="target"></div>
 
         <script type="module">
-            import { x } from '../x.js';
+            import { init } from '../init.js';
+            import { repeatInit } from '../repeatInit.js';
+            import {repeatUpdate} from '../repeatUpdate.js';
+            import {update} from '../update.js';
             const options = {matchNext: true};
-            const ctx = x.i(list, {
-                liTransform: {
-                    li: ({ idx }) => 'Hello ' + idx,
-                },
+            const ctx = init(list, {
                 Transform: {
                     ul: ({ target, ctx }) => {
                         if (!ctx.update) {
-                            x.rpi(10, itemTemplate, target);
+                            repeatInit(10, itemTemplate, target);
                         }
-                        return ctx.liTransform;
+                        return ({
+                            li: ({ idx }) => 'Hello ' + idx,
+                        });
                     }
                 }
             }, target, options);
             addItems.addEventListener('click', e => {
-                x.rpu(15, itemTemplate, container);
-                x.u(ctx, target, options);
+                repeatUpdate(15, itemTemplate, container);
+                update(ctx, target, options);
             });
             removeItems.addEventListener('click', e =>{
-                x.rpu(5, null,  container);
+                repeatUpdate(5, null,  container);
             })
         </script>
     </div>
