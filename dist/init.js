@@ -8,7 +8,14 @@ export function init(template, ctx, target, options) {
             process(ctx, 0, 0, options);
         }
     }
-    const verb = options && options.prepend ? "prepend" : "appendChild";
+    let verb = 'appendChild';
+    if (options) {
+        if (options.prepend)
+            verb = 'prepend';
+        const callback = options.initializedCallback;
+        if (callback !== undefined)
+            callback(ctx, target, options);
+    }
     target[verb](ctx.template);
     return ctx;
 }
