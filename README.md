@@ -12,7 +12,7 @@ XSLT can take pure XML with no formatting instructions as its input.  Generally 
 
 Likewise, with the advent of custom elements, the template markup will tend to be much more semantic, like XML. trans-render tries to rely as much as possible on this intrinisic semantic nature of the template markup, to give enough clues on how to fill in the needed "potholes" like textContent and property setting.  But trans-render is completely extensible, so it can certainly accommodate custom markup (like string interpolation, or common binding attributes) by using additional, optional helper libraries.  
 
-This leaves the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may needed to make the binding rules in sync.  Much like how separate style rules would eed adjusting.
+This leaves the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may be needed to make the binding rules in sync.  Much like how separate style rules often need adjusting when the document structure changes.
 
 ## Advantages
 
@@ -29,16 +29,57 @@ For more musings on the question of what is this good for, please see the [rambl
 
 trans-render provides helper functions for cloning a template, and then walking through the DOM, applying rules in document order.  Note that the document can grow, as processing takes place (due, for example, to cloning sub templates).  It's critical, therefore, that the processing occur in a logical order, and that order is down the document tree.  That way it is fine to append nodes before continuing processing.  
 
-For each matching element, after modifying the node, you can instruct the processor to move to the next element sibling and/or the first child of the current one, where processing can continue.  You can also "cut to the chase" by "drilling" inside based on querySelector, but there's no going back to previous elements once that's done.  The syntax for the third option is shown below for the simplest example.  If you select the drill option, that trumps instructing trans-render to process the first child.
+### Drilling down to children
 
-It is deeply unfortunate that the DOM Query Api doesn't provide a convenience function for [finding the next sibling](https://gomakethings.com/finding-the-next-and-previous-sibling-elements-that-match-a-selector-with-vanilla-js/) that matches a query, similar to querySelector. Just saying.  But some support for "cutting to the chase" laterally is provided.
+For each matching element, after modifying the node, you can instruct the processor which node(s) to consider next.  
+
+Most of the time, especially during initial development, you won't need / want to be so precise about where to go next.  Generally, the pattern, as we will see, is just to define transform rules that match the HTML Template document structure pretty closely.
+
+So, in the example we will see below, this notation:
+
+```JavaScript
+const Transform = {
+    details: {
+        summary: x => model.summaryText
+    }
+};
+```
+
+means "if a node has tag name "details", then continue processing the next siblings of details, but also, find the first descendent of the node that has tag name "summary", and set its textContent property to model.summaryText."
+
+If most of the template is static, but there's a deeply nested element that needs modifying, it is possible to drill straight down to that element by specifying a "Select" string value, which invokes querySelector.  But beware: there's no going back to previous elements once that's done.  If your template is dense with dynamic pockets, you will more likely want to navigate to the first child by setting Select = '*'.
+
+So the syntax shown above is equivalent to:
+
+```JavaScript
+const Transform = {
+    details: {
+        Select: 'summary',
+        Transform: {
+            summary: x => model.summaryText
+        }
+    }
+};
+```
+
+In this case, the details property is a "NextStep" JS Object.  
+
+Clearly, the first example is easier, but you need to adopt the second way if you want to fine tune the next processing steps.
+
+
+### Matching next siblings
+
+We most likely will also want to check the next siblings down for matches.  Previously, in order to do this, you had to make sure "matchNextSibling" was passed back for every match.  But that proved cumbersome.  The current implementation checks for matches on the next sibling(s) by default.  You can halt going any further by specifying "SkipSibs" in the "NextStep" object, something to strongly consider when looking for optimization opportunities.
+
+It is deeply unfortunate that the DOM Query Api doesn't provide a convenience function for [finding the next sibling](https://gomakethings.com/finding-the-next-and-previous-sibling-elements-that-match-a-selector-with-vanilla-js/) that matches a query, similar to querySelector. Just saying.  But some support for "cutting to the chase" laterally is also provided, via the "NextMatch" property in the NextStep object.
+
 
 At this point, only a synchronous workflow is provided.
 
-## Syntax:
+## Syntax Example:
 
 ```html
-<template id="test">
+<template id="sourceTemplate">
     <details>
         ...
         <summary></summary>
@@ -72,9 +113,9 @@ Produces
 </div>
 ```
 
-"target" is the HTML element we are populating.  The transform matches can return a string, which will be used to set the textContent of the target.  Or the transform can do its own manipulations on the target element, and then return an object specifying where to go next.
+"target" is the HTML element we are populating.  The transform matches can return a string, which will be used to set the textContent of the target.  Or the transform can do its own manipulations on the target element, and then return a "NextStep" object specifying where to go next, or it can return a new Transform, which will get applied the first child by default.
 
-Note the unusual casing, in the JavaScript arena:  property Transform uses a capital T.  As we will see, this pattern is to allow the interpreter to distinguish between css matches and a "NextStep" JS object.
+Note the unusual property name casing, in the JavaScript arena for the NextStep object:  Transform, Select, SkipSibs, etc.  As we will see, this pattern is to allow the interpreter to distinguish between css matches for a nested Transform, vs a "NextStep" JS object.
 
 
 # Use Case 1:  Applying the DRY principle to (post) punk rock lyrics
@@ -310,9 +351,7 @@ Transform: {
     }),
 ```
 
-* is a match for all css elements.  What this is saying is "for any element regardless of css characters, continue processing its first child (Select => querySelector).  This, combined with the default setting to match all the next siblings means that, for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
-
-
+* is a match for all css elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector).  This, combined with the default setting to match all the next siblings means that, for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
 
 # Reapplying (some) of the transform
 
@@ -399,22 +438,22 @@ When defining an HTML based user interface, the question arises whether styles s
 
 The ability to keep the styles separate from the HTML does not invalidate support for inline styles.  The browser supports both, and probably always will.
 
-Likewise, arguing for the benefits of this library is not in any way meant to disparage the usefulness of the current prevailing orthodoxy of including the binding / formatting instructions in the markup.  I would be delighted to see the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with support for inline binding, added to the arsenal of tools developers could use.  Should that proposal come to fruition, this library, hovering under 1KB, would be in competition with one that is 0KB, with the full backing / optimization work of Chrome, Safari, Firefox.  Why would anyone use this library then?
+Likewise, arguing for the benefits of this library is not in any way meant to disparage the usefulness of the current prevailing orthodoxy of including the binding / formatting instructions in the markup.  I would be delighted to see the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with support for inline binding, added to the arsenal of tools developers could use.  Should that proposal come to fruition, this library, hovering under 1KB, would be in mind-share competition with one that is 0KB, with the full backing / optimization work of Chrome, Safari, Firefox.  Why would anyone use this library then?
 
-And in fact, the library described here is quite open ended.  Portions of the templates can invoke any custom function to be populated.  Or it could use browser-provided template instantation up to a point, and this library for more light-touch "macro" binding.
+And in fact, the library described here is quite open ended.  Until template instantiation become built into the browser, this library could be used as a tiny stand-in.  Once template instantiation is built into the browser, this library could continue to supplement the native support (or the other way around)
 
-For example, in the second example above, this library has nothing to offer in terms of string interpolation, since CSS matching provides no help:
+For example, in the second example above, the core "init" function nothing to offer in terms of string interpolation, since CSS matching provides no help:
 
 ```html
 <div>Hello {{Name}}</div>
 ```
 
-As this is a fundamental use case for template instantiation, it could be used as a first round of processing.  And where it makes sense to tightly couple the binding to the template, use it there as well, followed by a binding step using this library.  Just as use of inline styles, supplemented by css style tags/files is something seen quite often.
+We provide a small helper function "interpolate" for this purpose, but as this is a fundamental use case for template instantiation, and as this library doesn't add much "value-add" for that use case, native template instantiation could be used as a first round of processing.  And where it makes sense to tightly couple the binding to the template, use it there as well, followed by a binding step using this library.  Just as use of inline styles, supplemented by css style tags/files (or the other around) is something seen quite often.
 
 A question in my mind, is how does this rendering approach fit in with web components (I'm going to take a leap here and assume that [HTML Modules / Imports](https://github.com/w3c/webcomponents/issues/645) in some form makes it into browsers, even though I think the discussion still has some relevance without that).
 
-I think this alternative approach can provide value, by providing a process for "Pipeline Rendering":  Rendering starts with an HTML template element, which produces transformed markup using init.  Then consuming / extending web components could insert additional bindings using update, providing their own transformation.
+I think this alternative approach can provide value, by providing a process for "Pipeline Rendering":  Rendering starts with an HTML template element, which produces transformed markup using init or native template instantiation.  Then consuming / extending web components could insert additional bindings via the CSS-matching transformation this library provides.
 
-To aid with this process, the init and update functions provide a rendering options parameter, which contains an optional "initializedCallback" and "updatedCallback" option.
+To aid with this process, the init and update functions provide a rendering options parameter, which contains an optional "initializedCallback" and "updatedCallback" option.  This allows a pipeline processing sequence to be set up, similar in concept to [Apache Cocoon](http://cocoon.apache.org/2.2/1290_1_1.html).
 
 

@@ -14,3 +14,4 @@ export function repeatInit(count, template, target) {
         target.appendChild(clonedTemplate);
     }
 }
+//# sourceMappingURL=repeatInit.js.map
