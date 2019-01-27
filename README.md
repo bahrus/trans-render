@@ -81,6 +81,8 @@ Note the unusual casing, in the JavaScript arena:  property Transform uses a cap
 
 ## Example 1a (only viewable at [webcomponents.org](https://www.webcomponents.org/element/trans-render) )
 
+Demonstrates including sub templates.
+
 <!--
 ```
 <custom-element-demo>
@@ -166,6 +168,132 @@ Note the unusual casing, in the JavaScript arena:  property Transform uses a cap
                     }
                 }
             }, target);
+        </script>
+    </div>
+</template>
+</custom-element-demo>
+```
+-->
+
+## Example 1b (only viewable at [webcomponents.org](https://www.webcomponents.org/element/trans-render) )
+
+Demonstrates use of update, rudimentary interpolation, recursive select.
+
+<!--
+```
+<custom-element-demo>
+<template>
+
+    <div>
+        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a><br>
+        <button id="changeDays">Wi not trei a holiday in Sweeden this yer</button>
+        <template id="Friday">
+            <span x-d>It's |.Day5| I'm in love</span>
+        </template>
+        <template id="Opening">
+            <span x-d>I don't care if |.Day1|'s blue</span><br>
+            <span x-d>|.Day2|'s gray and |.Day3| too</span><br>
+            <span x-d>|.Day4| I don't care about you</span><br>
+            <span data-init="Friday"></span>
+        </template>
+
+        <template id="Main">
+            <div data-init="Opening" class="stanza"></div>
+            <div class="stanza">
+                <span x-d>|.Day1| you can fall apart</span><br>
+                <span x-d>|.Day2| |.Day3| break my heart</span><br>
+                <span x-d>Oh, |.Day4| doesn't even start</span><br>
+                <span data-init="Friday"></span>
+            </div>
+            <div class="stanza">
+                <span x-d>|.Day6| wait</span><br>
+                <span x-d>And |.Day7| always comes too late</span><br>
+                <span x-d>But |.Day5| never hesitate</span>
+            </div>
+
+            <div class="stanza">
+                <span x-d>I don't care if |.Day1|'s black</span><br>
+                <span x-d>|.Day2|, |.Day3| heart attack</span><br>
+                <span x-d>|.Day4| never looking back</span><br>
+                <span data-init="Friday"></span>
+            </div>
+            <div class="stanza">
+                <span x-d>|.Day1| you can hold your head</span><br>
+                <span x-d>|.Day2|, |.Day3| stay in bed</span><br>
+                <span x-d>Or |.Day4| watch the walls instead</span><br>
+                <span data-init="Friday"></span>
+            </div>
+            <div class="stanza">
+                <span x-d>|.Day6| wait</span><br>
+                <span x-d>And |.Day7| always comes too late</span><br>
+                <span x-d>But |.Day5| never hesitate</span>
+            </div>
+            <div class="stanza">
+                <span>Dressed up to the eyes</span><br>
+                <span>It's a wonderful surprise</span><br>
+                <span>To see your shoes and your spirits rise</span><br>
+                <span>Throwing out your frown</span><br>
+                <span>And just smiling at the sound</span><br>
+                <span>And as sleek as a shriek</span><br>
+                <span>Spinning round and round</span><br>
+                <span>Always take a big bite</span><br>
+                <span>It's such a gorgeous sight</span><br>
+                <span>To see you in the middle of the night</span><br>
+                <span>You can never get enough</span><br>
+                <span>Enough of this stuff</span><br>
+                <span x-d>It's |.Day5|</span><br>
+                <span>I'm in love</span>
+            </div>
+            <div data-init="Opening" class="stanza"></div>
+            <div class="stanza">
+                <span x-d>|.Day1| you can fall apart</span><br>
+                <span x-d>|.Day2|, |.Day3| break my heart</span><br>
+                <span x-d>|.Day4| doesn't even start</span><br>
+                <span data-init="Friday"></span>
+            </div>
+            <style>
+                .stanza{
+                padding-top: 20px;
+            }
+        </style>
+        </template>
+        <div id="target"></div>
+
+        <script type="module">
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.48/init.js';
+            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.48/interpolate.js';
+            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.48/update.js';
+
+            let model = {
+                Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
+                Day6: 'Saturday', Day7: 'Sunday',
+            };
+            const ctx = init(Main, {
+                Transform: {
+                    '*': x  => ({
+                        Select: '*'
+                    }),
+                    '[x-d]': ({ target }) => {
+                        interpolate(target, 'textContent', model);
+                    },
+                    '[data-init]': ({ target, ctx }) => {
+                        if (ctx.update !== undefined) {
+                            return {}
+                        } else {
+                            init(self[target.dataset.init], {
+                                Transform: ctx.Transform
+                            }, target);
+                        }
+                    },
+                }
+            }, target);
+            changeDays.addEventListener('click', e => {
+                model = {
+                    Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
+                    Day6: 'lördag', Day7: 'söndag',
+                }
+                update(ctx, target);
+            })
         </script>
     </div>
 </template>
@@ -281,7 +409,7 @@ For example, in the second example above, this library has nothing to offer in t
 <div>Hello {{Name}}</div>
 ```
 
-As this is a fundamental use case for template instantiation, it could be used as a first round of processing.  And where it makes sense to tightly couple the binding to the template, use it there as well, followed by a binding step using this library.  Just as use of inline styles, supplmented by css style tags/files is something seen quite often.
+As this is a fundamental use case for template instantiation, it could be used as a first round of processing.  And where it makes sense to tightly couple the binding to the template, use it there as well, followed by a binding step using this library.  Just as use of inline styles, supplemented by css style tags/files is something seen quite often.
 
 A question in my mind, is how does this rendering approach fit in with web components (I'm going to take a leap here and assume that [HTML Modules / Imports](https://github.com/w3c/webcomponents/issues/645) in some form makes it into browsers, even though I think the discussion still has some relevance without that).
 

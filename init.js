@@ -1,6 +1,5 @@
 export function init(template, ctx, target, options) {
-    //ctx.init = init;
-    const clonedTemplate = template.content.cloneNode(true);
+    const clonedTemplate = template.localName === 'template' ? template.content.cloneNode(true) : template;
     ctx.template = clonedTemplate;
     if (ctx.Transform) {
         const firstChild = clonedTemplate.firstElementChild;
@@ -12,6 +11,10 @@ export function init(template, ctx, target, options) {
     const verb = options && options.prepend ? "prepend" : "appendChild";
     target[verb](ctx.template);
     return ctx;
+}
+function isTR(obj) {
+    const firstCharOfFirstProp = Object.keys(obj)[0];
+    return 'SNTM'.indexOf(firstCharOfFirstProp) === -1;
 }
 export function process(context, idx, level, options) {
     const target = context.leaf;
@@ -46,7 +49,7 @@ export function process(context, idx, level, options) {
                                 target.textContent = resp;
                                 break;
                             case "object":
-                                if (resp["Select"] === undefined) {
+                                if (isTR(resp)) {
                                     const respAsTransformRules = resp;
                                     nextSelector = '*';
                                     Object.assign(nextTransform, respAsTransformRules);

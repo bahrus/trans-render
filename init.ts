@@ -2,20 +2,19 @@ import {
   NextStep,
   TransformRules,
   RenderContext,
-  TransformArg,
   RenderOptions,
   TransformFn
 } from "./init.d.js";
 
 
 export function init(
-  template: HTMLTemplateElement,
+  template: HTMLElement,
   ctx: RenderContext,
   target: HTMLElement | DocumentFragment,
   options?: RenderOptions
 ): RenderContext {
-  //ctx.init = init;
-  const clonedTemplate = template.content.cloneNode(true) as DocumentFragment;
+  
+  const clonedTemplate = template.localName === 'template' ? (template as HTMLTemplateElement).content.cloneNode(true) as DocumentFragment : template;
   ctx.template = clonedTemplate;
   if (ctx.Transform) {
     const firstChild = clonedTemplate.firstElementChild;
@@ -27,6 +26,11 @@ export function init(
   const verb = options && options.prepend ? "prepend" : "appendChild";
   (<any>target)[verb](ctx.template);
   return ctx;
+}
+
+function isTR(obj: object){
+  const firstCharOfFirstProp = Object.keys(obj)[0];
+  return 'SNTM'.indexOf(firstCharOfFirstProp) === -1;
 }
 export function process(
   context: RenderContext,
@@ -67,7 +71,7 @@ export function process(
                 target.textContent = resp;
                 break;
               case "object":
-                if ((<any>resp)["Select"] === undefined) {
+                if (isTR(resp)) {
                   const respAsTransformRules = resp as TransformRules;
                   nextSelector = '*';
                   Object.assign(nextTransform, respAsTransformRules);

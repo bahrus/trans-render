@@ -85,41 +85,33 @@
         <div id="target"></div>
 
         <script type="module">
-            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.26/init.js';
-            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.26/interpolate.js';
-            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.26/update.js';
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.48/init.js';
+            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.48/interpolate.js';
+            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.48/update.js';
+
             let model = {
                 Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
                 Day6: 'Saturday', Day7: 'Sunday',
             };
-            const ctx = {
-                divTransform:{
-                    '*': x => ({
-                        matchNextSib: true
+            const ctx = init(Main, {
+                Transform: {
+                    '*': x  => ({
+                        Select: '*'
                     }),
                     '[x-d]': ({ target }) => {
                         interpolate(target, 'textContent', model);
                     },
                     '[data-init]': ({ target, ctx }) => {
                         if (ctx.update !== undefined) {
-                            return {
-                                matchFirstChild: true
-                            }
+                            return {}
                         } else {
                             init(self[target.dataset.init], {
-                                transform: ctx.transform
+                                Transform: ctx.Transform
                             }, target);
                         }
                     },
-                },
-                transform: {
-                    div: ({ ctx }) => ({
-                        matchNextSib: true,
-                        matchFirstChild: ctx.divTransform
-                    }),
                 }
-            };
-            init(Main, ctx, target);
+            }, target);
             changeDays.addEventListener('click', e => {
                 model = {
                     Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
