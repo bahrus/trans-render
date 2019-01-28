@@ -312,9 +312,9 @@ Demonstrates use of update, rudimentary interpolation, recursive select.
         <div id="target"></div>
 
         <script type="module">
-            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.48/init.js';
-            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.48/interpolate.js';
-            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.48/update.js';
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.52/init.js';
+            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.52/interpolate.js';
+            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.52/update.js';
 
             let model = {
                 Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
@@ -332,9 +332,7 @@ Demonstrates use of update, rudimentary interpolation, recursive select.
                         if (ctx.update !== undefined) {
                             return {}
                         } else {
-                            init(self[target.dataset.init], {
-                                Transform: ctx.Transform
-                            }, target);
+                            init(self[target.dataset.init], {}, target);
                         }
                     },
                 }

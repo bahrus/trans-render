@@ -95,9 +95,6 @@
             };
             const ctx = init(Main, {
                 Transform: {
-                    '*': x  => ({
-                        Select: '*'
-                    }),
                     '[x-d]': ({ target }) => {
                         interpolate(target, 'textContent', model);
                     },
@@ -105,11 +102,12 @@
                         if (ctx.update !== undefined) {
                             return {}
                         } else {
-                            init(self[target.dataset.init], {
-                                Transform: ctx.Transform
-                            }, target);
+                            init(self[target.dataset.init], {}, target);
                         }
                     },
+                    '*': x  => ({
+                        Select: '*'
+                    }),
                 }
             }, target);
             changeDays.addEventListener('click', e => {
