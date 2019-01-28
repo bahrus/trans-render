@@ -353,7 +353,7 @@ Demonstrates use of update, rudimentary interpolation, recursive select.
 
 
 
-# Reapplying (some) of the transform
+## Reapplying (some) of the transform
 
 Often, we want to reapply a transform, after something changes -- typically the source data.
 
@@ -383,7 +383,7 @@ The ability to do this is illustrated in the previous example.  Critical syntax 
 ```
 
 
-#  Loop support (NB:  Not yet optimized)
+##  Loop support (NB:  Not yet optimized)
 
 The next big use case for this library is using it in conjunction with a [virtual scroller](https://valdrinkoshi.github.io/virtual-scroller/#more-examples). As far as I can see, the performance of this library should work quite well in that scenario.
 
@@ -440,9 +440,9 @@ The ability to keep the styles separate from the HTML does not invalidate suppor
 
 Likewise, arguing for the benefits of this library is not in any way meant to disparage the usefulness of the current prevailing orthodoxy of including the binding / formatting instructions in the markup.  I would be delighted to see the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with support for inline binding, added to the arsenal of tools developers could use.  Should that proposal come to fruition, this library, hovering under 1KB, would be in mind-share competition with one that is 0KB, with the full backing / optimization work of Chrome, Safari, Firefox.  Why would anyone use this library then?
 
-And in fact, the library described here is quite open ended.  Until template instantiation become built into the browser, this library could be used as a tiny stand-in.  Once template instantiation is built into the browser, this library could continue to supplement the native support (or the other way around)
+And in fact, the library described here is quite open ended.  Until template instantiation becomes built into the browser, this library could be used as a tiny stand-in.  Once template instantiation is built into the browser, this library could continue to supplement the native support (or the other way around, depending.)
 
-For example, in the second example above, the core "init" function nothing to offer in terms of string interpolation, since CSS matching provides no help:
+For example, in the second example above, the core "init" function described here has nothing special to offer in terms of string interpolation, since CSS matching provides no help:
 
 ```html
 <div>Hello {{Name}}</div>
@@ -455,5 +455,82 @@ A question in my mind, is how does this rendering approach fit in with web compo
 I think this alternative approach can provide value, by providing a process for "Pipeline Rendering":  Rendering starts with an HTML template element, which produces transformed markup using init or native template instantiation.  Then consuming / extending web components could insert additional bindings via the CSS-matching transformation this library provides.
 
 To aid with this process, the init and update functions provide a rendering options parameter, which contains an optional "initializedCallback" and "updatedCallback" option.  This allows a pipeline processing sequence to be set up, similar in concept to [Apache Cocoon](http://cocoon.apache.org/2.2/1290_1_1.html).
+
+**NB**  In re-reading the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) with a fresh set of eyes, I see now that there has in fact [been some careful thought](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) given to the idea of providing a kind of pipeline of binding.  And as mentioned above, this library provides little help when it comes to string interpolation, so the fact that the proposal provides some hooks for callbacks is really nice to see.
+
+I may not yet fully grasp the proposal, but it still does appear to me that the api they provide is only useful if one defines regions ahead of time in the markup where dynamic content may go.  
+
+This library, on the hand, considers the entire template document open for amendment.  This may be alarming, if as me, you find yourself comparing this effort to the constructible stylesheet proposal, where authors need to specify which elements can be themed.
+
+However, the use case is quite different.  In the case of stylesheets, we are talking about global theming, affecting large numbers of elements at the same time.  The use case I'm really considering is one web component extending another.  It doesn't seem that unreasonable to provide maximum flexibility in that circumstance.  Yes, I suppose the ability to mark some tags as "undeletable / non negotiable" might be nice, but I see no way to enforce that.
+
+## On-the-fly Data Extraction [TODO]
+
+Another interesting case to consider is this [Periodic Table Codepen](https://codepen.io/mikegolus/pen/OwrPgB).  Being what it is, it is no suprise that there's a lot of repetitive HTML markup needed to define the table.  The natural instinct of the modern developer, including the author of the codepen, is to generate the HTML from a consise data format (e.g. JS Array).  But I'm thinking that assumption might not be valid, from a performance point of view.  Yes, from a bandwidth perspective, it may shave off a little bit, but it would appear to mean significantly more CPU.  What if the data is instead provided in a minimized stream of HTML, and we copy in templates of repetive blocks of HTML?  Let's assume for the sake of this discussion that this approach ends up paying off in terms of performance.  The question is, can it be done with this library?
+
+The dilemma this use case presents, which I would like to discuss is this.
+
+What if the same data needs to occur twice.  See the markup below, taken from the compiled html:
+
+```html
+    <div class="element other-nonmetal c14 r2">
+      <input class="activate" type="radio" name="elements"/>
+      <input class="deactivate" type="radio" name="elements"/>
+      <div class="overlay"></div>
+      <div class="square">
+        <div class="model">
+          <div class="orbital">
+            <div class="electron"></div>
+            <div class="electron"></div>
+            <div class="electron"></div>
+            <div class="electron"></div>
+          </div>
+          <div class="orbital">
+            <div class="electron"></div>
+            <div class="electron"></div>
+          </div>
+        </div>
+        <div class="atomic-number">6</div>
+        <div class="label">
+          <div class="symbol">C</div>
+          <div class="name">Carbon</div>
+        </div>
+        <div class="atomic-mass">12.011</div>
+        <ul class="atomic-weight">
+          <li>2</li>
+          <li>4</li>
+        </ul>
+      </div>
+    </div>
+```
+
+The pattern that emerges is that the list towards the bottom:
+
+```html
+<ul class="atomic-weight">
+    <li>2</li>
+    <li>4</li>
+</ul>
+```
+
+matches exactly with the orbital electrons (except in reverse order):
+
+```html
+<div class="model">
+    <div class="orbital">
+        <div class="electron"></div>
+        <div class="electron"></div>
+        <div class="electron"></div>
+        <div class="electron"></div>
+    </div>
+    <div class="orbital">
+        <div class="electron"></div>
+        <div class="electron"></div>
+    </div>
+</div>
+```
+
+It's very possible that the periodic table could be generated with a structure that is more friendly to this library -- namely if the compact list appeared *above* the orbital model, rather than below.  Then we could extract the numbers from the ui/li list, and dynamically generate (with the help of template cloning) the orbital model.  But ideally this library should be flexible enough that it could handle this markup as is.  So what is the correct approach?
+
 
 
