@@ -20,7 +20,10 @@ export function init(template, ctx, target, options) {
     return ctx;
 }
 function isTR(obj) {
-    const firstCharOfFirstProp = Object.keys(obj)[0][0];
+    const keys = Object.keys(obj);
+    if (keys.length === 0)
+        return true;
+    const firstCharOfFirstProp = keys[0][0];
     return 'SNTM'.indexOf(firstCharOfFirstProp) === -1;
 }
 export function process(context, idx, level, options) {
