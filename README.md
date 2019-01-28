@@ -216,6 +216,17 @@ Demonstrates including sub templates.
 ```
 -->
 
+Note the transform rule above (if viewed from webcomponents.org):
+
+```JavaScript
+Transform: {
+    '*': x  => ({
+        Select: '*'
+    }),
+```
+
+"*" is a match for all css elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector).  This, combined with the default setting to match all the next siblings means that, for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
+
 ## Example 1b (only viewable at [webcomponents.org](https://www.webcomponents.org/element/trans-render) )
 
 Demonstrates use of update, rudimentary interpolation, recursive select.
@@ -342,16 +353,7 @@ Demonstrates use of update, rudimentary interpolation, recursive select.
 ```
 -->
 
-Note the transform rule above (if viewed from webcomponents.org):
 
-```JavaScript
-Transform: {
-    '*': x  => ({
-        Select: '*'
-    }),
-```
-
-* is a match for all css elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector).  This, combined with the default setting to match all the next siblings means that, for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
 
 # Reapplying (some) of the transform
 

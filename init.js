@@ -20,7 +20,7 @@ export function init(template, ctx, target, options) {
     return ctx;
 }
 function isTR(obj) {
-    const firstCharOfFirstProp = Object.keys(obj)[0];
+    const firstCharOfFirstProp = Object.keys(obj)[0][0];
     return 'SNTM'.indexOf(firstCharOfFirstProp) === -1;
 }
 export function process(context, idx, level, options) {
@@ -121,4 +121,3 @@ export function process(context, idx, level, options) {
         }
     }
 }
-//# sourceMappingURL=init.js.map
