@@ -464,13 +464,5 @@ This library, on the other hand, considers the entire template document open for
 
 However, the use case is quite different.  In the case of stylesheets, we are talking about global theming, affecting large numbers of elements at the same time.  The use case I'm really considering is one web component extending another.  It doesn't seem that unreasonable to provide maximum flexibility in that circumstance.  Yes, I suppose the ability to mark some tags as "undeletable / non negotiable" might be nice, but I see no way to enforce that.
 
-## TBD
 
-Another interesting case to consider is this [Periodic Table Codepen](https://codepen.io/mikegolus/pen/OwrPgB) example.  Being what it is, it is no suprise that there's a lot of repetitive HTML markup needed to define the table.  
-
-An intriguing, as yet unanswered question, is this:  Could this be the first known scenario in the history of the planet, where rendering time (including first paint) would be *improved* rather than *degraded* with the help of client-side JavaScript?  Even if the answer is no, it raises some interesting implementation questions.
-
-The natural instinct of the modern developer, including the author of the codepen, is to generate the HTML from a consise data format (e.g. JS Array).  In fact, the author provides server-side "pug" syntax to generate the HTML, which may be the most optimal solution out there.
-
-But I'm thinking the bandwidth savings from reducing repetitive HTML *might* be enough to offset the client side cpu needed by whatever library helpers are used by the client-side.  (I'm doubtful due to the power of gzip/brotli compression). The possibility that *this* library, of all the JS libraries in the world, would be the best one to achieve the goal seems quite dim, but let's see what happens anyway.  What if the data is instead provided in a minimized stream of HTML, and we copy in templates of repetitive blocks of HTML?  
 
