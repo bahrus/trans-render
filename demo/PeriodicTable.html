@@ -5928,10 +5928,9 @@
         import {init} from '../init.js';
         //import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.26/init.js';
         init(Main, {
-            transform: {
-                '*': x  => ({
-                    matchNextSib: true,
-                    matchFirstChild: true
+            Transform: {
+                '*': ({target})  => ({
+                    Select: '*'
                 }),
                 '[data-init]': ({target, ctx}) =>{
                     const split = target.dataset.init.split(';');
