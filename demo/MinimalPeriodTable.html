@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <template id="source">
+        <div class="square">
+            <div class="model"></div>
+            <div class="atomic-number">117</div>
+            <div class="label">
+                <div class="symbol">Ts</div>
+                <div class="name">Tennessine</div>
+            </div>
+            <div class="atomic-mass">(294)</div>
+            <ul class="atomic-weight">
+                <li>2</li>
+                <li>8</li>
+                <li>18</li>
+                <li>32</li>
+                <li>32</li>
+                <li>18</li>
+                <li>7</li>
+            </ul>
+        </div>
+    </template>
+    <div id="target"></div>
+    <script type="module">
+        import {init} from '../init.js';
+        init(source, {
+            Transform:{
+                '.square': ({target}) =>{
+                    debugger;
+                }
+            }
+        }, target);
+    </script>
+
+</body>
+</html>

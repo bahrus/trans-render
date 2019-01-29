@@ -448,29 +448,35 @@ For example, in the second example above, the core "init" function described her
 <div>Hello {{Name}}</div>
 ```
 
-We provide a small helper function "interpolate" for this purpose, but as this is a fundamental use case for template instantiation, and as this library doesn't add much "value-add" for that use case, native template instantiation could be used as a first round of processing.  And where it makes sense to tightly couple the binding to the template, use it there as well, followed by a binding step using this library.  Just as use of inline styles, supplemented by css style tags/files (or the other around) is something seen quite often.
+We provide a small helper function "interpolate" for this purpose, but as this is a fundamental use case for template instantiation, and as this library doesn't add much "value-add" for that use case, native template instantiation could be used as a first round of processing.  And where it makes sense to tightly couple the binding to the template, use it there as well, followed by a binding step using this library.  Just as use of inline styles, supplemented by css style tags/files (or the other way around) is something seen quite often.
 
 A question in my mind, is how does this rendering approach fit in with web components (I'm going to take a leap here and assume that [HTML Modules / Imports](https://github.com/w3c/webcomponents/issues/645) in some form makes it into browsers, even though I think the discussion still has some relevance without that).
 
-I think this alternative approach can provide value, by providing a process for "Pipeline Rendering":  Rendering starts with an HTML template element, which produces transformed markup using init or native template instantiation.  Then consuming / extending web components could insert additional bindings via the CSS-matching transformation this library provides.
+I think this alternative approach can provide value, by providing a process for "Pipeline Rendering":  Rendering starts with an HTML template element, which produces transformed markup using init or native template instantiation.  Then consuming / extending web components could insert additional bindings via the CSS-matching transformations this library provides.
 
 To aid with this process, the init and update functions provide a rendering options parameter, which contains an optional "initializedCallback" and "updatedCallback" option.  This allows a pipeline processing sequence to be set up, similar in concept to [Apache Cocoon](http://cocoon.apache.org/2.2/1290_1_1.html).
 
 **NB**  In re-reading the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) with a fresh set of eyes, I see now that there has in fact [been some careful thought](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) given to the idea of providing a kind of pipeline of binding.  And as mentioned above, this library provides little help when it comes to string interpolation, so the fact that the proposal provides some hooks for callbacks is really nice to see.
 
-I may not yet fully grasp the proposal, but it still does appear to me that the api they provide is only useful if one defines regions ahead of time in the markup where dynamic content may go.  
+I may not yet fully grasp the proposal, but it still does appear to me that the template instantiation proposal is only useful if one defines regions ahead of time in the markup where dynamic content may go.  
 
-This library, on the hand, considers the entire template document open for amendment.  This may be alarming, if as me, you find yourself comparing this effort to the constructible stylesheet proposal, where authors need to specify which elements can be themed.
+This library, on the other hand, considers the entire template document open for amendment.  This may be alarming, if as me, you find yourself comparing this effort to the constructible stylesheet proposal, where authors need to specify which elements can be themed.
 
 However, the use case is quite different.  In the case of stylesheets, we are talking about global theming, affecting large numbers of elements at the same time.  The use case I'm really considering is one web component extending another.  It doesn't seem that unreasonable to provide maximum flexibility in that circumstance.  Yes, I suppose the ability to mark some tags as "undeletable / non negotiable" might be nice, but I see no way to enforce that.
 
 ## On-the-fly Data Extraction [TODO]
 
-Another interesting case to consider is this [Periodic Table Codepen](https://codepen.io/mikegolus/pen/OwrPgB).  Being what it is, it is no suprise that there's a lot of repetitive HTML markup needed to define the table.  The natural instinct of the modern developer, including the author of the codepen, is to generate the HTML from a consise data format (e.g. JS Array).  But I'm thinking that assumption might not be valid, from a performance point of view.  Yes, from a bandwidth perspective, it may shave off a little bit, but it would appear to mean significantly more CPU.  What if the data is instead provided in a minimized stream of HTML, and we copy in templates of repetive blocks of HTML?  Let's assume for the sake of this discussion that this approach ends up paying off in terms of performance.  The question is, can it be done with this library?
+Another interesting case to consider is this [Periodic Table Codepen](https://codepen.io/mikegolus/pen/OwrPgB) example.  Being what it is, it is no suprise that there's a lot of repetitive HTML markup needed to define the table.  
 
-The dilemma this use case presents, which I would like to discuss is this.
+An intriguing, as yet unanswered question, is this:  Could this be the first known scenario in the history of the planet, where rendering time (including first paint) would be *improved* rather than *degraded* with the help of client-side JavaScript?  Even if the answer is no, it raises some interesting implementation questions.
 
-What if the same data needs to occur twice.  See the markup below, taken from the compiled html:
+The natural instinct of the modern developer, including the author of the codepen, is to generate the HTML from a consise data format (e.g. JS Array).  In fact, the author provides server-side "pug" syntax to generate the HTML, which may be the most optimal solution out there.
+
+But I'm thinking the bandwidth savings from reducing repetitive HTML *might* be enough to offset the client side cpu needed by whatever library helpers are used by the client-side.  (I'm doubtful due to the power of gzip/brotli compression). The possibility that *this* library, of all the S libraries in the world, would be the best one to achieve the goal seems quite dim, but let's see what happens anyway.  What if the data is instead provided in a minimized stream of HTML, and we copy in templates of repetitive blocks of HTML?  
+
+The dilemma this use case presents, which I would like to discuss, is this:
+
+What if the same data needs to occur twice?  See the markup below, taken from the compiled html:
 
 ```html
     <div class="element other-nonmetal c14 r2">
