@@ -464,5 +464,13 @@ This library, on the other hand, considers the entire template document open for
 
 However, the use case is quite different.  In the case of stylesheets, we are talking about global theming, affecting large numbers of elements at the same time.  The use case I'm really considering is one web component extending another.  It doesn't seem that unreasonable to provide maximum flexibility in that circumstance.  Yes, I suppose the ability to mark some tags as "undeletable / non negotiable" might be nice, but I see no way to enforce that.
 
+## Client side JS faster than SSR?
 
+Another interesting case to consider is this [Periodic Table Codepen](https://codepen.io/mikegolus/pen/OwrPgB) example.  Being what it is, it is no suprise that there's a lot of repetitive HTML markup needed to define the table.  
+
+An intriguing question, is this:  Could this be the first known scenario in the history of the planet, where rendering time (including first paint) would be *improved* rather than *degraded* with the help of client-side JavaScript? 
+
+The natural instinct of the modern developer, including the author of the codepen, is to generate the HTML from a consise data format using a server-side language (pug). 
+
+But it this library appears to significantly improve the performance over the server-side implementation!  That's if the init.js is embedded directly in the page.  Results extremely preliminary. And I'm not saying other libraries couldn't match what this library does.   
 
