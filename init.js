@@ -1,5 +1,7 @@
 export function init(template, ctx, target, options) {
-    const clonedTemplate = template.localName === 'template' ? template.content.cloneNode(true) : template;
+    const clonedTemplate = template.localName === "template"
+        ? template.content.cloneNode(true)
+        : template;
     ctx.template = clonedTemplate;
     if (ctx.Transform) {
         const firstChild = clonedTemplate.firstElementChild;
@@ -8,10 +10,10 @@ export function init(template, ctx, target, options) {
             process(ctx, 0, 0, options);
         }
     }
-    let verb = 'appendChild';
+    let verb = "appendChild";
     if (options) {
         if (options.prepend)
-            verb = 'prepend';
+            verb = "prepend";
         const callback = options.initializedCallback;
         if (callback !== undefined)
             callback(ctx, target, options);
@@ -24,7 +26,7 @@ function isTR(obj) {
     if (keys.length === 0)
         return true;
     const firstCharOfFirstProp = keys[0][0];
-    return 'SNTM'.indexOf(firstCharOfFirstProp) === -1;
+    return "SNTM".indexOf(firstCharOfFirstProp) === -1;
 }
 export function process(context, idx, level, options) {
     const target = context.leaf;
@@ -32,7 +34,7 @@ export function process(context, idx, level, options) {
         return;
     const transform = context.Transform;
     let nextTransform = {};
-    let nextSelector = '';
+    let nextSelector = "";
     let firstSelector = true;
     let matchNextSib = true;
     let inherit = false;
@@ -42,7 +44,7 @@ export function process(context, idx, level, options) {
             const transformTemplateVal = transform[selector];
             switch (typeof transformTemplateVal) {
                 case "object":
-                    nextSelector = '*';
+                    nextSelector = "*";
                     Object.assign(nextTransform, transformTemplateVal);
                     break;
                 case "function":
@@ -61,14 +63,17 @@ export function process(context, idx, level, options) {
                             case "object":
                                 if (isTR(resp)) {
                                     const respAsTransformRules = resp;
-                                    nextSelector = '*';
+                                    nextSelector = "*";
                                     Object.assign(nextTransform, respAsTransformRules);
                                 }
                                 else {
                                     const respAsNextStep = resp;
                                     inherit = inherit || !!resp.MergeTransforms;
-                                    nextSelector = (firstSelector ? '' : ',') + respAsNextStep.Select;
-                                    firstSelector = false;
+                                    if (respAsNextStep.Select !== undefined) {
+                                        nextSelector =
+                                            (firstSelector ? "" : ",") + respAsNextStep.Select;
+                                        firstSelector = false;
+                                    }
                                     const newTransform = respAsNextStep.Transform;
                                     if (newTransform === undefined) {
                                         Object.assign(nextTransform, context.Transform);
@@ -97,17 +102,17 @@ export function process(context, idx, level, options) {
             process(context, idx + 1, level, options);
         }
         context.Transform = transform;
-    }
-    else if (nextMatch.length > 0) {
-        const match = nextMatch.join(",");
-        let nextSib = target.nextElementSibling;
-        while (nextSib !== null) {
-            if (nextSib.matches(match)) {
-                context.leaf = nextSib;
-                process(context, idx + 1, level, options);
-                break;
+        if (nextMatch.length > 0) {
+            const match = nextMatch.join(",");
+            let nextSib = target.nextElementSibling;
+            while (nextSib !== null) {
+                if (nextSib.matches(match)) {
+                    context.leaf = nextSib;
+                    process(context, idx + 1, level, options);
+                    break;
+                }
+                nextSib = nextSib.nextElementSibling;
             }
-            nextSib = nextSib.nextElementSibling;
         }
     }
     if (nextSelector.length > 0) {

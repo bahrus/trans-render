@@ -5936,8 +5936,10 @@
                     const split = target.dataset.init.split(';');
                     split.forEach(section =>{
                         init(self[section], {}, target);
-                    })
-                    
+                    });
+                    return {
+                        SkipSibs: true,
+                    }
                 },
                 'div.element': ({target}) =>{
                     init(elementInputs, {}, target, {prepend:true});

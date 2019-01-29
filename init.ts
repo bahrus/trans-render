@@ -6,15 +6,18 @@ import {
   TransformFn
 } from "./init.d.js";
 
-
 export function init(
   template: HTMLElement,
   ctx: RenderContext,
   target: HTMLElement | DocumentFragment,
   options?: RenderOptions
 ): RenderContext {
-  
-  const clonedTemplate = template.localName === 'template' ? (template as HTMLTemplateElement).content.cloneNode(true) as DocumentFragment : template;
+  const clonedTemplate =
+    template.localName === "template"
+      ? ((template as HTMLTemplateElement).content.cloneNode(
+          true
+        ) as DocumentFragment)
+      : template;
   ctx.template = clonedTemplate;
   if (ctx.Transform) {
     const firstChild = clonedTemplate.firstElementChild;
@@ -23,21 +26,21 @@ export function init(
       process(ctx, 0, 0, options);
     }
   }
-  let verb = 'appendChild';
-  if(options){
-    if(options.prepend) verb = 'prepend';
+  let verb = "appendChild";
+  if (options) {
+    if (options.prepend) verb = "prepend";
     const callback = options.initializedCallback;
-    if(callback !== undefined) callback(ctx, target, options);
+    if (callback !== undefined) callback(ctx, target, options);
   }
   (<any>target)[verb](ctx.template);
   return ctx;
 }
 
-function isTR(obj: object){
+function isTR(obj: object) {
   const keys = Object.keys(obj);
-  if(keys.length === 0) return true;
+  if (keys.length === 0) return true;
   const firstCharOfFirstProp = keys[0][0];
-  return 'SNTM'.indexOf(firstCharOfFirstProp) === -1;
+  return "SNTM".indexOf(firstCharOfFirstProp) === -1;
 }
 export function process(
   context: RenderContext,
@@ -50,7 +53,7 @@ export function process(
   const transform = context.Transform;
 
   let nextTransform: TransformRules = {};
-  let nextSelector = '';
+  let nextSelector = "";
   let firstSelector = true;
   let matchNextSib: boolean = true;
   let inherit = false;
@@ -60,7 +63,7 @@ export function process(
       const transformTemplateVal = transform[selector];
       switch (typeof transformTemplateVal) {
         case "object":
-          nextSelector = '*';
+          nextSelector = "*";
           Object.assign(nextTransform, transformTemplateVal);
           break;
         case "function":
@@ -80,13 +83,17 @@ export function process(
               case "object":
                 if (isTR(resp)) {
                   const respAsTransformRules = resp as TransformRules;
-                  nextSelector = '*';
+                  nextSelector = "*";
                   Object.assign(nextTransform, respAsTransformRules);
                 } else {
                   const respAsNextStep = resp as NextStep;
                   inherit = inherit || !!resp.MergeTransforms;
-                  nextSelector = (firstSelector ? '' : ',') + respAsNextStep.Select;
-                  firstSelector = false;
+                  if (respAsNextStep.Select !== undefined) {
+                    nextSelector =
+                      (firstSelector ? "" : ",") + respAsNextStep.Select;
+                    firstSelector = false;
+                  }
+
                   const newTransform = respAsNextStep.Transform;
                   if (newTransform === undefined) {
                     Object.assign(nextTransform, context.Transform);
@@ -114,16 +121,17 @@ export function process(
       process(context, idx + 1, level, options);
     }
     context.Transform = transform;
-  } else if (nextMatch.length > 0) {
-    const match = nextMatch.join(",");
-    let nextSib = target.nextElementSibling;
-    while (nextSib !== null) {
-      if (nextSib.matches(match)) {
-        context.leaf = nextSib;
-        process(context, idx + 1, level, options);
-        break;
+    if (nextMatch.length > 0) {
+      const match = nextMatch.join(",");
+      let nextSib = target.nextElementSibling;
+      while (nextSib !== null) {
+        if (nextSib.matches(match)) {
+          context.leaf = nextSib;
+          process(context, idx + 1, level, options);
+          break;
+        }
+        nextSib = nextSib.nextElementSibling;
       }
-      nextSib = nextSib.nextElementSibling;
     }
   }
 
@@ -131,7 +139,7 @@ export function process(
     let transform = context.Transform;
 
     const nextChild = target.querySelector(nextSelector);
-    if(inherit){
+    if (inherit) {
       Object.assign(nextTransform, context.Transform);
     }
     if (nextChild !== null) {
@@ -140,6 +148,5 @@ export function process(
       process(context, 0, level + 1, options);
       context.Transform = transform;
     }
-    
   }
 }
