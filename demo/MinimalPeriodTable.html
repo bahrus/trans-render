@@ -33,7 +33,8 @@
         init(source, {
             Transform:{
                 '.square': ({target}) =>{
-                    debugger;
+                    const indecis = Array.from(target.querySelectorAll('li')).map(item => item.textContent);
+                    //that was easy
                 }
             }
         }, target);

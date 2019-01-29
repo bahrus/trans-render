@@ -464,7 +464,7 @@ This library, on the other hand, considers the entire template document open for
 
 However, the use case is quite different.  In the case of stylesheets, we are talking about global theming, affecting large numbers of elements at the same time.  The use case I'm really considering is one web component extending another.  It doesn't seem that unreasonable to provide maximum flexibility in that circumstance.  Yes, I suppose the ability to mark some tags as "undeletable / non negotiable" might be nice, but I see no way to enforce that.
 
-## On-the-fly Data Extraction [TODO]
+## TBD
 
 Another interesting case to consider is this [Periodic Table Codepen](https://codepen.io/mikegolus/pen/OwrPgB) example.  Being what it is, it is no suprise that there's a lot of repetitive HTML markup needed to define the table.  
 
@@ -472,71 +472,5 @@ An intriguing, as yet unanswered question, is this:  Could this be the first kno
 
 The natural instinct of the modern developer, including the author of the codepen, is to generate the HTML from a consise data format (e.g. JS Array).  In fact, the author provides server-side "pug" syntax to generate the HTML, which may be the most optimal solution out there.
 
-But I'm thinking the bandwidth savings from reducing repetitive HTML *might* be enough to offset the client side cpu needed by whatever library helpers are used by the client-side.  (I'm doubtful due to the power of gzip/brotli compression). The possibility that *this* library, of all the S libraries in the world, would be the best one to achieve the goal seems quite dim, but let's see what happens anyway.  What if the data is instead provided in a minimized stream of HTML, and we copy in templates of repetitive blocks of HTML?  
-
-The dilemma this use case presents, which I would like to discuss, is this:
-
-What if the same data needs to occur twice?  See the markup below, taken from the compiled html:
-
-```html
-    <div class="element other-nonmetal c14 r2">
-      <input class="activate" type="radio" name="elements"/>
-      <input class="deactivate" type="radio" name="elements"/>
-      <div class="overlay"></div>
-      <div class="square">
-        <div class="model">
-          <div class="orbital">
-            <div class="electron"></div>
-            <div class="electron"></div>
-            <div class="electron"></div>
-            <div class="electron"></div>
-          </div>
-          <div class="orbital">
-            <div class="electron"></div>
-            <div class="electron"></div>
-          </div>
-        </div>
-        <div class="atomic-number">6</div>
-        <div class="label">
-          <div class="symbol">C</div>
-          <div class="name">Carbon</div>
-        </div>
-        <div class="atomic-mass">12.011</div>
-        <ul class="atomic-weight">
-          <li>2</li>
-          <li>4</li>
-        </ul>
-      </div>
-    </div>
-```
-
-The pattern that emerges is that the list towards the bottom:
-
-```html
-<ul class="atomic-weight">
-    <li>2</li>
-    <li>4</li>
-</ul>
-```
-
-matches exactly with the orbital electrons (except in reverse order):
-
-```html
-<div class="model">
-    <div class="orbital">
-        <div class="electron"></div>
-        <div class="electron"></div>
-        <div class="electron"></div>
-        <div class="electron"></div>
-    </div>
-    <div class="orbital">
-        <div class="electron"></div>
-        <div class="electron"></div>
-    </div>
-</div>
-```
-
-It's very possible that the periodic table could be generated with a structure that is more friendly to this library -- namely if the compact list appeared *above* the orbital model, rather than below.  Then we could extract the numbers from the ui/li list, and dynamically generate (with the help of template cloning) the orbital model.  But ideally this library should be flexible enough that it could handle this markup as is.  So what is the correct approach?
-
-
+But I'm thinking the bandwidth savings from reducing repetitive HTML *might* be enough to offset the client side cpu needed by whatever library helpers are used by the client-side.  (I'm doubtful due to the power of gzip/brotli compression). The possibility that *this* library, of all the JS libraries in the world, would be the best one to achieve the goal seems quite dim, but let's see what happens anyway.  What if the data is instead provided in a minimized stream of HTML, and we copy in templates of repetitive blocks of HTML?  
 
