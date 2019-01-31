@@ -480,7 +480,7 @@ Trans-Rendering:
 
 Original
 
-<img src="https://bahrus.github.io/periodicTable/Original.png" alt="Original">
+<img src="https://bahrus.github.io/periodicTable/Original2.png" alt="Original">
 
 You can compare the two here:  This [link uses client-side trans-rendering](https://bahrus.github.io/periodicTable/PeriodicTable.html).  This [link uses all static html](https://bahrus.github.io/periodicTable/OriginalPeriodicTable.html)
 
