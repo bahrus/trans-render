@@ -472,8 +472,6 @@ An intriguing question, is this:  Could this be the first known scenario in the 
 
 The proper, natural instinct of a good modern developer, including the author of the codepen, is to generate the HTML from a consise data format using a server-side language (pug). 
 
-But this library appears to significantly improve the performance over the server-side implementation!  That's if the init.js is embedded directly in the page.  I'm not saying other libraries couldn't match what this library does (haven't tried them).   
+But using this library, and cloning some repetitive templates on the client side, reduces download size from 16kb to 14kb, and may improve other performance metrics as well (results ambiguous.)   
 
 You can compare the two here:  This [link uses client-side trans-rendering](https://bahrus.github.io/periodicTable/PeriodicTable.html).  This [link uses all static html](https://bahrus.github.io/periodicTable/OriginalPeriodicTable.html)
-
-If I throttle Chrome at Slow 3G and 6x cpu, I find that the first link loads in 7 seconds.  The second one loads in 11 seconds.
