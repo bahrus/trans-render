@@ -438,7 +438,7 @@ When defining an HTML based user interface, the question arises whether styles s
 
 The ability to keep the styles separate from the HTML does not invalidate support for inline styles.  The browser supports both, and probably always will.
 
-Likewise, arguing for the benefits of this library is not in any way meant to disparage the usefulness of the current prevailing orthodoxy of including the binding / formatting instructions in the markup.  I would be delighted to see the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with support for inline binding, added to the arsenal of tools developers could use.  Should that proposal come to fruition, this library, hovering under 1KB, would be in mind-share competition with one that is 0KB, with the full backing / optimization work of Chrome, Safari, Firefox.  Why would anyone use this library then?
+Likewise, arguing for the benefits of this library is not in any way meant to disparage the usefulness of the current prevailing orthodoxy of including the binding / formatting instructions in the markup.  I would be delighted to see the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with support for inline binding, added to the arsenal of tools developers could use.  Should that proposal come to fruition, this library, hovering under 1KB, would be in mind-share competition (my mind anyway) with one that is 0KB, with the full backing / optimization work of Chrome, Safari, Firefox.  Why would anyone use this library then?
 
 And in fact, the library described here is quite open ended.  Until template instantiation becomes built into the browser, this library could be used as a tiny stand-in.  Once template instantiation is built into the browser, this library could continue to supplement the native support (or the other way around, depending.)
 
@@ -472,6 +472,16 @@ An intriguing question, is this:  Could this be the first known scenario in the 
 
 The proper, natural instinct of a good modern developer, including the author of the codepen, is to generate the HTML from a consise data format using a server-side language (pug). 
 
-But using this library, and cloning some repetitive templates on the client side, reduces download size from 16kb to 14kb, and may improve other performance metrics as well (results ambiguous.)   
+But using this library, and cloning some repetitive templates on the client side, reduces download size from 16kb to 14kb, and may improve other performance metrics as well.  These are the performance results my copy of chrome captures, after opening in an ignito window, and throttling cpu to 6x and slow 3g network.
+
+Trans-Rendering:
+
+<img src="https://bahrus.github.io/periodicTable/Periodic.png" alt="Trans Rendered">
+
+Original
+
+<img src="https://bahrus.github.io/periodicTable/Original.png" alt="Original">
 
 You can compare the two here:  This [link uses client-side trans-rendering](https://bahrus.github.io/periodicTable/PeriodicTable.html).  This [link uses all static html](https://bahrus.github.io/periodicTable/OriginalPeriodicTable.html)
+
+Results are a bit unpredictable, so the jury is still out.
