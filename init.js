@@ -1,5 +1,6 @@
 export function init(template, ctx, target, options) {
-    const clonedTemplate = template.localName === "template"
+    const isTemplate = template.localName === "template";
+    const clonedTemplate = isTemplate
         ? template.content.cloneNode(true)
         : template;
     ctx.template = clonedTemplate;
@@ -10,23 +11,18 @@ export function init(template, ctx, target, options) {
             process(ctx, 0, 0, options);
         }
     }
-    let verb = "appendChild";
-    if (options) {
-        if (options.prepend)
-            verb = "prepend";
-        const callback = options.initializedCallback;
-        if (callback !== undefined)
-            callback(ctx, target, options);
+    if (isTemplate) {
+        let verb = "appendChild";
+        if (options) {
+            if (options.prepend)
+                verb = "prepend";
+            const callback = options.initializedCallback;
+            if (callback !== undefined)
+                callback(ctx, target, options);
+        }
+        target[verb](ctx.template);
     }
-    target[verb](ctx.template);
     return ctx;
-}
-function isTR(obj) {
-    const keys = Object.keys(obj);
-    if (keys.length === 0)
-        return true;
-    const firstCharOfFirstProp = keys[0][0];
-    return "SNTM".indexOf(firstCharOfFirstProp) === -1;
 }
 export function process(context, idx, level, options) {
     const target = context.leaf;
@@ -61,7 +57,13 @@ export function process(context, idx, level, options) {
                                 target.textContent = resp;
                                 break;
                             case "object":
-                                if (isTR(resp)) {
+                                let isTR = true;
+                                const keys = Object.keys(resp);
+                                if (keys.length > 0) {
+                                    const firstCharOfFirstProp = keys[0][0];
+                                    isTR = "SNTM".indexOf(firstCharOfFirstProp) === -1;
+                                }
+                                if (isTR) {
                                     const respAsTransformRules = resp;
                                     nextSelector = "*";
                                     Object.assign(nextTransform, respAsTransformRules);

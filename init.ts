@@ -12,8 +12,9 @@ export function init(
   target: HTMLElement | DocumentFragment,
   options?: RenderOptions
 ): RenderContext {
+  const isTemplate = template.localName === "template";
   const clonedTemplate =
-    template.localName === "template"
+      isTemplate
       ? ((template as HTMLTemplateElement).content.cloneNode(
           true
         ) as DocumentFragment)
@@ -26,22 +27,20 @@ export function init(
       process(ctx, 0, 0, options);
     }
   }
-  let verb = "appendChild";
-  if (options) {
-    if (options.prepend) verb = "prepend";
-    const callback = options.initializedCallback;
-    if (callback !== undefined) callback(ctx, target, options);
+  if(isTemplate){
+    let verb = "appendChild";
+    if (options) {
+      if (options.prepend) verb = "prepend";
+      const callback = options.initializedCallback;
+      if (callback !== undefined) callback(ctx, target, options);
+    }
+    (<any>target)[verb](ctx.template);
   }
-  (<any>target)[verb](ctx.template);
+
   return ctx;
 }
 
-function isTR(obj: object) {
-  const keys = Object.keys(obj);
-  if (keys.length === 0) return true;
-  const firstCharOfFirstProp = keys[0][0];
-  return "SNTM".indexOf(firstCharOfFirstProp) === -1;
-}
+
 export function process(
   context: RenderContext,
   idx: number,
@@ -81,7 +80,14 @@ export function process(
                 target.textContent = resp;
                 break;
               case "object":
-                if (isTR(resp)) {
+                let isTR = true;
+                const keys = Object.keys(resp);
+                if (keys.length > 0) {
+                  const firstCharOfFirstProp = keys[0][0];
+                  isTR = "SNTM".indexOf(firstCharOfFirstProp) === -1;
+                }
+
+                if (isTR) {
                   const respAsTransformRules = resp as TransformRules;
                   nextSelector = "*";
                   Object.assign(nextTransform, respAsTransformRules);
