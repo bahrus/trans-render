@@ -472,7 +472,7 @@ An intriguing question, is this:  Could this be the first known scenario in the 
 
 The proper, natural instinct of a good modern developer, including the author of the codepen, is to generate the HTML from a consise data format using a server-side language (pug). 
 
-But using this library, and cloning some repetitive templates on the client side, reduces download size from 16kb to 14kb, and may improve other performance metrics as well.  These are the performance results my copy of chrome captures, after opening in an ignito window, and throttling cpu to 6x and slow 3g network.
+But using this library, and cloning some repetitive templates on the client side, reduces download size from 16kb to 14kb, and may improve other performance metrics as well.  These are the performance results my copy of chrome captures, after opening in an icgonito window, and throttling cpu to 6x and slow 3g network.
 
 Trans-Rendering:
 
@@ -484,4 +484,19 @@ Original
 
 You can compare the two here:  This [link uses client-side trans-rendering](https://bahrus.github.io/periodicTable/PeriodicTable.html).  This [link uses all static html](https://bahrus.github.io/periodicTable/OriginalPeriodicTable.html)
 
-Results are a bit unpredictable, so the jury is still out.
+Results are a bit unpredictable, sometimes the differences are less dramatic.
+
+Lighthouse scrores are also little better.
+
+Trans-Rendering:
+
+<img src="https://bahrus.github.io/periodicTable/PeriodicLightHouse.png" alt="Trans Rendered Lighthouse">
+
+
+Original
+
+<img src="https://bahrus.github.io/periodicTable/OriginalLightHouse.png" alt="Original Lighthouse">
+
+Once in a while the scores match, but most of the time the scores above are what is seen.
+
+So the difference isn't dramatic, but it statisitically significant, in my opinion.
