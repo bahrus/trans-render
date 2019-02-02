@@ -490,12 +490,12 @@ Lighthouse scrores are also little better.
 
 Trans-Rendering:
 
-<img src="https://bahrus.github.io/periodicTable/PeriodicLightHouse.png" alt="Trans Rendered Lighthouse">
+<img src="https://bahrus.github.io/periodicTable/PeriodicLightHouse2.png" alt="Trans Rendered Lighthouse">
 
 
 Original
 
-<img src="https://bahrus.github.io/periodicTable/OriginalLightHouse2.png" alt="Original Lighthouse">
+<img src="https://bahrus.github.io/periodicTable/OriginalLightHouse.png" alt="Original Lighthouse">
 
 Once in a while the scores match, but most of the time the scores above are what is seen.
 
