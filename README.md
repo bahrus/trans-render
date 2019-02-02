@@ -495,7 +495,7 @@ Trans-Rendering:
 
 Original
 
-<img src="https://bahrus.github.io/periodicTable/OriginalLightHouse.png" alt="Original Lighthouse">
+<img src="https://bahrus.github.io/periodicTable/OriginalLightHouse2.png" alt="Original Lighthouse">
 
 Once in a while the scores match, but most of the time the scores above are what is seen.
 
