@@ -490,7 +490,7 @@ Lighthouse scrores are also little better.
 
 Trans-Rendering:
 
-<img src="https://bahrus.github.io/periodicTable/PeriodicLightHouse2.png" alt="Trans Rendered Lighthouse">
+![Trans Rendered Lighthouse]("https://bahrus.github.io/periodicTable/PeriodicLightHouse2.png")
 
 
 Original
