@@ -493,10 +493,10 @@ Trans-Rendering:
 ![Trans Rendered Lighthouse](https://bahrus.github.io/periodicTable/PeriodiLightHouse2.png)
 
 
-Original
+Original:
 
 <img src="https://bahrus.github.io/periodicTable/OriginalLightHouse.png" alt="Original Lighthouse">
 
 Once in a while the scores match, but most of the time the scores above are what is seen.
 
-So the difference isn't dramatic, but it statisitically significant, in my opinion.
+So the difference isn't dramatic, but it statistically significant, in my opinion.
