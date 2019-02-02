@@ -478,7 +478,7 @@ Trans-Rendering:
 
 <img src="https://bahrus.github.io/periodicTable/Periodic.png" alt="Trans Rendered">
 
-Original
+Original:
 
 <img src="https://bahrus.github.io/periodicTable/Original2.png" alt="Original">
 
