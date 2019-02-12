@@ -4,6 +4,10 @@ export function renameTag(src, newTag) {
     if (parentNode === null)
         return;
     const newEl = document.createElement(newTag);
-    parentNode.replaceChild(src, newEl);
-    return src;
+    while (src.firstChild) {
+        newEl.appendChild(src.firstChild); // *Moves* the child
+    }
+    src.style.display = 'none';
+    src.insertAdjacentElement('afterend', newEl);
+    return newEl;
 }
