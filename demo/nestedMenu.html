@@ -7,19 +7,22 @@
     <title>Document</title>
   </head>
   <body>
-    <template id="detailsSubstitute">
-        <input
-        aria-controls="nav"
-        aria-haspopup="true"
-        aria-labelledby="menu"
-        id="link-top"
-        role="button"
-        tabindex="1"
-        type="checkbox"
-        />
-        <label class="down" for="link-top" id="menu" role="none" tabindex="-1"
-        >Menu</label
-        >
+    <template id="summarySubstitute">
+            <input
+            aria-controls="nav"
+            aria-haspopup="true"
+            aria-labelledby="menu"
+            id="link-top"
+            role="button"
+            tabindex="1"
+            type="checkbox"
+            />
+            <label class="down" for="link-top" id="menu" role="none" tabindex="-1"
+            >Menu</label
+            >
+    </template>
+    <template id="navSubstitute">
+
         <ul aria-labelledby="menu" id="nav" role="menu">
             <slot></slot>
         </ul>
@@ -31,15 +34,21 @@
             <summary data-label-id="menu">Menu</summary>
             <details>
               <summary data-label-id="shop">Shop</summary>
-              <a>Tops</a>
-              <a>Bottoms</a>
-              <a>Shoes</a>
-              <a>Accessories</a>
-              <a>Sales</a>
+              <nav>
+                <a>Tops</a>
+                <a>Bottoms</a>
+                <a>Shoes</a>
+                <a>Accessories</a>
+                <a>Sales</a>
+              </nav>
+
             </details>
-            <a>Blog</a>
-            <a>About</a>
-            <a>Contact</a>
+            <nav>
+                <a>Blog</a>
+                <a>About</a>
+                <a>Contact</a>
+            </nav>
+
           </details>
         </nav>
       </main>
@@ -124,8 +133,8 @@
                 // lbl.id = target.dataset.labelId;
                 // lbl.setAttribute('role', 'none');
             },
-            details: ({target}) =>{
-                insertAdjacentTemplate(target, detailsSubstitute);
+            'details>nav': ({target}) =>{
+                insertAdjacentTemplate(target, navSubstitute);
             }
         }
         init(src, {Transform});
