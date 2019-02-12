@@ -7,6 +7,23 @@
     <title>Document</title>
   </head>
   <body>
+    <template id="detailsSubstitute">
+        <input
+        aria-controls="nav"
+        aria-haspopup="true"
+        aria-labelledby="menu"
+        id="link-top"
+        role="button"
+        tabindex="1"
+        type="checkbox"
+        />
+        <label class="down" for="link-top" id="menu" role="none" tabindex="-1"
+        >Menu</label
+        >
+        <ul aria-labelledby="menu" id="nav" role="menu">
+            <slot></slot>
+        </ul>
+    </template>
     <div id="src">
       <main ontouchstart="true" role="main">
         <nav role="menu">
@@ -102,9 +119,13 @@
                 'Select': '*'
             }),
             summary: ({target}) =>{
-                console.log(target);
-                const lbl = renameTag(target, 'label');
-                lbl.id = target.dataset.labelId;
+                // console.log(target);
+                // const lbl = renameTag(target, 'label');
+                // lbl.id = target.dataset.labelId;
+                // lbl.setAttribute('role', 'none');
+            },
+            details: ({target}) =>{
+                insertAdjacentTemplate(target, detailsSubstitute);
             }
         }
         init(src, {Transform});
