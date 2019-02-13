@@ -128,7 +128,7 @@ Or even simpler, your transform can hardcode some values:
     import { init } from '../init.js';
     const Transform = {
         details: {
-            summary: x => 'Hallå'
+            summary: 'Hallå'
         }
     };
     init(sourceTemplate, { Transform }, target);
