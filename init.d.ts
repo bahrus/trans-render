@@ -1,5 +1,5 @@
 export type TransformFn = (arg: TransformArg) => TransformRules | NextStep | string | void;
-export type TransformValueOptions =  TransformRules | TransformFn;
+export type TransformValueOptions =  TransformRules | TransformFn | string;
 export type TransformRules = { [key: string]: TransformValueOptions};
 export interface TransformArg {
     target: Element,
