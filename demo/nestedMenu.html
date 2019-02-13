@@ -8,24 +8,23 @@
   </head>
   <body>
     <template id="summarySubstitute">
-            <input
-            aria-controls="nav"
-            aria-haspopup="true"
-            aria-labelledby="menu"
-            id="link-top"
-            role="button"
-            tabindex="1"
-            type="checkbox"
-            />
-            <label class="down" for="link-top" id="menu" role="none" tabindex="-1"
-            >Menu</label
-            >
+      <input
+        aria-controls="nav"
+        aria-haspopup="true"
+        aria-labelledby="menu"
+        id="link-top"
+        role="button"
+        tabindex="1"
+        type="checkbox"
+      />
+      <label class="down" for="link-top" id="menu" role="none" tabindex="-1"
+        >Menu</label
+      >
     </template>
     <template id="navSubstitute">
-
-        <ul aria-labelledby="menu" id="nav" role="menu">
-            <slot></slot>
-        </ul>
+      <ul aria-labelledby="menu" id="nav" role="menu">
+        <slot></slot>
+      </ul>
     </template>
     <div id="src">
       <main ontouchstart="true" role="main">
@@ -41,14 +40,12 @@
                 <a>Accessories</a>
                 <a>Sales</a>
               </nav>
-
             </details>
             <nav>
-                <a>Blog</a>
-                <a>About</a>
-                <a>Contact</a>
+              <a>Blog</a>
+              <a>About</a>
+              <a>Contact</a>
             </nav>
-
           </details>
         </nav>
       </main>
@@ -120,24 +117,29 @@
       </main>
     </div>
     <script type="module">
-        import {init} from '../init.js';
-        import {insertAdjacentTemplate} from '../insertAdjacentTemplate.js';
-        import {renameTag} from '../renameTag.js';
-        const Transform = {
-            '*': x => ({
-                'Select': '*'
-            }),
-            summary: ({target}) =>{
-                // console.log(target);
-                // const lbl = renameTag(target, 'label');
-                // lbl.id = target.dataset.labelId;
-                // lbl.setAttribute('role', 'none');
-            },
-            'details>nav': ({target}) =>{
-                insertAdjacentTemplate(target, navSubstitute);
-            }
+      import { init } from "../init.js";
+      import { insertAdjacentTemplate } from "../insertAdjacentTemplate.js";
+      import { renameTag } from "../renameTag.js";
+      import {promoteChildren} from "../promote.js";
+      const Transform = {
+        "*": x => ({
+          Select: "*"
+        }),
+        details: ({target}) => {
+            promoteChildren(target);
+        },
+        summary: ({ target }) => {
+          insertAdjacentTemplate(target, summarySubstitute, target.parentElement);
+          // console.log(target);
+          // const lbl = renameTag(target, 'label');
+          // lbl.id = target.dataset.labelId;
+          // lbl.setAttribute('role', 'none');
+        },
+        "nav": ({ target }) => {
+          insertAdjacentTemplate(target, navSubstitute, target.parentElement);
         }
-        init(src, {Transform});
+      };
+      init(src, { Transform });
     </script>
   </body>
 </html>
