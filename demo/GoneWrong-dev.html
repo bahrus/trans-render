@@ -82,9 +82,9 @@
             import { init } from '../init.js';
             init(Main, {
                 Transform: {
-                    '*': x  => ({
+                    '*': {
                         Select: '*'
-                    }),
+                    },
                     '[data-init]': ({target, ctx}) =>{
                         init(self[target.dataset.init], {}, target);
                     }

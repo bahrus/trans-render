@@ -105,9 +105,9 @@
                             init(self[target.dataset.init], {}, target);
                         }
                     },
-                    '*': x  => ({
+                    '*': {
                         Select: '*'
-                    }),
+                    },
                 }
             }, target);
             changeDays.addEventListener('click', e => {

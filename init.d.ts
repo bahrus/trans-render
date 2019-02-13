@@ -22,7 +22,7 @@ export interface RenderContext {
     init?: (template: HTMLElement, ctx: RenderContext, target: HTMLElement | DocumentFragment, options?: RenderOptions) => RenderContext,
     leaf?: Element,
     Transform?: TransformRules,
-    template?: DocumentFragment | HTMLElement,
+    //template?: DocumentFragment | HTMLElement,
     update?: (ctx: RenderContext, target: HTMLElement | DocumentFragment) => RenderContext;
     refs?: {[key: string] : any},
 }

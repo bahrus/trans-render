@@ -113,6 +113,40 @@ Produces
 </div>
 ```
 
+Or even simpler, your transform can hardcode some values:
+
+```html
+<template id="sourceTemplate">
+    <details>
+        ...
+        <summary></summary>
+        ...
+    </details>
+</template>
+<div id="target"></div>
+<script type="module">
+    import { init } from '../init.js';
+    const Transform = {
+        details: {
+            summary: x => 'Hallå'
+        }
+    };
+    init(sourceTemplate, { Transform }, target);
+</script>
+```
+
+produces:
+
+```html
+<div id="target">
+    <details>
+        ...
+        <summary>Hallå</summary>
+        ...
+    </details>
+</div>
+```
+
 "target" is the HTML element we are populating.  The transform matches can return a string, which will be used to set the textContent of the target.  Or the transform can do its own manipulations on the target element, and then return a "NextStep" object specifying where to go next, or it can return a new Transform, which will get applied the first child by default.
 
 Note the unusual property name casing, in the JavaScript arena for the NextStep object:  Transform, Select, SkipSibs, etc.  As we will see, this pattern is to allow the interpreter to distinguish between css matches for a nested Transform, vs a "NextStep" JS object.
@@ -198,12 +232,12 @@ Demonstrates including sub templates.
         </template>
         <div id="target"></div>
         <script type="module">
-            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.44/init.js';
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.61/init.js';
             init(Main, {
                 Transform: {
-                    '*': x  => ({
+                    '*': {
                         Select: '*'
-                    }),
+                    },
                     '[data-init]': ({target, ctx}) =>{
                         init(self[target.dataset.init], {}, target);
                     }
@@ -220,9 +254,9 @@ Note the transform rule above (if viewed from webcomponents.org):
 
 ```JavaScript
 Transform: {
-    '*': x  => ({
+    '*': {
         Select: '*'
-    }),
+    },
 ```
 
 "*" is a match for all css elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector).  This, combined with the default setting to match all the next siblings means that, for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
@@ -312,9 +346,9 @@ Demonstrates use of update, rudimentary interpolation, recursive select.
         <div id="target"></div>
 
         <script type="module">
-            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.54/init.js';
-            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.54/interpolate.js';
-            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.54/update.js';
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.61/init.js';
+            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.61/interpolate.js';
+            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.61/update.js';
 
             let model = {
                 Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
@@ -322,9 +356,9 @@ Demonstrates use of update, rudimentary interpolation, recursive select.
             };
             const ctx = init(Main, {
                 Transform: {
-                    '*': x  => ({
+                    '*': {
                         Select: '*'
-                    }),
+                    },
                     '[x-d]': ({ target }) => {
                         interpolate(target, 'textContent', model);
                     },

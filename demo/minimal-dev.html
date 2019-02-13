@@ -13,6 +13,7 @@
         <template id="sourceTemplate">
             <details>
                 <summary></summary>
+                I am here
             </details>
         </template>
         <div id="target"></div>
@@ -23,7 +24,7 @@
             }
             const Transform = {
                 details: {
-                    summary: x => model.summaryText
+                    summary: x => 'Hallå'
                 }
             };
             init(sourceTemplate, { Transform }, target);

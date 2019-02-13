@@ -19,7 +19,7 @@ export function init(
           true
         ) as DocumentFragment)
       : template;
-  ctx.template = clonedTemplate;
+  //ctx.template = clonedTemplate;
   if (ctx.Transform) {
     const firstChild = clonedTemplate.firstElementChild;
     if (firstChild !== null) {
@@ -34,12 +34,11 @@ export function init(
       const callback = options.initializedCallback;
       if (callback !== undefined) callback(ctx, target, options);
     }
-    (<any>target)[verb](ctx.template);
+    (<any>target)[verb](clonedTemplate);
   }
 
   return ctx;
 }
-
 
 export function process(
   context: RenderContext,
@@ -60,63 +59,50 @@ export function process(
   for (const selector in transform) {
     if (target.matches(selector)) {
       const transformTemplateVal = transform[selector];
-      switch (typeof transformTemplateVal) {
-        case "object":
-          nextSelector = "*";
-          Object.assign(nextTransform, transformTemplateVal);
+      let resp2 : string | void | TransformRules | NextStep | TransformFn = transformTemplateVal;
+      if(typeof resp2 === 'function'){
+        resp2 = resp2({target: target, ctx: context, idx: idx, level: level});
+      }
+      switch (typeof resp2) {
+        case "string":
+          target.textContent = resp2;
           break;
-        case "function":
-          const transformTemplate = transformTemplateVal as TransformFn;
-          const resp = transformTemplate({
-            target: target,
-            ctx: context,
-            idx: idx,
-            level: level
-          });
+        case "object":
+          let isTR = true;
+          const keys = Object.keys(resp2);
+          if (keys.length > 0) {
+            const firstCharOfFirstProp = keys[0][0];
+            isTR = "SNTM".indexOf(firstCharOfFirstProp) === -1;
+          }
 
-          if (resp !== undefined) {
-            switch (typeof resp) {
-              case "string":
-                target.textContent = resp;
-                break;
-              case "object":
-                let isTR = true;
-                const keys = Object.keys(resp);
-                if (keys.length > 0) {
-                  const firstCharOfFirstProp = keys[0][0];
-                  isTR = "SNTM".indexOf(firstCharOfFirstProp) === -1;
-                }
+          if (isTR) {
+            const respAsTransformRules = resp2 as TransformRules;
+            nextSelector = "*";
+            Object.assign(nextTransform, respAsTransformRules);
+          } else {
+            const respAsNextStep = resp2 as NextStep;
+            inherit = inherit || !!resp2.MergeTransforms;
+            if (respAsNextStep.Select !== undefined) {
+              nextSelector =
+                (firstSelector ? "" : ",") + respAsNextStep.Select;
+              firstSelector = false;
+            }
 
-                if (isTR) {
-                  const respAsTransformRules = resp as TransformRules;
-                  nextSelector = "*";
-                  Object.assign(nextTransform, respAsTransformRules);
-                } else {
-                  const respAsNextStep = resp as NextStep;
-                  inherit = inherit || !!resp.MergeTransforms;
-                  if (respAsNextStep.Select !== undefined) {
-                    nextSelector =
-                      (firstSelector ? "" : ",") + respAsNextStep.Select;
-                    firstSelector = false;
-                  }
-
-                  const newTransform = respAsNextStep.Transform;
-                  if (newTransform === undefined) {
-                    Object.assign(nextTransform, context.Transform);
-                  } else {
-                    Object.assign(nextTransform, newTransform);
-                  }
-                  if (respAsNextStep.SkipSibs) matchNextSib = false;
-                  if (!matchNextSib && resp.NextMatch) {
-                    nextMatch.push(resp.NextMatch);
-                  }
-                }
-
-                break;
+            const newTransform = respAsNextStep.Transform;
+            if (newTransform === undefined) {
+              Object.assign(nextTransform, context.Transform);
+            } else {
+              Object.assign(nextTransform, newTransform);
+            }
+            if (respAsNextStep.SkipSibs) matchNextSib = false;
+            if (!matchNextSib && resp2.NextMatch) {
+              nextMatch.push(resp2.NextMatch);
             }
           }
+
           break;
       }
+
     }
   }
   if (matchNextSib) {

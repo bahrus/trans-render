@@ -79,12 +79,12 @@
         </template>
         <div id="target"></div>
         <script type="module">
-            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.54/init.js';
+            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.61/init.js';
             init(Main, {
                 Transform: {
-                    '*': x  => ({
+                    '*': {
                         Select: '*'
-                    }),
+                    },
                     '[data-init]': ({target, ctx}) =>{
                         init(self[target.dataset.init], {}, target);
                     }
