@@ -518,9 +518,9 @@ Original:
 
 You can compare the two here:  This [link uses client-side trans-rendering](https://bahrus.github.io/periodicTable/PeriodicTable.html).  This [link uses all static html](https://bahrus.github.io/periodicTable/OriginalPeriodicTable.html)
 
-Results are a bit unpredictable, sometimes the differences are less dramatic.
+Results are a bit unpredictable, and usually the differences are less dramatic.
 
-Lighthouse scrores are also little better.
+Lighthouse scrores also provide evidence that that trans-rendering improves performance.
 
 Trans-Rendering:
 
@@ -534,3 +534,30 @@ Original:
 Once in a while the scores match, but most of the time the scores above are what is seen.
 
 So the difference isn't dramatic, but it statistically significant, in my opinion.
+
+<!--
+## Miscellaneous Helper Functions
+
+### Declative-ish property setting / behavior enhancement
+
+Helper function "decorate" provides a Typescript-friendly way of setting properties on a matching element.
+
+Example syntax:
+
+```Typescript
+    header: {
+      h3: this.packageName,
+      nav: {
+        a: ({ctx, target}) => decorate<HTMLAnchorElement>(ctx, target, {
+            propVals:{
+                href: 'https://foo.bar',
+            }
+        })
+      }
+    } as TransformRules
+
+```
+
+Note:  Typescript already provides generic support for Object.assign<T>, but decorate provides enhanced support (to be detailed later).
+
+-->
