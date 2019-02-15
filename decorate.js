@@ -1,18 +1,19 @@
+const spKey = '__transrender_deco_onPropsChange';
 export function decorate(ctx, target, src) {
-    const propVals = src.propVals;
+    const propVals = src.PropVals;
     if (propVals !== undefined) {
         let dataset = propVals.dataset;
         if (dataset !== undefined) {
             delete propVals.dataset;
         }
-        Object.assign(target, src);
+        Object.assign(target, propVals);
         if (dataset !== undefined) {
             Object.assign(target.dataset, dataset);
         }
     }
     if (ctx !== undefined && ctx.update)
         return;
-    const props = src.props;
+    const props = src.Props;
     if (props !== undefined) {
         for (const key in props) {
             const propVal = props[key];
@@ -31,7 +32,8 @@ export function decorate(ctx, target, src) {
                         composed: false,
                     });
                     this.dispatchEvent(newEvent);
-                    //if(this[spKey]) this[spKey](key, val);
+                    if (this[spKey])
+                        this[spKey](key, val);
                 },
                 enumerable: true,
                 configurable: true,
@@ -39,11 +41,12 @@ export function decorate(ctx, target, src) {
             target[key] = propVal;
         }
     }
-    const methods = src.methods;
+    const methods = src.Methods;
     if (methods !== undefined) {
         for (const key in props) {
             const method = props[key];
-            const prop = Object.defineProperty(target, key, {
+            const fnKey = (key === 'onPropsChange') ? spKey : key;
+            Object.defineProperty(target, fnKey, {
                 enumerable: false,
                 configurable: true,
                 writable: true,
@@ -51,7 +54,7 @@ export function decorate(ctx, target, src) {
             });
         }
     }
-    const events = src.on;
+    const events = src.On;
     if (events) {
         for (const key in events) {
             const handlerKey = key + '_transRenderHandler';

@@ -1,35 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <div>
-        <template id="sourceTemplate">
-            <details>
-                <summary></summary>
-                I am here
-            </details>
-        </template>
-        <div id="target"></div>
-        <script type="module">
-            import { init } from '../init.js';
-            const model = {
-                summaryText: 'hello'
-            }
-            const Transform = {
-                details: {
-                    summary: 'Hallå'
+      <template id="sourceTemplate">
+        <details>
+          <summary></summary>
+          <a>I am here</a>
+        </details>
+      </template>
+      <div id="target"></div>
+      <script type="module">
+        import { init } from "../init.js";
+        import { decorate } from "../decorate.js";
+        const model = {
+          summaryText: "hello"
+        };
+        const Transform = {
+          details: {
+            summary: "Hallå",
+            a: ({ ctx, target }) =>
+              decorate(ctx, target, {
+                PropVals: {
+                  href: "https://www.cnn.com"
                 }
-            };
-            init(sourceTemplate, { Transform }, target);
-        </script>
+              })
+          }
+        };
+        init(sourceTemplate, { Transform }, target);
+      </script>
     </div>
-</body>
-
+  </body>
 </html>

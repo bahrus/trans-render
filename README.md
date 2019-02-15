@@ -494,7 +494,7 @@ To aid with this process, the init and update functions provide a rendering opti
 
 I may not yet fully grasp the proposal, but it still does appear to me that the template instantiation proposal is only useful if one defines regions ahead of time in the markup where dynamic content may go.  
 
-This library, on the other hand, considers the entire template document open for amendment.  This may be alarming, if as me, you find yourself comparing this effort to the constructible stylesheet proposal, where authors need to specify which elements can be themed.
+This library, on the other hand, considers the entire template document open for amendment.  This may be alarming, if as me, you find yourself comparing this effort to the [::part ::theme initiative](https://meowni.ca/posts/part-theme-explainer/), where authors need to specify which elements can be themed.
 
 However, the use case is quite different.  In the case of stylesheets, we are talking about global theming, affecting large numbers of elements at the same time.  The use case I'm really considering is one web component extending another.  It doesn't seem that unreasonable to provide maximum flexibility in that circumstance.  Yes, I suppose the ability to mark some tags as "undeletable / non negotiable" might be nice, but I see no way to enforce that.
 
@@ -535,22 +535,30 @@ Once in a while the scores match, but most of the time the scores above are what
 
 So the difference isn't dramatic, but it statistically significant, in my opinion.
 
-<!--
+
 ## Miscellaneous Helper Functions
 
-### Declative-ish property setting / behavior enhancement
+### Declative-ish property setting / behavior enhancement [Highly Experimental]
 
-Helper function "decorate" provides a Typescript-friendly way of setting properties on a matching element.
+Helper function "decorate" provides an optionally Typescript-friendly way of setting properties and adding behavior on a matching element in a Vue-like way.
 
-Example syntax:
+Example syntax if using Typescript (optional):
 
 ```Typescript
     header: {
       h3: this.packageName,
       nav: {
         a: ({ctx, target}) => decorate<HTMLAnchorElement>(ctx, target, {
-            propVals:{
+            PropVals:{
                 href: 'https://foo.bar',
+            }
+            Props:{
+                numberOfClicks: 0
+            }
+            Methods:{
+                onPropsChange(){
+                    alert(this.numberOfClicks)
+                }
             }
         })
       }
@@ -558,6 +566,5 @@ Example syntax:
 
 ```
 
-Note:  Typescript already provides generic support for Object.assign<T>, but decorate provides enhanced support (to be detailed later).
+Note:  Typescript already provides generic support for Object.assign<T>, which can be quite declarative and type aware, but "decorate" provides enhanced support.
 
--->
