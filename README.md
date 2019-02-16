@@ -598,104 +598,110 @@ The ruling elites countered with fancy words like "heuristics" and "smoosh."  "W
 
 Which all *sounded* like a good faith argument.  But why, at least one heretic thought, has the main web site used to bind family and friends together introduced the following global constants, which surely could cause problems if the web wanted to evolve:
 
-facebook 
-meta_referrer 
-pageTitle 
-u_0_11 
-u_0_12 
-u_0_13 
-u_0_14 
-u_0_15 
-u_0_16 
-u_0_17 
-pagelet_bluebar 
-blueBarDOMInspector 
-login_form 
-email 
-pass 
-loginbutton 
-u_0_2 
-u_0_3 
-u_0_4 
-lgnjs 
-locale 
-prefill_contact_point 
-prefill_source 
-prefill_type 
-globalContainer 
-content 
-reg_box 
-reg_error 
-reg_error_inner 
-reg 
-reg_form_box 
-fullname_field 
-u_0_b 
-u_0_c 
-u_0_d 
-u_0_e 
-fullname_error_msg 
-u_0_f 
-u_0_g 
-u_0_h 
-u_0_i 
-u_0_j 
-u_0_k 
-u_0_l 
-u_0_m 
-password_field 
-u_0_n 
-u_0_o 
-u_0_p 
-u_0_q 
-month 
-day 
-year 
-birthday-help 
-u_0_r 
-u_0_s 
-u_0_9 
-u_0_a 
-u_0_t 
-terms-link 
-privacy-link 
-cookie-use-link 
-u_0_u 
-u_0_v 
-referrer 
-asked_to_login 
-terms 
-ns 
-ri 
-action_dialog_shown 
-reg_instance 
-contactpoint_label 
-ignore 
-locale 
-reg_captcha 
-security_check_header 
-outer_captcha_box 
-captcha_box 
-captcha_response_error 
-captcha 
-captcha_persist_data 
-captcha_response 
-captca-recaptcha 
-captcha_whats_this 
-captcha_buttons 
-u_0_w 
-u_0_x 
-u_0_y 
-reg_pages_msg 
-u_0_z 
-u_0_10 
-pageFooter 
-contentCurve 
-js_0 
-u_0_18 
-u_0_19
+* facebook 
+* * meta_referrer 
+* * pageTitle 
+* u_0_11 
+* u_0_11 
+* u_0_11 
+* u_0_11 
+* u_0_11 
+* u_0_12 
+* u_0_13 
+* u_0_14 
+* u_0_15 
+* u_0_16 
+* u_0_17 
+* pagelet_bluebar 
+* blueBarDOMInspector 
+* login_form 
+* email 
+* pass 
+* loginbutton 
+* u_0_2 
+* u_0_3 
+* u_0_4 
+* lgnjs 
+* locale 
+* prefill_contact_point 
+* prefill_source 
+* prefill_type 
+* globalContainer 
+* content 
+* reg_box 
+* reg_error 
+* reg_error_inner 
+* reg 
+* reg_form_box 
+* fullname_field 
+* u_0_b 
+* u_0_c 
+* u_0_d 
+* u_0_e 
+* fullname_error_msg 
+* u_0_f 
+* u_0_g 
+* u_0_h 
+* u_0_i 
+* u_0_j 
+* u_0_k 
+* u_0_l 
+* u_0_m 
+* password_field 
+* u_0_n 
+* u_0_o 
+* u_0_p 
+* u_0_q 
+* month 
+* day 
+* year 
+* birthday-help 
+* u_0_r 
+* u_0_s 
+* u_0_9 
+* u_0_a 
+* u_0_t 
+* terms-link 
+* privacy-link 
+* cookie-use-link 
+* u_0_u 
+* u_0_v 
+* referrer 
+* asked_to_login 
+* terms 
+* ns 
+* ri 
+* action_dialog_shown 
+* reg_instance 
+* contactpoint_label 
+* ignore 
+* locale 
+* reg_captcha 
+* security_check_header 
+* outer_captcha_box 
+* captcha_box 
+* captcha_response_error 
+* captcha 
+* captcha_persist_data 
+* captcha_response 
+* captca-recaptcha 
+* captcha_whats_this 
+* captcha_buttons 
+* u_0_w 
+* u_0_x 
+* u_0_y 
+* reg_pages_msg 
+* u_0_z 
+* u_0_10 
+* pageFooter 
+* contentCurve 
+* js_0 
+* u_0_18 
+* u_0_19
 
-Mind you, I do think this is a concern to consider. I would applaud any official advice on what naming conventions for properties attached to other elements can be used to avoid conflicts  Uncle Ben's advice is quite apt -- if you are attaching a property to a DOM (or custom) element that has a snowball chance in hell of 1)  Ever being added natively to that DOM (or custom) element and 2)  If whatever you're doing has any chance of becoming widespread, come up with a different name.
+Mind you, I do think this is a concern to consider. I would applaud any official advice on what naming conventions for properties attached to other elements can be used to avoid conflicts, similar to what was done with data-*.  In the mean time, Uncle Ben's advice is quite apt -- if you are attaching a property to a DOM (or custom) element that has a snowball chance in hell of 1)  Ever being added natively to that DOM (or custom) element and 2)  If whatever you're doing has any chance of becoming widespread, come up with a different name.
+
+As far as methods, I think usually "onPropsChange" is sufficient for most purposes.  There is a check to see if that method already exists, and if so it gets renamed.  onPropsChange is called automatically any time a property is changed, so usually you won't need to know what the actual name is.
 
 
 
