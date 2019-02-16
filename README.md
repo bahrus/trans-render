@@ -584,5 +584,5 @@ Example syntax:
 
 ```
 
-Note: 
+
 
