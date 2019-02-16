@@ -5,7 +5,7 @@ export function init(template, ctx, target, options) {
         : template;
     //ctx.template = clonedTemplate;
     if (ctx.Transform) {
-        const firstChild = clonedTemplate.firstElementChild;
+        const firstChild = isTemplate ? clonedTemplate.firstElementChild : clonedTemplate;
         if (firstChild !== null) {
             ctx.leaf = firstChild;
             process(ctx, 0, 0, options);

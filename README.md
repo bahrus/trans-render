@@ -538,33 +538,49 @@ So the difference isn't dramatic, but it statistically significant, in my opinio
 
 ## Miscellaneous Helper Functions
 
-### Declative-ish property setting / behavior enhancement [Highly Experimental]
+### Declative-ish property setting / behavior enhancement
 
 Typescript already provides generic support for Object.assign<T>, which can be quite declarative and type aware, but "decorate" provides enhanced support.
 
-Helper function "decorate" provides an optionally Typescript-friendly way of setting properties and adding behavior on a matching element in a Vue-like way.
+The first two arguments are just like Object.assign, but decorate gives special attention to two readonly HTML properties:   dataset and style.
 
-Example syntax if using Typescript (optional):
+The third argument provides a way of creating a little Vue-like anonymous custom element, or add some behavior on top of an existing custom element.
 
-```Typescript
-    header: {
-      h3: this.packageName,
-      nav: {
-        a: ({ctx, target}) => decorate<HTMLAnchorElement>(ctx, target, {
-            PropVals:{
-                href: 'https://foo.bar',
-            }
-            Props:{
-                numberOfClicks: 0
-            }
-            Methods:{
-                onPropsChange(){
-                    alert(this.numberOfClicks)
+Example syntax:
+
+```html
+    <div id="decorateTest">
+        <button>Test</button>
+    </div>
+    <script type="module">
+        import {decorate} from '../decorate.js';
+        import {init} from '../init.js';
+        init(decorateTest, {
+            Transform: {
+                div: {
+                    button: ({target}) => decorate(target, {
+                            textContent: 'Hello'
+                        }, {
+                        props:{
+                            count: 0
+                        },
+                        on:{
+                            click: function(e){
+                                this.count++;
+                            }
+                        },
+                        methods:{
+                            onPropsChange(){
+                                alert(this.count)
+                            }
+                        }
+                    })
                 }
             }
+            
+            
         })
-      }
-    } as TransformRules
+    </script>
 
 ```
 

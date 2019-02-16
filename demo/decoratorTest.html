@@ -16,26 +16,23 @@
         init(decorateTest, {
             Transform: {
                 div: {
-                    button: ({ctx, target}) => {
-                        decorate(ctx, target, {
-                            PropVals: {
-                                textContent: 'iah'
-                            },
-                            Props:{
-                                count: 0
-                            },
-                            On:{
-                                click: function(e){
-                                    this.count++;
-                                }
-                            },
-                            Methods:{
-                                onPropsChange(){
-                                    alert(this.count)
-                                }
+                    button: ({target}) => decorate(target, {
+                            textContent: 'Hello'
+                        }, {
+                        props:{
+                            count: 0
+                        },
+                        on:{
+                            click: function(e){
+                                this.count++;
                             }
-                        })
-                    }
+                        },
+                        methods:{
+                            onPropsChange(){
+                                alert(this.count)
+                            }
+                        }
+                    })
                 }
             }
             

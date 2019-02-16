@@ -1,26 +1,29 @@
 import {RenderContext} from './init.d.js';
 
 const spKey = '__transrender_deco_onPropsChange';
-interface DecorateArgs<T extends HTMLElement>{
-    PropVals: T | undefined,
-    Props: {[key: string]: any} | undefined;
-    Methods: {[key: string] : any} | undefined;
-    On: {[key: string] : any} | undefined;
+interface DecorateArgs{
+    props: {[key: string]: any} | undefined;
+    methods: {[key: string] : Function} | undefined;
+    on: {[key: string] : (e: Event) => void} | undefined;
+    class: string | string[] | undefined;
 }
-export function decorate<T extends HTMLElement>(ctx: RenderContext, target: T, src: DecorateArgs<T>){
-    const propVals = src.PropVals;
-    if(propVals !== undefined) {
-        let dataset = propVals.dataset;
-        if(dataset !== undefined){
-            delete (<any>propVals).dataset;
-        }
-        Object.assign(target, propVals);
-        if(dataset !== undefined){
-            Object.assign(target.dataset, dataset);
-        }
+function assignSpecial<T extends HTMLElement>(target: T, vals: T, propNames: string[]){
+    propNames.forEach(propName =>{
+        const targetProp = (<any>target)[propName];
+        const srcProp = (<any>vals)[propName];
+        Object.assign(targetProp, srcProp);
+        delete (<any>vals)[propName];
+    })
+}
+export function decorate<T extends HTMLElement>(target: T, vals: T | null, decor?: DecorateArgs){
+    if(vals !== null) {
+        const valCopy = {...vals};
+        assignSpecial(target, valCopy, ['dataset', 'style']);
+        Object.assign(target, valCopy);
+        //classes?
     }
-    if(ctx !== undefined && ctx.update) return;
-    const props = src.Props;
+    if(decor === undefined) return;
+    const props = decor.props;
     if(props !== undefined){
         for (const key in props) {
             const propVal = props[key];
@@ -47,7 +50,7 @@ export function decorate<T extends HTMLElement>(ctx: RenderContext, target: T, s
             (<any>target)[key] = propVal;
         }
     }
-    const methods = src.Methods;
+    const methods = decor.methods;
     if(methods !== undefined){
         for(const key in methods){
             const method = methods[key];
@@ -60,7 +63,7 @@ export function decorate<T extends HTMLElement>(ctx: RenderContext, target: T, s
             });
         }
     }
-    const events = src.On;
+    const events = decor.on;
     if(events){
         for (const key in events) {
             const handlerKey = key + '_transRenderHandler';

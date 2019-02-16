@@ -1,19 +1,22 @@
 const spKey = '__transrender_deco_onPropsChange';
-export function decorate(ctx, target, src) {
-    const propVals = src.PropVals;
-    if (propVals !== undefined) {
-        let dataset = propVals.dataset;
-        if (dataset !== undefined) {
-            delete propVals.dataset;
-        }
-        Object.assign(target, propVals);
-        if (dataset !== undefined) {
-            Object.assign(target.dataset, dataset);
-        }
+function assignSpecial(target, vals, propNames) {
+    propNames.forEach(propName => {
+        const targetProp = target[propName];
+        const srcProp = vals[propName];
+        Object.assign(targetProp, srcProp);
+        delete vals[propName];
+    });
+}
+export function decorate(target, vals, decor) {
+    if (vals !== null) {
+        const valCopy = { ...vals };
+        assignSpecial(target, valCopy, ['dataset', 'style']);
+        Object.assign(target, valCopy);
+        //classes?
     }
-    if (ctx !== undefined && ctx.update)
+    if (decor === undefined)
         return;
-    const props = src.Props;
+    const props = decor.props;
     if (props !== undefined) {
         for (const key in props) {
             const propVal = props[key];
@@ -41,7 +44,7 @@ export function decorate(ctx, target, src) {
             target[key] = propVal;
         }
     }
-    const methods = src.Methods;
+    const methods = decor.methods;
     if (methods !== undefined) {
         for (const key in methods) {
             const method = methods[key];
@@ -54,7 +57,7 @@ export function decorate(ctx, target, src) {
             });
         }
     }
-    const events = src.On;
+    const events = decor.on;
     if (events) {
         for (const key in events) {
             const handlerKey = key + '_transRenderHandler';
