@@ -599,8 +599,8 @@ The ruling elites countered with fancy words like "heuristics" and "smoosh."  "W
 Which all *sounded* like a good faith argument.  But why, at least one heretic thought, has the main web site used to bind family and friends together introduced the following global constants, which surely could cause problems if the web wanted to evolve:
 
 * facebook 
-* * meta_referrer 
-* * pageTitle 
+* meta_referrer 
+* pageTitle 
 * u_0_11 
 * u_0_11 
 * u_0_11 
