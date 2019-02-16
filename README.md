@@ -584,5 +584,119 @@ Example syntax:
 
 ```
 
+## Avoiding name space collisions
+
+**NB:**  All names, characters, and incidents portrayed in the following discussion are fictitious. No identification with actual persons (living or deceased), places, buildings, and products is intended or should be inferred. No person or entity associated with this discussion received payment or anything of value, or entered into any agreement, in connection with the depiction of tobacco products. No animals were harmed in formulating the points discussed below.
+
+In a web-loving land, there was a kingdom that held sway over a large portion of the greatest minds, who in turn guided career choices of the common folk.  The kingdom's main income derived from a most admirable goal -- keeping friends and family in touch.  The kingdom was ruled by conservatives.  "Edmund Burke" conservatives, who didn't see the appeal of allowing heretics to join freely in their kingdom.  They were tolerant, mind you.  If you were not a tax-paying subject born to a family of the kingdom, i.e. a heretic, and you wanted to visit their Kingdom, you could do so.  You only had to be heavily surrounded by guards, who would translate what you had to say, and vice versa, into Essex, the de-facto language of the web, according to the Kingdom's elites.  
+
+The heretics called these conservatives unflattering words like "reactionaries."  
+
+"Why can't we speak directly to your subjects?  What are you afraid of?" the counter-cultural heretics would plead.
+
+The ruling elites countered with fancy words like "heuristics" and "smoosh."  "We've put our greatest minds to the problem, and, quite frankly, they're stumped.  We don't see how we can let you speak freely without corrupting the language of the web.  The web rules over all of us, and what if the web wants to introduce an attribute or property that is already in heavy use?  What are we to do then?  Don't you see?  We are the true lovers of the web.  We are protecting the web, so it can continue to evolve and flourish."
+
+Which all *sounded* like a good faith argument.  But why, at least one heretic thought, has the main web site used to bind family and friends together introduced the following global constants, which surely could cause problems if the web wanted to evolve:
+
+facebook 
+meta_referrer 
+pageTitle 
+u_0_11 
+u_0_12 
+u_0_13 
+u_0_14 
+u_0_15 
+u_0_16 
+u_0_17 
+pagelet_bluebar 
+blueBarDOMInspector 
+login_form 
+email 
+pass 
+loginbutton 
+u_0_2 
+u_0_3 
+u_0_4 
+lgnjs 
+locale 
+prefill_contact_point 
+prefill_source 
+prefill_type 
+globalContainer 
+content 
+reg_box 
+reg_error 
+reg_error_inner 
+reg 
+reg_form_box 
+fullname_field 
+u_0_b 
+u_0_c 
+u_0_d 
+u_0_e 
+fullname_error_msg 
+u_0_f 
+u_0_g 
+u_0_h 
+u_0_i 
+u_0_j 
+u_0_k 
+u_0_l 
+u_0_m 
+password_field 
+u_0_n 
+u_0_o 
+u_0_p 
+u_0_q 
+month 
+day 
+year 
+birthday-help 
+u_0_r 
+u_0_s 
+u_0_9 
+u_0_a 
+u_0_t 
+terms-link 
+privacy-link 
+cookie-use-link 
+u_0_u 
+u_0_v 
+referrer 
+asked_to_login 
+terms 
+ns 
+ri 
+action_dialog_shown 
+reg_instance 
+contactpoint_label 
+ignore 
+locale 
+reg_captcha 
+security_check_header 
+outer_captcha_box 
+captcha_box 
+captcha_response_error 
+captcha 
+captcha_persist_data 
+captcha_response 
+captca-recaptcha 
+captcha_whats_this 
+captcha_buttons 
+u_0_w 
+u_0_x 
+u_0_y 
+reg_pages_msg 
+u_0_z 
+u_0_10 
+pageFooter 
+contentCurve 
+js_0 
+u_0_18 
+u_0_19
+
+Mind you, I do think this is a concern to consider. I would applaud any official advice on what naming conventions for properties attached to other elements can be used to avoid conflicts  Uncle Ben's advice is quite apt -- if you are attaching a property to a DOM (or custom) element that has a snowball chance in hell of 1)  Ever being added natively to that DOM (or custom) element and 2)  If whatever you're doing has any chance of becoming widespread, come up with a different name.
+
+
 
 
