@@ -49,8 +49,8 @@ export function decorate<T extends HTMLElement>(ctx: RenderContext, target: T, s
     }
     const methods = src.Methods;
     if(methods !== undefined){
-        for(const key in props){
-            const method = props[key];
+        for(const key in methods){
+            const method = methods[key];
             const fnKey = (key === 'onPropsChange') ? spKey : key; 
             Object.defineProperty(target, fnKey, {
                 enumerable: false,

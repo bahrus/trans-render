@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="decorateTest">
+        <button>Test</button>
+    </div>
+    <script type="module">
+        import {decorate} from '../decorate.js';
+        import {init} from '../init.js';
+        init(decorateTest, {
+            Transform: {
+                div: {
+                    button: ({ctx, target}) => {
+                        decorate(ctx, target, {
+                            PropVals: {
+                                textContent: 'iah'
+                            },
+                            Props:{
+                                count: 0
+                            },
+                            On:{
+                                click: function(e){
+                                    this.count++;
+                                }
+                            },
+                            Methods:{
+                                onPropsChange(){
+                                    alert(this.count)
+                                }
+                            }
+                        })
+                    }
+                }
+            }
+            
+            
+        })
+    </script>
+</body>
+</html>

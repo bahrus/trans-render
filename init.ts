@@ -21,7 +21,7 @@ export function init(
       : template;
   //ctx.template = clonedTemplate;
   if (ctx.Transform) {
-    const firstChild = clonedTemplate.firstElementChild;
+    const firstChild = isTemplate ? clonedTemplate.firstElementChild : clonedTemplate;
     if (firstChild !== null) {
       ctx.leaf = firstChild;
       process(ctx, 0, 0, options);
@@ -46,7 +46,7 @@ export function process(
   level: number,
   options?: RenderOptions
 ) {
-  const target = context.leaf!;
+  const target = context.leaf! as HTMLElement;
   if (target.matches === undefined) return;
   const transform = context.Transform;
 

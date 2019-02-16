@@ -540,6 +540,8 @@ So the difference isn't dramatic, but it statistically significant, in my opinio
 
 ### Declative-ish property setting / behavior enhancement [Highly Experimental]
 
+Typescript already provides generic support for Object.assign<T>, which can be quite declarative and type aware, but "decorate" provides enhanced support.
+
 Helper function "decorate" provides an optionally Typescript-friendly way of setting properties and adding behavior on a matching element in a Vue-like way.
 
 Example syntax if using Typescript (optional):
@@ -566,5 +568,5 @@ Example syntax if using Typescript (optional):
 
 ```
 
-Note:  Typescript already provides generic support for Object.assign<T>, which can be quite declarative and type aware, but "decorate" provides enhanced support.
+Note: 
 

@@ -20,7 +20,7 @@ export interface NextStep {
 
 export interface RenderContext {
     init?: (template: HTMLElement, ctx: RenderContext, target: HTMLElement | DocumentFragment, options?: RenderOptions) => RenderContext,
-    leaf?: Element,
+    leaf?: Element | DocumentFragment,
     Transform?: TransformRules,
     //template?: DocumentFragment | HTMLElement,
     update?: (ctx: RenderContext, target: HTMLElement | DocumentFragment) => RenderContext;
