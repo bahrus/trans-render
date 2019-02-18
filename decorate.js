@@ -19,6 +19,8 @@ export function decorate(target, vals, decor) {
     const props = decor.props;
     if (props !== undefined) {
         for (const key in props) {
+            if (key in target === true)
+                throw 'Property ' + key + ' already exists.';
             const propVal = props[key];
             Object.defineProperty(target, key, {
                 get: function () {

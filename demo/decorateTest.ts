@@ -5,6 +5,5 @@ function test(h: HTMLElement){
         style: {
 
         },
-        
     } as HTMLAnchorElement)
 }

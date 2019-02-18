@@ -2,6 +2,7 @@ import {RenderContext} from './init.d.js';
 
 const spKey = '__transrender_deco_onPropsChange';
 interface DecorateArgs{
+    //attribs:{[key: string]: string} | undefined;
     props: {[key: string]: any} | undefined;
     methods: {[key: string] : Function} | undefined;
     on: {[key: string] : (e: Event) => void} | undefined;
@@ -26,7 +27,9 @@ export function decorate<T extends HTMLElement>(target: T, vals: T | null, decor
     const props = decor.props;
     if(props !== undefined){
         for (const key in props) {
+            if(key in target === true) throw 'Property ' + key + ' already exists.';
             const propVal = props[key];
+            
             Object.defineProperty(target, key, {
                 get: function () {
                     return this['_' + key];
