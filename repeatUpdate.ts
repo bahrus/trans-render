@@ -1,7 +1,8 @@
+import {TransformValueOptions} from './init.d.js';
 import {countKey, idxKey} from './repeatInit.js';
 
 //type HTMLFn = (el: HTMLElement) => void
-export function repeatUpdate(count: number, template: HTMLTemplateElement, target: HTMLElement){
+export function repeatUpdate(count: number, template: HTMLTemplateElement, target: HTMLElement, targetTransform?: TransformValueOptions){
     const childCount = (<any>target)[countKey];
     const diff = count - childCount;
     if(diff === 0) return;
@@ -26,4 +27,5 @@ export function repeatUpdate(count: number, template: HTMLTemplateElement, targe
         }
     }
     (<any>target)[countKey] = count;
+    return targetTransform;
 }

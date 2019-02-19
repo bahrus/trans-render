@@ -1,7 +1,7 @@
 export const countKey = '__trCount';
 export const idxKey = '__trIdx';
 //export const initKey = '__trInit';
-export function repeatInit(count, template, target) {
+export function repeatInit(count, template, target, targetTransform) {
     target[countKey] = count;
     for (let i = 0; i < count; i++) {
         const clonedTemplate = template.content.cloneNode(true);
@@ -13,4 +13,5 @@ export function repeatInit(count, template, target) {
         //TODO:  assign index to children
         target.appendChild(clonedTemplate);
     }
+    return targetTransform;
 }

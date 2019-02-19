@@ -1,52 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <div>
-        <template id="itemTemplate">
-            <li></li>
-        </template>
-        <template id="list">
-            <ul id="container"></ul>
-            <button id="addItems">Add items</button>
-            <button id="removeItems">Remove items</button>
-        </template>
-        <div id="target"></div>
+      <template id="itemTemplate">
+        <li></li>
+      </template>
+      <template id="list">
+        <ul id="container"></ul>
+        <button id="addItems">Add items</button>
+        <button id="removeItems">Remove items</button>
+      </template>
+      <div id="target"></div>
 
-        <script type="module">
-            import { init } from '../init.js';
-            import { repeatInit } from '../repeatInit.js';
-            import {repeatUpdate} from '../repeatUpdate.js';
-            import {update} from '../update.js';
-            const options = {matchNext: true};
-            const ctx = init(list, {
-                Transform: {
-                    ul: ({ target, ctx }) => {
-                        if (!ctx.update) {
-                            repeatInit(10, itemTemplate, target);
-                        }
-                        return ({
-                            li: ({ idx }) => 'Hello ' + idx,
-                        });
-                    }
-                }
-            }, target, options);
-            addItems.addEventListener('click', e => {
-                repeatUpdate(15, itemTemplate, container);
-                update(ctx, target, options);
-            });
-            removeItems.addEventListener('click', e =>{
-                repeatUpdate(5, null,  container);
-            })
-        </script>
+      <script type="module">
+        import { init } from '../init.js';
+        import { repeatInit } from '../repeatInit.js';
+        import {repeatUpdate} from '../repeatUpdate.js';
+        import {update} from '../update.js';
+        const options = {matchNext: true};
+        const ctx = init(list, {
+            Transform: {
+                ul: ({ target, ctx }) =>  repeatInit(ctx.update ? 0 : 10, itemTemplate, target, {
+                    li: ({ idx }) => 'Hello ' + idx,
+                })
+            }
+        }, target, options);
+        addItems.addEventListener('click', e => {
+            repeatUpdate(15, itemTemplate, container);
+            update(ctx, target, options);
+        });
+        removeItems.addEventListener('click', e =>{
+            repeatUpdate(5, null,  container);
+        })
+      </script>
     </div>
-</body>
-
+  </body>
 </html>

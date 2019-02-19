@@ -1,7 +1,9 @@
+import {TransformValueOptions} from './init.d.js';
 export const countKey = '__trCount';
 export const idxKey = '__trIdx';
 //export const initKey = '__trInit';
-export function repeatInit(count: number, template: HTMLTemplateElement, target: Element){
+export function repeatInit(count: number, template: HTMLTemplateElement, target: Element, targetTransform?: TransformValueOptions){
+    
     (<any>target)[countKey] = count;
     for(let i =0; i < count; i++){
         const clonedTemplate = template.content.cloneNode(true) as DocumentFragment;
@@ -14,4 +16,5 @@ export function repeatInit(count: number, template: HTMLTemplateElement, target:
         target.appendChild(clonedTemplate);
         
     }
+    return targetTransform;
 }
