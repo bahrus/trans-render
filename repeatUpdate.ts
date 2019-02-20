@@ -1,9 +1,9 @@
-import {TransformRules, RenderContext} from './init.d.js';
+import {TransformRules, RenderContext, TransformValueOptions} from './init.d.js';
 import {countKey, idxKey} from './repeatInit.js';
 import {update} from './update.js';
 
 //type HTMLFn = (el: HTMLElement) => void
-export function repeatUpdate(template: HTMLTemplateElement, ctx: RenderContext, count: number, target: HTMLElement, targetTransform?: TransformRules){
+export function repeatUpdate(template: HTMLTemplateElement, ctx: RenderContext, count: number, target: HTMLElement, targetTransform?: TransformValueOptions){
     const childCount = (<any>target)[countKey];
     const diff = count - childCount;
     if(diff === 0) return;
@@ -29,7 +29,7 @@ export function repeatUpdate(template: HTMLTemplateElement, ctx: RenderContext, 
     }
     (<any>target)[countKey] = count;
     if(targetTransform){
-        ctx.Transform = targetTransform;
+        ctx.Transform = targetTransform as TransformRules;
         update(ctx, target);
     }
     return targetTransform;

@@ -1,13 +1,7 @@
-import {RenderContext} from './init.d.js';
+import {RenderContext, DecorateArgs} from './init.d.js';
 
 const spKey = '__transrender_deco_onPropsChange';
-interface DecorateArgs{
-    //attribs:{[key: string]: string} | undefined;
-    props: {[key: string]: any} | undefined;
-    methods: {[key: string] : Function} | undefined;
-    on: {[key: string] : (e: Event) => void} | undefined;
-    class: string | string[] | undefined;
-}
+
 function assignSpecial<T extends HTMLElement>(target: T, vals: T, propNames: string[]){
     propNames.forEach(propName =>{
         const targetProp = (<any>target)[propName];

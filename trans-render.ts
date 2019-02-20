@@ -2,7 +2,11 @@ import {define} from 'xtal-latx/define.js';
 import {XtallatX} from 'xtal-latx/xtal-latx.js';
 import {init} from './init.js';
 import {repeatInit} from './repeatInit.js';
+import {repeatUpdate} from './repeatUpdate.js';
+import {interpolate} from './interpolate.js';
+import {decorate} from './decorate.js';
 import {RenderContext} from './init.d.js';
+import { update } from './update.js';
 //import {decorate} from 'trans-render/decorate.js';
 
 //const spKey = '__xtal_deco_onPropsChange'; //special key
@@ -12,7 +16,7 @@ export class TransRender extends XtallatX(HTMLElement) {
     static get is() { return 'trans-render'; }
     connectedCallback() {
         this.style.display = 'none';
-        this._upgradeProperties(['input']);
+        this._upgradeProperties(['viewModel']);
         this.getElement('_nextSibling', t => (t.nextElementSibling as HTMLElement));
         this.getElement('_script', t => t.querySelector('script'));
     }
@@ -40,24 +44,26 @@ export class TransRender extends XtallatX(HTMLElement) {
     onPropsChange(){
         if(!this._nextSibling || !this._script) return;
         this.evaluateCode(this._script, this._nextSibling);
-        if(this._input === undefined) return;
+        if(this._viewModel === undefined) return;
         const ctx = {
             init: init,
+            //update: update,
+            interpolate: interpolate,
+            decorate: decorate,
+            repeatInit: repeatInit,
+            //repeatUpdate: repeatUpdate,
             Transform: this._evalObj,
-            refs:{
-                repeatInit: repeatInit,
-                input: this._input,
-            }
+            viewModel: this._viewModel,
         } as RenderContext;
         init(this._nextSibling, ctx, this._nextSibling);
     }
 
-    _input: any;
-    get input(){
-        return this._input;
+    _viewModel: any;
+    get viewModel(){
+        return this._viewModel;
     }
-    set input(nv){
-        this._input = nv;
+    set viewModel(nv){
+        this._viewModel = nv;
         this.onPropsChange();
     }
 

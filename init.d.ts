@@ -16,15 +16,25 @@ export interface NextStep {
     SkipSibs?: boolean,
 }
 
-
+export interface DecorateArgs{
+    //attribs:{[key: string]: string} | undefined;
+    props: {[key: string]: any} | undefined;
+    methods: {[key: string] : Function} | undefined;
+    on: {[key: string] : (e: Event) => void} | undefined;
+    class: string | string[] | undefined;
+}
 
 export interface RenderContext {
     init?: (template: HTMLElement, ctx: RenderContext, target: HTMLElement | DocumentFragment, options?: RenderOptions) => RenderContext,
+    repeatInit?: (template: HTMLTemplateElement, ctx: RenderContext, count: number, target: Element, targetTransform?: TransformValueOptions) => TransformValueOptions;
+    repeatUpdate?: (template: HTMLTemplateElement, ctx: RenderContext, count: number, target: HTMLElement, targetTransform?: TransformValueOptions) => TransformValueOptions;
+    interpolate?: (target: any, prop: string, obj: any, isAttr: boolean) => void;
+    decorate?<T extends HTMLElement>(target: T, vals: T | null, decor?: DecorateArgs) : void;
     leaf?: Element | DocumentFragment,
     Transform?: TransformRules,
-    //template?: DocumentFragment | HTMLElement,
     update?: (ctx: RenderContext, target: HTMLElement | DocumentFragment) => RenderContext;
     refs?: {[key: string] : any},
+    viewModel?: any,
 }
 
 export interface RenderOptions{
