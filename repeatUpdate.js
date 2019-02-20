@@ -1,7 +1,7 @@
 import { countKey, idxKey } from './repeatInit.js';
 import { update } from './update.js';
 //type HTMLFn = (el: HTMLElement) => void
-export function repeatUpdate(ctx, count, template, target, targetTransform) {
+export function repeatUpdate(template, ctx, count, target, targetTransform) {
     const childCount = target[countKey];
     const diff = count - childCount;
     if (diff === 0)

@@ -448,14 +448,14 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
     };
     const ctx = init(list, {
         Transform: {
-            ul: ({ target, ctx }) =>  repeatInit(ctx, 10, itemTemplate, target, itemTransform)
+            ul: ({ target, ctx }) =>  repeatInit(itemTemplate, ctx, 10, target, itemTransform)
         }
     }, target, options);
     addItems.addEventListener('click', e => {
-        repeatUpdate(ctx, 15, itemTemplate, container, itemTransform);
+        repeatUpdate(itemTemplate, ctx, 15, container, itemTransform);
     });
     removeItems.addEventListener('click', e =>{
-        repeatUpdate(ctx, 5, null,  container);
+        repeatUpdate(itemTemplate, ctx, 5, container);
     })
     </script>
 </div>

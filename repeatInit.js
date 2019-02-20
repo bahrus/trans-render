@@ -1,7 +1,7 @@
 export const countKey = '__trCount';
 export const idxKey = '__trIdx';
 //export const initKey = '__trInit';
-export function repeatInit(ctx, count, template, target, targetTransform) {
+export function repeatInit(template, ctx, count, target, targetTransform) {
     if (ctx.update)
         return;
     target[countKey] = count;
