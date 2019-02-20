@@ -426,44 +426,39 @@ However, no self respecting rendering library would be complete without some int
 Anyway the syntax is shown below.  What's notable is a sub template is cloned repeatedly, then populated using the simple init / update methods.
 
 ```html
-    <div>
-        <template id="itemTemplate">
-            <li></li>
-        </template>
-        <template id="list">
-            <ul id="container"></ul>
-            <button id="addItems">Add items</button>
-            <button id="removeItems">Remove items</button>
-        </template>
-        <div id="target"></div>
+<div>
+    <template id="itemTemplate">
+    <li></li>
+    </template>
+    <template id="list">
+    <ul id="container"></ul>
+    <button id="addItems">Add items</button>
+    <button id="removeItems">Remove items</button>
+    </template>
+    <div id="target"></div>
 
-        <script type="module">
-            import { init } from '../init.js';
-            import { repeatInit } from '../repeatInit.js';
-            import {repeatUpdate} from '../repeatUpdate.js';
-            import {update} from '../update.js';
-            const options = {matchNext: true};
-            const ctx = init(list, {
-                Transform: {
-                    ul: ({ target, ctx }) => {
-                        if (!ctx.update) {
-                            repeatInit(10, itemTemplate, target);
-                        }
-                        return ({
-                            li: ({ idx }) => 'Hello ' + idx,
-                        });
-                    }
-                }
-            }, target, options);
-            addItems.addEventListener('click', e => {
-                repeatUpdate(15, itemTemplate, container);
-                update(ctx, target, options);
-            });
-            removeItems.addEventListener('click', e =>{
-                repeatUpdate(5, null,  container);
-            })
-        </script>
-    </div>
+    <script type="module">
+    import { init } from '../init.js';
+    import { repeatInit } from '../repeatInit.js';
+    import {repeatUpdate} from '../repeatUpdate.js';
+    import {update} from '../update.js';
+    const options = {matchNext: true};
+    const itemTransform = {
+        li: ({ idx }) => 'Hello ' + idx,
+    };
+    const ctx = init(list, {
+        Transform: {
+            ul: ({ target, ctx }) =>  repeatInit(ctx, 10, itemTemplate, target, itemTransform)
+        }
+    }, target, options);
+    addItems.addEventListener('click', e => {
+        repeatUpdate(ctx, 15, itemTemplate, container, itemTransform);
+    });
+    removeItems.addEventListener('click', e =>{
+        repeatUpdate(ctx, 5, null,  container);
+    })
+    </script>
+</div>
 ```
 
 ## Ramblings From the Department of Faulty Analogies
@@ -699,7 +694,7 @@ Which all *sounded* like a good faith argument.  But why, at least one heretic t
 * u_0_18 
 * u_0_19
 
-Mind you, I do think this is a concern to consider. I would applaud any official advice on what naming conventions for properties attached to other elements can be used to avoid conflicts, similar to what was done with data-*.  In the mean time, Uncle Ben's advice is quite apt -- if you are attaching a property to a DOM (or custom) element that has a snowball chance in hell of 1)  Ever being added natively to that DOM (or custom) element and 2)  If whatever you're doing has any chance of becoming widespread, come up with a different name.  I cannot seem to locate a listing of all native DOM properties, but I suspect if you begin your property name with an underscore(_) you will be safe.  The intention here is **not** to provide a formal extension mechanism, as the built-in custom element "is" extension proposal provides (and which Apple tirelessly objects to), but rather a one-time duct tape type solution.  Whether adding a property to a native element, or to an existing custom element,  to err on the side of caution, the code balks at adding a property, if the property already exists, and in fact throws an error in this circumstance.
+Mind you, I do think this is a concern to consider. I would applaud any official advice on what naming conventions for properties attached to other elements can be used to avoid conflicts, [similar](https://api.jquery.com/data/) to what was done with data-*.  In the mean time, Uncle Ben's advice is quite apt -- if you are attaching a property to a DOM (or custom) element that has a snowball chance in hell of 1)  Ever being added natively to that DOM (or custom) element and 2)  If whatever you're doing has any chance of becoming widespread, come up with a different name.  I cannot seem to locate a listing of all native DOM properties, but I suspect if you begin your property name with an underscore(_) you will be safe.  The intention here is **not** to provide a formal extension mechanism, as the built-in custom element "is" extension proposal provides (and which Apple tirelessly objects to), but rather a one-time duct tape type solution.  Whether adding a property to a native element, or to an existing custom element,  to err on the side of caution, the code balks at adding a property, if the property already exists, and in fact throws an error in this circumstance.
 
 As far as methods, I think usually "onPropsChange" is sufficient for most purposes.  There is a check to see if that method already exists, and if so it gets renamed.  onPropsChange is called automatically any time a property is changed, so usually you won't need to know what the actual name is.
 
