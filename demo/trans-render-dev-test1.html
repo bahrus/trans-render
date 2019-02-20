@@ -11,7 +11,7 @@
         <template id="itemTemplate">
             <li></li>
         </template>
-        <trans-render><script nomodule>
+        <trans-render view-model='["winter", "spring", "summer", "fall"]'><script nomodule>
             ({
                 ul: ({ctx, target}) => ctx.repeatInit(itemTemplate, ctx, ctx.viewModel.length, target, {
                     li: ({ctx, idx}) => ctx.viewModel[idx]
@@ -19,9 +19,6 @@
             })
         </script></trans-render>
         <ul></ul>
-        <script>
-             document.querySelector('trans-render').viewModel = ['winter', 'spring', 'summer', 'fall'];
-        </script>
         <script type="module" src="../trans-render.js"></script>
     </div>
 </body>

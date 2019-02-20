@@ -699,7 +699,7 @@ Which all *sounded* like a good faith argument.  But why, at least one heretic t
 
 And why does the kingdom not want to empower its subjects to choose for themselves if this is a valid concern?
 
-Now I **do** think this is a concern to consider.   The intention here is **not** to provide a formal extension mechanism, as the built-in custom element "is" extension proposal provides (and which Apple tirelessly objects to), but rather a one-time duct tape type solution.  Whether adding a property to a native element, or to an existing custom element,  to err on the side of caution, the code balks at adding a property, if the property already exists, and in fact throws an error in this circumstance.  The only way to set such an extension property, thden, is via the api, and the api doesn't pass the property on to the element it is decorating, so I think that would avoid any surprises should a new native property be introduced.
+Now I **do** think this is a concern to consider.   The intention here is **not** to provide a formal extension mechanism, as the built-in custom element "is" extension proposal provides (and which Apple tirelessly objects to), but rather a one-time duct tape type solution.  Whether adding a property to a native element, or to an existing custom element,  to err on the side of caution, the code balks at adding a property, if the property already exists, and in fact throws an error in this circumstance.  The only way to set such an extension property, then, is via the api, and the api doesn't pass the property on to the element it is decorating, so I think that would avoid any surprises should a new native property be introduced.
 
 As far as methods, I think usually "onPropsChange" is sufficient for most purposes.  There is a check to see if that method already exists, and if so it gets renamed.  onPropsChange is called automatically any time a property is changed, so usually you won't need to know what the actual name is.
 
@@ -717,18 +717,15 @@ A web component wrapper around the functions described here is available.
         <template id="itemTemplate">
             <li></li>
         </template>
-        <trans-render><script nomodule>
+        <trans-render view-model='["winter", "spring", "summer", "fall"]'><script nomodule>
             ({
                 ul: ({ctx, target}) => ctx.repeatInit(itemTemplate, ctx, ctx.viewModel.length, target, {
-                    li: ({ctx, idx}) => ctx.viewModel[idx].text
+                    li: ({ctx, idx}) => ctx.viewModel[idx]
                 })
             })
         </script></trans-render>
         <ul></ul>
-        <script>
-                document.querySelector('trans-render').viewModel = [{text:'winter'}, {text: 'spring'}, {text: 'summer'}, {text: 'fall'}];
-        </script>
-        <script type="module" src="https://unpkg.com/trans-render@0.0.71/trans-render.js?module"></script>
+        <script type="module" src="https://unpkg.com/trans-render@0.0.72/trans-render.js?module"></script>
     </div>
 </template>
 </custom-element-demo>

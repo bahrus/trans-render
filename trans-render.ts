@@ -10,10 +10,21 @@ import { update } from './update.js';
 //import {decorate} from 'trans-render/decorate.js';
 
 //const spKey = '__xtal_deco_onPropsChange'; //special key
-
+const view_model = 'view-model';
 export class TransRender extends XtallatX(HTMLElement) {
 
     static get is() { return 'trans-render'; }
+    static get observedAttributes(){
+        return super.observedAttributes.concat(view_model);
+    }
+    attributeChangedCallback(n: string, ov: string, nv: string){
+        switch(n){
+            case view_model:
+                this.viewModel = JSON.parse(nv);
+                break;
+        }
+        super.attributeChangedCallback(n, ov, nv);
+    }
     connectedCallback() {
         this.style.display = 'none';
         this._upgradeProperties(['viewModel']);

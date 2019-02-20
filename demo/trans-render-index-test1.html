@@ -8,21 +8,18 @@
 </head>
 <body>
     <div>
-    <template id="itemTemplate">
+        <template id="itemTemplate">
             <li></li>
         </template>
-        <trans-render><script nomodule>
+        <trans-render view-model='["winter", "spring", "summer", "fall"]'><script nomodule>
             ({
                 ul: ({ctx, target}) => ctx.repeatInit(itemTemplate, ctx, ctx.viewModel.length, target, {
-                    li: ({ctx, idx}) => ctx.viewModel[idx].text
+                    li: ({ctx, idx}) => ctx.viewModel[idx]
                 })
             })
         </script></trans-render>
         <ul></ul>
-        <script>
-                document.querySelector('trans-render').viewModel = [{text:'winter'}, {text: 'spring'}, {text: 'summer'}, {text: 'fall'}];
-        </script>
-        <script type="module" src="https://unpkg.com/trans-render@0.0.71/trans-render.js?module"></script>
+        <script type="module" src="https://unpkg.com/trans-render@0.0.72/trans-render.js?module"></script>
     </div>
 </body>
 </html>
