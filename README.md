@@ -698,6 +698,36 @@ Mind you, I do think this is a concern to consider. I would applaud any official
 
 As far as methods, I think usually "onPropsChange" is sufficient for most purposes.  There is a check to see if that method already exists, and if so it gets renamed.  onPropsChange is called automatically any time a property is changed, so usually you won't need to know what the actual name is.
 
+## trans-render the web component
 
+A web component wrapper around the functions described here is available.
+
+### Example syntax:
+
+<!--
+```
+<custom-element-demo>
+<template>
+    <div>
+        <template id="itemTemplate">
+            <li></li>
+        </template>
+        <trans-render><script nomodule>
+            ({
+                ul: ({ctx, target}) => ctx.refs.repeatInit(itemTemplate, ctx, ctx.refs.input.length, target, {
+                    li: ({ctx, idx}) => ctx.refs.input[idx].text
+                })
+            })
+        </script></trans-render>
+        <ul></ul>
+        <script type="module" src="https://unpkg.com/trans-render@0.0.70/trans-render.js?module"></script>
+        <script>
+            document.querySelector('trans-render').input = [{text:'winter'}, {text: 'spring'}, {text: 'summer'}, {text: 'fall'}];
+        </script>
+    </div>
+</template>
+</custom-element-demo>
+```
+-->
 
 

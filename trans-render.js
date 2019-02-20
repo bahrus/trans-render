@@ -35,9 +35,13 @@ export class TransRender extends XtallatX(HTMLElement) {
             return;
         const ctx = {
             init: init,
-            repeatInit: repeatInit,
-            Transform: this._evalObj
+            Transform: this._evalObj,
+            refs: {
+                repeatInit: repeatInit,
+                input: this._input,
+            }
         };
+        init(this._nextSibling, ctx, this._nextSibling);
     }
     get input() {
         return this._input;

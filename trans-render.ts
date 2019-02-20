@@ -43,9 +43,13 @@ export class TransRender extends XtallatX(HTMLElement) {
         if(this._input === undefined) return;
         const ctx = {
             init: init,
-            repeatInit: repeatInit,
-            Transform: this._evalObj
+            Transform: this._evalObj,
+            refs:{
+                repeatInit: repeatInit,
+                input: this._input,
+            }
         } as RenderContext;
+        init(this._nextSibling, ctx, this._nextSibling);
     }
 
     _input: any;

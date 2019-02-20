@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <template id="itemTemplate">
+            <li></li>
+        </template>
+        <trans-render><script nomodule>
+            ({
+                ul: ({ctx, target}) => ctx.refs.repeatInit(itemTemplate, ctx, ctx.refs.input.length, target, {
+                    li: ({ctx, idx}) => ctx.refs.input[idx].text
+                })
+            })
+        </script></trans-render>
+        <ul></ul>
+        <script type="module" src="../trans-render.js"></script>
+        <script>
+             document.querySelector('trans-render').input = [{text:'winter'}, {text: 'spring'}, {text: 'summer'}, {text: 'fall'}];
+        </script>
+    </div>
+</body>
+</html>
