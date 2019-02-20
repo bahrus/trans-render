@@ -7,6 +7,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "dependencies": {
+    "xtal-latx": "0.0.88"
+  },
   "devDependencies": {
     "jiife": "0.0.11"
   },
