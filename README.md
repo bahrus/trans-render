@@ -589,10 +589,12 @@ The heretics called these conservatives unflattering words like "reactionaries."
 
 "Why can't we speak directly to your subjects?  What are you afraid of?" the counter-cultural heretics would plead.
 
-The ruling elites countered with fancy words like "heuristics" and "smoosh."  "We've put our greatest minds to the problem, and, quite frankly, they're stumped.  We don't see how we can let you speak freely without corrupting the language of the web.  The web rules over all of us, and what if the web wants to introduce an attribute or property that is already in heavy use?  What are we to do then?  Don't you see?  We are the true lovers of the web.  We are protecting the web, so it can continue to evolve and flourish."
+The ruling elites countered with fancy words like "heuristics" and "smoosh."  "We've put our greatest minds to the problem, and, quite frankly, they're stumped.  We don't see how we can let you speak freely without corrupting the language of the web.  The web rules over all of us, and what if the web wants to introduce an attribute that is already in heavy use?  What are we to do then?  Don't you see?  We are the true lovers of the web.  We are protecting the web, so it can continue to evolve and flourish."
 
 Which all *sounded* like a good faith argument.  But why, at least one heretic thought, has the main web site used to bind family and friends together introduced the following global constants, which surely could cause problems if the web wanted to evolve:
 
+<details>
+    <summary>A subset of global constants.</summary> 
 * facebook 
 * meta_referrer 
 * pageTitle 
@@ -693,8 +695,11 @@ Which all *sounded* like a good faith argument.  But why, at least one heretic t
 * js_0 
 * u_0_18 
 * u_0_19
+</details>
 
-Mind you, I do think this is a concern to consider. I would applaud any official advice on what naming conventions for properties attached to other elements can be used to avoid conflicts, [similar](https://api.jquery.com/data/) to what was done with data-*.  In the mean time, Uncle Ben's advice is quite apt -- if you are attaching a property to a DOM (or custom) element that has a snowball chance in hell of 1)  Ever being added natively to that DOM (or custom) element and 2)  If whatever you're doing has any chance of becoming widespread, come up with a different name.  I cannot seem to locate a listing of all native DOM properties, but I suspect if you begin your property name with an underscore(_) you will be safe.  The intention here is **not** to provide a formal extension mechanism, as the built-in custom element "is" extension proposal provides (and which Apple tirelessly objects to), but rather a one-time duct tape type solution.  Whether adding a property to a native element, or to an existing custom element,  to err on the side of caution, the code balks at adding a property, if the property already exists, and in fact throws an error in this circumstance.
+And why does the kingdom not want to empower its subjects to choose for themselves if this is a valid concern?
+
+Now I **do** think this is a concern to consider.   The intention here is **not** to provide a formal extension mechanism, as the built-in custom element "is" extension proposal provides (and which Apple tirelessly objects to), but rather a one-time duct tape type solution.  Whether adding a property to a native element, or to an existing custom element,  to err on the side of caution, the code balks at adding a property, if the property already exists, and in fact throws an error in this circumstance.  The only way to set such an extension property, thden, is via the api, and the api doesn't pass the property on to the element it is decorating, so I think that would avoid any surprises should a new native property be introduced.
 
 As far as methods, I think usually "onPropsChange" is sufficient for most purposes.  There is a check to see if that method already exists, and if so it gets renamed.  onPropsChange is called automatically any time a property is changed, so usually you won't need to know what the actual name is.
 
