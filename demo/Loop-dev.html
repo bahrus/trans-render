@@ -25,19 +25,20 @@
         import {repeatUpdate} from '../repeatUpdate.js';
         import {update} from '../update.js';
         const options = {matchNext: true};
+        const itemTransform = {
+            li: ({ idx }) => 'Hello ' + idx,
+        };
         const ctx = init(list, {
             Transform: {
-                ul: ({ target, ctx }) =>  repeatInit(ctx.update ? 0 : 10, itemTemplate, target, {
-                    li: ({ idx }) => 'Hello ' + idx,
-                })
+                ul: ({ target, ctx }) =>  repeatInit(ctx, 10, itemTemplate, target, itemTransform)
             }
         }, target, options);
         addItems.addEventListener('click', e => {
-            repeatUpdate(15, itemTemplate, container);
-            update(ctx, target, options);
+            repeatUpdate(ctx, 15, itemTemplate, container, itemTransform);
+            //update(ctx, target, options);
         });
         removeItems.addEventListener('click', e =>{
-            repeatUpdate(5, null,  container);
+            repeatUpdate(ctx, 5, null,  container);
         })
       </script>
     </div>
