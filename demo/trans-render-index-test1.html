@@ -8,21 +8,21 @@
 </head>
 <body>
     <div>
-        <template id="itemTemplate">
+    <template id="itemTemplate">
             <li></li>
         </template>
         <trans-render><script nomodule>
             ({
-                ul: ({ctx, target}) => ctx.refs.repeatInit(itemTemplate, ctx, ctx.refs.input.length, target, {
-                    li: ({ctx, idx}) => ctx.refs.input[idx].text
+                ul: ({ctx, target}) => ctx.repeatInit(itemTemplate, ctx, ctx.viewModel.length, target, {
+                    li: ({ctx, idx}) => ctx.viewModel[idx].text
                 })
             })
         </script></trans-render>
         <ul></ul>
-        <script type="module" src="https://unpkg.com/trans-render@0.0.70/trans-render.js?module"></script>
         <script>
-            document.querySelector('trans-render').input = [{text:'winter'}, {text: 'spring'}, {text: 'summer'}, {text: 'fall'}];
+                document.querySelector('trans-render').viewModel = [{text:'winter'}, {text: 'spring'}, {text: 'summer'}, {text: 'fall'}];
         </script>
+        <script type="module" src="https://unpkg.com/trans-render@0.0.70/trans-render.js?module"></script>
     </div>
 </body>
 </html>
