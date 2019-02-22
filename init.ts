@@ -21,12 +21,13 @@ export function init(
       : template;
   //ctx.template = clonedTemplate;
   if (ctx.Transform) {
-    const firstChild = isTemplate ? clonedTemplate.firstElementChild : clonedTemplate;
+    const firstChild = clonedTemplate.firstElementChild;
     if (firstChild !== null) {
       ctx.leaf = firstChild;
       process(ctx, 0, 0, options);
     }
   }
+  
   if(isTemplate){
     let verb = "appendChild";
     if (options) {

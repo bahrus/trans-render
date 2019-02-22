@@ -724,8 +724,10 @@ A web component wrapper around the functions described here is available.
                 })
             })
         </script></trans-render>
-        <ul></ul>
-        <script type="module" src="https://unpkg.com/trans-render@0.0.72/trans-render.js?module"></script>
+        <div>
+            <ul></ul>
+        </div>
+        <script type="module" src="https://unpkg.com/trans-render@0.0.73/trans-render.js?module"></script>
     </div>
 </template>
 </custom-element-demo>
