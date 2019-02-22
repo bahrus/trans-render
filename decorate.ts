@@ -21,7 +21,7 @@ export function decorate<T extends HTMLElement>(target: T, vals: T | null, decor
     const props = decor.props;
     if(props !== undefined){
         for (const key in props) {
-            if(key in target === true) throw 'Property ' + key + ' already exists.';
+            if(props[key]) throw 'Property ' + key + ' already exists.'; //only throw error if non truthy value set.
             const propVal = props[key];
             
             Object.defineProperty(target, key, {
