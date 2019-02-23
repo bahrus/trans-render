@@ -22,6 +22,12 @@ class Actions {
         this.el[v + "Attribute"](name, trueVal || val);
         return this;
     }
+    transform(transform) {
+        return transform;
+    }
+    get void() {
+        return undefined;
+    }
 }
 export function decorate(target, vals, decor) {
     if (vals !== null) {
@@ -88,5 +94,4 @@ export function decorate(target, vals, decor) {
             target.addEventListener(key, target[handlerKey]);
         }
     }
-    return new Actions(target);
 }

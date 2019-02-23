@@ -1,4 +1,4 @@
-import { RenderContext, DecorateArgs } from "./init.d.js";
+import { RenderContext, DecorateArgs, TransformValueOptions } from "./init.d.js";
 
 const spKey = "__transrender_deco_onPropsChange";
 
@@ -26,6 +26,13 @@ class Actions {
     const v = val ? "set" : "remove"; //verb
     (<any>this.el)[v + "Attribute"](name, trueVal || val);
     return this;
+  }
+
+  transform(transform: TransformValueOptions) : TransformValueOptions{
+      return transform;
+  }
+  get void(){
+      return undefined;
   }
 }
 export function decorate<T extends HTMLElement>(
@@ -95,5 +102,4 @@ export function decorate<T extends HTMLElement>(
       target.addEventListener(key, (<any>target)[handlerKey]);
     }
   }
-  return new Actions(target);
 }
