@@ -37,7 +37,6 @@ export function decorate(target, vals, decor) {
         assignSpecial(target, valCopy, ["dataset", "style"]);
         setAttribs(target, valCopy);
         Object.assign(target, valCopy);
-        //classes?
     }
     if (decor === undefined)
         return;

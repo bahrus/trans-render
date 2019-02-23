@@ -6,7 +6,9 @@
 
 <img src="https://badgen.net/bundlephobia/minzip/trans-render">
 
-trans-render provides an alternative way of instantiating a template.  It draws inspiration from the (least) popular features of xslt.  Like xslt, trans-render performs transforms on elements by matching tests on elements.  Whereas xslt uses xpath for its tests, trans-render uses css path tests via the element.matches() and element.querySelector() methods.
+Yes, there is an actual [web component](https://github.com/bahrus/trans-render#trans-render-the-web-component) in this package.  However, it won't make sense unless the core functions described first are (at least partly) understood.
+
+trans-render provides an alternative way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, trans-render performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, trans-render uses css path tests via the element.matches() and element.querySelector() methods.
 
 XSLT can take pure XML with no formatting instructions as its input.  Generally speaking, the XML that XSLT acts on isn't a bunch of semantically  meaningless div tags, but rather a nice semantic document, whose intrinsic structure is enough to go on, in order to formulate a "transform" that doesn't feel like a hack.  
 
@@ -151,6 +153,17 @@ produces:
 
 Note the unusual property name casing, in the JavaScript arena for the NextStep object:  Transform, Select, SkipSibs, etc.  As we will see, this pattern is to allow the interpreter to distinguish between css matches for a nested Transform, vs a "NextStep" JS object.
 
+## What does wdwsf stand for?
+
+As you may have noticed, some abbreviations are used by this library:
+
+init = initialize
+ctx = (rendering) context
+idx = (numeric) index of array
+SkipSibs = Skip Siblings
+attribs = attributes
+props = properties
+refs = references
 
 # Use Case 1:  Applying the DRY principle to (post) punk rock lyrics
 
@@ -384,7 +397,6 @@ Demonstrates use of update, rudimentary interpolation, recursive select.
 </custom-element-demo>
 ```
 -->
-
 
 
 ## Reapplying (some) of the transform

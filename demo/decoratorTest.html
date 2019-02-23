@@ -15,25 +15,26 @@
         import {init} from '../init.js';
         init(decorateTest, {
             Transform: {
-                div: {
-                    button: ({target}) => decorate(target, {
-                            textContent: 'Hello'
-                        }, {
-                        props:{
-                            count: 0
-                        },
-                        on:{
-                            click: function(e){
-                                this.count++;
-                            }
-                        },
-                        methods:{
-                            onPropsChange(){
-                                alert(this.count)
-                            }
+                button: ({target}) => decorate(target, {
+                        textContent: 'Hello',
+                        attribs:{
+                            title: "Hello, world"
                         }
-                    })
-                }
+                    }, {
+                    props:{
+                        count: 0
+                    },
+                    on:{
+                        click: function(e){
+                            this.count++;
+                        }
+                    },
+                    methods:{
+                        onPropsChange(){
+                            alert(this.count)
+                        }
+                    }
+                })
             }
             
             

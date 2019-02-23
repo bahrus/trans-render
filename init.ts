@@ -27,7 +27,6 @@ export function init(
       process(ctx, 0, 0, options);
     }
   }
-  
   if(isTemplate){
     let verb = "appendChild";
     if (options) {
