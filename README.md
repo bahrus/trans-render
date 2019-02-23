@@ -553,9 +553,14 @@ Example syntax:
         init(decorateTest, {
             Transform: {
                 div: {
-                    button: ({target}) => decorate(target, {
-                            textContent: 'Hello'
-                        }, {
+                    button: ({target}) => decorate(target, 
+                    {
+                        textContent: 'Hello',
+                        attribs: {
+                            title: 'Hello, world'
+                        }
+                    }, 
+                    {
                         props:{
                             count: 0
                         },
@@ -571,9 +576,7 @@ Example syntax:
                         }
                     })
                 }
-            }
-            
-            
+            }            
         })
     </script>
 

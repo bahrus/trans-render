@@ -14,26 +14,28 @@ function assignSpecial<T extends HTMLElement>(
     delete (<any>vals)[propName];
   });
 }
-class Actions {
-   constructor(public el: HTMLElement){}
-  /**
-   * Set attribute value.
-   * @param name
-   * @param val
-   * @param trueVal String to set attribute if true.
-   */
-  attr(name: string, val: string | boolean | null, trueVal?: string) : Actions {
-    const v = val ? "set" : "remove"; //verb
-    (<any>this.el)[v + "Attribute"](name, trueVal || val);
-    return this;
-  }
-
-  transform(transform: TransformValueOptions) : TransformValueOptions{
-      return transform;
-  }
-  get void(){
-      return undefined;
-  }
+function setAttribs(target: HTMLElement, valCopy: any){
+    const attribs = valCopy.attribs;
+    if(attribs !== undefined){
+        for(const key in attribs){
+            const attrib = attribs[key];
+            switch(typeof attrib){
+                case 'string':
+                  target.setAttribute(key, attrib);
+                  break;
+                case 'boolean':
+                  if(attrib === true){
+                      target.setAttribute(key, '');
+                  }else{
+                      target.removeAttribute(key);
+                  }
+            }
+            if(attrib === true){
+                target.setAttribute(key, '');
+            }
+        }
+        delete valCopy.attribs;
+    }
 }
 export function decorate<T extends HTMLElement>(
   target: T,
@@ -43,10 +45,12 @@ export function decorate<T extends HTMLElement>(
   if (vals !== null) {
     const valCopy = { ...vals };
     assignSpecial(target, valCopy, ["dataset", "style"]);
+    setAttribs(target, valCopy);
     Object.assign(target, valCopy);
     //classes?
   }
   if (decor === undefined) return;
+
   const props = decor.props;
   if (props !== undefined) {
     for (const key in props) {

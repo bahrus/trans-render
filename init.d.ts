@@ -16,12 +16,13 @@ export interface NextStep {
     SkipSibs?: boolean,
 }
 
+
 export interface DecorateArgs{
-    //attribs:{[key: string]: string} | undefined;
-    props: {[key: string]: any} | undefined;
-    methods: {[key: string] : Function} | undefined;
-    on: {[key: string] : (e: Event) => void} | undefined;
-    class: string | string[] | undefined;
+    props: {[key: string]: any} | undefined,
+    methods: {[key: string] : Function} | undefined,
+    on: {[key: string] : (e: Event) => void} | undefined,
+    class: string | string[] | undefined,
+    attribs: {[key: string] : string | boolean}
 }
 
 export interface RenderContext {

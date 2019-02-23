@@ -7,32 +7,35 @@ function assignSpecial(target, vals, propNames) {
         delete vals[propName];
     });
 }
-class Actions {
-    constructor(el) {
-        this.el = el;
-    }
-    /**
-     * Set attribute value.
-     * @param name
-     * @param val
-     * @param trueVal String to set attribute if true.
-     */
-    attr(name, val, trueVal) {
-        const v = val ? "set" : "remove"; //verb
-        this.el[v + "Attribute"](name, trueVal || val);
-        return this;
-    }
-    transform(transform) {
-        return transform;
-    }
-    get void() {
-        return undefined;
+function setAttribs(target, valCopy) {
+    const attribs = valCopy.attribs;
+    if (attribs !== undefined) {
+        for (const key in attribs) {
+            const attrib = attribs[key];
+            switch (typeof attrib) {
+                case 'string':
+                    target.setAttribute(key, attrib);
+                    break;
+                case 'boolean':
+                    if (attrib === true) {
+                        target.setAttribute(key, '');
+                    }
+                    else {
+                        target.removeAttribute(key);
+                    }
+            }
+            if (attrib === true) {
+                target.setAttribute(key, '');
+            }
+        }
+        delete valCopy.attribs;
     }
 }
 export function decorate(target, vals, decor) {
     if (vals !== null) {
         const valCopy = { ...vals };
         assignSpecial(target, valCopy, ["dataset", "style"]);
+        setAttribs(target, valCopy);
         Object.assign(target, valCopy);
         //classes?
     }

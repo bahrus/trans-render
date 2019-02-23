@@ -5,9 +5,6 @@ const testArr = ['a', 'b', 'c'];
 function test(h: HTMLElement){
     decorate<HTMLAnchorElement>(h as HTMLAnchorElement, {
         href: 'hello',
-        
-        style: {
-
-        },
+        style: {},
     } as HTMLAnchorElement)
 }
