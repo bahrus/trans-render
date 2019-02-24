@@ -1,10 +1,4 @@
-import {
-  NextStep,
-  TransformRules,
-  RenderContext,
-  RenderOptions,
-  TransformFn
-} from "./init.d.js";
+import { NextStep, TransformRules, RenderContext, RenderOptions, TransformFn} from "./init.d.js";
 
 export function init(
   template: HTMLElement,
