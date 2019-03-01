@@ -31,6 +31,33 @@ function setAttribs(target, valCopy) {
         delete valCopy.attribs;
     }
 }
+function defProp(key, props, target) {
+    const propVal = props[key];
+    const keyS = key.toString();
+    const localSym = Symbol(key.toString());
+    Object.defineProperty(target, key, {
+        get: function () {
+            return this[localSym];
+        },
+        set: function (val) {
+            this[localSym] = val;
+            const eventName = keyS + "-changed";
+            const newEvent = new CustomEvent(eventName, {
+                detail: {
+                    value: val
+                },
+                bubbles: true,
+                composed: false
+            });
+            this.dispatchEvent(newEvent);
+            if (this[spKey])
+                this[spKey](key, val);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    target[key] = propVal;
+}
 export function decorate(target, vals, decor) {
     if (vals !== null) {
         const valCopy = { ...vals };
@@ -43,32 +70,11 @@ export function decorate(target, vals, decor) {
     const props = decor.props;
     if (props !== undefined) {
         for (const key in props) {
-            if (props[key])
-                throw "Property " + key + " already exists."; //only throw error if non truthy value set.
-            const propVal = props[key];
-            const localSym = Symbol(key);
-            Object.defineProperty(target, key, {
-                get: function () {
-                    return this[localSym];
-                },
-                set: function (val) {
-                    this[localSym] = val;
-                    const eventName = key + "-changed";
-                    const newEvent = new CustomEvent(eventName, {
-                        detail: {
-                            value: val
-                        },
-                        bubbles: true,
-                        composed: false
-                    });
-                    this.dispatchEvent(newEvent);
-                    if (this[spKey])
-                        this[spKey](key, val);
-                },
-                enumerable: true,
-                configurable: true
-            });
-            target[key] = propVal;
+            //if (props[key]) throw "Property " + key + " already exists."; //only throw error if non truthy value set.
+            defProp(key, props, target);
+        }
+        for (const key of Object.getOwnPropertySymbols(props)) {
+            defProp(key, props, target);
         }
     }
     const methods = decor.methods;

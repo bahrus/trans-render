@@ -37,6 +37,32 @@ function setAttribs(target: HTMLElement, valCopy: any){
         delete valCopy.attribs;
     }
 }
+function defProp(key: string | symbol, props: any, target: any){
+  const propVal = props[key];
+  const keyS = key.toString();
+  const localSym = Symbol(key.toString());
+  Object.defineProperty(target, key, {
+    get: function() {
+      return this[localSym];
+    },
+    set: function(val) {
+      this[localSym] = val;
+      const eventName = keyS + "-changed";
+      const newEvent = new CustomEvent(eventName, {
+        detail: {
+          value: val
+        },
+        bubbles: true,
+        composed: false
+      } as CustomEventInit);
+      this.dispatchEvent(newEvent);
+      if (this[spKey]) this[spKey](key, val);
+    },
+    enumerable: true,
+    configurable: true
+  });
+  (<any>target)[key] = propVal;
+}
 export function decorate<T extends HTMLElement>(
   target: T,
   vals: T | null,
@@ -53,30 +79,11 @@ export function decorate<T extends HTMLElement>(
   const props = decor.props;
   if (props !== undefined) {
     for (const key in props) {
-      if (props[key]) throw "Property " + key + " already exists."; //only throw error if non truthy value set.
-      const propVal = props[key];
-      const localSym = Symbol(key);
-      Object.defineProperty(target, key, {
-        get: function() {
-          return this[localSym];
-        },
-        set: function(val) {
-          this[localSym] = val;
-          const eventName = key + "-changed";
-          const newEvent = new CustomEvent(eventName, {
-            detail: {
-              value: val
-            },
-            bubbles: true,
-            composed: false
-          } as CustomEventInit);
-          this.dispatchEvent(newEvent);
-          if (this[spKey]) this[spKey](key, val);
-        },
-        enumerable: true,
-        configurable: true
-      });
-      (<any>target)[key] = propVal;
+      //if (props[key]) throw "Property " + key + " already exists."; //only throw error if non truthy value set.
+      defProp(key, props, target);
+    }
+    for(const key of Object.getOwnPropertySymbols(props)){
+      defProp(key, props, target);
     }
   }
   const methods = decor.methods;

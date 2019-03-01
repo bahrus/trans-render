@@ -13,6 +13,7 @@
     <script type="module">
         import {decorate} from '../decorate.js';
         import {init} from '../init.js';
+        const count = Symbol.for('count');
         init(decorateTest, {
             Transform: {
                 button: ({target}) => decorate(target, {
@@ -22,16 +23,16 @@
                         }
                     }, {
                     props:{
-                        count: 0
+                        [count]: 0
                     },
                     on:{
                         click: function(e){
-                            this.count++;
+                            this[count]++;
                         }
                     },
                     methods:{
                         onPropsChange(){
-                            alert(this.count)
+                            alert(this[count])
                         }
                     }
                 })
