@@ -719,7 +719,7 @@ Example syntax:
 
 </blockquote>
 
-Now I **do** think this is a concern to consider.   Focusing on the decorate functionality described above, the intention here is **not** to provide a formal extension mechanism, as the built-in custom element "is" extension proposal provides (and which Apple tirelessly objects to), but rather a one-time duct tape type solution.  Whether adding a property to a native element, or to an existing custom element,  to err on the side of caution, the  doesn't pass the property on to the element it is decorating.
+Now I **do** think this is a concern to consider.   Focusing on the decorate functionality described above, the intention here is **not** to provide a formal extension mechanism, as the built-in custom element "is" extension proposal provides (and which Apple tirelessly objects to), but rather a one-time duct tape type solution.  Whether adding a property to a native element, or to an existing custom element,  to err on the side of caution, the code doesn't pass the property or method call on to the element it is decorating.
 
 </details>
 
