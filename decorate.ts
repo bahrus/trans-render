@@ -63,6 +63,16 @@ function defProp(key: string | symbol, props: any, target: any){
   });
   (<any>target)[key] = propVal;
 }
+function defMethod(key: string | symbol, methods: any, target: any){
+  const method = methods[key];
+  const fnKey = key === "onPropsChange" ? spKey : key;
+  Object.defineProperty(target, fnKey, {
+    enumerable: false,
+    configurable: true,
+    writable: true,
+    value: method
+  });
+}
 export function decorate<T extends HTMLElement>(
   target: T,
   vals: T | null,
@@ -89,14 +99,10 @@ export function decorate<T extends HTMLElement>(
   const methods = decor.methods;
   if (methods !== undefined) {
     for (const key in methods) {
-      const method = methods[key];
-      const fnKey = key === "onPropsChange" ? spKey : key;
-      Object.defineProperty(target, fnKey, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: method
-      });
+      defMethod(key, methods, target);
+    }
+    for(const key of Object.getOwnPropertySymbols(methods)){
+      defProp(key, methods, target);
     }
   }
   const events = decor.on;

@@ -503,7 +503,7 @@ I may not yet fully grasp the proposal, but it still does appear to me that the 
 
 This library, on the other hand, considers the entire template document open for amendment.  This may be alarming, if as me, you find yourself comparing this effort to the [::part ::theme initiative](https://meowni.ca/posts/part-theme-explainer/), where authors need to specify which elements can be themed.
 
-However, the use case is quite different.  In the case of stylesheets, we are talking about global theming, affecting large numbers of elements at the same time.  The use case I'm really considering is one web component extending another.  It doesn't seem that unreasonable to provide maximum flexibility in that circumstance.  Yes, I suppose the ability to mark some tags as "undeletable / non negotiable" might be nice, but I see no way to enforce that.
+However, the use case is quite different.  In the case of stylesheets, we are talking about global theming, affecting large numbers of elements at the same time.  The use case I'm really considering is one web component extending another.  I don't just mean direct class inheritance, but compositional extensions as well.  It doesn't seem that unreasonable to provide maximum flexibility in that circumstance.  Yes, I suppose the ability to mark some tags as "undeletable / non negotiable" might be nice, but I see no way to enforce that.
 
 ## Client-side JS faster than SSR?
 
@@ -599,17 +599,17 @@ Example syntax:
 
 <details>
     <summary>Reflections on the Revolutionary Extensible Web Manifesto</summary> 
-**NB:**  All names, characters, and incidents portrayed in the following discussion are fictitious. No identification with actual persons (living or deceased), places, buildings, and products is intended or should be inferred. No person or entity associated with this discussion received payment or anything of value, or entered into any agreement, in connection with the depiction of tobacco products. No animals were harmed in formulating the points discussed below.
+<b>NB:</b>  All names, characters, and incidents portrayed in the following discussion are fictitious. No identification with actual persons (living or deceased), places, buildings, and products is intended or should be inferred. No person or entity associated with this discussion received payment or anything of value, or entered into any agreement, in connection with the depiction of tobacco products. No animals were harmed in formulating the points discussed below.
 
-In a web-loving land, there was a kingdom that held sway over a large portion of the greatest minds, who in turn guided career choices of the common folk.  The kingdom's main income derived from a most admirable goal -- keeping friends and family in touch.  The kingdom was ruled by conservatives.  "Edmund Burke" conservatives, who didn't see the appeal of allowing heretics to join freely in their kingdom.  They were tolerant, mind you.  If you were not a tax-paying subject born to a family of the kingdom, i.e. a heretic, and you wanted to visit their kingdom, you could do so.  You only had to be heavily surrounded by guards, who would translate what you had to say, and vice versa, into Essex, the de-facto language of the web, according to the kingdom's elites.  
+<blockquote><i>In a web-loving land, there was a kingdom that held sway over a large portion of the greatest minds, who in turn guided career choices of the common folk.  The kingdom's main income derived from a most admirable goal -- keeping friends and family in touch.  The kingdom was ruled by conservatives.  "Edmund Burke" conservatives, who didn't see the appeal of allowing heretics to join freely in their kingdom.  They were tolerant, mind you.  If you were not a tax-paying subject born to a family of the kingdom, i.e. a heretic, and you wanted to visit their kingdom, you could do so.  You only had to be heavily surrounded by guards, who would translate what you had to say, and vice versa, into Essex, the de-facto language of the web, according to the kingdom's elites.</i>
 
-The heretics called these conservatives unflattering words like "reactionaries."  
+<i>The heretics called these conservatives unflattering words like "reactionaries." </i> 
 
-"Why can't we speak directly to your subjects?  What are you afraid of?" the counter-cultural heretics would plead.
+<i>"Why can't we speak directly to your subjects?  What are you afraid of?" the counter-cultural heretics would plead.</i>
 
-The ruling elites countered with fancy words like "heuristics" and "smoosh."  "We've put our greatest minds to the problem, and, quite frankly, they're stumped.  We don't see how we can let you speak freely without corrupting the language of the web.  The web rules over all of us, and what if the web wants to introduce an attribute that is already in heavy use?  What are we to do then?  Don't you see?  We are the true lovers of the web.  We are protecting the web, so it can continue to evolve and flourish."
+<i>The ruling elites countered with fancy words like "heuristics" and "smoosh."  "We've put our greatest minds to the problem, and, quite frankly, they're stumped.  We don't see how we can let you speak freely without corrupting the language of the web.  The web rules over all of us, and what if the web wants to introduce an attribute that is already in heavy use?  What are we to do then?  Don't you see?  We are the true lovers of the web.  We are protecting the web, so it can continue to evolve and flourish."</i>
 
-Which all *sounded* like a good faith argument.  But why, at least one heretic thought, has the main web site used to bind family and friends together introduced the following global constants, which surely could cause problems if the web wanted to evolve:
+<i>Which all *sounded* like a good faith argument.  But why, at least one heretic thought, has the main web site used to bind family and friends together introduced the following global constants, which surely could cause problems if the web wanted to evolve:</i>
 
 <details>
     <summary>A subset of global constants.</summary> 
@@ -715,14 +715,15 @@ Which all *sounded* like a good faith argument.  But why, at least one heretic t
 <br>u_0_19
 </details>
 
-And why does the kingdom not want to empower its subjects to choose for themselves if this is a valid concern?
+<i>And why does the kingdom not want to empower its subjects to choose for themselves if this is a valid concern?</i>
 
-Now I **do** think this is a concern to consider.   Focusing on the decorate functionality described above, the intention here is **not** to provide a formal extension mechanism, as the built-in custom element "is" extension proposal provides (and which Apple tirelessly objects to), but rather a one-time duct tape type solution.  Whether adding a property to a native element, or to an existing custom element,  to err on the side of caution, the code balks at adding a property, if the property already exists with a non falsy value, and in fact throws an error in this circumstance.  The only way to set such an extension property, then, is via the api, and the api doesn't pass the property on to the element it is decorating, so I think that would avoid any surprises should a new native property be introduced.
+</blockquote>
 
-As far as methods, I think usually "onPropsChange" is sufficient for most purposes.  There is a check to see if that method already exists, and if so it gets renamed.  onPropsChange is called automatically any time a property is changed, so usually you won't need to know what the actual name is.
+Now I **do** think this is a concern to consider.   Focusing on the decorate functionality described above, the intention here is **not** to provide a formal extension mechanism, as the built-in custom element "is" extension proposal provides (and which Apple tirelessly objects to), but rather a one-time duct tape type solution.  Whether adding a property to a native element, or to an existing custom element,  to err on the side of caution, the  doesn't pass the property on to the element it is decorating.
+
 </details>
 
-If you are deeply concerned about slapping properties onto an existing element, like "button" in the example above, you can make use of Symbols:
+**NB**  It's a good idea to consider, if you are  slapping properties onto an existing element, which might, in the future, adopt properties / methods with the same name, to make use of Symbols:
 
 ```html
 <!DOCTYPE html>
@@ -741,6 +742,7 @@ If you are deeply concerned about slapping properties onto an existing element, 
         import {decorate} from '../decorate.js';
         import {init} from '../init.js';
         const count = Symbol('count');
+        const myMethod = Symbol('myMethod');
         init(decorateTest, {
             Transform: {
                 button: ({target}) => decorate(target, {
@@ -759,7 +761,10 @@ If you are deeply concerned about slapping properties onto an existing element, 
                     },
                     methods:{
                         onPropsChange(){
-                            alert(this[count])
+                            this[myMethod]();
+                        },
+                        [myMethod](){
+                            alert(this[count]);
                         }
                     }
                 })
@@ -771,6 +776,8 @@ If you are deeply concerned about slapping properties onto an existing element, 
 </body>
 </html>
 ```
+
+The syntax isn't that much more complicated, but it is probably harder to troubleshoot if using symbols, so use your best judgment. Perhaps start properties and methods with an underscore if you wish to preserve the easy debugging capabilities.  You can also use Symbol.for('couont'), which kind of meets halfway between the two approaches.
 
 ## trans-render the web component
 

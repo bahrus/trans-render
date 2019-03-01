@@ -58,6 +58,16 @@ function defProp(key, props, target) {
     });
     target[key] = propVal;
 }
+function defMethod(key, methods, target) {
+    const method = methods[key];
+    const fnKey = key === "onPropsChange" ? spKey : key;
+    Object.defineProperty(target, fnKey, {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: method
+    });
+}
 export function decorate(target, vals, decor) {
     if (vals !== null) {
         const valCopy = { ...vals };
@@ -80,14 +90,10 @@ export function decorate(target, vals, decor) {
     const methods = decor.methods;
     if (methods !== undefined) {
         for (const key in methods) {
-            const method = methods[key];
-            const fnKey = key === "onPropsChange" ? spKey : key;
-            Object.defineProperty(target, fnKey, {
-                enumerable: false,
-                configurable: true,
-                writable: true,
-                value: method
-            });
+            defMethod(key, methods, target);
+        }
+        for (const key of Object.getOwnPropertySymbols(methods)) {
+            defProp(key, methods, target);
         }
     }
     const events = decor.on;
