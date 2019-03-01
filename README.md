@@ -157,13 +157,13 @@ Note the unusual property name casing, in the JavaScript arena for the NextStep 
 
 As you may have noticed, some abbreviations are used by this library:
 
-init = initialize
-ctx = (rendering) context
-idx = (numeric) index of array
-SkipSibs = Skip Siblings
-attribs = attributes
-props = properties
-refs = references
+* init = initialize
+* ctx = (rendering) context
+* idx = (numeric) index of array
+* SkipSibs = Skip Siblings
+* attribs = attributes
+* props = properties
+* refs = references
 
 # Use Case 1:  Applying the DRY principle to (post) punk rock lyrics
 
@@ -716,11 +716,61 @@ Which all *sounded* like a good faith argument.  But why, at least one heretic t
 </details>
 
 And why does the kingdom not want to empower its subjects to choose for themselves if this is a valid concern?
-</details>
 
 Now I **do** think this is a concern to consider.   Focusing on the decorate functionality described above, the intention here is **not** to provide a formal extension mechanism, as the built-in custom element "is" extension proposal provides (and which Apple tirelessly objects to), but rather a one-time duct tape type solution.  Whether adding a property to a native element, or to an existing custom element,  to err on the side of caution, the code balks at adding a property, if the property already exists with a non falsy value, and in fact throws an error in this circumstance.  The only way to set such an extension property, then, is via the api, and the api doesn't pass the property on to the element it is decorating, so I think that would avoid any surprises should a new native property be introduced.
 
 As far as methods, I think usually "onPropsChange" is sufficient for most purposes.  There is a check to see if that method already exists, and if so it gets renamed.  onPropsChange is called automatically any time a property is changed, so usually you won't need to know what the actual name is.
+</details>
+
+If you are deeply concerned about slapping properties onto an existing element, like "button" in the example above, you can make use of Symbols:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="decorateTest">
+        <button>Test</button>
+    </div>
+    <script type="module">
+        import {decorate} from '../decorate.js';
+        import {init} from '../init.js';
+        const count = Symbol('count');
+        init(decorateTest, {
+            Transform: {
+                button: ({target}) => decorate(target, {
+                        textContent: 'Hello',
+                        attribs:{
+                            title: "Hello, world"
+                        }
+                    }, {
+                    props:{
+                        [count]: 0
+                    },
+                    on:{
+                        click: function(e){
+                            this[count]++;
+                        }
+                    },
+                    methods:{
+                        onPropsChange(){
+                            alert(this[count])
+                        }
+                    }
+                })
+            }
+            
+            
+        })
+    </script>
+</body>
+</html>
+```
 
 ## trans-render the web component
 
