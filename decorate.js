@@ -1,4 +1,5 @@
-const spKey = "__transrender_deco_onPropsChange";
+//const spKey = "__transrender_deco_onPropsChange";
+const onPropsChange = Symbol('onPropChange');
 function assignSpecial(target, vals, propNames) {
     propNames.forEach(propName => {
         const targetProp = target[propName];
@@ -50,8 +51,9 @@ function defProp(key, props, target) {
                 composed: false
             });
             this.dispatchEvent(newEvent);
-            if (this[spKey])
-                this[spKey](key, val);
+            if (this[onPropsChange])
+                this[onPropsChange](key, val);
+            //if (this[spKey]) this[spKey](key, val);
         },
         enumerable: true,
         configurable: true
@@ -60,7 +62,7 @@ function defProp(key, props, target) {
 }
 function defMethod(key, methods, target) {
     const method = methods[key];
-    const fnKey = key === "onPropsChange" ? spKey : key;
+    const fnKey = key === "onPropsChange" ? onPropsChange : key;
     Object.defineProperty(target, fnKey, {
         enumerable: false,
         configurable: true,

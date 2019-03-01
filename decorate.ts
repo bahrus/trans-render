@@ -1,6 +1,7 @@
 import { RenderContext, DecorateArgs, TransformValueOptions } from "./init.d.js";
 
-const spKey = "__transrender_deco_onPropsChange";
+//const spKey = "__transrender_deco_onPropsChange";
+const onPropsChange = Symbol('onPropChange');
 
 function assignSpecial<T extends HTMLElement>(
   target: T,
@@ -56,7 +57,8 @@ function defProp(key: string | symbol, props: any, target: any){
         composed: false
       } as CustomEventInit);
       this.dispatchEvent(newEvent);
-      if (this[spKey]) this[spKey](key, val);
+      if(this[onPropsChange]) this[onPropsChange](key, val);
+      //if (this[spKey]) this[spKey](key, val);
     },
     enumerable: true,
     configurable: true
@@ -65,7 +67,7 @@ function defProp(key: string | symbol, props: any, target: any){
 }
 function defMethod(key: string | symbol, methods: any, target: any){
   const method = methods[key];
-  const fnKey = key === "onPropsChange" ? spKey : key;
+  const fnKey = key === "onPropsChange" ? onPropsChange : key;
   Object.defineProperty(target, fnKey, {
     enumerable: false,
     configurable: true,
