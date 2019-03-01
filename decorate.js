@@ -1,5 +1,3 @@
-//const spKey = "__transrender_deco_onPropsChange";
-const onPropsChange = Symbol('onPropChange');
 function assignSpecial(target, vals, propNames) {
     propNames.forEach(propName => {
         const targetProp = target[propName];
@@ -32,7 +30,7 @@ function setAttribs(target, valCopy) {
         delete valCopy.attribs;
     }
 }
-function defProp(key, props, target) {
+function defProp(key, props, target, onPropsChange) {
     const propVal = props[key];
     const keyS = key.toString();
     const localSym = Symbol(key.toString());
@@ -60,7 +58,7 @@ function defProp(key, props, target) {
     });
     target[key] = propVal;
 }
-function defMethod(key, methods, target) {
+function defMethod(key, methods, target, onPropsChange) {
     const method = methods[key];
     const fnKey = key === "onPropsChange" ? onPropsChange : key;
     Object.defineProperty(target, fnKey, {
@@ -71,6 +69,7 @@ function defMethod(key, methods, target) {
     });
 }
 export function decorate(target, vals, decor) {
+    const onPropsChange = Symbol('onPropChange');
     if (vals !== null) {
         const valCopy = { ...vals };
         assignSpecial(target, valCopy, ["dataset", "style"]);
@@ -83,19 +82,19 @@ export function decorate(target, vals, decor) {
     if (props !== undefined) {
         for (const key in props) {
             //if (props[key]) throw "Property " + key + " already exists."; //only throw error if non truthy value set.
-            defProp(key, props, target);
+            defProp(key, props, target, onPropsChange);
         }
         for (const key of Object.getOwnPropertySymbols(props)) {
-            defProp(key, props, target);
+            defProp(key, props, target, onPropsChange);
         }
     }
     const methods = decor.methods;
     if (methods !== undefined) {
         for (const key in methods) {
-            defMethod(key, methods, target);
+            defMethod(key, methods, target, onPropsChange);
         }
         for (const key of Object.getOwnPropertySymbols(methods)) {
-            defProp(key, methods, target);
+            defProp(key, methods, target, onPropsChange);
         }
     }
     const events = decor.on;
