@@ -40,7 +40,7 @@ function defProp(key, props, target, onPropsChange) {
         },
         set: function (val) {
             this[localSym] = val;
-            const eventName = keyS + "-changed";
+            const eventName = keyS.replace('(', '-').replace(')', '') + "-changed";
             const newEvent = new CustomEvent(eventName, {
                 detail: {
                     value: val
@@ -49,6 +49,9 @@ function defProp(key, props, target, onPropsChange) {
                 composed: false
             });
             this.dispatchEvent(newEvent);
+            //this.dataset[]
+            if (this.toggleAttribute)
+                this.toggleAttribute('data-' + eventName);
             if (this[onPropsChange])
                 this[onPropsChange](key, val);
             //if (this[spKey]) this[spKey](key, val);
