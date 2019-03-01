@@ -13,7 +13,7 @@
     <script type="module">
         import {decorate} from '../decorate.js';
         import {init} from '../init.js';
-        const count = Symbol.for('count');
+        const count = Symbol('count');
         init(decorateTest, {
             Transform: {
                 button: ({target}) => decorate(target, {
