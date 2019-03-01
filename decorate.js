@@ -46,12 +46,13 @@ export function decorate(target, vals, decor) {
             if (props[key])
                 throw "Property " + key + " already exists."; //only throw error if non truthy value set.
             const propVal = props[key];
+            const localSym = Symbol(key);
             Object.defineProperty(target, key, {
                 get: function () {
-                    return this["_" + key];
+                    return this[localSym];
                 },
                 set: function (val) {
-                    this["_" + key] = val;
+                    this[localSym] = val;
                     const eventName = key + "-changed";
                     const newEvent = new CustomEvent(eventName, {
                         detail: {
