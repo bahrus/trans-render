@@ -777,7 +777,7 @@ Now I **do** think this is a concern to consider.   Focusing on the decorate fun
 </html>
 ```
 
-The syntax isn't that much more complicated, but it is probably harder to troubleshoot if using symbols, so use your best judgment. Perhaps start properties and methods with an underscore if you wish to preserve the easy debugging capabilities.  You can also use Symbol.for('couont'), which kind of meets halfway between the two approaches.
+The syntax isn't that much more complicated, but it is probably harder to troubleshoot if using symbols, so use your best judgment. Perhaps start properties and methods with an underscore if you wish to preserve the easy debugging capabilities.  You can also use Symbol.for('count'), which kind of meets halfway between the two approaches.
 
 ## trans-render the web component
 
