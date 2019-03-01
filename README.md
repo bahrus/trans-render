@@ -783,7 +783,7 @@ The syntax isn't that much more complicated, but it is probably harder to troubl
 
 A web component wrapper around the functions described here is available.
 
-### Example syntax:
+### Example syntax (only viewable at [webcomponents.org](https://www.webcomponents.org/element/trans-render) ):
 
 <!--
 ```
