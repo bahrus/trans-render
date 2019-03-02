@@ -56,16 +56,20 @@ export class TransRender extends XtallatX(HTMLElement) {
         if(!this._nextSibling || !this._script) return;
         this.evaluateCode(this._script, this._nextSibling);
         if(this._viewModel === undefined) return;
+
         const ctx = {
             init: init,
-            //update: update,
             interpolate: interpolate,
             decorate: decorate,
             repeatInit: repeatInit,
-            //repeatUpdate: repeatUpdate,
-            Transform: this._evalObj,
+            //Transform: this._evalObj,
             viewModel: this._viewModel,
         } as RenderContext;
+        if(this._evalObj['Transform']){
+            Object.assign(ctx, this._evalObj);
+        }else{
+            ctx.Transform = this._evalObj;
+        }
         init(this._nextSibling, ctx, this._nextSibling);
     }
 
