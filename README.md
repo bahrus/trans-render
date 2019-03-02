@@ -723,10 +723,10 @@ Now I **do** think this is a concern to consider.   Focusing on the decorate fun
 
 </details>
 <p>
-**NB** If:
+<b>NB</b> If:
 
 1.  You are slapping properties onto an existing native HTML element, and:
-2.  The existing native HTML element wmight, in the future, adopt properties / methods with the same name.
+2.  The existing native HTML element might, in the future, adopt properties / methods with the same name.
 
 Then it's a good idea to consider making use of [Symbols](https://www.keithcirkel.co.uk/metaprogramming-in-es6-symbols/):
 
