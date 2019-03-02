@@ -595,7 +595,7 @@ Example syntax:
 ```
 
 
-## Avoiding name space collisions
+## Avoiding namespace collisions
 
 <details>
     <summary>Reflections on the Revolutionary Extensible Web Manifesto</summary> 
@@ -722,8 +722,13 @@ Example syntax:
 Now I **do** think this is a concern to consider.   Focusing on the decorate functionality described above, the intention here is **not** to provide a formal extension mechanism, as the built-in custom element "is" extension proposal provides (and which Apple tirelessly objects to), but rather a one-time duct tape type solution.  Whether adding a property to a native element, or to an existing custom element,  to err on the side of caution, the code doesn't pass the property or method call on to the element it is decorating.
 
 </details>
+<p>
+**NB** If:
 
-**NB**  It's a good idea to consider, if you are  slapping properties onto an existing element, which might, in the future, adopt properties / methods with the same name, to make use of Symbols:
+1.  You are slapping properties onto an existing native HTML element, and:
+2.  The existing native HTML element wmight, in the future, adopt properties / methods with the same name.
+
+Then it's a good idea to consider making use of [Symbols](https://www.keithcirkel.co.uk/metaprogramming-in-es6-symbols/):
 
 ```html
 <!DOCTYPE html>
@@ -778,6 +783,63 @@ Now I **do** think this is a concern to consider.   Focusing on the decorate fun
 ```
 
 The syntax isn't that much more complicated, but it is probably harder to troubleshoot if using symbols, so use your best judgment. Perhaps start properties and methods with an underscore if you wish to preserve the easy debugging capabilities.  You can also use Symbol.for('count'), which kind of meets halfway between the two approaches.
+
+## Even more indirection
+
+The render context which the init function works with provides a "symbols" property for storing symbols.  The transform does look a little scary at first, but hopefully it's manageable:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="decorateTest">
+        <button>Test</button>
+    </div>
+    <script type="module">
+        import {decorate} from '../decorate.js';
+        import {init} from '../init.js';
+        const count = Symbol('count');
+        init(decorateTest, {
+            symbols: {
+                count: Symbol('count'),
+                myMethod: Symbol('myMethod')
+            },
+            Transform: {
+                button: ({target, ctx}) => decorate(target, {
+                        textContent: 'Hello',
+                        attribs:{
+                            title: "Hello, world"
+                        }
+                    }, {
+                    props:{
+                        [ctx.symbols['count']]: 0
+                    },
+                    on:{
+                        click: function(e){
+                            this[ctx.symbols['count']]++;
+                        }
+                    },
+                    methods:{
+                        onPropsChange(){
+                            this[ctx.symbols['myMethod']]();
+                        },
+                        [ctx.symbols['myMethod']](){
+                            alert(this[ctx.symbols['count']]);
+                        }
+                    }
+                })
+            }
+        })
+    </script>
+</body>
+</html>
+```
 
 ## trans-render the web component
 

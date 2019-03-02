@@ -14,8 +14,6 @@
         import {decorate} from '../decorate.js';
         import {init} from '../init.js';
         const count = Symbol('count');
-        console.log(import.meta);
-        //const myMethod = Symbol('myMethod');
         init(decorateTest, {
             symbols: {
                 count: Symbol('count'),
@@ -37,17 +35,15 @@
                         }
                     },
                     methods:{
-                        onPropsChange: function(){
+                        onPropsChange(){
                             this[ctx.symbols['myMethod']]();
                         },
-                        [ctx.symbols['myMethod']]: function(){
+                        [ctx.symbols['myMethod']](){
                             alert(this[ctx.symbols['count']]);
                         }
                     }
                 })
             }
-            
-            
         })
     </script>
 </body>
