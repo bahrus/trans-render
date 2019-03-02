@@ -36,6 +36,7 @@ export interface RenderContext {
     update?: (ctx: RenderContext, target: HTMLElement | DocumentFragment) => RenderContext;
     refs?: {[key: string] : any},
     viewModel?: any,
+    symbols?: {[key: string] : symbol},
 }
 
 export interface RenderOptions{

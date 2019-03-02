@@ -14,29 +14,34 @@
         import {decorate} from '../decorate.js';
         import {init} from '../init.js';
         const count = Symbol('count');
-        const myMethod = Symbol('myMethod');
+        console.log(import.meta);
+        //const myMethod = Symbol('myMethod');
         init(decorateTest, {
+            symbols: {
+                count: Symbol('count'),
+                myMethod: Symbol('myMethod')
+            },
             Transform: {
-                button: ({target}) => decorate(target, {
+                button: ({target, ctx}) => decorate(target, {
                         textContent: 'Hello',
                         attribs:{
                             title: "Hello, world"
                         }
                     }, {
                     props:{
-                        [count]: 0
+                        [ctx.symbols['count']]: 0
                     },
                     on:{
                         click: function(e){
-                            this[count]++;
+                            this[ctx.symbols['count']]++;
                         }
                     },
                     methods:{
-                        onPropsChange(){
-                            this[myMethod]();
+                        onPropsChange: function(){
+                            this[ctx.symbols['myMethod']]();
                         },
-                        [myMethod](){
-                            alert(this[count]);
+                        [ctx.symbols['myMethod']]: function(){
+                            alert(this[ctx.symbols['count']]);
                         }
                     }
                 })
