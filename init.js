@@ -11,15 +11,15 @@ export function init(template, ctx, target, options) {
             process(ctx, 0, 0, options);
         }
     }
+    let verb = "appendChild";
+    if (options) {
+        if (options.prepend)
+            verb = "prepend";
+        const callback = options.initializedCallback;
+        if (callback !== undefined)
+            callback(ctx, target || template, options);
+    }
     if (isTemplate) {
-        let verb = "appendChild";
-        if (options) {
-            if (options.prepend)
-                verb = "prepend";
-            const callback = options.initializedCallback;
-            if (callback !== undefined)
-                callback(ctx, target, options);
-        }
         target[verb](clonedTemplate);
     }
     return ctx;

@@ -1,12 +1,12 @@
 import { NextStep, TransformRules, RenderContext, RenderOptions, TransformFn} from "./init.d.js";
 
 export function init(
-  template: HTMLElement,
+  template: HTMLElement | DocumentFragment,
   ctx: RenderContext,
-  target: HTMLElement | DocumentFragment,
+  target?: HTMLElement | DocumentFragment,
   options?: RenderOptions
 ): RenderContext {
-  const isTemplate = template.localName === "template";
+  const isTemplate = (template as HTMLElement).localName === "template";
   const clonedTemplate =
       isTemplate
       ? ((template as HTMLTemplateElement).content.cloneNode(
@@ -21,13 +21,13 @@ export function init(
       process(ctx, 0, 0, options);
     }
   }
+  let verb = "appendChild";
+  if (options) {
+    if (options.prepend) verb = "prepend";
+    const callback = options.initializedCallback;
+    if (callback !== undefined) callback(ctx, target || template, options);
+  }
   if(isTemplate){
-    let verb = "appendChild";
-    if (options) {
-      if (options.prepend) verb = "prepend";
-      const callback = options.initializedCallback;
-      if (callback !== undefined) callback(ctx, target, options);
-    }
     (<any>target)[verb](clonedTemplate);
   }
 
