@@ -17,7 +17,7 @@ export function init(template, ctx, target, options) {
             verb = "prepend";
         const callback = options.initializedCallback;
         if (callback !== undefined)
-            callback(ctx, target || template, options);
+            callback(ctx, clonedTemplate, options);
     }
     if (isTemplate) {
         target[verb](clonedTemplate);
