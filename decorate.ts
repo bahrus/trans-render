@@ -1,6 +1,6 @@
 import { RenderContext, DecorateArgs, TransformValueOptions } from "./init.d.js";
 
-
+export const attribs = Symbol('attribs');
 
 function assignSpecial<T extends HTMLElement>(
   target: T,
@@ -15,10 +15,10 @@ function assignSpecial<T extends HTMLElement>(
   });
 }
 function setAttribs(target: HTMLElement, valCopy: any){
-    const attribs = valCopy.attribs;
-    if(attribs !== undefined){
-        for(const key in attribs){
-            const attrib = attribs[key];
+    const attributes = valCopy[attribs];
+    if(attributes !== undefined){
+        for(const key in attributes){
+            const attrib = attributes[key];
             switch(typeof attrib){
                 case 'string':
                   target.setAttribute(key, attrib);
@@ -34,7 +34,7 @@ function setAttribs(target: HTMLElement, valCopy: any){
                 target.setAttribute(key, '');
             }
         }
-        delete valCopy.attribs;
+        delete valCopy[attribs];
     }
 }
 function defProp(key: string | symbol, props: any, target: any, onPropsChange: symbol){

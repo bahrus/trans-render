@@ -1,3 +1,4 @@
+export const attribs = Symbol('attribs');
 function assignSpecial(target, vals, propNames) {
     propNames.forEach(propName => {
         const targetProp = target[propName];
@@ -7,10 +8,10 @@ function assignSpecial(target, vals, propNames) {
     });
 }
 function setAttribs(target, valCopy) {
-    const attribs = valCopy.attribs;
-    if (attribs !== undefined) {
-        for (const key in attribs) {
-            const attrib = attribs[key];
+    const attributes = valCopy[attribs];
+    if (attributes !== undefined) {
+        for (const key in attributes) {
+            const attrib = attributes[key];
             switch (typeof attrib) {
                 case 'string':
                     target.setAttribute(key, attrib);
@@ -27,7 +28,7 @@ function setAttribs(target, valCopy) {
                 target.setAttribute(key, '');
             }
         }
-        delete valCopy.attribs;
+        delete valCopy[attribs];
     }
 }
 function defProp(key, props, target, onPropsChange) {

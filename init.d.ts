@@ -22,7 +22,7 @@ export interface DecorateArgs{
     methods?: {[key: string] : Function} | undefined,
     on?: {[key: string] : (e: Event) => void} | undefined,
     class?: string | string[] | undefined,
-    attribs?: {[key: string] : string | boolean},
+    //attribs?: {[key: string] : string | boolean},
     id?: symbol;
 }
 

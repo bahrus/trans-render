@@ -549,7 +549,7 @@ So the difference isn't dramatic, but it is statistically significant, in my opi
 
 Typescript already provides generic support for Object.assign<T>, which can be quite declarative and type aware, but "decorate" provides enhanced support.
 
-The first two arguments are just like Object.assign, but decorate gives special attention to two readonly HTML properties:   dataset and style.
+The first two arguments are just like Object.assign, but decorate gives special attention to two readonly HTML properties:   dataset and style.  It also allows attributes to be set declaratively, using the attribs symbol imported from decorate.js.
 
 The third argument provides a way of creating a little Vue-like anonymous custom element, or add some behavior on top of an existing custom element.
 
@@ -561,14 +561,14 @@ Example syntax:
     </div>
     <script type="module">
         import {decorate} from '../decorate.js';
-        import {init} from '../init.js';
+        import {init, attribs} from '../init.js';
         init(decorateTest, {
             Transform: {
                 div: {
                     button: ({target}) => decorate(target, 
                     {
                         textContent: 'Hello',
-                        attribs: {
+                        [attribs]: {
                             title: 'Hello, world'
                         }
                     }, 
@@ -744,7 +744,7 @@ Then it's a good idea to consider making use of [Symbols](https://www.keithcirke
         <button>Test</button>
     </div>
     <script type="module">
-        import {decorate} from '../decorate.js';
+        import {decorate, attribs} from '../decorate.js';
         import {init} from '../init.js';
         const count = Symbol('count');
         const myMethod = Symbol('myMethod');
@@ -752,7 +752,7 @@ Then it's a good idea to consider making use of [Symbols](https://www.keithcirke
             Transform: {
                 button: ({target}) => decorate(target, {
                         textContent: 'Hello',
-                        attribs:{
+                        [attribs]:{
                             title: "Hello, world"
                         }
                     }, {
