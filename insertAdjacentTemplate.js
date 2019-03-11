@@ -1,20 +1,7 @@
-export function insertAdjacentTemplate(src, template) {
-    src.style.display = 'none';
-    let targetToAppend = src;
-    const clonedTemplate = template.content.cloneNode(true);
-    Array.from(clonedTemplate.children).forEach(child => {
-        let slot = null;
-        if (child.localName === 'slot') {
-            slot = child;
-        }
-        else {
-            slot = child.querySelector('slot');
-        }
-        if (slot !== null) {
-            while (src.lastElementChild) {
-                slot.insertAdjacentElement('afterend', src.lastElementChild);
-            }
-        }
-        targetToAppend = targetToAppend.insertAdjacentElement('afterend', child);
+export function insertAdjacentTemplate(template, target, position) {
+    const clone = document.importNode(template.content, true);
+    let appendTarget = target;
+    Array.from(clone.children).forEach(child => {
+        appendTarget = appendTarget.insertAdjacentElement(position, child);
     });
 }

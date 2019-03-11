@@ -545,6 +545,10 @@ So the difference isn't dramatic, but it is statistically significant, in my opi
 
 ## Miscellaneous Helper Functions
 
+### insertAdjacentTemplate(template: HTMLTemplateElement, target: Element, position: InsertPosition)
+
+insertTemplate just like inserting an Element.
+
 ### Declative-ish property setting / behavior enhancement
 
 Typescript already provides generic support for Object.assign<T>, which can be quite declarative and type aware, but "decorate" provides enhanced support.

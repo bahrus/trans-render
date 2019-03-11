@@ -9,10 +9,7 @@ export function init(
   const isTemplate = (template as HTMLElement).localName === "template";
   const clonedTemplate =
       isTemplate
-      ? ((template as HTMLTemplateElement).content.cloneNode(
-          true
-        ) as DocumentFragment)
-      : template;
+      ? document.importNode((template as HTMLTemplateElement).content, true) : template;
   //ctx.template = clonedTemplate;
   if (ctx.Transform) {
     const firstChild = clonedTemplate.firstElementChild;
