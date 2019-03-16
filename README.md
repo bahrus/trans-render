@@ -547,7 +547,7 @@ So the difference isn't dramatic, but it is statistically significant, in my opi
 
 ### insertAdjacentTemplate(template: HTMLTemplateElement, target: Element, position: InsertPosition)
 
-insertTemplate just like inserting an Element.
+This function is modeled after insertAdjacentElement / insertAdjacentHTML.  Only here we are able to insert a template.  By using the preferred "afterEnd" as the insert position, the trans-rendering will be able to process those nodes like any other nodes.
 
 ### Declative-ish property setting / behavior enhancement
 
@@ -806,7 +806,7 @@ The render context which the init function works with provides a "symbols" prope
         <button>Test</button>
     </div>
     <script type="module">
-        import {decorate} from '../decorate.js';
+        import {decorate, attribs} from '../decorate.js';
         import {init} from '../init.js';
         const count = Symbol('count');
         init(decorateTest, {
@@ -817,7 +817,7 @@ The render context which the init function works with provides a "symbols" prope
             Transform: {
                 button: ({target, ctx}) => decorate(target, {
                         textContent: 'Hello',
-                        attribs:{
+                        [attribs]:{
                             title: "Hello, world"
                         }
                     }, {
