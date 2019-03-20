@@ -2,13 +2,13 @@ import { RenderContext, DecorateArgs, TransformValueOptions } from "./init.d.js"
 
 export const attribs = Symbol('attribs');
 
-export interface ElementWithAttribs<T extends HTMLElement>{
-  [attribs]: {[key: string] : string | boolean};
+export interface HasAttribs<T extends HTMLElement>{
+  [attribs]?: {[key: string] : string | boolean};
 }
 
 function assignSpecial<T extends HTMLElement>(
   target: T,
-  vals: ElementWithAttribs<T>,
+  vals: HasAttribs<T>,
   propNames: string[]
 ) {
   propNames.forEach(propName => {
@@ -82,7 +82,7 @@ function defMethod(key: string | symbol, methods: any, target: any, onPropsChang
 }
 export function decorate<T extends HTMLElement>(
   target: T,
-  vals: ElementWithAttribs<T> | null,
+  vals: HasAttribs<T> | null,
   decor?: DecorateArgs
 ) {
   const onPropsChange = Symbol('onPropChange');
