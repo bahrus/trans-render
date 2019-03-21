@@ -21,9 +21,9 @@ export interface DecorateArgs{
     props?: {[key: string]: any} | undefined,
     methods?: {[key: string] : Function} | undefined,
     on?: {[key: string] : (e: Event) => void} | undefined,
-    class?: string | string[] | undefined,
+    //class?: string | string[] | undefined,
     //attribs?: {[key: string] : string | boolean},
-    id?: symbol;
+    //id?: symbol;
 }
 
 export interface RenderContext {

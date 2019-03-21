@@ -82,11 +82,10 @@ export function decorate(target, vals, decor) {
     }
     if (decor === undefined)
         return;
-    if (decor.id) {
-        if (target[decor.id] === true)
-            return;
-        target[decor.id] = true;
-    }
+    // if(decor.id){
+    //   if((<any>target)[decor.id] === true) return;
+    //   (<any>target)[decor.id] = true;
+    // }
     const props = decor.props;
     if (props !== undefined) {
         for (const key in props) {
