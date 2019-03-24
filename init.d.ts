@@ -18,8 +18,8 @@ export interface NextStep {
 
 export type propVals = Map<string | symbol, any> | undefined;
 export interface Vals {
-  attribs: { [key: string]: string | boolean | number } | undefined;
-  propVals: propVals;
+  attribs?: { [key: string]: string | boolean | number } | undefined;
+  propVals?: propVals | undefined;
 }
 
 export interface DecorateArgs extends Vals{
