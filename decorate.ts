@@ -52,47 +52,38 @@ export function decorate<T extends HTMLElement>(
   source: DecorateArgs
 ) {
   const onPropsChange = Symbol('onPropChange');
-  // if (vals !== null) {
-  //   const valCopy = { ...vals };
-  //   assignSpecial(target, valCopy, ["dataset", "style"]);
-  //   setAttribs(target, valCopy);
-  //   Object.assign(target, valCopy);
-  // }
-  // if (decor === undefined) return;
-  // // if(decor.id){
-  // //   if((<any>target)[decor.id] === true) return;
-  // //   (<any>target)[decor.id] = true;
-  // // }
-  // const props = decor.props;
-  // if (props !== undefined) {
-  //   for (const key in props) {
-  //     //if (props[key]) throw "Property " + key + " already exists."; //only throw error if non truthy value set.
-  //     defProp(key, props, target, onPropsChange);
-  //   }
-  //   for(const key of Object.getOwnPropertySymbols(props)){
-  //     defProp(key, props, target, onPropsChange);
-  //   }
-  // }
-  // const methods = decor.methods;
-  // if (methods !== undefined) {
-  //   for (const key in methods) {
-  //     defMethod(key, methods, target, onPropsChange);
-  //   }
-  //   for(const key of Object.getOwnPropertySymbols(methods)){
-  //     defProp(key, methods, target, onPropsChange);
-  //   }
-  // }
-  // const events = decor.on;
-  // if (events) {
-  //   for (const key in events) {
-  //     const handlerKey = key + "_transRenderHandler";
-  //     const prop = Object.defineProperty(target, handlerKey, {
-  //       enumerable: false,
-  //       configurable: true,
-  //       writable: true,
-  //       value: events[key]
-  //     });
-  //     target.addEventListener(key, (<any>target)[handlerKey]);
-  //   }
-  // }
+  domAssign(target, source);
+  
+  const props = source.propDefs;
+  if (props !== undefined) {
+    for (const key in props) {
+      //if (props[key]) throw "Property " + key + " already exists."; //only throw error if non truthy value set.
+      defProp(key, props, target, onPropsChange);
+    }
+    for(const key of Object.getOwnPropertySymbols(props)){
+      defProp(key, props, target, onPropsChange);
+    }
+  }
+  const methods = source.methods;
+  if (methods !== undefined) {
+    for (const key in methods) {
+      defMethod(key, methods, target, onPropsChange);
+    }
+    for(const key of Object.getOwnPropertySymbols(methods)){
+      defProp(key, methods, target, onPropsChange);
+    }
+  }
+  const events = source.on;
+  if (events) {
+    for (const key in events) {
+      const handlerKey = key + "_transRenderHandler";  //TODO  : symbolize
+      const prop = Object.defineProperty(target, handlerKey, {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: events[key]
+      });
+      target.addEventListener(key, (<any>target)[handlerKey]);
+    }
+  }
 }

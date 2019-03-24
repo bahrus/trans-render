@@ -21,12 +21,13 @@
             },
             Transform: {
                 button: ({target, ctx}) => decorate(target, {
+                    propVals: {
                         textContent: 'Hello',
-                        attribs:{
+                    },
+                    attrs:{
                             title: "Hello, world"
-                        }
-                    }, {
-                    props:{
+                    },
+                    propDefs:{
                         [ctx.symbols['count']]: 0
                     },
                     on:{

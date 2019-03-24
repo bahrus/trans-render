@@ -22,9 +22,7 @@ export interface Vals {
   propVals: propVals;
 }
 
-export interface DecorateArgs{
-    propVals?: propVals,
-    attr?: {[key: string] : string},
+export interface DecorateArgs extends Vals{
     propDefs?: {[key: string]: any} | undefined,
     methods?: {[key: string] : Function} | undefined,
     on?: {[key: string] : (e: Event) => void} | undefined,
