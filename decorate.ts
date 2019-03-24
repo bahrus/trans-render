@@ -1,4 +1,5 @@
 import { RenderContext, DecorateArgs, TransformValueOptions } from "./init.d.js";
+import {domAssign} from './domAssign.js';
 
 // export const attribs = Symbol('attribs');
 

@@ -30,6 +30,14 @@ function setAttribs(target, source) {
         //delete source[attrib];
     }
 }
-export function domAssign(target, source) {
-    return Object.assign(target, source);
+export function domAssign(target, vals) {
+    if (vals.propVals !== undefined) {
+        const valCopy = { ...vals };
+        assignSpecial(target, valCopy.propVals, ["dataset", "style"]);
+        setAttribs(target, valCopy);
+        Object.assign(target, valCopy);
+    }
+    if (vals.attrs !== undefined) {
+        setAttribs(target, vals);
+    }
 }

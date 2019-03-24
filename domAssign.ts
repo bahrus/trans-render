@@ -1,9 +1,13 @@
-
-interface Vals{
-    attrs: {[key: string] : string | boolean | number} | undefined,
-    propVals: Map<string | symbol, any>,
+type propVals = Map<string | symbol, any> | undefined;
+interface Vals {
+  attrs: { [key: string]: string | boolean | number } | undefined;
+  propVals: propVals;
 }
-function assignSpecial<T extends HTMLElement>(target: T, vals: T, propNames: string[]) {
+function assignSpecial<T extends HTMLElement>(
+  target: T,
+  vals: propVals,
+  propNames: string[]
+) {
   propNames.forEach(propName => {
     const targetProp = (<any>target)[propName];
     const srcProp = (<any>vals)[propName];
@@ -35,9 +39,14 @@ function setAttribs(target: HTMLElement, source: Vals) {
   }
 }
 
-export function domAssign<T extends HTMLElement, U extends HTMLElement>(
-  target: T,
-  source: U
-): T & U {
-    return Object.assign(target, source);
+export function domAssign<T extends HTMLElement>(target: T, vals: Vals): void {
+  if (vals.propVals !== undefined) {
+    const valCopy = { ...vals };
+    assignSpecial(target, valCopy.propVals, ["dataset", "style"]);
+    setAttribs(target, valCopy);
+    Object.assign(target, valCopy);
+  }
+  if(vals.attrs !== undefined){
+    setAttribs(target, vals);
+  }
 }
