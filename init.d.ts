@@ -18,7 +18,9 @@ export interface NextStep {
 
 
 export interface DecorateArgs{
-    props?: {[key: string]: any} | undefined,
+    propVals?: Map<string | symbol, any>,
+    attr?: {[key: string] : string},
+    propDefs?: {[key: string]: any} | undefined,
     methods?: {[key: string] : Function} | undefined,
     on?: {[key: string] : (e: Event) => void} | undefined,
     //class?: string | string[] | undefined,
@@ -31,7 +33,7 @@ export interface RenderContext {
     repeatInit?: (template: HTMLTemplateElement, ctx: RenderContext, count: number, target: Element, targetTransform?: TransformValueOptions) => TransformValueOptions;
     repeatUpdate?: (template: HTMLTemplateElement, ctx: RenderContext, count: number, target: HTMLElement, targetTransform?: TransformValueOptions) => TransformValueOptions;
     interpolate?: (target: any, prop: string, obj: any, isAttr: boolean) => void;
-    decorate?<T extends HTMLElement>(target: T, vals: T | null, decor?: DecorateArgs) : void;
+    decorate?<T extends HTMLElement>(target: T, decor: DecorateArgs) : void;
     leaf?: Element | DocumentFragment,
     Transform?: TransformRules,
     update?: (ctx: RenderContext, target: HTMLElement | DocumentFragment) => RenderContext;

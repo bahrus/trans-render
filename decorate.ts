@@ -1,46 +1,12 @@
 import { RenderContext, DecorateArgs, TransformValueOptions } from "./init.d.js";
 
-export const attribs = Symbol('attribs');
+// export const attribs = Symbol('attribs');
 
-export interface HasAttribs<T extends HTMLElement>{
-  [attribs]?: {[key: string] : string | boolean};
-}
+// export interface HasAttribsextends HTMLElement{
+//   [attribs]?: {[key: string] : string | boolean};
+// }
 
-function assignSpecial<T extends HTMLElement>(
-  target: T,
-  vals: HasAttribs<T>,
-  propNames: string[]
-) {
-  propNames.forEach(propName => {
-    const targetProp = (<any>target)[propName];
-    const srcProp = (<any>vals)[propName];
-    Object.assign(targetProp, srcProp);
-    delete (<any>vals)[propName];
-  });
-}
-function setAttribs(target: HTMLElement, valCopy: any){
-    const attributes = valCopy[attribs];
-    if(attributes !== undefined){
-        for(const key in attributes){
-            const attrib = attributes[key];
-            switch(typeof attrib){
-                case 'string':
-                  target.setAttribute(key, attrib);
-                  break;
-                case 'boolean':
-                  if(attrib === true){
-                      target.setAttribute(key, '');
-                  }else{
-                      target.removeAttribute(key);
-                  }
-            }
-            if(attrib === true){
-                target.setAttribute(key, '');
-            }
-        }
-        delete valCopy[attribs];
-    }
-}
+
 function defProp(key: string | symbol, props: any, target: any, onPropsChange: symbol){
   const propVal = props[key];
   const keyS = key.toString();
@@ -82,51 +48,50 @@ function defMethod(key: string | symbol, methods: any, target: any, onPropsChang
 }
 export function decorate<T extends HTMLElement>(
   target: T,
-  vals: HasAttribs<T> | null,
-  decor?: DecorateArgs
+  source: DecorateArgs
 ) {
   const onPropsChange = Symbol('onPropChange');
-  if (vals !== null) {
-    const valCopy = { ...vals };
-    assignSpecial(target, valCopy, ["dataset", "style"]);
-    setAttribs(target, valCopy);
-    Object.assign(target, valCopy);
-  }
-  if (decor === undefined) return;
-  // if(decor.id){
-  //   if((<any>target)[decor.id] === true) return;
-  //   (<any>target)[decor.id] = true;
+  // if (vals !== null) {
+  //   const valCopy = { ...vals };
+  //   assignSpecial(target, valCopy, ["dataset", "style"]);
+  //   setAttribs(target, valCopy);
+  //   Object.assign(target, valCopy);
   // }
-  const props = decor.props;
-  if (props !== undefined) {
-    for (const key in props) {
-      //if (props[key]) throw "Property " + key + " already exists."; //only throw error if non truthy value set.
-      defProp(key, props, target, onPropsChange);
-    }
-    for(const key of Object.getOwnPropertySymbols(props)){
-      defProp(key, props, target, onPropsChange);
-    }
-  }
-  const methods = decor.methods;
-  if (methods !== undefined) {
-    for (const key in methods) {
-      defMethod(key, methods, target, onPropsChange);
-    }
-    for(const key of Object.getOwnPropertySymbols(methods)){
-      defProp(key, methods, target, onPropsChange);
-    }
-  }
-  const events = decor.on;
-  if (events) {
-    for (const key in events) {
-      const handlerKey = key + "_transRenderHandler";
-      const prop = Object.defineProperty(target, handlerKey, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: events[key]
-      });
-      target.addEventListener(key, (<any>target)[handlerKey]);
-    }
-  }
+  // if (decor === undefined) return;
+  // // if(decor.id){
+  // //   if((<any>target)[decor.id] === true) return;
+  // //   (<any>target)[decor.id] = true;
+  // // }
+  // const props = decor.props;
+  // if (props !== undefined) {
+  //   for (const key in props) {
+  //     //if (props[key]) throw "Property " + key + " already exists."; //only throw error if non truthy value set.
+  //     defProp(key, props, target, onPropsChange);
+  //   }
+  //   for(const key of Object.getOwnPropertySymbols(props)){
+  //     defProp(key, props, target, onPropsChange);
+  //   }
+  // }
+  // const methods = decor.methods;
+  // if (methods !== undefined) {
+  //   for (const key in methods) {
+  //     defMethod(key, methods, target, onPropsChange);
+  //   }
+  //   for(const key of Object.getOwnPropertySymbols(methods)){
+  //     defProp(key, methods, target, onPropsChange);
+  //   }
+  // }
+  // const events = decor.on;
+  // if (events) {
+  //   for (const key in events) {
+  //     const handlerKey = key + "_transRenderHandler";
+  //     const prop = Object.defineProperty(target, handlerKey, {
+  //       enumerable: false,
+  //       configurable: true,
+  //       writable: true,
+  //       value: events[key]
+  //     });
+  //     target.addEventListener(key, (<any>target)[handlerKey]);
+  //   }
+  // }
 }
