@@ -1,8 +1,4 @@
-type propVals = Map<string | symbol, any> | undefined;
-interface Vals {
-  attrs: { [key: string]: string | boolean | number } | undefined;
-  propVals: propVals;
-}
+import {propVals, Vals} from './init.d.js';
 function assignSpecial<T extends HTMLElement>(
   target: T,
   vals: propVals,

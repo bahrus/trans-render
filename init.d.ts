@@ -16,9 +16,14 @@ export interface NextStep {
     SkipSibs?: boolean,
 }
 
+export type propVals = Map<string | symbol, any> | undefined;
+export interface Vals {
+  attrs: { [key: string]: string | boolean | number } | undefined;
+  propVals: propVals;
+}
 
 export interface DecorateArgs{
-    propVals?: Map<string | symbol, any>,
+    propVals?: propVals,
     attr?: {[key: string] : string},
     propDefs?: {[key: string]: any} | undefined,
     methods?: {[key: string] : Function} | undefined,
