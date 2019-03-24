@@ -18,7 +18,7 @@ export interface NextStep {
 
 export type propVals = Map<string | symbol, any> | undefined;
 export interface Vals {
-  attrs: { [key: string]: string | boolean | number } | undefined;
+  attribs: { [key: string]: string | boolean | number } | undefined;
   propVals: propVals;
 }
 

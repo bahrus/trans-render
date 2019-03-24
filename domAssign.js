@@ -7,7 +7,7 @@ function assignSpecial(target, vals, propNames) {
     });
 }
 function setAttribs(target, source) {
-    const attributes = source.attrs;
+    const attributes = source.attribs;
     if (attributes !== undefined) {
         for (const key in attributes) {
             const attrib = attributes[key];
@@ -37,7 +37,7 @@ export function domAssign(target, vals) {
         setAttribs(target, valCopy);
         Object.assign(target, valCopy);
     }
-    if (vals.attrs !== undefined) {
+    if (vals.attribs !== undefined) {
         setAttribs(target, vals);
     }
 }

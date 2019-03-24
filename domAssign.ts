@@ -12,7 +12,7 @@ function assignSpecial<T extends HTMLElement>(
   });
 }
 function setAttribs(target: HTMLElement, source: Vals) {
-  const attributes = source.attrs;
+  const attributes = source.attribs;
   if (attributes !== undefined) {
     for (const key in attributes) {
       const attrib = attributes[key];
@@ -42,7 +42,7 @@ export function domAssign<T extends HTMLElement>(target: T, vals: Vals): void {
     setAttribs(target, valCopy);
     Object.assign(target, valCopy);
   }
-  if(vals.attrs !== undefined){
+  if(vals.attribs !== undefined){
     setAttribs(target, vals);
   }
 }
