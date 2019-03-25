@@ -796,12 +796,13 @@ Then it's a good idea to consider making use of [Symbols](https://www.keithcirke
         init(decorateTest, {
             Transform: {
                 button: ({target}) => decorate(target, {
+                    propVals:{
                         textContent: 'Hello',
-                        [attribs]:{
-                            title: "Hello, world"
-                        }
-                    }, {
-                    props:{
+                    },
+                    attribs:{
+                        title: "Hello, world"
+                    }, 
+                    propDefs:{
                         [count]: 0
                     },
                     on:{
