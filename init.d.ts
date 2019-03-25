@@ -16,19 +16,16 @@ export interface NextStep {
     SkipSibs?: boolean,
 }
 
-export type propVals = Map<string | symbol, any> | undefined;
+export type props = Map<string | symbol, any> | undefined;
 export interface Vals {
   attribs?: { [key: string]: string | boolean | number } | undefined;
-  propVals?: propVals | undefined;
+  propVals?: props | undefined;
 }
 
 export interface DecorateArgs extends Vals{
-    propDefs?: {[key: string]: any} | undefined,
+    propDefs?: props,
     methods?: {[key: string] : Function} | undefined,
     on?: {[key: string] : (e: Event) => void} | undefined,
-    //class?: string | string[] | undefined,
-    //attribs?: {[key: string] : string | boolean},
-    //id?: symbol;
 }
 
 export interface RenderContext {

@@ -549,15 +549,56 @@ So the difference isn't dramatic, but it is statistically significant, in my opi
 
 This function is modeled after insertAdjacentElement / insertAdjacentHTML.  Only here we are able to insert a template.  By using the preferred "afterEnd" as the insert position, the trans-rendering will be able to process those nodes like any other nodes.
 
-### Declative-ish property setting / behavior enhancement
+### Declative-ish property setting
 
-Typescript already provides generic support for Object.assign<T>, which can be quite declarative and type aware, but "decorate" provides enhanced support.
+Object.assign and its modern abbreviated variations, provides a quite declarative feeling when populating an object with values.  Unfortunately, Object.assign provides only limited support when it comes to populating a DOM element, resulting in repetitive, ugly code, leading to the need for convenience functions like jQuery and "h" to help ease the tediousness.
 
-The first two arguments are just like Object.assign, but decorate gives special attention to two readonly HTML properties:   dataset and style.  It also allows attributes to be set declaratively, using the attribs symbol imported from decorate.js.
+The function domAssign provides similar help.
 
-The third argument provides a way of creating a little Vue-like anonymous custom element, or add some behavior on top of an existing custom element.
+The (tentative) signature is 
 
-Example syntax:
+```TypeScript
+domAssign<T extends HTMLElement>(target: T, vals: Vals): void
+```
+
+where 
+
+```TypeScript
+export type props = Map<string | symbol, any> | undefined;
+export interface Vals {
+  attribs?: { [key: string]: string | boolean | number } | undefined;
+  propVals?: props | undefined;
+}
+```
+
+###  Behavior enhancement
+
+
+Vue (with common roots from Polymer 1) provides an elegant way of turning an existing DOM element into a kind of anonymous custom element.  The alternative to this is the "is" built-in custom element api, which, while implemented in two of the three major browsers, remains strongly opposed by the third, and the reasons seem, to my non-expert ears, to have some merit.  
+
+Even if the built-ins do become a standard, I still think the "decorate" function, described below, would come in handy for less formal occasions.  
+
+Tentative Signature:
+
+```TypeScript
+export function decorate<T extends HTMLElement>(
+  target: T,
+  source: DecorateArgs
+)
+```
+
+where
+
+
+```TypeScript
+export interface DecorateArgs extends Vals{
+    propDefs?: props,
+    methods?: {[key: string] : Function} | undefined,
+    on?: {[key: string] : (e: Event) => void} | undefined,
+}
+```
+
+For example:
 
 ```html
     <div id="decorateTest">
@@ -569,15 +610,15 @@ Example syntax:
         init(decorateTest, {
             Transform: {
                 div: {
-                    button: ({target}) => decorate(target, 
-                    {
-                        textContent: 'Hello',
-                        [attribs]: {
+                    button: ({target}) => decorate(target, {
+                        propVals:{
+                            textContent: 'Hello',
+                        },
+                        attribs: {
                             title: 'Hello, world'
                         }
-                    }, 
                     {
-                        props:{
+                        propDefs:{
                             count: 0
                         },
                         on:{
@@ -806,7 +847,7 @@ The render context which the init function works with provides a "symbols" prope
         <button>Test</button>
     </div>
     <script type="module">
-        import {decorate, attribs} from '../decorate.js';
+        import {decorate} from '../decorate.js';
         import {init} from '../init.js';
         const count = Symbol('count');
         init(decorateTest, {
@@ -816,12 +857,13 @@ The render context which the init function works with provides a "symbols" prope
             },
             Transform: {
                 button: ({target, ctx}) => decorate(target, {
+                    propVals: {
                         textContent: 'Hello',
-                        [attribs]:{
+                    },
+                    attribs:{
                             title: "Hello, world"
-                        }
-                    }, {
-                    props:{
+                    },
+                    propDefs:{
                         [ctx.symbols['count']]: 0
                     },
                     on:{
