@@ -1,6 +1,6 @@
 import {Vals} from './init.d.js';
-function assignSpecial<T extends HTMLElement>(
-  target: T,
+function assignSpecial(
+  target: HTMLElement,
   vals: object,
   propNames: string[]
 ) {
@@ -34,14 +34,13 @@ function setAttribs(target: HTMLElement, source: Vals) {
   }
 }
 
-export function domAssign<T extends HTMLElement>(target: T, vals: Vals): void {
+export function domAssign(target: HTMLElement, vals: Vals): void {
   const propVals = vals.propVals
   if (propVals !== undefined) {
     const valCopy = { ...propVals };
     assignSpecial(target, valCopy, ["dataset", "style"]);
     Object.assign(target, valCopy);
     setAttribs(target, valCopy);
-    
   }
   if(vals.attribs !== undefined){
     setAttribs(target, vals);

@@ -551,14 +551,14 @@ This function is modeled after insertAdjacentElement / insertAdjacentHTML.  Only
 
 ### Declative-ish property setting
 
-Object.assign and its modern abbreviated variations, provides a quite declarative feeling when populating an object with values.  Unfortunately, Object.assign provides only limited support when it comes to populating a DOM element, resulting in repetitive, ugly code, leading to the need for convenience functions like jQuery and "h" to help ease the tediousness.
+Object.assign and its modern abbreviated variations, provides a quite declarative feeling when populating an object with values.  Unfortunately, Object.assign throws errors if using it to set read-only properties like style and dataset (are there others?). An alternative to object.assign are convenience functions like JQuery and "h", but the function domAssign strives to create an Object.assign tailored for properties and attributes.
 
 The function domAssign provides similar help.
 
 The (tentative) signature is 
 
 ```TypeScript
-domAssign<T extends HTMLElement>(target: T, vals: Vals): void
+domAssign(target: T, vals: Vals): void
 ```
 
 where 
@@ -580,8 +580,8 @@ Even if the built-ins do become a standard, I still think the "decorate" functio
 Tentative Signature:
 
 ```TypeScript
-export function decorate<T extends HTMLElement>(
-  target: T,
+export function decorate(
+  target: HTMLElement,
   source: DecorateArgs
 )
 ```

@@ -47,8 +47,8 @@ function defMethod(key: string | symbol, methods: any, target: any, onPropsChang
     value: method
   });
 }
-export function decorate<T extends HTMLElement>(
-  target: T,
+export function decorate(
+  target: HTMLElement,
   source: DecorateArgs
 ) {
   const onPropsChange = Symbol('onPropChange');
