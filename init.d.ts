@@ -18,14 +18,14 @@ export interface NextStep {
 
 //export type props = {[key: string] : any};
 export interface Vals {
-  attribs?: { [key: string]: string | boolean | number } | undefined;
-  propVals?: object | undefined;
+  attribs?: { [key: string]: string | boolean | number };
+  propVals?: object;
 }
 
 export interface DecorateArgs extends Vals{
-    propDefs?: object | undefined,
-    methods?: {[key: string] : Function} | undefined,
-    on?: {[key: string] : (e: Event) => void} | undefined,
+    propDefs?: object,
+    methods?: {[key: string] : Function},
+    on?: {[key: string] : (e: Event) => void},
 }
 
 export interface RenderContext {
