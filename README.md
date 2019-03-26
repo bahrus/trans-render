@@ -637,6 +637,7 @@ For example:
 
 ```
 
+decorate can also attach behaviors to custom elements, not just native elements, [in a decorative way.](https://en.wikipedia.org/wiki/Decorator_pattern)
 
 ## Avoiding namespace collisions
 
