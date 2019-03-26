@@ -616,8 +616,7 @@ For example:
                         },
                         attribs: {
                             title: 'Hello, world'
-                        }
-                    {
+                        },
                         propDefs:{
                             count: 0
                         },
