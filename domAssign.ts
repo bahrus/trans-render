@@ -1,7 +1,7 @@
-import {props, Vals} from './init.d.js';
+import {Vals} from './init.d.js';
 function assignSpecial<T extends HTMLElement>(
   target: T,
-  vals: props,
+  vals: Vals,
   propNames: string[]
 ) {
   propNames.forEach(propName => {
