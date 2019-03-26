@@ -27,7 +27,6 @@ function setAttribs(target, source) {
                 target.setAttribute(key, "");
             }
         }
-        //delete source[attrib];
     }
 }
 export function domAssign(target, vals) {

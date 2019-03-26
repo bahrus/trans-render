@@ -31,7 +31,6 @@ function setAttribs(target: HTMLElement, source: Vals) {
         target.setAttribute(key, "");
       }
     }
-    //delete source[attrib];
   }
 }
 
