@@ -564,7 +564,7 @@ domAssign<T extends HTMLElement>(target: T, vals: Vals): void
 where 
 
 ```TypeScript
-export type props = Map<string | symbol, any> | undefined;
+export type props = {[key: string] : any};
 export interface Vals {
   attribs?: { [key: string]: string | boolean | number } | undefined;
   propVals?: props | undefined;
