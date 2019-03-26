@@ -30,11 +30,12 @@ function setAttribs(target, source) {
     }
 }
 export function domAssign(target, vals) {
-    if (vals.propVals !== undefined) {
-        const valCopy = { ...vals };
-        assignSpecial(target, valCopy.propVals, ["dataset", "style"]);
-        setAttribs(target, valCopy);
+    const propVals = vals.propVals;
+    if (propVals !== undefined) {
+        const valCopy = { ...propVals };
+        assignSpecial(target, valCopy, ["dataset", "style"]);
         Object.assign(target, valCopy);
+        setAttribs(target, valCopy);
     }
     if (vals.attribs !== undefined) {
         setAttribs(target, vals);

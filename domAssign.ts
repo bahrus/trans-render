@@ -1,7 +1,7 @@
 import {Vals} from './init.d.js';
 function assignSpecial<T extends HTMLElement>(
   target: T,
-  vals: Vals,
+  vals: object,
   propNames: string[]
 ) {
   propNames.forEach(propName => {
@@ -35,11 +35,13 @@ function setAttribs(target: HTMLElement, source: Vals) {
 }
 
 export function domAssign<T extends HTMLElement>(target: T, vals: Vals): void {
-  if (vals.propVals !== undefined) {
-    const valCopy = { ...vals };
-    assignSpecial(target, valCopy.propVals, ["dataset", "style"]);
-    setAttribs(target, valCopy);
+  const propVals = vals.propVals
+  if (propVals !== undefined) {
+    const valCopy = { ...propVals };
+    assignSpecial(target, valCopy, ["dataset", "style"]);
     Object.assign(target, valCopy);
+    setAttribs(target, valCopy);
+    
   }
   if(vals.attribs !== undefined){
     setAttribs(target, vals);
