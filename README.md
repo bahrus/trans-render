@@ -639,7 +639,7 @@ For example:
 
 decorate can also attach behaviors to custom elements, not just native elements, [in a decorative way.](https://en.wikipedia.org/wiki/Decorator_pattern)
 
-## Avoiding namespace collisions
+### Avoiding namespace collisions
 
 <details>
     <summary>Reflections on the Revolutionary Extensible Web Manifesto</summary> 
@@ -829,7 +829,7 @@ Then it's a good idea to consider making use of [Symbols](https://www.keithcirke
 
 The syntax isn't that much more complicated, but it is probably harder to troubleshoot if using symbols, so use your best judgment. Perhaps start properties and methods with an underscore if you wish to preserve the easy debugging capabilities.  You can also use Symbol.for('count'), which kind of meets halfway between the two approaches.
 
-## Even more indirection
+### Even more indirection
 
 The render context which the init function works with provides a "symbols" property for storing symbols.  The transform does look a little scary at first, but hopefully it's manageable:
 
@@ -886,6 +886,10 @@ The render context which the init function works with provides a "symbols" prope
 </body>
 </html>
 ```
+
+### appendTag(container: HTMLElement, name: string, config: DecorateArgs) : HTMLElement
+
+Just saves a tiny bit of boiler plate (document.createElement, container.appendChild)
 
 ## trans-render the web component
 
