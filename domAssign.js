@@ -22,9 +22,13 @@ function setAttribs(target, source) {
                     else {
                         target.removeAttribute(key);
                     }
-            }
-            if (attrib === true) {
-                target.setAttribute(key, "");
+                    break;
+                case "number":
+                    target.setAttribute(key, attrib.toString());
+                    break;
+                case null:
+                case undefined:
+                    target.removeAttribute(key);
             }
         }
     }

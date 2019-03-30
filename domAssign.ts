@@ -17,8 +17,8 @@ function setAttribs(target: HTMLElement, source: Vals) {
     for (const key in attributes) {
       const attrib = attributes[key];
       switch (typeof attrib) {
-        case "string":
-          target.setAttribute(key, attrib);
+        case 'string':
+          target.setAttribute(key, attrib as string); // why is casting needed?
           break;
         case "boolean":
           if (attrib === true) {
@@ -26,9 +26,13 @@ function setAttribs(target: HTMLElement, source: Vals) {
           } else {
             target.removeAttribute(key);
           }
-      }
-      if (attrib === true) {
-        target.setAttribute(key, "");
+          break;
+        case "number":
+          target.setAttribute(key, attrib.toString());
+          break;
+        case null:
+        case undefined:
+          target.removeAttribute(key);
       }
     }
   }
