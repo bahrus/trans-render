@@ -33,6 +33,7 @@ function setAttribs(target: HTMLElement, source: Vals) {
         case null:
         case undefined:
           target.removeAttribute(key);
+          break;
       }
     }
   }
