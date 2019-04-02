@@ -527,7 +527,7 @@ You can compare the two here:  This [link uses client-side trans-rendering](http
 
 Results are a bit unpredictable, and usually the differences are less dramatic.
 
-Lighthouse scrores also provide evidence that that trans-rendering improves performance.
+Lighthouse scrores also provide evidence that trans-rendering improves performance.
 
 Trans-Rendering:
 
