@@ -6,6 +6,8 @@
 
 <img src="https://badgen.net/bundlephobia/minzip/trans-render">
 
+
+
 Yes, there is an actual [web component](https://github.com/bahrus/trans-render#trans-render-the-web-component) in this package.  However, it won't make sense unless the core functions described first are (at least partly) understood.
 
 trans-render provides an alternative way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, trans-render performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, trans-render uses css path tests via the element.matches() and element.querySelector() methods.
@@ -25,6 +27,11 @@ Providing the binding transform in JS form inside the init function signature ha
 Another advantage of separating the binding like this, is that one can insert comments, console.log's and/or breakpoints, in order to walk through the binding process.
 
 For more musings on the question of what is this good for, please see the [rambling section](https://github.com/bahrus/trans-render#ramblings-from-the-department-of-faulty-analogies) below.
+
+**NB**  It's come to my attention (via [template discussions found here](https://github.com/w3c/webcomponents)) that there are some existing libraries which have explored similar ideas:
+
+1.  [pure-js](https://pure-js.com/)
+2.  [weld](https://github.com/tmpvar/weld)
 
 
 ## Workflow

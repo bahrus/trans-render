@@ -1,10 +1,11 @@
+const sk = Symbol('sk'); //storage key
 export function interpolate(target, prop, obj, isAttr = false) {
-    const privateStorageKey = '__' + prop + '__split';
-    let split = target[privateStorageKey];
+    //const privateStorageKey = '__' + prop + '__split';
+    let split = target[sk];
     if (split === undefined) {
         const txt = isAttr ? target.getAttribute(prop) : target[prop];
         split = txt.split('|');
-        target[privateStorageKey] = split;
+        target[sk] = split;
     }
     const newVal = (split.map(s => s[0] === '.' ? obj[s.substr(1)] : s)).join('');
     if (isAttr) {
