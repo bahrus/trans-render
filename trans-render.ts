@@ -1,5 +1,5 @@
-import {define} from 'xtal-latx/define.js';
-import {XtallatX} from 'xtal-latx/xtal-latx.js';
+import {define} from 'xtal-element/define.js';
+import {XtallatX} from 'xtal-element/xtal-latx.js';
 import {init} from './init.js';
 import {repeatInit} from './repeatInit.js';
 import {repeatUpdate} from './repeatUpdate.js';
