@@ -7,11 +7,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "xtal-element": "0.0.44"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "jiife": "0.0.11"
+    "jiife": "0.0.12"
   },
   "repository": {
     "type": "git",

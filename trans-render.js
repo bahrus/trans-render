@@ -1,13 +1,14 @@
-import { define } from 'xtal-element/define.js';
-import { XtallatX } from 'xtal-element/xtal-latx.js';
+import { define } from './define.js';
+import { hydrate, up } from './hydrate';
 import { init } from './init.js';
 import { repeatInit } from './repeatInit.js';
+import { repeatUpdate } from './repeatUpdate.js';
 import { interpolate } from './interpolate.js';
 import { decorate } from './decorate.js';
 //import {decorate} from 'trans-render/decorate.js';
 //const spKey = '__xtal_deco_onPropsChange'; //special key
 const view_model = 'view-model';
-export class TransRender extends XtallatX(HTMLElement) {
+export class TransRender extends hydrate(HTMLElement) {
     static get is() { return 'trans-render'; }
     static get observedAttributes() {
         return super.observedAttributes.concat(view_model);
@@ -22,7 +23,7 @@ export class TransRender extends XtallatX(HTMLElement) {
     }
     connectedCallback() {
         this.style.display = 'none';
-        this._upgradeProperties(['viewModel']);
+        this[up](['viewModel']);
         this.getElement('_nextSibling', t => t.nextElementSibling);
         this.getElement('_script', t => t.querySelector('script'));
     }
@@ -52,6 +53,7 @@ export class TransRender extends XtallatX(HTMLElement) {
             interpolate: interpolate,
             decorate: decorate,
             repeatInit: repeatInit,
+            repeatUpdate: repeatUpdate,
             //Transform: this._evalObj,
             viewModel: this._viewModel,
         };
