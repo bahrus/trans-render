@@ -1,6 +1,7 @@
 export const disabled = 'disabled';
 export const up = Symbol('upgrade');
 export interface IHydrate extends HTMLElement{
+    _disabled: boolean;
     /**
      * Any component that emits events should not do so if it is disabled.
      * Note that this is not enforced, but the disabled property is made available.
@@ -22,6 +23,8 @@ export interface IHydrate extends HTMLElement{
      * @param trueVal String to set attribute if true.
      */
     attr(name: string, val: string | boolean, trueVal?: string): void;
+
+    attributeChangedCallback(name: string, oldVal: string, newVal: string) : void;
 }
 type Constructor<T = {}> = new (...args: any[]) => T;
 
