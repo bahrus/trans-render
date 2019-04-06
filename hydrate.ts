@@ -15,7 +15,13 @@ export interface IHydrate extends HTMLElement{
     [up](props: string[]): void;
     //_upgradeProperties(props: string[]): void;
 
-
+    /**
+     * Set attribute value.
+     * @param name 
+     * @param val 
+     * @param trueVal String to set attribute if true.
+     */
+    attr(name: string, val: string | boolean, trueVal?: string): void;
 }
 type Constructor<T = {}> = new (...args: any[]) => T;
 
