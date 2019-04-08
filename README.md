@@ -558,14 +558,16 @@ This function is modeled after insertAdjacentElement / insertAdjacentHTML.  Only
 
 ### Declative-ish property setting
 
-Object.assign and its modern abbreviated variations, provides a quite declarative feeling when populating an object with values.  Unfortunately, Object.assign throws errors if using it to set read-only properties like style and dataset (are there others?). An alternative to object.assign are convenience functions like JQuery and "h", but the function domAssign strives to create an Object.assign tailored for properties and attributes.
+Object.assign and its modern abbreviated variations, provides a quite declarative feeling when populating an object with values.  Unfortunately, Object.assign throws errors if using it to set read-only properties like style and dataset (are there others?). An alternative to object.assign are convenience functions like JQuery.extends, JQuery.attr and "h", which domMerge draws inspiration from.
 
-The function domAssign provides similar help.
+
+
+The function domMerge provides similar help.
 
 The (tentative) signature is 
 
 ```TypeScript
-domAssign(target: T, vals: Vals): void
+domMerge(target: T, vals: Vals): void
 ```
 
 where 

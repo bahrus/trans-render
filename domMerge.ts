@@ -1,16 +1,17 @@
 import {Vals} from './init.d.js';
-function assignSpecial(
-  target: HTMLElement,
-  vals: object,
-  propNames: string[]
-) {
-  propNames.forEach(propName => {
-    const targetProp = (<any>target)[propName];
-    const srcProp = (<any>vals)[propName];
-    Object.assign(targetProp, srcProp);
-    delete (<any>vals)[propName];
-  });
-}
+import {mergeDeep} from './mergeDeep.js';
+// function assignSpecial(
+//   target: HTMLElement,
+//   vals: object,
+//   propNames: string[]
+// ) {
+//   propNames.forEach(propName => {
+//     const targetProp = (<any>target)[propName];
+//     const srcProp = (<any>vals)[propName];
+//     Object.assign(targetProp, srcProp);
+//     delete (<any>vals)[propName];
+//   });
+// }
 function setAttribs(target: HTMLElement, source: Vals) {
   const attributes = source.attribs;
   if (attributes !== undefined) {
@@ -39,13 +40,14 @@ function setAttribs(target: HTMLElement, source: Vals) {
   }
 }
 
-export function domAssign(target: HTMLElement, vals: Vals): void {
+export function domMerge(target: HTMLElement, vals: Vals): void {
   const propVals = vals.propVals
   if (propVals !== undefined) {
-    const valCopy = { ...propVals };
-    assignSpecial(target, valCopy, ["dataset", "style"]);
-    Object.assign(target, valCopy);
-    setAttribs(target, valCopy);
+    //const valCopy = { ...propVals };
+    //assignSpecial(target, valCopy, ["dataset", "style"]);
+    //Object.assign(target, valCopy);
+    //setAttribs(target, );
+    mergeDeep(target, propVals);
   }
   if(vals.attribs !== undefined){
     setAttribs(target, vals);

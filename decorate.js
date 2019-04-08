@@ -1,4 +1,4 @@
-import { domAssign } from './domAssign.js';
+import { domMerge } from './domMerge.js';
 // export const attribs = Symbol('attribs');
 // export interface HasAttribsextends HTMLElement{
 //   [attribs]?: {[key: string] : string | boolean};
@@ -46,7 +46,7 @@ function defMethod(key, methods, target, onPropsChange) {
 }
 export function decorate(target, source) {
     const onPropsChange = Symbol('onPropChange');
-    domAssign(target, source);
+    domMerge(target, source);
     const props = source.propDefs;
     if (props !== undefined) {
         for (const key in props) {

@@ -25,6 +25,7 @@ export interface IHydrate extends HTMLElement{
     attr(name: string, val: string | boolean, trueVal?: string): void;
 
     attributeChangedCallback(name: string, oldVal: string, newVal: string) : void;
+
 }
 type Constructor<T = {}> = new (...args: any[]) => T;
 

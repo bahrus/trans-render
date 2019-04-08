@@ -1,5 +1,5 @@
 import { RenderContext, DecorateArgs, TransformValueOptions } from "./init.d.js";
-import {domAssign} from './domAssign.js';
+import {domMerge} from './domMerge.js';
 
 // export const attribs = Symbol('attribs');
 
@@ -52,7 +52,7 @@ export function decorate(
   source: DecorateArgs
 ) {
   const onPropsChange = Symbol('onPropChange');
-  domAssign(target, source);
+  domMerge(target, source);
   
   const props = source.propDefs;
   if (props !== undefined) {
