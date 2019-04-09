@@ -567,7 +567,7 @@ The function domMerge provides similar help.
 The (tentative) signature is 
 
 ```TypeScript
-domMerge(target: T, vals: Vals): void
+export function domMerge(target: HTMLElement, vals: Vals): void
 ```
 
 where 
