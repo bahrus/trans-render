@@ -1,4 +1,4 @@
-import { RenderContext, DecorateArgs, TransformValueOptions } from "./init.d.js";
+import { RenderContext, DecorateArgs, TransformValueOptions, AttribsSettings } from "./init.d.js";
 import {domMerge} from './domMerge.js';
 
 // export const attribs = Symbol('attribs');
@@ -47,9 +47,9 @@ function defMethod(key: string | symbol, methods: any, target: any, onPropsChang
     value: method
   });
 }
-export function decorate(
+export function decorate<TProps = object, TAttribs = AttribsSettings> (
   target: HTMLElement,
-  source: DecorateArgs
+  source: DecorateArgs<TProps, TAttribs>
 ) {
   const onPropsChange = Symbol('onPropChange');
   domMerge(target, source);
