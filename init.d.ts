@@ -16,13 +16,15 @@ export interface NextStep {
     SkipSibs?: boolean,
 }
 
+export type AttribsSettings = { [key: string]: string | boolean | number };
+
 //export type props = {[key: string] : any};
-export interface Vals {
-  attribs?: { [key: string]: string | boolean | number };
+export interface Vals<TAttribsSettings = AttribsSettings, TProps = object> {
+  attribs?: AttribsSettings;
   propVals?: object;
 }
 
-export interface DecorateArgs extends Vals{
+export interface DecorateArgs<TAttribsSettings = AttribsSettings, TProps = object> extends Vals{
     propDefs?: object,
     methods?: {[key: string] : Function},
     on?: {[key: string] : (e: Event) => void},
