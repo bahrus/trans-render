@@ -16,7 +16,7 @@ export interface NextStep {
     SkipSibs?: boolean,
 }
 
-export type AttribsSettings = { [key: string]: string | boolean | number };
+export type AttribsSettings = { [key: string]: string | boolean | number | undefined };
 
 //export type props = {[key: string] : any};
 export interface Vals<TAttribsSettings = AttribsSettings, TProps = object> {
@@ -47,6 +47,6 @@ export interface RenderContext {
 
 export interface RenderOptions{
     prepend?: boolean | undefined;
-    initializedCallback?: (ctx: RenderContext, target: HTMLElement | DocumentFragment, options?: RenderOptions) => RenderContext | void,
-    updatedCallback?: (ctx: RenderContext, target: HTMLElement | DocumentFragment, options?: RenderOptions) => RenderContext | void,
+    initializedCallback?: (ctx: RenderContext, target: Element | DocumentFragment, options?: RenderOptions) => RenderContext | void,
+    updatedCallback?: (ctx: RenderContext, target: Element | DocumentFragment, options?: RenderOptions) => RenderContext | void,
 }
