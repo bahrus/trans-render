@@ -1,8 +1,9 @@
 import { define } from './define.js';
 import { hydrate, up } from './hydrate';
 import { init } from './init.js';
-import { repeatInit } from './repeatInit.js';
-import { repeatUpdate } from './repeatUpdate.js';
+//import {repeatInit} from './repeatInit.js';
+//import {repeatUpdate} from './repeatUpdate.js';
+import { repeat } from './repeat.js';
 import { interpolate } from './interpolate.js';
 import { decorate } from './decorate.js';
 //import {decorate} from 'trans-render/decorate.js';
@@ -52,8 +53,9 @@ export class TransRender extends hydrate(HTMLElement) {
             init: init,
             interpolate: interpolate,
             decorate: decorate,
-            repeatInit: repeatInit,
-            repeatUpdate: repeatUpdate,
+            repeat: repeat,
+            //repeatInit: repeatInit,
+            //repeatUpdate: repeatUpdate,
             //Transform: this._evalObj,
             viewModel: this._viewModel,
         };
