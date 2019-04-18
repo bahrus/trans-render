@@ -73,7 +73,13 @@ export class TransRender extends hydrate(HTMLElement) {
         }else{
             ctx.Transform = this._evalObj;
         }
-        init(this._nextSibling, ctx, this._nextSibling);
+        if(ctx.update !== undefined){
+            update(ctx, this._nextSibling)
+        }else{
+            init(this._nextSibling, ctx, this._nextSibling);
+            ctx.update = update;
+        }
+        
     }
 
     _viewModel: any;

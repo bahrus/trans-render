@@ -910,13 +910,13 @@ A web component wrapper around the functions described here is available.
 ```
 <custom-element-demo>
 <template>
-    <div>
+        <div>
         <template id="itemTemplate">
             <li></li>
         </template>
         <trans-render view-model='["winter", "spring", "summer", "fall"]'><script nomodule>
             ({
-                ul: ({ctx, target}) => ctx.repeatInit(itemTemplate, ctx, ctx.viewModel.length, target, {
+                ul: ({ctx, target}) => ctx.repeat(itemTemplate, ctx, ctx.viewModel.length, target, {
                     li: ({ctx, idx}) => ctx.viewModel[idx]
                 })
             })
@@ -924,7 +924,7 @@ A web component wrapper around the functions described here is available.
         <div>
             <ul></ul>
         </div>
-        <script type="module" src="https://unpkg.com/trans-render@0.0.73/trans-render.js?module"></script>
+        <script type="module" src="https://unpkg.com/trans-render@0.0.103/trans-render.js?module"></script>
     </div>
 </template>
 </custom-element-demo>

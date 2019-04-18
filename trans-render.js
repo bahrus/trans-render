@@ -6,6 +6,7 @@ import { init } from './init.js';
 import { repeat } from './repeat.js';
 import { interpolate } from './interpolate.js';
 import { decorate } from './decorate.js';
+import { update } from './update.js';
 //import {decorate} from 'trans-render/decorate.js';
 //const spKey = '__xtal_deco_onPropsChange'; //special key
 const view_model = 'view-model';
@@ -65,7 +66,13 @@ export class TransRender extends hydrate(HTMLElement) {
         else {
             ctx.Transform = this._evalObj;
         }
-        init(this._nextSibling, ctx, this._nextSibling);
+        if (ctx.update !== undefined) {
+            update(ctx, this._nextSibling);
+        }
+        else {
+            init(this._nextSibling, ctx, this._nextSibling);
+            ctx.update = update;
+        }
     }
     get viewModel() {
         return this._viewModel;
