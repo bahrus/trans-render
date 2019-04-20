@@ -858,7 +858,6 @@ The render context which the init function works with provides a "symbols" prope
     <script type="module">
         import {decorate} from '../decorate.js';
         import {init} from '../init.js';
-        const count = Symbol('count');
         init(decorateTest, {
             symbols: {
                 count: Symbol('count'),
