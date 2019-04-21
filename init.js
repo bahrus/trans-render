@@ -57,9 +57,13 @@ export function process(context, idx, level, options) {
                         nextSelector = "*";
                         Object.assign(nextTransform, respAsTransformRules);
                     }
+                    else if (resp2.localName === 'template') {
+                        const templ = resp2;
+                        target.appendChild(document.importNode(templ, true));
+                    }
                     else {
                         const respAsNextStep = resp2;
-                        inherit = inherit || !!resp2.MergeTransforms;
+                        inherit = inherit || !!respAsNextStep.MergeTransforms;
                         if (respAsNextStep.Select !== undefined) {
                             nextSelector =
                                 (firstSelector ? "" : ",") + respAsNextStep.Select;
@@ -74,8 +78,8 @@ export function process(context, idx, level, options) {
                         }
                         if (respAsNextStep.SkipSibs)
                             matchNextSib = false;
-                        if (!matchNextSib && resp2.NextMatch) {
-                            nextMatch.push(resp2.NextMatch);
+                        if (!matchNextSib && respAsNextStep.NextMatch) {
+                            nextMatch.push(respAsNextStep.NextMatch);
                         }
                     }
                     break;

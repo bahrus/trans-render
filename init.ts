@@ -50,7 +50,7 @@ export function process(
   for (const selector in transform) {
     if (target.matches(selector)) {
       const transformTemplateVal = transform[selector];
-      let resp2 : string | void | TransformRules | NextStep | TransformFn = transformTemplateVal;
+      let resp2 : string | HTMLTemplateElement | void | TransformRules | NextStep | TransformFn = transformTemplateVal;
       if(typeof resp2 === 'function'){
         resp2 = resp2({target: target, ctx: context, idx: idx, level: level});
       }
@@ -65,14 +65,16 @@ export function process(
             const firstCharOfFirstProp = keys[0][0];
             isTR = "SNTM".indexOf(firstCharOfFirstProp) === -1;
           }
-
           if (isTR) {
             const respAsTransformRules = resp2 as TransformRules;
             nextSelector = "*";
             Object.assign(nextTransform, respAsTransformRules);
+          }else if((<HTMLElement>resp2).localName === 'template'){
+            const templ = resp2 as HTMLTemplateElement;
+            target.appendChild(document.importNode(templ, true));
           } else {
             const respAsNextStep = resp2 as NextStep;
-            inherit = inherit || !!resp2.MergeTransforms;
+            inherit = inherit || !!respAsNextStep.MergeTransforms;
             if (respAsNextStep.Select !== undefined) {
               nextSelector =
                 (firstSelector ? "" : ",") + respAsNextStep.Select;
@@ -86,8 +88,8 @@ export function process(
               Object.assign(nextTransform, newTransform);
             }
             if (respAsNextStep.SkipSibs) matchNextSib = false;
-            if (!matchNextSib && resp2.NextMatch) {
-              nextMatch.push(resp2.NextMatch);
+            if (!matchNextSib && respAsNextStep.NextMatch) {
+              nextMatch.push(respAsNextStep.NextMatch);
             }
           }
 
