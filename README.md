@@ -508,12 +508,12 @@ My summary Text
 </script>
 ```
 
-### Alternate Template Selection (not implemented, untested)
+### Alternate Template Selection (untested)
 
 ```html
 <template id="sourceTemplate">
     <details>
-        <template data-is="switch">
+        <div data-is="switch">
             <template data-tag="condition-1">
                 <script type="module">
                     import 'myCdn/mondayView.js';
@@ -526,7 +526,7 @@ My summary Text
                 </script>
                 <tuesday-view></tuesday-view>
             </template>
-        </template>
+        </div>
     </details>
 </template>
 <script type="module">
@@ -535,9 +535,7 @@ My summary Text
     const model = {
     const Transform = {
         details: {
-            template[data-is="switch"]: chooser({
-                
-            })
+            template[data-is="switch"]: ({target}) => chooser(target, '[data-tag="condition-1"]', 'afterend');
         }
     };
     init(sourceTemplate, { Transform }, target);
