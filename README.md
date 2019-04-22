@@ -480,6 +480,35 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
 </div>
 ```
 
+### Simple Template Insertion (untested)
+
+A template can be inserted directly in as follows:
+
+```html
+<template id="summaryTemplate">
+My summary Text
+</template>
+<template id="sourceTemplate">
+    <details>
+        ...
+        <summary></summary>
+        ...
+    </details>
+</template>
+<div id="target"></div>
+<script type="module">
+    import { init } from '../init.js';
+    const model = {
+    const Transform = {
+        details: {
+            summary: summaryTemplate
+        }
+    };
+    init(sourceTemplate, { Transform }, target);
+</script>
+```
+
+
 ## Ramblings From the Department of Faulty Analogies
 
 When defining an HTML based user interface, the question arises whether styles should be inlined in the markup or kept separate in style tags and/or CSS files.
