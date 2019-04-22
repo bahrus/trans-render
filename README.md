@@ -480,7 +480,7 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
 </div>
 ```
 
-### Simple Template Insertion (untested)
+### Simple Template Insertion (implemented, untested)
 
 A template can be inserted directly in as follows:
 
@@ -502,6 +502,42 @@ My summary Text
     const Transform = {
         details: {
             summary: summaryTemplate
+        }
+    };
+    init(sourceTemplate, { Transform }, target);
+</script>
+```
+
+### Alternate Template Selection (not implemented, untested)
+
+```html
+<template id="sourceTemplate">
+    <details>
+        <template data-is="switch">
+            <template data-tag="condition-1">
+                <script type="module">
+                    import 'myCdn/mondayView.js';
+                </script>
+                <monday-view></monday-view>
+            </template>
+            <template data-tag="condition-2">
+                <script type="module">
+                    import 'myCdn/tuesdayview.js';
+                </script>
+                <tuesday-view></tuesday-view>
+            </template>
+        </template>
+    </details>
+</template>
+<script type="module">
+    import { init } from '../init.js';
+    import { chooser } from '../chooser.js';
+    const model = {
+    const Transform = {
+        details: {
+            template[data-is="switch"]: chooser({
+                
+            })
         }
     };
     init(sourceTemplate, { Transform }, target);
