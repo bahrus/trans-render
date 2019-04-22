@@ -535,7 +535,7 @@ My summary Text
     const model = {
     const Transform = {
         details: {
-            template[data-is="switch"]: ({target}) => chooser(target, '[data-tag="condition-1"]', 'afterend');
+            'div[data-is="switch"]': ({target}) => chooser(target, '[data-tag="condition-1"]', 'afterend');
         }
     };
     init(sourceTemplate, { Transform }, target);

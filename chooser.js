@@ -1,5 +1,5 @@
 import { insertAdjacentTemplate } from './insertAdjacentTemplate.js';
-export function chooser(target, select, position) {
-    const templ = target.querySelector(select);
-    insertAdjacentTemplate(templ, target, position);
+export function chooser(container, select, position, target) {
+    const templ = container.querySelector(select);
+    insertAdjacentTemplate(templ, target || container, position);
 }
