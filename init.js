@@ -34,7 +34,9 @@ export function process(context, idx, level, options) {
     let matchNextSib = true;
     let inherit = false;
     let nextMatch = [];
-    for (const selector in transform) {
+    let prevSelector = null;
+    for (const rawSelector in transform) {
+        const selector = (prevSelector !== null && rawSelector.startsWith('"')) ? prevSelector : rawSelector;
         if (target.matches(selector)) {
             const transformTemplateVal = transform[selector];
             let resp2 = transformTemplateVal;

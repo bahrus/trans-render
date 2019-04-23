@@ -508,7 +508,7 @@ My summary Text
 </script>
 ```
 
-### Multiple matching (TODO) with "Ditto" notation
+### Multiple matching with "Ditto" notation (untested)
 
 Sometimes, one rule will cause the target to get (new) children.  We then want to apply another rule to process the target element, now that the children are there.
 
@@ -525,12 +525,14 @@ We can specify multiple matches as follows:
             summary: summaryTemplate,
             '"': ({target}) => ...,
             '""': ...,
-            '"""': ...
+            '"3': ...
         }
     };
     init(sourceTemplate, { Transform }, target);
 </script>
 ```
+
+I.e. any selector that starts with a double quote (") will use the last selector that didn't.
 
 ### Alternate Template Selection
 

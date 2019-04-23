@@ -47,7 +47,9 @@ export function process(
   let matchNextSib: boolean = true;
   let inherit = false;
   let nextMatch = [];
-  for (const selector in transform) {
+  let prevSelector = null;
+  for (const rawSelector in transform) {
+    const selector = (prevSelector !== null && rawSelector.startsWith('"')) ? prevSelector : rawSelector;
     if (target.matches(selector)) {
       const transformTemplateVal = transform[selector];
       let resp2 : string | HTMLTemplateElement | void | TransformRules | NextStep | TransformFn = transformTemplateVal;
