@@ -482,7 +482,7 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
 
 ### Simple Template Insertion (implemented, untested)
 
-A template can be inserted directly in as follows:
+A template can be inserted directly inside the target element as follows:
 
 ```html
 <template id="summaryTemplate">
@@ -508,7 +508,31 @@ My summary Text
 </script>
 ```
 
-### Alternate Template Selection (untested)
+### Multiple matching (TODO) with "Ditto" notation
+
+Sometimes, one rule will cause the target to get (new) children.  We then want to apply another rule to process the target element, now that the children are there.
+
+But uniqueueness of the keys of the JSON like structure we are using prevents us from listing the same match expression twice.
+
+We can specify multiple matches as follows:
+
+```html
+<script type="module">
+    import { init } from '../init.js';
+    const model = {
+    const Transform = {
+        details: {
+            summary: summaryTemplate,
+            '"': ({target}) => ...,
+            '""': ...,
+            '"""': ...
+        }
+    };
+    init(sourceTemplate, { Transform }, target);
+</script>
+```
+
+### Alternate Template Selection
 
 ```html
 <template id="sourceTemplate">
@@ -541,6 +565,7 @@ My summary Text
     init(sourceTemplate, { Transform }, target);
 </script>
 ```
+
 
 
 ## Ramblings From the Department of Faulty Analogies

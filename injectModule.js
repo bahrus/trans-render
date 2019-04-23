@@ -1,13 +1,11 @@
 import { appendTag } from './appendTag';
-export function injectModule(path) {
+export function injectModule(script) {
     appendTag(document.head, 'script', {
         attribs: {
             type: 'module'
         },
         propVals: {
-            innerHTML: `
-            import "${path}";
-            `
+            innerHTML: script
         }
     });
 }
