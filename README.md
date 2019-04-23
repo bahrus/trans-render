@@ -28,7 +28,7 @@ Another advantage of separating the binding like this, is that one can insert co
 
 For more musings on the question of what is this good for, please see the [rambling section](https://github.com/bahrus/trans-render#ramblings-from-the-department-of-faulty-analogies) below.
 
-**NB**  It's come to my attention (via [template discussions found here](https://github.com/w3c/webcomponents)) that there are some existing libraries which have explored similar ideas:
+**NB**  It's come to my attention (via [template discussions found here](https://github.com/w3c/webcomponents/issues/704#issuecomment-459290999)) that there are some existing libraries which have explored similar ideas:
 
 1.  [pure-js](https://pure-js.com/)
 2.  [weld](https://github.com/tmpvar/weld)
