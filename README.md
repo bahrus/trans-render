@@ -989,6 +989,16 @@ The render context which the init function works with provides a "symbols" prope
 
 Just saves a tiny bit of boiler plate (document.createElement, container.appendChild)
 
+### chooser(container: Element, select: string, position: InsertPosition, target?: HTMLElement) -- untested
+
+Clones the template element within the container, matching the select string, and inserts according to the position parameter, relative to the optional target element, or the container if no target element is provided.
+
+### replaceTargetWithTemplate(target: Element, template: HTMLTemplateElement) -- untested
+
+### injectModuleScript(script: string) -- untested
+
+### injectModuleRef(path: string) -- untested
+
 ## trans-render the web component
 
 A web component wrapper around the functions described here is available.

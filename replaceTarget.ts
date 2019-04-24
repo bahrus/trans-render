@@ -1,6 +1,11 @@
 import { insertAdjacentTemplate } from "./insertAdjacentTemplate";
-
+import {deleteMe} from './init.js';
+/**
+ * 
+ * @param target 
+ * @param template 
+ */
 export function replaceTargetWithTemplate(target: Element, template: HTMLTemplateElement){
     insertAdjacentTemplate(template, target, 'afterend');
-    target.remove();
+    (<any>target)[deleteMe] = true;
 }

@@ -1,3 +1,4 @@
+export const deleteMe = Symbol('deleteMe');
 export function init(template, ctx, target, options) {
     const isTemplate = template.localName === "template";
     const clonedTemplate = isTemplate
@@ -122,4 +123,6 @@ export function process(context, idx, level, options) {
             context.Transform = transform;
         }
     }
+    if (target[deleteMe])
+        target.remove();
 }

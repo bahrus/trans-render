@@ -12,6 +12,7 @@ export function injectModuleScript(script: string){
 const modulePath = Symbol('modulePath');
 const lookup: {[key: string] : boolean} = {};
 (<any>window)[modulePath] = lookup;
+
 export function injectModuleRef(path: string){
     if(lookup[path]) return;
     injectModuleScript(`
