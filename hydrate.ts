@@ -1,5 +1,5 @@
 export const disabled = 'disabled';
-export const up = Symbol('upgrade');
+//export const up = Symbol('upgrade');
 export interface IHydrate extends HTMLElement{
     _disabled: boolean;
     /**
@@ -13,8 +13,7 @@ export interface IHydrate extends HTMLElement{
      * Needed for asynchronous loading
      * @param props Array of property names to "upgrade", without losing value set while element was Unknown
      */
-    [up](props: string[]): void;
-    //_upgradeProperties(props: string[]): void;
+    propUp(props: string[]): void;
 
     /**
      * Set attribute value.
@@ -78,7 +77,7 @@ export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBas
          * Needed for asynchronous loading
          * @param props Array of property names to "upgrade", without losing value set while element was Unknown
          */
-        [up](props: string[]) {
+        propUp(props: string[]) {
             props.forEach(prop => {
                 if (this.hasOwnProperty(prop)) {
                     let value = (<any>this)[prop];

@@ -1,5 +1,5 @@
 import { define } from './define.js';
-import { hydrate, up } from './hydrate';
+import { hydrate } from './hydrate';
 import { init } from './init.js';
 //import {repeatInit} from './repeatInit.js';
 //import {repeatUpdate} from './repeatUpdate.js';
@@ -25,7 +25,7 @@ export class TransRender extends hydrate(HTMLElement) {
     }
     connectedCallback() {
         this.style.display = 'none';
-        this[up](['viewModel']);
+        this.propUp(['viewModel']);
         this.getElement('_nextSibling', t => t.nextElementSibling);
         this.getElement('_script', t => t.querySelector('script'));
     }

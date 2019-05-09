@@ -1,5 +1,4 @@
 export const disabled = 'disabled';
-export const up = Symbol('upgrade');
 /**
  * Base class for many xtal- components
  * @param superClass
@@ -41,7 +40,7 @@ export function hydrate(superClass) {
          * Needed for asynchronous loading
          * @param props Array of property names to "upgrade", without losing value set while element was Unknown
          */
-        [up](props) {
+        propUp(props) {
             props.forEach(prop => {
                 if (this.hasOwnProperty(prop)) {
                     let value = this[prop];
