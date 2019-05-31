@@ -1,11 +1,28 @@
 import { RenderContext, DecorateArgs, TransformValueOptions, AttribsSettings } from "./init.d.js";
 import {domMerge} from './domMerge.js';
 
-// export const attribs = Symbol('attribs');
-
-// export interface HasAttribsextends HTMLElement{
-//   [attribs]?: {[key: string] : string | boolean};
-// }
+const evCount = Symbol('evtCount');
+/**
+ * Turn number into string with even and odd values easy to query via css.
+ * @param n 
+ */
+function to$(n: number) {
+    const mod = n % 2;
+    return (n - mod) / 2 + '-' + mod;
+}
+/**
+ * Increment event count
+ * @param name
+ */
+function incAttr(name: string, target: HTMLElement) {
+    const ec = (<any>target)[evCount];
+    if (name in ec) {
+        ec[name]++;
+    } else {
+        ec[name] = 0;
+    }
+    target.setAttribute('data-' + name, to$(ec[name]));
+}
 
 
 function defProp(key: string | symbol, props: any, target: any, onPropsChange: symbol){
@@ -17,6 +34,8 @@ function defProp(key: string | symbol, props: any, target: any, onPropsChange: s
       return this[localSym];
     },
     set: function(val) {
+      const oldVal = this[localSym];
+      if((oldVal === null || oldVal === undefined) && (val === oldVal)) return;
       this[localSym] = val;
       const eventName = keyS.replace('(', '-').replace(')', '') + "-changed";
       const newEvent = new CustomEvent(eventName, {
@@ -28,8 +47,9 @@ function defProp(key: string | symbol, props: any, target: any, onPropsChange: s
       } as CustomEventInit);
       this.dispatchEvent(newEvent);
       //this.dataset[]
-      if(this.toggleAttribute) this.toggleAttribute('data-' + eventName);
-      if(this[onPropsChange]) this[onPropsChange](key, val);
+      //if(this.toggleAttribute) this.toggleAttribute('data-' + eventName);
+      incAttr(eventName, target);
+      if(this[onPropsChange]) this[onPropsChange](key, val, oldVal);
       //if (this[spKey]) this[spKey](key, val);
     },
     enumerable: true,
@@ -56,6 +76,7 @@ export function decorate<TProps = object, TAttribs = AttribsSettings> (
   
   const props = source.propDefs;
   if (props !== undefined) {
+    (<any>target)[evCount] = {};
     for (const key in props) {
       //if (props[key]) throw "Property " + key + " already exists."; //only throw error if non truthy value set.
       defProp(key, props, target, onPropsChange);
