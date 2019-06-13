@@ -25,5 +25,6 @@
   "bugs": {
     "url": "https://github.com/bahrus/trans-render/issues"
   },
-  "homepage": "https://github.com/bahrus/trans-render#readme"
+  "homepage": "https://github.com/bahrus/trans-render#readme",
+  "typings": "init.d.ts"
 }
