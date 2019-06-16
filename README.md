@@ -160,6 +160,34 @@ produces:
 
 Note the unusual property name casing, in the JavaScript arena for the NextStep object:  Transform, Select, SkipSibs, etc.  As we will see, this pattern is to allow the interpreter to distinguish between css matches for a nested Transform, vs a "NextStep" JS object.
 
+## Conditional Display
+
+If a matching node returns a boolean value of false, the node is removed.  For example:
+
+```JavaScript
+...
+"section[data-type='attributes']":({ target, ctx}) => {
+    const attribs = tags[idx].attributes;
+    if (attribs === undefined) return false;
+    return {
+    details: {
+        dl: ({ target, ctx}) => {
+        repeat(attributeItemTemplate, ctx, attribs.length, target);
+        return {
+            dt: ({ idx }) => attribs[Math.floor(idx / 2)].name,
+            dd: ({ idx }) => ({
+            'hypo-link[data-bind="description"]': attribs[Math.floor(idx / 2)].description,
+            }) 
+        } as TransformRules;
+        }
+    }
+    }
+},
+...
+```
+
+Here the tag "section" will be removed if attributes is undefined.
+
 ## What does wdwsf stand for?
 
 As you may have noticed, some abbreviations are used by this library:
