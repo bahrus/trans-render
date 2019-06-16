@@ -96,6 +96,9 @@ export function process(
           }
 
           break;
+        case "boolean":
+          if(resp2 === false) target.remove();
+          break;
       }
 
     }
