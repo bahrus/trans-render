@@ -188,6 +188,8 @@ If a matching node returns a boolean value of false, the node is removed.  For e
 
 Here the tag "section" will be removed if attributes is undefined.
 
+**NB:**  Be careful when using this technique.  Once node is removed, there's no going back -- it will no longer match any css if you use trans-render updating.  If your use if trans-render is mostly to display once, and you recreate everything from scratch when your model changes, that's fine.  However, if you want to apply incremental updates, and need to display content conditionally, it would be better to use a [custom element for that purpose](https://github.com/bahrus/if-diff).
+
 ## What does wdwsf stand for?
 
 As you may have noticed, some abbreviations are used by this library:
