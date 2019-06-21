@@ -88,7 +88,7 @@ export function process(context, idx, level, options) {
                     break;
                 case "boolean":
                     if (resp2 === false)
-                        target.remove();
+                        target[deleteMe] = true;
                     break;
             }
         }
