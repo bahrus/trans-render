@@ -24,12 +24,11 @@ export function init(
     const callback = options.initializedCallback;
     if (callback !== undefined) callback(ctx, clonedTemplate, options);
   }
-  if(isTemplate){
+  if(isTemplate && target){
     (<any>target)[verb](clonedTemplate);
   }else{
     ctx.leaf = clonedTemplate;
   }
-
   return ctx;
 }
 

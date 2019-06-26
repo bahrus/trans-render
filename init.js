@@ -19,7 +19,7 @@ export function init(template, ctx, target, options) {
         if (callback !== undefined)
             callback(ctx, clonedTemplate, options);
     }
-    if (isTemplate) {
+    if (isTemplate && target) {
         target[verb](clonedTemplate);
     }
     else {
