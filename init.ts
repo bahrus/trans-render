@@ -26,6 +26,8 @@ export function init(
   }
   if(isTemplate){
     (<any>target)[verb](clonedTemplate);
+  }else{
+    ctx.leaf = clonedTemplate;
   }
 
   return ctx;

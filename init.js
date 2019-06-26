@@ -22,6 +22,9 @@ export function init(template, ctx, target, options) {
     if (isTemplate) {
         target[verb](clonedTemplate);
     }
+    else {
+        ctx.leaf = clonedTemplate;
+    }
     return ctx;
 }
 export function process(context, idx, level, options) {
