@@ -10,5 +10,5 @@ export function replaceTargetWithTag(target, tag, ctx, postSwapCallback) {
     ctx.replacedElement = target;
     target[deleteMe] = true;
     if (postSwapCallback)
-        postSwapCallback(target, tagEl);
+        postSwapCallback(tagEl);
 }
