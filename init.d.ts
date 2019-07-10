@@ -1,4 +1,4 @@
-export type TransformFn = (arg: TransformArg) => TransformRules | NextStep | string | HTMLTemplateElement | void;
+export type TransformFn = (arg: TransformArg) => TransformRules | NextStep | string | HTMLTemplateElement | void | boolean;
 export type TransformValueOptions =  TransformRules | TransformFn | string | HTMLTemplateElement | boolean; 
 export type TransformRules = { [key: string]: TransformValueOptions};
 export interface TransformArg {
@@ -44,6 +44,7 @@ export interface RenderContext {
     viewModel?: any,
     host?: HTMLElement,
     symbols?: {[key: string] : symbol},
+    replacedElement?: Element
 }
 
 export interface RenderOptions{
