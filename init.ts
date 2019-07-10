@@ -53,7 +53,7 @@ export function process(
     const selector = (prevSelector !== null && rawSelector.startsWith('"')) ? prevSelector : rawSelector;
     if (target.matches(selector)) {
       const transformTemplateVal = transform[selector];
-      let resp2 : string | HTMLTemplateElement | void | TransformRules | NextStep | TransformFn = transformTemplateVal;
+      let resp2 : string | HTMLTemplateElement | void | TransformRules | NextStep | TransformFn | boolean = transformTemplateVal;
       if(typeof resp2 === 'function'){
         resp2 = resp2({target: target, ctx: context, idx: idx, level: level});
       }

@@ -29,7 +29,7 @@ function setAttribs(target: HTMLElement, source: Vals) {
           }
           break;
         case "number":
-          target.setAttribute(key, attrib.toString());
+          target.setAttribute(key, attrib!.toString());
           break;
         case null:
         case undefined:
