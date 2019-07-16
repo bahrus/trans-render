@@ -6,7 +6,7 @@ import {TransformValueOptions, RenderContext} from './init.d.js';
  * @param target 
  * @param template 
  */
-export function replaceElementWithTemplate(target: Element, template: HTMLTemplateElement, ctx: RenderContext){
+export function replaceElementWithTemplate(target: HTMLElement, template: HTMLTemplateElement, ctx: RenderContext){
     insertAdjacentTemplate(template, target, 'afterend');
     ctx.replacedElement = target;
     (<any>target)[deleteMe] = true;
