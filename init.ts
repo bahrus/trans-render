@@ -14,7 +14,7 @@ export function init(
   if (ctx.Transform) {
     const firstChild = clonedTemplate.firstElementChild;
     if (firstChild !== null) {
-      ctx.leaf = firstChild;
+      ctx.leaf = firstChild as HTMLElement;
       process(ctx, 0, 0, options);
     }
   }
@@ -108,7 +108,7 @@ export function process(
     let transform = context.Transform;
     const nextSib = target.nextElementSibling;
     if (nextSib !== null) {
-      context.leaf = nextSib;
+      context.leaf = nextSib as HTMLElement;
       process(context, idx + 1, level, options);
     }
     context.Transform = transform;
@@ -117,7 +117,7 @@ export function process(
       let nextSib = target.nextElementSibling;
       while (nextSib !== null) {
         if (nextSib.matches(match)) {
-          context.leaf = nextSib;
+          context.leaf = nextSib as HTMLElement;
           process(context, idx + 1, level, options);
           break;
         }
@@ -134,7 +134,7 @@ export function process(
       Object.assign(nextTransform, context.Transform);
     }
     if (nextChild !== null) {
-      context.leaf = nextChild;
+      context.leaf = nextChild as HTMLElement;
       context.Transform = nextTransform;
       process(context, 0, level + 1, options);
       context.Transform = transform;
