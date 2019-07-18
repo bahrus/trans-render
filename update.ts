@@ -3,12 +3,12 @@ import {UpdateContext} from './update.d.js';
 import {process} from './init.js';
 
 
-export function update(ctx: RenderContext, target: Element | DocumentFragment, options?: RenderOptions){
+export function update(ctx: RenderContext, target: HTMLElement | DocumentFragment, options?: RenderOptions){
     const updateCtx = ctx as UpdateContext;
     updateCtx.update = update;
     const firstChild = target.firstElementChild;
     if(firstChild !== null){
-        ctx.leaf = firstChild;
+        ctx.leaf = firstChild as HTMLElement;
         process(ctx, 0, 0, options);
         if(options){
             const updatedCallback = options.updatedCallback;
