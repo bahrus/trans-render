@@ -22,7 +22,7 @@ export function mergeDeep(target, source) {
 function processKey(key, target, source) {
     const sourceVal = source[key];
     const targetVal = target[key];
-    if (!sourceVal)
+    if (sourceVal === null || sourceVal === undefined)
         return; //TODO:  null out property?
     if (!targetVal) {
         target[key] = sourceVal;
