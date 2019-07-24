@@ -1,16 +1,17 @@
 export function split(target, textContent, search) {
-    if (typeof search === 'string') {
-        const split = textContent.split(new RegExp(search, 'i'));
+    if (typeof search === "string") {
+        const split = textContent.split(new RegExp(search, "i"));
         const tcL = textContent.length; //token content length;
         const tc = split.length;
         const len = search.length;
         let iP = 0;
-        let text = '';
+        let text = "";
         split.forEach((t, i) => {
             iP += t.length;
             text += t;
             if (i < tc && iP < tcL)
-                text += "<span class='match'>" + textContent.substr(iP, len) + "</span>";
+                text +=
+                    "<span class='match'>" + textContent.substr(iP, len) + "</span>";
             iP += len;
         });
         target.innerHTML = text;
