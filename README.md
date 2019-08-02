@@ -1036,7 +1036,7 @@ Clones the template element within the container, matching the select string, an
 
 ### replaceElementWithTemplate(target: HTMLElement, template: HTMLTemplateElement, ctx: RenderContext) 
 
-During pipeline processing, replace a tag with a template.
+During pipeline processing, replace a tag with a template.  The original tag goes into ctx.replacedElement
 
 
 ## trans-render the web component
