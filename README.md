@@ -164,7 +164,7 @@ Note the unusual property name casing, in the JavaScript arena for the NextStep 
 
 If a matching node returns a boolean value of false, the node is removed.  For example:
 
-```JavaScript
+```TypeScript
 ...
 "section[data-type='attributes']":({ target, ctx}) => {
     const attribs = tags[idx].attributes;
@@ -172,13 +172,12 @@ If a matching node returns a boolean value of false, the node is removed.  For e
     return {
         details: {
             dl: ({ target, ctx}) => {
-                repeat(attributeItemTemplate, ctx, attribs.length, target);
-                return {
+                repeat(attributeItemTemplate, ctx, attribs.length, target, {
                     dt: ({ idx }) => attribs[Math.floor(idx / 2)].name,
                     dd: ({ idx }) => ({
-                    'hypo-link[data-bind="description"]': attribs[Math.floor(idx / 2)].description,
+                        'hypo-link[data-bind="description"]': attribs[Math.floor(idx / 2)].description,
                     }) 
-                } as TransformRules;
+                } as TransformRules);
             }
         }
     }
