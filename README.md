@@ -170,17 +170,17 @@ If a matching node returns a boolean value of false, the node is removed.  For e
     const attribs = tags[idx].attributes;
     if (attribs === undefined) return false;
     return {
-    details: {
-        dl: ({ target, ctx}) => {
-        repeat(attributeItemTemplate, ctx, attribs.length, target);
-        return {
-            dt: ({ idx }) => attribs[Math.floor(idx / 2)].name,
-            dd: ({ idx }) => ({
-            'hypo-link[data-bind="description"]': attribs[Math.floor(idx / 2)].description,
-            }) 
-        } as TransformRules;
+        details: {
+            dl: ({ target, ctx}) => {
+                repeat(attributeItemTemplate, ctx, attribs.length, target);
+                return {
+                    dt: ({ idx }) => attribs[Math.floor(idx / 2)].name,
+                    dd: ({ idx }) => ({
+                    'hypo-link[data-bind="description"]': attribs[Math.floor(idx / 2)].description,
+                    }) 
+                } as TransformRules;
+            }
         }
-    }
     }
 },
 ...
@@ -204,10 +204,13 @@ As you may have noticed, some abbreviations are used by this library:
 
 # Use Case 1:  Applying the DRY principle to (post) punk rock lyrics
 
-## Example 1a (only viewable at [webcomponents.org](https://www.webcomponents.org/element/trans-render) )
+## Example 1a
+
+[Demo](https://jsfiddle.net/bahrus/gc58Ldkp/)
 
 Demonstrates including sub templates.
 
+If you are [here](https://www.webcomponents.org/element/trans-render), the demo appears below:
 <!--
 ```
 <custom-element-demo>
@@ -300,7 +303,7 @@ Demonstrates including sub templates.
 ```
 -->
 
-Note the transform rule above (if viewed from webcomponents.org):
+Note the transform rule:
 
 ```JavaScript
 Transform: {
@@ -311,7 +314,9 @@ Transform: {
 
 "*" is a match for all css elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector).  This, combined with the default setting to match all the next siblings means that, for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
 
-## Example 1b (only viewable at [webcomponents.org](https://www.webcomponents.org/element/trans-render) )
+## Example 1b
+
+[Demo](https://jsfiddle.net/bahrus/ktpjyLvc/)
 
 Demonstrates use of update, rudimentary interpolation, recursive select.
 
@@ -538,7 +543,7 @@ My summary Text
 </script>
 ```
 
-### Multiple matching with "Ditto" notation (untested)
+### Multiple matching with "Ditto" notation
 
 Sometimes, one rule will cause the target to get (new) children.  We then want to apply another rule to process the target element, now that the children are there.
 
@@ -564,6 +569,7 @@ We can specify multiple matches as follows:
 
 I.e. any selector that starts with a double quote (") will use the last selector that didn't.
 
+<!--
 ### Alternate Template Selection
 
 ```html
@@ -597,7 +603,7 @@ I.e. any selector that starts with a double quote (") will use the last selector
     init(sourceTemplate, { Transform }, target);
 </script>
 ```
-
+-->
 
 
 ## Ramblings From the Department of Faulty Analogies
@@ -618,7 +624,7 @@ For example, in the second example above, the core "init" function described her
 
 We provide a small helper function "interpolate" for this purpose, but as this is a fundamental use case for template instantiation, and as this library doesn't add much "value-add" for that use case, native template instantiation could be used as a first round of processing.  And where it makes sense to tightly couple the binding to the template, use it there as well, followed by a binding step using this library.  Just as use of inline styles, supplemented by css style tags/files (or the other way around) is something seen quite often.
 
-A question in my mind, is how does this rendering approach fit in with web components (I'm going to take a leap here and assume that [HTML Modules / Imports](https://github.com/w3c/webcomponents/issues/645) in some form makes it into browsers, even though I think the discussion still has some relevance without that).
+A question in my mind, is how does this rendering approach fits in with web components (I'm going to take a leap here and assume that [HTML Modules / Imports](https://github.com/w3c/webcomponents/issues/645) in some form makes it into browsers, even though I think the discussion still has some relevance without that).
 
 I think this alternative approach can provide value, by providing a process for "Pipeline Rendering":  Rendering starts with an HTML template element, which produces transformed markup using init or native template instantiation.  Then consuming / extending web components could insert additional bindings via the CSS-matching transformations this library provides.
 
@@ -1019,21 +1025,29 @@ The render context which the init function works with provides a "symbols" prope
 
 Just saves a tiny bit of boiler plate (document.createElement, container.appendChild)
 
+### split(target: HTMLElement, textContent: string, search: string | null | undefined)
+Splits text based on search into stylable spans
+
+<!--
 ### chooser(container: Element, select: string, position: InsertPosition, target?: HTMLElement) -- untested
 
 Clones the template element within the container, matching the select string, and inserts according to the position parameter, relative to the optional target element, or the container if no target element is provided.
+-->
 
-### replaceTargetWithTemplate(target: Element, template: HTMLTemplateElement) -- untested
+### replaceElementWithTemplate(target: HTMLElement, template: HTMLTemplateElement, ctx: RenderContext) 
 
-### injectModuleScript(script: string) -- untested
+During pipeline processing, replace a tag with a template.
 
-### injectModuleRef(path: string) -- untested
 
 ## trans-render the web component
 
 A web component wrapper around the functions described here is available.
 
-### Example syntax (only viewable at [webcomponents.org](https://www.webcomponents.org/element/trans-render) ):
+### Example syntax 
+
+[Demo](https://jsfiddle.net/bahrus/yph7bm35/)
+
+If you are [here](https://www.webcomponents.org/element/trans-render) what appears next should work:
 
 <!--
 ```

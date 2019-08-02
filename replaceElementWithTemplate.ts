@@ -2,7 +2,7 @@ import { insertAdjacentTemplate } from "./insertAdjacentTemplate.js";
 import {deleteMe} from './init.js';
 import {TransformValueOptions, RenderContext} from './init.d.js';
 /**
- * 
+ * During pipeline processing, replace a tag with a template.
  * @param target 
  * @param template 
  */

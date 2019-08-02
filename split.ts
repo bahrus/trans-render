@@ -1,4 +1,10 @@
-export function split(
+
+/**
+ * Splits text based on search into stylable spans
+ * @param target 
+ * @param textContent 
+ * @param search 
+ */export function split(
   target: HTMLElement,
   textContent: string,
   search: string | null | undefined

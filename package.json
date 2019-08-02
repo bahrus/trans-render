@@ -2,6 +2,7 @@
   "name": "trans-render",
   "version": "0.0.130",
   "description": "Instantiate an HTML Template",
+  "main": "init.js",
   "module": "init.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

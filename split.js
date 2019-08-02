@@ -1,4 +1,9 @@
-export function split(target, textContent, search) {
+/**
+ * Splits text based on search into stylable spans
+ * @param target
+ * @param textContent
+ * @param search
+ */ export function split(target, textContent, search) {
     if (typeof search === "string") {
         const split = textContent.split(new RegExp(search, "i"));
         const tcL = textContent.length; //token content length;
