@@ -514,7 +514,7 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
 </div>
 ```
 
-### Simple Template Insertion (implemented, untested)
+### Simple Template Insertion
 
 A template can be inserted directly inside the target element as follows:
 
@@ -546,7 +546,7 @@ My summary Text
 
 Sometimes, one rule will cause the target to get (new) children.  We then want to apply another rule to process the target element, now that the children are there.
 
-But uniqueueness of the keys of the JSON like structure we are using prevents us from listing the same match expression twice.
+But uniqueueness of the keys of the JSON-like structure we are using prevents us from listing the same match expression twice.
 
 We can specify multiple matches as follows:
 
@@ -683,9 +683,7 @@ This function is modeled after insertAdjacentElement / insertAdjacentHTML.  Only
 
 ### Declative-ish property setting
 
-Object.assign and its modern abbreviated variations, provides a quite declarative feeling when populating an object with values.  Unfortunately, Object.assign throws errors if using it to set read-only properties like style and dataset (are there others?). An alternative to object.assign are convenience functions like JQuery.extends, JQuery.attr and "h", which domMerge draws inspiration from.
-
-
+Object.assign and its modern abbreviated variations, provides a quite declarative feeling when populating an object with values.  Unfortunately, Object.assign can't be used to recursively set read-only properties like style and dataset (are there others?). An alternative to object.assign are convenience functions like JQuery.extends, JQuery.attr and "h", which domMerge draws inspiration from.
 
 The function domMerge provides similar help.
 
@@ -1036,7 +1034,6 @@ Clones the template element within the container, matching the select string, an
 ### replaceElementWithTemplate(target: HTMLElement, template: HTMLTemplateElement, ctx: RenderContext) 
 
 During pipeline processing, replace a tag with a template.  The original tag goes into ctx.replacedElement
-
 
 ## trans-render the web component
 
