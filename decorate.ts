@@ -2,6 +2,7 @@ import { RenderContext, DecorateArgs, TransformValueOptions, AttribsSettings } f
 import {domMerge} from './domMerge.js';
 
 const evCount = Symbol('evtCount');
+const handlerKey = Symbol('handlerKey');
 /**
  * Turn number into string with even and odd values easy to query via css.
  * @param n 
@@ -97,7 +98,7 @@ export function decorate<TProps = object, TAttribs = AttribsSettings> (
   const events = source.on;
   if (events) {
     for (const key in events) {
-      const handlerKey = key + "_transRenderHandler";  //TODO  : symbolize
+      //const handlerKey = key + "_transRenderHandler";  //TODO  : symbolize
       const prop = Object.defineProperty(target, handlerKey, {
         enumerable: false,
         configurable: true,
