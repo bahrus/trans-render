@@ -35,8 +35,14 @@ export interface RenderContext {
     //repeatInit?: (template: HTMLTemplateElement, ctx: RenderContext, count: number, target: Element, targetTransform?: TransformValueOptions) => TransformValueOptions;
     //repeatUpdate?: (template: HTMLTemplateElement, ctx: RenderContext, count: number, target: HTMLElement, targetTransform?: TransformValueOptions) => TransformValueOptions;
     repeat?: (template: HTMLTemplateElement, ctx: RenderContext, count: number, target: HTMLElement, targetTransform?: TransformValueOptions) => TransformValueOptions;
+    repeateth?: (template: HTMLTemplateElement, ctx: RenderContext, count: number, target: HTMLElement, targetTransform?: TransformValueOptions) => TransformValueOptions;
     interpolate?: (target: any, prop: string, obj: any, isAttr: boolean) => void;
+    insertAdjacentTemplate?: (template: HTMLTemplateElement, target: Element, position: InsertPosition) => void;
     decorate?<T extends HTMLElement>(target: T, decor: DecorateArgs) : void;
+    split?: (target: HTMLElement, textContent: string, search: string | null | undefined) => void;
+    replaceElementWithTemplate?: (target: HTMLElement, template: HTMLTemplateElement, ctx: RenderContext) => void;
+    replaceTargetWithTag?: (target: HTMLElement, tag: string, ctx: RenderContext, postSwapCallback?: (el: HTMLElement) => void) => void;
+    appendTag?: (container: HTMLElement, name: string, config: DecorateArgs) => HTMLElement;
     leaf?: HTMLElement | DocumentFragment,
     Transform?: TransformRules,
     update?: (ctx: RenderContext, target: HTMLElement | DocumentFragment) => RenderContext;
@@ -44,7 +50,7 @@ export interface RenderContext {
     viewModel?: any,
     host?: HTMLElement,
     symbols?: {[key: string] : symbol},
-    replacedElement?: HTMLElement
+    replacedElement?: HTMLElement,
 }
 
 export interface RenderOptions{

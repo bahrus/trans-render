@@ -68,9 +68,9 @@ function defMethod(key: string | symbol, methods: any, target: any, onPropsChang
     value: method
   });
 }
-export function decorate<TProps = object, TAttribs = AttribsSettings> (
+export function decorate<PropsType = object, TAttribs = AttribsSettings> (
   target: HTMLElement,
-  source: DecorateArgs<TProps, TAttribs>
+  source: DecorateArgs<PropsType, TAttribs>
 ) {
   const onPropsChange = Symbol('onPropChange');
   domMerge(target, source);

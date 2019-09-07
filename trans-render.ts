@@ -8,6 +8,12 @@ import {interpolate} from './interpolate.js';
 import {decorate} from './decorate.js';
 import {RenderContext} from './init.d.js';
 import { update } from './update.js';
+import {appendTag} from './appendTag.js';
+import {repeateth} from './repeateth.js';
+import {insertAdjacentTemplate} from './insertAdjacentTemplate.js';
+import {replaceElementWithTemplate} from './replaceElementWithTemplate.js';
+import {replaceTargetWithTag} from './replaceTargetWithTag.js';
+import {split} from './split.js';
 //import {decorate} from 'trans-render/decorate.js';
 
 //const spKey = '__xtal_deco_onPropsChange'; //special key
@@ -63,6 +69,12 @@ export class TransRender extends hydrate(HTMLElement) {
             interpolate: interpolate,
             decorate: decorate,
             repeat: repeat,
+            repeateth: repeateth,
+            insertAdjacentTemplate: insertAdjacentTemplate,
+            replaceElementWithTemplate: replaceElementWithTemplate,
+            replaceTargetWithTag: replaceTargetWithTag,
+            split: split,
+            appendTag: appendTag,
             //repeatInit: repeatInit,
             //repeatUpdate: repeatUpdate,
             //Transform: this._evalObj,
