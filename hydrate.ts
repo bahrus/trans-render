@@ -31,7 +31,7 @@ export interface IHydrate extends HTMLElement{
 type Constructor<T = {}> = new (...args: any[]) => T;
 
 /**
- * Base class for many xtal- components
+ * Base mixin for many xtal- components
  * @param superClass
  */
 export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBase) {

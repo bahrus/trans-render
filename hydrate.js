@@ -1,6 +1,6 @@
 export const disabled = 'disabled';
 /**
- * Base class for many xtal- components
+ * Base mixin for many xtal- components
  * @param superClass
  */
 export function hydrate(superClass) {
