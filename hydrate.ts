@@ -61,14 +61,16 @@ export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBas
         }
 
         _disabled!: boolean;
+
+        get disabled() {
+            return this._disabled;
+        }
         /**
          * Any component that emits events should not do so if it is disabled.
          * Note that this is not enforced, but the disabled property is made available.
          * Users of this mix-in should ensure not to call "de" if this property is set to true.
+         * @attr
          */
-        get disabled() {
-            return this._disabled;
-        }
         set disabled(val) {
             this.attr(disabled, val, '');
         }
