@@ -5,17 +5,22 @@ export function interpolate(target, prop, obj, isAttr = false) {
     if (split === undefined) {
         const txt = isAttr ? target.getAttribute(prop) : target[prop];
         split = txt.split('|');
-        target[sk] = split;
+        target[sk] = split.map(s => {
+            const optionalChain = s.split('??'); //todo trimend only -- waiting for universal browser support
+            return optionalChain.length === 1 ? optionalChain[0] : optionalChain;
+        });
     }
-    const newVal = split.map((s, idx) => {
+    const newVal = target[sk].map((a, idx) => {
+        const isArray = Array.isArray(a);
+        const s = isArray ? a[0] : a;
         if (s[0] === '.') {
-            const chained = s.substr(1).split('??');
-            const frstItem = obj[chained[0].trim()]; //todo trimend
-            if (chained.length === 1) {
+            //const chained = s.substr(1).split('??');
+            const frstItem = obj[s.substr(1).trim()];
+            if (!isArray) {
                 return frstItem;
             }
             else {
-                return (frstItem === undefined || frstItem === null) ? chained[1] : frstItem;
+                return (frstItem === undefined || frstItem === null) ? a[1] : frstItem;
             }
         }
         else {
