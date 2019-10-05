@@ -1,8 +1,8 @@
 export type TransformFn = (arg: TransformArg) => TransformRules | NextStep | string | HTMLTemplateElement | void | boolean;
 export type TransformValueOptions =  TransformRules | TransformFn | string | HTMLTemplateElement | boolean; 
 export type TransformRules = { [key: string]: TransformValueOptions};
-export interface TransformArg {
-    target: HTMLElement,
+export interface TransformArg<TargetType extends HTMLElement = HTMLElement> {
+    target: TargetType,
     ctx: RenderContext,
     idx: number,
     level: number,
