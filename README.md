@@ -1037,7 +1037,7 @@ Clones the template element within the container, matching the select string, an
 
 During pipeline processing, replace a tag with a template.  The original tag goes into ctx.replacedElement
 
-## pierce<TargetType extends HTMLElement = HTMLElement>(el: HTMLElement, ctx: RenderContext, targetTransform: TransformRules)
+### pierce<TargetType extends HTMLElement = HTMLElement>(el: HTMLElement, ctx: RenderContext, targetTransform: TransformRules)
 
 Pierce into shadow root, and (asynchronously) apply transform rules within the shadow root.
 
