@@ -5,11 +5,13 @@
   "main": "init.js",
   "module": "init.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "node node_modules/xtal-test/serve.js"
   },
   "dependencies": {},
   "devDependencies": {
-    "jiife": "0.0.12"
+    "jiife": "0.0.14",
+    "xtal-test": "0.0.20"
   },
   "repository": {
     "type": "git",

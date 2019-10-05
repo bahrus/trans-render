@@ -674,6 +674,8 @@ Once in a while the scores match, but most of the time the scores above are what
 
 So the difference isn't dramatic, but it is statistically significant, in my opinion.
 
+See this [side-by-side comparison](https://www.webpagetest.org/video/view.php?id=190927_26744e8bf5d82ba9296bdea710299d3274277a2a) for more evidence of the benefits. 
+
 
 ## Miscellaneous Helper Functions
 
@@ -1035,6 +1037,10 @@ Clones the template element within the container, matching the select string, an
 
 During pipeline processing, replace a tag with a template.  The original tag goes into ctx.replacedElement
 
+## pierce<TargetType extends HTMLElement = HTMLElement>(el: HTMLElement, ctx: RenderContext, targetTransform: TransformRules)
+
+Pierce into shadow root, and (asynchronously) apply transform rules within the shadow root.
+
 ## trans-render the web component
 
 A web component wrapper around the functions described here is available.
@@ -1069,5 +1075,7 @@ If you are [here](https://www.webcomponents.org/element/trans-render) what appea
 </custom-element-demo>
 ```
 -->
+
+
 
 

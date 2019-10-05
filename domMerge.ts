@@ -1,22 +1,11 @@
-import {Vals} from './init.d.js';
+import {Vals, AttribsSettings} from './init.d.js';
 import {mergeDeep} from './mergeDeep.js';
-// function assignSpecial(
-//   target: HTMLElement,
-//   vals: object,
-//   propNames: string[]
-// ) {
-//   propNames.forEach(propName => {
-//     const targetProp = (<any>target)[propName];
-//     const srcProp = (<any>vals)[propName];
-//     Object.assign(targetProp, srcProp);
-//     delete (<any>vals)[propName];
-//   });
-// }
+
 function setAttribs(target: HTMLElement, source: Vals) {
   const attributes = source.attribs;
   if (attributes !== undefined) {
     for (const key in attributes) {
-      const attrib = attributes[key];
+      const attrib = attributes[key] as string | boolean | number | undefined;//why, typescript?
       switch (typeof attrib) {
         case 'string':
           target.setAttribute(key, attrib as string); // why is casting needed?

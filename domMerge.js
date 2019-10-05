@@ -1,21 +1,9 @@
 import { mergeDeep } from './mergeDeep.js';
-// function assignSpecial(
-//   target: HTMLElement,
-//   vals: object,
-//   propNames: string[]
-// ) {
-//   propNames.forEach(propName => {
-//     const targetProp = (<any>target)[propName];
-//     const srcProp = (<any>vals)[propName];
-//     Object.assign(targetProp, srcProp);
-//     delete (<any>vals)[propName];
-//   });
-// }
 function setAttribs(target, source) {
     const attributes = source.attribs;
     if (attributes !== undefined) {
         for (const key in attributes) {
-            const attrib = attributes[key];
+            const attrib = attributes[key]; //why, typescript?
             switch (typeof attrib) {
                 case 'string':
                     target.setAttribute(key, attrib); // why is casting needed?

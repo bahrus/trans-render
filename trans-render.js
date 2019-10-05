@@ -1,5 +1,5 @@
 import { define } from './define.js';
-import { hydrate } from './hydrate';
+import { hydrate } from './hydrate.js';
 import { init } from './init.js';
 //import {repeatInit} from './repeatInit.js';
 //import {repeatUpdate} from './repeatUpdate.js';
@@ -12,6 +12,7 @@ import { repeateth } from './repeateth.js';
 import { insertAdjacentTemplate } from './insertAdjacentTemplate.js';
 import { replaceElementWithTemplate } from './replaceElementWithTemplate.js';
 import { replaceTargetWithTag } from './replaceTargetWithTag.js';
+import { pierce } from './pierce.js';
 import { split } from './split.js';
 //import {decorate} from 'trans-render/decorate.js';
 //const spKey = '__xtal_deco_onPropsChange'; //special key
@@ -67,6 +68,7 @@ export class TransRender extends hydrate(HTMLElement) {
             replaceTargetWithTag: replaceTargetWithTag,
             split: split,
             appendTag: appendTag,
+            pierce: pierce,
             //repeatInit: repeatInit,
             //repeatUpdate: repeatUpdate,
             //Transform: this._evalObj,

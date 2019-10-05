@@ -1,5 +1,5 @@
-export type TransformFn = (arg: TransformArg) => TransformRules | NextStep | string | HTMLTemplateElement | void | boolean;
-export type TransformValueOptions =  TransformRules | TransformFn | string | HTMLTemplateElement | boolean; 
+export type TransformFn<TargetType extends HTMLElement = HTMLElement> = (arg: TransformArg<TargetType>) => TransformRules | NextStep | string | HTMLTemplateElement | void | boolean;
+export type TransformValueOptions<TargetType extends HTMLElement = HTMLElement> =  TransformRules | TransformFn<TargetType> | string | HTMLTemplateElement | boolean; 
 export type TransformRules = { [key: string]: TransformValueOptions};
 export interface TransformArg<TargetType extends HTMLElement = HTMLElement> {
     target: TargetType,
@@ -51,6 +51,7 @@ export interface RenderContext {
     host?: HTMLElement,
     symbols?: {[key: string] : symbol},
     replacedElement?: HTMLElement,
+    pierce?: (el: HTMLElement, ctx: RenderContext) => void;
 }
 
 export interface RenderOptions{
