@@ -1,7 +1,7 @@
 import {RenderContext, TransformRules} from './init.d.js';
 import {init} from './init.js';
 
-export function pierce<TargetType extends HTMLElement = HTMLElement>(el: HTMLElement, ctx: RenderContext, 
+export function pierce<TargetType extends HTMLElement = HTMLElement>(el: TargetType, ctx: RenderContext, 
     targetTransform: TransformRules){
     customElements.whenDefined(el.localName).then(() =>{
         requestAnimationFrame(() =>{
