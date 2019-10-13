@@ -6,10 +6,10 @@ import {RenderContext} from './init.d.js';
  * @param target 
  * @param template 
  */
-export function replaceTargetWithTag(target: HTMLElement, tag: string, ctx: RenderContext, postSwapCallback?: (el: HTMLElement) => void){
-    const tagEl = document.createElement(tag);
-    target.insertAdjacentElement('afterend', tagEl);
+export function replaceTargetWithTag<TargetType extends HTMLElement = HTMLElement, ReplacingTagType extends HTMLElement = HTMLElement>(target: TargetType, tag: string, ctx: RenderContext, preSwapCallback?: (el: ReplacingTagType) => void){
+    const tagEl = document.createElement(tag) as ReplacingTagType;
     ctx.replacedElement = target;
     (<any>target)[deleteMe] = true;
-    if(postSwapCallback) postSwapCallback(tagEl);
+    if(preSwapCallback) preSwapCallback(tagEl);
+    target.insertAdjacentElement('afterend', tagEl);
 }

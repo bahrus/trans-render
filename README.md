@@ -1037,6 +1037,10 @@ Clones the template element within the container, matching the select string, an
 
 During pipeline processing, replace a tag with a template.  The original tag goes into ctx.replacedElement
 
+### replaceTargetWithTag<TargetType extends HTMLElement = HTMLElement, ReplacingTagType extends HTMLElement = HTMLElement>(target: TargetType, tag: string, ctx: RenderContext, preSwapCallback?: (el: ReplacingTagType) => void)
+
+During pipeline processing, replace a tag with another tag.  The original tag goes into ctx.replacedElement
+
 ### pierce<TargetType extends HTMLElement = HTMLElement>(el: TargetType, ctx: RenderContext, targetTransform: TransformRules)
 
 Pierce into shadow root, and (asynchronously) apply transform rules within the shadow root.
