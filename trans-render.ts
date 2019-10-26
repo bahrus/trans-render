@@ -17,8 +17,13 @@ import {pierce} from './pierce.js';
 import {split} from './split.js';
 //import {decorate} from 'trans-render/decorate.js';
 
-//const spKey = '__xtal_deco_onPropsChange'; //special key
 const view_model = 'view-model';
+/**
+ * Alternative way of instantiating a template
+ * @element trans-render
+ * 
+ * 
+ */
 export class TransRender extends hydrate(HTMLElement) {
 
     static get is() { return 'trans-render'; }
@@ -100,6 +105,10 @@ export class TransRender extends hydrate(HTMLElement) {
     get viewModel(){
         return this._viewModel;
     }
+    /**
+     * model to base view on
+     * @attr view-model
+     */
     set viewModel(nv){
         this._viewModel = nv;
         this.onPropsChange();
