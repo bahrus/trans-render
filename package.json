@@ -2,8 +2,8 @@
   "name": "trans-render",
   "version": "0.0.135",
   "description": "Instantiate an HTML Template",
-  "main": "init.js",
-  "module": "init.js",
+  "main": "trans-render.js",
+  "module": "trans-render.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "node node_modules/xtal-test/serve.js"
@@ -11,7 +11,7 @@
   "dependencies": {},
   "devDependencies": {
     "jiife": "0.0.14",
-    "xtal-test": "0.0.20"
+    "xtal-test": "0.0.21"
   },
   "repository": {
     "type": "git",

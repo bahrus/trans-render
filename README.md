@@ -4,9 +4,9 @@
 
 <a href="https://nodei.co/npm/trans-render/"><img src="https://nodei.co/npm/trans-render.png"></a>
 
+Size of web component, with all optional processors included:
+
 <img src="https://badgen.net/bundlephobia/minzip/trans-render">
-
-
 
 Yes, there is an actual [web component](https://github.com/bahrus/trans-render#trans-render-the-web-component) in this package.  However, it won't make sense unless the core functions described first are (at least partly) understood.
 
@@ -187,7 +187,7 @@ If a matching node returns a boolean value of false, the node is removed.  For e
 
 Here the tag "section" will be removed if attributes is undefined.
 
-**NB:**  Be careful when using this technique.  Once node is removed, there's no going back -- it will no longer match any css if you use trans-render updating.  If your use if trans-render is mostly to display once, and you recreate everything from scratch when your model changes, that's fine.  However, if you want to apply incremental updates, and need to display content conditionally, it would be better to use a [custom element for that purpose](https://github.com/bahrus/if-diff).
+**NB:**  Be careful when using this technique.  Once a node is removed, there's no going back -- it will no longer match any css if you use trans-render updating.  If your use of trans-render is mostly to display something once, and you recreate everything from scratch when your model changes, that's fine.  However, if you want to apply incremental updates, and need to display content conditionally, it would be better to use a [custom element](https://polymer-library.polymer-project.org/3.0/docs/devguide/templates#dom-if) [for that](https://github.com/bahrus/if-diff) [purpose](https://github.com/matthewp/if-else).
 
 ## What does wdwsf stand for?
 
@@ -1051,7 +1051,7 @@ A web component wrapper around the functions described here is available.
 
 ### Example syntax 
 
-[Demo](https://jsfiddle.net/bahrus/yph7bm35/)
+[Demo](https://jsfiddle.net/bahrus/0c96b2aj/)
 
 If you are [here](https://www.webcomponents.org/element/trans-render) what appears next should work:
 
