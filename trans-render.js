@@ -1,8 +1,6 @@
 import { define } from './define.js';
 import { hydrate } from './hydrate.js';
 import { init } from './init.js';
-//import {repeatInit} from './repeatInit.js';
-//import {repeatUpdate} from './repeatUpdate.js';
 import { repeat } from './repeat.js';
 import { interpolate } from './interpolate.js';
 import { decorate } from './decorate.js';

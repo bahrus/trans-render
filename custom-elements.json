@@ -38,7 +38,8 @@
         }
       ],
       "events": [],
-      "slots": []
+      "slots": [],
+      "cssProperties": []
     }
   ]
 }

@@ -1,12 +1,10 @@
 import {define} from './define.js';
 import {hydrate} from './hydrate.js';
 import {init} from './init.js';
-//import {repeatInit} from './repeatInit.js';
-//import {repeatUpdate} from './repeatUpdate.js';
 import {repeat} from './repeat.js';
 import {interpolate} from './interpolate.js';
 import {decorate} from './decorate.js';
-import {RenderContext} from './init.d.js';
+import {RenderContext, TransRenderWC} from './init.d.js';
 import { update } from './update.js';
 import {appendTag} from './appendTag.js';
 import {repeateth} from './repeateth.js';
@@ -24,7 +22,7 @@ const view_model = 'view-model';
  * 
  * 
  */
-export class TransRender extends hydrate(HTMLElement) {
+export class TransRender extends hydrate(HTMLElement) implements TransRenderWC {
 
     static get is() { return 'trans-render'; }
     static get observedAttributes(){
@@ -101,7 +99,7 @@ export class TransRender extends hydrate(HTMLElement) {
         
     }
 
-    _viewModel: any;
+    _viewModel!: object;
     get viewModel(){
         return this._viewModel;
     }
@@ -116,3 +114,9 @@ export class TransRender extends hydrate(HTMLElement) {
 
 }
 define(TransRender);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'trans-render': TransRender,
+    }
+}
