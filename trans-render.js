@@ -72,10 +72,8 @@ export class TransRender extends hydrate(HTMLElement) {
             split: split,
             appendTag: appendTag,
             pierce: pierce,
-            //repeatInit: repeatInit,
-            //repeatUpdate: repeatUpdate,
-            //Transform: this._evalObj,
             viewModel: this._viewModel,
+            host: this
         };
         if (this._evalObj['Transform']) {
             Object.assign(ctx, this._evalObj);
