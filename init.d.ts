@@ -51,7 +51,7 @@ export interface RenderContext {
     host?: HTMLElement,
     symbols?: {[key: string] : symbol},
     replacedElement?: HTMLElement,
-    pierce?: (el: HTMLElement, ctx: RenderContext) => void;
+    pierce?: (el: HTMLElement, ctx: RenderContext, targetTransform: TransformRules) => void;
 }
 
 export interface RenderOptions{
