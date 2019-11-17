@@ -1,6 +1,5 @@
-export function waitForAttributeChange(el: HTMLElement, attributeName: string, once: boolean = true, test?: (s: string | null) => boolean){
-    //does it even make sense to listen more than once with a promise?
-    //observer of some sort?
+export function waitForAttributeChange(el: HTMLElement, attributeName: string, test?: (s: string | null) => boolean){
+    //kind of limited, promises only seem to support one time only events.  I guess this is what RxJS is trying to do
     return new Promise((resolve, reject) =>{
         const observer = new MutationObserver(mutations => {
             // For the sake of...observation...let's output the mutation to console to see how this all works
@@ -8,10 +7,8 @@ export function waitForAttributeChange(el: HTMLElement, attributeName: string, o
                 if(mutation.attributeName === attributeName){
                     if(test){
                         if(test(el.getAttribute(attributeName))){
+                            observer.disconnect();
                             resolve();
-                            if(once){
-                                observer.disconnect();
-                            }
                         }
                     }else{
                         resolve();
