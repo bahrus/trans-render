@@ -11,6 +11,7 @@ export function waitForAttributeChange(el: HTMLElement, attributeName: string, t
                             resolve();
                         }
                     }else{
+                        observer.disconnect();
                         resolve();
                     }
                 }

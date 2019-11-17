@@ -12,6 +12,7 @@ export function waitForAttributeChange(el, attributeName, test) {
                         }
                     }
                     else {
+                        observer.disconnect();
                         resolve();
                     }
                 }
