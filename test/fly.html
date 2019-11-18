@@ -7,8 +7,14 @@
     <title>Document</title>
 </head>
 <body>
+    <template id=title>
+        There was an old lady who swallowed a fly;
+        <div mark data-covg="9%"></div>
+    </template>
+    <div id=target></div>
     <script type=module>
         import {init} from '../init.js';
+        init(title, {}, target);
     </script>
 </body>
 </html>
