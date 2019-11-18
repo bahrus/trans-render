@@ -6,12 +6,15 @@
   "main": "trans-render.js",
   "module": "trans-render.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "tape test/*.js",
     "serve": "node node_modules/xtal-test/serve.js",
     "doc": "wca analyze trans-render.js --outFile custom-elements.json"
   },
   "dependencies": {},
   "devDependencies": {
+    "@types/node": "12.12.8",
+    "tape": "4.11.0",
+    "@types/tape": "4.2.33",
     "jiife": "0.0.14",
     "xtal-test": "0.0.21"
   },
