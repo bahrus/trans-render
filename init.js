@@ -52,6 +52,11 @@ export function process(context, idx, level, options) {
                     target.textContent = resp2;
                     break;
                 case "object":
+                    if (resp2.localName === 'template') {
+                        const templ = resp2;
+                        target.appendChild(templ.content.cloneNode(true));
+                        continue;
+                    }
                     let isTR = true;
                     const keys = Object.keys(resp2);
                     if (keys.length > 0) {
@@ -62,10 +67,6 @@ export function process(context, idx, level, options) {
                         const respAsTransformRules = resp2;
                         nextSelector = "*";
                         Object.assign(nextTransform, respAsTransformRules);
-                    }
-                    else if (resp2.localName === 'template') {
-                        const templ = resp2;
-                        target.appendChild(document.importNode(templ, true));
                     }
                     else {
                         const respAsNextStep = resp2;

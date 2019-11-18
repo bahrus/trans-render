@@ -62,6 +62,11 @@ export function process(
           target.textContent = resp2;
           break;
         case "object":
+          if((<HTMLElement>resp2).localName === 'template'){
+            const templ = resp2 as HTMLTemplateElement;
+            target.appendChild(templ.content.cloneNode(true));
+            continue;
+          }
           let isTR = true;
           const keys = Object.keys(resp2);
           if (keys.length > 0) {
@@ -72,9 +77,6 @@ export function process(
             const respAsTransformRules = resp2 as TransformRules;
             nextSelector = "*";
             Object.assign(nextTransform, respAsTransformRules);
-          }else if((<HTMLElement>resp2).localName === 'template'){
-            const templ = resp2 as HTMLTemplateElement;
-            target.appendChild(document.importNode(templ, true));
           } else {
             const respAsNextStep = resp2 as NextStep;
             inherit = inherit || !!respAsNextStep.MergeTransforms;

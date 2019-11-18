@@ -9,7 +9,7 @@ async function customTests(page) {
     };
     TapeTestRunner.test('testing dev.html', (t) => {
         t.equal(errorTags.length, 0);
-        t.equals(markings.length, 1);
+        t.equals(markings.length, 2);
         t.end();
     });
 }

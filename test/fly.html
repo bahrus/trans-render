@@ -8,13 +8,21 @@
 </head>
 <body>
     <template id=title>
-        There was an old lady who swallowed a fly;
+        <div>There was an old lady who swallowed a fly;</div>
         <div mark data-covg="9%"></div>
+    </template>
+    <template id=dontKnowWhy>
+        I don't know why she swallowed a fly - Perhaps she'll die!
+        <div mark data-covg="39%"></div>
     </template>
     <div id=target></div>
     <script type=module>
         import {init} from '../init.js';
-        init(title, {}, target);
+        init(title, {
+            Transform:{
+                '[mark]': dontKnowWhy
+            }
+        }, target);
     </script>
 </body>
 </html>
