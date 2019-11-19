@@ -12,7 +12,7 @@ async function customTests(page: Page) {
     } as Test;
     TapeTestRunner.test('testing dev.html', (t: any) => {
         t.equal(errorTags.length, 0);
-        t.equals(markings.length, 2);
+        t.equals(markings.length, 3);
         t.end();
     });
 

@@ -15,6 +15,9 @@
         I don't know why she swallowed a fly - Perhaps she'll die!
         <div id=dieMark mark data-covg="39%"></div>
     </template>
+    <template id=mark>
+        <div mark></div>
+    </template>
     <div id=target></div>
     <script type=module>
         import {init} from '../init.js';
@@ -23,7 +26,8 @@
                 '#flyMark': dontKnowWhy,
                 '"': {
                     '#dieMark': 'There was an old lady who swallowed a spider;'
-                }
+                },
+                '""': mark
             }
         }, target);
     </script>
