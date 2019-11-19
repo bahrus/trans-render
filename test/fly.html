@@ -7,9 +7,29 @@
     <title>Document</title>
 </head>
 <body>
+    <style>
+    [mark][err="true"]::after{
+        content: 'She died'
+    }
+    [mark]{
+        display:none;
+    }
+    [err="true"]{
+        color:red;
+        display:  block;
+    }
+    [mark][err="true"]{
+        display:block;
+        
+    }
+
+    </style>
     <template id=title>
         <div>There was an old lady who swallowed a fly;</div>
-        <div id=flyMark mark data-covg="9%"></div>
+        <div id=flyMark mark data-covg="9%" style="display:block;"></div>
+        <div bad>
+            <div mark err=true></div>
+        </div>
         <div nested>
             <div>
                 <div>
@@ -19,10 +39,11 @@
                 </div>
             </div>
         </div>
+
     </template>
     <template id=dontKnowWhy>
         I don't know why she swallowed a fly - Perhaps she'll die!
-        <div id=dieMark mark data-covg="39%"></div>
+        <div id=dieMark mark data-covg="39%" style="display:block;"></div>
     </template>
     <template id=wriggle>
             That wriggled and jiggled and tickled inside her! 
@@ -52,7 +73,8 @@
                         '""': x => whySpider
                     },
                     SkipSibs: true
-                }
+                },
+                '[bad]': false,
             }
         }, target);
     </script>
