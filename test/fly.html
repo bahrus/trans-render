@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+    [mark][err="true"]::after{
+        content: 'She died'
+    }
+    [mark]{
+        display:none;
+    }
+    [err="true"]{
+        color:red;
+        display:  block;
+    }
+    [mark][err="true"]{
+        display:block;
+        
+    }
+
+    </style>
+    <template id=title>
+        <div>There was an old lady who swallowed a fly;</div>
+        <div id=flyMark mark data-covg="9%" style="display:block;"></div>
+        <div bad>
+            <div mark err=true></div>
+        </div>
+        <div nested>
+            <div>
+                <div>
+                    <div>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </template>
+    <template id=dontKnowWhy>
+        I don't know why she swallowed a fly - Perhaps she'll die!
+        <div id=dieMark mark data-covg="39%" style="display:block;"></div>
+    </template>
+    <template id=wriggle>
+            That wriggled and jiggled and tickled inside her! 
+            <div mark data-covg="76%"></div>
+    </template>
+    <template id=whySpider>
+            She swallowed the spider to catch the fly;
+            <div mark data-covg="88%"></div>
+    </template>
+    <template id=mark>
+        <div mark data-covg="59%"></div>
+    </template>
+    <div id=target></div>
+    <script type=module>
+        import {init} from '../init.js';
+        init(title, {
+            Transform:{
+                '#flyMark': dontKnowWhy,
+                '"': {
+                    '#dieMark': 'There was an old lady who swallowed a spider;'
+                },
+                '""': mark,
+                '[nested]':{
+                    Select: 'span',
+                    Transform: {
+                        'span': wriggle,
+                        '""': x => whySpider
+                    },
+                    SkipSibs: true
+                },
+                '[bad]': false,
+            }
+        }, target, {
+            prepend: true
+        });
+    </script>
+</body>
+</html>

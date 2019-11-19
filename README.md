@@ -4,6 +4,8 @@
 
 <a href="https://nodei.co/npm/trans-render/"><img src="https://nodei.co/npm/trans-render.png"></a>
 
+[![Actions Status](https://github.com/bahrus/trans-render/workflows/CI/badge.svg)](https://github.com/bahrus/trans-render/actions?query=workflow%3ACI)
+
 Size of web component, with all optional processors included:
 
 <img src="https://badgen.net/bundlephobia/minzip/trans-render">
