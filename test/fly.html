@@ -28,6 +28,10 @@
             That wriggled and jiggled and tickled inside her! 
             <div mark data-covg="76%"></div>
     </template>
+    <template id=whySpider>
+            She swallowed the spider to catch the fly;
+            <div mark data-covg="88%"></div>
+    </template>
     <template id=mark>
         <div mark data-covg="59%"></div>
     </template>
@@ -45,10 +49,9 @@
                     Select: 'span',
                     Transform: {
                         'span': wriggle,
-                        '""':{
-                            
-                        }
-                    }
+                        '""': x => whySpider
+                    },
+                    SkipSibs: true
                 }
             }
         }, target);

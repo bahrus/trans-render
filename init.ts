@@ -16,7 +16,6 @@ export function init(
   const clonedTemplate = isTemplate
     ? document.importNode((template as HTMLTemplateElement).content, true)
     : template;
-  //ctx.template = clonedTemplate;
   if (ctx.Transform) {
     const firstChild = clonedTemplate.firstElementChild;
     if (firstChild !== null) {

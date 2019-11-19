@@ -4,7 +4,6 @@ export function init(template, ctx, target, options) {
     const clonedTemplate = isTemplate
         ? document.importNode(template.content, true)
         : template;
-    //ctx.template = clonedTemplate;
     if (ctx.Transform) {
         const firstChild = clonedTemplate.firstElementChild;
         if (firstChild !== null) {
