@@ -10,13 +10,26 @@
     <template id=title>
         <div>There was an old lady who swallowed a fly;</div>
         <div id=flyMark mark data-covg="9%"></div>
+        <div nested>
+            <div>
+                <div>
+                    <div>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </template>
     <template id=dontKnowWhy>
         I don't know why she swallowed a fly - Perhaps she'll die!
         <div id=dieMark mark data-covg="39%"></div>
     </template>
+    <template id=wriggle>
+            That wriggled and jiggled and tickled inside her!
+            
+    </template>
     <template id=mark>
-        <div mark></div>
+        <div mark data-covg="59%"></div>
     </template>
     <div id=target></div>
     <script type=module>
@@ -27,7 +40,13 @@
                 '"': {
                     '#dieMark': 'There was an old lady who swallowed a spider;'
                 },
-                '""': mark
+                '""': mark,
+                '[nested]':{
+                    Select: 'span',
+                    Transform: {
+                        'span': wriggle
+                    }
+                }
             }
         }, target);
     </script>
