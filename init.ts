@@ -1,5 +1,11 @@
-import { NextStep, TransformRules, RenderContext, RenderOptions, TransformFn} from "./init.d.js";
-export const deleteMe = Symbol('deleteMe');
+import {
+  NextStep,
+  TransformRules,
+  RenderContext,
+  RenderOptions,
+  TransformFn
+} from "./init.d.js";
+export const deleteMe = Symbol("deleteMe");
 export function init(
   template: HTMLElement | DocumentFragment,
   ctx: RenderContext,
@@ -7,9 +13,9 @@ export function init(
   options?: RenderOptions
 ): RenderContext {
   const isTemplate = (template as HTMLElement).localName === "template";
-  const clonedTemplate =
-      isTemplate
-      ? document.importNode((template as HTMLTemplateElement).content, true) : template;
+  const clonedTemplate = isTemplate
+    ? document.importNode((template as HTMLTemplateElement).content, true)
+    : template;
   //ctx.template = clonedTemplate;
   if (ctx.Transform) {
     const firstChild = clonedTemplate.firstElementChild;
@@ -24,9 +30,9 @@ export function init(
     const callback = options.initializedCallback;
     if (callback !== undefined) callback(ctx, clonedTemplate, options);
   }
-  if(isTemplate && target){
+  if (isTemplate && target) {
     (<any>target)[verb](clonedTemplate);
-  }else{
+  } else {
     ctx.leaf = clonedTemplate;
   }
   return ctx;
@@ -50,60 +56,73 @@ export function process(
   let nextMatch = [];
   let prevSelector = null;
   for (const rawSelector in transform) {
-    const selector = (prevSelector !== null && rawSelector.startsWith('"')) ? prevSelector : rawSelector;
+    let selector;
+    if(prevSelector !== null && rawSelector.startsWith('"')){
+      selector = prevSelector;
+    } else{
+      selector = rawSelector;
+      prevSelector = selector;
+    }
+    
     if (target.matches(selector)) {
-      const transformTemplateVal = transform[selector];
-      let resp2 : string | HTMLTemplateElement | void | TransformRules | NextStep | TransformFn | boolean = transformTemplateVal;
-      if(typeof resp2 === 'function'){
-        resp2 = resp2({target: target, ctx: context, idx: idx, level: level});
+      const transformTemplateVal = transform[rawSelector];
+      let resp2:
+        | string
+        | HTMLTemplateElement
+        | void
+        | TransformRules
+        | NextStep
+        | TransformFn
+        | boolean = transformTemplateVal;
+      if (typeof resp2 === "function") {
+        resp2 = resp2({ target: target, ctx: context, idx: idx, level: level });
       }
       switch (typeof resp2) {
         case "string":
           target.textContent = resp2;
           break;
         case "object":
-          if((<HTMLElement>resp2).localName === 'template'){
+          if ((<HTMLElement>resp2).localName === "template") {
             const templ = resp2 as HTMLTemplateElement;
             target.appendChild(templ.content.cloneNode(true));
-            continue;
-          }
-          let isTR = true;
-          const keys = Object.keys(resp2);
-          if (keys.length > 0) {
-            const firstCharOfFirstProp = keys[0][0];
-            isTR = "SNTM".indexOf(firstCharOfFirstProp) === -1;
-          }
-          if (isTR) {
-            const respAsTransformRules = resp2 as TransformRules;
-            nextSelector = "*";
-            Object.assign(nextTransform, respAsTransformRules);
           } else {
-            const respAsNextStep = resp2 as NextStep;
-            inherit = inherit || !!respAsNextStep.MergeTransforms;
-            if (respAsNextStep.Select !== undefined) {
-              nextSelector =
-                (firstSelector ? "" : ",") + respAsNextStep.Select;
-              firstSelector = false;
+            let isTR = true;
+            const keys = Object.keys(resp2);
+            if (keys.length > 0) {
+              const firstCharOfFirstProp = keys[0][0];
+              isTR = "SNTM".indexOf(firstCharOfFirstProp) === -1;
             }
-
-            const newTransform = respAsNextStep.Transform;
-            if (newTransform === undefined) {
-              Object.assign(nextTransform, context.Transform);
+            if (isTR) {
+              const respAsTransformRules = resp2 as TransformRules;
+              nextSelector = "*";
+              Object.assign(nextTransform, respAsTransformRules);
             } else {
-              Object.assign(nextTransform, newTransform);
-            }
-            if (respAsNextStep.SkipSibs) matchNextSib = false;
-            if (!matchNextSib && respAsNextStep.NextMatch) {
-              nextMatch.push(respAsNextStep.NextMatch);
+              const respAsNextStep = resp2 as NextStep;
+              inherit = inherit || !!respAsNextStep.MergeTransforms;
+              if (respAsNextStep.Select !== undefined) {
+                nextSelector =
+                  (firstSelector ? "" : ",") + respAsNextStep.Select;
+                firstSelector = false;
+              }
+
+              const newTransform = respAsNextStep.Transform;
+              if (newTransform === undefined) {
+                Object.assign(nextTransform, context.Transform);
+              } else {
+                Object.assign(nextTransform, newTransform);
+              }
+              if (respAsNextStep.SkipSibs) matchNextSib = false;
+              if (!matchNextSib && respAsNextStep.NextMatch) {
+                nextMatch.push(respAsNextStep.NextMatch);
+              }
             }
           }
 
           break;
         case "boolean":
-          if(resp2 === false) (<any>target)[deleteMe] = true;
+          if (resp2 === false) (<any>target)[deleteMe] = true;
           break;
       }
-
     }
   }
   if (matchNextSib) {
@@ -142,5 +161,5 @@ export function process(
       context.Transform = transform;
     }
   }
-  if((<any>target)[deleteMe]) target.remove();
+  if ((<any>target)[deleteMe]) target.remove();
 }
