@@ -24,6 +24,11 @@
     }
 
     </style>
+    <template id=bad>
+        <div>
+            <div mark err=true></div>
+        </div>
+    </template>
     <template id=main>
         <div>There was an old lady who swallowed a fly;</div>
         <div id=flyMark mark data-covg="9%" style="display:block;"></div>
@@ -40,8 +45,13 @@
                 </div>
             </div>
         </div>
+        <div sibtest1 sibtest2>There was an old lady who swallowed a bird; </div>
+        <b></b>
+        <p></p>
 
     </template>
+
+
     <template id=dontKnowWhy>
         I don't know why she swallowed a fly - Perhaps she'll die!
         <div id=dieMark mark data-covg="39%" style="display:block;"></div>
@@ -72,7 +82,6 @@
                     Transform: {
                         span: wriggle,
                         '""': x => whySpider,
-                        
                     },
                     SkipSibs: true,
                     NextMatch: 'p'
@@ -84,6 +93,8 @@
                     }
                 },
                 '[bad]': false,
+                b: bad,
+                p: 'How absurd to swallow a bird!'
             }
         }, target, {
             prepend: true

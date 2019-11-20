@@ -132,17 +132,17 @@ export function process(
       process(context, idx + 1, level, options);
     }
     context.Transform = transform;
-    if (nextMatch.length > 0) {
-      const match = nextMatch.join(",");
-      let nextSib = target.nextElementSibling;
-      while (nextSib !== null) {
-        if (nextSib.matches(match)) {
-          context.leaf = nextSib as HTMLElement;
-          process(context, idx + 1, level, options);
-          break;
-        }
-        nextSib = nextSib.nextElementSibling;
+
+  }else if (nextMatch.length > 0) {
+    const match = nextMatch.join(",");
+    let nextSib = target.nextElementSibling;
+    while (nextSib !== null) {
+      if (nextSib.matches(match)) {
+        context.leaf = nextSib as HTMLElement;
+        process(context, idx + 1, level, options);
+        break;
       }
+      nextSib = nextSib.nextElementSibling;
     }
   }
 
