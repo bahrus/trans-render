@@ -30,11 +30,15 @@
         <div bad>
             <div mark err=true></div>
         </div>
-        <div nested>
+        <div nested nested2>
             <div>
                 <div>
                     <div>
                         <span></span>
+                        <pre></pre>
+                        <p></p>
+                        <label></label>
+                        <div></div>
                     </div>
                 </div>
             </div>
@@ -69,10 +73,24 @@
                 '[nested]':{
                     Select: 'span',
                     Transform: {
-                        'span': wriggle,
-                        '""': x => whySpider
+                        span: wriggle,
+                        '""': x => whySpider,
+                        '"3':{
+                            SkipSibs: true,
+                            NextMatch: 'p'                            
+                        },
+                        "pre":{
+                            NextMatch: 'label'
+                        }
                     },
-                    SkipSibs: true
+                    SkipSibs: true,
+                    NextMatch: 'p'
+                },
+                '[nested2]':{
+                    Select: 'label',
+                    Transform:{
+                        label:'I am a label'
+                    }
                 },
                 '[bad]': false,
             }

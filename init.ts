@@ -99,7 +99,7 @@ export function process(
               const respAsNextStep = resp2 as NextStep;
               inherit = inherit || !!respAsNextStep.MergeTransforms;
               if (respAsNextStep.Select !== undefined) {
-                nextSelector =
+                nextSelector +=
                   (firstSelector ? "" : ",") + respAsNextStep.Select;
                 firstSelector = false;
               }

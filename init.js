@@ -79,7 +79,7 @@ export function process(context, idx, level, options) {
                             const respAsNextStep = resp2;
                             inherit = inherit || !!respAsNextStep.MergeTransforms;
                             if (respAsNextStep.Select !== undefined) {
-                                nextSelector =
+                                nextSelector +=
                                     (firstSelector ? "" : ",") + respAsNextStep.Select;
                                 firstSelector = false;
                             }
