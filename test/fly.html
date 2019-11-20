@@ -24,7 +24,7 @@
     }
 
     </style>
-    <template id=title>
+    <template id=main>
         <div>There was an old lady who swallowed a fly;</div>
         <div id=flyMark mark data-covg="9%" style="display:block;"></div>
         <div bad>
@@ -35,10 +35,7 @@
                 <div>
                     <div>
                         <span></span>
-                        <pre></pre>
-                        <p></p>
                         <label></label>
-                        <div></div>
                     </div>
                 </div>
             </div>
@@ -63,7 +60,7 @@
     <div id=target></div>
     <script type=module>
         import {init} from '../init.js';
-        init(title, {
+        init(main, {
             Transform:{
                 '#flyMark': dontKnowWhy,
                 '"': {
@@ -75,13 +72,7 @@
                     Transform: {
                         span: wriggle,
                         '""': x => whySpider,
-                        '"3':{
-                            SkipSibs: true,
-                            NextMatch: 'p'                            
-                        },
-                        "pre":{
-                            NextMatch: 'label'
-                        }
+                        
                     },
                     SkipSibs: true,
                     NextMatch: 'p'
@@ -89,7 +80,7 @@
                 '[nested2]':{
                     Select: 'label',
                     Transform:{
-                        label:'I am a label'
+                        label:"I don't know why she swallowed a fly - Perhaps she'll die!"
                     }
                 },
                 '[bad]': false,
