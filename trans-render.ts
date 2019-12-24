@@ -15,6 +15,7 @@ import {pierce} from './pierce.js';
 import {split} from './split.js';
 //import {decorate} from 'trans-render/decorate.js';
 
+type prop = keyof TransRenderWC;
 const view_model = 'view-model';
 /**
  * Alternative way of instantiating a template
@@ -38,7 +39,7 @@ export class TransRender extends hydrate(HTMLElement) implements TransRenderWC {
     }
     connectedCallback() {
         this.style.display = 'none';
-        this.propUp(['viewModel']);
+        this.propUp<prop[]>(['viewModel']);
         this.getElement('_nextSibling', t => (t.nextElementSibling as HTMLElement));
         this.getElement('_script', t => t.querySelector('script'));
     }

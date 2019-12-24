@@ -79,7 +79,7 @@ export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBas
          * Needed for asynchronous loading
          * @param props Array of property names to "upgrade", without losing value set while element was Unknown
          */
-        propUp(props: string[]) {
+        propUp<TKeys extends string[] = string[]>(props: TKeys) {
             props.forEach(prop => {
                 if (this.hasOwnProperty(prop)) {
                     let value = (<any>this)[prop];

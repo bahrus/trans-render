@@ -12,7 +12,6 @@ import { replaceElementWithTemplate } from './replaceElementWithTemplate.js';
 import { replaceTargetWithTag } from './replaceTargetWithTag.js';
 import { pierce } from './pierce.js';
 import { split } from './split.js';
-//import {decorate} from 'trans-render/decorate.js';
 const view_model = 'view-model';
 /**
  * Alternative way of instantiating a template
