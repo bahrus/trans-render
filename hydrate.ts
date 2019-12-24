@@ -1,5 +1,6 @@
 export const disabled = 'disabled';
 //export const up = Symbol('upgrade');
+//TODO:  move into types.d.ts
 export interface IHydrate extends HTMLElement{
     _disabled: boolean;
     /**
