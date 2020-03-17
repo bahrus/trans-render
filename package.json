@@ -12,8 +12,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/node": "12.12.8",
-    "xtal-test": "0.0.31"
+    "xtal-test": "0.0.42"
   },
   "repository": {
     "type": "git",
