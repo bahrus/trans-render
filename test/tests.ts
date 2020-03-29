@@ -9,11 +9,11 @@ const xt = require('xtal-test/index') as IXtalTestRunner;
             expectedNoOfSuccessMarkers: 5,
 
         },
-        // {
-        //     path: 'test/fly-repeat.html',
-        //     expectedNoOfSuccessMarkers: 1,
+        {
+            path: 'test/fly-repeat.html',
+            expectedNoOfSuccessMarkers: 1,
 
-        // },
+        },
     ]);
     if(passed){
         console.log("Tests Passed.  Have a nice day.");
