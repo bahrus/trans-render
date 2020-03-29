@@ -5,7 +5,7 @@ const xt = require('xtal-test/index') as IXtalTestRunner;
 (async () => {
     const passed = await xt.runTests([
         {
-            path: 'test/fly.html',
+            path: 'test/fly-init.html',
             expectedNoOfSuccessMarkers: 5,
 
         },

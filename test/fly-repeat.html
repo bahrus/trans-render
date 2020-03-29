@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <template id=personTemplate>
+        <li><div>Name: |.name|</div><div>Email: |.email|</div></li>
+    </template>
+    <div id=target>
+        <ul ></ul>
+    </div>
+    <script type=module>
+        import {init} from '../init.js';
+        import {repeat} from '../repeat.js';
+        import {interpolate} from '../interpolate.js';
+        const model = [
+            {
+                "name": "Cooper Patel",
+                "email": "cooperpatel@unisure.com",
+            },
+            {
+                "name": "Randolph Cameron",
+                "email": "randolphcameron@aquacine.com",
+            },
+            {
+                "name": "Vivian Jacobson",
+                "email": "vivianjacobson@parleynet.com",
+            }
+        ];
+        const Transform = {
+            ul: ({ctx, target}) => repeat(personTemplate, ctx, model.length, target, {
+                li: {
+                    div: ({target, idx}) => interpolate(target, 'textContent', model[idx])
+                }
+            }) 
+        }
+        init(target, {Transform});
+    </script>
+</body>
+</html>
