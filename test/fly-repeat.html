@@ -32,12 +32,13 @@
         ];
         const Transform = {
             ul: ({ctx, target}) => repeat(personTemplate, ctx, model.length, target, {
-                li: {
-                    div: ({target, idx}) => interpolate(target, 'textContent', model[idx])
-                }
+                li: ({idx}) => ({
+                    div: ({target}) => interpolate(target, 'textContent', model[idx], false)
+                })
             }) 
         }
         init(target, {Transform});
+        if(target.innerText.length === 166) target.setAttribute('mark', '');
     </script>
 </body>
 </html>
