@@ -30,6 +30,8 @@ export interface DecorateArgs<TAttribsSettings = AttribsSettings, TProps = objec
     on?: {[key: string] : (e: Event) => void},
 }
 
+export type DecorateTuple = [object, AttribsSettings, {[key: string] : (e: Event) => void}, object, {[key: string] : Function}];
+
 export interface RenderContext {
     init?: (template: HTMLElement, ctx: RenderContext, target: HTMLElement | DocumentFragment, options?: RenderOptions) => RenderContext,
     //repeatInit?: (template: HTMLTemplateElement, ctx: RenderContext, count: number, target: Element, targetTransform?: TransformValueOptions) => TransformValueOptions;

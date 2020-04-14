@@ -1,4 +1,4 @@
-import { RenderContext, DecorateArgs, TransformValueOptions, AttribsSettings } from "./init.d.js";
+import { RenderContext, DecorateArgs, DecorateTuple, TransformValueOptions, AttribsSettings } from "./init.d.js";
 import {domMerge} from './domMerge.js';
 
 const evCount = Symbol('evtCount');
@@ -47,11 +47,8 @@ function defProp(key: string | symbol, props: any, target: any, onPropsChange: s
         composed: false
       } as CustomEventInit);
       this.dispatchEvent(newEvent);
-      //this.dataset[]
-      //if(this.toggleAttribute) this.toggleAttribute('data-' + eventName);
       incAttr(eventName, target);
       if(this[onPropsChange]) this[onPropsChange](key, val, oldVal);
-      //if (this[spKey]) this[spKey](key, val);
     },
     enumerable: true,
     configurable: true
@@ -73,13 +70,14 @@ export function decorate<PropsType = object, TAttribs = AttribsSettings> (
   source: DecorateArgs<PropsType, TAttribs>
 ) {
   const onPropsChange = Symbol('onPropChange');
+
   domMerge(target, source);
   
   const props = source.propDefs;
   if (props !== undefined) {
     (<any>target)[evCount] = {};
     for (const key in props) {
-      //if (props[key]) throw "Property " + key + " already exists."; //only throw error if non truthy value set.
+      // throw error if non truthy value set?
       defProp(key, props, target, onPropsChange);
     }
     for(const key of Object.getOwnPropertySymbols(props)){
@@ -98,7 +96,6 @@ export function decorate<PropsType = object, TAttribs = AttribsSettings> (
   const events = source.on;
   if (events) {
     for (const key in events) {
-      //const handlerKey = key + "_transRenderHandler";  //TODO  : symbolize
       const prop = Object.defineProperty(target, handlerKey, {
         enumerable: false,
         configurable: true,
@@ -108,4 +105,16 @@ export function decorate<PropsType = object, TAttribs = AttribsSettings> (
       target.addEventListener(key, (<any>target)[handlerKey]);
     }
   }
+}
+
+export function decorateth<PropsType = object, TAttribs = AttribsSettings>(
+  target: HTMLElement, args: DecorateTuple
+){
+  decorate(target,{
+    propVals: args[0],
+    attribs: args[1],
+    on: args[2],
+    propDefs: args[3],
+    methods: args[4]
+  })
 }

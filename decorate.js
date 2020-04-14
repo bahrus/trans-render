@@ -45,12 +45,9 @@ function defProp(key, props, target, onPropsChange) {
                 composed: false
             });
             this.dispatchEvent(newEvent);
-            //this.dataset[]
-            //if(this.toggleAttribute) this.toggleAttribute('data-' + eventName);
             incAttr(eventName, target);
             if (this[onPropsChange])
                 this[onPropsChange](key, val, oldVal);
-            //if (this[spKey]) this[spKey](key, val);
         },
         enumerable: true,
         configurable: true
@@ -74,7 +71,7 @@ export function decorate(target, source) {
     if (props !== undefined) {
         target[evCount] = {};
         for (const key in props) {
-            //if (props[key]) throw "Property " + key + " already exists."; //only throw error if non truthy value set.
+            // throw error if non truthy value set?
             defProp(key, props, target, onPropsChange);
         }
         for (const key of Object.getOwnPropertySymbols(props)) {
@@ -93,7 +90,6 @@ export function decorate(target, source) {
     const events = source.on;
     if (events) {
         for (const key in events) {
-            //const handlerKey = key + "_transRenderHandler";  //TODO  : symbolize
             const prop = Object.defineProperty(target, handlerKey, {
                 enumerable: false,
                 configurable: true,
@@ -103,4 +99,13 @@ export function decorate(target, source) {
             target.addEventListener(key, target[handlerKey]);
         }
     }
+}
+export function decorateth(target, args) {
+    decorate(target, {
+        propVals: args[0],
+        attribs: args[1],
+        on: args[2],
+        propDefs: args[3],
+        methods: args[4]
+    });
 }
