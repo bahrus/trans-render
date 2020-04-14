@@ -100,12 +100,3 @@ export function decorate(target, source) {
         }
     }
 }
-export function decorateth(target, args) {
-    decorate(target, {
-        propVals: args[0],
-        attribs: args[1],
-        on: args[2],
-        propDefs: args[3],
-        methods: args[4]
-    });
-}

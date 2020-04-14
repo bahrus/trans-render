@@ -107,14 +107,3 @@ export function decorate<PropsType = object, TAttribs = AttribsSettings> (
   }
 }
 
-export function decorateth<PropsType = object, TAttribs = AttribsSettings>(
-  target: HTMLElement, args: DecorateTuple
-){
-  decorate(target,{
-    propVals: args[0],
-    attribs: args[1],
-    on: args[2],
-    propDefs: args[3],
-    methods: args[4]
-  })
-}
