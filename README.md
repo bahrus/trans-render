@@ -16,9 +16,9 @@ trans-render provides an alternative way of instantiating a template.  It draws 
 
 XSLT can take pure XML with no formatting instructions as its input.  Generally speaking, the XML that XSLT acts on isn't a bunch of semantically  meaningless div tags, but rather a nice semantic document, whose intrinsic structure is enough to go on, in order to formulate a "transform" that doesn't feel like a hack.  
 
-Likewise, with the advent of custom elements, the template markup will tend to be much more semantic, like XML. trans-render tries to rely as much as possible on this intrinsic semantic nature of the template markup, to give enough clues on how to fill in the needed "potholes" like textContent and property setting.  But trans-render is completely extensible, so it can certainly accommodate custom markup (like string interpolation, or common binding attributes) by using additional, optional helper libraries.  
+Likewise, with the advent of custom elements, the template markup will tend to be much more semantic, like XML. trans-render's usefulness grows as a result of the increasingly semantic nature of the template markup, because often the markup semantics provide enough clues on how to fill in the needed "potholes," like textContent and property setting, without the need for custom markup, like binding attributes.  But trans-render is completely extensible, so it can certainly accommodate custom binding attributes by using additional, optional helper libraries.  
 
-This leaves the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may be needed to make the binding rules in sync.  Much like how separate style rules often need adjusting when the document structure changes.
+This can leave the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may be needed to keep the binding rules in sync.  Much like how separate style rules often need adjusting when the document structure changes.
 
 ## Advantages
 
@@ -40,7 +40,7 @@ For more musings on the question of what is this good for, please see the [rambl
 
 trans-render provides helper functions for cloning a template, and then walking through the DOM, applying rules in document order.  Note that the document can grow, as processing takes place (due, for example, to cloning sub templates).  It's critical, therefore, that the processing occur in a logical order, and that order is down the document tree.  That way it is fine to append nodes before continuing processing.  
 
-### Drilling down to children
+## Drilling down to children
 
 For each matching element, after modifying the node, you can instruct the processor which node(s) to consider next.  
 
@@ -56,7 +56,7 @@ const Transform = {
 };
 ```
 
-means "if a node has tag name "details", then find the first descendent of the node that has tag name "summary", and set its textContent property to "'Hallå'."  To take another example, showing the full syntax:
+means "if a node has tag name 'details', then find any direct children  the details tag that has tag name 'summary', and set its textContent property to 'Hallå'."  Let's show the full syntax for a minimal working example:
 
 ## Syntax Example:
 
@@ -97,7 +97,9 @@ Produces
 
 ## Arbitrary queries.
 
-If most of the template is static, but there's a deeply nested element that needs modifying, it is possible to drill straight down to that element by specifying a "Select" string value, which invokes querySelector.  But beware: there's no going back to previous elements once that's done.  If your template is dense with dynamic pockets, you will more likely want to navigate to the first child by setting Select = '*'.
+If most of the template is static, but there's a deeply nested element that needs modifying, it is possible to drill straight down to that element by specifying a "Select" string value, which invokes querySelector.  But beware: there's no going back to previous elements once that's done.  If your template is dense with dynamic pockets, you will more likely want to navigate to the first child by setting Select = '*'. 
+
+Jumping arbitrarily down the document tree can be done with a "NextStep" object:
 
 
 ```JavaScript
@@ -112,13 +114,34 @@ const Transform = {
 };
 ```
 
-In this case, when the transformer encounters an article tag, it will then do querySelect for the first element matching "footer".
+In the example above, when the transformer encounters an article tag, it will then do a querySelect for the first element matching "footer".
 
 It then checks within the direct children of footer for elements matching css selector "p.contact".  If such an element is found, then the textContent is set to model.author.email (where "model" is assumed to be some object in the scope).
 
+The object:
+
+```JavaScript
+{
+    Select: ...
+    Transform: ...
+}
+```
+
+is a "NextStep" object, and can be easily distinguished from a nested transform object with CSS selector keys (as the previous examples showed) by the presence of capital letters for the keys.  The options of the NextStep object are as shown:
+
+```TypeScript
+export interface NextStep {
+    Transform?: TransformRules,
+    NextMatch?: string,
+    Select?: TransformRules | null,
+    MergeTransforms?: boolean,
+    SkipSibs?: boolean,
+}
+```
+
 ## Matching next siblings
 
-We most likely will also want to check the next siblings down for matches.  Previously, in order to do this, you had to make sure "matchNextSibling" was passed back for every match.  But that proved cumbersome.  The current implementation checks for matches on the next sibling(s) by default.  You can halt going any further by specifying "SkipSibs" in the "NextStep" object, something to strongly consider when looking for optimization opportunities.
+We most likely will also want to check the next siblings down for matches.  Previously, in order to do this, you had to make sure "matchNextSibling" was passed back for every match.  But that proved cumbersome.  The current implementation checks for matches on the next sibling(s) by default.  You can halt going any further by specifying "SkipSibs" in the "NextStep" object discussed above, something to strongly consider when looking for optimization opportunities.
 
 It is deeply unfortunate that the DOM Query Api doesn't provide a convenience function for [finding the next sibling](https://gomakethings.com/finding-the-next-and-previous-sibling-elements-that-match-a-selector-with-vanilla-js/) that matches a query, similar to querySelector. Just saying.  But some support for "cutting to the chase" laterally is also provided, via the "NextMatch" property in the NextStep object.
 
@@ -540,67 +563,57 @@ articleTemplate._attachShadow = {mode: 'open'}
 </script>
 ```
 
-### Multiple matching with "Ditto" notation
+## Multiple matching with "Ditto" notation
 
 Sometimes, one rule will cause the target to get (new) children.  We then want to apply another rule to process the target element, now that the children are there.
 
-But uniqueueness of the keys of the JSON-like structure we are using prevents us from listing the same match expression twice.
+But uniqueness of the keys of the JSON-like structure we are using prevents us from listing the same match expression twice.
 
 We can specify multiple matches as follows:
 
-```html
-<script type="module">
-    import { init } from '../init.js';
-    const model = {
-    const Transform = {
-        details: {
-            summary: summaryTemplate,
-            '"': ({target}) => ...,
-            '""': ...,
-            '"3': ...
-        }
-    };
-    init(sourceTemplate, { Transform }, target);
-</script>
+```JavaScript
+import { init } from '../init.js';
+const Transform = {
+    details: {
+        article: articleTemplate,
+        '"': ({target}) => ...,
+        '""': ...,
+        '"3': ...
+    }
+};
+init(sourceTemplate, { Transform }, target);
 ```
 
 I.e. any selector that starts with a double quote (") will use the last selector that didn't.
 
-<!--
-### Alternate Template Selection
+## Property / attribute / event binding [TODO]
 
-```html
-<template id="sourceTemplate">
-    <details>
-        <div data-is="switch">
-            <template data-tag="condition-1">
-                <script type="module">
-                    import 'myCdn/mondayView.js';
-                </script>
-                <monday-view></monday-view>
-            </template>
-            <template data-tag="condition-2">
-                <script type="module">
-                    import 'myCdn/tuesdayview.js';
-                </script>
-                <tuesday-view></tuesday-view>
-            </template>
-        </div>
-    </details>
-</template>
-<script type="module">
-    import { init } from '../init.js';
-    import { chooser } from '../chooser.js';
-    const model = {
-    const Transform = {
-        details: {
-            'div[data-is="switch"]': ({target}) => chooser(target, '[data-tag="condition-1"]', 'afterend');
-        }
-    };
-    init(sourceTemplate, { Transform }, target);
-</script>
+
+```JavaScript
+import { init } from '../init.js';
+const Transform = {
+    details: {
+        'my-custom-element': [
+            //Prop Setting
+            {prop1:'hello', prop2:{greeting: 'goodbye'}},
+            //Attribute Setting
+            {'my-attribute': 'myValue', 'my-attribute2?': true},
+            //Event Handlers
+            {'click': this.clickHandler},
+            //Nested Transform
+            {
+                'my-light-child': ...
+            }
+        ]
+    }
+};
+init(sourceTemplate, { Transform }, target);
 ```
--->
+
+## Contextual, Synchronous Evaluation
+
+All of the rules listed above also apply to the result of evaluating a lambda expression:
+
 
 
 ## Ramblings From the Department of Faulty Analogies
