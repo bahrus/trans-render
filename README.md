@@ -56,7 +56,46 @@ const Transform = {
 };
 ```
 
-means "if a node has tag name "details", then find the first descendent of the node that has tag name "summary", and set its textContent property to "'Hallå'."
+means "if a node has tag name "details", then find the first descendent of the node that has tag name "summary", and set its textContent property to "'Hallå'."  To take another example, showing the full syntax:
+
+## Syntax Example:
+
+```html
+<template id="sourceTemplate">
+    <details>
+        ...
+        <summary></summary>
+        ...
+    </details>
+</template>
+<div id="target"></div>
+<script type="module">
+    import { init } from '../init.js';
+    const model = {
+        summaryText: 'hello'
+    }
+    const Transform = {
+        details: {
+            summary: model.summaryText
+        }
+    };
+    init(sourceTemplate, { Transform }, target);
+</script>
+```
+
+Produces
+
+```html
+<div id="target">
+    <details>
+        ...
+        <summary>hello</summary>
+        ...
+    </details>
+</div>
+```
+
+## Arbitrary queries.
 
 If most of the template is static, but there's a deeply nested element that needs modifying, it is possible to drill straight down to that element by specifying a "Select" string value, which invokes querySelector.  But beware: there's no going back to previous elements once that's done.  If your template is dense with dynamic pockets, you will more likely want to navigate to the first child by setting Select = '*'.
 
@@ -85,81 +124,6 @@ It is deeply unfortunate that the DOM Query Api doesn't provide a convenience fu
 
 
 At this point, only a synchronous workflow is provided (exceeding when piercing into ShadowDOM).
-
-## Syntax Example:
-
-```html
-<template id="sourceTemplate">
-    <details>
-        ...
-        <summary></summary>
-        ...
-    </details>
-</template>
-<div id="target"></div>
-<script type="module">
-    import { init } from '../init.js';
-    const model = {
-        summaryText: 'hello'
-    }
-    const Transform = {
-        details: {
-            summary: x => model.summaryText
-        }
-    };
-    init(sourceTemplate, { Transform }, target);
-</script>
-```
-
-Produces
-
-```html
-<div id="target">
-    <details>
-        ...
-        <summary>hello</summary>
-        ...
-    </details>
-</div>
-```
-
-Or even simpler, your transform can hardcode some values:
-
-```html
-<template id="sourceTemplate">
-    <details>
-        ...
-        <summary></summary>
-        ...
-    </details>
-</template>
-<div id="target"></div>
-<script type="module">
-    import { init } from '../init.js';
-    const Transform = {
-        details: {
-            summary: x => model.summaryText
-        }
-    };
-    init(sourceTemplate, { Transform }, target);
-</script>
-```
-
-produces:
-
-```html
-<div id="target">
-    <details>
-        ...
-        <summary>Hallå</summary>
-        ...
-    </details>
-</div>
-```
-
-"target" is the HTML element we are populating.  The transform matches can return a string, which will be used to set the textContent of the target.  Or the transform can do its own manipulations on the target element, and then return a "NextStep" object specifying where to go next, or it can return a new Transform, which will get applied the first child by default.
-
-Note the unusual property name casing, in the JavaScript arena for the NextStep object:  Transform, Select, SkipSibs, etc.  As we will see, this pattern is to allow the interpreter to distinguish between css matches for a nested Transform, vs a "NextStep" JS object.
 
 ## Conditional Display
 
@@ -190,6 +154,9 @@ Here the tag "section" will be removed if attributes is undefined.
 
 **NB:**  Be careful when using this technique.  Once a node is removed, there's no going back -- it will no longer match any css if you use trans-render updating.  If your use of trans-render is mostly to display something once, and you recreate everything from scratch when your model changes, that's fine.  However, if you want to apply incremental updates, and need to display content conditionally, it would be better to use a [custom element](https://polymer-library.polymer-project.org/3.0/docs/devguide/templates#dom-if) [for that](https://github.com/bahrus/if-diff) [purpose](https://github.com/matthewp/if-else).
 
+
+
+
 ## What does wdwsf stand for?
 
 As you may have noticed, some abbreviations are used by this library:
@@ -201,6 +168,36 @@ As you may have noticed, some abbreviations are used by this library:
 * attribs = attributes
 * props = properties
 * refs = references
+
+## Reapplying (some) of the transform
+
+Often, we want to reapply a transform, after something changes -- typically the source data.
+
+The ability to do this is illustrated in the previous example.  Critical syntax shown below:
+
+```html
+<script type="module">
+    import { init } from '../init.js';
+    import { interpolate } from '../interpolate.js';
+    import {update} from '../update.js';
+    const ctx = init(Main, {
+        model:{
+            Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
+            Day6: 'Saturday', Day7: 'Sunday',
+        },
+        interpolate: interpolate,
+        $: id => window[id],
+    }, target);
+    changeDays.addEventListener('click', e=>{
+        ctx.model = {
+            Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
+            Day6: 'lördag', Day7: 'söndag',
+        }
+        update(ctx, target);
+    })
+</script>
+```
+
 
 # Use Case 1:  Applying the DRY principle to (post) punk rock lyrics
 
@@ -441,34 +438,6 @@ Demonstrates use of update, rudimentary interpolation, recursive select.
 -->
 
 
-## Reapplying (some) of the transform
-
-Often, we want to reapply a transform, after something changes -- typically the source data.
-
-The ability to do this is illustrated in the previous example.  Critical syntax shown below:
-
-```html
-<script type="module">
-    import { init } from '../init.js';
-    import { interpolate } from '../interpolate.js';
-    import {update} from '../update.js';
-    const ctx = init(Main, {
-        model:{
-            Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
-            Day6: 'Saturday', Day7: 'Sunday',
-        },
-        interpolate: interpolate,
-        $: id => window[id],
-    }, target);
-    changeDays.addEventListener('click', e=>{
-        ctx.model = {
-            Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
-            Day6: 'lördag', Day7: 'söndag',
-        }
-        update(ctx, target);
-    })
-</script>
-```
 
 
 ##  Loop support (NB:  Not yet optimized)
