@@ -51,32 +51,31 @@ So, in the example we will see below, this notation:
 ```JavaScript
 const Transform = {
     details: {
-        summary: x => model.summaryText
+        summary: 'Hallå'
     }
 };
 ```
 
-means "if a node has tag name "details", then continue processing the next siblings of details, but also, find the first descendent of the node that has tag name "summary", and set its textContent property to model.summaryText."
+means "if a node has tag name "details", then find the first descendent of the node that has tag name "summary", and set its textContent property to "'Hallå'."
 
 If most of the template is static, but there's a deeply nested element that needs modifying, it is possible to drill straight down to that element by specifying a "Select" string value, which invokes querySelector.  But beware: there's no going back to previous elements once that's done.  If your template is dense with dynamic pockets, you will more likely want to navigate to the first child by setting Select = '*'.
 
-So the syntax shown above is equivalent to:
 
 ```JavaScript
 const Transform = {
-    details: {
-        Select: 'summary',
+    article: {
+        Select: 'footer',
         Transform: {
-            summary: x => model.summaryText
+            'p.contact': model.author.email
         }
+
     }
 };
 ```
 
-In this case, the details property is a "NextStep" JS Object.  
+In this case, when the transformer encounters an article tag, it will then do querySelect for the first element matching "footer".
 
-Clearly, the first example is easier, but you need to adopt the second way if you want to fine tune the next processing steps.
-
+It then checks within the direct children of footer for elements matching css selector "p.contact".  If such an element is found, then the textContent is set to model.author.email (where "model" is assumed to be some object in the scope).
 
 ### Matching next siblings
 
@@ -85,7 +84,7 @@ We most likely will also want to check the next siblings down for matches.  Prev
 It is deeply unfortunate that the DOM Query Api doesn't provide a convenience function for [finding the next sibling](https://gomakethings.com/finding-the-next-and-previous-sibling-elements-that-match-a-selector-with-vanilla-js/) that matches a query, similar to querySelector. Just saying.  But some support for "cutting to the chase" laterally is also provided, via the "NextMatch" property in the NextStep object.
 
 
-At this point, only a synchronous workflow is provided.
+At this point, only a synchronous workflow is provided (exceeding when piercing into ShadowDOM).
 
 ## Syntax Example:
 
@@ -139,7 +138,7 @@ Or even simpler, your transform can hardcode some values:
     import { init } from '../init.js';
     const Transform = {
         details: {
-            summary: 'Hallå'
+            summary: x => model.summaryText
         }
     };
     init(sourceTemplate, { Transform }, target);
