@@ -116,12 +116,24 @@ In this case, when the transformer encounters an article tag, it will then do qu
 
 It then checks within the direct children of footer for elements matching css selector "p.contact".  If such an element is found, then the textContent is set to model.author.email (where "model" is assumed to be some object in the scope).
 
-### Matching next siblings
+## Matching next siblings
 
 We most likely will also want to check the next siblings down for matches.  Previously, in order to do this, you had to make sure "matchNextSibling" was passed back for every match.  But that proved cumbersome.  The current implementation checks for matches on the next sibling(s) by default.  You can halt going any further by specifying "SkipSibs" in the "NextStep" object, something to strongly consider when looking for optimization opportunities.
 
 It is deeply unfortunate that the DOM Query Api doesn't provide a convenience function for [finding the next sibling](https://gomakethings.com/finding-the-next-and-previous-sibling-elements-that-match-a-selector-with-vanilla-js/) that matches a query, similar to querySelector. Just saying.  But some support for "cutting to the chase" laterally is also provided, via the "NextMatch" property in the NextStep object.
 
+## Matching everything
+
+Note the transform rule:
+
+```JavaScript
+Transform: {
+    '*': {
+        Select: '*'
+    },
+```
+
+"*" is a match for all css elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector).  This, combined with the default setting to match all the next siblings means that, for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
 
 At this point, only a synchronous workflow is provided (exceeding when piercing into ShadowDOM).
 
@@ -153,8 +165,6 @@ If a matching node returns a boolean value of false, the node is removed.  For e
 Here the tag "section" will be removed if attributes is undefined.
 
 **NB:**  Be careful when using this technique.  Once a node is removed, there's no going back -- it will no longer match any css if you use trans-render updating.  If your use of trans-render is mostly to display something once, and you recreate everything from scratch when your model changes, that's fine.  However, if you want to apply incremental updates, and need to display content conditionally, it would be better to use a [custom element](https://polymer-library.polymer-project.org/3.0/docs/devguide/templates#dom-if) [for that](https://github.com/bahrus/if-diff) [purpose](https://github.com/matthewp/if-else).
-
-
 
 
 ## What does wdwsf stand for?
@@ -300,16 +310,7 @@ If you are [here](https://www.webcomponents.org/element/trans-render), the demo 
 ```
 -->
 
-Note the transform rule:
 
-```JavaScript
-Transform: {
-    '*': {
-        Select: '*'
-    },
-```
-
-"*" is a match for all css elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector).  This, combined with the default setting to match all the next siblings means that, for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
 
 ## Example 1b
 
@@ -437,9 +438,6 @@ Demonstrates use of update, rudimentary interpolation, recursive select.
 ```
 -->
 
-
-
-
 ##  Loop support (NB:  Not yet optimized)
 
 The next big use case for this library is using it in conjunction with a [virtual scroller](https://valdrinkoshi.github.io/virtual-scroller/#more-examples). As far as I can see, the performance of this library should work quite well in that scenario.
@@ -484,7 +482,7 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
 </div>
 ```
 
-### Simple Template Insertion
+## Simple Template Insertion
 
 A template can be inserted directly inside the target element as follows:
 
@@ -506,6 +504,36 @@ My summary Text
     const Transform = {
         details: {
             summary: summaryTemplate
+        }
+    };
+    init(sourceTemplate, { Transform }, target);
+</script>
+```
+
+##  Shadowed Template Insertion [TODO]
+
+```html
+<template id="articleTemplate">
+My interesting article...
+</template>
+<script>
+articleTemplate._attachShadow = {mode: 'open'}
+</script>
+<template id="sourceTemplate">
+    <details>
+        ...
+        <summary></summary>
+        <article></article>
+        ...
+    </details>
+</template>
+<div id="target"></div>
+<script type="module">
+    import { init } from '../init.js';
+    const model = {
+    const Transform = {
+        details: {
+            article: articleTemplate
         }
     };
     init(sourceTemplate, { Transform }, target);
