@@ -567,7 +567,7 @@ const Transform = {
 init(sourceTemplate, { Transform }, target);
 ```
 
-Each of the elements are "optional" in the sense that you  can either end the array early, or if you need to skip over one or more of the settings by specifying an empty object ({}).  A more verbose but somewhat more powerful way of doing this is discussed with the [decorate function](https://github.com/bahrus/trans-render#behavior-enhancement).
+Each of the elements are "optional" in the sense that you  can either end the array early, or you can skip over one or more of the settings by specifying an empty object ({}).  A more verbose but somewhat more powerful way of doing this is discussed with the [decorate function](https://github.com/bahrus/trans-render#behavior-enhancement).
 
 ## Contextual, Synchronous Evaluation
 
@@ -649,7 +649,7 @@ Just saves a tiny bit of boiler plate (document.createElement, container.appendC
 split(target: HTMLElement, textContent: string, search: string | null | undefined)
 ```
 
-Splits text based on search into styleable spans with class "match."
+Splits text based on search into styleable spans with class "match" and sets the innerHTML to this partitioned content.  [TODO:  check for unsafe html].
 
 
 ### Content Swapping, Part I
