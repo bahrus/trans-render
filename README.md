@@ -553,11 +553,11 @@ const Transform = {
         'my-custom-element': [
             //Prop Setting
             {prop1:'hello', prop2:{greeting: 'goodbye'}},
-            //Attribute Setting
-            {'my-attribute': 'myValue', 'my-attribute2?': true},
             //Event Handler Setting
             {'click': this.clickHandler},
-            //Nested Transform or NextStep Object
+            //Attribute Setting
+            {'my-attribute': 'myValue', 'my-attribute2?': true, 'my-old-attribute': null},
+            //Transform or NextStep Object
             {
                 'my-light-child': ...
             }
@@ -568,6 +568,8 @@ init(sourceTemplate, { Transform }, target);
 ```
 
 Each of the elements are "optional" in the sense that you  can either end the array early, or you can skip over one or more of the settings by specifying an empty object ({}).  A more verbose but somewhat more powerful way of doing this is discussed with the [decorate function](https://github.com/bahrus/trans-render#behavior-enhancement).
+
+A suggestion for remembering the order these elements come in -- Properties / Events / Attributes / Transform can be abbreviated as "peat."
 
 ## Contextual, Synchronous Evaluation
 
@@ -1029,7 +1031,7 @@ When defining an HTML based user interface, the question arises whether styles s
 
 The ability to keep the styles separate from the HTML does not invalidate support for inline styles.  The browser supports both, and probably always will.
 
-Likewise, arguing for the benefits of this library is not in any way meant to disparage the usefulness of the current prevailing orthodoxy of including the binding / formatting instructions in the markup.  I would be delighted to see the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with support for inline binding, added to the arsenal of tools developers could use.  Should that proposal come to fruition, this library, hovering under 1KB, would be in mind-share competition (my mind anyway) with one that is 0KB, with the full backing / optimization work of Chrome, Safari, Firefox.  Why would anyone use this library then?
+Likewise, arguing for the benefits of this library is not in any way meant to disparage the usefulness of the current prevailing orthodoxy of including the binding / formatting instructions in the markup.  I would be delighted to see the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with support for inline binding, added to the arsenal of tools developers could use.  Should that proposal come to fruition, this library would be in mind-share competition (my mind anyway) with one that is 0KB, with the full backing / optimization work of Chrome, Safari, Firefox.  Why would anyone use this library then?
 
 And in fact, the library described here is quite open ended.  Until template instantiation becomes built into the browser, this library could be used as a tiny stand-in.  Once template instantiation is built into the browser, this library could continue to supplement the native support (or the other way around, depending.)
 
@@ -1053,7 +1055,7 @@ I may not yet fully grasp the proposal, but it still does appear to me that the 
 
 This library, on the other hand, considers the entire template document open for amendment.  This may be alarming, if as me, you find yourself comparing this effort to the [::part ::theme initiative](https://meowni.ca/posts/part-theme-explainer/), where authors need to specify which elements can be themed.
 
-However, the use case is quite different.  In the case of stylesheets, we are talking about global theming, affecting large numbers of elements at the same time.  The use case I'm really considering is one web component extending another.  I don't just mean direct class inheritance, but compositional extensions as well.  It doesn't seem that unreasonable to provide maximum flexibility in that circumstance.  Yes, I suppose the ability to mark some tags as "undeletable / non negotiable" might be nice, but I see no way to enforce that.
+However, the use case is quite different.  In the case of stylesheets, we are talking about global theming, affecting large numbers of elements at the same time.  The use case I'm really considering is one web component extending another.  I don't just mean direct class inheritance, but compositional extensions as well.  It doesn't seem that unreasonable to provide maximum flexibility in that circumstance.  Yes, I suppose the ability to mark some tags as "undeletable / non negotiable" might be nice, and it is easy to speculate that a vendor could mark non mutable DOM nodes, but I see no way to enforce that.  
 
 ## Client-side JS faster than SSR?
 
@@ -1077,7 +1079,7 @@ You can compare the two here:  This [link uses client-side trans-rendering](http
 
 Results are a bit unpredictable, and usually the differences are less dramatic.
 
-Lighthouse scrores also provide evidence that trans-rendering improves performance.
+Lighthouse scores also provide evidence that trans-rendering improves performance.
 
 Trans-Rendering:
 
