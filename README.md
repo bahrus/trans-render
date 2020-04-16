@@ -566,7 +566,7 @@ init(sourceTemplate, { Transform }, target);
 
 Each of the elements are "optional" in the sense that you  can either end the array early, or you can skip over one or more of the settings by specifying an empty object ({}).  A more verbose but somewhat more powerful way of doing this is discussed with the [decorate function](https://github.com/bahrus/trans-render#behavior-enhancement).
 
-A suggestion for remembering the order these elements come in -- Properties / Events / Attributes / Transform can be abbreviated as "peat."
+A suggestion for remembering the order these "arguments" come in -- Properties / Events / Attributes / Transform can be abbreviated as "peat."
 
 ## Contextual, Synchronous Evaluation
 
