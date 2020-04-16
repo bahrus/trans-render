@@ -10,9 +10,8 @@ Size of web component, with all optional processors included:
 
 <img src="https://badgen.net/bundlephobia/minzip/trans-render">
 
-Yes, there is an actual [web component](https://github.com/bahrus/trans-render#trans-render-the-web-component) in this package.  However, it won't make sense unless the core functions described first are (at least partly) understood.
 
-trans-render provides an alternative way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, trans-render performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, trans-render uses css path tests via the element.matches() and element.querySelector() methods.
+trans-render provides a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, trans-render performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, trans-render uses css path tests via the element.matches() and element.querySelector() methods.
 
 XSLT can take pure XML with no formatting instructions as its input.  Generally speaking, the XML that XSLT acts on isn't a bunch of semantically  meaningless div tags, but rather a nice semantic document, whose intrinsic structure is enough to go on, in order to formulate a "transform" that doesn't feel like a hack.  
 
@@ -26,7 +25,7 @@ By keeping the binding separate, the same template can thus be used to bind with
 
 Providing the binding transform in JS form inside the init function signature has the advantage that one can benefit from TypeScript typing of Custom and Native DOM elements with no additional IDE support.  
 
-Another advantage of separating the binding like this, is that one can insert comments, console.log's and/or breakpoints, in order to walk through the binding process.
+Another advantage of separating the binding like this is that one can insert comments, console.log's and/or breakpoints, making it easier to walk through the binding process.
 
 For more musings on the question of what is this good for, please see the [rambling section](https://github.com/bahrus/trans-render#ramblings-from-the-department-of-faulty-analogies) below.
 
@@ -56,7 +55,7 @@ const Transform = {
 };
 ```
 
-means "if a node has tag name 'details', then find any direct children of the details tag, that has tag name 'summary', and set its textContent property to 'Hallå'."  Let's show the full syntax for a minimal working example:
+means "if a node has tag name 'details', then find any direct children of the details tag that has tag name 'summary', and set its textContent property to 'Hallå'."  Let's show the full syntax for a minimal working example:
 
 ## Syntax Example:
 
@@ -480,7 +479,6 @@ My summary Text
 <div id="target"></div>
 <script type="module">
     import { init } from '../init.js';
-    const model = {
     const Transform = {
         details: {
             summary: summaryTemplate
@@ -510,7 +508,6 @@ articleTemplate._attachShadowOptions = {mode: 'open'}
 <div id="target"></div>
 <script type="module">
     import { init } from '../init.js';
-    const model = {
     const Transform = {
         details: {
             article: articleTemplate
