@@ -56,7 +56,7 @@ const Transform = {
 };
 ```
 
-means "if a node has tag name 'details', then find any direct children  the details tag that has tag name 'summary', and set its textContent property to 'Hallå'."  Let's show the full syntax for a minimal working example:
+means "if a node has tag name 'details', then find any direct children of the details tag, that has tag name 'summary', and set its textContent property to 'Hallå'."  Let's show the full syntax for a minimal working example:
 
 ## Syntax Example:
 
@@ -156,13 +156,13 @@ Transform: {
     },
 ```
 
-"*" is a match for all css elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector).  This, combined with the default setting to match all the next siblings means that, for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
+"*" is a match for all css elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector('*')).  This, combined with the default setting to match all the next siblings means that, for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
 
-At this point, only a synchronous workflow is provided (exceeding when piercing into ShadowDOM).
+At this point, only a synchronous workflow is provided (except when piercing into ShadowDOM).
 
 ## Conditional Display
 
-If a matching node returns a boolean value of false, the node is removed.  For example:
+If a matching node returns a boolean value of *false*, the node is removed.  For example [TODO:  simpler example]:
 
 ```TypeScript
 ...
@@ -187,7 +187,7 @@ If a matching node returns a boolean value of false, the node is removed.  For e
 
 Here the tag "section" will be removed if attributes is undefined.
 
-**NB:**  Be careful when using this technique.  Once a node is removed, there's no going back -- it will no longer match any css if you use trans-render updating.  If your use of trans-render is mostly to display something once, and you recreate everything from scratch when your model changes, that's fine.  However, if you want to apply incremental updates, and need to display content conditionally, it would be better to use a [custom element](https://polymer-library.polymer-project.org/3.0/docs/devguide/templates#dom-if) [for that](https://github.com/bahrus/if-diff) [purpose](https://github.com/matthewp/if-else).
+**NB:**  Be careful when using this technique.  Once a node is removed, there's no going back -- it will no longer match any css if you use trans-render updating (discussed below).  If your use of trans-render is mostly to display something once, and you recreate everything from scratch when your model changes, that's fine.  However, if you want to apply incremental updates, and need to display content conditionally, it would be better to use a [custom element](https://polymer-library.polymer-project.org/3.0/docs/devguide/templates#dom-if) [for that](https://github.com/bahrus/if-diff) [purpose](https://github.com/matthewp/if-else).
 
 
 ## What does wdwsf stand for?
@@ -206,7 +206,7 @@ As you may have noticed, some abbreviations are used by this library:
 
 Often, we want to reapply a transform, after something changes -- typically the source data.
 
-The ability to do this is illustrated in the previous example.  Critical syntax shown below:
+The ability to do this is illustrated below:
 
 ```html
 <script type="module">
@@ -230,7 +230,6 @@ The ability to do this is illustrated in the previous example.  Critical syntax 
     })
 </script>
 ```
-
 
 # Use Case 1:  Applying the DRY principle to (post) punk rock lyrics
 
@@ -498,7 +497,7 @@ My summary Text
 My interesting article...
 </template>
 <script>
-articleTemplate._attachShadow = {mode: 'open'}
+articleTemplate._attachShadowOptions = {mode: 'open'}
 </script>
 <template id="sourceTemplate">
     <details>
@@ -556,9 +555,9 @@ const Transform = {
             {prop1:'hello', prop2:{greeting: 'goodbye'}},
             //Attribute Setting
             {'my-attribute': 'myValue', 'my-attribute2?': true},
-            //Event Handlers
+            //Event Handler Setting
             {'click': this.clickHandler},
-            //Nested Transform
+            //Nested Transform or NextStep Object
             {
                 'my-light-child': ...
             }
@@ -568,6 +567,8 @@ const Transform = {
 init(sourceTemplate, { Transform }, target);
 ```
 
+Each of the elements are "optional" in the sense that you  can either end the array early, or if you need to skip over one or more of the settings by specifying an empty object ({}).  A more verbose but somewhat more powerful way of doing this is discussed with the [decorate function](https://github.com/bahrus/trans-render#behavior-enhancement).
+
 ## Contextual, Synchronous Evaluation
 
 All of the rules listed above also apply to the result of evaluating a lambda expression:
@@ -575,7 +576,7 @@ All of the rules listed above also apply to the result of evaluating a lambda ex
 ```JavaScript
 const Transform = {
     details: {
-        summary: myContext => myContext.summaryText
+        summary: ({ctx}) => ctx.summaryText
     }
 }
 ```
@@ -626,85 +627,63 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
 </div>
 ```
 
-## Ramblings From the Department of Faulty Analogies
+### Adjacent template insertation
 
-When defining an HTML based user interface, the question arises whether styles should be inlined in the markup or kept separate in style tags and/or CSS files.
-
-The ability to keep the styles separate from the HTML does not invalidate support for inline styles.  The browser supports both, and probably always will.
-
-Likewise, arguing for the benefits of this library is not in any way meant to disparage the usefulness of the current prevailing orthodoxy of including the binding / formatting instructions in the markup.  I would be delighted to see the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with support for inline binding, added to the arsenal of tools developers could use.  Should that proposal come to fruition, this library, hovering under 1KB, would be in mind-share competition (my mind anyway) with one that is 0KB, with the full backing / optimization work of Chrome, Safari, Firefox.  Why would anyone use this library then?
-
-And in fact, the library described here is quite open ended.  Until template instantiation becomes built into the browser, this library could be used as a tiny stand-in.  Once template instantiation is built into the browser, this library could continue to supplement the native support (or the other way around, depending.)
-
-For example, in the second example above, the core "init" function described here has nothing special to offer in terms of string interpolation, since CSS matching provides no help:
-
-```html
-<div>Hello {{Name}}</div>
+```TypeScript
+insertAdjacentTemplate(template: HTMLTemplateElement, target: Element, position: InsertPosition)
 ```
-
-We provide a small helper function "interpolate" for this purpose, but as this is a fundamental use case for template instantiation, and as this library doesn't add much "value-add" for that use case, native template instantiation could be used as a first round of processing.  And where it makes sense to tightly couple the binding to the template, use it there as well, followed by a binding step using this library.  Just as use of inline styles, supplemented by css style tags/files (or the other way around) is something seen quite often.
-
-A question in my mind, is how does this rendering approach fit in with web components (I'm going to take a leap here and assume that [HTML Modules / Imports](https://github.com/w3c/webcomponents/issues/645) in some form makes it into browsers, even though I think the discussion still has some relevance without that).
-
-I think this alternative approach can provide value, by providing a process for "Pipeline Rendering":  Rendering starts with an HTML template element, which produces transformed markup using init or native template instantiation.  Then consuming / extending web components could insert additional bindings via the CSS-matching transformations this library provides.
-
-To aid with this process, the init and update functions provide a rendering options parameter, which contains an optional "initializedCallback" and "updatedCallback" option.  This allows a pipeline processing sequence to be set up, similar in concept to [Apache Cocoon](http://cocoon.apache.org/2.2/1290_1_1.html).
-
-**NB**  In re-reading the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) with a fresh set of eyes, I see now that there has in fact [been some careful thought](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) given to the idea of providing a kind of pipeline of binding.  And as mentioned above, this library provides little help when it comes to string interpolation, so the fact that the proposal provides some hooks for callbacks is really nice to see.
-
-I may not yet fully grasp the proposal, but it still does appear to me that the template instantiation proposal is only useful if one defines regions ahead of time in the markup where dynamic content may go.  
-
-This library, on the other hand, considers the entire template document open for amendment.  This may be alarming, if as me, you find yourself comparing this effort to the [::part ::theme initiative](https://meowni.ca/posts/part-theme-explainer/), where authors need to specify which elements can be themed.
-
-However, the use case is quite different.  In the case of stylesheets, we are talking about global theming, affecting large numbers of elements at the same time.  The use case I'm really considering is one web component extending another.  I don't just mean direct class inheritance, but compositional extensions as well.  It doesn't seem that unreasonable to provide maximum flexibility in that circumstance.  Yes, I suppose the ability to mark some tags as "undeletable / non negotiable" might be nice, but I see no way to enforce that.
-
-## Client-side JS faster than SSR?
-
-Another interesting case to consider is this [Periodic Table Codepen](https://codepen.io/mikegolus/pen/OwrPgB) example.  Being what it is, it is no suprise that there's a lot of repetitive HTML markup needed to define the table.  
-
-An intriguing question, is this:  Could this be the first known scenario in the history of the planet, where rendering time (including first paint) would be *improved* rather than *degraded* with the help of client-side JavaScript? 
-
-The proper, natural instinct of a good modern developer, including the author of the codepen, is to generate the HTML from a concise data format using a server-side language (pug). 
-
-But using this library, and cloning some repetitive templates on the client side, reduces download size from 16kb to 14kb, and may improve other performance metrics as well.  These are the performance results my copy of chrome captures, after opening in an incognito window, and throttling cpu to 6x and slow 3g network.
-
-Trans-Rendering:
-
-<img src="https://bahrus.github.io/periodicTable/Periodic.png" alt="Trans Rendered">
-
-Original:
-
-<img src="https://bahrus.github.io/periodicTable/Original2.png" alt="Original">
-
-You can compare the two here:  This [link uses client-side trans-rendering](https://bahrus.github.io/periodicTable/PeriodicTable.html).  This [link uses all static html](https://bahrus.github.io/periodicTable/OriginalPeriodicTable.html)
-
-Results are a bit unpredictable, and usually the differences are less dramatic.
-
-Lighthouse scrores also provide evidence that trans-rendering improves performance.
-
-Trans-Rendering:
-
-![Trans Rendered Lighthouse](https://bahrus.github.io/periodicTable/PeriodiLightHouse2.png)
-
-
-Original:
-
-<img src="https://bahrus.github.io/periodicTable/OriginalLightHouse.png" alt="Original Lighthouse">
-
-Once in a while the scores match, but most of the time the scores above are what is seen.
-
-So the difference isn't dramatic, but it is statistically significant, in my opinion.
-
-See this [side-by-side comparison](https://www.webpagetest.org/video/view.php?id=190927_26744e8bf5d82ba9296bdea710299d3274277a2a) for more evidence of the benefits. 
-
-
-## Miscellaneous Helper Functions
-
-### insertAdjacentTemplate(template: HTMLTemplateElement, target: Element, position: InsertPosition)
 
 This function is modeled after insertAdjacentElement / insertAdjacentHTML.  Only here we are able to insert a template.  By using the preferred "afterEnd" as the insert position, the trans-rendering will be able to process those nodes like any other nodes.
 
-### Declative-ish property setting
+### Ergonomic Tag Creation
+
+```Typescript
+appendTag(container: HTMLElement, name: string, config: DecorateArgs || TBD) : HTMLElement
+```
+
+Just saves a tiny bit of boiler plate (document.createElement, container.appendChild)
+
+### Text Searching
+
+```Typescript
+split(target: HTMLElement, textContent: string, search: string | null | undefined)
+```
+
+Splits text based on search into styleable spans with class "match."
+
+
+### Content Swapping, Part I
+
+```Typescript
+replaceElementWithTemplate(target: HTMLElement, template: HTMLTemplateElement, ctx: RenderContext) 
+```
+
+During pipeline processing, replace a tag with a template.  The original tag goes into ctx.replacedElement.
+
+Typically this feature will be paired with the [ditto syntax](https://github.com/bahrus/trans-render#multiple-matching-with-ditto-notation) mentioned previously.
+
+### Content Swapping, Part II
+
+```Typescript
+replaceTargetWithTag<TargetType extends HTMLElement = HTMLElement, ReplacingTagType extends HTMLElement = HTMLElement>(target: TargetType, tag: string, ctx: RenderContext, preSwapCallback?: (el: ReplacingTagType) => void)
+```
+
+During pipeline processing, replace a tag with another tag.  The original tag goes into ctx.replacedElement
+
+### Piercing into ShadowDOM
+
+```Typescript
+pierce<TargetType extends HTMLElement = HTMLElement>(el: TargetType, ctx: RenderContext, targetTransform: TransformRules)
+```
+
+... pierces into the shadow root of the target element, and (asynchronously) applies transform rules within the shadow root.  If the target element is a custom element, there is a delay to wait for the custom element to be upgraded, but there is perhaps a bit of timing fragility that accompanies this dangerous (but necessary as a last resort) function.
+
+**NB**  Doing this breaks any and all warranties from the component / template being surgically altered.
+
+<details>
+    <summary>Advanced utility functions</summary>
+
+### Property merging
 
 Object.assign and its modern abbreviated variations, provides a quite declarative feeling when populating an object with values.  Unfortunately, Object.assign can't be used to recursively set read-only properties like style and dataset (are there others?). An alternative to object.assign are convenience functions like JQuery.extends, JQuery.attr and "h", which domMerge draws inspiration from.
 
@@ -1041,30 +1020,81 @@ The render context which the init function works with provides a "symbols" prope
 </html>
 ```
 
-### appendTag(container: HTMLElement, name: string, config: DecorateArgs) : HTMLElement
 
-Just saves a tiny bit of boiler plate (document.createElement, container.appendChild)
+</details>
 
-### split(target: HTMLElement, textContent: string, search: string | null | undefined)
-Splits text based on search into stylable spans
+## Ramblings From the Department of Faulty Analogies
 
-<!--
-### chooser(container: Element, select: string, position: InsertPosition, target?: HTMLElement) -- untested
+When defining an HTML based user interface, the question arises whether styles should be inlined in the markup or kept separate in style tags and/or CSS files.
 
-Clones the template element within the container, matching the select string, and inserts according to the position parameter, relative to the optional target element, or the container if no target element is provided.
--->
+The ability to keep the styles separate from the HTML does not invalidate support for inline styles.  The browser supports both, and probably always will.
 
-### replaceElementWithTemplate(target: HTMLElement, template: HTMLTemplateElement, ctx: RenderContext) 
+Likewise, arguing for the benefits of this library is not in any way meant to disparage the usefulness of the current prevailing orthodoxy of including the binding / formatting instructions in the markup.  I would be delighted to see the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with support for inline binding, added to the arsenal of tools developers could use.  Should that proposal come to fruition, this library, hovering under 1KB, would be in mind-share competition (my mind anyway) with one that is 0KB, with the full backing / optimization work of Chrome, Safari, Firefox.  Why would anyone use this library then?
 
-During pipeline processing, replace a tag with a template.  The original tag goes into ctx.replacedElement
+And in fact, the library described here is quite open ended.  Until template instantiation becomes built into the browser, this library could be used as a tiny stand-in.  Once template instantiation is built into the browser, this library could continue to supplement the native support (or the other way around, depending.)
 
-### replaceTargetWithTag<TargetType extends HTMLElement = HTMLElement, ReplacingTagType extends HTMLElement = HTMLElement>(target: TargetType, tag: string, ctx: RenderContext, preSwapCallback?: (el: ReplacingTagType) => void)
+For example, in the second example above, the core "init" function described here has nothing special to offer in terms of string interpolation, since CSS matching provides no help:
 
-During pipeline processing, replace a tag with another tag.  The original tag goes into ctx.replacedElement
+```html
+<div>Hello {{Name}}</div>
+```
 
-### pierce<TargetType extends HTMLElement = HTMLElement>(el: TargetType, ctx: RenderContext, targetTransform: TransformRules)
+We provide a small helper function "interpolate" for this purpose, but as this is a fundamental use case for template instantiation, and as this library doesn't add much "value-add" for that use case, native template instantiation could be used as a first round of processing.  And where it makes sense to tightly couple the binding to the template, use it there as well, followed by a binding step using this library.  Just as use of inline styles, supplemented by css style tags/files (or the other way around) is something seen quite often.
 
-Pierce into shadow root, and (asynchronously) apply transform rules within the shadow root.
+A question in my mind, is how does this rendering approach fit in with web components (I'm going to take a leap here and assume that [HTML Modules / Imports](https://github.com/w3c/webcomponents/issues/645) in some form makes it into browsers, even though I think the discussion still has some relevance without that).
+
+I think this alternative approach can provide value, by providing a process for "Pipeline Rendering":  Rendering starts with an HTML template element, which produces transformed markup using init or native template instantiation.  Then consuming / extending web components could insert additional bindings via the CSS-matching transformations this library provides.
+
+To aid with this process, the init and update functions provide a rendering options parameter, which contains an optional "initializedCallback" and "updatedCallback" option.  This allows a pipeline processing sequence to be set up, similar in concept to [Apache Cocoon](http://cocoon.apache.org/2.2/1290_1_1.html).
+
+**NB**  In re-reading the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) with a fresh set of eyes, I see now that there has in fact [been some careful thought](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) given to the idea of providing a kind of pipeline of binding.  And as mentioned above, this library provides little help when it comes to string interpolation, so the fact that the proposal provides some hooks for callbacks is really nice to see.
+
+I may not yet fully grasp the proposal, but it still does appear to me that the template instantiation proposal is only useful if one defines regions ahead of time in the markup where dynamic content may go.  
+
+This library, on the other hand, considers the entire template document open for amendment.  This may be alarming, if as me, you find yourself comparing this effort to the [::part ::theme initiative](https://meowni.ca/posts/part-theme-explainer/), where authors need to specify which elements can be themed.
+
+However, the use case is quite different.  In the case of stylesheets, we are talking about global theming, affecting large numbers of elements at the same time.  The use case I'm really considering is one web component extending another.  I don't just mean direct class inheritance, but compositional extensions as well.  It doesn't seem that unreasonable to provide maximum flexibility in that circumstance.  Yes, I suppose the ability to mark some tags as "undeletable / non negotiable" might be nice, but I see no way to enforce that.
+
+## Client-side JS faster than SSR?
+
+Another interesting case to consider is this [Periodic Table Codepen](https://codepen.io/mikegolus/pen/OwrPgB) example.  Being what it is, it is no suprise that there's a lot of repetitive HTML markup needed to define the table.  
+
+An intriguing question, is this:  Could this be the first known scenario in the history of the planet, where rendering time (including first paint) would be *improved* rather than *degraded* with the help of client-side JavaScript? 
+
+The proper, natural instinct of a good modern developer, including the author of the codepen, is to generate the HTML from a concise data format using a server-side language (pug). 
+
+But using this library, and cloning some repetitive templates on the client side, reduces download size from 16kb to 14kb, and may improve other performance metrics as well.  These are the performance results my copy of chrome captures, after opening in an incognito window, and throttling cpu to 6x and slow 3g network.
+
+Trans-Rendering:
+
+<img src="https://bahrus.github.io/periodicTable/Periodic.png" alt="Trans Rendered">
+
+Original:
+
+<img src="https://bahrus.github.io/periodicTable/Original2.png" alt="Original">
+
+You can compare the two here:  This [link uses client-side trans-rendering](https://bahrus.github.io/periodicTable/PeriodicTable.html).  This [link uses all static html](https://bahrus.github.io/periodicTable/OriginalPeriodicTable.html)
+
+Results are a bit unpredictable, and usually the differences are less dramatic.
+
+Lighthouse scrores also provide evidence that trans-rendering improves performance.
+
+Trans-Rendering:
+
+![Trans Rendered Lighthouse](https://bahrus.github.io/periodicTable/PeriodiLightHouse2.png)
+
+
+Original:
+
+<img src="https://bahrus.github.io/periodicTable/OriginalLightHouse.png" alt="Original Lighthouse">
+
+Once in a while the scores match, but most of the time the scores above are what is seen.
+
+So the difference isn't dramatic, but it is statistically significant, in my opinion.
+
+See this [side-by-side comparison](https://www.webpagetest.org/video/view.php?id=190927_26744e8bf5d82ba9296bdea710299d3274277a2a) for more evidence of the benefits. 
+
+
 
 ## trans-render the web component
 
