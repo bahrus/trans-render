@@ -461,49 +461,7 @@ Demonstrates use of update, rudimentary interpolation, recursive select.
 ```
 -->
 
-##  Loop support (NB:  Not yet optimized)
 
-The next big use case for this library is using it in conjunction with a [virtual scroller](https://valdrinkoshi.github.io/virtual-scroller/#more-examples). As far as I can see, the performance of this library should work quite well in that scenario.
-
-However, no self respecting rendering library would be complete without some internal support for repeating lists.  This library is no exception.  While the performance of the initial list is likely to be acceptable, no effort has yet been made to utilize state of the art tricks to make list updates keep the number of DOM changes at a minimum. 
-
-Anyway the syntax is shown below.  What's notable is a sub template is cloned repeatedly, then populated using the simple init / update methods.
-
-```html
-<div>
-    <template id="itemTemplate">
-    <li></li>
-    </template>
-    <template id="list">
-    <ul id="container"></ul>
-    <button id="addItems">Add items</button>
-    <button id="removeItems">Remove items</button>
-    </template>
-    <div id="target"></div>
-
-    <script type="module">
-    import { init } from '../init.js';
-    import { repeat} from '../repeat.js';
-    import {update} from '../update.js';
-    const options = {matchNext: true};
-    const itemTransform = {
-        li: ({ idx }) => 'Hello ' + idx,
-    };
-    const ctx = init(list, {
-        Transform: {
-            ul: ({ target, ctx }) =>  repeat(itemTemplate, ctx, 10, target, itemTransform)
-        }
-    }, target, options);
-    ctx.update = update;
-    addItems.addEventListener('click', e => {
-        repeat(itemTemplate, ctx, 15, container, itemTransform);
-    });
-    removeItems.addEventListener('click', e =>{
-        repeat(itemTemplate, ctx, 5, container);
-    })
-    </script>
-</div>
-```
 
 ## Simple Template Insertion
 
@@ -614,7 +572,59 @@ init(sourceTemplate, { Transform }, target);
 
 All of the rules listed above also apply to the result of evaluating a lambda expression:
 
+```JavaScript
+const Transform = {
+    details: {
+        summary: myContext => myContext.summaryText
+    }
+}
+```
 
+## Utility functions
+
+###  Loop support (NB:  Not yet optimized?)
+
+The next big use case for this library is using it in conjunction with a [virtual scroller](https://github.com/WICG/virtual-scroller). As far as I can see, the performance of this library should work quite well in that scenario.
+
+However, no self respecting rendering library would be complete without some internal support for repeating lists.  This library is no exception.  While the performance of the initial list is likely to be acceptable, no effort has yet been made to utilize state of the art tricks to make list updates keep the number of DOM changes at a minimum. 
+
+Anyway the syntax is shown below.  What's notable is a sub template is cloned repeatedly, then populated using the simple init / update methods.
+
+```html
+<div>
+    <template id="itemTemplate">
+    <li></li>
+    </template>
+    <template id="list">
+    <ul id="container"></ul>
+    <button id="addItems">Add items</button>
+    <button id="removeItems">Remove items</button>
+    </template>
+    <div id="target"></div>
+
+    <script type="module">
+    import { init } from '../init.js';
+    import { repeat} from '../repeat.js';
+    import {update} from '../update.js';
+    const options = {matchNext: true};
+    const itemTransform = {
+        li: ({ idx }) => 'Hello ' + idx,
+    };
+    const ctx = init(list, {
+        Transform: {
+            ul: ({ target, ctx }) =>  repeat(itemTemplate, ctx, 10, target, itemTransform)
+        }
+    }, target, options);
+    ctx.update = update;
+    addItems.addEventListener('click', e => {
+        repeat(itemTemplate, ctx, 15, container, itemTransform);
+    });
+    removeItems.addEventListener('click', e =>{
+        repeat(itemTemplate, ctx, 5, container);
+    })
+    </script>
+</div>
+```
 
 ## Ramblings From the Department of Faulty Analogies
 
