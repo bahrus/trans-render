@@ -90,6 +90,11 @@ export function process(context, idx, level, options) {
                                         break;
                                     case 'number':
                                         target.setAttribute(key, val.toString());
+                                        break;
+                                    case 'object':
+                                        if (val === null)
+                                            target.removeAttribute(key);
+                                        break;
                                 }
                             }
                         }

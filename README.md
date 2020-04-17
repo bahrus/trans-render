@@ -142,7 +142,7 @@ export interface NextStep {
 
 We most likely will also want to check the next siblings down for matches.  Previously, in order to do this, you had to make sure "matchNextSibling" was passed back for every match.  But that proved cumbersome.  The current implementation checks for matches on the next sibling(s) by default.  You can halt going any further by specifying "SkipSibs" in the "NextStep" object discussed above, something to strongly consider when looking for optimization opportunities.
 
-It is deeply unfortunate that the DOM Query Api doesn't provide a convenience function for [finding](https://discourse.wicg.io/t/proposal-support-query-for-nearest-sibling-matching-a-selector/3521) [the next sibling](https://gomakethings.com/finding-the-next-and-previous-sibling-elements-that-match-a-selector-with-vanilla-js/) that matches a query, similar to querySelector. Just saying.  But some support for "cutting to the chase" laterally is also provided, via the "NextMatch" property in the NextStep object.
+It is deeply unfortunate that the DOM Query Api doesn't provide a convenience function for [finding](https://discourse.wicg.io/t/proposal-support-query-for-nearest-sibling-matching-a-selector/3521) [the next sibling](https://gomakethings.com/finding-the-next-and-previous-sibling-elements-that-match-a-selector-with-vanilla-js/) that matches a query, similar to querySelector or closest. Just saying.  But some support for "cutting to the chase" laterally is also provided, via the "NextMatch" property in the NextStep object.
 
 ## Matching everything
 
@@ -155,7 +155,7 @@ Transform: {
     },
 ```
 
-"*" is a match for all css elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector('*')).  This, combined with the default setting to match all the next siblings means that, for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
+The expression "\*" is a match for all css elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector('*')).  This, combined with the default setting to match all the next siblings means that, for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
 
 At this point, only a synchronous workflow is provided (except when piercing into ShadowDOM).
 
@@ -540,7 +540,7 @@ init(sourceTemplate, { Transform }, target);
 
 I.e. any selector that starts with a double quote (") will use the last selector that didn't.
 
-## Property / attribute / event binding [TODO]
+## Property / attribute / event binding [Untested]
 
 
 ```JavaScript
@@ -549,11 +549,11 @@ const Transform = {
     details: {
         'my-custom-element': [
             //Prop Setting
-            {prop1:'hello', prop2:{greeting: 'goodbye'}},
+            {prop1:{greeting: 'hello'}, prop2:'hello', },
             //Event Handler Setting
             {'click': this.clickHandler},
             //Attribute Setting
-            {'my-attribute': 'myValue', 'my-attribute2?': true, 'my-old-attribute': null},
+            {'my-attribute': 'myValue', 'my-attribute2': true, 'my-old-attribute': null}, // null removes attribute
             //Transform or NextStep Object
             {
                 'my-light-child': ...
@@ -612,12 +612,12 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
     };
     const ctx = init(list, {
         Transform: {
-            ul: ({ target, ctx }) =>  repeat(itemTemplate, ctx, 10, target, itemTransform)
+            ul: ({ target, ctx }) =>  repeat(itemTemplate, ctx, 10, target, itemTransform) // or repeat(itemTemplate, ctx, items, container, itemTransform) [TODO]
         }
     }, target, options);
     ctx.update = update;
     addItems.addEventListener('click', e => {
-        repeat(itemTemplate, ctx, 15, container, itemTransform);
+        repeat(itemTemplate, ctx, 15, container, itemTransform); 
     });
     removeItems.addEventListener('click', e =>{
         repeat(itemTemplate, ctx, 5, container);
@@ -625,6 +625,8 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
     </script>
 </div>
 ```
+
+An alternative to repeat is provided, "repeateth" that does the same thing, but it hides the "rows" that go out of scope as the list changes, rather than deleting them.
 
 ### Adjacent template insertion
 

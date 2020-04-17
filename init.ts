@@ -105,7 +105,11 @@ export function process(
                     target.setAttribute(key, val);
                     break;
                   case 'number':
-                    target.setAttribute(key, val.toString())
+                    target.setAttribute(key, val.toString());
+                    break;
+                  case 'object':
+                    if(val === null) target.removeAttribute(key);
+                    break;
                 }
               }
             }
