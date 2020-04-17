@@ -3,7 +3,9 @@ import {
   TransformRules,
   RenderContext,
   RenderOptions,
-  TransformFn
+  TransformFn,
+  TransformValueOptions,
+  PEATSettings
 } from "./init.d.js";
 export const deleteMe = Symbol("deleteMe");
 export function init(
@@ -56,31 +58,61 @@ export function process(
   let prevSelector = null;
   for (const rawSelector in transform) {
     let selector;
-    if(prevSelector !== null && rawSelector.startsWith('"')){
+    if (prevSelector !== null && rawSelector.startsWith('"')) {
       selector = prevSelector;
-    } else{
+    } else {
       selector = rawSelector;
       prevSelector = selector;
     }
-    
+
     if (target.matches(selector)) {
       const transformTemplateVal = transform[rawSelector];
-      let resp2:
-        | string
-        | HTMLTemplateElement
-        | void
-        | TransformRules
-        | NextStep
-        | TransformFn
-        | boolean = transformTemplateVal;
+      let resp2: TransformValueOptions<HTMLElement> = transformTemplateVal;
       if (typeof resp2 === "function") {
-        resp2 = resp2({ target: target, ctx: context, idx: idx, level: level });
+        resp2 = resp2({ target: target, ctx: context, idx: idx, level: level }) as TransformValueOptions<HTMLElement>;
       }
       switch (typeof resp2) {
         case "string":
           target.textContent = resp2;
           break;
         case "object":
+          if (Array.isArray(resp2)) {
+            const peat = resp2 as PEATSettings;
+            const len = peat.length;
+            if (len > 0) {
+              //////////  Prop Setting
+              Object.assign(target, peat[0]);
+            }
+            if (len > 1) {
+              /////////  Event Handling
+              for (const key in peat[1]) {
+                target.addEventListener(key, peat[1][key]);
+              }
+            }
+            if (len > 2) {
+              /////////  Attribute Setting
+              for (const key in peat[2]) {
+                const val = peat[2][key];
+                switch (typeof val) {
+                  case 'boolean':
+                    if (val) {
+                      target.setAttribute(key, '');
+                    } else {
+                      target.removeAttribute(key);
+                    }
+                    break;
+                  case 'string':
+                    target.setAttribute(key, val);
+                    break;
+                  case 'number':
+                    target.setAttribute(key, val.toString())
+                }
+              }
+            }
+            if(len > 3){
+              resp2 = peat[3] as TransformRules;
+            }
+          }
           if ((<HTMLElement>resp2).localName === "template") {
             const templ = resp2 as HTMLTemplateElement;
             target.appendChild(templ.content.cloneNode(true));
@@ -133,7 +165,7 @@ export function process(
     }
     context.Transform = transform;
 
-  }else if (nextMatch.length > 0) {
+  } else if (nextMatch.length > 0) {
     const match = nextMatch.join(",");
     let nextSib = target.nextElementSibling;
     while (nextSib !== null) {

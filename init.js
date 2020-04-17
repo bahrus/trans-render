@@ -59,6 +59,44 @@ export function process(context, idx, level, options) {
                     target.textContent = resp2;
                     break;
                 case "object":
+                    if (Array.isArray(resp2)) {
+                        const peat = resp2;
+                        const len = peat.length;
+                        if (len > 0) {
+                            //////////  Prop Setting
+                            Object.assign(target, peat[0]);
+                        }
+                        if (len > 1) {
+                            /////////  Event Handling
+                            for (const key in peat[1]) {
+                                target.addEventListener(key, peat[1][key]);
+                            }
+                        }
+                        if (len > 2) {
+                            /////////  Attribute Setting
+                            for (const key in peat[2]) {
+                                const val = peat[2][key];
+                                switch (typeof val) {
+                                    case 'boolean':
+                                        if (val) {
+                                            target.setAttribute(key, '');
+                                        }
+                                        else {
+                                            target.removeAttribute(key);
+                                        }
+                                        break;
+                                    case 'string':
+                                        target.setAttribute(key, val);
+                                        break;
+                                    case 'number':
+                                        target.setAttribute(key, val.toString());
+                                }
+                            }
+                        }
+                        if (len > 3) {
+                            resp2 = peat[3];
+                        }
+                    }
                     if (resp2.localName === "template") {
                         const templ = resp2;
                         target.appendChild(templ.content.cloneNode(true));

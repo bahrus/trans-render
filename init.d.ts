@@ -1,5 +1,6 @@
-export type TransformFn<TargetType extends HTMLElement = HTMLElement> = (arg: TransformArg<TargetType>) => TransformRules | NextStep | string | HTMLTemplateElement | void | boolean;
-export type TransformValueOptions<TargetType extends HTMLElement = HTMLElement> =  TransformRules | TransformFn<TargetType> | string | HTMLTemplateElement | boolean; 
+export type TransformFn<TargetType extends HTMLElement = HTMLElement> 
+    = (arg: TransformArg<TargetType>) => TransformRules | NextStep | string | HTMLTemplateElement | void | boolean | PEATSettings<TargetType>;
+
 export type TransformRules = { [key: string]: TransformValueOptions};
 export interface TransformArg<TargetType extends HTMLElement = HTMLElement> {
     target: TargetType,
@@ -7,6 +8,7 @@ export interface TransformArg<TargetType extends HTMLElement = HTMLElement> {
     idx: number,
     level: number,
 }
+
 
 export interface NextStep {
     Transform?: TransformRules,
@@ -16,8 +18,22 @@ export interface NextStep {
     SkipSibs?: boolean,
 }
 
-export type AttribsSettings = { [key: string]: string | boolean | number | undefined };
-
+export type PropSettings = {[key: string] : any};
+export type EventSettings = {[key: string] : (e: Event ) => void};
+export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null};
+export type PSettings = [PropSettings]; 
+export type PESettings = [PropSettings, EventSettings];
+export type PEASettings = [PropSettings, EventSettings, AttribsSettings];
+export type PEATSettings<TargetType extends HTMLElement = HTMLElement> = [PropSettings, EventSettings, AttribsSettings, TransformValueOptions<TargetType>];
+export type TransformValueOptions<TargetType extends HTMLElement = HTMLElement> 
+    =   
+        TransformRules // css selector
+        | TransformFn<TargetType> 
+        | string // value goes into textContent
+        | HTMLTemplateElement // clone template
+        | boolean //if false, target is removed from tree
+        | PEATSettings<TargetType>
+        ; 
 //export type props = {[key: string] : any};
 export interface Vals<TAttribsSettings = AttribsSettings, TProps = object> {
   attribs?: AttribsSettings;

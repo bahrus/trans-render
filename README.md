@@ -63,7 +63,7 @@ means "if a node has tag name 'details', then find any direct children of the de
 <template id="sourceTemplate">
     <details>
         ...
-        <summary></summary>
+        <summary>E pluribus unum</summary>
         ...
     </details>
 </template>
@@ -142,7 +142,7 @@ export interface NextStep {
 
 We most likely will also want to check the next siblings down for matches.  Previously, in order to do this, you had to make sure "matchNextSibling" was passed back for every match.  But that proved cumbersome.  The current implementation checks for matches on the next sibling(s) by default.  You can halt going any further by specifying "SkipSibs" in the "NextStep" object discussed above, something to strongly consider when looking for optimization opportunities.
 
-It is deeply unfortunate that the DOM Query Api doesn't provide a convenience function for [finding the next sibling](https://gomakethings.com/finding-the-next-and-previous-sibling-elements-that-match-a-selector-with-vanilla-js/) that matches a query, similar to querySelector. Just saying.  But some support for "cutting to the chase" laterally is also provided, via the "NextMatch" property in the NextStep object.
+It is deeply unfortunate that the DOM Query Api doesn't provide a convenience function for [finding](https://discourse.wicg.io/t/proposal-support-query-for-nearest-sibling-matching-a-selector/3521) [the next sibling](https://gomakethings.com/finding-the-next-and-previous-sibling-elements-that-match-a-selector-with-vanilla-js/) that matches a query, similar to querySelector. Just saying.  But some support for "cutting to the chase" laterally is also provided, via the "NextMatch" property in the NextStep object.
 
 ## Matching everything
 
@@ -626,7 +626,7 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
 </div>
 ```
 
-### Adjacent template insertation
+### Adjacent template insertion
 
 ```TypeScript
 insertAdjacentTemplate(template: HTMLTemplateElement, target: Element, position: InsertPosition)
