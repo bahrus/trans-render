@@ -585,7 +585,7 @@ const Transform = {
 ###  Create template element programmatically
 
 ```JavaScript
-const template = createTemplate(/* html */`<my-markup>...</my-markup>`, ctx, as:'myMarkup', shadow:{mode: 'open'});
+const template = createTemplate(/* html */`<my-markup>...</my-markup>`, ctx, {as:'myMarkup', shadow:{mode: 'open'}});
 ```
 
 This creates a template object ready for cloning.  The second parameter is optional.

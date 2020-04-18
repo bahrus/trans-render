@@ -84,7 +84,6 @@ export interface TransRenderWC{
 }
 
 export interface CreateTemplateOptions{
-    ctx?: RenderContext;
     as?: string;
     shadow?: ShadowRootInit;
 }

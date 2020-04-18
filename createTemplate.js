@@ -3,12 +3,11 @@ function doeth(html) {
     template.innerHTML = html;
     return template;
 }
-export function createTemplate(html, options) {
+export function createTemplate(html, ctx = {}, options) {
     let template;
     if (options !== undefined) {
-        const ctx = options.ctx;
         const as = options.as;
-        if (ctx !== undefined && as !== undefined) {
+        if (as !== undefined) {
             if (ctx.templates === undefined)
                 ctx.templates = {};
             if (ctx.templates[as] === undefined) {
