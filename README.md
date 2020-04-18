@@ -115,7 +115,7 @@ const Transform = {
 
 In the example above, when the transformer encounters an article tag, it will then do a querySelect for the first element matching "footer".
 
-It then checks within the direct children of footer for elements matching css selector "p.contact".  If such an element is found, then the textContent is set to model.author.email (where "model" is assumed to be some object in the scope).
+It then checks within the direct children of footer for elements matching css selector "p.contact".  If such an element is found, then the textContent is set to model.author.email (where "model" is assumed to be some object in scope).
 
 The object:
 
@@ -155,7 +155,7 @@ Transform: {
     },
 ```
 
-The expression "\*" is a match for all css elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector('*')).  This, combined with the default setting to match all the next siblings means that, for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
+The expression "\*" is a match for all HTML elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector('*')).  This, combined with the default setting to match all the next siblings means that, for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
 
 At this point, only a synchronous workflow is provided (except when piercing into ShadowDOM).
 
@@ -230,9 +230,9 @@ The ability to do this is illustrated below:
 </script>
 ```
 
-# Use Case 1:  Applying the DRY principle to (post) punk rock lyrics
+## Use Case 1:  Applying the DRY principle to (post) punk rock lyrics
 
-## Example 1a
+### Example 1a
 
 [Demo](https://jsfiddle.net/bahrus/gc58Ldkp/)
 
@@ -582,6 +582,12 @@ const Transform = {
 
 ## Utility functions
 
+###  Create Template programmatically [TODO]
+
+```JavaScript
+createTemplate (/* html */`<my-markup>...</my-markup>`, {ctx:ctx, as:'myMarkup', shadowMode:open})
+```
+
 ###  Loop support (NB:  Not yet optimized?)
 
 The next big use case for this library is using it in conjunction with a [virtual scroller](https://github.com/WICG/virtual-scroller). As far as I can see, the performance of this library should work quite well in that scenario.
@@ -612,7 +618,7 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
     };
     const ctx = init(list, {
         Transform: {
-            ul: ({ target, ctx }) =>  repeat(itemTemplate, ctx, 10, target, itemTransform) // or repeat(itemTemplate, ctx, items, container, itemTransform) [TODO]
+            ul: ({ target, ctx }) =>  repeat(itemTemplate, ctx, 10, target, itemTransform) // or repeat(itemTemplate, ctx, items, target, itemTransform) [TODO]
         }
     }, target, options);
     ctx.update = update;
@@ -639,7 +645,7 @@ This function is modeled after insertAdjacentElement / insertAdjacentHTML.  Only
 ### Ergonomic Tag Creation
 
 ```Typescript
-appendTag(container: HTMLElement, name: string, config: DecorateArgs || TBD) : HTMLElement
+appendTag(container: HTMLElement, name: string, config: DecorateArgs || PEATSettings<TargetType> /* TODO */) : HTMLElement 
 ```
 
 Just saves a tiny bit of boiler plate (document.createElement, container.appendChild)

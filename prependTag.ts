@@ -5,4 +5,5 @@ export function prependTag(container: HTMLElement, name: string, config: Decorat
     decorate(newElement, config);
     container.prepend(newElement);
     return newElement;
+    
 }
