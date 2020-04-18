@@ -610,8 +610,8 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
 
     <script type="module">
     import { init } from '../init.js';
-    import { repeat} from '../repeat.js';
-    import {update} from '../update.js';
+    import { repeat } from '../repeat.js';
+    import { update } from '../update.js';
     const options = {matchNext: true};
     const itemTransform = {
         li: ({ idx }) => 'Hello ' + idx,
