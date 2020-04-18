@@ -25,6 +25,8 @@ export type PSettings = [PropSettings];
 export type PESettings = [PropSettings, EventSettings];
 export type PEASettings = [PropSettings, EventSettings, AttribsSettings];
 export type PEATSettings<TargetType extends HTMLElement = HTMLElement> = [PropSettings, EventSettings, AttribsSettings, TransformValueOptions<TargetType>];
+export type PEATUnionSettings<TargetType extends HTMLElement = HTMLElement> = 
+    PSettings | PESettings | PEASettings | PEATSettings<TargetType>;
 export type TransformValueOptions<TargetType extends HTMLElement = HTMLElement> 
     =   
         TransformRules // css selector
@@ -32,7 +34,7 @@ export type TransformValueOptions<TargetType extends HTMLElement = HTMLElement>
         | string // value goes into textContent
         | HTMLTemplateElement // clone template
         | boolean //if false, target is removed from tree
-        | PEATSettings<TargetType>
+        | PEATUnionSettings<TargetType>
         ; 
 //export type props = {[key: string] : any};
 export interface Vals<TAttribsSettings = AttribsSettings, TProps = object> {
