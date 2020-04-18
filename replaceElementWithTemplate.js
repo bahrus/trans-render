@@ -5,9 +5,9 @@ import { createTemplate } from './createTemplate.js';
  * @param target
  * @param template
  */
-export function replaceElementWithTemplate(target, ctx, template, symbol) {
-    if (typeof template === 'string') {
-        template = createTemplate(template, ctx, symbol);
+export function replaceElementWithTemplate(target, ctx, template) {
+    if (Array.isArray(template)) {
+        template = createTemplate(template[1], ctx, template[0]);
     }
     insertAdjacentTemplate(template, target, 'afterend');
     ctx.replacedElement = target;

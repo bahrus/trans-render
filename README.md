@@ -662,14 +662,12 @@ Splits text based on search into styleable spans with class "match" and sets the
 ### Content Swapping, Part I
 
 ```Typescript
-replaceElementWithTemplate(target: HTMLElement, ctx: RenderContext, template: HTMLTemplateElement | string, symbol?: symbol) 
+replaceElementWithTemplate(target: HTMLElement, ctx: RenderContext, template: HTMLTemplateElement | [symbol, string]) 
 ```
 
 During pipeline processing, replace a tag with a template.  The original tag goes into ctx.replacedElement.
 
-Typically this feature will be paired with the [ditto syntax](https://github.com/bahrus/trans-render#multiple-matching-with-ditto-notation) mentioned previously.
-
-If this is done inside a dynamic expression (like a lambda function), it is crucial to provide the symbol parameter (see createTemplate for more info).
+For the template parameter, you can either pass in a template object, or an array of size two, where the first element of the array is an html string, and the second eleemnt of the array is a symbol to use for caching.
 
 ### Content Swapping, Part II
 
@@ -972,6 +970,8 @@ Then it's a good idea to consider making use of [Symbols](https://www.keithcirke
 ```
 
 The syntax isn't that much more complicated, but it is probably harder to troubleshoot if using symbols, so use your best judgment. Perhaps start properties and methods with an underscore if you wish to preserve the easy debugging capabilities.  You can also use Symbol.for('count'), which kind of meets halfway between the two approaches.
+
+**NB:**  There appears to be serious flaw as far as symbols and imports.  If you find yourself importing a symbol from another file, even from the same package, you are in for a bumpy ride, from my experience, especially when using a bare import server plug-in like es-dev-server.  I've raised the issue [here](https://github.com/WICG/webpackage/issues/496) and [there](https://github.com/WICG/import-maps/issues/132).
 
 ### Even more indirection
 

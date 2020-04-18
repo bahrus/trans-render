@@ -6,9 +6,9 @@ import {TransformValueOptions, RenderContext} from './init.d.js';
  * @param target 
  * @param template 
  */
-export function replaceElementWithTemplate(target: HTMLElement, ctx: RenderContext, template: HTMLTemplateElement | string, symbol?: symbol){
-    if(typeof template === 'string'){
-        template = createTemplate(template, ctx, symbol);
+export function replaceElementWithTemplate(target: HTMLElement, ctx: RenderContext, template: HTMLTemplateElement | [symbol, string]){
+    if(Array.isArray(template)){
+        template = createTemplate(template[1], ctx, template[0]);
     }
     insertAdjacentTemplate(template as HTMLTemplateElement, target, 'afterend');
     ctx.replacedElement = target;
