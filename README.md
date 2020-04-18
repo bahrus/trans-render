@@ -662,12 +662,14 @@ Splits text based on search into styleable spans with class "match" and sets the
 ### Content Swapping, Part I
 
 ```Typescript
-replaceElementWithTemplate(target: HTMLElement, ctx: RenderContext, template: HTMLTemplateElement) 
+replaceElementWithTemplate(target: HTMLElement, ctx: RenderContext, template: HTMLTemplateElement | string, symbol?: symbol) 
 ```
 
 During pipeline processing, replace a tag with a template.  The original tag goes into ctx.replacedElement.
 
 Typically this feature will be paired with the [ditto syntax](https://github.com/bahrus/trans-render#multiple-matching-with-ditto-notation) mentioned previously.
+
+If this is done inside a dynamic expression (like a lambda function), it is crucial to provide the symbol parameter (see createTemplate for more info).
 
 ### Content Swapping, Part II
 
