@@ -494,9 +494,6 @@ My summary Text
 <template id="articleTemplate">
 My interesting article...
 </template>
-<script>
-articleTemplate._attachShadowOptions = {mode: 'open'}
-</script>
 <template id="sourceTemplate">
     <details>
         ...
@@ -510,7 +507,7 @@ articleTemplate._attachShadowOptions = {mode: 'open'}
     import { init } from '../init.js';
     const Transform = {
         details: {
-            article: articleTemplate
+            article: [articleTemplate]
         }
     };
     init(sourceTemplate, { Transform }, target);
@@ -584,15 +581,12 @@ const Transform = {
 
 ###  Create template element programmatically
 
-```JavaScript
-const template = createTemplate(/* html */`<my-markup>...</my-markup>`, ctx, {as:'myMarkup', shadow:{mode: 'open'}});
+```TypeScript
+createTemplate(html: string, cache?: any, symbol?: symbol): HTMLTemplateElement;
 ```
 
-This creates a template object ready for cloning.  The second parameter is optional.
+If createTemplate is called inside an arrow function, and if cache and symbol are not provided, the template will be recreated repeatedly, which is wasteful, and seemingly voids the whole point of using templates. Assuming the html is always the same, then a cache object should passed in as well as a symbol.
 
-If "ctx" and "as" are provided, the template is stored / cached in ctx.templates['myMarkup'] for future referencing / cloning.
-
-If "shadow" is provided, it simply attaches a property _attachShadowOptions = {mode: 'open'} which can be useful when instantiating the template.
 
 ###  Loop support (NB:  Not yet optimized?)
 

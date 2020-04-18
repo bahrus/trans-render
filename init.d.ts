@@ -84,8 +84,3 @@ export interface RenderOptions{
 export interface TransRenderWC{
     viewModel: object;
 }
-
-export interface CreateTemplateOptions{
-    as?: string;
-    shadow?: ShadowRootInit;
-}
