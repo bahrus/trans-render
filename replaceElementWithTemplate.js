@@ -5,7 +5,7 @@ import { deleteMe } from './init.js';
  * @param target
  * @param template
  */
-export function replaceElementWithTemplate(target, template, ctx) {
+export function replaceElementWithTemplate(target, ctx, template) {
     insertAdjacentTemplate(template, target, 'afterend');
     ctx.replacedElement = target;
     target[deleteMe] = true;

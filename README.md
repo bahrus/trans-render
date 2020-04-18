@@ -585,7 +585,7 @@ const Transform = {
 ###  Create template element programmatically
 
 ```JavaScript
-const template = createTemplate(/* html */`<my-markup>...</my-markup>`, {ctx, as:'myMarkup', shadow:{mode: 'open'});
+const template = createTemplate(/* html */`<my-markup>...</my-markup>`, ctx, as:'myMarkup', shadow:{mode: 'open'});
 ```
 
 This creates a template object ready for cloning.  The second parameter is optional.
@@ -668,7 +668,7 @@ Splits text based on search into styleable spans with class "match" and sets the
 ### Content Swapping, Part I
 
 ```Typescript
-replaceElementWithTemplate(target: HTMLElement, template: HTMLTemplateElement, ctx: RenderContext) 
+replaceElementWithTemplate(target: HTMLElement, ctx: RenderContext, template: HTMLTemplateElement) 
 ```
 
 During pipeline processing, replace a tag with a template.  The original tag goes into ctx.replacedElement.
@@ -678,7 +678,8 @@ Typically this feature will be paired with the [ditto syntax](https://github.com
 ### Content Swapping, Part II
 
 ```Typescript
-replaceTargetWithTag<TargetType extends HTMLElement = HTMLElement, ReplacingTagType extends HTMLElement = HTMLElement>(target: TargetType, tag: string, ctx: RenderContext, preSwapCallback?: (el: ReplacingTagType) => void)
+replaceTargetWithTag<TargetType extends HTMLElement = HTMLElement, ReplacingTagType extends HTMLElement = HTMLElement>
+    (target: TargetType, ctx: RenderContext, tag: string, preSwapCallback?: (el: ReplacingTagType) => void)
 ```
 
 During pipeline processing, replace a tag with another tag.  The original tag goes into ctx.replacedElement
