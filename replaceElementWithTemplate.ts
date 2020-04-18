@@ -1,5 +1,4 @@
 import { insertAdjacentTemplate } from "./insertAdjacentTemplate.js";
-import {deleteMe} from './init.js';
 import {createTemplate} from './createTemplate.js';
 import {TransformValueOptions, RenderContext} from './init.d.js';
 /**
@@ -13,5 +12,5 @@ export function replaceElementWithTemplate(target: HTMLElement, ctx: RenderConte
     }
     insertAdjacentTemplate(template as HTMLTemplateElement, target, 'afterend');
     ctx.replacedElement = target;
-    (<any>target)[deleteMe] = true;
+    target.dataset.deleteMe = 'true';
 }

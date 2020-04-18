@@ -1,4 +1,3 @@
-import { deleteMe } from './init.js';
 /**
  *
  * @param target
@@ -7,7 +6,7 @@ import { deleteMe } from './init.js';
 export function replaceTargetWithTag(target, ctx, tag, preSwapCallback) {
     const tagEl = document.createElement(tag);
     ctx.replacedElement = target;
-    target[deleteMe] = true;
+    target.dataset.deleteMe = 'true';
     if (preSwapCallback)
         preSwapCallback(tagEl);
     target.insertAdjacentElement('afterend', tagEl);

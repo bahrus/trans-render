@@ -7,7 +7,7 @@ import {
   TransformValueOptions,
   PEATSettings
 } from "./init.d.js";
-export const deleteMe = Symbol("deleteMe");
+//export const deleteMe = Symbol("deleteMe");
 export function init(
   template: HTMLElement | DocumentFragment,
   ctx: RenderContext,
@@ -196,5 +196,5 @@ export function process(
       context.Transform = transform;
     }
   }
-  if ((<any>target)[deleteMe]) target.remove();
+  if(target.dataset.deleteMe !== undefined) target.remove();
 }
