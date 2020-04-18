@@ -70,6 +70,7 @@ export interface RenderContext {
     symbols?: {[key: string] : symbol},
     replacedElement?: HTMLElement,
     pierce?: (el: HTMLElement, ctx: RenderContext, targetTransform: TransformRules) => void;
+    templates?: {[key: string]: HTMLTemplateElement};
 }
 
 export interface RenderOptions{
@@ -79,6 +80,11 @@ export interface RenderOptions{
 }
 
 export interface TransRenderWC{
-
     viewModel: object;
+}
+
+export interface CreateTemplateOptions{
+    ctx: RenderContext;
+    as: string;
+    shadow: ShadowRootInit;
 }

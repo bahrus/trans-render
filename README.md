@@ -582,11 +582,17 @@ const Transform = {
 
 ## Utility functions
 
-###  Create Template programmatically [TODO]
+###  Create template element programmatically
 
 ```JavaScript
-createTemplate (/* html */`<my-markup>...</my-markup>`, {ctx:ctx, as:'myMarkup', shadowMode:open})
+const template = createTemplate(/* html */`<my-markup>...</my-markup>`, {ctx, as:'myMarkup', shadow:{mode: 'open'});
 ```
+
+This creates a template object ready for cloning.  The second parameter is optional.
+
+If "ctx" and "as" are provided, the template is stored / cached in ctx.templates['myMarkup'] for future referencing / cloning.
+
+If "shadow" is provided, it simply attaches a property _attachShadowOptions = {mode: 'open'} which can be useful when instantiating the template.
 
 ###  Loop support (NB:  Not yet optimized?)
 
