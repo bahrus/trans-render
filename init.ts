@@ -163,7 +163,7 @@ export function process(
 
           break;
         case "boolean":
-          if (resp2 === false) (<any>target)[deleteMe] = true;
+          if (resp2 === false) target.dataset.deleteMe = 'true';
           break;
       }
     }
