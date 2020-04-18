@@ -82,12 +82,16 @@ export function process(
             if (len > 0) {
               //////////  Prop Setting
               Object.assign(target, peat[0]);
+            }else{
+              continue;
             }
             if (len > 1) {
               /////////  Event Handling
               for (const key in peat[1]) {
                 target.addEventListener(key, peat[1][key]);
               }
+            }else{
+              continue;
             }
             if (len > 2) {
               /////////  Attribute Setting
@@ -112,9 +116,13 @@ export function process(
                     break;
                 }
               }
+            }else{
+              continue;
             }
             if(len > 3){
               resp2 = peat[3] as TransformRules;
+            }else{
+              continue;
             }
           }
           if ((<HTMLElement>resp2).localName === "template") {
