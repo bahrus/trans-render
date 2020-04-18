@@ -66,17 +66,11 @@ export function process(context, idx, level, options) {
                             //////////  Prop Setting
                             Object.assign(target, peat[0]);
                         }
-                        else {
-                            continue;
-                        }
                         if (len > 1) {
                             /////////  Event Handling
                             for (const key in peat[1]) {
                                 target.addEventListener(key, peat[1][key]);
                             }
-                        }
-                        else {
-                            continue;
                         }
                         if (len > 2) {
                             /////////  Attribute Setting
@@ -103,9 +97,6 @@ export function process(context, idx, level, options) {
                                         break;
                                 }
                             }
-                        }
-                        else {
-                            continue;
                         }
                         if (len > 3) {
                             resp2 = peat[3];
