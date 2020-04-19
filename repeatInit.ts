@@ -14,7 +14,7 @@ export function repeatInit(template: HTMLTemplateElement, ctx: RenderContext, co
     const count = itemsProvided ? (countOrItems as any[]).length : countOrItems as number;
     (<any>target)[countKey] = count;
     (<any>target)[ubKey] = count;
-    for(let i =0; i < countOrItems; i++){
+    for(let i = 0; i < count; i++){
         const clonedTemplate = template.content.cloneNode(true) as DocumentFragment;
         Array.from(clonedTemplate.children).forEach(c =>{
             (<any>c)[idxKey] = i;

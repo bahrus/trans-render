@@ -12,7 +12,7 @@ export function repeatInit(template, ctx, countOrItems, target, targetTransform)
     const count = itemsProvided ? countOrItems.length : countOrItems;
     target[countKey] = count;
     target[ubKey] = count;
-    for (let i = 0; i < countOrItems; i++) {
+    for (let i = 0; i < count; i++) {
         const clonedTemplate = template.content.cloneNode(true);
         Array.from(clonedTemplate.children).forEach(c => {
             c[idxKey] = i;
