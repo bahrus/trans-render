@@ -1,11 +1,13 @@
 import {TransformRules, RenderContext, TransformValueOptions} from './init.d.js';
-import {countKey, idxKey, ubKey} from './repeatInit.js';
+import {countKey, idxKey, ubKey, itemsKey} from './repeatInit.js';
 import {update} from './update.js';
 
 const origStyleKey = Symbol('origStyle');
 //type HTMLFn = (el: HTMLElement) => void
-export function repeatethUpdateth(template: HTMLTemplateElement, ctx: RenderContext, count: number, target: HTMLElement, targetTransform?: TransformValueOptions){
+export function repeatethUpdateth(template: HTMLTemplateElement, ctx: RenderContext, countOrItems: number | any[], target: HTMLElement, targetTransform?: TransformValueOptions){
     const childCount = (<any>target)[countKey];
+    const itemsProvided = Array.isArray(countOrItems);
+    const count = itemsProvided ? (countOrItems as any[]).length : countOrItems as number;
     const ub = (<any>target)[ubKey];
     const diff = count - childCount;
     if(diff === 0) return;
@@ -19,7 +21,7 @@ export function repeatethUpdateth(template: HTMLTemplateElement, ctx: RenderCont
                 //TODO:  mark children as needing initialization
                 Array.from(clonedTemplate.children).forEach(c =>{
                     (<any>c)[idxKey] = childCount + i;
-                    //(c as HTMLElement).dataset.idxKey = childCount + i + '';
+                    if(itemsProvided) (<any>c)[itemsKey] = (countOrItems as any[])[i];
                 });
     
                 target.appendChild(clonedTemplate);

@@ -3,7 +3,6 @@ import {setSymbol} from './manageSymbols.js';
 export const sk = setSymbol(TRS.is, 'sk');
 
 export function interpolate(target: any, prop: string, obj: any, isAttr: boolean = false){
-    //const privateStorageKey = '__' + prop + '__split';
     let split = target[sk] as (string | string[])[] | undefined;
     if(split === undefined){
         const txt = isAttr ?  target.getAttribute(prop) : target[prop] as string;
@@ -17,7 +16,6 @@ export function interpolate(target: any, prop: string, obj: any, isAttr: boolean
         const isArray = Array.isArray(a);
         const s = isArray ? a[0] : a as string;
         if(s[0] === '.'){
-            //const chained = s.substr(1).split('??');
             const frstItem = obj[s.substr(1).trim()]; 
             if(!isArray) {
                 return frstItem;

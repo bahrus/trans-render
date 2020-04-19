@@ -13,8 +13,8 @@
         </template>
         <trans-render view-model='["winter", "spring", "summer", "fall"]'><script nomodule>
             ({
-                ul: ({ctx, target}) => ctx.repeat(itemTemplate, ctx, ctx.viewModel.length, target, {
-                    li: ({ctx, idx}) => ctx.viewModel[idx]
+                ul: ({ctx, target}) => ctx.repeat(itemTemplate, ctx, ctx.viewModel, target, {
+                    li: ({ctx, item}) => item
                 })
             })
         </script></trans-render>

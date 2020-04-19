@@ -2,7 +2,6 @@ import {TransformRules, RenderContext, TransformValueOptions} from './init.d.js'
 import {countKey, idxKey, itemsKey} from './repeatInit.js';
 import {update} from './update.js';
 
-//type HTMLFn = (el: HTMLElement) => void
 export function repeatUpdate(template: HTMLTemplateElement, ctx: RenderContext, countOrItems: number | any[], target: HTMLElement, targetTransform?: TransformValueOptions){
     const childCount = (<any>target)[countKey];
     const itemsProvided = Array.isArray(countOrItems);
