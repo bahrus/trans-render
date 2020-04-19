@@ -1112,7 +1112,7 @@ A web component wrapper around the functions described here is available.
 
 ### Example syntax 
 
-[Demo](https://jsfiddle.net/bahrus/0c96b2aj/3/)
+[Demo](https://jsfiddle.net/bahrus/0c96b2aj/4/)
 
 If you are [here](https://www.webcomponents.org/element/trans-render) what appears next should work:
 
@@ -1127,7 +1127,7 @@ If you are [here](https://www.webcomponents.org/element/trans-render) what appea
         <trans-render view-model='["winter", "spring", "summer", "fall"]'><script nomodule>
             ({
                 ul: ({ctx, target}) => ctx.repeat(itemTemplate, ctx, ctx.viewModel, target, {
-                    li: ({ctx, item}) => item
+                    li: ({item}) => item
                 })
             })
         </script></trans-render>
