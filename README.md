@@ -1112,7 +1112,7 @@ A web component wrapper around the functions described here is available.
 
 ### Example syntax 
 
-[Demo](https://jsfiddle.net/bahrus/0c96b2aj/)
+[Demo](https://jsfiddle.net/bahrus/0c96b2aj/3/)
 
 If you are [here](https://www.webcomponents.org/element/trans-render) what appears next should work:
 
@@ -1120,21 +1120,21 @@ If you are [here](https://www.webcomponents.org/element/trans-render) what appea
 ```
 <custom-element-demo>
 <template>
-        <div>
+    <div>
         <template id="itemTemplate">
             <li></li>
         </template>
         <trans-render view-model='["winter", "spring", "summer", "fall"]'><script nomodule>
             ({
-                ul: ({ctx, target}) => ctx.repeat(itemTemplate, ctx, ctx.viewModel.length, target, {
-                    li: ({ctx, idx}) => ctx.viewModel[idx]
+                ul: ({ctx, target}) => ctx.repeat(itemTemplate, ctx, ctx.viewModel, target, {
+                    li: ({ctx, item}) => item
                 })
             })
         </script></trans-render>
         <div>
             <ul></ul>
         </div>
-        <script type="module" src="https://unpkg.com/trans-render@0.0.103/trans-render.js?module"></script>
+        <script type="module" src="https://cdn.pika.dev/trans-render"></script>
     </div>
 </template>
 </custom-element-demo>
