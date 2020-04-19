@@ -1,6 +1,6 @@
-import TransRenderSymbols from './trans-render-symbols.js';
+import { TransRenderSymbols as TRS } from './trans-render-symbols.js';
 import { setSymbol } from './manageSymbols.js';
-export const sk = setSymbol(TransRenderSymbols.is, 'sk');
+export const sk = setSymbol(TRS.is, 'sk');
 export function interpolate(target, prop, obj, isAttr = false) {
     //const privateStorageKey = '__' + prop + '__split';
     let split = target[sk];

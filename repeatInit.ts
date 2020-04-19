@@ -1,8 +1,10 @@
 import {TransformValueOptions, RenderContext} from './init.d.js';
-//export const countKey = '__trCount';
-export const countKey = Symbol('ck');
-export const idxKey = Symbol('iK');
-export const ubKey = Symbol('ub');
+import {TransRenderSymbols as TRS} from './trans-render-symbols.js';
+import {setSymbol} from './manageSymbols.js';
+
+export const countKey = setSymbol(TRS.is, 'countKey');
+export const idxKey = setSymbol(TRS.is, 'idxKey');
+export const ubKey = setSymbol(TRS.is, 'ubKey');
 //export const idxKey = '__trIdx';
 //export const initKey = '__trInit';
 export function repeatInit(template: HTMLTemplateElement, ctx: RenderContext, count: number, target: Element, targetTransform?: TransformValueOptions){
