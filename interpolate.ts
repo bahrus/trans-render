@@ -1,4 +1,7 @@
-const sk = Symbol('sk'); //storage key
+import TransRenderSymbols from './trans-render-symbols.js';
+import {setSymbol, getSymbol} from './manageSymbols.js';
+export const sk = setSymbol(TransRenderSymbols.is, 'sk');
+
 export function interpolate(target: any, prop: string, obj: any, isAttr: boolean = false){
     //const privateStorageKey = '__' + prop + '__split';
     let split = target[sk] as (string | string[])[] | undefined;
