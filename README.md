@@ -618,7 +618,7 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
     };
     const ctx = init(list, {
         Transform: {
-            ul: ({ target, ctx }) =>  repeat(itemTemplate, ctx, 10, target, itemTransform) // or repeat(itemTemplate, ctx, items, target, itemTransform) [TODO]
+            ul: ({ target, ctx }) =>  repeat(itemTemplate, ctx, 10, target, itemTransform) // or repeat(itemTemplate, ctx, items, target, itemTransform) 
         }
     }, target, options);
     ctx.update = update;

@@ -1,8 +1,10 @@
-import { countKey, idxKey } from './repeatInit.js';
+import { countKey, idxKey, itemsKey } from './repeatInit.js';
 import { update } from './update.js';
 //type HTMLFn = (el: HTMLElement) => void
-export function repeatUpdate(template, ctx, count, target, targetTransform) {
+export function repeatUpdate(template, ctx, countOrItems, target, targetTransform) {
     const childCount = target[countKey];
+    const itemsProvided = Array.isArray(countOrItems);
+    const count = itemsProvided ? countOrItems.length : countOrItems;
     const diff = count - childCount;
     if (diff === 0)
         return;
@@ -12,7 +14,8 @@ export function repeatUpdate(template, ctx, count, target, targetTransform) {
             //TODO:  mark children as needing initialization
             Array.from(clonedTemplate.children).forEach(c => {
                 c[idxKey] = childCount + i;
-                //(c as HTMLElement).dataset.idxKey = childCount + i + '';
+                if (itemsProvided)
+                    c[itemsKey] = countOrItems[i];
             });
             target.appendChild(clonedTemplate);
         }

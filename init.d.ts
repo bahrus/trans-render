@@ -7,6 +7,7 @@ export interface TransformArg<TargetType extends HTMLElement = HTMLElement> {
     ctx: RenderContext,
     idx: number,
     level: number,
+    item: any,
 }
 
 
@@ -73,6 +74,7 @@ export interface RenderContext {
     replacedElement?: HTMLElement,
     pierce?: (el: HTMLElement, ctx: RenderContext, targetTransform: TransformRules) => void;
     templates?: {[key: string]: HTMLTemplateElement};
+    itemsKey?: symbol;
 }
 
 export interface RenderOptions{

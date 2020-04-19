@@ -1,11 +1,14 @@
 import {TransformRules, RenderContext, TransformValueOptions} from './init.d.js';
-import {countKey, idxKey} from './repeatInit.js';
+import {countKey, idxKey, itemsKey} from './repeatInit.js';
 import {update} from './update.js';
 
 //type HTMLFn = (el: HTMLElement) => void
-export function repeatUpdate(template: HTMLTemplateElement, ctx: RenderContext, count: number, target: HTMLElement, targetTransform?: TransformValueOptions){
+export function repeatUpdate(template: HTMLTemplateElement, ctx: RenderContext, countOrItems: number | any[], target: HTMLElement, targetTransform?: TransformValueOptions){
     const childCount = (<any>target)[countKey];
+    const itemsProvided = Array.isArray(countOrItems);
+    const count = itemsProvided ? (countOrItems as any[]).length : countOrItems as number;
     const diff = count - childCount;
+    
     if(diff === 0) return;
     if(diff > 0){
         for(let i = 0; i < diff; i++){
@@ -13,7 +16,7 @@ export function repeatUpdate(template: HTMLTemplateElement, ctx: RenderContext, 
             //TODO:  mark children as needing initialization
             Array.from(clonedTemplate.children).forEach(c =>{
                 (<any>c)[idxKey] = childCount + i;
-                //(c as HTMLElement).dataset.idxKey = childCount + i + '';
+                if(itemsProvided) (<any>c)[itemsKey] = (countOrItems as any[])[i];
             });
 
             target.appendChild(clonedTemplate);
