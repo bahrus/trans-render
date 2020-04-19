@@ -1,6 +1,5 @@
 import { countKey, idxKey, itemsKey } from './repeatInit.js';
 import { update } from './update.js';
-//type HTMLFn = (el: HTMLElement) => void
 export function repeatUpdate(template, ctx, countOrItems, target, targetTransform) {
     const childCount = target[countKey];
     const itemsProvided = Array.isArray(countOrItems);

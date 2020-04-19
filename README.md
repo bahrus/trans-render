@@ -577,6 +577,22 @@ const Transform = {
 }
 ```
 
+There are currently five parameters that can be pulled via these arrow functions:
+
+```JavaScript
+    summary: ({target, ctx, idx, level, item}) => {
+        ...
+    }
+```
+
+TypeScript Tip: Some of the parameters, like target, are quite generic (e.g. target:HTMLElement, item: any). But one can add typing thusly:
+
+```Typescript
+    summary: ({target, item} : {target: HTMLInputElement, item: MyModelItem}) =>{
+        ...
+    }
+```
+
 ## Utility functions
 
 ###  Create template element programmatically

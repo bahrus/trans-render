@@ -2,7 +2,6 @@ import { TransRenderSymbols as TRS } from './trans-render-symbols.js';
 import { setSymbol } from './manageSymbols.js';
 export const sk = setSymbol(TRS.is, 'sk');
 export function interpolate(target, prop, obj, isAttr = false) {
-    //const privateStorageKey = '__' + prop + '__split';
     let split = target[sk];
     if (split === undefined) {
         const txt = isAttr ? target.getAttribute(prop) : target[prop];
@@ -16,7 +15,6 @@ export function interpolate(target, prop, obj, isAttr = false) {
         const isArray = Array.isArray(a);
         const s = isArray ? a[0] : a;
         if (s[0] === '.') {
-            //const chained = s.substr(1).split('??');
             const frstItem = obj[s.substr(1).trim()];
             if (!isArray) {
                 return frstItem;
