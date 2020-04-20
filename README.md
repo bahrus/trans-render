@@ -69,7 +69,7 @@ means "if a node has tag name 'details', then find any direct children of the de
 </template>
 <div id="target"></div>
 <script type="module">
-    import { init } from '../init.js';
+    import { init } from 'trans-render/init.js';
     const model = {
         summaryText: 'hello'
     }
@@ -989,7 +989,7 @@ The syntax isn't that much more complicated, but it is probably harder to troubl
 
 **NB:**  There appears to be serious flaw as far as symbols and imports.  If you find yourself importing a symbol from another file, even from the same package, you are in for a bumpy ride, from my experience, especially when using a bare import server plug-in like es-dev-server.  I've raised the issue [here](https://github.com/WICG/webpackage/issues/496) and [there](https://github.com/WICG/import-maps/issues/132).
 
-However, a helper library, manageSymbols.js, is contained in this library that builds on the singleton-like aspects of custom elements, in order to improve the reliable of symbols, even in an environment where different versions of the same module may be present.
+However, a helper library, manageSymbols.js, is contained in this package, that builds on the singleton-like aspects of custom elements.  It improves the reliability of symbols, even in an environment where different versions of the same module may be present.
 
 ### Even more indirection
 

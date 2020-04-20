@@ -65,7 +65,13 @@ export function process(ctx, idx, level, options) {
                         const len = peat.length;
                         if (len > 0) {
                             //////////  Prop Setting
-                            Object.assign(target, peat[0]);
+                            /////////   Because of dataset, style (other?) assign at one level down
+                            const props = peat[0];
+                            Object.assign(target, props);
+                            if (props.style !== undefined)
+                                Object.assign(target.style, props.style);
+                            if (props.dataset !== undefined)
+                                Object.assign(target.dataset, props.dataset);
                         }
                         if (len > 1) {
                             /////////  Event Handling
