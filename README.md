@@ -615,12 +615,12 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
 ```html
 <div>
     <template id="itemTemplate">
-    <li></li>
+        <li></li>
     </template>
     <template id="list">
-    <ul id="container"></ul>
-    <button id="addItems">Add items</button>
-    <button id="removeItems">Remove items</button>
+        <ul id="container"></ul>
+        <button id="addItems">Add items</button>
+        <button id="removeItems">Remove items</button>
     </template>
     <div id="target"></div>
 
@@ -672,7 +672,7 @@ Just saves a tiny bit of boiler plate (document.createElement, container.appendC
 split(target: HTMLElement, textContent: string, search: string | null | undefined)
 ```
 
-Splits text based on search into styleable spans with class "match" and sets the innerHTML to this partitioned content.  [TODO:  check for unsafe html].
+Splits text based on search into styleable spans with class "match" and sets the innerHTML to this partitioned content.  The second argument, 'textContent' should not contain any HTML tags in it (but that is left to the caller to ensure).
 
 
 ### Content Swapping, Part I
