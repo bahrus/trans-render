@@ -20,8 +20,9 @@ export function replaceElementWithTemplate(target: HTMLElement, ctx: RenderConte
     ctx.replacedElement = target;
     target.dataset.deleteMe = 'true';
     if (wasString) {
+        const templateCopy = template;
         return function (target: HTMLElement, ctx: RenderContext) {
-            replaceElementWithTemplate(target, ctx, template as HTMLTemplateElement);
+            replaceElementWithTemplate(target, ctx, templateCopy as HTMLTemplateElement);
         }
     }
 }

@@ -19,8 +19,9 @@ export function replaceElementWithTemplate(target, ctx, template) {
     ctx.replacedElement = target;
     target.dataset.deleteMe = 'true';
     if (wasString) {
+        const templateCopy = template;
         return function (target, ctx) {
-            replaceElementWithTemplate(target, ctx, template);
+            replaceElementWithTemplate(target, ctx, templateCopy);
         };
     }
 }
