@@ -39,7 +39,9 @@ export function process(ctx, idx, level, options) {
     let inherit = false;
     let nextMatch = [];
     let prevSelector = null;
-    const overrides = {};
+    if (!transform.overrides)
+        transform.overrides = {};
+    const overrides = transform.overrides;
     for (const rawSelector in transform) {
         let selector;
         if (prevSelector !== null && rawSelector.startsWith('"')) {
