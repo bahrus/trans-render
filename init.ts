@@ -56,8 +56,7 @@ export function process(
   let inherit = false;
   let nextMatch = [];
   let prevSelector = null;
-  if(!(<any>transform).overrides) (<any>transform).overrides = {};
-  const overrides = (<any>transform).overrides as  {[key:string]: TransformValueOptions<HTMLElement>};
+  const overrides: {[key:string]: TransformValueOptions<HTMLElement>} = {};
   for (const rawSelector in transform) {
     let selector;
     if (prevSelector !== null && rawSelector.startsWith('"')) {
