@@ -68,10 +68,21 @@ export function process(
     if (target.matches(selector)) {
       const transformTemplateVal = transform[rawSelector];
       let resp2: TransformValueOptions<HTMLElement> = transformTemplateVal;
-      if (typeof resp2 === "function") {
-        const item = ctx.itemsKey !== undefined ? (<any>target)[ctx.itemsKey] : undefined;
-        resp2 = resp2({ target, ctx, idx, level, item }) as TransformValueOptions<HTMLElement>;
+      switch(typeof resp2){
+        case 'function':
+          const item = ctx.itemsKey !== undefined ? (<any>target)[ctx.itemsKey] : undefined;
+          resp2 = resp2({ target, ctx, idx, level, item }) as TransformValueOptions<HTMLElement>;
+          if(typeof resp2 === 'function'){
+            transform[rawSelector] = resp2;
+          }
+          break;
+        case 'symbol':
+          resp2 = ctx[resp2];
+          transform[rawSelector] = resp2;
+          //delete ctx[resp2];
+          break;
       }
+ 
       switch (typeof resp2) {
         case "string":
           target.textContent = resp2;

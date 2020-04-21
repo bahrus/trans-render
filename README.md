@@ -605,10 +605,15 @@ TypeScript Tip: Some of the parameters, like target, are quite generic (e.g. tar
 ###  Create template element programmatically
 
 ```TypeScript
-createTemplate(html: string, cache?: any, symbol?: symbol): HTMLTemplateElement;
+cacheTemplate(html: string, cache?: any)
 ```
 
-If createTemplate is called inside an arrow function, and if cache and symbol are not provided, the template will be recreated repeatedly, which is wasteful, and seemingly voids the whole point of using templates. Assuming the html is always the same, then a cache object should passed in as well as a symbol.
+Example:
+
+```JavaScript
+    details: ({target, ctx}) => cacheTemplate(`<summary>SummaryText</summary>...`, ctx)
+```
+
 
 
 ###  Loop support (NB:  Not yet optimized?)
@@ -685,12 +690,12 @@ Splits text based on search into styleable spans with class "match" and sets the
 ### Content Swapping, Part I
 
 ```Typescript
-replaceElementWithTemplate(target: HTMLElement, ctx: RenderContext, template: HTMLTemplateElement | [symbol, string]) 
+replaceElementWithTemplate(target: HTMLElement, ctx: RenderContext, template: HTMLTemplateElement | string) 
 ```
 
 During pipeline processing, replace a tag with a template.  The original tag goes into ctx.replacedElement.
 
-For the template parameter, you can either pass in a template object, or an array of size two, where the first element of the array is an html string, and the second eleemnt of the array is a symbol to use for caching.
+For the template parameter, you can either pass in a template object, or an html string.
 
 ### Content Swapping, Part II
 
