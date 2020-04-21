@@ -56,6 +56,7 @@ export function process(
   let inherit = false;
   let nextMatch = [];
   let prevSelector = null;
+  const overrides: {[key:string]: TransformValueOptions<HTMLElement>} = {};
   for (const rawSelector in transform) {
     let selector;
     if (prevSelector !== null && rawSelector.startsWith('"')) {
@@ -66,14 +67,14 @@ export function process(
     }
 
     if (target.matches(selector)) {
-      const transformTemplateVal = transform[rawSelector];
+      const transformTemplateVal = overrides[rawSelector] || transform[rawSelector];
       let resp2: TransformValueOptions<HTMLElement> = transformTemplateVal;
       switch(typeof resp2){
         case 'function':
           const item = ctx.itemsKey !== undefined ? (<any>target)[ctx.itemsKey] : undefined;
           resp2 = resp2({ target, ctx, idx, level, item }) as TransformValueOptions<HTMLElement>;
           if(typeof resp2 === 'function'){
-            transform[rawSelector] = resp2;
+            overrides[rawSelector] = resp2;
           }
           break;
         case 'symbol':
