@@ -39,7 +39,6 @@ export function process(ctx, idx, level, options) {
     let inherit = false;
     let nextMatch = [];
     let prevSelector = null;
-    const overrides = {};
     for (const rawSelector in transform) {
         let selector;
         if (prevSelector !== null && rawSelector.startsWith('"')) {
@@ -50,21 +49,11 @@ export function process(ctx, idx, level, options) {
             prevSelector = selector;
         }
         if (target.matches(selector)) {
-            const transformTemplateVal = overrides[rawSelector] || transform[rawSelector];
+            const transformTemplateVal = transform[rawSelector];
             let resp2 = transformTemplateVal;
-            switch (typeof resp2) {
-                case 'function':
-                    const item = ctx.itemsKey !== undefined ? target[ctx.itemsKey] : undefined;
-                    resp2 = resp2({ target, ctx, idx, level, item });
-                    if (typeof resp2 === 'function') {
-                        overrides[rawSelector] = resp2;
-                    }
-                    break;
-                case 'symbol':
-                    resp2 = ctx[resp2];
-                    transform[rawSelector] = resp2;
-                    //delete ctx[resp2];
-                    break;
+            if (typeof resp2 === "function") {
+                const item = ctx.itemsKey !== undefined ? target[ctx.itemsKey] : undefined;
+                resp2 = resp2({ target, ctx, idx, level, item });
             }
             switch (typeof resp2) {
                 case "string":

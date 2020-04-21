@@ -1,12 +1,10 @@
-export function createTemplate(html: string){
+export function createTemplate(html: string, cache?: any, symbol?: symbol){
+    const useCache = (cache !== undefined) && (symbol !== undefined);
+    if(useCache){
+        if(cache[symbol!] !== undefined) return cache[symbol!];
+    }
     const template = document.createElement("template") as HTMLTemplateElement;
     template.innerHTML = html;
+    if(useCache) cache[symbol!] = template;
     return template;
-}
-
-export function cacheTemplate(html : string, cache: any, symbol?: symbol){
-    const template = createTemplate(html);
-    const sym = symbol === undefined ? Symbol() : symbol;
-    cache[sym] = template;
-    return sym;
 }
