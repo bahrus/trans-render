@@ -488,7 +488,7 @@ My summary Text
 </script>
 ```
 
-Here we are relying on the fact that outside any Shadow DOM, id's become global constants.  So for simple HTML pages, this works.  Assuming HTML Modules someday bring brings the world back into balance, an open question remains how code will be able to reference templates defined within the HTML template.
+Here we are relying on the fact that outside any Shadow DOM, id's become global constants.  So for simple HTML pages, this works.  Assuming HTML Modules someday brings the world back into balance, an open question remains how code will be able to reference templates defined within the HTML template.
 
 For now, typically, web components are written in JavaScript exclusively. A [utility to create a template](#create-template-element-programmatically) is provided that can then be referenced, in lieu of an HTML Template DOM node.
 
@@ -583,9 +583,6 @@ const Transform = {
 }
 ```
 
-*Opaque comment:*
-
-*Just to be transparent about how some subtle functionality below works, if, instead of resolving to a lambda expression, it points to a symbol, then trans-render assumes the symbol is a key of ctx to a transform rule, and all the rules above will also apply to the result of getting the value of that keyed value. [TODO]*
 
 There are currently five parameters that can be pulled via these arrow functions:
 
