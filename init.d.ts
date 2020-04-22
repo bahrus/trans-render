@@ -86,3 +86,7 @@ export interface RenderOptions{
 export interface TransRenderWC{
     viewModel: object;
 }
+
+export type Partial<T> = {
+    [P in keyof T]?: T[P];
+}

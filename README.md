@@ -605,13 +605,13 @@ TypeScript Tip: Some of the parameters, like target, are quite generic (e.g. tar
 ###  Create template element programmatically
 
 ```TypeScript
-cacheTemplate(html: string, cache?: any)
+createTemplate(html: string, cache?: any, symbol?: symbol)
 ```
 
 Example:
 
 ```JavaScript
-    details: ({target, ctx}) => cacheTemplate(`<summary>SummaryText</summary>...`, ctx)
+    details: ({target, ctx}) => createTemplate(`<summary>SummaryText</summary>...`);
 ```
 
 
@@ -690,7 +690,7 @@ Splits text based on search into styleable spans with class "match" and sets the
 ### Content Swapping, Part I
 
 ```Typescript
-replaceElementWithTemplate(target: HTMLElement, ctx: RenderContext, template: HTMLTemplateElement | string) 
+replaceElementWithTemplate(target: HTMLElement, ctx: RenderContext, template: HTMLTemplateElement | [symbol, string]) 
 ```
 
 During pipeline processing, replace a tag with a template.  The original tag goes into ctx.replacedElement.
