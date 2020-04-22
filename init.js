@@ -27,9 +27,6 @@ export function init(template, ctx, target, options) {
     }
     return ctx;
 }
-function isTemplate(test) {
-    return test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
-}
 export function process(ctx, idx, level, options) {
     const target = ctx.leaf;
     if (target.matches === undefined)
@@ -69,49 +66,8 @@ export function process(ctx, idx, level, options) {
                             continue;
                         }
                         const peat = resp2;
+                        applyPeatSettings(peat, target);
                         const len = peat.length;
-                        if (len > 0) {
-                            //////////  Prop Setting
-                            /////////   Because of dataset, style (other?) assign at one level down
-                            const props = peat[0];
-                            Object.assign(target, props);
-                            if (props.style !== undefined)
-                                Object.assign(target.style, props.style);
-                            if (props.dataset !== undefined)
-                                Object.assign(target.dataset, props.dataset);
-                        }
-                        if (len > 1) {
-                            /////////  Event Handling
-                            for (const key in peat[1]) {
-                                target.addEventListener(key, peat[1][key]);
-                            }
-                        }
-                        if (len > 2) {
-                            /////////  Attribute Setting
-                            for (const key in peat[2]) {
-                                const val = peat[2][key];
-                                switch (typeof val) {
-                                    case 'boolean':
-                                        if (val) {
-                                            target.setAttribute(key, '');
-                                        }
-                                        else {
-                                            target.removeAttribute(key);
-                                        }
-                                        break;
-                                    case 'string':
-                                        target.setAttribute(key, val);
-                                        break;
-                                    case 'number':
-                                        target.setAttribute(key, val.toString());
-                                        break;
-                                    case 'object':
-                                        if (val === null)
-                                            target.removeAttribute(key);
-                                        break;
-                                }
-                            }
-                        }
                         if (len > 3) {
                             resp2 = peat[3];
                         }
@@ -201,4 +157,52 @@ export function process(ctx, idx, level, options) {
     }
     if (target.dataset.deleteMe !== undefined)
         target.remove();
+}
+function isTemplate(test) {
+    return test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
+}
+export function applyPeatSettings(peat, target) {
+    const len = peat.length;
+    if (len > 0) {
+        //////////  Prop Setting
+        /////////   Because of dataset, style (other?) assign at one level down
+        const props = peat[0];
+        Object.assign(target, props);
+        if (props.style !== undefined)
+            Object.assign(target.style, props.style);
+        if (props.dataset !== undefined)
+            Object.assign(target.dataset, props.dataset);
+    }
+    if (len > 1) {
+        /////////  Event Handling
+        for (const key in peat[1]) {
+            target.addEventListener(key, peat[1][key]);
+        }
+    }
+    if (len > 2) {
+        /////////  Attribute Setting
+        for (const key in peat[2]) {
+            const val = peat[2][key];
+            switch (typeof val) {
+                case 'boolean':
+                    if (val) {
+                        target.setAttribute(key, '');
+                    }
+                    else {
+                        target.removeAttribute(key);
+                    }
+                    break;
+                case 'string':
+                    target.setAttribute(key, val);
+                    break;
+                case 'number':
+                    target.setAttribute(key, val.toString());
+                    break;
+                case 'object':
+                    if (val === null)
+                        target.removeAttribute(key);
+                    break;
+            }
+        }
+    }
 }

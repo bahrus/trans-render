@@ -27,9 +27,10 @@ export type AttribsSettings = { [key: string]: string | boolean | number | undef
 export type PSettings<T extends HTMLElement = HTMLElement> = [PropSettings<T>]; 
 export type PESettings<T extends HTMLElement = HTMLElement> = [PropSettings<T>, EventSettings];
 export type PEASettings<T extends HTMLElement = HTMLElement> = [PropSettings<T>, EventSettings, AttribsSettings];
+export type PEAUnionSettings<T extends HTMLElement = HTMLElement> = PSettings<T> | PESettings<T> | PEASettings<T>;
 export type PEATSettings<T extends HTMLElement = HTMLElement> = [PropSettings<T>, EventSettings, AttribsSettings, TransformValueOptions<T>];
 export type PEATUnionSettings<T extends HTMLElement = HTMLElement> = 
-    PSettings<T> | PESettings | PEASettings | PEATSettings<T>;
+    PSettings<T> | PESettings<T> | PEASettings<T> | PEATSettings<T>;
 export type TransformValueOptions<TargetType extends HTMLElement = HTMLElement> 
     =   
         TransformRules // css selector

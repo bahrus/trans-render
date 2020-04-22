@@ -494,7 +494,7 @@ For now, typically, web components are written in JavaScript exclusively. A [uti
 
 
 
-##  Shadowed Template Insertion [Untested]
+##  Shadowed Template Insertion [UntestedF]
 
 ```html
 <template id="articleTemplate">
@@ -673,7 +673,7 @@ This function is modeled after insertAdjacentElement / insertAdjacentHTML.  Only
 ### Ergonomic Tag Creation
 
 ```Typescript
-appendTag(container: HTMLElement, name: string, config: DecorateArgs || PEATSettings<TargetType> /* TODO */) : HTMLElement 
+appendTag<T extends HTMLElement>(container: HTMLElement, name: string, config: PEAUnionSettings<T> | DecorateArgs<T> /* untested */) : HTMLElement 
 ```
 
 Just saves a tiny bit of boiler plate (document.createElement, container.appendChild)
