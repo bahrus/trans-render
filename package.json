@@ -4,6 +4,7 @@
   "description": "Instantiate an HTML Template",
   "main": "trans-render.js",
   "module": "trans-render.js",
+  "typings": "init.d.ts",
   "scripts": {
     "test": "node test/tests.js",
     "serve": "node node_modules/xtal-test/serve.js",
@@ -27,6 +28,5 @@
   "bugs": {
     "url": "https://github.com/bahrus/trans-render/issues"
   },
-  "homepage": "https://github.com/bahrus/trans-render#readme",
-  "typings": "init.d.ts"
+  "homepage": "https://github.com/bahrus/trans-render#readme"
 }

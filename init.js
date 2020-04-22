@@ -27,6 +27,9 @@ export function init(template, ctx, target, options) {
     }
     return ctx;
 }
+function isTemplate(test) {
+    return test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
+}
 export function process(ctx, idx, level, options) {
     const target = ctx.leaf;
     if (target.matches === undefined)
@@ -58,9 +61,13 @@ export function process(ctx, idx, level, options) {
             switch (typeof resp2) {
                 case "string":
                     target.textContent = resp2;
-                    break;
+                    continue;
                 case "object":
                     if (Array.isArray(resp2)) {
+                        if (resp2.length === 1 && isTemplate(resp2[0])) {
+                            (target.shadowRoot !== null ? target.shadowRoot : target.attachShadow({ mode: 'open', delegatesFocus: true })).appendChild(resp2[0].content.cloneNode(true));
+                            continue;
+                        }
                         const peat = resp2;
                         const len = peat.length;
                         if (len > 0) {
@@ -112,7 +119,7 @@ export function process(ctx, idx, level, options) {
                             continue;
                         }
                     }
-                    if (resp2.localName === "template") {
+                    if (isTemplate(resp2)) {
                         const templ = resp2;
                         target.appendChild(templ.content.cloneNode(true));
                     }

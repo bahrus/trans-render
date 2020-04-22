@@ -38,7 +38,9 @@ export function init(
   }
   return ctx;
 }
-
+function isTemplate(test: HTMLTemplateElement){
+  return test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
+}
 export function process(
   ctx: RenderContext,
   idx: number,
@@ -64,7 +66,6 @@ export function process(
       selector = rawSelector;
       prevSelector = selector;
     }
-
     if (target.matches(selector)) {
       const transformTemplateVal = transform[rawSelector];
       let resp2: TransformValueOptions<HTMLElement> = transformTemplateVal;
@@ -75,9 +76,13 @@ export function process(
       switch (typeof resp2) {
         case "string":
           target.textContent = resp2;
-          break;
+          continue;
         case "object":
           if (Array.isArray(resp2)) {
+            if((resp2 as HTMLTemplateElement[]).length === 1 && isTemplate(resp2[0] as HTMLTemplateElement)){
+              (target.shadowRoot !== null ? target.shadowRoot : target.attachShadow({mode: 'open', delegatesFocus: true})).appendChild((resp2[0] as HTMLTemplateElement).content.cloneNode(true));
+              continue;
+            }
             const peat = resp2 as PEATSettings;
             const len = peat.length;
             if (len > 0) {
@@ -124,7 +129,7 @@ export function process(
               continue;
             }
           }
-          if ((<HTMLElement>resp2).localName === "template") {
+          if (isTemplate(resp2 as HTMLTemplateElement)) {
             const templ = resp2 as HTMLTemplateElement;
             target.appendChild(templ.content.cloneNode(true));
           } else {

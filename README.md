@@ -494,7 +494,7 @@ For now, typically, web components are written in JavaScript exclusively. A [uti
 
 
 
-##  Shadowed Template Insertion [TODO]
+##  Shadowed Template Insertion [Untested]
 
 ```html
 <template id="articleTemplate">
