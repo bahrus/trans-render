@@ -611,7 +611,7 @@ createTemplate(html: string, cache?: any, symbol?: symbol)
 Example:
 
 ```JavaScript
-    details: ({target, ctx}) => createTemplate(`<summary>SummaryText</summary>...`);
+    details: x => createTemplate(`<summary>SummaryText</summary>...`);
 ```
 
 
@@ -695,7 +695,7 @@ replaceElementWithTemplate(target: HTMLElement, ctx: RenderContext, template: HT
 
 During pipeline processing, replace a tag with a template.  The original tag goes into ctx.replacedElement.
 
-For the template parameter, you can either pass in a template object, or an html string.
+For the template parameter, you can either pass in a template object, or an html string / symbol pair.  The symbol is required so the template can be cached.
 
 ### Content Swapping, Part II
 
