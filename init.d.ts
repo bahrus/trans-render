@@ -19,15 +19,17 @@ export interface NextStep {
     SkipSibs?: boolean,
 }
 
-export type PropSettings = {[key: string] : any};
+export type PropSettings<T extends HTMLElement = HTMLElement> = {
+    [P in keyof T]?: any
+};
 export type EventSettings = {[key: string] : (e: Event ) => void};
 export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null};
-export type PSettings = [PropSettings]; 
-export type PESettings = [PropSettings, EventSettings];
-export type PEASettings = [PropSettings, EventSettings, AttribsSettings];
-export type PEATSettings<TargetType extends HTMLElement = HTMLElement> = [PropSettings, EventSettings, AttribsSettings, TransformValueOptions<TargetType>];
-export type PEATUnionSettings<TargetType extends HTMLElement = HTMLElement> = 
-    PSettings | PESettings | PEASettings | PEATSettings<TargetType>;
+export type PSettings<T extends HTMLElement = HTMLElement> = [PropSettings<T>]; 
+export type PESettings<T extends HTMLElement = HTMLElement> = [PropSettings<T>, EventSettings];
+export type PEASettings<T extends HTMLElement = HTMLElement> = [PropSettings<T>, EventSettings, AttribsSettings];
+export type PEATSettings<T extends HTMLElement = HTMLElement> = [PropSettings<T>, EventSettings, AttribsSettings, TransformValueOptions<T>];
+export type PEATUnionSettings<T extends HTMLElement = HTMLElement> = 
+    PSettings<T> | PESettings | PEASettings | PEATSettings<T>;
 export type TransformValueOptions<TargetType extends HTMLElement = HTMLElement> 
     =   
         TransformRules // css selector
@@ -87,6 +89,7 @@ export interface TransRenderWC{
     viewModel: object;
 }
 
+//https://www.typescriptlang.org/docs/handbook/advanced-types.html#mapped-types
 export type Partial<T> = {
     [P in keyof T]?: T[P];
 }
