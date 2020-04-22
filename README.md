@@ -494,7 +494,7 @@ For now, typically, web components are written in JavaScript exclusively. A [uti
 
 
 
-##  Shadowed Template Insertion [UntestedF]
+##  Shadowed Template Insertion [Untested]
 
 ```html
 <template id="articleTemplate">
@@ -611,7 +611,7 @@ createTemplate(html: string, cache?: any, symbol?: symbol)
 Example:
 
 ```JavaScript
-    details: x => createTemplate(`<summary>SummaryText</summary>...`);
+    details: createTemplate(`<summary>SummaryText</summary>...`);
 ```
 
 
@@ -721,14 +721,14 @@ pierce<TargetType extends HTMLElement = HTMLElement>(el: TargetType, ctx: Render
 
 ### Property merging
 
-Object.assign and its modern abbreviated variations, provides a quite declarative feeling when populating an object with values.  Unfortunately, Object.assign can't be used to recursively set read-only properties like style and dataset (are there others?). An alternative to object.assign are convenience functions like JQuery.extends, JQuery.attr and "h", which domMerge draws inspiration from.
+Object.assign, and its modern abbreviated variations, provides a quite declarative feeling when populating an object with values.  Unfortunately, Object.assign is a fast shallow merge. An alternative to object.assign are more nuanced deep merge functions like [JQuery.extends](https://api.jquery.com/jQuery.extend/#jQuery-extend-deep-target-object1-objectN), or lodash [merge](https://stackoverflow.com/questions/19965844/lodash-difference-between-extend-assign-and-merge), which domMerge draws inspiration from.
 
 The function domMerge provides similar help.
 
 The (tentative) signature is 
 
 ```TypeScript
-export function domMerge(target: HTMLElement, vals: Vals): void
+export function domMerge<(target: HTMLElement, vals: Vals): void
 ```
 
 where 
@@ -770,41 +770,40 @@ export interface DecorateArgs extends Vals{
 For example:
 
 ```html
-    <div id="decorateTest">
-        <button>Test</button>
-    </div>
-    <script type="module">
-        import {decorate} from '../decorate.js';
-        import {init, attribs} from '../init.js';
-        init(decorateTest, {
-            Transform: {
-                div: {
-                    button: ({target}) => decorate(target, {
-                        propVals:{
-                            textContent: 'Hello',
-                        },
-                        attribs: {
-                            title: 'Hello, world'
-                        },
-                        propDefs:{
-                            count: 0
-                        },
-                        on:{
-                            click: function(e){
-                                this.count++;
-                            }
-                        },
-                        methods:{
-                            onPropsChange(){
-                                alert(this.count)
-                            }
+<div id="decorateTest">
+    <button>Test</button>
+</div>
+<script type="module">
+    import {decorate} from '../decorate.js';
+    import {init, attribs} from '../init.js';
+    init(decorateTest, {
+        Transform: {
+            div: {
+                button: ({target}) => decorate(target, {
+                    propVals:{
+                        textContent: 'Hello',
+                    },
+                    attribs: {
+                        title: 'Hello, world'
+                    },
+                    propDefs:{
+                        count: 0
+                    },
+                    on:{
+                        click: function(e){
+                            this.count++;
                         }
-                    })
-                }
-            }            
-        })
-    </script>
-
+                    },
+                    methods:{
+                        onPropsChange(){
+                            alert(this.count)
+                        }
+                    }
+                })
+            }
+        }            
+    })
+</script>
 ```
 
 decorate can also attach behaviors to custom elements, not just native elements, [in a decorative way.](https://en.wikipedia.org/wiki/Decorator_pattern)
