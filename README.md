@@ -605,7 +605,7 @@ TypeScript Tip: Some of the parameters, like target, are quite generic (e.g. tar
 ###  Create template element programmatically
 
 ```TypeScript
-createTemplate(html: string, cache?: any, symbol?: symbol)
+createTemplate(html: string, context?: any, symbol?: symbol)
 ```
 
 Example:
@@ -613,6 +613,14 @@ Example:
 ```JavaScript
     details: createTemplate(`<summary>SummaryText</summary>...`);
 ```
+
+An explanation for the second and third parameters are needed.
+
+Templates shine most when they are created once, and cloned repeatedly as needed.  What this means in the context of a JS module, is that they should cached somewhere most, and cloned from the cache.  The use of the third parameter, symbol, ensures that no two disparate code snippets will trample over each other.  But which "cache" to use.  The easiest, sledgehammer approach would be to cache it in self or globalThis.  But there is likely a cost to caching lots of things in such a global area, as the lookups are likely to grow (logarithmically perhaps).
+
+Caching inside the renderContext object (ctx) may be too tepid, because the renderContext is likely to be created with each instance of a web component.
+
+So the code checks whether the context object has a "cache" property, and if so, it caches it there.  If using this library inside a web component library, a suggestion would be to set ctx.cache = MyCustomElementClass.
 
 
 

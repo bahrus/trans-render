@@ -5,7 +5,8 @@ import {
   RenderOptions,
   TransformFn,
   TransformValueOptions,
-  PEATSettings
+  PEATSettings,
+  PEATUnionSettings
 } from "./init.d.js";
 //export const deleteMe = Symbol("deleteMe");
 export function init(
@@ -176,7 +177,7 @@ function isTemplate(test: HTMLTemplateElement){
   return test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
 }
 
-export function applyPeatSettings(peat: PEATSettings, target: HTMLElement){
+export function applyPeatSettings<T extends HTMLElement = HTMLElement>(target: T, peat: PEATUnionSettings<T>){
   const len = peat.length;
   if (len > 0) {
     //////////  Prop Setting
@@ -216,5 +217,4 @@ export function applyPeatSettings(peat: PEATSettings, target: HTMLElement){
       }
     }
   }
-
 }
