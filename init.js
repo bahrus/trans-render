@@ -161,7 +161,7 @@ export function process(ctx, idx, level, options) {
 function isTemplate(test) {
     return test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
 }
-export function applyPeatSettings(peat, target) {
+export function applyPeatSettings(target, peat) {
     const len = peat.length;
     if (len > 0) {
         //////////  Prop Setting

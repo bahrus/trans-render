@@ -83,7 +83,7 @@ export function process(
               continue;
             }
             const peat = resp2 as PEATSettings;
-            applyPeatSettings(peat, target);
+            applyPeatSettings(target, peat, ctx);
             const len = peat.length;
             if(len > 3){
               resp2 = peat[3] as TransformRules;
@@ -177,7 +177,7 @@ function isTemplate(test: HTMLTemplateElement){
   return test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
 }
 
-export function applyPeatSettings<T extends HTMLElement = HTMLElement>(target: T, peat: PEATUnionSettings<T>){
+export function applyPeatSettings<T extends HTMLElement = HTMLElement>(target: T, peat: PEATUnionSettings<T>, ctx: RenderContext){
   const len = peat.length;
   if (len > 0) {
     //////////  Prop Setting
@@ -190,7 +190,9 @@ export function applyPeatSettings<T extends HTMLElement = HTMLElement>(target: T
   if (len > 1) {
     /////////  Event Handling
     for (const key in peat[1]) {
-      target.addEventListener(key, peat[1][key]);
+      let eventHandler = peat[1][key];
+      if(ctx.eventManager !== undefined) eventHandler = eventHandler.bind(ctx.eventManager);
+      target.addEventListener(key, eventHandler);
     }
   }
   if (len > 2) {

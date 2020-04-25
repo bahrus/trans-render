@@ -4,7 +4,7 @@ export function appendTag(container, name, config) {
     const newElement = document.createElement(name);
     if (config !== undefined) {
         if (Array.isArray(config)) {
-            applyPeatSettings(config, container);
+            applyPeatSettings(newElement, config);
         }
         else {
             decorate(newElement, config);
