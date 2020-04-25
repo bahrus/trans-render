@@ -66,7 +66,7 @@ export function process(ctx, idx, level, options) {
                             continue;
                         }
                         const peat = resp2;
-                        applyPeatSettings(peat, target);
+                        applyPeatSettings(target, peat, ctx);
                         const len = peat.length;
                         if (len > 3) {
                             resp2 = peat[3];
@@ -161,7 +161,7 @@ export function process(ctx, idx, level, options) {
 function isTemplate(test) {
     return test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
 }
-export function applyPeatSettings(target, peat) {
+export function applyPeatSettings(target, peat, ctx) {
     const len = peat.length;
     if (len > 0) {
         //////////  Prop Setting
@@ -176,7 +176,10 @@ export function applyPeatSettings(target, peat) {
     if (len > 1) {
         /////////  Event Handling
         for (const key in peat[1]) {
-            target.addEventListener(key, peat[1][key]);
+            let eventHandler = peat[1][key];
+            if (ctx.host !== undefined)
+                eventHandler = eventHandler.bind(ctx.host);
+            target.addEventListener(key, eventHandler);
         }
     }
     if (len > 2) {

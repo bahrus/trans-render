@@ -57,7 +57,6 @@ export type DecorateTuple = [object, AttribsSettings, {[key: string] : (e: Event
 export interface RenderContext {
     init?: (template: HTMLElement, ctx: RenderContext, target: HTMLElement | DocumentFragment, options?: RenderOptions) => RenderContext,
     cache?: any,
-    eventManager?: EventTarget,
     repeat?: (template: HTMLTemplateElement, ctx: RenderContext, count: number, target: HTMLElement, targetTransform?: TransformValueOptions) => TransformValueOptions;
     repeateth?: (template: HTMLTemplateElement, ctx: RenderContext, count: number, target: HTMLElement, targetTransform?: TransformValueOptions) => TransformValueOptions;
     interpolate?: (target: any, prop: string, obj: any, isAttr: boolean) => void;

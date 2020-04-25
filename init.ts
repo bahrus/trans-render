@@ -191,7 +191,7 @@ export function applyPeatSettings<T extends HTMLElement = HTMLElement>(target: T
     /////////  Event Handling
     for (const key in peat[1]) {
       let eventHandler = peat[1][key];
-      if(ctx.eventManager !== undefined) eventHandler = eventHandler.bind(ctx.eventManager);
+      if(ctx.host !== undefined) eventHandler = eventHandler.bind(ctx.host);
       target.addEventListener(key, eventHandler);
     }
   }
