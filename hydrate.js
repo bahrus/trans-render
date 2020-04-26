@@ -1,4 +1,7 @@
+import { TransRenderSymbols as TRS } from './trans-render-symbols.js';
+import { setSymbol } from './manageSymbols.js';
 export const disabled = 'disabled';
+export const propUp = setSymbol(TRS.is, 'propUp');
 /**
  * Base mixin for many xtal- components
  * @param superClass
@@ -41,7 +44,7 @@ export function hydrate(superClass) {
          * Needed for asynchronous loading
          * @param props Array of property names to "upgrade", without losing value set while element was Unknown
          */
-        propUp(props) {
+        [propUp](props) {
             props.forEach(prop => {
                 if (this.hasOwnProperty(prop)) {
                     let value = this[prop];

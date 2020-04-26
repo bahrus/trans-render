@@ -63,7 +63,7 @@ export interface RenderContext {
     insertAdjacentTemplate?: (template: HTMLTemplateElement, target: Element, position: InsertPosition) => void;
     decorate?<T extends HTMLElement>(target: T, decor: DecorateArgs) : void;
     split?: (target: HTMLElement, textContent: string, search: string | null | undefined) => void;
-    replaceElementWithTemplate?: (target: HTMLElement, template: HTMLTemplateElement, ctx: RenderContext) => void;
+    replaceElementWithTemplate?: (target: HTMLElement, ctx: RenderContext, template: HTMLTemplateElement | [symbol, string]) => void;
     replaceTargetWithTag?: (target: HTMLElement, tag: string, ctx: RenderContext, postSwapCallback?: (el: HTMLElement) => void) => void;
     appendTag?: (container: HTMLElement, name: string, config: DecorateArgs) => HTMLElement;
     leaf?: HTMLElement | DocumentFragment,
