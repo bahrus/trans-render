@@ -1,31 +1,8 @@
-import {TransRenderSymbols as TRS} from './trans-render-symbols.js';
-import {setSymbol} from './manageSymbols.js'
+import {IHydrate} from './init.d.js';
 
 export const disabled = 'disabled';
-export const propUp : symbol = setSymbol(TRS.is,'propUp');
-//TODO:  move into types.d.ts
-export interface IHydrate extends HTMLElement{
-    _disabled: boolean;
-    /**
-     * Any component that emits events should not do so if it is disabled.
-     * Note that this is not enforced, but the disabled property is made available.
-     * Users of this mix-in should ensure not to call "de" if this property is set to true.
-    */
-   disabled: boolean;
+//export const propUp : symbol = setSymbol(TRS.is,'propUp'); //Typescript can't handle this (yet?)
 
-    /**
-     * Set attribute value.
-     * @param name 
-     * @param val 
-     * @param trueVal String to set attribute if true.
-     */
-    attr(name: string, val: string | boolean, trueVal?: string): void;
-
-    attributeChangedCallback(name: string, oldVal: string, newVal: string) : void;
-
-    connectedCallback?(): void;
-
-}
 type Constructor<T = {}> = new (...args: any[]) => T;
 
 /**
@@ -77,7 +54,7 @@ export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBas
          * Needed for asynchronous loading
          * @param props Array of property names to "upgrade", without losing value set while element was Unknown
          */
-        [propUp]<TKeys extends string[] = string[]>(props: TKeys) {
+        propUp<TKeys extends string[] = string[]>(props: TKeys) {
             props.forEach(prop => {
                 if (this.hasOwnProperty(prop)) {
                     let value = (<any>this)[prop];

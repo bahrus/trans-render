@@ -93,3 +93,32 @@ export interface TransRenderWC{
 export type Partial<T> = {
     [P in keyof T]?: T[P];
 }
+
+export interface IHydrate extends HTMLElement{
+    _disabled: boolean;
+    /**
+     * Any component that emits events should not do so if it is disabled.
+     * Note that this is not enforced, but the disabled property is made available.
+     * Users of this mix-in should ensure not to call "de" if this property is set to true.
+    */
+   disabled: boolean;
+
+    /**
+     * Set attribute value.
+     * @param name 
+     * @param val 
+     * @param trueVal String to set attribute if true.
+     */
+    attr(name: string, val: string | boolean, trueVal?: string): void;
+
+    attributeChangedCallback(name: string, oldVal: string, newVal: string) : void;
+
+    connectedCallback?(): void;
+
+    /**
+     * Needed for asynchronous loading
+     * @param props Array of property names to "upgrade", without losing value set while element was Unknown
+     */
+    propUp<TKeys extends string[] = string[]>(props: TKeys): void;
+
+}
