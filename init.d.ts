@@ -19,13 +19,10 @@ export interface NextStep {
     SkipSibs?: boolean,
 }
 
-export type PropSettings<T extends HTMLElement = HTMLElement> = {
+export type PropSettings<T extends Partial<HTMLElement> = HTMLElement> = {
     [P in keyof T]?: any
 };
-//https://www.typescriptlang.org/docs/handbook/advanced-types.html#mapped-types
-export type Partial<T> = {
-    [P in keyof T]?: T[P];
-}
+
 export type EventSettings = {[key: string] : (e: Event ) => void};
 export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null};
 export type PSettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T>]; 
