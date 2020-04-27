@@ -1,8 +1,8 @@
-export type TransformFn<TargetType extends HTMLElement = HTMLElement> 
+export type TransformFn<TargetType extends Partial<HTMLElement> = HTMLElement> 
     = (arg: TransformArg<TargetType>) => TransformRules | NextStep | string | HTMLTemplateElement | void | boolean | PEATSettings<TargetType>;
 
 export type TransformRules = { [key: string]: TransformValueOptions};
-export interface TransformArg<TargetType extends HTMLElement = HTMLElement> {
+export interface TransformArg<TargetType extends Partial<HTMLElement> = HTMLElement> {
     target: TargetType,
     ctx: RenderContext,
     idx: number,
@@ -22,16 +22,20 @@ export interface NextStep {
 export type PropSettings<T extends HTMLElement = HTMLElement> = {
     [P in keyof T]?: any
 };
+//https://www.typescriptlang.org/docs/handbook/advanced-types.html#mapped-types
+export type Partial<T> = {
+    [P in keyof T]?: T[P];
+}
 export type EventSettings = {[key: string] : (e: Event ) => void};
 export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null};
-export type PSettings<T extends HTMLElement = HTMLElement> = [PropSettings<T>]; 
-export type PESettings<T extends HTMLElement = HTMLElement> = [PropSettings<T>, EventSettings];
-export type PEASettings<T extends HTMLElement = HTMLElement> = [PropSettings<T>, EventSettings, AttribsSettings];
-export type PEAUnionSettings<T extends HTMLElement = HTMLElement> = PSettings<T> | PESettings<T> | PEASettings<T>;
-export type PEATSettings<T extends HTMLElement = HTMLElement> = [PropSettings<T>, EventSettings, AttribsSettings, TransformValueOptions<T>];
-export type PEATUnionSettings<T extends HTMLElement = HTMLElement> = 
+export type PSettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T>]; 
+export type PESettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T>, EventSettings];
+export type PEASettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T>, EventSettings, AttribsSettings];
+export type PEAUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PSettings<T> | PESettings<T> | PEASettings<T>;
+export type PEATSettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T>, EventSettings, AttribsSettings, TransformValueOptions<T>];
+export type PEATUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = 
     PSettings<T> | PESettings<T> | PEASettings<T> | PEATSettings<T>;
-export type TransformValueOptions<TargetType extends HTMLElement = HTMLElement> 
+export type TransformValueOptions<TargetType extends Partial<HTMLElement> = HTMLElement> 
     =   
         TransformRules // css selector
         | TransformFn<TargetType> 
@@ -89,10 +93,7 @@ export interface TransRenderWC{
     viewModel: object;
 }
 
-//https://www.typescriptlang.org/docs/handbook/advanced-types.html#mapped-types
-export type Partial<T> = {
-    [P in keyof T]?: T[P];
-}
+
 
 export interface IHydrate extends HTMLElement{
     _disabled: boolean;

@@ -1,4 +1,3 @@
-import { insertAdjacentTemplate } from "./insertAdjacentTemplate.js";
 import {RenderContext} from './init.d.js';
 /**
  * 
