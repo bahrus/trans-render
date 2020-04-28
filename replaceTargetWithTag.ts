@@ -1,4 +1,4 @@
-import {RenderContext} from './init.d.js';
+import {RenderContext} from './types.js';
 /**
  * 
  * @param target 

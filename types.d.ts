@@ -65,7 +65,7 @@ export interface RenderContext {
     decorate?<T extends HTMLElement>(target: T, decor: DecorateArgs) : void;
     split?: (target: HTMLElement, textContent: string, search: string | null | undefined) => void;
     replaceElementWithTemplate?: (target: HTMLElement, ctx: RenderContext, template: HTMLTemplateElement | [symbol, string]) => void;
-    replaceTargetWithTag?: (target: HTMLElement, tag: string, ctx: RenderContext, postSwapCallback?: (el: HTMLElement) => void) => void;
+    replaceTargetWithTag?: (target: HTMLElement, ctx: RenderContext, tag: string, preSwapCallback?: (el: HTMLElement) => void) => void;
     appendTag?: (container: HTMLElement, name: string, config: DecorateArgs) => HTMLElement;
     leaf?: HTMLElement | DocumentFragment,
     Transform?: TransformRules,
@@ -119,4 +119,8 @@ export interface IHydrate extends HTMLElement{
      */
     propUp<TKeys extends string[] = string[]>(props: TKeys): void;
 
+}
+
+export interface UpdateContext extends RenderContext {
+    update: (ctx: RenderContext, target: HTMLElement | DocumentFragment) => UpdateContext;
 }

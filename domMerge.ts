@@ -1,4 +1,4 @@
-import {Vals, AttribsSettings} from './init.d.js';
+import {Vals, AttribsSettings} from './types.js';
 import {mergeDeep} from './mergeDeep.js';
 
 function setAttribs(target: HTMLElement, source: Vals) {

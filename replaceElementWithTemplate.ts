@@ -1,6 +1,6 @@
 import { insertAdjacentTemplate } from "./insertAdjacentTemplate.js";
 import {createTemplate} from './createTemplate.js';
-import {TransformValueOptions, RenderContext} from './init.d.js';
+import {TransformValueOptions, RenderContext} from './types.js';
 /**
  * During pipeline processing, replace a tag with a template.
  * @param target 

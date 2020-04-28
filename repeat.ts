@@ -1,4 +1,4 @@
-import {TransformValueOptions, RenderContext} from './init.d.js';
+import {TransformValueOptions, RenderContext} from './types.js';
 import {repeatInit} from './repeatInit.js';
 import {createTemplate} from './createTemplate.js';
 import {repeatUpdate} from './repeatUpdate.js';

@@ -1,4 +1,4 @@
-import {RenderContext, TransformRules} from './init.d.js';
+import {RenderContext, TransformRules} from './types.js';
 import {init} from './init.js';
 
 export function pierce<TargetType extends HTMLElement = HTMLElement>(el: TargetType, ctx: RenderContext, 

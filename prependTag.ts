@@ -1,4 +1,4 @@
-import {DecorateArgs} from './init.d.js';
+import {DecorateArgs} from './types.js';
 import {decorate} from './decorate.js';
 export function prependTag(container: HTMLElement, name: string, config: DecorateArgs) : HTMLElement{
     const newElement = document.createElement(name);

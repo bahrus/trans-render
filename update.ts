@@ -1,5 +1,5 @@
-import {RenderContext, RenderOptions} from './init.d.js';
-import {UpdateContext} from './update.d.js';
+import {RenderContext, RenderOptions} from './types.js';
+import {UpdateContext} from './types.d.js';
 import {process} from './init.js';
 
 

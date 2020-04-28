@@ -1,4 +1,4 @@
-import {IHydrate} from './init.d.js';
+import {IHydrate} from './types.js';
 
 export const disabled = 'disabled';
 //export const propUp : symbol = setSymbol(TRS.is,'propUp'); //Typescript can't handle this (yet?)

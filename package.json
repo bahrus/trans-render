@@ -4,7 +4,7 @@
   "description": "Instantiate an HTML Template",
   "main": "trans-render.js",
   "module": "trans-render.js",
-  "typings": "init.d.ts",
+  "typings": "types.d.ts",
   "scripts": {
     "test": "node test/tests.js",
     "serve": "node node_modules/xtal-test/serve.js",

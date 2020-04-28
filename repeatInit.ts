@@ -1,4 +1,4 @@
-import {TransformValueOptions, RenderContext} from './init.d.js';
+import {TransformValueOptions, RenderContext} from './types.js';
 import {TransRenderSymbols as TRS} from './trans-render-symbols.js';
 import {setSymbol} from './manageSymbols.js';
 

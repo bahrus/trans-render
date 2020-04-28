@@ -7,7 +7,7 @@ import {
   TransformValueOptions,
   PEATSettings,
   PEATUnionSettings
-} from "./init.d.js";
+} from "./types.js";
 //export const deleteMe = Symbol("deleteMe");
 export function init(
   template: HTMLElement | DocumentFragment,
