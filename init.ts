@@ -58,6 +58,14 @@ export function process(
   let nextMatch = [];
   let prevSelector = null;
   for (const rawSelector in transform) {
+    if(typeof rawSelector === 'symbol'){
+      const transformTemplateVal = transform[rawSelector];// as TransformValueOptions<HTMLElement>;
+      if(typeof transformTemplateVal === 'function'){
+        const item = undefined;
+        transformTemplateVal({target: ctx[rawSelector] || ctx.host![rawSelector], ctx, idx, level, item});
+        continue;
+      }
+    }
     let selector;
     if (prevSelector !== null && rawSelector.startsWith('"')) {
       selector = prevSelector;
@@ -130,6 +138,10 @@ export function process(
           break;
         case "boolean":
           if (resp2 === false) target.dataset.deleteMe = 'true';
+          break;
+        case "symbol":
+          const cache = ctx.host || ctx;
+          (<any>cache)[resp2] = target; 
           break;
       }
     }

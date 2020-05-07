@@ -621,7 +621,7 @@ This can certainly be useful for code written within the custom element, where a
 
 However, this approach doesn't lend itself to declarative fast access using trans-render notation.
 
-Instead, trans-render supports another approach [TODO]:
+Instead, trans-render supports another approach [untested]:
 
 ```JavaScript
     const myFastAccessSymbol = Symbol();
