@@ -543,7 +543,7 @@ init(sourceTemplate, { Transform }, target);
 
 I.e. any selector that starts with a double quote (") will use the last selector that didn't.
 
-## Property / attribute / event binding [Untested]
+## Property / attribute / event binding [TODO:  Test Coverage]
 
 
 ```JavaScript
@@ -600,6 +600,44 @@ TypeScript Tip: Some of the parameters, like target, are quite generic (e.g. tar
     }
 ```
 
+## Planting flags
+
+Suppose during initialization you want to create references to specific elements that will require rapid updates during repeated update processes?
+
+One way to do that would be with a rule tied to id's.
+
+The initialization transform could look like:
+
+```JavaScript
+    '*': {
+        Select: '*' //check every element recursively -- sledghammer approach
+    },
+    ['id']: ({ctx, target}) => ctx.host[target.id] = target;
+```
+
+where we assume we are using this within the context of a custom element, and ctx.host refers to the instance of the custom element.
+
+This can certainly be useful for code written within the custom element, where a method needs fast access to an element by id without having to do a querySelect.
+
+However, this approach doesn't lend itself to declarative fast access using trans-render notation.
+
+Instead, trans-render supports another approach [TODO]:
+
+```JavaScript
+    const myFastAccessSymbol = Symbol();
+
+    initTransform = {
+        'my-rapidly-changing-element': myFastAccessSymbol
+    }
+
+    updateTransforms = [{
+        ({fastChangingProp}) =>{
+            [myFastAccessSymbol]: ({target}) => target.myProp = fastChangingProp
+        }
+    }]
+```
+
+
 ## Utility functions
 
 ###  Create template element programmatically
@@ -616,13 +654,11 @@ Example:
 
 An explanation for the second and third parameters is needed.
 
-Templates shine most when they are created once, and cloned repeatedly as needed.  What this means in the context of a JS module, is that they should cached somewhere most, and cloned from the cache.  The use of the third parameter, symbol, ensures that no two disparate code snippets will trample over each other.  But which "cache" to use.  The easiest, sledgehammer approach would be to cache it in self or globalThis.  But there is likely a cost to caching lots of things in such a global area, as the lookups are likely to grow (logarithmically perhaps).
+Templates shine most when they are created once, and cloned repeatedly as needed.  What this means in the context of a JS module, is that they should be cached somewhere, and instances cloned from the cache.  The use of the third parameter, symbol, ensures that no two disparate code snippets will trample over each other.  But which "cache" to use?  The easiest, sledgehammer approach would be to cache it in self or globalThis.  But there is likely a cost to caching lots of things in such a global area, as the lookups are likely to grow (logarithmically perhaps).
 
 Caching inside the renderContext object (ctx) may be too tepid, because the renderContext is likely to be created with each instance of a web component.
 
 So the code checks whether the context object has a "cache" property, and if so, it caches it there.  If using this library inside a web component library, a suggestion would be to set ctx.cache = MyCustomElementClass.
-
-
 
 ###  Loop support (NB:  Not yet optimized?)
 
