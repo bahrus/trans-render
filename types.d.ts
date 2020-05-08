@@ -40,6 +40,7 @@ export type TransformValueOptions<TargetType extends Partial<HTMLElement> = HTML
         | HTMLTemplateElement // clone template
         | boolean //if false, target is removed from tree
         | PEATUnionSettings<TargetType>
+        | Symbol
         ; 
 //export type props = {[key: string] : any};
 export interface Vals<TAttribsSettings = AttribsSettings, TProps = object> {

@@ -39,15 +39,14 @@ export function process(ctx, idx, level, options) {
     let inherit = false;
     let nextMatch = [];
     let prevSelector = null;
-    for (const rawSelector in transform) {
-        if (typeof rawSelector === 'symbol') {
-            const transformTemplateVal = transform[rawSelector]; // as TransformValueOptions<HTMLElement>;
-            if (typeof transformTemplateVal === 'function') {
-                const item = undefined;
-                transformTemplateVal({ target: ctx[rawSelector] || ctx.host[rawSelector], ctx, idx, level, item });
-                continue;
-            }
+    for (const sym of Object.getOwnPropertySymbols(transform)) {
+        const transformTemplateVal = transform[sym]; // as TransformValueOptions<HTMLElement>;
+        if (typeof transformTemplateVal === 'function') {
+            const item = undefined;
+            transformTemplateVal({ target: (ctx[sym] || ctx.host[sym]), ctx, idx, level, item });
         }
+    }
+    for (const rawSelector in transform) {
         let selector;
         if (prevSelector !== null && rawSelector.startsWith('"')) {
             selector = prevSelector;
