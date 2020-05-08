@@ -171,10 +171,10 @@ If a matching node returns a boolean value of *false*, the node is removed.  For
     return {
         details: {
             dl: ({ target, ctx}) => {
-                repeat(attributeItemTemplate, ctx, attribs.length, target, {
-                    dt: ({ idx }) => attribs[Math.floor(idx / 2)].name,
+                repeat(attributeItemTemplate, ctx, attribs, target, {
+                    dt: ({ idx, item }) => item.name,
                     dd: ({ idx }) => ({
-                        'hypo-link[data-bind="description"]': attribs[Math.floor(idx / 2)].description,
+                        'hypo-link[data-bind="description"]': item.description,
                     }) 
                 } as TransformRules);
             }
