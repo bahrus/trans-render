@@ -25,13 +25,17 @@ export type PropSettings<T extends Partial<HTMLElement> = HTMLElement> = {
 
 export type EventSettings = {[key: string] : (e: Event ) => void};
 export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null};
-export type PSettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T>]; 
-export type PESettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T>, EventSettings];
-export type PEASettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T>, EventSettings, AttribsSettings];
+export type PSettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T> | undefined]; 
+export type PESettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T> | undefined, EventSettings | undefined];
+export type PEASettings<T extends Partial<HTMLElement> = HTMLElement> = 
+    [PropSettings<T> | undefined, EventSettings | undefined, AttribsSettings | undefined];
 export type PEAUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PSettings<T> | PESettings<T> | PEASettings<T>;
-export type PEATSettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T>, EventSettings, AttribsSettings, TransformValueOptions<T>];
+export type PEATSettings<T extends Partial<HTMLElement> = HTMLElement> = 
+    [PropSettings<T> | undefined, EventSettings | undefined, AttribsSettings | undefined, TransformValueOptions<T> | undefined];
+export type PEAT$ettings<T extends Partial<HTMLElement> = HTMLElement> =
+    [PropSettings<T> | undefined, EventSettings | undefined, AttribsSettings | undefined, TransformValueOptions<T> | undefined, Symbol | undefined]
 export type PEATUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = 
-    PSettings<T> | PESettings<T> | PEASettings<T> | PEATSettings<T>;
+    PSettings<T> | PESettings<T> | PEASettings<T> | PEATSettings<T> | PEAT$ettings<T>;
 export type TransformValueOptions<TargetType extends Partial<HTMLElement> = HTMLElement> 
     =   
         TransformRules // css selector

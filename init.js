@@ -75,7 +75,7 @@ export function process(ctx, idx, level, options) {
                         const peat = resp2;
                         applyPeatSettings(target, peat, ctx);
                         const len = peat.length;
-                        if (len > 3) {
+                        if (len > 3 && peat[3] !== undefined) {
                             resp2 = peat[3];
                         }
                         else {
@@ -178,13 +178,15 @@ export function applyPeatSettings(target, peat, ctx) {
         //////////  Prop Setting
         /////////   Because of dataset, style (other?) assign at one level down
         const props = peat[0];
-        Object.assign(target, props);
-        if (props.style !== undefined)
-            Object.assign(target.style, props.style);
-        if (props.dataset !== undefined)
-            Object.assign(target.dataset, props.dataset);
+        if (props !== undefined) {
+            Object.assign(target, props);
+            if (props.style !== undefined)
+                Object.assign(target.style, props.style);
+            if (props.dataset !== undefined)
+                Object.assign(target.dataset, props.dataset);
+        }
     }
-    if (len > 1) {
+    if (len > 1 && peat[1] !== undefined) {
         /////////  Event Handling
         for (const key in peat[1]) {
             let eventHandler = peat[1][key];
@@ -193,7 +195,7 @@ export function applyPeatSettings(target, peat, ctx) {
             target.addEventListener(key, eventHandler);
         }
     }
-    if (len > 2) {
+    if (len > 2 && peat[2] !== undefined) {
         /////////  Attribute Setting
         for (const key in peat[2]) {
             const val = peat[2][key];
