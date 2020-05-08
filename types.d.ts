@@ -33,7 +33,7 @@ export type PEAUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PSe
 export type PEATSettings<T extends Partial<HTMLElement> = HTMLElement> = 
     [PropSettings<T> | undefined, EventSettings | undefined, AttribsSettings | undefined, TransformValueOptions<T> | undefined];
 export type PEAT$ettings<T extends Partial<HTMLElement> = HTMLElement> =
-    [PropSettings<T> | undefined, EventSettings | undefined, AttribsSettings | undefined, TransformValueOptions<T> | undefined, Symbol | undefined]
+    [PropSettings<T> | undefined, EventSettings | undefined, AttribsSettings | undefined, TransformValueOptions<T> | undefined, symbol]
 export type PEATUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = 
     PSettings<T> | PESettings<T> | PEASettings<T> | PEATSettings<T> | PEAT$ettings<T>;
 export type TransformValueOptions<TargetType extends Partial<HTMLElement> = HTMLElement> 

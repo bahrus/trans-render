@@ -2,8 +2,8 @@
   "name": "trans-render",
   "version": "0.0.170",
   "description": "Instantiate an HTML Template",
-  "main": "trans-render.js",
-  "module": "trans-render.js",
+  "main": "init.js",
+  "module": "init.js",
   "typings": "types.d.ts",
   "scripts": {
     "test": "node test/tests.js",

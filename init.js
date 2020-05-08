@@ -77,6 +77,9 @@ export function process(ctx, idx, level, options) {
                         const len = peat.length;
                         if (len > 3 && peat[3] !== undefined) {
                             resp2 = peat[3];
+                            if (len > 4) {
+                                (ctx.host || ctx)[peat[4]] = target;
+                            }
                         }
                         else {
                             continue;

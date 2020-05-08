@@ -89,12 +89,14 @@ export function process(
               (target.shadowRoot !== null ? target.shadowRoot : target.attachShadow({mode: 'open', delegatesFocus: true})).appendChild((resp2[0] as HTMLTemplateElement).content.cloneNode(true));
               continue;
             }
-            const peat = resp2 as PEATSettings;
+            const peat = resp2 as PEATUnionSettings;
             applyPeatSettings(target, peat, ctx);
             const len = peat.length;
             if(len > 3 && peat[3] !== undefined){
               resp2 = peat[3] as TransformRules;
-              
+              if(len > 4){
+                (<any>(ctx.host || ctx))[peat[4]!] = target;
+              }
             }else{
               continue;
             }
