@@ -161,26 +161,11 @@ At this point, only a synchronous workflow is provided (except when piercing int
 
 ## Conditional Display
 
-If a matching node returns a boolean value of *false*, the node is removed.  For example [TODO:  simpler example]:
+If a matching node returns a boolean value of *false*, the node is removed.  For example:
 
 ```TypeScript
 ...
-"section[data-type='attributes']":({ target, ctx}) => {
-    const attribs = tags[idx].attributes;
-    if (attribs === undefined) return false;
-    return {
-        details: {
-            dl: ({ target, ctx}) => {
-                repeat(attributeItemTemplate, ctx, attribs, target, {
-                    dt: ({ idx, item }) => item.name,
-                    dd: ({ idx }) => ({
-                        'hypo-link[data-bind="description"]': item.description,
-                    }) 
-                } as TransformRules);
-            }
-        }
-    }
-},
+"section[data-type='attributes']":false
 ...
 ```
 
