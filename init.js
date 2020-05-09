@@ -65,26 +65,26 @@ export function process(ctx, idx, level, options) {
                 const item = ctx.itemsKey !== undefined ? target[ctx.itemsKey] : undefined;
                 resp2 = resp2({ target, ctx, idx, level, item });
             }
+            if (selector.endsWith(']')) {
+                //TODO use named capture group reg expression
+                const pos = selector.lastIndexOf('[');
+                if (pos > -1 && selector[pos + 1] === '-') {
+                    /* scenario:
+                      'my-custom-element[-my-prop]':{
+                          subProp1: 'hello',
+                          subProp2: 'world'
+                      }
+                    */
+                    const propName = lispToCamel(selector.substring(pos + 2, selector.length - 1));
+                    target[propName] = resp2;
+                    continue;
+                }
+            }
             switch (typeof resp2) {
                 case "string":
                     target.textContent = resp2;
                     continue;
                 case "object":
-                    if (selector.endsWith(']')) {
-                        //TODO use named capture group reg expression
-                        const pos = selector.lastIndexOf('[');
-                        if (pos > -1 && selector[pos + 1] === '-') {
-                            /* scenario:
-                              'my-custom-element[-my-prop]':{
-                                  subProp1: 'hello',
-                                  subProp2: 'world'
-                              }
-                            */
-                            const propName = lispToCamel(selector.substring(pos + 2, selector.length - 1));
-                            target[propName] = resp2;
-                            continue;
-                        }
-                    }
                     if (Array.isArray(resp2)) {
                         const peat = resp2;
                         applyPeatSettings(target, peat, ctx);
