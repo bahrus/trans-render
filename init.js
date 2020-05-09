@@ -1,4 +1,7 @@
-//export const deleteMe = Symbol("deleteMe");
+const stcRe = /(\-\w)/g;
+export function lispToCamel(s) {
+    return s.replace(stcRe, function (m) { return m[1].toUpperCase(); });
+}
 export function init(template, ctx, target, options) {
     const isTemplate = template.localName === "template";
     const clonedTemplate = isTemplate
@@ -67,11 +70,22 @@ export function process(ctx, idx, level, options) {
                     target.textContent = resp2;
                     continue;
                 case "object":
+                    if (selector.endsWith(']')) {
+                        //TODO use named capture group reg expression
+                        const pos = selector.lastIndexOf('[');
+                        if (pos > -1 && selector[pos + 1] === '-') {
+                            /* scenario:
+                              'my-custom-element[-my-prop]':{
+                                  subProp1: 'hello',
+                                  subProp2: 'world'
+                              }
+                            */
+                            const propName = lispToCamel(selector.substring(pos + 2, selector.length - 1));
+                            target[propName] = resp2;
+                            continue;
+                        }
+                    }
                     if (Array.isArray(resp2)) {
-                        // if((resp2 as HTMLTemplateElement[]).length === 1 && isTemplate(resp2[0] as HTMLTemplateElement)){
-                        //   (target.shadowRoot !== null ? target.shadowRoot : target.attachShadow({mode: 'open', delegatesFocus: true})).appendChild((resp2[0] as HTMLTemplateElement).content.cloneNode(true));
-                        //   continue;
-                        // }
                         const peat = resp2;
                         applyPeatSettings(target, peat, ctx);
                         const len = peat.length;

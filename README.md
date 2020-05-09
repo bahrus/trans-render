@@ -445,7 +445,7 @@ Demonstrates use of update, rudimentary interpolation, recursive select.
 -->
 
 
-## Simple Template Insertion, Part I
+## Simple Template Insertion [Untested]
 
 A template can be inserted directly inside the target element as follows:
 
@@ -555,6 +555,41 @@ Each of the elements are "optional" in the sense that you  can either end the ar
 
 A suggestion for remembering the order these "arguments" come in -- Properties / Events / Attributes / Transform can be abbreviated as "peat."
 
+## Prop setting shortcut [TODO]
+
+We mentioned earlier that if a css match maps to a string, we do the mostly likely thing one would want -- setting the textContent:
+
+```JavaScript
+const Transform = {
+    details: {
+        summary: 'Hallå'
+    }
+};
+```
+
+But it is also desirable to have a fast way of setting properties with few required keystrokes.  
+
+This can be done as follows.
+
+If the template contains this markup, with a "pseudo" attribute starting with a dash:
+
+```html
+<template>
+    <my-custom-element -my-prop></my-custom-element>
+</template>
+```
+
+```JavaScript
+const Transform = {
+    'my-custom-element[-my-prop]':{
+        subProp1: 'hello',
+        subProp2: 'world'
+    }
+}
+```
+
+Then the property "myProp" of the my-custom-element instance will be set to {subProp1:'hello', subProp2: 'world'}.
+
 ## Contextual, Synchronous Evaluation
 
 All of the rules listed above also apply to the result of evaluating a lambda expression:
@@ -620,6 +655,7 @@ Instead, trans-render supports another approach [TODO: no test coverage]:
         }
     }]
 ```
+
 
 
 ## Utility functions
