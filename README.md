@@ -445,7 +445,6 @@ Demonstrates use of update, rudimentary interpolation, recursive select.
 -->
 
 
-
 ## Simple Template Insertion, Part I
 
 A template can be inserted directly inside the target element as follows:
@@ -482,7 +481,7 @@ For now, typically, web components are written in JavaScript exclusively. A [uti
 ##  Shadowed Template Insertion [Untested]
 
 ```html
-<template id="articleTemplate">
+<template id="articleTemplate" data-shadow-root="open">
 My interesting article...
 </template>
 <template id="sourceTemplate">
@@ -498,7 +497,7 @@ My interesting article...
     import { init } from '../init.js';
     const Transform = {
         details: {
-            article: [articleTemplate]
+            article: articleTemplate
         }
     };
     init(sourceTemplate, { Transform }, target);
@@ -606,7 +605,7 @@ This can certainly be useful for code written within the custom element, where a
 
 However, this approach doesn't lend itself to declarative fast access using trans-render notation.
 
-Instead, trans-render supports another approach [untested]:
+Instead, trans-render supports another approach [TODO: no test coverage]:
 
 ```JavaScript
     const myFastAccessSymbol = Symbol();
@@ -639,7 +638,8 @@ Example:
 
 An explanation for the second and third parameters is needed.
 
-Templates shine most when they are created once, and cloned repeatedly as needed.  What this means in the context of a JS module, is that they should be cached somewhere, and instances cloned from the cache.  The use of the third parameter, symbol, ensures that no two disparate code snippets will trample over each other.  But which "cache" to use?  The easiest, sledgehammer approach would be to cache it in self or globalThis.  But there is likely a cost to caching lots of things in such a global area, as the lookups are likely to grow (logarithmically perhaps).
+Templates shine most when they are created once, and cloned repeatedly as needed.  What this means,
+ in the context of a JS module, is that they should be cached somewhere, and instances cloned from the cache.  The use of the third parameter, symbol, ensures that no two disparate code snippets will trample over each other.  But which "cache" to use?  The easiest, sledgehammer approach would be to cache it in self or globalThis.  But there is likely a cost to caching lots of things in such a global area, as the lookups are likely to grow (logarithmically perhaps).
 
 Caching inside the renderContext object (ctx) may be too tepid, because the renderContext is likely to be created with each instance of a web component.
 
