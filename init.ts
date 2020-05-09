@@ -85,10 +85,10 @@ export function process(
           continue;
         case "object":
           if (Array.isArray(resp2)) {
-            if((resp2 as HTMLTemplateElement[]).length === 1 && isTemplate(resp2[0] as HTMLTemplateElement)){
-              (target.shadowRoot !== null ? target.shadowRoot : target.attachShadow({mode: 'open', delegatesFocus: true})).appendChild((resp2[0] as HTMLTemplateElement).content.cloneNode(true));
-              continue;
-            }
+            // if((resp2 as HTMLTemplateElement[]).length === 1 && isTemplate(resp2[0] as HTMLTemplateElement)){
+            //   (target.shadowRoot !== null ? target.shadowRoot : target.attachShadow({mode: 'open', delegatesFocus: true})).appendChild((resp2[0] as HTMLTemplateElement).content.cloneNode(true));
+            //   continue;
+            // }
             const peat = resp2 as PEATUnionSettings;
             applyPeatSettings(target, peat, ctx);
             const len = peat.length;
@@ -103,7 +103,13 @@ export function process(
           }
           if (isTemplate(resp2 as HTMLTemplateElement)) {
             const templ = resp2 as HTMLTemplateElement;
-            target.appendChild(templ.content.cloneNode(true));
+            const clone = templ.content.cloneNode(true);
+            if(templ.dataset.shadowRoot !== undefined){
+              target.attachShadow({mode: templ.dataset.shadowRoot as 'open' | 'closed', delegatesFocus: true}).appendChild(clone)
+            }else{
+              target.appendChild(clone);
+            }
+            
           } else {
             let isTR = true;
             const keys = Object.keys(resp2);
