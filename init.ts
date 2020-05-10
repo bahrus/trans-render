@@ -52,8 +52,8 @@ export function process(
   options?: RenderOptions
 ) {
   const target = ctx.leaf! as HTMLElement;
-  if (target.matches === undefined) return;
   const transform = ctx.Transform;
+  if (target.matches === undefined || transform === undefined) return;
 
   let nextTransform: TransformRules = {};
   let nextSelector = "";

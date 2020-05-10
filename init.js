@@ -32,9 +32,9 @@ export function init(template, ctx, target, options) {
 }
 export function process(ctx, idx, level, options) {
     const target = ctx.leaf;
-    if (target.matches === undefined)
-        return;
     const transform = ctx.Transform;
+    if (target.matches === undefined || transform === undefined)
+        return;
     let nextTransform = {};
     let nextSelector = "";
     let firstSelector = true;
