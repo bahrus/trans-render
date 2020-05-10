@@ -169,7 +169,7 @@ If a matching node returns a boolean value of *false*, the node is removed.  For
 ...
 ```
 
-Here the tag "section" will be removed if attributes is undefined.
+Here the tag "section" will be removed.
 
 **NB:**  Be careful when using this technique.  Once a node is removed, there's no going back -- it will no longer match any css if you use trans-render updating (discussed below).  If your use of trans-render is mostly to display something once, and you recreate everything from scratch when your model changes, that's fine.  However, if you want to apply incremental updates, and need to display content conditionally, it would be better to use a [custom element](https://polymer-library.polymer-project.org/3.0/docs/devguide/templates#dom-if) [for that](https://github.com/bahrus/if-diff) [purpose](https://github.com/matthewp/if-else).
 
@@ -555,9 +555,9 @@ Each of the elements are "optional" in the sense that you  can either end the ar
 
 A suggestion for remembering the order these "arguments" come in -- Properties / Events / Attributes / Transform can be abbreviated as "peat."
 
-## Prop setting shortcut [TODO]
+## Prop setting shortcut [No test coverage]
 
-We mentioned earlier that if a css match maps to a string, we do the mostly likely thing one would want -- setting the textContent:
+We mentioned earlier that if a css match maps to a string, we do the most likely thing one would want -- setting the textContent:
 
 ```JavaScript
 const Transform = {
