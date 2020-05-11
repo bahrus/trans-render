@@ -1,7 +1,15 @@
 import { decorate } from './decorate.js';
-export function prependTag(container, name, config) {
+import { applyPeatSettings } from './init.js';
+export function appendTag(container, name, config, ctx) {
     const newElement = document.createElement(name);
-    decorate(newElement, config);
+    if (config !== undefined) {
+        if (Array.isArray(config) && ctx !== undefined) {
+            applyPeatSettings(newElement, config, ctx);
+        }
+        else {
+            decorate(newElement, config);
+        }
+    }
     container.prepend(newElement);
     return newElement;
 }
