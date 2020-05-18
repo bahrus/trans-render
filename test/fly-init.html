@@ -29,6 +29,9 @@
             <div mark err=true></div>
         </div>
     </template>
+    <template id=shadow data-shadow-root="open">
+        <div mark>She swallowed the spider to catch the fly;</div>
+    </template>
     <template id=main>
         <div>There was an old lady who swallowed a fly;</div>
         <div id=flyMark mark data-covg="9%" style="display:block;"></div>
@@ -49,6 +52,7 @@
         <b></b>
         <p></p>
         <div spider></div>
+        <div shadow></div>
     </template>
 
 
@@ -95,7 +99,8 @@
                 '[bad]': false,
                 b: bad,
                 p: 'How absurd to swallow a bird!',
-                '[spider]':[{textContent: 'She swallowed the bird to catch the spider', style:{display:'block'}},,{mark: ''}]
+                '[spider]':[{textContent: 'She swallowed the bird to catch the spider', style:{display:'block'}},,{mark: ''}],
+                '[shadow]': shadow
             }
         }, target, {
             prepend: true
