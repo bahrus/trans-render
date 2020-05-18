@@ -527,8 +527,7 @@ init(sourceTemplate, { Transform }, target);
 
 I.e. any selector that starts with a double quote (") will use the last selector that didn't.
 
-## Property / attribute / event binding [TODO:  Test Coverage]
-
+## Property / attribute / event binding
 
 ```JavaScript
 import { init } from '../init.js';
