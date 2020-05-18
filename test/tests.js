@@ -3,7 +3,7 @@ const xt = require('xtal-test/index');
     const passed = await xt.runTests([
         {
             path: 'test/fly-init.html',
-            expectedNoOfSuccessMarkers: 5,
+            expectedNoOfSuccessMarkers: 6,
         },
         {
             path: 'test/fly-repeat.html',
