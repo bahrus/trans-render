@@ -680,7 +680,7 @@ Caching inside the renderContext object (ctx) may be too tepid, because the rend
 
 So the code checks whether the context object has a "cache" property, and if so, it caches it there.  If using this library inside a web component library, a suggestion would be to set ctx.cache = MyCustomElementClass.
 
-###  Loop support (NB:  Not yet optimized?)
+###  Simple Loop support
 
 The next big use case for this library is using it in conjunction with a [virtual scroller](https://github.com/WICG/virtual-scroller). As far as I can see, the performance of this library should work quite well in that scenario.
 
@@ -725,6 +725,22 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
 ```
 
 An alternative to repeat is provided, "repeateth" that does the same thing, but it hides the "rows" that go out of scope as the list changes, rather than deleting them.
+
+
+
+### Carousel Loop Support (TODO)
+
+*It is the year 2116, and, after many little wars sparked by overpopulation, life is very different from what we know today.*  
+
+*Everyone is born on the same day, and is given a unique combination of name and generation number, and each citizen is given a Geodesic DOM structure where they can live a hedonistic life.  Until they reach age 21, at which point it's time to be "renewed."  For on that day a new generation of citizens are born, who are also given a name followed by a new generation number, one higher than the last. Many of the names match the previous generation's name.  Matching names is generally a sign that they share many of the same traits.  The new generation is also given a promise to inhabit the very same Geodesic DOM structures the previous generation was inhabiting.* 
+
+*When the citizens reach their Last Day, they get to fill out a preference card for what should happen to their body and soul on the fateful next day, when the crystal embedded in their palm turns black.*
+
+*Let's say Jessica 6, for example, has reached her Last Day.  Jessica 6 can request that should a newborn be assigned to her Geodesic DOM, Jessica 6 should be automatically cremated, so as to give the next generation a fresh start, whether the person's name is Jessica 7 or Doyle 7.  Or Jessica 6 could request that should the new inhabitant be Jessica 7, to please merge her memories into the memories of Jessica 7, otherwise Jessica 6 should be cremated.  Or Jessica 6, being open to all newcomers, could ask that her memories be merged in, regardless of who inhabit her DOM next.  Jessica 6 can also request that if no one is assigned to her Geodesic DOM, that she can become a "runner" and hide, so her memories can be merged at a later time.*
+
+*The new generation, though, witnessing all this in a Rawlsian veil of ignorance, also get the chance to fill out a preference card, and their will generally takes precedence over the one-day-left living generation.  They can request that they would like to absorb the wisdom, strength, and other resources of the previous generation, but only if their names match, and reside in the same DOM.  Or they can ask that they be assigned any old Geodesic DOM, but they would still like to absorb the life spirits of the previous occupant.  Or, being concerned that this would cause them confusion, request that the previous occupant be cremated.  Doing so means they start out penniless, but on the other hand carrying no out-dated "baggage" with them.*
+
+*And round and around it goes.*
 
 ### Adjacent template insertion
 
