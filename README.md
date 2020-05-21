@@ -706,11 +706,11 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
     import { update } from '../update.js';
     const options = {matchNext: true};
     const itemTransform = {
-        li: ({ idx }) => 'Hello ' + idx,
+        li: ({ item }) => 'Hello ' + item.name,
     };
     const ctx = init(list, {
         Transform: {
-            ul: ({ target, ctx }) =>  repeat(itemTemplate, ctx, 10, target, itemTransform) // or repeat(itemTemplate, ctx, items, target, itemTransform) 
+            ul: ({ target, ctx }) =>  repeat(itemTemplate, ctx, items, target, itemTransform) // or repeat(itemTemplate, ctx, 10, target, itemTransform) 
         }
     }, target, options);
     ctx.update = update;
@@ -724,9 +724,37 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
 </div>
 ```
 
+<details>
+
+<summary>Separate init / update transforms for repeat[TODO]</summary>
+
+```JavaScript
+const items = ['item 1', 'item 2', ..., 'item 56'];
+const itemSym = Symbol();
+const ctx = init(list, {
+    Transform: {
+        ul: ({ target, ctx }) =>  repeat(itemTemplate, ctx, 57, target, [ //57 string in items array 
+            //init Transform:
+            {
+                li: ({idx}) => [itemSym, idx]
+            },
+            //update Transform:
+            {
+                itemSym: idx => items[idx]
+            }
+        ]) // or repeat(itemTemplate, ctx, items, target, itemTransform) 
+    }
+}, target, options);
+```
+
+</details>
+
 An alternative to repeat is provided, "repeateth" that does the same thing, but it hides the "rows" that go out of scope as the list changes, rather than deleting them.
 
 
+
+<details>
+<summary>Logan's Loop[TODO</summary>
 
 ### Carousel Loop Support (TODO)
 
@@ -740,7 +768,7 @@ An alternative to repeat is provided, "repeateth" that does the same thing, but 
 
 *The new generation, though, witnessing all this in a Rawlsian veil of ignorance, also get the chance to fill out a preference card, and their will generally takes precedence over the one-day-left living generation.  They can request that they would like to absorb the wisdom, strength, and other resources of the previous generation, but only if their names match, and reside in the same DOM.  Or they can ask that they be assigned any old Geodesic DOM, but they would still like to absorb the life spirits of the previous occupant.  Or, being concerned that this would cause them confusion, request that the previous occupant be cremated.  Doing so means they start out penniless, but on the other hand carrying no out-dated "baggage" with them.*
 
-*And round and around it goes.*
+</details>
 
 ### Adjacent template insertion
 
