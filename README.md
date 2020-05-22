@@ -537,7 +537,7 @@ const Transform = {
             //Prop Setting
             {prop1:{greeting: 'hello'}, prop2:'hello', },
             //Event Handler Setting
-            {'click': this.clickHandler},
+            {click: this.clickHandler},
             //Attribute Setting
             {'my-attribute': 'myValue', 'my-attribute2': true, 'my-old-attribute': null}, // null removes attribute
             //Transform or NextStep Object
@@ -552,7 +552,13 @@ init(sourceTemplate, { Transform }, target);
 
 Each of the elements are "optional" in the sense that you  can either end the array early, or you can skip over one or more of the settings by specifying an empty object ({}), or just a comma i.e. [,,{'my-attribute', 'myValue'}].  A more verbose but somewhat more powerful way of doing this is discussed with the [decorate function](https://github.com/bahrus/trans-render#behavior-enhancement) discussed later.
 
-A suggestion for remembering the order these "arguments" come in -- Properties / Events / Attributes / Transform can be abbreviated as "peat."
+A suggestion for remembering the order these "arguments" come in -- Properties / Events / Attributes / Transform can be abbreviated as "PEAT."  Actually, there is a fifth "argument" of type symbol, which stores the target in ctx.host.  So the acronym to remember is really PEATS.
+
+The second element of the array, where event handlers can go, can actually pass arguments to the handler [TODO]:
+
+```JavaScript
+{click: [this.clickHandler, {keyName: Number}, myProp, my-attribute]}
+```
 
 ## Prop setting shortcut [No test coverage]
 
