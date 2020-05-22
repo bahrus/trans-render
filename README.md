@@ -554,10 +554,10 @@ Each of the elements are "optional" in the sense that you  can either end the ar
 
 A suggestion for remembering the order these "arguments" come in -- Properties / Events / Attributes / Transform can be abbreviated as "PEAT."  Actually, there is a fifth "argument" of type symbol, which stores the target in ctx.host.  So the acronym to remember is really PEATS.
 
-The second element of the array, where event handlers can go, can actually pass arguments to the handler [TODO]:
+The second element of the array, where event handlers can go, can actually pass arguments to the handler [Untested]:
 
 ```JavaScript
-{click: [this.clickHandler, {keyName: Number}, myProp, my-attribute]}
+{click: [this.clickHandler, val: 'dataset.keyName']}
 ```
 
 ## Prop setting shortcut [No test coverage]

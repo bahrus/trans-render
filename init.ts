@@ -214,6 +214,15 @@ function isTemplate(test: HTMLTemplateElement){
   return test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
 }
 
+export function getProp(val: any, pathTokens: string[]){
+  let context = val;
+  for(const token of pathTokens){
+    context = context[token];
+    if(context === undefined) break;
+  }
+  return context;
+}
+
 export function applyPeatSettings<T extends HTMLElement = HTMLElement>(target: T, peat: PEATUnionSettings<T>, ctx: RenderContext){
   const len = peat.length;
   if (len > 0) {
@@ -230,7 +239,15 @@ export function applyPeatSettings<T extends HTMLElement = HTMLElement>(target: T
     /////////  Event Handling
     for (const key in peat[1]) {
       let eventHandler = peat[1][key];
-      if(ctx.host !== undefined) eventHandler = eventHandler.bind(ctx.host);
+      if(Array.isArray(eventHandler)){
+        const objSelectorPath = eventHandler[1];
+        const originalEventHandler = ctx.host !== undefined ? eventHandler[0].bind(ctx.host) : eventHandler[0];
+        eventHandler = e =>{
+          originalEventHandler(getProp(e.target, objSelectorPath), e);
+        }
+      }else if(ctx.host !== undefined){
+        eventHandler = eventHandler.bind(ctx.host);
+      }
       target.addEventListener(key, eventHandler);
     }
   }
