@@ -736,7 +736,7 @@ const ctx = init(list, {
         ul: ({ target, ctx }) =>  repeat(itemTemplate, ctx, 57, target, [ //57 string in items array 
             //init Transform:
             {
-                li: ({idx}) => [itemSym, idx]
+                li: ({idx}) => itemSym
             },
             //update Transform:
             {
