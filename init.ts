@@ -240,9 +240,9 @@ export function applyPeatSettings<T extends HTMLElement = HTMLElement>(target: T
     for (const key in peat[1]) {
       let eventHandler = peat[1][key];
       if(Array.isArray(eventHandler)){
-        const objSelectorPath = eventHandler[1];
+        const objSelectorPath = eventHandler[1].split('.');
         const originalEventHandler = ctx.host !== undefined ? eventHandler[0].bind(ctx.host) : eventHandler[0];
-        eventHandler = e =>{
+        eventHandler = (e: Event) =>{
           originalEventHandler(getProp(e.target, objSelectorPath), e);
         }
       }else if(ctx.host !== undefined){
