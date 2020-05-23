@@ -63,11 +63,16 @@ export function process(
   let nextMatch = [];
   let prevSelector = null;
   for(const sym of Object.getOwnPropertySymbols(transform) ) {
-    const transformTemplateVal = (<any>transform)[sym];// as TransformValueOptions<HTMLElement>;
-      if(typeof transformTemplateVal === 'function'){
-        const item = undefined;
-        transformTemplateVal({target: ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement, ctx, idx, level, item});
-      }
+    const transformTemplateVal = (<any>transform)[sym];
+    const newTarget = ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement;
+    switch(typeof(transformTemplateVal)){
+      case 'function':
+        transformTemplateVal({target: newTarget, ctx, idx, level, undefined});
+        break;
+      case 'string':
+        newTarget.textContent = transformTemplateVal;
+        break;
+    }
   }
   for (const rawSelector in transform) {
     let selector;

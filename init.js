@@ -43,10 +43,15 @@ export function process(ctx, idx, level, options) {
     let nextMatch = [];
     let prevSelector = null;
     for (const sym of Object.getOwnPropertySymbols(transform)) {
-        const transformTemplateVal = transform[sym]; // as TransformValueOptions<HTMLElement>;
-        if (typeof transformTemplateVal === 'function') {
-            const item = undefined;
-            transformTemplateVal({ target: (ctx[sym] || ctx.host[sym]), ctx, idx, level, item });
+        const transformTemplateVal = transform[sym];
+        const newTarget = (ctx[sym] || ctx.host[sym]);
+        switch (typeof (transformTemplateVal)) {
+            case 'function':
+                transformTemplateVal({ target: newTarget, ctx, idx, level, undefined });
+                break;
+            case 'string':
+                newTarget.textContent = transformTemplateVal;
+                break;
         }
     }
     for (const rawSelector in transform) {
