@@ -595,6 +595,8 @@ const Transform = {
 
 Then the property "myProp" of the my-custom-element instance will be set to {subProp1:'hello', subProp2: 'world'}.
 
+In addition to the slightly less typing required to set property values, there is also the advantage that the template provides fairly non-obtrusive clues in the markup as to what is happening.
+
 ## Contextual, Synchronous Evaluation
 
 All of the rules listed above also apply to the result of evaluating a lambda expression:
