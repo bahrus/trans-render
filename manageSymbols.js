@@ -21,3 +21,6 @@ export function setSymbol(customElementName, symbolName) {
     customElements.get(customElementName)[symbolName] = newSymbol;
     return newSymbol;
 }
+export function setSymbols(customElementName, symbolNames) {
+    return symbolNames.map(s => setSymbol(customElementName, s));
+}
