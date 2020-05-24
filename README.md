@@ -690,6 +690,16 @@ So the code checks whether the context object has a "cache" property, and if so,
 
 ###  Simple Loop support
 
+```TypeScript
+repeat(
+    template: HTMLTemplateElement | [symbol, string], 
+    ctx: RenderContext, countOrItems: number | any[], 
+    target: HTMLElement, 
+    initTransform: TransformValueOptions,
+    updateTransform: TransformValueOptions = initTransform
+)
+```
+
 The next big use case for this library is using it in conjunction with a [virtual scroller](https://github.com/WICG/virtual-scroller). As far as I can see, the performance of this library should work quite well in that scenario.
 
 However, no self respecting rendering library would be complete without some internal support for repeating lists.  This library is no exception.  While the performance of the initial list is likely to be acceptable, no effort has yet been made to utilize state of the art tricks to make list updates keep the number of DOM changes at a minimum. 
@@ -718,12 +728,12 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
     };
     const ctx = init(list, {
         Transform: {
-            ul: ({ target, ctx }) =>  repeat(itemTemplate, ctx, items, target, itemTransform) // or repeat(itemTemplate, ctx, 10, target, itemTransform) 
+            ul: ({ target, ctx }) =>  repeat(itemTemplate, ctx, 10, target, itemTransform) // or repeat(itemTemplate, ctx, items, target, itemTransform) 
         }
     }, target, options);
     ctx.update = update;
     addItems.addEventListener('click', e => {
-        repeat(itemTemplate, ctx, 15, container, itemTransform); 
+        repeat(itemTemplate, ctx, , container, itemTransform); 
     });
     removeItems.addEventListener('click', e =>{
         repeat(itemTemplate, ctx, 5, container);
@@ -732,39 +742,14 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
 </div>
 ```
 
-<details>
-
-<summary>Separate init / update transforms for repeat[TODO]</summary>
-
-```JavaScript
-const items = ['item 1', 'item 2', ..., 'item 56'];
-const itemSym = Symbol();
-const ctx = init(list, {
-    Transform: {
-        ul: ({ target, ctx }) =>  repeat(itemTemplate, ctx, 57, target, [ //57 string in items array 
-            //init Transform:
-            {
-                li: ({idx}) => itemSym
-            },
-            //update Transform:
-            {
-                itemSym: idx => items[idx]
-            }
-        ]) // or repeat(itemTemplate, ctx, items, target, itemTransform) 
-    }
-}, target, options);
-```
-
-</details>
-
 An alternative to repeat is provided, "repeateth" that does the same thing, but it hides the "rows" that go out of scope as the list changes, rather than deleting them.
 
 
 
 <details>
-<summary>Logan's Loop[TODO</summary>
+<summary>Logan's Loop[TODO]</summary>
 
-### Carousel Loop Support (TODO)
+### Carousel Loop Support
 
 *It is the year 2116, and, after many little wars sparked by overpopulation, life is very different from what we know today.*  
 
