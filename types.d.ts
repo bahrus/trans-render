@@ -129,3 +129,10 @@ export interface IHydrate extends HTMLElement{
 export interface UpdateContext extends RenderContext {
     update: (ctx: RenderContext, target: HTMLElement | DocumentFragment) => UpdateContext;
 }
+
+interface ItemStatus{
+    version: number | string;
+    breaking: boolean;
+    inScope: boolean;
+    identity: number | string;
+}

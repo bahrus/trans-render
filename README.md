@@ -782,7 +782,7 @@ LoganLoop(
 )
 ```
 
-If an item's status is breaking, the previously generated DOM fragment generated from that item is deleted first.
+If an item's status is "breaking", the previously generated DOM fragment generated from that item is deleted first.
 If an item's inScope is false, it will be hidden (or remain deleted if breaking).  No transform applied.
 If no change in version, no change is made to the DOM fragment generated from that item.
 If item is missing, DOM element is hidden, no transform.

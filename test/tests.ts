@@ -14,6 +14,11 @@ const xt = require('xtal-test/index') as IXtalTestRunner;
             expectedNoOfSuccessMarkers: 1,
 
         },
+        {
+            path: 'test/fly-nested-repeat.html',
+            expectedNoOfSuccessMarkers: 1,
+
+        },
     ]);
     if(passed){
         console.log("Tests Passed.  Have a nice day.");
