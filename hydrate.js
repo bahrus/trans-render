@@ -1,19 +1,18 @@
-export const disabled = 'disabled';
 /**
  * Base mixin for many xtal- components
  * @param superClass
  */
 export function hydrate(superClass) {
     return class extends superClass {
-        static get observedAttributes() {
-            return [disabled];
-        }
-        attributeChangedCallback(name, oldVal, newVal) {
-            switch (name) {
-                case disabled:
-                    this._disabled = newVal !== null;
-                    break;
-            }
+        constructor() {
+            super(...arguments);
+            /**
+             * Any component that emits events should not do so if it is disabled.
+             * Note that this is not enforced, but the disabled property is made available.
+             * Users of this mix-in should ensure not to call "de" if this property is set to true.
+             * @attr
+             */
+            this.disabled = false;
         }
         /**
          * Set attribute value.
@@ -22,20 +21,16 @@ export function hydrate(superClass) {
          * @param trueVal String to set attribute if true.
          */
         attr(name, val, trueVal) {
+            if (!this.isConnected) {
+                if (this._attribQueue === undefined)
+                    this._attribQueue = [];
+                this._attribQueue.push({
+                    name, val, trueVal
+                });
+                return;
+            }
             const v = val ? 'set' : 'remove'; //verb
             this[v + 'Attribute'](name, trueVal || val);
-        }
-        get disabled() {
-            return this._disabled;
-        }
-        /**
-         * Any component that emits events should not do so if it is disabled.
-         * Note that this is not enforced, but the disabled property is made available.
-         * Users of this mix-in should ensure not to call "de" if this property is set to true.
-         * @attr
-         */
-        set disabled(val) {
-            this.attr(disabled, val, '');
         }
         /**
          * Needed for asynchronous loading
@@ -49,6 +44,16 @@ export function hydrate(superClass) {
                     this[prop] = value;
                 }
             });
+        }
+        connectedCallback() {
+            const ep = this.constructor.props;
+            this.propUp([...ep.bool, ...ep.str, ...ep.num, ...ep.obj]);
+            if (this._attribQueue !== undefined) {
+                this._attribQueue.forEach(attribQItem => {
+                    this.attr(attribQItem.name, attribQItem.val, attribQItem.trueVal);
+                });
+                delete this._attribQueue;
+            }
         }
     };
 }

@@ -98,7 +98,6 @@ export interface TransRenderWC{
 
 
 export interface IHydrate extends HTMLElement{
-    _disabled: boolean;
     /**
      * Any component that emits events should not do so if it is disabled.
      * Note that this is not enforced, but the disabled property is made available.
@@ -114,9 +113,7 @@ export interface IHydrate extends HTMLElement{
      */
     attr(name: string, val: string | boolean, trueVal?: string): void;
 
-    attributeChangedCallback(name: string, oldVal: string, newVal: string) : void;
-
-    connectedCallback?(): void;
+    connectedCallback(): void;
 
     /**
      * Needed for asynchronous loading
@@ -135,4 +132,17 @@ interface ItemStatus{
     breaking: boolean;
     inScope: boolean;
     identity: number | string;
+}
+
+export interface EvaluatedAttributeProps{
+    num: string[];
+    bool: string[];
+    str: string[];
+    obj: string[];
+    reflect: string[];
+    jsonProp: string[];
+    notify: string[];
+    dry: string[];
+    log?: string[];
+    debug?: string[];
 }
