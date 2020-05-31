@@ -4,16 +4,6 @@
  */
 export function hydrate(superClass) {
     return class extends superClass {
-        constructor() {
-            super(...arguments);
-            /**
-             * Any component that emits events should not do so if it is disabled.
-             * Note that this is not enforced, but the disabled property is made available.
-             * Users of this mix-in should ensure not to call "de" if this property is set to true.
-             * @attr
-             */
-            this.disabled = false;
-        }
         /**
          * Set attribute value.
          * @param name

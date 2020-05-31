@@ -22,7 +22,7 @@ const view_model = 'view-model';
 export class TransRender extends hydrate(HTMLElement) {
     static get is() { return 'trans-render'; }
     static get observedAttributes() {
-        return super.observedAttributes.concat(view_model);
+        return [view_model];
     }
     attributeChangedCallback(n, ov, nv) {
         switch (n) {
@@ -30,7 +30,6 @@ export class TransRender extends hydrate(HTMLElement) {
                 this.viewModel = JSON.parse(nv);
                 break;
         }
-        super.attributeChangedCallback(n, ov, nv);
     }
     connectedCallback() {
         this.style.display = 'none';

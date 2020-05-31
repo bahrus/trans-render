@@ -27,7 +27,7 @@ export class TransRender extends hydrate(HTMLElement) implements TransRenderWC {
 
     static get is() { return 'trans-render'; }
     static get observedAttributes(){
-        return super.observedAttributes.concat(view_model);
+        return [view_model];
     }
     attributeChangedCallback(n: string, ov: string, nv: string){
         switch(n){
@@ -35,7 +35,7 @@ export class TransRender extends hydrate(HTMLElement) implements TransRenderWC {
                 this.viewModel = JSON.parse(nv);
                 break;
         }
-        super.attributeChangedCallback(n, ov, nv);
+        
     }
     connectedCallback() {
         this.style.display = 'none';

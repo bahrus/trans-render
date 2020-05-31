@@ -257,7 +257,7 @@ export function applyPeatSettings<T extends HTMLElement = HTMLElement>(target: T
       }else if(ctx.host !== undefined){
         eventHandler = eventHandler.bind(ctx.host);
       }
-      target.addEventListener(key, eventHandler);
+      target.addEventListener(key, eventHandler as EventListenerOrEventListenerObject);
     }
   }
   if (len > 2 && peat[2] !== undefined) {

@@ -40,7 +40,7 @@ export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBas
          * Users of this mix-in should ensure not to call "de" if this property is set to true.
          * @attr
          */
-        disabled = false;
+        disabled!: boolean;
 
         /**
          * Needed for asynchronous loading
