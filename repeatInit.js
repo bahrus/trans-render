@@ -1,6 +1,7 @@
-import { TransRenderSymbols as TRS } from './trans-render-symbols.js';
-import { setSymbols } from './manageSymbols.js';
-export const [countKey, idxKey, itemsKey, ubKey] = setSymbols(TRS.is, ['countKey', 'idxKey', 'itemsKey', 'ubKey']);
+export const countKey = Symbol.for('04efa75f-dec8-4002-a091-153683691bd1'); //what a waste of bandwidth
+export const itemsKey = Symbol.for('bb247496-9c5d-459c-8127-fe80fee8c256');
+export const idxKey = Symbol.for('ad7cf100-0c10-4184-b836-f560f2c15c81');
+export const ubKey = Symbol.for('7c6fd3aa-eea3-478c-b18c-32132b1bfc7c');
 export function repeatInit(template, ctx, countOrItems, target, targetTransform) {
     if (ctx.update)
         return;

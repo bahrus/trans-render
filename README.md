@@ -1129,9 +1129,7 @@ Then it's a good idea to consider making use of [Symbols](https://www.keithcirke
 
 The syntax isn't that much more complicated, but it is probably harder to troubleshoot if using symbols, so use your best judgment. Perhaps start properties and methods with an underscore if you wish to preserve the easy debugging capabilities.  You can also use Symbol.for('count'), which kind of meets halfway between the two approaches.
 
-**NB:**  There appears to be serious flaw as far as symbols and imports.  If you find yourself importing a symbol from another file, even from the same package, you are in for a bumpy ride, from my experience, especially when using a bare import server plug-in like es-dev-server.  I've raised the issue [here](https://github.com/WICG/webpackage/issues/496) and [there](https://github.com/WICG/import-maps/issues/132).
-
-However, a helper library, manageSymbols.js, is contained in this package, that builds on the singleton-like aspects of custom elements.  It improves the reliability of symbols, even in an environment where different versions of the same module may be present.
+**NB:**  There appears to be serious flaw as far as symbols and imports.  If you find yourself importing a symbol from another file, even from the same package, you are in for a bumpy ride, from my experience, especially when using a bare import server plug-in like es-dev-server.  I've raised the issue [here](https://github.com/WICG/webpackage/issues/496) and [there](https://github.com/WICG/import-maps/issues/132). As was suggested in the second link, perhaps the solution is to use Symbol.for in combination with a guid, which seems wasteful bandwidth wise, and makes debugging more difficult, perhaps.
 
 ### Even more indirection
 
