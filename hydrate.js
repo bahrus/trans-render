@@ -1,3 +1,5 @@
+export const propUp = Symbol.for('8646ccd5-3ffd-447a-a4df-0022ca3a8155');
+export const attribQueue = Symbol.for('02ca2c80-68e0-488f-b4b4-6859284848fb');
 /**
  * Base mixin for many xtal- components
  * @param superClass
@@ -11,10 +13,12 @@ export function hydrate(superClass) {
          * @param trueVal String to set attribute if true.
          */
         attr(name, val, trueVal) {
-            if (!this.isConnected) {
-                if (this._attribQueue === undefined)
-                    this._attribQueue = [];
-                this._attribQueue.push({
+            if (val === undefined)
+                return this.getAttribute(name);
+            if (!this.xlConnected) {
+                if (this[attribQueue] === undefined)
+                    this[attribQueue] = [];
+                this[attribQueue].push({
                     name, val, trueVal
                 });
                 return;
@@ -26,7 +30,7 @@ export function hydrate(superClass) {
          * Needed for asynchronous loading
          * @param props Array of property names to "upgrade", without losing value set while element was Unknown
          */
-        propUp(props) {
+        [propUp](props) {
             props.forEach(prop => {
                 if (this.hasOwnProperty(prop)) {
                     let value = this[prop];
@@ -37,12 +41,12 @@ export function hydrate(superClass) {
         }
         connectedCallback() {
             const ep = this.constructor.props;
-            this.propUp([...ep.bool, ...ep.str, ...ep.num, ...ep.obj]);
-            if (this._attribQueue !== undefined) {
-                this._attribQueue.forEach(attribQItem => {
+            this[propUp]([...ep.bool, ...ep.str, ...ep.num, ...ep.obj]);
+            if (this[attribQueue] !== undefined) {
+                this[attribQueue].forEach(attribQItem => {
                     this.attr(attribQItem.name, attribQItem.val, attribQItem.trueVal);
                 });
-                delete this._attribQueue;
+                delete this[attribQueue];
             }
         }
     };

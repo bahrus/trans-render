@@ -1,5 +1,5 @@
 import {define} from './define.js';
-import {hydrate} from './hydrate.js';
+import {hydrate, propUp} from './hydrate.js';
 import {init} from './init.js';
 import {repeat} from './repeat.js';
 import {interpolate} from './interpolate.js';
@@ -13,6 +13,7 @@ import {replaceElementWithTemplate} from './replaceElementWithTemplate.js';
 import {replaceTargetWithTag} from './replaceTargetWithTag.js';
 import {pierce} from './pierce.js';
 import {split} from './split.js';
+
 //import {decorate} from 'trans-render/decorate.js';
 
 type prop = keyof TransRenderWC;
@@ -39,7 +40,7 @@ export class TransRender extends hydrate(HTMLElement) implements TransRenderWC {
     }
     connectedCallback() {
         this.style.display = 'none';
-        this.propUp<prop[]>(['viewModel']);
+        this[propUp]<prop[]>(['viewModel']);
         this.getElement('_nextSibling', t => (t.nextElementSibling as HTMLElement));
         this.getElement('_script', t => t.querySelector('script'));
     }

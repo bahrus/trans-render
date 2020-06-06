@@ -1,3 +1,4 @@
+import {propUp} from './hydrate.js';
 export type TransformFn<TargetType extends Partial<HTMLElement> = HTMLElement> 
     = (arg: TransformArg<TargetType>) => TransformRules | NextStep | string | HTMLTemplateElement | void | boolean | PEATSettings<TargetType>;
 
@@ -119,7 +120,7 @@ export interface IHydrate extends HTMLElement{
      * Needed for asynchronous loading
      * @param props Array of property names to "upgrade", without losing value set while element was Unknown
      */
-    propUp<TKeys extends string[] = string[]>(props: TKeys): void;
+    [propUp]<TKeys extends string[] = string[]>(props: TKeys): void;
 
 }
 
@@ -145,4 +146,5 @@ export interface EvaluatedAttributeProps{
     dry: string[];
     log?: string[];
     debug?: string[];
+    async?: string[];
 }
