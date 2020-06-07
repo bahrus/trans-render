@@ -33,7 +33,7 @@ export function hydrate(superClass) {
             attr(name, val, trueVal) {
                 if (val === undefined)
                     return this.getAttribute(name);
-                if (!this.xlConnected) {
+                if (!this._xlConnected) {
                     if (__classPrivateFieldGet(this, _attribQueue) === undefined)
                         __classPrivateFieldSet(this, _attribQueue, []);
                     __classPrivateFieldGet(this, _attribQueue).push({

@@ -28,7 +28,7 @@ export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBas
          */
         attr(name: string, val?: string | boolean | null, trueVal?: string) {
             if(val === undefined) return this.getAttribute(name);
-            if(!(<any>this).xlConnected){
+            if(!(<any>this)._xlConnected){
                 if(this.#attribQueue === undefined) this.#attribQueue = [];
                 this.#attribQueue!.push({
                     name, val, trueVal
