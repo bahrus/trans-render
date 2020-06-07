@@ -18,11 +18,12 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
  * @param superClass
  */
 export function hydrate(superClass) {
-    var _attribQueue, _a;
+    var _attribQueue, _conn, _a;
     return _a = class extends superClass {
             constructor() {
                 super(...arguments);
                 _attribQueue.set(this, void 0);
+                _conn.set(this, false);
             }
             /**
              * Set attribute value.
@@ -33,7 +34,7 @@ export function hydrate(superClass) {
             attr(name, val, trueVal) {
                 if (val === undefined)
                     return this.getAttribute(name);
-                if (!this._xlConnected) {
+                if (!__classPrivateFieldGet(this, _conn)) {
                     if (__classPrivateFieldGet(this, _attribQueue) === undefined)
                         __classPrivateFieldSet(this, _attribQueue, []);
                     __classPrivateFieldGet(this, _attribQueue).push({
@@ -58,6 +59,7 @@ export function hydrate(superClass) {
                 });
             }
             connectedCallback() {
+                __classPrivateFieldSet(this, _conn, true);
                 const ep = this.constructor.props;
                 this.__propUp([...ep.bool, ...ep.str, ...ep.num, ...ep.obj]);
                 if (__classPrivateFieldGet(this, _attribQueue) !== undefined) {
@@ -69,5 +71,6 @@ export function hydrate(superClass) {
             }
         },
         _attribQueue = new WeakMap(),
+        _conn = new WeakMap(),
         _a;
 }

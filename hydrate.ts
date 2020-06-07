@@ -10,8 +10,7 @@ interface attrArgs{
 
 //export const propUp: unique symbol = Symbol.for('8646ccd5-3ffd-447a-a4df-0022ca3a8155');
 //export const attribQueue: unique symbol = Symbol.for('02ca2c80-68e0-488f-b4b4-6859284848fb');
-
-    
+ 
 /**
  * Base mixin for many xtal- components
  * @param superClass
@@ -20,6 +19,7 @@ export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBas
     return class extends superClass implements IHydrate {
 
         #attribQueue: attrArgs[] | undefined;
+        #conn = false;
         /**
          * Set attribute value.
          * @param name 
@@ -28,7 +28,7 @@ export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBas
          */
         attr(name: string, val?: string | boolean | null, trueVal?: string) {
             if(val === undefined) return this.getAttribute(name);
-            if(!(<any>this)._xlConnected){
+            if(!this.#conn){
                 if(this.#attribQueue === undefined) this.#attribQueue = [];
                 this.#attribQueue!.push({
                     name, val, trueVal
@@ -61,6 +61,7 @@ export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBas
 
         }
         connectedCallback(){
+            this.#conn = true;
             const ep = (<any>this.constructor).props as EvaluatedAttributeProps;
             this.__propUp([...ep.bool, ...ep.str, ...ep.num, ...ep.obj]);
             if(this.#attribQueue !== undefined){
