@@ -62,16 +62,18 @@ export function process(
   let inherit = false;
   let nextMatch = [];
   let prevSelector = null;
-  for(const sym of Object.getOwnPropertySymbols(transform) ) {
-    const transformTemplateVal = (<any>transform)[sym];
-    const newTarget = ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement;
-    switch(typeof(transformTemplateVal)){
-      case 'function':
-        transformTemplateVal({target: newTarget, ctx, idx, level, undefined});
-        break;
-      case 'string':
-        newTarget.textContent = transformTemplateVal;
-        break;
+  if(ctx.skipSymBind !== true){
+    for(const sym of Object.getOwnPropertySymbols(transform) ) {
+      const transformTemplateVal = (<any>transform)[sym];
+      const newTarget = ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement;
+      switch(typeof(transformTemplateVal)){
+        case 'function':
+          transformTemplateVal({target: newTarget, ctx, idx, level, undefined});
+          break;
+        case 'string':
+          newTarget.textContent = transformTemplateVal;
+          break;
+      }
     }
   }
   for (const rawSelector in transform) {
@@ -176,6 +178,7 @@ export function process(
       }
     }
   }
+  ctx.skipSymBind = true;
   if (matchNextSib) {
     let transform = ctx.Transform;
     const nextSib = target.nextElementSibling;
@@ -197,7 +200,7 @@ export function process(
       nextSib = nextSib.nextElementSibling;
     }
   }
-
+  ctx.skipSymBind = false;
   if (nextSelector.length > 0) {
     let transform = ctx.Transform;
 

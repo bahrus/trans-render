@@ -42,16 +42,18 @@ export function process(ctx, idx, level, options) {
     let inherit = false;
     let nextMatch = [];
     let prevSelector = null;
-    for (const sym of Object.getOwnPropertySymbols(transform)) {
-        const transformTemplateVal = transform[sym];
-        const newTarget = (ctx[sym] || ctx.host[sym]);
-        switch (typeof (transformTemplateVal)) {
-            case 'function':
-                transformTemplateVal({ target: newTarget, ctx, idx, level, undefined });
-                break;
-            case 'string':
-                newTarget.textContent = transformTemplateVal;
-                break;
+    if (ctx.skipSymBind !== true) {
+        for (const sym of Object.getOwnPropertySymbols(transform)) {
+            const transformTemplateVal = transform[sym];
+            const newTarget = (ctx[sym] || ctx.host[sym]);
+            switch (typeof (transformTemplateVal)) {
+                case 'function':
+                    transformTemplateVal({ target: newTarget, ctx, idx, level, undefined });
+                    break;
+                case 'string':
+                    newTarget.textContent = transformTemplateVal;
+                    break;
+            }
         }
     }
     for (const rawSelector in transform) {
@@ -161,6 +163,7 @@ export function process(ctx, idx, level, options) {
             }
         }
     }
+    ctx.skipSymBind = true;
     if (matchNextSib) {
         let transform = ctx.Transform;
         const nextSib = target.nextElementSibling;
@@ -182,6 +185,7 @@ export function process(ctx, idx, level, options) {
             nextSib = nextSib.nextElementSibling;
         }
     }
+    ctx.skipSymBind = false;
     if (nextSelector.length > 0) {
         let transform = ctx.Transform;
         const nextChild = target.querySelector(nextSelector);

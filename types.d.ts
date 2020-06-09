@@ -84,6 +84,7 @@ export interface RenderContext {
     pierce?: (el: HTMLElement, ctx: RenderContext, targetTransform: TransformRules) => void;
     templates?: {[key: string]: HTMLTemplateElement};
     itemsKey?: symbol;
+    skipSymBind?: boolean;
 }
 
 export interface RenderOptions{
