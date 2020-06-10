@@ -52,14 +52,15 @@ export function hydrate(superClass) {
             __propUp(props) {
                 const defaultValues = this.constructor['defaultValues'];
                 props.forEach(prop => {
-                    if (this.hasOwnProperty(prop)) {
-                        let value = this[prop];
-                        if (value === undefined && defaultValues !== undefined) {
-                            value = defaultValues[prop];
-                        }
-                        delete this[prop];
-                        this[prop] = value;
+                    let value = this[prop];
+                    if (value === undefined && defaultValues !== undefined) {
+                        value = defaultValues[prop];
                     }
+                    if (this.hasOwnProperty(prop)) {
+                        delete this[prop];
+                    }
+                    if (value !== undefined)
+                        this[prop] = value;
                 });
             }
             connectedCallback() {

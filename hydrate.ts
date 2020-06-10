@@ -55,14 +55,14 @@ export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBas
         __propUp(props: string[]) { //https://github.com/denoland/deno/issues/5258
             const defaultValues = (<any>this.constructor)['defaultValues'];
             props.forEach(prop => {
-                if (this.hasOwnProperty(prop)) {
-                    let value = (<any>this)[prop];
-                    if(value === undefined && defaultValues !== undefined){
-                        value = defaultValues[prop];
-                    }
-                    delete (<any>this)[prop];
-                    (<any>this)[prop] = value;
+                let value = (<any>this)[prop];
+                if(value === undefined && defaultValues !== undefined){
+                    value = defaultValues[prop];
                 }
+                if (this.hasOwnProperty(prop)) {
+                    delete (<any>this)[prop];
+                }
+                if(value !== undefined) (<any>this)[prop] = value;
             });
         }
         
