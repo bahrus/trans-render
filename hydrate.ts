@@ -18,6 +18,8 @@ interface attrArgs{
 export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBase) {
     return class extends superClass implements IHydrate {
 
+        static defaultValues : any;
+
         #attribQueue: attrArgs[] | undefined;
         #conn = false;
         /**
@@ -51,15 +53,19 @@ export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBas
          * @param props Array of property names to "upgrade", without losing value set while element was Unknown
          */
         __propUp(props: string[]) { //https://github.com/denoland/deno/issues/5258
+            const defaultValues = (<any>this.constructor)['defaultValues'];
             props.forEach(prop => {
                 if (this.hasOwnProperty(prop)) {
                     let value = (<any>this)[prop];
+                    if(value === undefined && defaultValues !== undefined){
+                        value = defaultValues[prop];
+                    }
                     delete (<any>this)[prop];
                     (<any>this)[prop] = value;
                 }
-            })
-
+            });
         }
+        
         connectedCallback(){
             this.#conn = true;
             const ep = (<any>this.constructor).props as EvaluatedAttributeProps;
