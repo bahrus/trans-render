@@ -746,6 +746,31 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
 An alternative to repeat is provided, "repeateth" that does the same thing, but it hides the "rows" that go out of scope as the list changes, rather than deleting them.
 
 
+<details>
+<summary>Declarative Repeat [TODO]</summary>
+
+```JavaScript
+    const ctx = init(list, {
+        Transform: {
+            ul: [itemTemplate, items, [3, 10], itemTransform, ul$]
+        }
+    }, target, options);
+```
+
+Acronym:  TARTS
+
+Template
+Array (of items)
+Range 
+Transform
+RefSymbol
+
+Template required
+Array and Range optional, but one of them is required
+Range allows to specify span within items to display -- useful for virtual rendering?
+Transform, RefSymbol optional
+
+</details>
 
 <details>
 <summary>Logan's Loop[TODO]</summary>
