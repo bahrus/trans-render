@@ -94,6 +94,81 @@ Produces
 </div>
 ```
 
+<details>
+    <summary>Rules Summary</summary>
+
+
+### Terminology:
+
+Each transform rule has a left hand side (lhs) "key" and a right hand side (rhs) expression.
+
+For example, in:
+
+```JavaScript
+const Transform = {
+    details: {
+        summary: model.summaryText
+    }
+};
+```
+
+details, summary are lhs keys.  model.summaryText is a rhs expression, as is the open and closed curly braces section.
+
+In the example above, the details and summary keys are really strings, and could be equivalently written:
+
+```JavaScript
+const Transform = {
+    'details': {
+        'summary': model.summaryText
+    }
+};
+```
+
+Due to the basic rules of object literals in JavaScript, keys can only be strings or ES6 symbols. 
+
+### LHS Key Scenarios
+
+- If the key is a string that starts with a lower case letter, then it is a "css match" expression.
+- If the key is a string that starts with double quote, then it is also a "css match", but the css expression comes from the nearest previous sibling key which doesn't start with a double quote.
+- If the key is a string that starts with a capital letter, then it is part of a "Next Step" expression that indicates where to jump down to next in the DOM tree.
+- If the key is an ES6 symbol, it is a shortcut to grab a reference to a DOM element previously stored either in cache or the custom element hosting the transform.
+
+### CSS Match Rules
+
+- If the rhs expression evaluates to a string, then set the textContent property of matching elements to that string.
+- If the rhs expression evaluates to the boolean "false", then remove the matching elements from the DOM Tree.
+- If the rhs expression evaluates to a function, then
+  -  that function is invoked, where the following parameters are passed in:
+     - target
+     - ctx
+     - idx
+     - level
+     - item
+  - The evaluated function replaces the rhs expression.
+- If the rhs expression evaluates to an array, then
+  -  Arrays are treated as "tuples" for common requirements.
+  -  The first element of the tuple indicates what type of tuple to expect.
+  -  If the first element of the tuple is a non-array object, or undefined, then the array represents a "PEATS" tuple -- property / setting
+     -  First optional parameter is a **p**roperty object, that gets shallow-merged into the matching element (target).
+     -  Second optional parameter is an **e**vent object, that binds to events of the matching target element.
+     -  Third optional parameter is an **a**ttribute object, that sets the attributes.
+     -  Fourth optional parameter is a sub-**t**ransform, which recursively performs transforms within the light children of the matching target element.
+     -  Fifth optional parameter is of type **s**ymbol, to allow future referencing to the matching target element.
+  -  [TODO] If the first element of the tuple itself is an array, then the array represents an "ATRIUMS" loop -- a declarative loop associated with those items 
+     - The acronym to remember for a loop array is "ATRIUMS".
+     - First element of the tuple the **a**rray of items.
+     - Second element is the **t**emplate reference that should be repeated.
+     - Third optional parameter is an optional **r**ange of indexes from the item array to display
+     - Fourth optional parameter is the **i**nit transform for each item, which recursively uses the transform syntax described here.
+     - Fifth optional parameter is the **u**date transform for each item.
+     - Sixth optional parameter is **m**etadata associated with the loop -- how to extra the identifier for each item, for example.
+     - Seventh optional parameter is a **s**ymbol to allow references to the matching target element
+  -  [TODO] If the first element of the tuple is a function, then evaluate the function, and the function is expected to return an index to another element inside the array, and that value is used as the rhs expression.
+
+
+
+</details>
+
 ## Arbitrary queries.
 
 If most of the template is static, but there's a deeply nested element that needs modifying, it is possible to drill straight down to that element by specifying a "Select" string value, which invokes querySelector.  But beware: there's no going back to previous elements once that's done.  If your template is dense with dynamic pockets, you will more likely want to navigate to the first child by setting Select = '*'. 
