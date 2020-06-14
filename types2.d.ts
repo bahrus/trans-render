@@ -7,6 +7,7 @@ export interface RenderContext{
     item: any;
     idx: number;
     options: RenderOptions | undefined;
+    host?: HTMLElement;
 }
 
 export interface RenderOptions{

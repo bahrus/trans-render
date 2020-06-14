@@ -116,7 +116,7 @@ function processEl(ctx) {
 }
 function doObjectMatch(key, tvoo, ctx) {
     if (Array.isArray(tvoo)) {
-        doArrayMatch(key, tvoo);
+        doArrayMatch(key, tvoo, ctx);
     }
     else {
         if (isTemplate(tvoo)) {
@@ -149,9 +149,87 @@ function isTemplate(test) {
 function doTemplate(ctx, te) {
     ctx.target.appendChild(te.content.cloneNode(true));
 }
-function doPropSetting(key, tm, ctx) {
+function doArrayMatch(key, tvao, ctx) {
+    const firstEl = tvao[0];
+    switch (typeof firstEl) {
+        case 'undefined':
+        case 'object':
+            doPropSetting(key, tvao, ctx);
+            break;
+    }
 }
-function doArrayMatch(key, tvao) {
+function doPropSetting(key, peat, ctx) {
+    const len = peat.length;
+    const target = ctx.target;
+    if (len > 0) {
+        //////////  Prop Setting
+        /////////   Because of dataset, style (other?) assign at one level down
+        const props = peat[0];
+        if (props !== undefined) {
+            Object.assign(target, props);
+            if (props.style !== undefined)
+                Object.assign(target.style, props.style);
+            if (props.dataset !== undefined)
+                Object.assign(target.dataset, props.dataset);
+        }
+    }
+    if (len > 1 && peat[1] !== undefined) {
+        /////////  Event Handling
+        const eventSettings = peat[1];
+        for (const key in eventSettings) {
+            let eventHandler = eventSettings[key];
+            if (Array.isArray(eventHandler)) {
+                const objSelectorPath = eventHandler[1].split('.');
+                const converter = eventHandler[2];
+                const originalEventHandler = ctx.host !== undefined ? eventHandler[0].bind(ctx.host) : eventHandler[0];
+                eventHandler = (e) => {
+                    let val = getProp(e.target, objSelectorPath);
+                    if (converter !== undefined)
+                        val = converter(val);
+                    originalEventHandler(val, e);
+                };
+            }
+            else if (ctx.host !== undefined) {
+                eventHandler = eventHandler.bind(ctx.host);
+            }
+            target.addEventListener(key, eventHandler);
+        }
+    }
+    if (len > 2 && peat[2] !== undefined) {
+        /////////  Attribute Setting
+        for (const key in peat[2]) {
+            const val = peat[2][key];
+            switch (typeof val) {
+                case 'boolean':
+                    if (val) {
+                        target.setAttribute(key, '');
+                    }
+                    else {
+                        target.removeAttribute(key);
+                    }
+                    break;
+                case 'string':
+                    target.setAttribute(key, val);
+                    break;
+                case 'number':
+                    target.setAttribute(key, val.toString());
+                    break;
+                case 'object':
+                    if (val === null)
+                        target.removeAttribute(key);
+                    break;
+            }
+        }
+    }
+}
+export function getProp(val, pathTokens) {
+    let context = val;
+    for (const token of pathTokens) {
+        context = context[token];
+        if (context === undefined)
+            break;
+    }
+    return context;
 }
 function closestNextSib(target, match) {
     let nextElementSibling = target.nextElementSibling;
