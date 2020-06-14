@@ -65,6 +65,7 @@ function processFragment(
     //         break;
     //     }
     // }
+    ctx.target = source.firstElementChild as HTMLElement;
     processEl(ctx);
 }
 
@@ -101,13 +102,14 @@ function processEl(
             const tvo = getRHS(tm[key], ctx) as TransformValueOptions;
             switch(typeof tvo){
                 case 'string':
-                    target.textContent = tvo;
+                    nextElementSibling.textContent = tvo;
                     break;
                 case 'boolean':
-                    if(tvo === false) target.remove();
+                    if(tvo === false) nextElementSibling.remove();
                     break;
                 case 'object':
                     if(tvo === null) continue;
+                    ctx.target = nextElementSibling;
                     doObjectMatch(key, tvo as TransformValueObjectOptions, ctx);
                 case 'undefined':
                     continue;    

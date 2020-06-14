@@ -41,6 +41,7 @@ function processFragment(source, ctx) {
     //         break;
     //     }
     // }
+    ctx.target = source.firstElementChild;
     processEl(ctx);
 }
 function processEl(ctx) {
@@ -76,15 +77,16 @@ function processEl(ctx) {
             const tvo = getRHS(tm[key], ctx);
             switch (typeof tvo) {
                 case 'string':
-                    target.textContent = tvo;
+                    nextElementSibling.textContent = tvo;
                     break;
                 case 'boolean':
                     if (tvo === false)
-                        target.remove();
+                        nextElementSibling.remove();
                     break;
                 case 'object':
                     if (tvo === null)
                         continue;
+                    ctx.target = nextElementSibling;
                     doObjectMatch(key, tvo, ctx);
                 case 'undefined':
                     continue;
