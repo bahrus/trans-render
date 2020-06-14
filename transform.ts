@@ -87,8 +87,9 @@ function processEl(
     let nextElementSibling: HTMLElement | null = target;
     const tm = ctx.Transform as TransformMatch;
     let matched = false;
-    let removeNextElementSibling = false;
+    
     while(nextElementSibling !== null){
+        let removeNextElementSibling = false;
         for(let i = 0, ii = keys.length; i < ii; i++){
             const key = keys[i];
             if(key.startsWith('"')){
@@ -100,7 +101,6 @@ function processEl(
                 }
             }
             matched = true;
-            removeNextElementSibling = false;
             const tvo = getRHS(tm[key], ctx) as TransformValueOptions;
             switch(typeof tvo){
                 case 'string':
