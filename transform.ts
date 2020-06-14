@@ -87,6 +87,7 @@ function processEl(
     let nextElementSibling: HTMLElement | null = target;
     const tm = ctx.Transform as TransformMatch;
     let matched = false;
+    let removeNextElementSibling = false;
     while(nextElementSibling !== null){
         for(let i = 0, ii = keys.length; i < ii; i++){
             const key = keys[i];
@@ -105,7 +106,7 @@ function processEl(
                     nextElementSibling.textContent = tvo;
                     break;
                 case 'boolean':
-                    if(tvo === false) nextElementSibling.remove();
+                    if(tvo === false) removeNextElementSibling = true;
                     break;
                 case 'object':
                     if(tvo === null) continue;
@@ -115,7 +116,9 @@ function processEl(
                     continue;    
             }
         }
+        const elementToRemove = removeNextElementSibling ? nextElementSibling : undefined;
         nextElementSibling = nextElementSibling.nextElementSibling as HTMLElement | null;
+        if(elementToRemove !== undefined) elementToRemove.remove();
     }
 }
 
@@ -130,6 +133,8 @@ function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ctx: Rend
             ctx.target = ctx.target!.firstElementChild as HTMLElement;
             ctx.level++;
             ctx.idx = 0;
+            ctx.previousTransform = ctx.Transform;
+            ctx.Transform = tvoo;
             processEl(ctx);
             restoreCtx(ctx, ctxCopy);
         }
@@ -168,26 +173,25 @@ function closestNextSib(target: HTMLElement, match: string){
 function doNextStep(
     ctx: RenderContext,
 ){
-    throw('?');
-    // const nextStep = ctx.Transform as NextStep;
-    // let nextEl : HTMLElement | null;
-    // if(nextStep.NextMatch !== undefined){
-    //     nextEl = closestNextSib(ctx.target!, nextStep.NextMatch);
-    // }else if(nextStep.Select){
-    //     nextEl = target.querySelector(nextStep.Select);
-    // }else{
-    //     throw('?');
-    // }
-    // if(nextEl === null) return;
-    // const inherit = !!nextStep.MergeTransforms;
-    // const newTransform = nextStep.Transform;
-    // const mergedTransform = Object.assign({}, newTransform);
-    // if (prevTransform !== null && inherit) {
-    //   Object.assign(mergedTransform, prevTransform);
-    // }
-    // ctx.Transform = mergedTransform;
-    // ctx.target = nextEl;
-    // processEl(ctx, idx, level, false, prevTransform, options);
+    const nextStep = ctx.Transform as NextStep;
+    let nextEl : HTMLElement | null;
+    if(nextStep.NextMatch !== undefined){
+        nextEl = closestNextSib(ctx.target!, nextStep.NextMatch);
+    }else if(nextStep.Select){
+        nextEl = ctx.target!.querySelector(nextStep.Select);
+    }else{
+        throw('?');
+    }
+    if(nextEl === null) return;
+    const inherit = !!nextStep.MergeTransforms;
+    const newTransform = nextStep.Transform;
+    const mergedTransform = Object.assign({}, newTransform);
+    if (ctx.previousTransform !== undefined && inherit) {
+      Object.assign(mergedTransform, ctx.previousTransform);
+    }
+    ctx.Transform = mergedTransform;
+    ctx.target = nextEl;
+    processEl(ctx);
 }
 
 function getRHS(expr: any, ctx: RenderContext): any{

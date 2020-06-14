@@ -1,6 +1,7 @@
 export interface RenderContext{
     target: HTMLElement | null;
     self: RenderContext;
+    previousTransform: TransformValueOptions;
     Transform: TransformValueOptions;
     level: number;
     item: any;
