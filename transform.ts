@@ -18,12 +18,15 @@ export function transform(
     target: HTMLElement | DocumentFragment = sourceOrTemplate,
     options?: RenderOptions
 ){
+    ctx.level = 0;
+    ctx.idx = 0;
+    ctx.options = options;
     const isTemplate = (sourceOrTemplate as HTMLElement).localName === "template";
     const source = isTemplate
       ? (sourceOrTemplate as HTMLTemplateElement).content.cloneNode(true) as DocumentFragment
       : sourceOrTemplate;
     if(ctx.Transform !== undefined){
-        processFragment(source, ctx, 0, 0, options);
+        processFragment(source, ctx);
     }
     
     let verb = "appendChild";
@@ -38,12 +41,17 @@ export function transform(
     return ctx;
 }
 
+function copyCtx(ctx: RenderContext){
+    return Object.assign({}, ctx) as RenderContext;
+}
+
+function restoreCtx(ctx: RenderContext, originalCtx: RenderContext){
+    return (Object.assign(ctx, originalCtx));
+}
+
 function processFragment(  
     source: DocumentFragment | HTMLElement,
-    ctx: RenderContext,
-    idx: number,
-    level: number,
-    options?: RenderOptions,
+    ctx: RenderContext
 ){
     // for(const sym of Object.getOwnPropertySymbols(transform) ) {
     //     const transformTemplateVal = (<any>transform)[sym];
@@ -57,17 +65,11 @@ function processFragment(
     //         break;
     //     }
     // }
-    ctx.target = source.firstElementChild as HTMLElement | null;
-    processEl(ctx, idx, level, false, null, options)
+    processEl(ctx);
 }
 
 function processEl(
-    ctx: RenderContext,
-    idx: number,
-    level: number,
-    skipSibs: boolean,
-    prevTransform: TransformValueOptions | null = null,
-    options?: RenderOptions,  
+    ctx: RenderContext
 ){
     const target = ctx.target;
     if(target == null) return;
@@ -78,7 +80,7 @@ function processEl(
     const firstCharOfFirstProp = keys[0][0];
     let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
     if(isNextStep){
-        doNextStep(target, ctx, idx, level, prevTransform, options);
+        doNextStep(ctx);
         return;
     }
     let nextElementSibling: HTMLElement | null = target;
@@ -119,13 +121,28 @@ function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ctx: Rend
     if(Array.isArray(tvoo)){
         doArrayMatch(key, tvoo as TransformValueArrayOptions);
     }else{
-
+        if(isTemplate(tvoo as HTMLTemplateElement)){
+            doTemplate(ctx, tvoo as HTMLTemplateElement);
+        }else{
+            const ctxCopy = copyCtx(ctx);
+            ctx.target = ctx.target!.firstElementChild as HTMLElement;
+            ctx.level++;
+            ctx.idx = 0;
+            processEl(ctx);
+            restoreCtx(ctx, ctxCopy);
+        }
     }
 }
 
-function doCSSMatch(key: string, tm: TransformMatch){
-
+function isTemplate(test: HTMLTemplateElement){
+    return test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
 }
+
+function doTemplate(ctx: RenderContext, te: HTMLTemplateElement){
+    ctx.target!.appendChild(te.content.cloneNode(true));
+}
+
+
 
 function doPropSetting(key: string, tm: TransformMatch, ctx: RenderContext){
 
@@ -147,31 +164,28 @@ function closestNextSib(target: HTMLElement, match: string){
 }
 
 function doNextStep(
-    target: HTMLElement,
     ctx: RenderContext,
-    idx: number,
-    level: number,
-    prevTransform: TransformValueOptions | null = null,
-    options?: RenderOptions,  
 ){
-    const nextStep = ctx.Transform as NextStep;
-    let nextEl : HTMLElement | null;
-    if(nextStep.NextMatch !== undefined){
-        nextEl = closestNextSib(target, nextStep.NextMatch);
-    }else if(nextStep.Select){
-        nextEl = target.querySelector(nextStep.Select);
-    }else{
-        throw('?');
-    }
-    if(nextEl === null) return;
-    const inherit = !!nextStep.MergeTransforms;
-    const newTransform = nextStep.Transform;
-    const mergedTransform = Object.assign({}, newTransform);
-    if (prevTransform !== null && inherit) {
-      Object.assign(mergedTransform, prevTransform);
-    }
-    ctx.Transform = mergedTransform;
-    processEl(nextEl, ctx, idx, level, false, prevTransform, options);
+    throw('?');
+    // const nextStep = ctx.Transform as NextStep;
+    // let nextEl : HTMLElement | null;
+    // if(nextStep.NextMatch !== undefined){
+    //     nextEl = closestNextSib(ctx.target!, nextStep.NextMatch);
+    // }else if(nextStep.Select){
+    //     nextEl = target.querySelector(nextStep.Select);
+    // }else{
+    //     throw('?');
+    // }
+    // if(nextEl === null) return;
+    // const inherit = !!nextStep.MergeTransforms;
+    // const newTransform = nextStep.Transform;
+    // const mergedTransform = Object.assign({}, newTransform);
+    // if (prevTransform !== null && inherit) {
+    //   Object.assign(mergedTransform, prevTransform);
+    // }
+    // ctx.Transform = mergedTransform;
+    // ctx.target = nextEl;
+    // processEl(ctx, idx, level, false, prevTransform, options);
 }
 
 function getRHS(expr: any, ctx: RenderContext): any{

@@ -1,10 +1,13 @@
 export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate, options) {
+    ctx.level = 0;
+    ctx.idx = 0;
+    ctx.options = options;
     const isTemplate = sourceOrTemplate.localName === "template";
     const source = isTemplate
         ? sourceOrTemplate.content.cloneNode(true)
         : sourceOrTemplate;
     if (ctx.Transform !== undefined) {
-        processFragment(source, ctx, 0, 0, options);
+        processFragment(source, ctx);
     }
     let verb = "appendChild";
     if (options !== undefined) {
@@ -19,7 +22,13 @@ export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate, opti
     }
     return ctx;
 }
-function processFragment(source, ctx, idx, level, options) {
+function copyCtx(ctx) {
+    return Object.assign({}, ctx);
+}
+function restoreCtx(ctx, originalCtx) {
+    return (Object.assign(ctx, originalCtx));
+}
+function processFragment(source, ctx) {
     // for(const sym of Object.getOwnPropertySymbols(transform) ) {
     //     const transformTemplateVal = (<any>transform)[sym];
     //     const newTarget = ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement;
@@ -32,10 +41,9 @@ function processFragment(source, ctx, idx, level, options) {
     //         break;
     //     }
     // }
-    ctx.target = source.firstElementChild;
-    processEl(ctx, idx, level, false, null, options);
+    processEl(ctx);
 }
-function processEl(ctx, idx, level, skipSibs, prevTransform = null, options) {
+function processEl(ctx) {
     const target = ctx.target;
     if (target == null)
         return;
@@ -45,7 +53,7 @@ function processEl(ctx, idx, level, skipSibs, prevTransform = null, options) {
     const firstCharOfFirstProp = keys[0][0];
     let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
     if (isNextStep) {
-        doNextStep(target, ctx, idx, level, prevTransform, options);
+        doNextStep(ctx);
         return;
     }
     let nextElementSibling = target;
@@ -90,9 +98,24 @@ function doObjectMatch(key, tvoo, ctx) {
         doArrayMatch(key, tvoo);
     }
     else {
+        if (isTemplate(tvoo)) {
+            doTemplate(ctx, tvoo);
+        }
+        else {
+            const ctxCopy = copyCtx(ctx);
+            ctx.target = ctx.target.firstElementChild;
+            ctx.level++;
+            ctx.idx = 0;
+            processEl(ctx);
+            restoreCtx(ctx, ctxCopy);
+        }
     }
 }
-function doCSSMatch(key, tm) {
+function isTemplate(test) {
+    return test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
+}
+function doTemplate(ctx, te) {
+    ctx.target.appendChild(te.content.cloneNode(true));
 }
 function doPropSetting(key, tm, ctx) {
 }
@@ -107,28 +130,27 @@ function closestNextSib(target, match) {
     }
     return null;
 }
-function doNextStep(target, ctx, idx, level, prevTransform = null, options) {
-    const nextStep = ctx.Transform;
-    let nextEl;
-    if (nextStep.NextMatch !== undefined) {
-        nextEl = closestNextSib(target, nextStep.NextMatch);
-    }
-    else if (nextStep.Select) {
-        nextEl = target.querySelector(nextStep.Select);
-    }
-    else {
-        throw ('?');
-    }
-    if (nextEl === null)
-        return;
-    const inherit = !!nextStep.MergeTransforms;
-    const newTransform = nextStep.Transform;
-    const mergedTransform = Object.assign({}, newTransform);
-    if (prevTransform !== null && inherit) {
-        Object.assign(mergedTransform, prevTransform);
-    }
-    ctx.Transform = mergedTransform;
-    processEl(nextEl, ctx, idx, level, false, prevTransform, options);
+function doNextStep(ctx) {
+    throw ('?');
+    // const nextStep = ctx.Transform as NextStep;
+    // let nextEl : HTMLElement | null;
+    // if(nextStep.NextMatch !== undefined){
+    //     nextEl = closestNextSib(ctx.target!, nextStep.NextMatch);
+    // }else if(nextStep.Select){
+    //     nextEl = target.querySelector(nextStep.Select);
+    // }else{
+    //     throw('?');
+    // }
+    // if(nextEl === null) return;
+    // const inherit = !!nextStep.MergeTransforms;
+    // const newTransform = nextStep.Transform;
+    // const mergedTransform = Object.assign({}, newTransform);
+    // if (prevTransform !== null && inherit) {
+    //   Object.assign(mergedTransform, prevTransform);
+    // }
+    // ctx.Transform = mergedTransform;
+    // ctx.target = nextEl;
+    // processEl(ctx, idx, level, false, prevTransform, options);
 }
 function getRHS(expr, ctx) {
     switch (typeof expr) {

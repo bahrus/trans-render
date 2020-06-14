@@ -1,7 +1,11 @@
 export interface RenderContext{
     target: HTMLElement | null;
     self: RenderContext;
-    Transform: TransformValueOptions
+    Transform: TransformValueOptions;
+    level: number;
+    item: any;
+    idx: number;
+    options: RenderOptions | undefined;
 }
 
 export interface RenderOptions{
@@ -31,6 +35,7 @@ export type TransformValueOptions<TargetType extends Partial<HTMLElement> = HTML
 export type TransformValueObjectOptions<TargetType extends Partial<HTMLElement> = HTMLElement> = 
         TransformMatch
     |   TransformValueArrayOptions<TargetType>  
+    |   HTMLTemplateElement
 ;
 
 export type TransformValueArrayOptions<TargetType extends Partial<HTMLElement> = HTMLElement> =
