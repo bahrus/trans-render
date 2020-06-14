@@ -31,18 +31,19 @@ function restoreCtx(ctx, originalCtx) {
     return (Object.assign(ctx, originalCtx));
 }
 function processFragment(source, ctx) {
-    // for(const sym of Object.getOwnPropertySymbols(transform) ) {
-    //     const transformTemplateVal = (<any>transform)[sym];
-    //     const newTarget = ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement;
-    //     switch(typeof(transformTemplateVal)){
-    //       case 'function':
-    //         transformTemplateVal({target: newTarget, ctx, idx, level, undefined});
-    //         break;
-    //       case 'string':
-    //         newTarget.textContent = transformTemplateVal;
-    //         break;
-    //     }
-    // }
+    for (const sym of Object.getOwnPropertySymbols(transform)) {
+        const transformTemplateVal = transform[sym];
+        const newTarget = (ctx[sym] || ctx.host[sym]);
+        ctx.target = newTarget;
+        switch (typeof (transformTemplateVal)) {
+            case 'function':
+                transformTemplateVal(ctx);
+                break;
+            case 'string':
+                newTarget.textContent = transformTemplateVal;
+                break;
+        }
+    }
     ctx.target = source.firstElementChild;
     processEl(ctx);
 }
