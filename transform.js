@@ -147,7 +147,13 @@ function isTemplate(test) {
     return test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
 }
 function doTemplate(ctx, te) {
-    ctx.target.appendChild(te.content.cloneNode(true));
+    const clone = te.content.cloneNode(true);
+    if (te.dataset.shadowRoot !== undefined) {
+        ctx.target.attachShadow({ mode: te.dataset.shadowRoot, delegatesFocus: true }).appendChild(clone);
+    }
+    else {
+        ctx.target.appendChild(clone);
+    }
 }
 function doArrayMatch(key, tvao, ctx) {
     const firstEl = tvao[0];

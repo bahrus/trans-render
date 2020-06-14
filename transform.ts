@@ -166,7 +166,12 @@ function isTemplate(test: HTMLTemplateElement){
 }
 
 function doTemplate(ctx: RenderContext, te: HTMLTemplateElement){
-    ctx.target!.appendChild(te.content.cloneNode(true));
+    const clone = te.content.cloneNode(true);
+    if(te.dataset.shadowRoot !== undefined){
+      ctx.target!.attachShadow({mode: te.dataset.shadowRoot as 'open' | 'closed', delegatesFocus: true}).appendChild(clone)
+    }else{
+      ctx.target!.appendChild(clone);
+    }
 }
 
 function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: RenderContext){
