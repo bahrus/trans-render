@@ -131,14 +131,16 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 - If the key is a string that starts with a lower case letter, then it is a "css match" expression.
 - If the key is a string that starts with double quote, then it is also a "css match", but the css expression comes from the nearest previous sibling key which doesn't start with a double quote.
 - If the key is a string that starts with a capital letter, then it is part of a "Next Step" expression that indicates where to jump down to next in the DOM tree.
-- If the key is an ES6 symbol, it is a shortcut to grab a reference to a DOM element previously stored either in cache or the custom element hosting the transform.
+- If the key is an ES6 symbol, it is a shortcut to grab a reference to a DOM element previously stored either in context.host or context.cache, where context.host in a custom element instance.
 
 ### CSS Match Rules
 
-- If the rhs expression evaluates to a string, then set the textContent property of matching elements to that string.
+- If the rhs expression is null or undefined, do nothing.
+- If the rhs expression evaluates to a string, then set the textContent property of matching target element to that string.
 - If the rhs expression evaluates to the boolean "false", then remove the matching elements from the DOM Tree.
+- If the rhs expression evaluates to a symbol, create a reference to the matching with that symbol as a key, in the context.host (custom element instance) or context.cache property.
 - If the rhs expression evaluates to a function, then
-  -  that function is invoked, where the following parameters are passed in:
+  -  that function is invoked, where an object with the following properties is passed in:
      - target
      - ctx
      - idx
@@ -148,22 +150,32 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 - If the rhs expression evaluates to an array, then
   -  Arrays are treated as "tuples" for common requirements.
   -  The first element of the tuple indicates what type of tuple to expect.
-  -  If the first element of the tuple is a non-array object, or undefined, then the array represents a "PEATS" tuple -- property / setting
+  -  If the first element of the tuple is a non-array, non HTMLTemplateElement object, or undefined, then the array represents a "PEATS" tuple -- property / event / attribute  setting
      -  First optional parameter is a **p**roperty object, that gets shallow-merged into the matching element (target).
+        - Shallow-merging goes one level deeper with style and dataset properties.
      -  Second optional parameter is an **e**vent object, that binds to events of the matching target element.
      -  Third optional parameter is an **a**ttribute object, that sets the attributes.
      -  Fourth optional parameter is a sub-**t**ransform, which recursively performs transforms within the light children of the matching target element.
      -  Fifth optional parameter is of type **s**ymbol, to allow future referencing to the matching target element.
-  -  [TODO] If the first element of the tuple itself is an array, then the array represents an "ATRIUMS" loop -- a declarative loop associated with those items 
+  -  [TODO] If the first element of the tuple itself is an array, then the array represents a declarative loop associated with those items 
      - The acronym to remember for a loop array is "ATRIUMS".
      - First element of the tuple the **a**rray of items.
      - Second element is the **t**emplate reference that should be repeated.
-     - Third optional parameter is an optional **r**ange of indexes from the item array to display
+     - Third optional parameter is an optional **r**ange of indexes from the item array to render
      - Fourth optional parameter is the **i**nit transform for each item, which recursively uses the transform syntax described here.
-     - Fifth optional parameter is the **u**date transform for each item.
+     - Fifth optional parameter is the **u**pdate transform for each item.
      - Sixth optional parameter is **m**etadata associated with the loop -- how to extra the identifier for each item, for example.
      - Seventh optional parameter is a **s**ymbol to allow references to the matching target element
-  -  [TODO] If the first element of the tuple is a function, then evaluate the function, and the function is expected to return an index to another element inside the array, and that value is used as the rhs expression.
+  -  [TODO] If the first element of the tuple is a function, then evaluate the function.
+     - If the function evaluates to a string or symbol, and if the second element is a non array object, then:
+       -  The second element of the tuple is expected to be an object / map, where the keys are the possible values of the evaluated function.
+          -  If a match is found, replace the rhs expression with the matching expression found in the previous step.
+          -  Otherwise, replace the first element of the array with the evaluated function (virtually) and reapply the logic
+  -  [TODO] If the first element of the tuple is a boolean, then this represents a conditional statement.
+     - If the first element is true, replace the rhs expression with the second element.
+     - If the first element is false
+  -  [TODO] If the first element of the tuple is a template, then second element is expected to be init transform, second is update transform.
+
 
 
 

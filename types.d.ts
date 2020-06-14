@@ -1,4 +1,4 @@
-import {propUp} from './hydrate.js';
+
 export type TransformFn<TargetType extends Partial<HTMLElement> = HTMLElement> 
     = (arg: TransformArg<TargetType>) => TransformRules | NextStep | string | HTMLTemplateElement | void | boolean | PEATSettings<TargetType>;
 
