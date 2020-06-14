@@ -75,6 +75,7 @@ function processEl(ctx) {
                 }
             }
             matched = true;
+            removeNextElementSibling = false;
             const tvo = getRHS(tm[key], ctx);
             switch (typeof tvo) {
                 case 'string':
@@ -141,11 +142,11 @@ function closestNextSib(target, match) {
 function doNextStep(ctx) {
     const nextStep = ctx.Transform;
     let nextEl;
-    if (nextStep.NextMatch !== undefined) {
-        nextEl = closestNextSib(ctx.target, nextStep.NextMatch);
-    }
-    else if (nextStep.Select) {
+    if (nextStep.Select !== undefined) {
         nextEl = ctx.target.querySelector(nextStep.Select);
+    }
+    else if (nextStep.NextMatch !== undefined) {
+        nextEl = closestNextSib(ctx.target, nextStep.NextMatch);
     }
     else {
         throw ('?');

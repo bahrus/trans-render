@@ -100,6 +100,7 @@ function processEl(
                 }
             }
             matched = true;
+            removeNextElementSibling = false;
             const tvo = getRHS(tm[key], ctx) as TransformValueOptions;
             switch(typeof tvo){
                 case 'string':
@@ -175,10 +176,10 @@ function doNextStep(
 ){
     const nextStep = ctx.Transform as NextStep;
     let nextEl : HTMLElement | null;
-    if(nextStep.NextMatch !== undefined){
-        nextEl = closestNextSib(ctx.target!, nextStep.NextMatch);
-    }else if(nextStep.Select){
+    if(nextStep.Select !== undefined){
         nextEl = ctx.target!.querySelector(nextStep.Select);
+    }else if(nextStep.NextMatch !== undefined){
+        nextEl = closestNextSib(ctx.target!, nextStep.NextMatch);
     }else{
         throw('?');
     }
