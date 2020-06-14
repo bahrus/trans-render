@@ -1,3 +1,5 @@
+const SkipSibs = Symbol();
+const NextMatch = Symbol();
 export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate, options) {
     ctx.level = 0;
     ctx.idx = 0;
@@ -54,8 +56,8 @@ function processEl(ctx) {
     const firstCharOfFirstProp = keys[0][0];
     let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
     if (isNextStep) {
-        doNextStep(ctx);
-        return;
+        doNextStepSelect(ctx);
+        doNextStepSibling(ctx);
     }
     let nextElementSibling = target;
     const tm = ctx.Transform;
@@ -89,12 +91,25 @@ function processEl(ctx) {
                         continue;
                     ctx.target = nextElementSibling;
                     doObjectMatch(key, tvo, ctx);
+                    break;
                 case 'undefined':
                     continue;
             }
         }
         const elementToRemove = removeNextElementSibling ? nextElementSibling : undefined;
-        nextElementSibling = nextElementSibling.nextElementSibling;
+        const nextMatch = nextElementSibling[NextMatch];
+        const prevEl = nextElementSibling;
+        if (prevEl[SkipSibs]) {
+            nextElementSibling = null;
+        }
+        else if (nextMatch !== undefined) {
+            nextElementSibling = closestNextSib(nextElementSibling, nextMatch);
+        }
+        else {
+            nextElementSibling = nextElementSibling.nextElementSibling;
+        }
+        prevEl[SkipSibs] = false;
+        prevEl[NextMatch] = undefined;
         if (elementToRemove !== undefined)
             elementToRemove.remove();
     }
@@ -109,12 +124,21 @@ function doObjectMatch(key, tvoo, ctx) {
         }
         else {
             const ctxCopy = copyCtx(ctx);
-            ctx.target = ctx.target.firstElementChild;
-            ctx.level++;
-            ctx.idx = 0;
-            ctx.previousTransform = ctx.Transform;
-            ctx.Transform = tvoo;
-            processEl(ctx);
+            ctx.Transform = tvoo; //TODO -- don't do this line if this is a property setting
+            const keys = Object.keys(tvoo);
+            const firstCharOfFirstProp = keys[0][0];
+            let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
+            if (isNextStep) {
+                doNextStepSelect(ctx);
+                doNextStepSibling(ctx);
+            }
+            else {
+                ctx.target = ctx.target.firstElementChild;
+                ctx.level++;
+                ctx.idx = 0;
+                ctx.previousTransform = ctx.Transform;
+                processEl(ctx);
+            }
             restoreCtx(ctx, ctxCopy);
         }
     }
@@ -138,18 +162,11 @@ function closestNextSib(target, match) {
     }
     return null;
 }
-function doNextStep(ctx) {
+function doNextStepSelect(ctx) {
     const nextStep = ctx.Transform;
-    let nextEl;
-    if (nextStep.Select !== undefined) {
-        nextEl = ctx.target.querySelector(nextStep.Select);
-    }
-    else if (nextStep.NextMatch !== undefined) {
-        nextEl = closestNextSib(ctx.target, nextStep.NextMatch);
-    }
-    else {
-        throw ('?');
-    }
+    if (nextStep.Select === undefined)
+        return;
+    let nextEl = ctx.target.querySelector(nextStep.Select);
     if (nextEl === null)
         return;
     const inherit = !!nextStep.MergeTransforms;
@@ -158,9 +175,17 @@ function doNextStep(ctx) {
     if (ctx.previousTransform !== undefined && inherit) {
         Object.assign(mergedTransform, ctx.previousTransform);
     }
+    const copy = copyCtx(ctx);
     ctx.Transform = mergedTransform;
     ctx.target = nextEl;
     processEl(ctx);
+    restoreCtx(ctx, copy);
+}
+function doNextStepSibling(ctx) {
+    const nextStep = ctx.Transform;
+    const aTarget = ctx.target;
+    (aTarget)[SkipSibs] = nextStep.SkipSibs || (aTarget)[SkipSibs];
+    aTarget[NextMatch] = (aTarget[NextMatch] === undefined) ? nextStep.NextMatch : aTarget[NextMatch] + ', ' + nextStep.NextMatch;
 }
 function getRHS(expr, ctx) {
     switch (typeof expr) {

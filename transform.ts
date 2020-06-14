@@ -1,5 +1,3 @@
-import { getChildFromSinglePath } from "./getChildFromSinglePath";
-
 import {
     RenderContext, 
     RenderOptions, 
@@ -10,7 +8,8 @@ import {
     TransformValueArrayOptions
 } from './types2.js';
 
-import { itemLookup } from "./logansLoopInit";
+const SkipSibs = Symbol();
+const NextMatch = Symbol();
 
 export function transform(
     sourceOrTemplate: HTMLElement | DocumentFragment,
@@ -81,8 +80,8 @@ function processEl(
     const firstCharOfFirstProp = keys[0][0];
     let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
     if(isNextStep){
-        doNextStep(ctx);
-        return;
+        doNextStepSelect(ctx);
+        doNextStepSibling(ctx)
     }
     let nextElementSibling: HTMLElement | null = target;
     const tm = ctx.Transform as TransformMatch;
@@ -113,12 +112,23 @@ function processEl(
                     if(tvo === null) continue;
                     ctx.target = nextElementSibling;
                     doObjectMatch(key, tvo as TransformValueObjectOptions, ctx);
+                    break;
                 case 'undefined':
                     continue;    
             }
         }
         const elementToRemove = removeNextElementSibling ? nextElementSibling : undefined;
-        nextElementSibling = nextElementSibling.nextElementSibling as HTMLElement | null;
+        const nextMatch = (<any>nextElementSibling)[NextMatch];
+        const prevEl = <any>nextElementSibling;
+        if(prevEl[SkipSibs]){
+            nextElementSibling = null;
+        }else if(nextMatch !== undefined){
+            nextElementSibling = closestNextSib(nextElementSibling, nextMatch);
+        }else{
+            nextElementSibling = nextElementSibling.nextElementSibling as HTMLElement | null;
+        }
+        prevEl[SkipSibs] = false;
+        prevEl[NextMatch] = undefined;
         if(elementToRemove !== undefined) elementToRemove.remove();
     }
 }
@@ -131,12 +141,20 @@ function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ctx: Rend
             doTemplate(ctx, tvoo as HTMLTemplateElement);
         }else{
             const ctxCopy = copyCtx(ctx);
-            ctx.target = ctx.target!.firstElementChild as HTMLElement;
-            ctx.level++;
-            ctx.idx = 0;
-            ctx.previousTransform = ctx.Transform;
-            ctx.Transform = tvoo;
-            processEl(ctx);
+            ctx.Transform = tvoo; //TODO -- don't do this line if this is a property setting
+            const keys = Object.keys(tvoo);
+            const firstCharOfFirstProp = keys[0][0];
+            let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
+            if(isNextStep){
+                doNextStepSelect(ctx);
+                doNextStepSibling(ctx);
+            }else{
+                ctx.target = ctx.target!.firstElementChild as HTMLElement;
+                ctx.level++;
+                ctx.idx = 0;
+                ctx.previousTransform = ctx.Transform;
+                processEl(ctx);
+            }
             restoreCtx(ctx, ctxCopy);
         }
     }
@@ -171,18 +189,12 @@ function closestNextSib(target: HTMLElement, match: string){
     return null;
 }
 
-function doNextStep(
+function doNextStepSelect(
     ctx: RenderContext,
 ){
     const nextStep = ctx.Transform as NextStep;
-    let nextEl : HTMLElement | null;
-    if(nextStep.Select !== undefined){
-        nextEl = ctx.target!.querySelector(nextStep.Select);
-    }else if(nextStep.NextMatch !== undefined){
-        nextEl = closestNextSib(ctx.target!, nextStep.NextMatch);
-    }else{
-        throw('?');
-    }
+    if(nextStep.Select === undefined) return;
+    let nextEl = ctx.target!.querySelector(nextStep.Select) as HTMLElement | null;
     if(nextEl === null) return;
     const inherit = !!nextStep.MergeTransforms;
     const newTransform = nextStep.Transform;
@@ -190,9 +202,20 @@ function doNextStep(
     if (ctx.previousTransform !== undefined && inherit) {
       Object.assign(mergedTransform, ctx.previousTransform);
     }
+    const copy = copyCtx(ctx);
     ctx.Transform = mergedTransform;
     ctx.target = nextEl;
     processEl(ctx);
+    restoreCtx(ctx, copy);
+}
+
+function doNextStepSibling(
+    ctx: RenderContext
+){
+    const nextStep = ctx.Transform as NextStep;
+    const aTarget = <any>ctx.target;
+    (aTarget)[SkipSibs] = nextStep.SkipSibs || (aTarget)[SkipSibs];
+    aTarget[NextMatch] = (aTarget[NextMatch] === undefined) ? nextStep.NextMatch : aTarget[NextMatch] + ', ' + nextStep.NextMatch;
 }
 
 function getRHS(expr: any, ctx: RenderContext): any{
