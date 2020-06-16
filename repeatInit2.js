@@ -14,7 +14,7 @@ export async function repeatInit(template, ctx, items, target, targetTransform) 
     ctxClone.Transform = targetTransform;
     for (let i = 0; i < count; i++) {
         const item = items[i];
-        ctxClone.item = items[i];
+        ctxClone.item = item;
         ctxClone.idx = i;
         ctxClone.itemTagger = (h) => {
             h[idxKey] = i;

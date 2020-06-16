@@ -15,22 +15,19 @@ export function repeatethUpdateth(template: HTMLTemplateElement, ctx: RenderCont
     ctxClone.Transform = targetTransform!;
     if(diff > 0){
         for(let i = 0; i < diff; i++){
-            ctxClone.item = items[i + childCount];
-            ctxClone.idx = i + childCount;
+            const iOffset = i + childCount;
+            const item = items[iOffset];
+            ctxClone.item = item;
+            ctxClone.idx = iOffset;
             if(i + childCount < ub){
                 const child = target.children[i + childCount] as HTMLElement;
                 child.style.display = (<any>child)[origStyleKey];
             }else{
-
+                ctxClone.itemTagger = (h: any) =>{
+                    h[idxKey] = iOffset;
+                    h[itemsKey] = item;
+                }
                 transform(template, ctxClone, target);
-                // const clonedTemplate = template.content.cloneNode(true) as DocumentFragment;
-                // //TODO:  mark children as needing initialization
-                // Array.from(clonedTemplate.children).forEach(child =>{
-                //     (<any>child)[idxKey] = childCount + i;
-                //     if(itemsProvided) (<any>child)[itemsKey] = (countOrItems as any[])[i];
-                // });
-    
-                // target.appendChild(clonedTemplate);
             }
 
 
