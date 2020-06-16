@@ -255,8 +255,12 @@ function doPropSetting(key: string, peat: PEATUnionSettings, ctx: RenderContext)
 }
 
 async function doRepeat(key: string, atriums: ATRIUM_Union, ctx: RenderContext){
+    const mode = ctx.mode;
     const {repeateth} = await import('./repeateth2.js');
-    repeateth(atriums[1], ctx, atriums[0], ctx.target!, atriums[3], atriums[4])
+    const newMode = ctx.mode;
+    ctx.mode = mode;
+    repeateth(atriums[1], ctx, atriums[0], ctx.target!, atriums[3], atriums[4]);
+    ctx.mode = newMode;
 }
 
 export function getProp(val: any, pathTokens: string[]){

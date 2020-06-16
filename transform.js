@@ -240,8 +240,12 @@ function doPropSetting(key, peat, ctx) {
     }
 }
 async function doRepeat(key, atriums, ctx) {
+    const mode = ctx.mode;
     const { repeateth } = await import('./repeateth2.js');
+    const newMode = ctx.mode;
+    ctx.mode = mode;
     repeateth(atriums[1], ctx, atriums[0], ctx.target, atriums[3], atriums[4]);
+    ctx.mode = newMode;
 }
 export function getProp(val, pathTokens) {
     let context = val;
