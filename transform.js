@@ -33,7 +33,7 @@ function restoreCtx(ctx, originalCtx) {
     return (Object.assign(ctx, originalCtx));
 }
 async function processFragment(source, ctx) {
-    for (const sym of Object.getOwnPropertySymbols(transform)) {
+    for (const sym of Object.getOwnPropertySymbols(ctx.Transform)) {
         const transformTemplateVal = transform[sym];
         const newTarget = (ctx[sym] || ctx.host[sym]);
         ctx.target = newTarget;
@@ -51,7 +51,7 @@ async function processFragment(source, ctx) {
 }
 async function processEl(ctx) {
     const target = ctx.target;
-    if (target == null)
+    if (target == null || ctx.Transform === undefined)
         return;
     const keys = Object.keys(ctx.Transform);
     if (keys.length === 0)

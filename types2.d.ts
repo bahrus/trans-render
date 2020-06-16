@@ -1,15 +1,16 @@
 export interface RenderContext{
-    target: HTMLElement | null;
-    ctx: RenderContext;
-    previousTransform: TransformValueOptions;
-    Transform: TransformValueOptions;
-    level: number;
-    item: any;
-    itemTagger: (el: HTMLElement) => void;
-    idx: number;
-    options: RenderOptions | undefined;
-    host?: HTMLElement;
-    mode: 'init' | 'update';
+    target?: HTMLElement | null;
+    ctx?: RenderContext | undefined;
+    cache?: any;
+    previousTransform?: TransformValueOptions | undefined;
+    Transform?: TransformValueOptions;
+    level?: number | undefined;
+    item?: any | undefined;
+    itemTagger?:  (el: HTMLElement) => void;
+    idx?: number | undefined;
+    options?: RenderOptions | undefined;
+    host?: HTMLElement | undefined;
+    mode?: 'init' | 'update';
 }
 
 export interface RenderOptions{

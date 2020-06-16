@@ -55,7 +55,7 @@ async function processFragment(
     source: DocumentFragment | HTMLElement,
     ctx: RenderContext
 ){
-    for(const sym of Object.getOwnPropertySymbols(transform) ) {
+    for(const sym of Object.getOwnPropertySymbols(ctx.Transform!) ) {
         const transformTemplateVal = (<any>transform)[sym];
         const newTarget = ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement;
         ctx.target = newTarget;
@@ -76,7 +76,7 @@ async function processEl(
     ctx: RenderContext
 ){
     const target = ctx.target;
-    if(target == null) return;
+    if(target == null || ctx.Transform === undefined) return;
     
     const keys = Object.keys(ctx.Transform);
     if(keys.length === 0) return;
@@ -159,7 +159,7 @@ async function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ctx
                 doNextStepSibling(ctx);
             }else{
                 ctx.target = ctx.target!.firstElementChild as HTMLElement;
-                ctx.level++;
+                ctx.level!++;
                 ctx.idx = 0;
                 ctx.previousTransform = ctx.Transform;
                 await processEl(ctx);
