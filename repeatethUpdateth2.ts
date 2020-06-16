@@ -48,9 +48,5 @@ export function repeatethUpdateth(template: HTMLTemplateElement, ctx: RenderCont
         }
     }
     (<any>target)[countKey] = count;
-    if(targetTransform){
-        ctx.Transform = targetTransform as TransformValueOptions;
-        transform(target, ctx);
-    }
-    return targetTransform;
+
 }

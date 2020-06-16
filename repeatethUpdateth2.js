@@ -44,9 +44,4 @@ export function repeatethUpdateth(template, ctx, items, target, targetTransform)
         }
     }
     target[countKey] = count;
-    if (targetTransform) {
-        ctx.Transform = targetTransform;
-        transform(target, ctx);
-    }
-    return targetTransform;
 }
