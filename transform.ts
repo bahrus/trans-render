@@ -104,6 +104,7 @@ function processEl(
                 }
             }
             matched = true;
+            ctx.target = nextElementSibling;
             const tvo = getRHS(tm[key], ctx) as TransformValueOptions;
             switch(typeof tvo){
                 case 'string':
@@ -259,7 +260,7 @@ async function doRepeat(key: string, atriums: ATRIUM_Union, ctx: RenderContext){
     const {repeateth} = await import('./repeateth2.js');
     const newMode = ctx.mode;
     ctx.mode = mode;
-    repeateth(atriums[1], ctx, atriums[0], ctx.target!, atriums[3], atriums[4]);
+    const transform = repeateth(atriums[1], ctx, atriums[0], ctx.target!, atriums[3], atriums[4]);
     ctx.mode = newMode;
 }
 
