@@ -5,7 +5,8 @@ import {
     TransformValueOptions, 
     TransformMatch,
     TransformValueObjectOptions,
-    TransformValueArrayOptions
+    TransformValueArrayOptions,
+    ATRIUM_Union
 } from './types2.js';
 import { PEATUnionSettings } from './types.js';
 
@@ -16,11 +17,10 @@ export function transform(
     sourceOrTemplate: HTMLElement | DocumentFragment,
     ctx: RenderContext,
     target: HTMLElement | DocumentFragment = sourceOrTemplate,
-    options?: RenderOptions
 ){
-    ctx.level = 0;
-    ctx.idx = 0;
-    ctx.options = options;
+    if(ctx.mode === undefined){
+        Object.assign<RenderContext, Partial<RenderContext>>(ctx, {mode: 'init', level: 0, idx: 0})
+    }
     const isTemplate = (sourceOrTemplate as HTMLElement).localName === "template";
     const source = isTemplate
       ? (sourceOrTemplate as HTMLTemplateElement).content.cloneNode(true) as DocumentFragment
@@ -30,6 +30,7 @@ export function transform(
     }
     
     let verb = "appendChild";
+    const options = ctx.options;
     if (options !== undefined) {
       if (options.prepend) verb = "prepend";
       const callback = options.initializedCallback;
@@ -38,6 +39,7 @@ export function transform(
     if (isTemplate && target) {
       (<any>target)[verb](source);
     }
+    ctx.mode = 'update';
     return ctx;
 }
 
@@ -115,6 +117,9 @@ function processEl(
                     ctx.target = nextElementSibling;
                     doObjectMatch(key, tvo as TransformValueObjectOptions, ctx);
                     break;
+                case 'symbol':
+                    const cache = ctx.host || ctx;
+                    (<any>cache)[tvo] = nextElementSibling; 
                 case 'undefined':
                     continue;    
             }
@@ -180,7 +185,12 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
     switch(typeof firstEl){
         case 'undefined':
         case 'object':
-            doPropSetting(key, tvao as PEATUnionSettings, ctx);
+            if(Array.isArray(firstEl)){
+                doRepeat(key, tvao as ATRIUM_Union, ctx); 
+            }else{
+                doPropSetting(key, tvao as PEATUnionSettings, ctx);
+            }
+            
             break;
     }
 }
@@ -242,6 +252,11 @@ function doPropSetting(key: string, peat: PEATUnionSettings, ctx: RenderContext)
         }
       }
     }
+}
+
+async function doRepeat(key: string, atriums: ATRIUM_Union, ctx: RenderContext){
+    const {repeateth} = await import('./repeateth2.js');
+    repeateth(atriums[1], ctx, atriums[0], ctx.target!, atriums[3], atriums[4])
 }
 
 export function getProp(val: any, pathTokens: string[]){

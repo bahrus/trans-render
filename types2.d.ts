@@ -1,6 +1,6 @@
 export interface RenderContext{
     target: HTMLElement | null;
-    self: RenderContext;
+    ctx: RenderContext;
     previousTransform: TransformValueOptions;
     Transform: TransformValueOptions;
     level: number;
@@ -8,6 +8,7 @@ export interface RenderContext{
     idx: number;
     options: RenderOptions | undefined;
     host?: HTMLElement;
+    mode: 'init' | 'update';
 }
 
 export interface RenderOptions{
@@ -41,7 +42,8 @@ export type TransformValueObjectOptions<TargetType extends Partial<HTMLElement> 
 ;
 
 export type TransformValueArrayOptions<TargetType extends Partial<HTMLElement> = HTMLElement> =
-    PEATUnionSettings<TargetType>
+        PEATUnionSettings<TargetType>
+    |   ATRIUM_Union
 ;
 
 
@@ -62,5 +64,25 @@ export type PEAT$ettings<T extends Partial<HTMLElement> = HTMLElement> =
     [PropSettings<T> | undefined, EventSettings | undefined, AttribsSettings | undefined, TransformValueOptions<T> | undefined, symbol]
 export type PEATUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = 
     PSettings<T> | PESettings<T> | PEASettings<T> | PEATSettings<T> | PEAT$ettings<T>;
+
+
+export type ArraySlot = any[] | undefined;
+
+
+export type Range = [number, number] | number | undefined;
+
+export type InitTransform = TransformValueOptions | undefined;
+
+export type UpdateTransform = TransformValueOptions | undefined;
+
+export type MetaSettings = any;
+
+export type AT = [any[], HTMLTemplateElement];
+export type ATR = [any[], HTMLTemplateElement, Range];
+export type ATRI = [any[], HTMLTemplateElement, Range, InitTransform];
+export type ATRIU = [any[], HTMLTemplateElement, Range, InitTransform, UpdateTransform];
+export type ATRIUM = [any[], HTMLTemplateElement, Range, InitTransform, UpdateTransform, MetaSettings];
+export type ATRIUMS = [any[], HTMLTemplateElement, Range, InitTransform, UpdateTransform, MetaSettings, symbol];
+export type ATRIUM_Union = AT | ATR | ATRI | ATRIU | ATRIUM | ATRIUMS;
 
 

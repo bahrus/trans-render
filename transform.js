@@ -1,9 +1,9 @@
 const SkipSibs = Symbol();
 const NextMatch = Symbol();
-export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate, options) {
-    ctx.level = 0;
-    ctx.idx = 0;
-    ctx.options = options;
+export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate) {
+    if (ctx.mode === undefined) {
+        Object.assign(ctx, { mode: 'init', level: 0, idx: 0 });
+    }
     const isTemplate = sourceOrTemplate.localName === "template";
     const source = isTemplate
         ? sourceOrTemplate.content.cloneNode(true)
@@ -12,6 +12,7 @@ export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate, opti
         processFragment(source, ctx);
     }
     let verb = "appendChild";
+    const options = ctx.options;
     if (options !== undefined) {
         if (options.prepend)
             verb = "prepend";
@@ -22,6 +23,7 @@ export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate, opti
     if (isTemplate && target) {
         target[verb](source);
     }
+    ctx.mode = 'update';
     return ctx;
 }
 function copyCtx(ctx) {
@@ -93,6 +95,9 @@ function processEl(ctx) {
                     ctx.target = nextElementSibling;
                     doObjectMatch(key, tvo, ctx);
                     break;
+                case 'symbol':
+                    const cache = ctx.host || ctx;
+                    cache[tvo] = nextElementSibling;
                 case 'undefined':
                     continue;
             }
@@ -161,7 +166,12 @@ function doArrayMatch(key, tvao, ctx) {
     switch (typeof firstEl) {
         case 'undefined':
         case 'object':
-            doPropSetting(key, tvao, ctx);
+            if (Array.isArray(firstEl)) {
+                doRepeat(key, tvao, ctx);
+            }
+            else {
+                doPropSetting(key, tvao, ctx);
+            }
             break;
     }
 }
@@ -228,6 +238,10 @@ function doPropSetting(key, peat, ctx) {
             }
         }
     }
+}
+async function doRepeat(key, atriums, ctx) {
+    const { repeateth } = await import('./repeateth2.js');
+    repeateth(atriums[1], ctx, atriums[0], ctx.target, atriums[3], atriums[4]);
 }
 export function getProp(val, pathTokens) {
     let context = val;

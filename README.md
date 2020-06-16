@@ -138,7 +138,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 - If the rhs expression is null or undefined, do nothing.
 - If the rhs expression evaluates to a string, then set the textContent property of matching target element to that string.
 - If the rhs expression evaluates to the boolean "false", then remove the matching elements from the DOM Tree.
-- If the rhs expression evaluates to a symbol, create a reference to the matching with that symbol as a key, in the context.host (custom element instance) or context.cache property.
+- If the rhs expression evaluates to a symbol, create a reference to the matching target element with that symbol as a key, in the context.host (custom element instance) or context.cache property.
 - If the rhs expression evaluates to a function, then
   -  that function is invoked, where an object with the following properties is passed in:
      - target
