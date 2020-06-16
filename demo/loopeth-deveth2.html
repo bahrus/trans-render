@@ -33,7 +33,7 @@
                 }, target);
                 addItems.addEventListener('click', e => {
                     while (model.length < 15) {
-                        model.push(model.length);
+                        model.push(model.length + 1);
                     }
                     transform(target, ctx);
                 });
