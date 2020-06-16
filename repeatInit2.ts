@@ -6,18 +6,19 @@ export const itemsKey: unique symbol = Symbol.for('bb247496-9c5d-459c-8127-fe80f
 export const idxKey: unique symbol = Symbol.for('ad7cf100-0c10-4184-b836-f560f2c15c81');
 export const ubKey: unique symbol = Symbol.for('7c6fd3aa-eea3-478c-b18c-32132b1bfc7c');
 
-export function repeatInit(template: HTMLTemplateElement, ctx: RenderContext, items: any[], target: HTMLElement, targetTransform?: TransformValueOptions){
+export async function repeatInit(template: HTMLTemplateElement, ctx: RenderContext, items: any[], target: HTMLElement, targetTransform?: TransformValueOptions){
     if(ctx.mode === 'update') return;
     
     const count = items.length;
     (<any>target)[countKey] = count;
     (<any>target)[ubKey] = count;
+    target.dataset.iah = 'hi';
     const ctxClone = Object.assign({}, ctx);
     ctxClone.Transform = targetTransform!;
     for(let i = 0; i < count; i++){
         ctxClone.item = items[i];
         ctxClone.idx = i;
-        transform(template, ctxClone, target);
+        await transform(template, ctxClone, target);
         // Array.from(clonedTemplate.children).forEach(templateChild =>{
         //     (<any>templateChild)[idxKey] = i;
         //     if(itemsProvided) (<any>templateChild)[itemsKey] = (countOrItems as any[])[i];

@@ -13,7 +13,7 @@ import { PEATUnionSettings } from './types.js';
 const SkipSibs = Symbol();
 const NextMatch = Symbol();
 
-export function transform(
+export async function transform(
     sourceOrTemplate: HTMLElement | DocumentFragment,
     ctx: RenderContext,
     target: HTMLElement | DocumentFragment = sourceOrTemplate,
@@ -26,7 +26,7 @@ export function transform(
       ? (sourceOrTemplate as HTMLTemplateElement).content.cloneNode(true) as DocumentFragment
       : sourceOrTemplate;
     if(ctx.Transform !== undefined){
-        processFragment(source, ctx);
+        await processFragment(source, ctx);
     }
     
     let verb = "appendChild";
@@ -51,7 +51,7 @@ function restoreCtx(ctx: RenderContext, originalCtx: RenderContext){
     return (Object.assign(ctx, originalCtx));
 }
 
-function processFragment(  
+async function processFragment(  
     source: DocumentFragment | HTMLElement,
     ctx: RenderContext
 ){
@@ -69,10 +69,10 @@ function processFragment(
         }
     }
     ctx.target = source.firstElementChild as HTMLElement;
-    processEl(ctx);
+    await processEl(ctx);
 }
 
-function processEl(
+async function processEl(
     ctx: RenderContext
 ){
     const target = ctx.target;
@@ -84,7 +84,7 @@ function processEl(
     const firstCharOfFirstProp = keys[0][0];
     let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
     if(isNextStep){
-        doNextStepSelect(ctx);
+        await doNextStepSelect(ctx);
         doNextStepSibling(ctx)
     }
     let nextElementSibling: HTMLElement | null = target;
@@ -116,7 +116,7 @@ function processEl(
                 case 'object':
                     if(tvo === null) continue;
                     ctx.target = nextElementSibling;
-                    doObjectMatch(key, tvo as TransformValueObjectOptions, ctx);
+                    await doObjectMatch(key, tvo as TransformValueObjectOptions, ctx);
                     break;
                 case 'symbol':
                     const cache = ctx.host || ctx;
@@ -141,9 +141,9 @@ function processEl(
     }
 }
 
-function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ctx: RenderContext){
+async function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ctx: RenderContext){
     if(Array.isArray(tvoo)){
-        doArrayMatch(key, tvoo as TransformValueArrayOptions, ctx);
+        await doArrayMatch(key, tvoo as TransformValueArrayOptions, ctx);
     }else{
         if(isTemplate(tvoo as HTMLTemplateElement)){
             doTemplate(ctx, tvoo as HTMLTemplateElement);
@@ -154,14 +154,14 @@ function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ctx: Rend
             const firstCharOfFirstProp = keys[0][0];
             let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
             if(isNextStep){
-                doNextStepSelect(ctx);
+                await doNextStepSelect(ctx);
                 doNextStepSibling(ctx);
             }else{
                 ctx.target = ctx.target!.firstElementChild as HTMLElement;
                 ctx.level++;
                 ctx.idx = 0;
                 ctx.previousTransform = ctx.Transform;
-                processEl(ctx);
+                await processEl(ctx);
             }
             restoreCtx(ctx, ctxCopy);
         }
@@ -181,13 +181,13 @@ function doTemplate(ctx: RenderContext, te: HTMLTemplateElement){
     }
 }
 
-function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: RenderContext){
+async function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: RenderContext){
     const firstEl = tvao[0];
     switch(typeof firstEl){
         case 'undefined':
         case 'object':
             if(Array.isArray(firstEl)){
-                doRepeat(key, tvao as ATRIUM_Union, ctx); 
+                await doRepeat(key, tvao as ATRIUM_Union, ctx); 
             }else{
                 doPropSetting(key, tvao as PEATUnionSettings, ctx);
             }
@@ -259,9 +259,9 @@ async function doRepeat(key: string, atriums: ATRIUM_Union, ctx: RenderContext){
     const mode = ctx.mode;
     const {repeateth} = await import('./repeateth2.js');
     const newMode = ctx.mode;
-    ctx.mode = mode;
+    //ctx.mode = mode;
     const transform = repeateth(atriums[1], ctx, atriums[0], ctx.target!, atriums[3], atriums[4]);
-    ctx.mode = newMode;
+    //ctx.mode = newMode;
 }
 
 export function getProp(val: any, pathTokens: string[]){
@@ -286,7 +286,7 @@ function closestNextSib(target: HTMLElement, match: string){
     return null;
 }
 
-function doNextStepSelect(
+async function doNextStepSelect(
     ctx: RenderContext,
 ){
     const nextStep = ctx.Transform as NextStep;
@@ -302,7 +302,7 @@ function doNextStepSelect(
     const copy = copyCtx(ctx);
     ctx.Transform = mergedTransform;
     ctx.target = nextEl;
-    processEl(ctx);
+    await processEl(ctx);
     restoreCtx(ctx, copy);
 }
 

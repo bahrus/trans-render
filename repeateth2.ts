@@ -6,7 +6,7 @@ import {
 } from './types2.js';
 import {repeatInit}from './repeatInit2.js';
 import {repeatethUpdateth} from './repeatethUpdateth2.js';
-export function repeateth(
+export async function repeateth(
     template: HTMLTemplateElement, 
     ctx: RenderContext, 
     items: any[], 
@@ -15,8 +15,8 @@ export function repeateth(
     updateTransform: UpdateTransform = initTransform
     ){
     if(ctx.mode === 'update'){
-        return repeatethUpdateth(template, ctx, items, target, updateTransform)
+        return await repeatethUpdateth(template, ctx, items, target, updateTransform)
     }else{
-        return repeatInit(template, ctx, items, target, initTransform);
+        return await repeatInit(template, ctx, items, target, initTransform);
     }
 }

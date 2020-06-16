@@ -1,6 +1,6 @@
 const SkipSibs = Symbol();
 const NextMatch = Symbol();
-export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate) {
+export async function transform(sourceOrTemplate, ctx, target = sourceOrTemplate) {
     if (ctx.mode === undefined) {
         Object.assign(ctx, { mode: 'init', level: 0, idx: 0 });
     }
@@ -9,7 +9,7 @@ export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate) {
         ? sourceOrTemplate.content.cloneNode(true)
         : sourceOrTemplate;
     if (ctx.Transform !== undefined) {
-        processFragment(source, ctx);
+        await processFragment(source, ctx);
     }
     let verb = "appendChild";
     const options = ctx.options;
@@ -32,7 +32,7 @@ function copyCtx(ctx) {
 function restoreCtx(ctx, originalCtx) {
     return (Object.assign(ctx, originalCtx));
 }
-function processFragment(source, ctx) {
+async function processFragment(source, ctx) {
     for (const sym of Object.getOwnPropertySymbols(transform)) {
         const transformTemplateVal = transform[sym];
         const newTarget = (ctx[sym] || ctx.host[sym]);
@@ -47,9 +47,9 @@ function processFragment(source, ctx) {
         }
     }
     ctx.target = source.firstElementChild;
-    processEl(ctx);
+    await processEl(ctx);
 }
-function processEl(ctx) {
+async function processEl(ctx) {
     const target = ctx.target;
     if (target == null)
         return;
@@ -59,7 +59,7 @@ function processEl(ctx) {
     const firstCharOfFirstProp = keys[0][0];
     let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
     if (isNextStep) {
-        doNextStepSelect(ctx);
+        await doNextStepSelect(ctx);
         doNextStepSibling(ctx);
     }
     let nextElementSibling = target;
@@ -94,7 +94,7 @@ function processEl(ctx) {
                     if (tvo === null)
                         continue;
                     ctx.target = nextElementSibling;
-                    doObjectMatch(key, tvo, ctx);
+                    await doObjectMatch(key, tvo, ctx);
                     break;
                 case 'symbol':
                     const cache = ctx.host || ctx;
@@ -121,9 +121,9 @@ function processEl(ctx) {
             elementToRemove.remove();
     }
 }
-function doObjectMatch(key, tvoo, ctx) {
+async function doObjectMatch(key, tvoo, ctx) {
     if (Array.isArray(tvoo)) {
-        doArrayMatch(key, tvoo, ctx);
+        await doArrayMatch(key, tvoo, ctx);
     }
     else {
         if (isTemplate(tvoo)) {
@@ -136,7 +136,7 @@ function doObjectMatch(key, tvoo, ctx) {
             const firstCharOfFirstProp = keys[0][0];
             let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
             if (isNextStep) {
-                doNextStepSelect(ctx);
+                await doNextStepSelect(ctx);
                 doNextStepSibling(ctx);
             }
             else {
@@ -144,7 +144,7 @@ function doObjectMatch(key, tvoo, ctx) {
                 ctx.level++;
                 ctx.idx = 0;
                 ctx.previousTransform = ctx.Transform;
-                processEl(ctx);
+                await processEl(ctx);
             }
             restoreCtx(ctx, ctxCopy);
         }
@@ -162,13 +162,13 @@ function doTemplate(ctx, te) {
         ctx.target.appendChild(clone);
     }
 }
-function doArrayMatch(key, tvao, ctx) {
+async function doArrayMatch(key, tvao, ctx) {
     const firstEl = tvao[0];
     switch (typeof firstEl) {
         case 'undefined':
         case 'object':
             if (Array.isArray(firstEl)) {
-                doRepeat(key, tvao, ctx);
+                await doRepeat(key, tvao, ctx);
             }
             else {
                 doPropSetting(key, tvao, ctx);
@@ -244,9 +244,9 @@ async function doRepeat(key, atriums, ctx) {
     const mode = ctx.mode;
     const { repeateth } = await import('./repeateth2.js');
     const newMode = ctx.mode;
-    ctx.mode = mode;
+    //ctx.mode = mode;
     const transform = repeateth(atriums[1], ctx, atriums[0], ctx.target, atriums[3], atriums[4]);
-    ctx.mode = newMode;
+    //ctx.mode = newMode;
 }
 export function getProp(val, pathTokens) {
     let context = val;
@@ -266,7 +266,7 @@ function closestNextSib(target, match) {
     }
     return null;
 }
-function doNextStepSelect(ctx) {
+async function doNextStepSelect(ctx) {
     const nextStep = ctx.Transform;
     if (nextStep.Select === undefined)
         return;
@@ -282,7 +282,7 @@ function doNextStepSelect(ctx) {
     const copy = copyCtx(ctx);
     ctx.Transform = mergedTransform;
     ctx.target = nextEl;
-    processEl(ctx);
+    await processEl(ctx);
     restoreCtx(ctx, copy);
 }
 function doNextStepSibling(ctx) {
