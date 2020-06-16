@@ -16,8 +16,13 @@ export async function repeatInit(template: HTMLTemplateElement, ctx: RenderConte
     const ctxClone = Object.assign({}, ctx);
     ctxClone.Transform = targetTransform!;
     for(let i = 0; i < count; i++){
+        const item = items[i];
         ctxClone.item = items[i];
         ctxClone.idx = i;
+        ctxClone.itemTagger = (h: any) =>{
+            h[idxKey] = i
+            h[itemsKey] = item;
+        }
         await transform(template, ctxClone, target);
         // Array.from(clonedTemplate.children).forEach(templateChild =>{
         //     (<any>templateChild)[idxKey] = i;

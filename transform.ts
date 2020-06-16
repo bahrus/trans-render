@@ -92,6 +92,7 @@ async function processEl(
     let matched = false;
     
     while(nextElementSibling !== null){
+        if(ctx.itemTagger !== undefined) ctx.itemTagger(nextElementSibling);
         let removeNextElementSibling = false;
         for(let i = 0, ii = keys.length; i < ii; i++){
             const key = keys[i];

@@ -5,6 +5,7 @@ export interface RenderContext{
     Transform: TransformValueOptions;
     level: number;
     item: any;
+    itemTagger: (el: HTMLElement) => void;
     idx: number;
     options: RenderOptions | undefined;
     host?: HTMLElement;
