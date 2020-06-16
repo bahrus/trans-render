@@ -55,8 +55,9 @@ async function processFragment(
     source: DocumentFragment | HTMLElement,
     ctx: RenderContext
 ){
-    for(const sym of Object.getOwnPropertySymbols(ctx.Transform!) ) {
-        const transformTemplateVal = (<any>transform)[sym];
+    const transf = ctx.Transform!;
+    for(const sym of Object.getOwnPropertySymbols(transf) ) {
+        const transformTemplateVal = (<any>transf)[sym];
         const newTarget = ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement;
         ctx.target = newTarget;
         switch(typeof(transformTemplateVal)){

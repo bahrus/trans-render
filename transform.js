@@ -33,8 +33,9 @@ function restoreCtx(ctx, originalCtx) {
     return (Object.assign(ctx, originalCtx));
 }
 async function processFragment(source, ctx) {
-    for (const sym of Object.getOwnPropertySymbols(ctx.Transform)) {
-        const transformTemplateVal = transform[sym];
+    const transf = ctx.Transform;
+    for (const sym of Object.getOwnPropertySymbols(transf)) {
+        const transformTemplateVal = transf[sym];
         const newTarget = (ctx[sym] || ctx.host[sym]);
         ctx.target = newTarget;
         switch (typeof (transformTemplateVal)) {
