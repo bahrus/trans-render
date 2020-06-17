@@ -1,16 +1,17 @@
-export interface RenderContext{
+export interface RenderContext<TItem = any>{
     target?: HTMLElement | null;
     ctx?: RenderContext | undefined;
     cache?: any;
     previousTransform?: TransformValueOptions | undefined;
     Transform?: TransformValueOptions;
     level?: number | undefined;
-    item?: any | undefined;
+    item?: TItem | undefined;
     itemTagger?:  (el: HTMLElement) => void;
     idx?: number | undefined;
     options?: RenderOptions | undefined;
     host?: HTMLElement | undefined;
     mode?: 'init' | 'update';
+    replacedElement?: HTMLElement,
 }
 
 export interface RenderOptions{

@@ -273,7 +273,7 @@ export function getProp(val: any, pathTokens: string[]){
       if(context === undefined) break;
     }
     return context;
-  }
+}
 
 
 
