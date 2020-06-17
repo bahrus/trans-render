@@ -127,7 +127,8 @@ async function processEl(
                     continue;    
             }
         }
-        const elementToRemove = removeNextElementSibling ? nextElementSibling : undefined;
+        const elementToRemove = (removeNextElementSibling || nextElementSibling.dataset.deleteMe === 'true' ) ? 
+            nextElementSibling : undefined;
         const nextMatch = (<any>nextElementSibling)[NextMatch];
         const prevEl = <any>nextElementSibling;
         if(prevEl[SkipSibs]){

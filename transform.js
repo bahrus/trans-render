@@ -106,7 +106,8 @@ async function processEl(ctx) {
                     continue;
             }
         }
-        const elementToRemove = removeNextElementSibling ? nextElementSibling : undefined;
+        const elementToRemove = (removeNextElementSibling || nextElementSibling.dataset.deleteMe === 'true') ?
+            nextElementSibling : undefined;
         const nextMatch = nextElementSibling[NextMatch];
         const prevEl = nextElementSibling;
         if (prevEl[SkipSibs]) {
