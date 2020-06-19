@@ -114,7 +114,7 @@ export async function processEl(
                 const pos = key.lastIndexOf('[');
                 if(pos > -1 && key[pos + 1] === '-'){
                     const propName = lispToCamel(key.substring(pos + 2, key.length - 1));
-                    (<any>key)[propName] = key;
+                    (<any>nextElementSibling)[propName] = tvo;
                     return true;
                 }
             }
