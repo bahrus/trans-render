@@ -1,7 +1,8 @@
 import { doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp } from './transform.js';
-export async function doObjectMatch(key, tvoo, ctx) {
+import { repeateth } from './repeateth2.js';
+export function doObjectMatch(key, tvoo, ctx) {
     if (Array.isArray(tvoo)) {
-        await doArrayMatch(key, tvoo, ctx);
+        doArrayMatch(key, tvoo, ctx);
     }
     else {
         if (isTemplate(tvoo)) {
@@ -14,7 +15,7 @@ export async function doObjectMatch(key, tvoo, ctx) {
         const firstCharOfFirstProp = keys[0][0];
         let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
         if (isNextStep) {
-            await doNextStepSelect(ctx);
+            doNextStepSelect(ctx);
             doNextStepSibling(ctx);
         }
         else {
@@ -22,7 +23,7 @@ export async function doObjectMatch(key, tvoo, ctx) {
             ctx.level++;
             ctx.idx = 0;
             ctx.previousTransform = ctx.Transform;
-            await processEl(ctx);
+            processEl(ctx);
         }
         restoreCtx(ctx, ctxCopy);
     }
@@ -39,13 +40,13 @@ function doTemplate(ctx, te) {
         ctx.target.appendChild(clone);
     }
 }
-async function doArrayMatch(key, tvao, ctx) {
+function doArrayMatch(key, tvao, ctx) {
     const firstEl = tvao[0];
     switch (typeof firstEl) {
         case 'undefined':
         case 'object':
             if (Array.isArray(firstEl)) {
-                await doRepeat(key, tvao, ctx);
+                doRepeat(key, tvao, ctx);
             }
             else {
                 doPropSetting(key, tvao, ctx);
@@ -117,9 +118,8 @@ function doPropSetting(key, peat, ctx) {
         }
     }
 }
-async function doRepeat(key, atriums, ctx) {
+function doRepeat(key, atriums, ctx) {
     const mode = ctx.mode;
-    const { repeateth } = await import('./repeateth2.js');
     const newMode = ctx.mode;
     const transform = repeateth(atriums[1], ctx, atriums[0], ctx.target, atriums[3], atriums[4]);
 }

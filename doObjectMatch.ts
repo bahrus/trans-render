@@ -10,13 +10,13 @@ import {
     PEATUnionSettings
 } from './types2.js';
 
-import {doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp} from './transform.js';
+import { doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp } from './transform.js';
+import { repeateth } from './repeateth2.js';
 
 
-
-export async function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ctx: RenderContext){
+export function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ctx: RenderContext){
     if(Array.isArray(tvoo)){
-        await doArrayMatch(key, tvoo as TransformValueArrayOptions, ctx);
+        doArrayMatch(key, tvoo as TransformValueArrayOptions, ctx);
     }else{
         if(isTemplate(tvoo as HTMLTemplateElement)){
             doTemplate(ctx, tvoo as HTMLTemplateElement);
@@ -29,14 +29,14 @@ export async function doObjectMatch(key: string, tvoo: TransformValueObjectOptio
         const firstCharOfFirstProp = keys[0][0];
         let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
         if(isNextStep){
-            await doNextStepSelect(ctx);
+            doNextStepSelect(ctx);
             doNextStepSibling(ctx);
         }else{
             ctx.target = ctx.target!.firstElementChild as HTMLElement;
             ctx.level!++;
             ctx.idx = 0;
             ctx.previousTransform = ctx.Transform;
-            await processEl(ctx);
+            processEl(ctx);
         }
         restoreCtx(ctx, ctxCopy);
     }
@@ -55,13 +55,13 @@ function doTemplate(ctx: RenderContext, te: HTMLTemplateElement){
     }
 }
 
-async function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: RenderContext){
+function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: RenderContext){
     const firstEl = tvao[0];
     switch(typeof firstEl){
         case 'undefined':
         case 'object':
             if(Array.isArray(firstEl)){
-                await doRepeat(key, tvao as ATRIUM_Union, ctx); 
+                doRepeat(key, tvao as ATRIUM_Union, ctx); 
             }else{
                 doPropSetting(key, tvao as PEATUnionSettings, ctx);
             }
@@ -129,9 +129,8 @@ function doPropSetting(key: string, peat: PEATUnionSettings, ctx: RenderContext)
     }
 }
 
-async function doRepeat(key: string, atriums: ATRIUM_Union, ctx: RenderContext){
+function doRepeat(key: string, atriums: ATRIUM_Union, ctx: RenderContext){
     const mode = ctx.mode;
-    const {repeateth} = await import('./repeateth2.js');
     const newMode = ctx.mode;
     const transform = repeateth(atriums[1], ctx, atriums[0], ctx.target!, atriums[3], atriums[4]);
 }

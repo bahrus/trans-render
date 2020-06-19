@@ -9,15 +9,16 @@ import {
     ATRIUM_Union,
     PEATUnionSettings
 } from './types2.js';
+import {doObjectMatch} from './doObjectMatch.js';
 
 const SkipSibs = Symbol();
 const NextMatch = Symbol();
 
-export async function transform(
+export function transform(
     sourceOrTemplate: HTMLElement | DocumentFragment,
     ctx: RenderContext,
     target: HTMLElement | DocumentFragment = sourceOrTemplate,
-): Promise<RenderContext>{
+){
     if(ctx.mode === undefined){
         Object.assign<RenderContext, Partial<RenderContext>>(ctx, {mode: 'init', level: 0, idx: 0})
     }
@@ -26,9 +27,8 @@ export async function transform(
       ? (sourceOrTemplate as HTMLTemplateElement).content.cloneNode(true) as DocumentFragment
       : sourceOrTemplate;
     
-    const ret = await processFragment(source, ctx);
+    processFragment(source, ctx);
     
-    if(!ret) return ctx;
     let verb = "appendChild";
     const options = ctx.options;
     if (options !== undefined) {
@@ -40,7 +40,6 @@ export async function transform(
       (<any>target)[verb](source);
     }
     ctx.mode = 'update';
-    return ctx;
 }
 
 export function copyCtx(ctx: RenderContext){
@@ -51,12 +50,12 @@ export function restoreCtx(ctx: RenderContext, originalCtx: RenderContext){
     return (Object.assign(ctx, originalCtx));
 }
 
-async function processFragment(  
+function processFragment(  
     source: DocumentFragment | HTMLElement,
     ctx: RenderContext
-): Promise<boolean>{
+){
     const transf = ctx.Transform;
-    if(transf === undefined) return true;
+    if(transf === undefined) return;
     for(const sym of Object.getOwnPropertySymbols(transf) ) {
         const transformTemplateVal = (<any>transf)[sym];
         const newTarget = ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement;
@@ -71,12 +70,12 @@ async function processFragment(
         }
     }
     ctx.target = source.firstElementChild as HTMLElement;
-    return await processEl(ctx);
+    processEl(ctx);
 }
 
-export async function processEl(
+export function processEl(
     ctx: RenderContext
-): Promise<boolean>{
+){
     const target = ctx.target;
     if(target == null || ctx.Transform === undefined) return true;
     
@@ -86,7 +85,7 @@ export async function processEl(
     const firstCharOfFirstProp = keys[0][0];
     let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
     if(isNextStep){
-        await doNextStepSelect(ctx);
+        doNextStepSelect(ctx);
         doNextStepSibling(ctx)
     }
     let nextElementSibling: HTMLElement | null = target;
@@ -128,8 +127,7 @@ export async function processEl(
                 case 'object':
                     if(tvo === null) continue;
                     ctx.target = nextElementSibling;
-                    const {doObjectMatch} = await import('./doObjectMatch.js');
-                    await doObjectMatch(key, tvo as TransformValueObjectOptions, ctx);
+                    doObjectMatch(key, tvo as TransformValueObjectOptions, ctx);
                     break;
                 case 'symbol':
                     const cache = ctx.host || ctx;
@@ -181,7 +179,7 @@ function closestNextSib(target: HTMLElement, match: string){
     return null;
 }
 
-export async function doNextStepSelect(
+export function doNextStepSelect(
     ctx: RenderContext,
 ){
     const nextStep = ctx.Transform as NextStep;
@@ -197,7 +195,7 @@ export async function doNextStepSelect(
     const copy = copyCtx(ctx);
     ctx.Transform = mergedTransform;
     ctx.target = nextEl;
-    await processEl(ctx);
+    processEl(ctx);
     restoreCtx(ctx, copy);
 }
 
