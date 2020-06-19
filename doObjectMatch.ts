@@ -12,10 +12,7 @@ import {
 
 import {doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp} from './transform.js';
 
-const stcRe = /(\-\w)/g;
-export function lispToCamel(s: string){
-    return s.replace(stcRe, function(m){return m[1].toUpperCase();});
-}
+
 
 export async function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ctx: RenderContext){
     if(Array.isArray(tvoo)){
@@ -25,15 +22,7 @@ export async function doObjectMatch(key: string, tvoo: TransformValueObjectOptio
             doTemplate(ctx, tvoo as HTMLTemplateElement);
             return;
         }
-        if(key.endsWith(']')){
-            //TODO use named capture group reg expression
-            const pos = key.lastIndexOf('[');
-            if(pos > -1 && key[pos + 1] === '-'){
-                const propName = lispToCamel(key.substring(pos + 2, key.length - 1));
-                (<any>key)[propName] = key;
-                return;
-            }
-        }
+
         const ctxCopy = copyCtx(ctx);
         ctx.Transform = tvoo; //TODO -- don't do this line if this is a property setting
         const keys = Object.keys(tvoo);

@@ -87,6 +87,15 @@ export async function processEl(ctx) {
             matched = true;
             ctx.target = nextElementSibling;
             const tvo = getRHS(tm[key], ctx);
+            if (key.endsWith(']')) {
+                //TODO use named capture group reg expression
+                const pos = key.lastIndexOf('[');
+                if (pos > -1 && key[pos + 1] === '-') {
+                    const propName = lispToCamel(key.substring(pos + 2, key.length - 1));
+                    key[propName] = key;
+                    return true;
+                }
+            }
             switch (typeof tvo) {
                 case 'string':
                     nextElementSibling.textContent = tvo;
@@ -128,6 +137,10 @@ export async function processEl(ctx) {
             elementToRemove.remove();
     }
     return true;
+}
+const stcRe = /(\-\w)/g;
+export function lispToCamel(s) {
+    return s.replace(stcRe, function (m) { return m[1].toUpperCase(); });
 }
 export function getProp(val, pathTokens) {
     let context = val;
