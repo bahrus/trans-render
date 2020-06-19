@@ -8,9 +8,7 @@ export async function transform(sourceOrTemplate, ctx, target = sourceOrTemplate
     const source = isTemplate
         ? sourceOrTemplate.content.cloneNode(true)
         : sourceOrTemplate;
-    if (ctx.Transform !== undefined) {
-        await processFragment(source, ctx);
-    }
+    await processFragment(source, ctx);
     let verb = "appendChild";
     const options = ctx.options;
     if (options !== undefined) {
@@ -34,6 +32,8 @@ export function restoreCtx(ctx, originalCtx) {
 }
 async function processFragment(source, ctx) {
     const transf = ctx.Transform;
+    if (transf === undefined)
+        return;
     for (const sym of Object.getOwnPropertySymbols(transf)) {
         const transformTemplateVal = transf[sym];
         const newTarget = (ctx[sym] || ctx.host[sym]);

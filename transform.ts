@@ -25,9 +25,9 @@ export async function transform(
     const source = isTemplate
       ? (sourceOrTemplate as HTMLTemplateElement).content.cloneNode(true) as DocumentFragment
       : sourceOrTemplate;
-    if(ctx.Transform !== undefined){
-        await processFragment(source, ctx);
-    }
+    
+    await processFragment(source, ctx);
+    
     
     let verb = "appendChild";
     const options = ctx.options;
@@ -55,7 +55,8 @@ async function processFragment(
     source: DocumentFragment | HTMLElement,
     ctx: RenderContext
 ){
-    const transf = ctx.Transform!;
+    const transf = ctx.Transform;
+    if(transf === undefined) return;
     for(const sym of Object.getOwnPropertySymbols(transf) ) {
         const transformTemplateVal = (<any>transf)[sym];
         const newTarget = ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement;
