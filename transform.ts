@@ -17,7 +17,7 @@ export async function transform(
     sourceOrTemplate: HTMLElement | DocumentFragment,
     ctx: RenderContext,
     target: HTMLElement | DocumentFragment = sourceOrTemplate,
-){
+): Promise<RenderContext>{
     if(ctx.mode === undefined){
         Object.assign<RenderContext, Partial<RenderContext>>(ctx, {mode: 'init', level: 0, idx: 0})
     }
@@ -26,9 +26,9 @@ export async function transform(
       ? (sourceOrTemplate as HTMLTemplateElement).content.cloneNode(true) as DocumentFragment
       : sourceOrTemplate;
     
-    await processFragment(source, ctx);
+    const ret = await processFragment(source, ctx);
     
-    
+    if(!ret) return ctx;
     let verb = "appendChild";
     const options = ctx.options;
     if (options !== undefined) {
@@ -54,9 +54,9 @@ export function restoreCtx(ctx: RenderContext, originalCtx: RenderContext){
 async function processFragment(  
     source: DocumentFragment | HTMLElement,
     ctx: RenderContext
-){
+): Promise<boolean>{
     const transf = ctx.Transform;
-    if(transf === undefined) return;
+    if(transf === undefined) return true;
     for(const sym of Object.getOwnPropertySymbols(transf) ) {
         const transformTemplateVal = (<any>transf)[sym];
         const newTarget = ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement;
@@ -71,17 +71,17 @@ async function processFragment(
         }
     }
     ctx.target = source.firstElementChild as HTMLElement;
-    await processEl(ctx);
+    return await processEl(ctx);
 }
 
 export async function processEl(
     ctx: RenderContext
-){
+): Promise<boolean>{
     const target = ctx.target;
-    if(target == null || ctx.Transform === undefined) return;
+    if(target == null || ctx.Transform === undefined) return true;
     
     const keys = Object.keys(ctx.Transform);
-    if(keys.length === 0) return;
+    if(keys.length === 0) return true;
     
     const firstCharOfFirstProp = keys[0][0];
     let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
@@ -144,6 +144,7 @@ export async function processEl(
         prevEl[NextMatch] = undefined;
         if(elementToRemove !== undefined) elementToRemove.remove();
     }
+    return true;
 }
 
 

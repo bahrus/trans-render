@@ -8,7 +8,9 @@ export async function transform(sourceOrTemplate, ctx, target = sourceOrTemplate
     const source = isTemplate
         ? sourceOrTemplate.content.cloneNode(true)
         : sourceOrTemplate;
-    await processFragment(source, ctx);
+    const ret = await processFragment(source, ctx);
+    if (!ret)
+        return ctx;
     let verb = "appendChild";
     const options = ctx.options;
     if (options !== undefined) {
@@ -33,7 +35,7 @@ export function restoreCtx(ctx, originalCtx) {
 async function processFragment(source, ctx) {
     const transf = ctx.Transform;
     if (transf === undefined)
-        return;
+        return true;
     for (const sym of Object.getOwnPropertySymbols(transf)) {
         const transformTemplateVal = transf[sym];
         const newTarget = (ctx[sym] || ctx.host[sym]);
@@ -48,15 +50,15 @@ async function processFragment(source, ctx) {
         }
     }
     ctx.target = source.firstElementChild;
-    await processEl(ctx);
+    return await processEl(ctx);
 }
 export async function processEl(ctx) {
     const target = ctx.target;
     if (target == null || ctx.Transform === undefined)
-        return;
+        return true;
     const keys = Object.keys(ctx.Transform);
     if (keys.length === 0)
-        return;
+        return true;
     const firstCharOfFirstProp = keys[0][0];
     let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
     if (isNextStep) {
@@ -125,6 +127,7 @@ export async function processEl(ctx) {
         if (elementToRemove !== undefined)
             elementToRemove.remove();
     }
+    return true;
 }
 export function getProp(val, pathTokens) {
     let context = val;
