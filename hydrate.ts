@@ -20,8 +20,8 @@ export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBas
 
         static defaultValues : any;
 
-        #attribQueue: attrArgs[] | undefined;
-        #conn = false;
+        __attribQueue: attrArgs[] | undefined;
+        __conn = false;
         /**
          * Set attribute value.
          * @param name 
@@ -30,9 +30,9 @@ export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBas
          */
         attr(name: string, val?: string | boolean | null, trueVal?: string) {
             if(val === undefined) return this.getAttribute(name);
-            if(!this.#conn){
-                if(this.#attribQueue === undefined) this.#attribQueue = [];
-                this.#attribQueue!.push({
+            if(!this.__conn){
+                if(this.__attribQueue === undefined) this.__attribQueue = [];
+                this.__attribQueue!.push({
                     name, val, trueVal
                 });
                 return;
@@ -67,14 +67,14 @@ export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBas
         }
         
         connectedCallback(){
-            this.#conn = true;
+            this.__conn = true;
             const ep = (<any>this.constructor).props as EvaluatedAttributeProps;
             this.__propUp([...ep.bool, ...ep.str, ...ep.num, ...ep.obj]);
-            if(this.#attribQueue !== undefined){
-                this.#attribQueue!.forEach(attribQItem =>{
+            if(this.__attribQueue !== undefined){
+                this.__attribQueue!.forEach(attribQItem =>{
                     this.attr(attribQItem.name, attribQItem.val, attribQItem.trueVal);
                 })
-                this.#attribQueue = undefined;
+                this.__attribQueue = undefined;
             }
         }
     }
