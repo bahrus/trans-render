@@ -114,7 +114,7 @@ export function processEl(
                 if(pos > -1 && key[pos + 1] === '-'){
                     const propName = lispToCamel(key.substring(pos + 2, key.length - 1));
                     (<any>nextElementSibling)[propName] = tvo;
-                    return true;
+                    continue;
                 }
             }
             switch(typeof tvo){
@@ -126,7 +126,6 @@ export function processEl(
                     break;
                 case 'object':
                     if(tvo === null) continue;
-                    ctx.target = nextElementSibling;
                     doObjectMatch(key, tvo as TransformValueObjectOptions, ctx);
                     break;
                 case 'symbol':
