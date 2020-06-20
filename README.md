@@ -10,7 +10,7 @@
 <img src="https://badgen.net/bundlephobia/minzip/trans-render">
 
 
-trans-render provides a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, trans-render performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, trans-render uses css path tests via the element.matches() and element.querySelector() methods.
+trans-render provides a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, trans-render performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, trans-render uses css path tests via the element.matches() and element.querySelector() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
 
 XSLT can take pure XML with no formatting instructions as its input.  Generally speaking, the XML that XSLT acts on isn't a bunch of semantically  meaningless div tags, but rather a nice semantic document, whose intrinsic structure is enough to go on, in order to formulate a "transform" that doesn't feel like a hack.  
 
@@ -95,6 +95,8 @@ Produces
 
 We'll be walking through a number of more complex scenarios, but for reference, the rules are available below in Summary form.
 
+They will make more sense after walking through examples, and, of course, real-world practice.
+
 <details>
     <summary>Rules Summary</summary>
 
@@ -125,12 +127,12 @@ const Transform = {
 };
 ```
 
-Due to the basic rules of object literals in JavaScript, keys can only be strings or ES6 symbols. 
+Due to the basic rules of object literals in JavaScript, keys can only be strings or ES6 symbols.  trans-render uses both.
 
 ### LHS Key Scenarios
 
 - If the key is a string that starts with a lower case letter, then it is a "css match" expression.
-- If the key is a string that starts with double quote, then it is also a "css match", but the css expression comes from the nearest previous sibling key which doesn't start with a double quote.
+- If the key is a string that starts with double quote, then it is also a "css match" expression, but the css expression comes from the nearest previous sibling key which doesn't start with a double quote.
 - If the key is a string that starts with a capital letter, then it is part of a "Next Step" expression that indicates where to jump down to next in the DOM tree.
 - If the key is an ES6 symbol, it is a shortcut to grab a reference to a DOM element previously stored either in context.host or context.cache, where context.host in a custom element instance.
 
@@ -151,11 +153,11 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 - If the rhs expression evaluates to an array, then
   -  Arrays are treated as "tuples" for common requirements.
   -  The first element of the tuple indicates what type of tuple to expect.
-  -  If the first element of the tuple is a non-array, non HTMLTemplateElement object, or undefined, then the array represents a "PEATS" tuple -- property / event / attribute  setting
+  -  If the first element of the tuple is a non-array, non HTMLTemplateElement object, or undefined, then the tuple is treated as a "PEATS" tuple -- property / event / attribute / symbol reference setting:
      -  First optional parameter is a **p**roperty object, that gets shallow-merged into the matching element (target).
         - Shallow-merging goes one level deeper with style and dataset properties.
      -  Second optional parameter is an **e**vent object, that binds to events of the matching target element.
-     -  Third optional parameter is an **a**ttribute object, that sets the attributes.
+     -  Third optional parameter is an **a**ttribute object, that sets the attributes.  "null" values removes the attributes.
      -  Fourth optional parameter is a sub-**t**ransform, which recursively performs transforms within the light children of the matching target element.
      -  Fifth optional parameter is of type **s**ymbol, to allow future referencing to the matching target element.
   -  If the first element of the tuple itself is an array, then the array represents a declarative loop associated with those items.
@@ -181,7 +183,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 
 ## Arbitrary queries.
 
-If most of the template is static, but there's a deeply nested element that needs modifying, it is possible to drill straight down to that element by specifying a "Select" string value, which invokes querySelector.  But beware: there's no going back to previous elements once that's done.  If your template is dense with dynamic pockets, you will more likely want to navigate to the first child by setting Select = '*'. 
+If most of the template is static, but there's an isolated, deeply nested element that needs modifying, it is possible to drill straight down to that element by specifying a "Select" string value, which invokes querySelector.  But beware: there's no going back to previous elements once that's done (within that nested transform structure). 
 
 Jumping arbitrarily down the document tree can be done with a "NextStep" object:
 
@@ -242,10 +244,13 @@ Transform: {
 
 The expression "\*" is a match for all HTML elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector('*')).  This, combined with the default setting to match all the next siblings means that for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
 
+If you use a rule like the one above, then the other rules will almost match what you would expect with a classic css file, as far as the selectors.
+
 At this point, only a synchronous workflow is provided (except when piercing into ShadowDOM).
 
 ## Conditional Display
 
+### Permanent Removal
 If a matching node returns a boolean value of *false*, the node is removed.  For example:
 
 ```TypeScript
@@ -257,6 +262,7 @@ If a matching node returns a boolean value of *false*, the node is removed.  For
 Here the tag "section" will be removed.
 
 **NB:**  Be careful when using this technique.  Once a node is removed, there's no going back -- it will no longer match any css if you use trans-render updating (discussed below).  If your use of trans-render is mostly to display something once, and you recreate everything from scratch when your model changes, that's fine.  However, if you want to apply incremental updates, and need to display content conditionally, it would be better to use a [custom element](https://polymer-library.polymer-project.org/3.0/docs/devguide/templates#dom-if) [for that](https://github.com/bahrus/if-diff) [purpose](https://github.com/matthewp/if-else).
+
 
 
 ## What does wdwsf stand for?
@@ -283,7 +289,6 @@ The ability to do this is illustrated below:
 <script type="module">
     import { init } from '../init.js';
     import { interpolate } from '../interpolate.js';
-    import {update} from '../update.js';
     const ctx = init(Main, {
         model:{
             Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
@@ -297,7 +302,7 @@ The ability to do this is illustrated below:
             Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
             Day6: 'lördag', Day7: 'söndag',
         }
-        update(ctx, target);
+        transform(ctx, target);
     })
 </script>
 ```
