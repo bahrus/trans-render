@@ -26,17 +26,20 @@ export function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ct
         const ctxCopy = copyCtx(ctx);
         ctx.Transform = tvoo; //TODO -- don't do this line if this is a property setting
         const keys = Object.keys(tvoo);
-        const firstCharOfFirstProp = keys[0][0];
-        let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
-        ctx.previousTransform = ctxCopy.Transform;
-        if(isNextStep){
-            doNextStepSelect(ctx);
-            doNextStepSibling(ctx);
-        }else{
-            ctx.target = ctx.target!.firstElementChild as HTMLElement;
-            ctx.level!++;
-            ctx.idx = 0;
-            processEl(ctx);
+        if(keys.length !== 0){
+          const firstCharOfFirstProp = keys[0][0];
+          let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
+          ctx.previousTransform = ctxCopy.Transform;
+          if(isNextStep){
+              doNextStepSelect(ctx);
+              doNextStepSibling(ctx);
+          }else{
+              ctx.target = ctx.target!.firstElementChild as HTMLElement;
+              ctx.level!++;
+              ctx.idx = 0;
+              processEl(ctx);
+          }
+          delete ctx.previousTransform;
         }
         restoreCtx(ctx, ctxCopy);
     }

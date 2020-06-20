@@ -24,6 +24,7 @@ export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate) {
         target[verb](source);
     }
     ctx.mode = 'update';
+    return ctx;
 }
 export function copyCtx(ctx) {
     return Object.assign({}, ctx);

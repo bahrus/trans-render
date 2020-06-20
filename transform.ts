@@ -41,6 +41,7 @@ export function transform(
       (<any>target)[verb](source);
     }
     ctx.mode = 'update';
+    return ctx;
 }
 
 export function copyCtx(ctx: RenderContext){
