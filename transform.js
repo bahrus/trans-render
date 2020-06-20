@@ -5,6 +5,7 @@ export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate) {
     if (ctx.mode === undefined) {
         Object.assign(ctx, { mode: 'init', level: 0, idx: 0 });
     }
+    ctx.ctx = ctx;
     const isTemplate = sourceOrTemplate.localName === "template";
     const source = isTemplate
         ? sourceOrTemplate.content.cloneNode(true)
@@ -164,10 +165,13 @@ export function doNextStepSelect(ctx) {
     if (nextEl === null)
         return;
     const inherit = !!nextStep.MergeTransforms;
-    const newTransform = nextStep.Transform;
-    const mergedTransform = Object.assign({}, newTransform);
-    if (ctx.previousTransform !== undefined && inherit) {
-        Object.assign(mergedTransform, ctx.previousTransform);
+    let mergedTransform = nextStep.Transform || ctx.previousTransform;
+    if (inherit && nextStep.Transform) {
+        const newTransform = nextStep.Transform;
+        mergedTransform = Object.assign({}, newTransform);
+        if (ctx.previousTransform !== undefined && inherit) {
+            Object.assign(mergedTransform, ctx.previousTransform);
+        }
     }
     const copy = copyCtx(ctx);
     ctx.Transform = mergedTransform;

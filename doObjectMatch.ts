@@ -28,6 +28,7 @@ export function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ct
         const keys = Object.keys(tvoo);
         const firstCharOfFirstProp = keys[0][0];
         let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
+        ctx.previousTransform = ctxCopy.Transform;
         if(isNextStep){
             doNextStepSelect(ctx);
             doNextStepSibling(ctx);
@@ -35,7 +36,6 @@ export function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ct
             ctx.target = ctx.target!.firstElementChild as HTMLElement;
             ctx.level!++;
             ctx.idx = 0;
-            ctx.previousTransform = ctx.Transform;
             processEl(ctx);
         }
         restoreCtx(ctx, ctxCopy);

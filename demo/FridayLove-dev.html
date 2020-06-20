@@ -85,24 +85,23 @@
         <div id="target"></div>
 
         <script type="module">
-            import { init } from '../init.js';
+            import { transform } from '../transform.js';
             import { interpolate } from '../interpolate.js';
-            import { update } from '../update.js';
 
             let model = {
                 Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
                 Day6: 'Saturday', Day7: 'Sunday',
             };
-            const ctx = init(Main, {
+            const ctx = transform(Main, {
                 Transform: {
                     '[x-d]': ({ target }) => {
                         interpolate(target, 'textContent', model);
                     },
                     '[data-init]': ({ target, ctx }) => {
-                        if (ctx.update !== undefined) {
+                        if (ctx.mode === 'update') {
                             return {}
                         } else {
-                            init(self[target.dataset.init], {}, target);
+                            transform(self[target.dataset.init], {}, target);
                         }
                     },
                     '*': {
@@ -115,7 +114,7 @@
                     Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
                     Day6: 'lördag', Day7: 'söndag',
                 }
-                update(ctx, target);
+                transform(target, ctx);
             })
         </script>
     </div>

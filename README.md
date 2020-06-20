@@ -6,7 +6,6 @@
 
 [![Actions Status](https://github.com/bahrus/trans-render/workflows/CI/badge.svg)](https://github.com/bahrus/trans-render/actions?query=workflow%3ACI)
 
-Size of core file:
 
 <img src="https://badgen.net/bundlephobia/minzip/trans-render">
 
@@ -23,7 +22,7 @@ This can leave the template markup quite pristine, but it does mean that the sep
 
 By keeping the binding separate, the same template can thus be used to bind with different object structures.
 
-Providing the binding transform in JS form inside the init function signature has the advantage that one can benefit from TypeScript typing of Custom and Native DOM elements with no additional IDE support.  
+Providing the binding transform in JS form inside the transform function signature has the advantage that one can benefit from TypeScript typing of Custom and Native DOM elements with no additional IDE support.  As much as possible, JSON-like structures are also used, allowing most or all of the binding to remain declarative.
 
 Another advantage of separating the binding like this is that one can insert comments, console.log's and/or breakpoints, making it easier to walk through the binding process.
 
@@ -37,7 +36,7 @@ For more musings on the question of what is this good for, please see the [rambl
 
 ## Workflow
 
-trans-render provides helper functions for cloning a template, and then walking through the DOM, applying rules in document order.  Note that the document can grow, as processing takes place (due, for example, to cloning sub templates).  It's critical, therefore, that the processing occur in a logical order, and that order is down the document tree.  That way it is fine to append nodes before continuing processing.  
+trans-render provides helper functions for either 1)  cloning a template, and then walking through the DOM, applying rules in document order, or, using the same syntax, applying changes on a live DOM fragment.  Note that the document can grow as processing takes place (due, for example, to cloning sub templates).  It's critical, therefore, that the processing occur in a logical order, and that order is down the document tree.  That way it is fine to append nodes before continuing processing.  
 
 ## Drilling down to children
 
@@ -69,7 +68,7 @@ means "if a node has tag name 'details', then find any direct children of the de
 </template>
 <div id="target"></div>
 <script type="module">
-    import { init } from 'trans-render/init.js';
+    import { transform } from 'trans-render/transform.js';
     const model = {
         summaryText: 'hello'
     }
@@ -78,7 +77,7 @@ means "if a node has tag name 'details', then find any direct children of the de
             summary: model.summaryText
         }
     };
-    init(sourceTemplate, { Transform }, target);
+    transform(sourceTemplate, { Transform }, target);
 </script>
 ```
 
@@ -93,6 +92,8 @@ Produces
     </details>
 </div>
 ```
+
+We'll be walking through a number of more complex scenarios, but for reference, the rules are available below in Summary form.
 
 <details>
     <summary>Rules Summary</summary>
@@ -112,7 +113,7 @@ const Transform = {
 };
 ```
 
-details, summary are lhs keys.  model.summaryText is a rhs expression, as is the open and closed curly braces section.
+details, summary are lhs keys.  model.summaryText is a rhs expression, as is the open and closed curly braces section containing it.
 
 In the example above, the details and summary keys are really strings, and could be equivalently written:
 
@@ -138,7 +139,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 - If the rhs expression is null or undefined, do nothing.
 - If the rhs expression evaluates to a string, then set the textContent property of matching target element to that string.
 - If the rhs expression evaluates to the boolean "false", then remove the matching elements from the DOM Tree.
-- If the rhs expression evaluates to a symbol, create a reference to the matching target element with that symbol as a key, in the context.host (custom element instance) or context.cache property.
+- If the rhs expression evaluates to a symbol, create a reference to the matching target element with that symbol as a key, in the ctx.host (custom element instance) or ctx.cache property.
 - If the rhs expression evaluates to a function, then
   -  that function is invoked, where an object with the following properties is passed in:
      - target
@@ -157,27 +158,24 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
      -  Third optional parameter is an **a**ttribute object, that sets the attributes.
      -  Fourth optional parameter is a sub-**t**ransform, which recursively performs transforms within the light children of the matching target element.
      -  Fifth optional parameter is of type **s**ymbol, to allow future referencing to the matching target element.
-  -  [TODO] If the first element of the tuple itself is an array, then the array represents a declarative loop associated with those items 
+  -  If the first element of the tuple itself is an array, then the array represents a declarative loop associated with those items.
      - The acronym to remember for a loop array is "ATRIUMS".
-     - First element of the tuple the **a**rray of items.
+     - First element of the tuple is the **a**rray of items to loop over.
      - Second element is the **t**emplate reference that should be repeated.
      - Third optional parameter is an optional **r**ange of indexes from the item array to render
      - Fourth optional parameter is the **i**nit transform for each item, which recursively uses the transform syntax described here.
      - Fifth optional parameter is the **u**pdate transform for each item.
-     - Sixth optional parameter is **m**etadata associated with the loop -- how to extra the identifier for each item, for example.
+     - Sixth optional parameter is **m**etadata associated with the loop -- how to extract the identifier for each item, for example.
      - Seventh optional parameter is a **s**ymbol to allow references to the matching target element
-  -  [TODO] If the first element of the tuple is a function, then evaluate the function.
+  -  If the first element of the tuple is a function, then evaluate the function.
      - If the function evaluates to a string or symbol, and if the second element is a non array object, then:
        -  The second element of the tuple is expected to be an object / map, where the keys are the possible values of the evaluated function.
-          -  If a match is found, replace the rhs expression with the matching expression found in the previous step.
-          -  Otherwise, replace the first element of the array with the evaluated function (virtually) and reapply the logic
-  -  [TODO] If the first element of the tuple is a boolean, then this represents a conditional statement.
-     - If the first element is true, replace the rhs expression with the second element.
-     - If the first element is false
-  -  [TODO] If the first element of the tuple is a template, then second element is expected to be init transform, second is update transform.
-
-
-
+       -  If a match is found, replace the rhs expression with the matching expression found in the previous step.
+       -  Otherwise, replace the first element of the array with the evaluated function (virtually) and reapply the logic.
+  -  If the first element of the tuple is a boolean, then this represents a conditional statement.
+     - If the first element is true, replace the rhs expression with the second element, and reapply the logic.
+     - If the first element is false, replace the rhs expression with the third element, and reapply the logic.
+  -  If the first element of the tuple is a template, then the second element is expected to be init transform, second is update transform.
 
 </details>
 
@@ -242,7 +240,7 @@ Transform: {
     },
 ```
 
-The expression "\*" is a match for all HTML elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector('*')).  This, combined with the default setting to match all the next siblings means that, for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
+The expression "\*" is a match for all HTML elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector('*')).  This, combined with the default setting to match all the next siblings means that for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
 
 At this point, only a synchronous workflow is provided (except when piercing into ShadowDOM).
 
@@ -276,6 +274,8 @@ As you may have noticed, some abbreviations are used by this library:
 ## Reapplying (some) of the transform
 
 Often, we want to reapply a transform, after something changes -- typically the source data.
+
+This can be done by holding on to the context from the initial transform.
 
 The ability to do this is illustrated below:
 

@@ -22,6 +22,7 @@ export function transform(
     if(ctx.mode === undefined){
         Object.assign<RenderContext, Partial<RenderContext>>(ctx, {mode: 'init', level: 0, idx: 0})
     }
+    ctx.ctx = ctx;
     const isTemplate = (sourceOrTemplate as HTMLElement).localName === "template";
     const source = isTemplate
       ? (sourceOrTemplate as HTMLTemplateElement).content.cloneNode(true) as DocumentFragment
@@ -186,10 +187,13 @@ export function doNextStepSelect(
     let nextEl = ctx.target!.querySelector(nextStep.Select) as HTMLElement | null;
     if(nextEl === null) return;
     const inherit = !!nextStep.MergeTransforms;
-    const newTransform = nextStep.Transform;
-    const mergedTransform = Object.assign({}, newTransform);
-    if (ctx.previousTransform !== undefined && inherit) {
-      Object.assign(mergedTransform, ctx.previousTransform);
+    let mergedTransform = nextStep.Transform || ctx.previousTransform;
+    if(inherit && nextStep.Transform){
+        const newTransform = nextStep.Transform;
+        mergedTransform = Object.assign({}, newTransform);
+        if (ctx.previousTransform !== undefined && inherit) {
+          Object.assign(mergedTransform, ctx.previousTransform);
+        }
     }
     const copy = copyCtx(ctx);
     ctx.Transform = mergedTransform;
