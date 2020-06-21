@@ -93,7 +93,27 @@ Produces
 </div>
 ```
 
-We'll be walking through a number of more complex scenarios, but for reference, the rules are available below in Summary form.
+### Not limited to declarative syntax
+
+The transform example so far has been declarative (according to my definition of that subjective term).  This library is striving to make the
+syntax as declarative as possible as more functionality is added.  The goal being that ultimately much of what one needs with normal UI development could in fact be encoded into a separate JSON import.
+
+However, bear in mind that the transform rules also provide support for 100% no-holds-barred non-declarative code:
+
+```TypeScript
+const Transorm = {
+    details:{
+        summary: ({target}: RenderContext<HTMLSummaryElement>) => {
+            ...
+            target.innerHTML = 'Knock yourself out!';
+        }
+    }
+}
+```
+
+## Syntax summary
+
+We'll be walking through a number of more complex scenarios, but for reference, the rules are available below in summary form, if you expand the section.
 
 They will make more sense after walking through examples, and, of course, real-world practice.
 
@@ -128,6 +148,7 @@ const Transform = {
 ```
 
 Due to the basic rules of object literals in JavaScript, keys can only be strings or ES6 symbols.  trans-render uses both.
+
 
 ### LHS Key Scenarios
 
@@ -266,6 +287,7 @@ Here the tag "section" will be removed.
 **NB:**  Be careful when using this technique.  Once a node is removed, there's no going back -- it will no longer match any css if you use trans-render updating (discussed below).  If your use of trans-render is mostly to display something once, and you recreate everything from scratch when your model changes, that's fine.  However, if you want to apply incremental updates, and need to display content conditionally, it would be better to use a [custom element](https://polymer-library.polymer-project.org/3.0/docs/devguide/templates#dom-if) [for that](https://github.com/bahrus/if-diff) [purpose](https://github.com/matthewp/if-else).
 
 
+### Limited Support for 
 
 ## What does wdwsf stand for?
 

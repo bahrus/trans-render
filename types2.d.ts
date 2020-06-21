@@ -1,5 +1,5 @@
-export interface RenderContext<TItem = any>{
-    target?: HTMLElement | null;
+export interface RenderContext<TTarget = HTMLElement, TItem = any>{
+    target?: TTarget | null;
     ctx?: RenderContext | undefined;
     cache?: any;
     previousTransform?: TransformValueOptions | undefined;
