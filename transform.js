@@ -47,6 +47,9 @@ function processFragment(source, ctx) {
             case 'string':
                 newTarget.textContent = transformTemplateVal;
                 break;
+            case 'object':
+                doObjectMatch('', transformTemplateVal, ctx);
+                break;
         }
     }
     ctx.target = source.firstElementChild;

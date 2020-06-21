@@ -69,6 +69,9 @@ function processFragment(
           case 'string':
             newTarget.textContent = transformTemplateVal;
             break;
+          case 'object':
+              doObjectMatch('', transformTemplateVal as TransformValueObjectOptions, ctx);
+              break;
         }
     }
     ctx.target = source.firstElementChild as HTMLElement;
