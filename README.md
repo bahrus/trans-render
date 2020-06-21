@@ -178,7 +178,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
      -  First optional parameter is a **p**roperty object, that gets shallow-merged into the matching element (target).
         - Shallow-merging goes one level deeper with style and dataset properties.
      -  Second optional parameter is an **e**vent object, that binds to events of the matching target element.
-     -  Third optional parameter is an **a**ttribute object, that sets the attributes.  "null" values removes the attributes.
+     -  Third optional parameter is an **a**ttribute object, that sets the attributes.  "null" values remove the attributes.
      -  Fourth optional parameter is a sub-**t**ransform, which recursively performs transforms within the light children of the matching target element.
      -  Fifth optional parameter is of type **s**ymbol, to allow future referencing to the matching target element.
   -  If the first element of the tuple itself is an array, then the array represents a declarative loop associated with those items.
@@ -287,7 +287,11 @@ Here the tag "section" will be removed.
 **NB:**  Be careful when using this technique.  Once a node is removed, there's no going back -- it will no longer match any css if you use trans-render updating (discussed below).  If your use of trans-render is mostly to display something once, and you recreate everything from scratch when your model changes, that's fine.  However, if you want to apply incremental updates, and need to display content conditionally, it would be better to use a [custom element](https://polymer-library.polymer-project.org/3.0/docs/devguide/templates#dom-if) [for that](https://github.com/bahrus/if-diff) [purpose](https://github.com/matthewp/if-else).
 
 
-### Limited Support for 
+### Limited Support for conditional templates [untested]
+
+```JavaScript
+article: [isHotOutside, warmWeatherTemplate, coldWeatherTemplate]
+```
 
 ## What does wdwsf stand for?
 
@@ -331,237 +335,26 @@ The ability to do this is illustrated below:
 </script>
 ```
 
+The ctx object has a "mode" property that becomes "update" after the initial transform completes.
+
 ## Use Case 1:  Applying the DRY principle to (post) punk rock lyrics
 
 ### Example 1a
 
-[Demo](https://jsfiddle.net/bahrus/gc58Ldkp/)
+[Demo](https://jsfiddle.net/bahrus/zvfa6q2u/)
 
 Demonstrates including sub templates.
-
-If you are [here](https://www.webcomponents.org/element/trans-render), the demo appears below:
-<!--
-```
-<custom-element-demo>
-<template>
-    <div>
-        <a href="https://www.youtube.com/watch?v=2-Lb-JhsaEk" target="_blank">Something's gone wrong again</a>
-        <template id="Title">Something's gone wrong again</template>
-        <template id="Title2">Something goes wrong again</template>
-        <template id="Again">And again</template>
-        <template id="Again2">And again, and again, again and something's gone wrong again</template>
-        <template id="Again3">And again, and again, again and something goes wrong again</template>
-        <template id="Agains">
-            <span data-init="Again"></span><br>
-            <span data-init="Again2"></span><br>
-            <span data-init="Title"></span>
-        </template>
-        <template id="Agains2">
-            <span data-init="Title2"></span><br>
-            <span data-init="Again"></span><br>
-            <span data-init="Again3"></span><br>
-            <span data-init="Title2"></span>
-        </template>
-        <template id="bus">
-            <span>Nothing ever happens to people like us</span><br>
-            <span>'Cept we miss the bus, something goes wrong again</span><br>
-            <span>Need a smoke, use my last fifty P.</span><br>
-            <span>But the machine is broke, something's gone wrong again</span>
-        </template>
-        <template id="Main">
-            <div>
-                <span>Tried to find my sock</span><br>
-                <span>No good, it's lost</span><br>
-                <span data-init="Title"></span><br>
-                <span>Need a shave</span><br>
-                <span>Cut myself, need a new blade</span><br>
-                <span data-init="Title"></span>
-            </div>
-            <div data-init="Agains"></div>
-            <div>
-                <span>Tried to fry an egg</span><br>
-                <span>Broke the yolk, no joke</span><br>
-                <span data-init="Title"></span><br>
-                <span>Look at my watch, just to tell the time but the hand's come off mine</span><br>
-                <span data-init="Title"></span><br>
-                <span data-init="Title"></span>
-            </div>
-            <div data-init="Agains"></div>
-            <div data-init="bus"></div>
-            <div data-init="Agains2"></div>
-            <div data-init="Agains2"></div>
-            <div data-init="bus"></div>
-            <div data-init="Agains2"></div>
-            <div>
-                <span>I turned up early in time for our date</span><br>
-                <span>But then you turn up late, something goes wrong again</span><br>
-                <span>Need a drink, go to the pub</span><br>
-                <span>But the bugger's shut, something goes wrong again</span>
-            </div>
-            <div>
-                <span data-init="Title2"></span><br>
-                <span data-init="Again"></span><br>
-                <span data-init="Again3"></span><br>
-                <span>Ah, something goes wrong again</span><br>
-                <span data-init="Title2"></span><br>
-                <span data-init="Title2"></span>
-            </div>
-            <style>
-                div{
-                    padding-top:20px;
-                }
-            </style>
-        </template>
-        <div id="target"></div>
-        <script type="module">
-            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.61/init.js';
-            init(Main, {
-                Transform: {
-                    '*': {
-                        Select: '*'
-                    },
-                    '[data-init]': ({target, ctx}) =>{
-                        init(self[target.dataset.init], {}, target);
-                    }
-                }
-            }, target);
-        </script>
-    </div>
-</template>
-</custom-element-demo>
-```
--->
 
 
 
 ## Example 1b
 
-[Demo](https://jsfiddle.net/bahrus/ktpjyLvc/)
+[Demo](https://jsfiddle.net/bahrus/zvfa6q2u/4/)
 
 Demonstrates use of update, rudimentary interpolation, recursive select.
 
-<!--
-```
-<custom-element-demo>
-<template>
 
-    <div>
-        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a><br>
-        <button id="changeDays">Wi not trei a holiday in Sweeden this yer</button>
-        <template id="Friday">
-            <span x-d>It's |.Day5| I'm in love</span>
-        </template>
-        <template id="Opening">
-            <span x-d>I don't care if |.Day1|'s blue</span><br>
-            <span x-d>|.Day2|'s gray and |.Day3| too</span><br>
-            <span x-d>|.Day4| I don't care about you</span><br>
-            <span data-init="Friday"></span>
-        </template>
-
-        <template id="Main">
-            <div data-init="Opening" class="stanza"></div>
-            <div class="stanza">
-                <span x-d>|.Day1| you can fall apart</span><br>
-                <span x-d>|.Day2| |.Day3| break my heart</span><br>
-                <span x-d>Oh, |.Day4| doesn't even start</span><br>
-                <span data-init="Friday"></span>
-            </div>
-            <div class="stanza">
-                <span x-d>|.Day6| wait</span><br>
-                <span x-d>And |.Day7| always comes too late</span><br>
-                <span x-d>But |.Day5| never hesitate</span>
-            </div>
-
-            <div class="stanza">
-                <span x-d>I don't care if |.Day1|'s black</span><br>
-                <span x-d>|.Day2|, |.Day3| heart attack</span><br>
-                <span x-d>|.Day4| never looking back</span><br>
-                <span data-init="Friday"></span>
-            </div>
-            <div class="stanza">
-                <span x-d>|.Day1| you can hold your head</span><br>
-                <span x-d>|.Day2|, |.Day3| stay in bed</span><br>
-                <span x-d>Or |.Day4| watch the walls instead</span><br>
-                <span data-init="Friday"></span>
-            </div>
-            <div class="stanza">
-                <span x-d>|.Day6| wait</span><br>
-                <span x-d>And |.Day7| always comes too late</span><br>
-                <span x-d>But |.Day5| never hesitate</span>
-            </div>
-            <div class="stanza">
-                <span>Dressed up to the eyes</span><br>
-                <span>It's a wonderful surprise</span><br>
-                <span>To see your shoes and your spirits rise</span><br>
-                <span>Throwing out your frown</span><br>
-                <span>And just smiling at the sound</span><br>
-                <span>And as sleek as a shriek</span><br>
-                <span>Spinning round and round</span><br>
-                <span>Always take a big bite</span><br>
-                <span>It's such a gorgeous sight</span><br>
-                <span>To see you in the middle of the night</span><br>
-                <span>You can never get enough</span><br>
-                <span>Enough of this stuff</span><br>
-                <span x-d>It's |.Day5|</span><br>
-                <span>I'm in love</span>
-            </div>
-            <div data-init="Opening" class="stanza"></div>
-            <div class="stanza">
-                <span x-d>|.Day1| you can fall apart</span><br>
-                <span x-d>|.Day2|, |.Day3| break my heart</span><br>
-                <span x-d>|.Day4| doesn't even start</span><br>
-                <span data-init="Friday"></span>
-            </div>
-            <style>
-                .stanza{
-                padding-top: 20px;
-            }
-        </style>
-        </template>
-        <div id="target"></div>
-
-        <script type="module">
-            import { init } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.61/init.js';
-            import { interpolate } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.61/interpolate.js';
-            import { update } from 'https://cdn.jsdelivr.net/npm/trans-render@0.0.61/update.js';
-
-            let model = {
-                Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
-                Day6: 'Saturday', Day7: 'Sunday',
-            };
-            const ctx = init(Main, {
-                Transform: {
-                    '*': {
-                        Select: '*'
-                    },
-                    '[x-d]': ({ target }) => {
-                        interpolate(target, 'textContent', model);
-                    },
-                    '[data-init]': ({ target, ctx }) => {
-                        if (ctx.update !== undefined) {
-                            return {}
-                        } else {
-                            init(self[target.dataset.init], {}, target);
-                        }
-                    },
-                }
-            }, target);
-            changeDays.addEventListener('click', e => {
-                model = {
-                    Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
-                    Day6: 'lördag', Day7: 'söndag',
-                }
-                update(ctx, target);
-            })
-        </script>
-    </div>
-</template>
-</custom-element-demo>
-```
--->
-
-
-## Simple Template Insertion [Untested]
+## Simple Template Insertion
 
 A template can be inserted directly inside the target element as follows:
 
@@ -578,21 +371,19 @@ My summary Text
 </template>
 <div id="target"></div>
 <script type="module">
-    import { init } from '../init.js';
+    import { transform } from '../transform.js';
     const Transform = {
         details: {
             summary: summaryTemplate
         }
     };
-    init(sourceTemplate, { Transform }, target);
+    transform(sourceTemplate, { Transform }, target);
 </script>
 ```
 
-Here we are relying on the fact that outside any Shadow DOM, id's become global constants.  So for simple HTML pages, this works.  Assuming HTML Modules someday brings the world back into balance, an open question remains how code will be able to reference templates defined within the HTML template.
+Here we are relying on the fact that outside any Shadow DOM, id's become global constants.  So for simple HTML pages, this works.  Assuming HTML Modules someday bring the world back into balance, an open question remains how code will be able to reference templates defined within the HTML module.
 
-For now, typically, web components are written in JavaScript exclusively. A [utility to create a template](#create-template-element-programmatically) is provided that can then be referenced, in lieu of an HTML Template DOM node.
-
-
+For now, typically, web components are written in JavaScript exclusively. Although creating a template is one of code, the code is a bit length, so a [utility to create a template](#create-template-element-programmatically) is provided that can then be referenced, in lieu of an HTML Template DOM node.
 
 ##  Shadowed Template Insertion
 
@@ -629,7 +420,7 @@ But uniqueness of the keys of the JSON-like structure we are using prevents us f
 We can specify multiple matches as follows:
 
 ```JavaScript
-import { init } from '../init.js';
+import { transform } from '../transform.js';
 const Transform = {
     details: {
         article: articleTemplate,
@@ -638,7 +429,7 @@ const Transform = {
         '"3': ...
     }
 };
-init(sourceTemplate, { Transform }, target);
+transform(sourceTemplate, { Transform }, target);
 ```
 
 I.e. any selector that starts with a double quote (") will use the last selector that didn't.
@@ -646,7 +437,7 @@ I.e. any selector that starts with a double quote (") will use the last selector
 ## Property / attribute / event binding
 
 ```JavaScript
-import { init } from '../init.js';
+import { transform} from '../transform.js';
 const Transform = {
     details: {
         'my-custom-element': [
@@ -663,7 +454,7 @@ const Transform = {
         ]
     }
 };
-init(sourceTemplate, { Transform }, target);
+transform(sourceTemplate, { Transform }, target);
 ```
 
 Each of the elements are "optional" in the sense that you  can either end the array early, or you can skip over one or more of the settings by specifying an empty object ({}), or just a comma i.e. [,,{'my-attribute', 'myValue'}].  A more verbose but somewhat more powerful way of doing this is discussed with the [decorate function](https://github.com/bahrus/trans-render#behavior-enhancement) discussed later.
@@ -737,7 +528,15 @@ There are currently five parameters that can be pulled via these arrow functions
 TypeScript Tip: Some of the parameters, like target, are quite generic (e.g. target:HTMLElement, item: any). But one can add typing thusly:
 
 ```Typescript
-    summary: ({target, item} : {target: HTMLInputElement, item: MyModelItem}) =>{
+    summary: ({target, item} :  {target: HTMLInputElement, item: MyModelItem}) =>{
+        ...
+    }
+```
+
+The argument is of type "RenderContext" so you can also get the benefit of typing thusly:
+
+```Typescript
+    summary: ({target, item} :  RenderContext<HTMLInputElement, MyModelItem>) =>{
         ...
     }
 ```

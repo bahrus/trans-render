@@ -79,14 +79,14 @@
         </template>
         <div id="target"></div>
         <script type="module">
-            import { init } from '../init.js';
-            init(Main, {
+            import { transform } from '../transform.js';
+            transform(Main, {
                 Transform: {
                     '*': {
                         Select: '*'
                     },
                     '[data-init]': ({target, ctx}) =>{
-                        init(self[target.dataset.init], {}, target);
+                        transform(self[target.dataset.init], ctx, target);
                     }
                 }
             }, target);
