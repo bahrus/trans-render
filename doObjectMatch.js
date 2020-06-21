@@ -32,19 +32,35 @@ export function doObjectMatch(key, tvoo, ctx) {
     }
 }
 function isTemplate(test) {
-    return test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
+    return test !== undefined && test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
 }
+const lastTempl = Symbol();
 function doTemplate(ctx, te) {
+    const target = ctx.target;
+    if (target[lastTempl] !== undefined && target[lastTempl] === te[lastTempl])
+        return;
+    const useShadow = te.dataset.shadowRoot !== undefined;
     const clone = te.content.cloneNode(true);
-    if (te.dataset.shadowRoot !== undefined) {
-        ctx.target.attachShadow({ mode: te.dataset.shadowRoot, delegatesFocus: true }).appendChild(clone);
+    let fragmentTarget = target;
+    if (useShadow) {
+        if (target.shadowRoot === null) {
+            target.attachShadow({ mode: te.dataset.shadowRoot, delegatesFocus: true });
+        }
+        else {
+            target.shadowRoot.innerHTML = '';
+        }
+        fragmentTarget = target.shadowRoot;
     }
     else {
-        ctx.target.appendChild(clone);
+        target.innerHTML = '';
     }
+    fragmentTarget.appendChild(clone);
 }
 function doArrayMatch(key, tvao, ctx) {
     const firstEl = tvao[0];
+    // if(isTemplate(firstEl)){
+    //   doTemplate(ctx, firstEl as HTMLTemplateElement, tvao[1])
+    // }
     switch (typeof firstEl) {
         case 'undefined':
         case 'object':

@@ -45,21 +45,35 @@ export function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ct
     }
 }
 
-function isTemplate(test: HTMLTemplateElement){
-    return test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
+function isTemplate(test: any | undefined){
+    return test !== undefined && test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
 }
 
+const lastTempl = Symbol();
 function doTemplate(ctx: RenderContext, te: HTMLTemplateElement){
+    const target = ctx.target!;
+    if((<any>target)[lastTempl] !== undefined &&   (<any>target)[lastTempl] === (<any>te)[lastTempl]) return;
+    const useShadow = te.dataset.shadowRoot !== undefined;
     const clone = te.content.cloneNode(true);
-    if(te.dataset.shadowRoot !== undefined){
-      ctx.target!.attachShadow({mode: te.dataset.shadowRoot as 'open' | 'closed', delegatesFocus: true}).appendChild(clone)
+    let fragmentTarget : Node = target;
+    if(useShadow){
+      if(target.shadowRoot === null){
+        target.attachShadow({mode: te.dataset.shadowRoot as 'open' | 'closed', delegatesFocus: true});
+      }else{
+        target.shadowRoot.innerHTML = '';
+      }
+      fragmentTarget = target.shadowRoot!;
     }else{
-      ctx.target!.appendChild(clone);
+      target.innerHTML = '';
     }
+    fragmentTarget.appendChild(clone);
 }
 
 function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: RenderContext){
     const firstEl = tvao[0];
+    // if(isTemplate(firstEl)){
+    //   doTemplate(ctx, firstEl as HTMLTemplateElement, tvao[1])
+    // }
     switch(typeof firstEl){
         case 'undefined':
         case 'object':
@@ -68,7 +82,6 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
             }else{
                 doPropSetting(key, tvao as PEATUnionSettings, ctx);
             }
-            
             break;
     }
 }

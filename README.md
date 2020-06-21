@@ -134,7 +134,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 - If the key is a string that starts with a lower case letter, then it is a "css match" expression.
 - If the key is a string that starts with double quote, then it is also a "css match" expression, but the css expression comes from the nearest previous sibling key which doesn't start with a double quote.
 - If the key is a string that starts with a capital letter, then it is part of a "Next Step" expression that indicates where to jump down to next in the DOM tree.
-- If the key is an ES6 symbol, it is a shortcut to grab a reference to a DOM element previously stored either in context.host or context.cache, where context.host in a custom element instance.
+- If the key is an ES6 symbol, it is a shortcut to grab a reference to a DOM element previously stored either in context.host or context.cache, where context.host is a custom element instance.
 
 ### CSS Match Rules
 
@@ -177,7 +177,9 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
   -  If the first element of the tuple is a boolean, then this represents a conditional statement.
      - If the first element is true, replace the rhs expression with the second element, and reapply the logic.
      - If the first element is false, replace the rhs expression with the third element, and reapply the logic.
-  -  If the first element of the tuple is a template, then the second element is expected to be init transform, second is update transform.
+  <!---  If the first element of the tuple is a template, then the second element is expected to be a transform.
+     - If the template element has property dataset.shadowRoot = 'open' | 'closed', create a shadowRoot with the given mode.
+     - During updates, if the template element doesn't match the original cloned template, the content inside the (shadow) target is cleared first before cloning the new template (which may not be the optimal solution for your use case, in which case seek some alternatives, like if-diff custom element).-->
 
 </details>
 
@@ -242,7 +244,7 @@ Transform: {
     },
 ```
 
-The expression "\*" is a match for all HTML elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector('*')).  This, combined with the default setting to match all the next siblings means that for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more processing than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
+The expression "\*" is a match for all HTML elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector('*')).  This, combined with the default setting to match all the next siblings means that for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more element matching than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
 
 If you use a rule like the one above, then the other rules will almost match what you would expect with a classic css file, as far as the selectors.
 
