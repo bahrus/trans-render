@@ -101,7 +101,7 @@ syntax as declarative as possible as more functionality is added.  The goal bein
 However, bear in mind that the transform rules also provide support for 100% no-holds-barred non-declarative code:
 
 ```TypeScript
-const Transorm = {
+const Transform = {
     details:{
         summary: ({target}: RenderContext<HTMLSummaryElement>) => {
             ...
@@ -135,7 +135,7 @@ const Transform = {
 };
 ```
 
-details, summary are lhs keys.  model.summaryText is a rhs expression, as is the open and closed curly braces section containing it.
+details, summary are lhs keys of two nested transform rules.  model.summaryText is a rhs expression, as is the open and closed curly braces section containing it.
 
 In the example above, the details and summary keys are really strings, and could be equivalently written:
 
@@ -174,7 +174,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 - If the rhs expression evaluates to an array, then
   -  Arrays are treated as "tuples" for common requirements.
   -  The first element of the tuple indicates what type of tuple to expect.
-  -  If the first element of the tuple is a non-array, non HTMLTemplateElement object, or undefined, then the tuple is treated as a "PEATS" tuple -- property / event / attribute / symbol reference setting:
+  -  If the first element of the tuple is a non-array, non HTMLTemplateElement object, or undefined, then the tuple is treated as a "PEATS" tuple -- property / event / attribute / transform / symbol reference setting:
      -  First optional parameter is a **p**roperty object, that gets shallow-merged into the matching element (target).
         - Shallow-merging goes one level deeper with style and dataset properties.
      -  Second optional parameter is an **e**vent object, that binds to events of the matching target element.
