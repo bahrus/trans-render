@@ -104,8 +104,8 @@ However, bear in mind that the transform rules also provide support for 100% no-
 const Transform = {
     details:{
         summary: ({target}: RenderContext<HTMLSummaryElement>) => {
-            ...
-            target.innerHTML = 'Knock yourself out!';
+            ///knock yourself out
+            target.appendChild(document.body);
         }
     }
 }
@@ -198,6 +198,15 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
   -  If the first element of the tuple is a boolean, then this represents a conditional statement.
      - If the first element is true, replace the rhs expression with the second element, and reapply the logic.
      - If the first element is false, replace the rhs expression with the third element, and reapply the logic.
+  -  If the first element of the tuple is an ES6 symbol, then this represents a directive / plugin.[TODO, tentative]
+     - The syntax only makes sense if: 
+         - that symbol, say mySymbol, is a key inside ctx.directives, and
+         - ctx.directives[mySymbol] maps to a function with a single argument.
+     - If that is the case, then that function is passed an object that is a merge of ctx, and the remaining items in the tuple.
+     - The benefits of a directive over an using an arrow function are:
+       - Arrow functions are a bit cumbersome
+       - Arrow functions are not really as declarative (kind of a subjective call)
+
   <!---  If the first element of the tuple is a template, then the second element is expected to be a transform.
      - If the template element has property dataset.shadowRoot = 'open' | 'closed', create a shadowRoot with the given mode.
      - During updates, if the template element doesn't match the original cloned template, the content inside the (shadow) target is cleared first before cloning the new template (which may not be the optimal solution for your use case, in which case seek some alternatives, like if-diff custom element).-->
