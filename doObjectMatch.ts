@@ -83,6 +83,9 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
                 doPropSetting(key, tvao as PEATUnionSettings, ctx);
             }
             break;
+        case 'symbol':
+            //TODO
+            break;
     }
 }
 

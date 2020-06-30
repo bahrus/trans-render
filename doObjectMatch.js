@@ -71,6 +71,9 @@ function doArrayMatch(key, tvao, ctx) {
                 doPropSetting(key, tvao, ctx);
             }
             break;
+        case 'symbol':
+            //TODO
+            break;
     }
 }
 function doPropSetting(key, peat, ctx) {

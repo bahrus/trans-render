@@ -238,7 +238,6 @@ function getRHS(expr: any, ctx: RenderContext): any{
                 case 'boolean':
                     return getRHS(pivot ? expr[1] : expr[2], ctx)
                 case 'string':
-                case 'symbol':
                     if(expr.length === 2 && typeof(expr[1]) === 'object'){
                         return getRHS(expr[1][pivot], ctx);
                     }else{
