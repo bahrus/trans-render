@@ -1,10 +1,26 @@
-import { doObjectMatch } from './doObjectMatch.js';
 const SkipSibs = Symbol();
 const NextMatch = Symbol();
+let doObjMtch;
+export async function doImports(repeat = true) {
+    const { doObjectMatch, repeatethFnContainer } = await import('./doObjectMatch.js');
+    doObjMtch = doObjectMatch;
+    if (repeat && repeatethFnContainer.repetethFn === undefined) {
+        const { repeateth } = await import('./repeateth2.js');
+        repeatethFnContainer.repeateth = repeateth;
+    }
+}
 export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate) {
     if (ctx.mode === undefined) {
         Object.assign(ctx, { mode: 'init', level: 0, idx: 0 });
     }
+    // const pluginPromises = ctx.pluginPromises;
+    // if(ctx.mode === 'init' && pluginPromises !== undefined){
+    //     const plugins = await Promise.all(pluginPromises);
+    //     if(ctx.plugins === undefined) ctx.plugins = {};
+    //     plugins.forEach(plugin =>{
+    //         ctx.plugins[plugin.sym as any as string] = plugin; //https://github.com/microsoft/TypeScript/issues/1863
+    //     });
+    // }
     ctx.ctx = ctx;
     const isTemplate = sourceOrTemplate.localName === "template";
     const source = isTemplate
@@ -25,6 +41,8 @@ export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate) {
     }
     ctx.mode = 'update';
     return ctx;
+}
+function init(sourceOrTemplate, ctx, target = sourceOrTemplate) {
 }
 export function copyCtx(ctx) {
     return Object.assign({}, ctx);
@@ -48,7 +66,7 @@ function processFragment(source, ctx) {
                 newTarget.textContent = transformTemplateVal;
                 break;
             case 'object':
-                doObjectMatch('', transformTemplateVal, ctx);
+                doObjMtch('', transformTemplateVal, ctx);
                 break;
         }
     }
@@ -110,7 +128,7 @@ export function processEl(ctx) {
                 case 'object':
                     if (tvo === null)
                         continue;
-                    doObjectMatch(key, tvo, ctx);
+                    doObjMtch(key, tvo, ctx);
                     break;
                 case 'symbol':
                     const cache = ctx.host || ctx;

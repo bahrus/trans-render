@@ -73,37 +73,40 @@
     </template>
     <div id=target></div>
     <script type=module>
-        import {transform} from '../transform.js';
-        transform(main, {
-            Transform:{
-                '#flyMark': dontKnowWhy,
-                '"': {
-                    '#dieMark': 'There was an old lady who swallowed a spider;'
-                },
-                '""': mark,
-                '[nested]':{
-                    Select: 'span',
-                    Transform: {
-                        span: wriggle,
-                        '""': x => whySpider,
+        import {transform, doImports} from '../transform.js';
+        doImports(false).then(() =>{
+            transform(main, {
+                Transform:{
+                    '#flyMark': dontKnowWhy,
+                    '"': {
+                        '#dieMark': 'There was an old lady who swallowed a spider;'
                     },
-                    NextMatch: 'p'
-                },
-                '[nested2]':{
-                    Select: 'label',
-                    Transform:{
-                        label:"I don't know why she swallowed a fly - Perhaps she'll die!"
-                    }
-                },
-                '[bad]': false,
-                b: bad,
-                p: 'How absurd to swallow a bird!',
-                '[spider]':[{textContent: 'She swallowed the bird to catch the spider', style:{display:'block'}},,{mark: ''}],
-                '[shadow]': shadow
-            }
-        }, target, {
-            prepend: true
+                    '""': mark,
+                    '[nested]':{
+                        Select: 'span',
+                        Transform: {
+                            span: wriggle,
+                            '""': x => whySpider,
+                        },
+                        NextMatch: 'p'
+                    },
+                    '[nested2]':{
+                        Select: 'label',
+                        Transform:{
+                            label:"I don't know why she swallowed a fly - Perhaps she'll die!"
+                        }
+                    },
+                    '[bad]': false,
+                    b: bad,
+                    p: 'How absurd to swallow a bird!',
+                    '[spider]':[{textContent: 'She swallowed the bird to catch the spider', style:{display:'block'}},,{mark: ''}],
+                    '[shadow]': shadow
+                }
+            }, target, {
+                prepend: true
+            });
         });
+
     </script>
 </body>
 </html>

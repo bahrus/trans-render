@@ -7,11 +7,36 @@ import {
     TransformValueObjectOptions,
     TransformValueArrayOptions,
     ATRIUM_Union,
-    PEATUnionSettings
+    PEATUnionSettings,
+    InitTransform,
+    UpdateTransform,
+    Plugin,
+  
 } from './types2.js';
 
+type repeatethFnSig = (template: HTMLTemplateElement, ctx: RenderContext, items: any[], target: HTMLElement, initTransform: InitTransform, updateTransform: UpdateTransform) => void;
+
+interface IRepeatethContainer{
+  repeateth?: undefined | repeatethFnSig;
+}
+
+export const repeatethFnContainer: IRepeatethContainer = {};
+
 import { doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp } from './transform.js';
-import { repeateth } from './repeateth2.js';
+// import { repeateth } from './repeateth2.js';
+
+// export function addRepeatSupport(){
+//     return new Promise(resolve =>{
+//         import('./repeateth2.js').then(({repeateth}) => {
+//             resolve({
+//                 fn: repeateth,
+//                 sym: repeatethSym
+//             } as Plugin);
+//         })
+//     });
+// }
+
+
 
 
 export function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ctx: RenderContext){
@@ -151,5 +176,5 @@ function doPropSetting(key: string, peat: PEATUnionSettings, ctx: RenderContext)
 function doRepeat(key: string, atriums: ATRIUM_Union, ctx: RenderContext){
     const mode = ctx.mode;
     const newMode = ctx.mode;
-    const transform = repeateth(atriums[1], ctx, atriums[0], ctx.target!, atriums[3], atriums[4]);
+    const transform = repeatethFnContainer.repeateth!(atriums[1], ctx, atriums[0], ctx.target!, atriums[3], atriums[4]);
 }

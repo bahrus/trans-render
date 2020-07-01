@@ -10,6 +10,11 @@ const xt = require('xtal-test/index') as IXtalTestRunner;
 
         },
         {
+            path: 'test/fly-transform.html',
+            expectedNoOfSuccessMarkers: 6,
+
+        },
+        {
             path: 'test/fly-repeat.html',
             expectedNoOfSuccessMarkers: 1,
 

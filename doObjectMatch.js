@@ -1,5 +1,16 @@
+export const repeatethFnContainer = {};
 import { doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp } from './transform.js';
-import { repeateth } from './repeateth2.js';
+// import { repeateth } from './repeateth2.js';
+// export function addRepeatSupport(){
+//     return new Promise(resolve =>{
+//         import('./repeateth2.js').then(({repeateth}) => {
+//             resolve({
+//                 fn: repeateth,
+//                 sym: repeatethSym
+//             } as Plugin);
+//         })
+//     });
+// }
 export function doObjectMatch(key, tvoo, ctx) {
     if (Array.isArray(tvoo)) {
         doArrayMatch(key, tvoo, ctx);
@@ -143,5 +154,5 @@ function doPropSetting(key, peat, ctx) {
 function doRepeat(key, atriums, ctx) {
     const mode = ctx.mode;
     const newMode = ctx.mode;
-    const transform = repeateth(atriums[1], ctx, atriums[0], ctx.target, atriums[3], atriums[4]);
+    const transform = repeatethFnContainer.repeateth(atriums[1], ctx, atriums[0], ctx.target, atriums[3], atriums[4]);
 }

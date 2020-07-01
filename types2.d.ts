@@ -12,6 +12,14 @@ export interface RenderContext<TTarget = HTMLElement, TItem = any>{
     host?: HTMLElement | undefined;
     mode?: 'init' | 'update';
     replacedElement?: HTMLElement,
+    pluginPromises?: Promise<Plugin>[],
+    plugins?: any;
+}
+
+
+export interface Plugin{
+    fn: Function;
+    sym: Symbol;
 }
 
 export interface RenderOptions{

@@ -7,12 +7,27 @@ import {
     TransformValueObjectOptions,
     TransformValueArrayOptions,
     ATRIUM_Union,
-    PEATUnionSettings
+    PEATUnionSettings,
+    Plugin
 } from './types2.js';
-import {doObjectMatch} from './doObjectMatch.js';
+
 
 const SkipSibs = Symbol();
 const NextMatch = Symbol();
+
+type doObjectMatchFnSig = (key: string, tvoo: TransformValueObjectOptions, ctx: RenderContext) => void;
+
+let  doObjMtch: undefined | doObjectMatchFnSig;
+
+
+export async function doImports(repeat: boolean = true){
+    const {doObjectMatch, repeatethFnContainer} = await import('./doObjectMatch.js');
+    doObjMtch = doObjectMatch;
+    if(repeat && repeatethFnContainer.repetethFn === undefined){
+        const {repeateth} = await import('./repeateth2.js');
+        repeatethFnContainer.repeateth = repeateth; 
+    }
+}
 
 export function transform(
     sourceOrTemplate: HTMLElement | DocumentFragment,
@@ -22,6 +37,14 @@ export function transform(
     if(ctx.mode === undefined){
         Object.assign<RenderContext, Partial<RenderContext>>(ctx, {mode: 'init', level: 0, idx: 0})
     }
+    // const pluginPromises = ctx.pluginPromises;
+    // if(ctx.mode === 'init' && pluginPromises !== undefined){
+    //     const plugins = await Promise.all(pluginPromises);
+    //     if(ctx.plugins === undefined) ctx.plugins = {};
+    //     plugins.forEach(plugin =>{
+    //         ctx.plugins[plugin.sym as any as string] = plugin; //https://github.com/microsoft/TypeScript/issues/1863
+    //     });
+    // }
     ctx.ctx = ctx;
     const isTemplate = (sourceOrTemplate as HTMLElement).localName === "template";
     const source = isTemplate
@@ -42,6 +65,12 @@ export function transform(
     }
     ctx.mode = 'update';
     return ctx;
+}
+
+function init(
+    sourceOrTemplate: HTMLElement | DocumentFragment,
+    ctx: RenderContext,
+    target: HTMLElement | DocumentFragment = sourceOrTemplate,){
 }
 
 export function copyCtx(ctx: RenderContext){
@@ -70,7 +99,7 @@ function processFragment(
             newTarget.textContent = transformTemplateVal;
             break;
           case 'object':
-              doObjectMatch('', transformTemplateVal as TransformValueObjectOptions, ctx);
+              doObjMtch!('', transformTemplateVal as TransformValueObjectOptions, ctx);
               break;
         }
     }
@@ -131,7 +160,7 @@ export function processEl(
                     break;
                 case 'object':
                     if(tvo === null) continue;
-                    doObjectMatch(key, tvo as TransformValueObjectOptions, ctx);
+                    doObjMtch!(key, tvo as TransformValueObjectOptions, ctx);
                     break;
                 case 'symbol':
                     const cache = ctx.host || ctx;

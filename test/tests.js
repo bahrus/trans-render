@@ -6,6 +6,10 @@ const xt = require('xtal-test/index');
             expectedNoOfSuccessMarkers: 6,
         },
         {
+            path: 'test/fly-transform.html',
+            expectedNoOfSuccessMarkers: 6,
+        },
+        {
             path: 'test/fly-repeat.html',
             expectedNoOfSuccessMarkers: 1,
         },
