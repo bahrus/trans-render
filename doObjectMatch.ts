@@ -23,20 +23,6 @@ interface IRepeatethContainer{
 export const repeatethFnContainer: IRepeatethContainer = {};
 
 import { doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp } from './transform.js';
-// import { repeateth } from './repeateth2.js';
-
-// export function addRepeatSupport(){
-//     return new Promise(resolve =>{
-//         import('./repeateth2.js').then(({repeateth}) => {
-//             resolve({
-//                 fn: repeateth,
-//                 sym: repeatethSym
-//             } as Plugin);
-//         })
-//     });
-// }
-
-
 
 
 export function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ctx: RenderContext){
@@ -88,7 +74,7 @@ function doTemplate(ctx: RenderContext, te: HTMLTemplateElement){
         target.shadowRoot.innerHTML = '';
       }
       fragmentTarget = target.shadowRoot!;
-    }else{
+    }else if(te.dataset.isSingle){
       target.innerHTML = '';
     }
     fragmentTarget.appendChild(clone);
@@ -96,9 +82,6 @@ function doTemplate(ctx: RenderContext, te: HTMLTemplateElement){
 
 function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: RenderContext){
     const firstEl = tvao[0];
-    // if(isTemplate(firstEl)){
-    //   doTemplate(ctx, firstEl as HTMLTemplateElement, tvao[1])
-    // }
     switch(typeof firstEl){
         case 'undefined':
         case 'object':

@@ -1,16 +1,5 @@
 export const repeatethFnContainer = {};
 import { doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp } from './transform.js';
-// import { repeateth } from './repeateth2.js';
-// export function addRepeatSupport(){
-//     return new Promise(resolve =>{
-//         import('./repeateth2.js').then(({repeateth}) => {
-//             resolve({
-//                 fn: repeateth,
-//                 sym: repeatethSym
-//             } as Plugin);
-//         })
-//     });
-// }
 export function doObjectMatch(key, tvoo, ctx) {
     if (Array.isArray(tvoo)) {
         doArrayMatch(key, tvoo, ctx);
@@ -62,16 +51,13 @@ function doTemplate(ctx, te) {
         }
         fragmentTarget = target.shadowRoot;
     }
-    else {
+    else if (te.dataset.isSingle) {
         target.innerHTML = '';
     }
     fragmentTarget.appendChild(clone);
 }
 function doArrayMatch(key, tvao, ctx) {
     const firstEl = tvao[0];
-    // if(isTemplate(firstEl)){
-    //   doTemplate(ctx, firstEl as HTMLTemplateElement, tvao[1])
-    // }
     switch (typeof firstEl) {
         case 'undefined':
         case 'object':
