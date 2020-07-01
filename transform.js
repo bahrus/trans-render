@@ -4,7 +4,7 @@ let doObjMtch;
 export async function doImports(repeat = true) {
     const { doObjectMatch, repeatethFnContainer } = await import('./doObjectMatch.js');
     doObjMtch = doObjectMatch;
-    if (repeat && repeatethFnContainer.repetethFn === undefined) {
+    if (repeat && repeatethFnContainer.repeateth === undefined) {
         const { repeateth } = await import('./repeateth2.js');
         repeatethFnContainer.repeateth = repeateth;
     }
