@@ -1,3 +1,4 @@
+import { pluginLookup } from './transform.js';
 export const repeatethFnContainer = {};
 import { doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp } from './transform.js';
 export function doObjectMatch(key, tvoo, ctx) {
@@ -69,7 +70,7 @@ function doArrayMatch(key, tvao, ctx) {
             }
             break;
         case 'symbol':
-            //TODO
+            pluginLookup[firstEl](ctx, tvao);
             break;
     }
 }

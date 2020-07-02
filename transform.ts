@@ -8,7 +8,7 @@ import {
     TransformValueArrayOptions,
     ATRIUM_Union,
     PEATUnionSettings,
-    Plugin
+    PluginPromises
 } from './types2.js';
 
 
@@ -19,13 +19,20 @@ type doObjectMatchFnSig = (key: string, tvoo: TransformValueObjectOptions, ctx: 
 
 let  doObjMtch: undefined | doObjectMatchFnSig;
 
+export let pluginLookup: any;
 
-export async function doImports(repeat: boolean = true){
+export async function doImports(repeat: boolean = true, plugins?: PluginPromises){
     const {doObjectMatch, repeatethFnContainer} = await import('./doObjectMatch.js');
     doObjMtch = doObjectMatch;
     if(repeat && repeatethFnContainer.repeateth === undefined){
         const {repeateth} = await import('./repeateth2.js');
         repeatethFnContainer.repeateth = repeateth; 
+    }
+    if(plugins !== undefined){
+        const pluginList = await Promise.all(plugins);
+        pluginList.forEach(plugin =>{
+            pluginLookup[plugin.sym] = plugin.fn;
+        })
     }
 }
 

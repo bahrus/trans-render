@@ -11,8 +11,8 @@ import {
     InitTransform,
     UpdateTransform,
     Plugin,
-  
 } from './types2.js';
+import {pluginLookup} from './transform.js';
 
 type repeatethFnSig = (template: HTMLTemplateElement, ctx: RenderContext, items: any[], target: HTMLElement, initTransform: InitTransform, updateTransform: UpdateTransform) => void;
 
@@ -92,7 +92,7 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
             }
             break;
         case 'symbol':
-            //TODO
+            pluginLookup[firstEl](ctx, tvao);
             break;
     }
 }

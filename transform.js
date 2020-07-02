@@ -1,12 +1,19 @@
 const SkipSibs = Symbol();
 const NextMatch = Symbol();
 let doObjMtch;
-export async function doImports(repeat = true) {
+export let pluginLookup;
+export async function doImports(repeat = true, plugins) {
     const { doObjectMatch, repeatethFnContainer } = await import('./doObjectMatch.js');
     doObjMtch = doObjectMatch;
     if (repeat && repeatethFnContainer.repeateth === undefined) {
         const { repeateth } = await import('./repeateth2.js');
         repeatethFnContainer.repeateth = repeateth;
+    }
+    if (plugins !== undefined) {
+        const pluginList = await Promise.all(plugins);
+        pluginList.forEach(plugin => {
+            pluginLookup[plugin.sym] = plugin.fn;
+        });
     }
 }
 export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate) {

@@ -1,3 +1,5 @@
+import {RenderContext, TransformValueArrayOptions, PlugInArgs} from './types2.d.js';
+
 const sk =  Symbol('sk');
 
 export function interpolate(target: any, prop: string, obj: any, isAttr: boolean = false){
@@ -34,5 +36,11 @@ export function interpolate(target: any, prop: string, obj: any, isAttr: boolean
     }else{
         target[prop] = newVal;
     }
+}
+
+export const interpolateSym = Symbol.for('cac2869c-94ef-4d3e-8264-418103c7433c');
+
+export function fromTuple(ctx: RenderContext, pia: PlugInArgs){
+    interpolate(ctx.target, pia[1] as string, pia[2], pia[3]);
 }
 

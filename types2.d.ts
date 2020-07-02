@@ -12,14 +12,12 @@ export interface RenderContext<TTarget = HTMLElement, TItem = any>{
     host?: HTMLElement | undefined;
     mode?: 'init' | 'update';
     replacedElement?: HTMLElement,
-    pluginPromises?: Promise<Plugin>[],
-    plugins?: any;
 }
 
-
+export type PluginPromises = Promise<Plugin>[];
 export interface Plugin{
     fn: Function;
-    sym: Symbol;
+    readonly sym: unique symbol;
 }
 
 export interface RenderOptions{
@@ -55,6 +53,7 @@ export type TransformValueObjectOptions<TargetType extends Partial<HTMLElement> 
 export type TransformValueArrayOptions<TargetType extends Partial<HTMLElement> = HTMLElement> =
         PEATUnionSettings<TargetType>
     |   ATRIUM_Union
+    |   PlugInArgs
 ;
 
 
@@ -96,4 +95,4 @@ export type ATRIUM = [any[], HTMLTemplateElement, Range, InitTransform, UpdateTr
 export type ATRIUMS = [any[], HTMLTemplateElement, Range, InitTransform, UpdateTransform, MetaSettings, symbol];
 export type ATRIUM_Union = AT | ATR | ATRI | ATRIU | ATRIUM | ATRIUMS;
 
-
+export type PlugInArgs = [symbol, ...any[]];
