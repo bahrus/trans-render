@@ -159,5 +159,8 @@ function doPropSetting(key: string, peat: PEATUnionSettings, ctx: RenderContext)
 function doRepeat(key: string, atriums: ATRIUM_Union, ctx: RenderContext){
     const mode = ctx.mode;
     const newMode = ctx.mode;
+    const vm = ctx.viewModel;
+    ctx.viewModel = atriums[0];
     const transform = repeatethFnContainer.repeateth!(atriums[1], ctx, atriums[0], ctx.target!, atriums[3], atriums[4]);
+    ctx.viewModel = vm;
 }

@@ -5,6 +5,7 @@ export interface RenderContext<TTarget = HTMLElement, TItem = any>{
     previousTransform?: TransformValueOptions | undefined;
     Transform?: TransformValueOptions;
     level?: number | undefined;
+    viewModel?: any;
     item?: TItem | undefined;
     itemTagger?:  (el: HTMLElement) => void;
     idx?: number | undefined;

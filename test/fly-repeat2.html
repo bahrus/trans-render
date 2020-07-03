@@ -43,7 +43,7 @@
             const Transform = {
                 ul: [model, personTemplate,,{
                     li: {
-                        div: [interpolateSym, 'textContent', false]
+                        div: [interpolateSym, 'textContent', ctx => ctx.item, false]
                     }
                 }] 
             }
