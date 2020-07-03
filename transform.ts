@@ -34,6 +34,7 @@ export async function doImports(objHandler: boolean = true, repeat: boolean = tr
             pluginLookup[plugin.sym] = plugin.fn;
         })
     }
+    return pluginLookup;
 }
 
 export function transform(

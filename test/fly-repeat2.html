@@ -17,11 +17,10 @@
     </div>
     <script type=module>
         import {transform, doImports} from '../transform.js';
-        let interpolateSym;
+        const interpolateSym = Symbol.for('cac2869c-94ef-4d3e-8264-418103c7433c');
         doImports(true, true, [
             new Promise((resolve) =>{
                 import('../interpolate.js').then(({plugin}) =>{
-                    interpolateSym = plugin.sym;
                     resolve(plugin);
                 });
             })

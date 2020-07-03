@@ -15,6 +15,7 @@ export async function doImports(objHandler = true, repeat = true, plugins) {
             pluginLookup[plugin.sym] = plugin.fn;
         });
     }
+    return pluginLookup;
 }
 export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate) {
     if (ctx.mode === undefined) {
