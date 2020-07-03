@@ -17,7 +17,7 @@ export interface RenderContext<TTarget = HTMLElement, TItem = any>{
 export type PluginPromises = Promise<Plugin>[];
 export interface Plugin{
     fn: Function;
-    readonly sym: unique symbol;
+    sym: symbol;
 }
 
 export interface RenderOptions{

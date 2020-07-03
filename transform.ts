@@ -19,9 +19,9 @@ type doObjectMatchFnSig = (key: string, tvoo: TransformValueObjectOptions, ctx: 
 
 let  doObjMtch: undefined | doObjectMatchFnSig;
 
-export let pluginLookup: any;
+export let pluginLookup: any = {};
 
-export async function doImports(repeat: boolean = true, plugins?: PluginPromises){
+export async function doImports(objHandler: boolean = true, repeat: boolean = true, plugins?: PluginPromises){
     const {doObjectMatch, repeatethFnContainer} = await import('./doObjectMatch.js');
     doObjMtch = doObjectMatch;
     if(repeat && repeatethFnContainer.repeateth === undefined){
@@ -279,7 +279,8 @@ function getRHS(expr: any, ctx: RenderContext): any{
                     }else{
                         throw '?';
                     }
-                
+                case 'symbol':
+                    return pluginLookup[pivot](ctx, expr);
             }
         case 'number':
             return expr.toString();

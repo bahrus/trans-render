@@ -1,8 +1,8 @@
 const SkipSibs = Symbol();
 const NextMatch = Symbol();
 let doObjMtch;
-export let pluginLookup;
-export async function doImports(repeat = true, plugins) {
+export let pluginLookup = {};
+export async function doImports(objHandler = true, repeat = true, plugins) {
     const { doObjectMatch, repeatethFnContainer } = await import('./doObjectMatch.js');
     doObjMtch = doObjectMatch;
     if (repeat && repeatethFnContainer.repeateth === undefined) {
@@ -245,6 +245,8 @@ function getRHS(expr, ctx) {
                     else {
                         throw '?';
                     }
+                case 'symbol':
+                    return pluginLookup[pivot](ctx, expr);
             }
         case 'number':
             return expr.toString();

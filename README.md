@@ -276,7 +276,7 @@ Transform: {
 
 The expression "\*" is a match for all HTML elements.  What this is saying is "for any element regardless of css-matching characteristics, continue processing its first child (Select => querySelector('*')).  This, combined with the default setting to match all the next siblings means that for a "sparse" template with very few pockets of dynamic data, you will be doing a lot more element matching than needed, as every single HTMLElement node will be checked for a match.  But for initial, pre-optimization work, this transform rule can be a convenient way to get things done more quickly.  
 
-If you use a rule like the one above, then the other rules will almost match what you would expect with a classic css file, as far as the selectors.
+If you use a rule like the one above, then the other selector rules will almost exactly match what you would expect with a classic css file.  In the absense of such a rule, css selectors will flow most naturally if emulating the nested support provided by tools such as SASS.
 
 At this point, only a synchronous workflow is provided (except when piercing into ShadowDOM).
 
@@ -560,7 +560,7 @@ The initialization transform could look like:
 
 ```JavaScript
     '*': {
-        Select: '*' //check every element recursively -- sledghammer approach
+        Select: '*' //check every element recursively -- sledgehammer approach
     },
     ['id']: ({ctx, target}) => ctx.host[target.id] = target;
 ```
