@@ -17,14 +17,13 @@
     </div>
     <script type=module>
         import {transform, doImports} from '../transform.js';
-        //import {interpolateSym} from '../interpolate.js';
         let interpolateSym;
         doImports(true, true, [
             new Promise((resolve) =>{
                 import('../interpolate.js').then(({plugin}) =>{
                     interpolateSym = plugin.sym;
                     resolve(plugin);
-                })
+                });
             })
         ]).then(() => {
             const model = [

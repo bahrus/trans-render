@@ -198,11 +198,10 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
   -  If the first element of the tuple is a boolean, then this represents a conditional statement.
      - If the first element is true, replace the rhs expression with the second element, and reapply the logic.
      - If the first element is false, replace the rhs expression with the third element, and reapply the logic.
-  -  If the first element of the tuple is an ES6 symbol, then this represents a directive / plugin.[TODO, tentative]
+  -  If the first element of the tuple is an ES6 symbol, then this represents a directive / plugin.
      - The syntax only makes sense if: 
-         - that symbol, say mySymbol, is a key inside ctx.directives, and
-         - ctx.directives[mySymbol] maps to a function with a single argument.
-     - If that is the case, then that function is passed an object that is a merge of ctx, and the remaining items in the tuple.
+         - that symbol, say mySymbol, is a key inside the plugins symbol of transform.js, and
+     - If that is the case, then that function is passed ctx, and the remaining items in the tuple.
      - The benefits of a directive over an using an arrow function are:
        - Arrow functions are a bit cumbersome
        - Arrow functions are not really as declarative (kind of a subjective call)
