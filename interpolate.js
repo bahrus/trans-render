@@ -39,7 +39,7 @@ export function interpolate(target, prop, obj, isAttr = false) {
 }
 export const interpolateSym = Symbol.for('cac2869c-94ef-4d3e-8264-418103c7433c');
 function fromTuple(ctx, pia) {
-    interpolate(ctx.target, pia[1], pia[2], pia[3]);
+    interpolate(ctx.target, pia[1], ctx.item, pia[2]);
 }
 export const plugin = {
     fn: fromTuple,
