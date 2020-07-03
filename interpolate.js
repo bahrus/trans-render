@@ -1,3 +1,4 @@
+import { getProp } from './transform.js';
 const sk = Symbol('sk');
 export function interpolate(target, prop, obj, isAttr = false) {
     let split = target[sk];
@@ -40,10 +41,15 @@ export function interpolate(target, prop, obj, isAttr = false) {
 export const interpolateSym = Symbol.for('cac2869c-94ef-4d3e-8264-418103c7433c');
 function fromTuple(ctx, pia) {
     let val = pia[2];
-    switch (typeof pia[2]) {
-        case 'function':
-            val = val(ctx, pia);
-            break;
+    if (Array.isArray(val)) {
+        val = getProp(ctx, val);
+    }
+    else {
+        switch (typeof pia[2]) {
+            case 'function':
+                val = val(ctx, pia);
+                break;
+        }
     }
     interpolate(ctx.target, pia[1], val, pia[3]);
 }
