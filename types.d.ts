@@ -121,7 +121,7 @@ export interface IHydrate extends HTMLElement{
      * Needed for asynchronous loading
      * @param props Array of property names to "upgrade", without losing value set while element was Unknown
      */
-    [propUp]<TKeys extends string[] = string[]>(props: TKeys): void;
+    __propUp<TKeys extends string[] = string[]>(props: TKeys): void;
 
 }
 
