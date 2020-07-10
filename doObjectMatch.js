@@ -91,65 +91,71 @@ function doPropSetting(key, peat, ctx) {
     else {
         return;
     }
-    if (len > 1 && peat[1] !== undefined) {
+    if (len > 1) {
         /////////  Event Handling
-        const eventSettings = peat[1];
-        for (const key in eventSettings) {
-            let eventHandler = eventSettings[key];
-            if (Array.isArray(eventHandler)) {
-                const objSelectorPath = eventHandler[1].split('.');
-                const converter = eventHandler[2];
-                const originalEventHandler = ctx.host !== undefined ? eventHandler[0].bind(ctx.host) : eventHandler[0];
-                eventHandler = (e) => {
-                    let val = getProp(e.target, objSelectorPath);
-                    if (converter !== undefined)
-                        val = converter(val);
-                    originalEventHandler(val, e);
-                };
+        if (peat[1] !== undefined) {
+            const eventSettings = peat[1];
+            for (const key in eventSettings) {
+                let eventHandler = eventSettings[key];
+                if (Array.isArray(eventHandler)) {
+                    const objSelectorPath = eventHandler[1].split('.');
+                    const converter = eventHandler[2];
+                    const originalEventHandler = ctx.host !== undefined ? eventHandler[0].bind(ctx.host) : eventHandler[0];
+                    eventHandler = (e) => {
+                        let val = getProp(e.target, objSelectorPath);
+                        if (converter !== undefined)
+                            val = converter(val);
+                        originalEventHandler(val, e);
+                    };
+                }
+                else if (ctx.host !== undefined) {
+                    eventHandler = eventHandler.bind(ctx.host);
+                }
+                target.addEventListener(key, eventHandler);
             }
-            else if (ctx.host !== undefined) {
-                eventHandler = eventHandler.bind(ctx.host);
-            }
-            target.addEventListener(key, eventHandler);
         }
     }
     else {
         return;
     }
-    if (len > 2 && peat[2] !== undefined) {
+    if (len > 2) {
         /////////  Attribute Setting
-        for (const key in peat[2]) {
-            const val = peat[2][key];
-            switch (typeof val) {
-                case 'boolean':
-                    if (val) {
-                        target.setAttribute(key, '');
-                    }
-                    else {
-                        target.removeAttribute(key);
-                    }
-                    break;
-                case 'string':
-                    target.setAttribute(key, val);
-                    break;
-                case 'number':
-                    target.setAttribute(key, val.toString());
-                    break;
-                case 'object':
-                    if (val === null)
-                        target.removeAttribute(key);
-                    break;
+        if (peat[2] !== undefined) {
+            for (const key in peat[2]) {
+                const val = peat[2][key];
+                switch (typeof val) {
+                    case 'boolean':
+                        if (val) {
+                            target.setAttribute(key, '');
+                        }
+                        else {
+                            target.removeAttribute(key);
+                        }
+                        break;
+                    case 'string':
+                        target.setAttribute(key, val);
+                        break;
+                    case 'number':
+                        target.setAttribute(key, val.toString());
+                        break;
+                    case 'object':
+                        if (val === null)
+                            target.removeAttribute(key);
+                        break;
+                }
             }
         }
     }
     else {
         return;
     }
-    if (len > 3 && peat[3] !== undefined) {
-        const transform = ctx.Transform;
-        ctx.Transform = peat[3];
-        processEl(ctx);
-        ctx.Transform = transform;
+    if (len > 3) {
+        if (peat[3] !== undefined) {
+            const transform = ctx.Transform;
+            ctx.Transform = peat[3];
+            processEl(ctx);
+            ctx.Transform = transform;
+        }
     }
     if (len > 4 && peat[4] !== undefined) {
         ////////////// Symbol
