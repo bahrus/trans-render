@@ -525,20 +525,15 @@ const Transform = {
 ```
 
 
-There are currently five parameters that can be pulled via these arrow functions:
+ctx is an object meant to pass data through (repeated, nested) transforms.  It includes a number of [internal, reserved properties](https://github.com/bahrus/trans-render/blob/baseline/types2.d.ts#L1).
 
-```JavaScript
-    summary: ({target, ctx, idx, level, item}) => {
-        ...
-    }
-```
 
 TypeScript Tip: Some of the parameters, like target, are quite generic (e.g. target:HTMLElement, item: any). But one can add typing thusly:
 
 ```Typescript
-    summary: ({target, item} :  {target: HTMLInputElement, item: MyModelItem}) =>{
-        ...
-    }
+summary: ({target, item} :  {target: HTMLInputElement, viewModel: MyModel, item: MyModelItem}) =>{
+    ...
+}
 ```
 
 The argument is of type "RenderContext" so you can also get the benefit of typing thusly:
@@ -613,6 +608,8 @@ So the code checks whether the context object has a "cache" property, and if so,
 
 ###  Simple Loop support
 
+#### Imperative Repeat
+
 ```TypeScript
 repeat(
     template: HTMLTemplateElement | [symbol, string], 
@@ -666,37 +663,35 @@ Anyway the syntax is shown below.  What's notable is a sub template is cloned re
 </div>
 ```
 
-An alternative to repeat is provided, "repeateth" that does the same thing, but it hides the "rows" that go out of scope as the list changes, rather than deleting them.
+####  Declarative Repeat
 
+Please expand below
 
 <details>
-<summary>Declarative Repeat [TODO]</summary>
+<summary>Declarative Repeat [Partially Implemented]</summary>
 
 ```JavaScript
     const ctx = init(list, {
         Transform: {
-            ul: [itemTemplate, items, [3, 10], itemTransform, ul$]
+            ul: [items, itemTemplate, [3, 10], itemTransform,,, ul$]
         }
     }, target, options);
 ```
 
-Acronym:  TARTS
+Acronym:  ATRIUMS
 
-Template
 Array (of items)
+Template (per item)
 Range 
-Transform
-RefSymbol
-
-Template required
-Array and Range optional, but one of them is required
-Range allows to specify span within items to display -- useful for virtual rendering?
-Transform, RefSymbol optional
+Init Transform
+Update Transform
+Metadata
+Symbol Ref
 
 </details>
 
 <details>
-<summary>Logan's Loop[TODO]</summary>
+<summary>Logan's Loop [TODO]</summary>
 
 ### Carousel Loop Support
 

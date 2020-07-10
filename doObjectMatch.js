@@ -1,6 +1,5 @@
-import { pluginLookup } from './transform.js';
+import { pluginLookup, doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp } from './transform.js';
 export const repeatethFnContainer = {};
-import { doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp } from './transform.js';
 export function doObjectMatch(key, tvoo, ctx) {
     if (Array.isArray(tvoo)) {
         doArrayMatch(key, tvoo, ctx);
@@ -89,6 +88,9 @@ function doPropSetting(key, peat, ctx) {
                 Object.assign(target.dataset, props.dataset);
         }
     }
+    else {
+        return;
+    }
     if (len > 1 && peat[1] !== undefined) {
         /////////  Event Handling
         const eventSettings = peat[1];
@@ -110,6 +112,9 @@ function doPropSetting(key, peat, ctx) {
             }
             target.addEventListener(key, eventHandler);
         }
+    }
+    else {
+        return;
     }
     if (len > 2 && peat[2] !== undefined) {
         /////////  Attribute Setting
@@ -136,6 +141,19 @@ function doPropSetting(key, peat, ctx) {
                     break;
             }
         }
+    }
+    else {
+        return;
+    }
+    if (len > 3 && peat[3] !== undefined) {
+        const transform = ctx.Transform;
+        ctx.Transform = peat[3];
+        processEl(ctx);
+        ctx.Transform = transform;
+    }
+    if (len > 4 && peat[4] !== undefined) {
+        ////////////// Symbol
+        (ctx.host || ctx.cache)[peat[4]] = target;
     }
 }
 function doRepeat(key, atriums, ctx) {

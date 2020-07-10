@@ -12,7 +12,7 @@ import {
     UpdateTransform,
     Plugin,
 } from './types2.js';
-import {pluginLookup} from './transform.js';
+import {pluginLookup, transform, doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp} from './transform.js';
 
 type repeatethFnSig = (template: HTMLTemplateElement, ctx: RenderContext, items: any[], target: HTMLElement, initTransform: InitTransform, updateTransform: UpdateTransform) => void;
 
@@ -22,7 +22,6 @@ interface IRepeatethContainer{
 
 export const repeatethFnContainer: IRepeatethContainer = {};
 
-import { doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp } from './transform.js';
 
 
 export function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ctx: RenderContext){
@@ -109,6 +108,8 @@ function doPropSetting(key: string, peat: PEATUnionSettings, ctx: RenderContext)
         if(props.style !== undefined) Object.assign(target.style, props.style);
         if(props.dataset !== undefined) Object.assign(target.dataset, props.dataset);
       }
+    }else{
+      return;
     }
     if (len > 1 && peat[1] !== undefined) {
       /////////  Event Handling
@@ -129,6 +130,8 @@ function doPropSetting(key: string, peat: PEATUnionSettings, ctx: RenderContext)
         }
         target.addEventListener(key, eventHandler as EventListenerOrEventListenerObject);
       }
+    }else{
+      return;
     }
     if (len > 2 && peat[2] !== undefined) {
       /////////  Attribute Setting
@@ -153,7 +156,20 @@ function doPropSetting(key: string, peat: PEATUnionSettings, ctx: RenderContext)
             break;
         }
       }
+    }else{
+      return;
     }
+    if(len > 3 && peat[3] !== undefined){
+      const transform = ctx.Transform;
+      ctx.Transform = peat[3];
+      processEl(ctx);
+      ctx.Transform = transform;
+    }
+    if(len > 4  && peat[4] !== undefined){
+      ////////////// Symbol
+      (ctx.host || ctx.cache)[peat[4]] = target;
+    }
+
 }
 
 function doRepeat(key: string, atriums: ATRIUM_Union, ctx: RenderContext){
