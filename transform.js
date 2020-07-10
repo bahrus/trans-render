@@ -58,7 +58,7 @@ export function copyCtx(ctx) {
 export function restoreCtx(ctx, originalCtx) {
     return (Object.assign(ctx, originalCtx));
 }
-function processFragment(source, ctx) {
+export function processFragment(source, ctx) {
     const transf = ctx.Transform;
     if (transf === undefined)
         return;

@@ -1,5 +1,27 @@
 import { pluginLookup, doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp } from './transform.js';
 export const repeatethFnContainer = {};
+function doTransform(ctx, tvoo) {
+    const ctxCopy = copyCtx(ctx);
+    ctx.Transform = tvoo; //TODO -- don't do this line if this is a property setting
+    const keys = Object.keys(tvoo);
+    if (keys.length !== 0) {
+        const firstCharOfFirstProp = keys[0][0];
+        let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
+        ctx.previousTransform = ctxCopy.Transform;
+        if (isNextStep) {
+            doNextStepSelect(ctx);
+            doNextStepSibling(ctx);
+        }
+        else {
+            ctx.target = ctx.target.firstElementChild;
+            ctx.level++;
+            ctx.idx = 0;
+            processEl(ctx);
+        }
+        delete ctx.previousTransform;
+    }
+    restoreCtx(ctx, ctxCopy);
+}
 export function doObjectMatch(key, tvoo, ctx) {
     if (Array.isArray(tvoo)) {
         doArrayMatch(key, tvoo, ctx);
@@ -9,26 +31,7 @@ export function doObjectMatch(key, tvoo, ctx) {
             doTemplate(ctx, tvoo);
             return;
         }
-        const ctxCopy = copyCtx(ctx);
-        ctx.Transform = tvoo; //TODO -- don't do this line if this is a property setting
-        const keys = Object.keys(tvoo);
-        if (keys.length !== 0) {
-            const firstCharOfFirstProp = keys[0][0];
-            let isNextStep = "SNTM".indexOf(firstCharOfFirstProp) > -1;
-            ctx.previousTransform = ctxCopy.Transform;
-            if (isNextStep) {
-                doNextStepSelect(ctx);
-                doNextStepSibling(ctx);
-            }
-            else {
-                ctx.target = ctx.target.firstElementChild;
-                ctx.level++;
-                ctx.idx = 0;
-                processEl(ctx);
-            }
-            delete ctx.previousTransform;
-        }
-        restoreCtx(ctx, ctxCopy);
+        doTransform(ctx, tvoo);
     }
 }
 function isTemplate(test) {
@@ -151,11 +154,11 @@ function doPropSetting(key, peat, ctx) {
     }
     if (len > 3) {
         if (peat[3] !== undefined) {
-            const transform = ctx.Transform;
-            ctx.Transform = peat[3];
-            processEl(ctx);
-            ctx.Transform = transform;
+            doTransform(ctx, peat[3]);
         }
+    }
+    else {
+        return;
     }
     if (len > 4 && peat[4] !== undefined) {
         ////////////// Symbol

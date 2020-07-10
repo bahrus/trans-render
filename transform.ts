@@ -89,7 +89,7 @@ export function restoreCtx(ctx: RenderContext, originalCtx: RenderContext){
     return (Object.assign(ctx, originalCtx));
 }
 
-function processFragment(  
+export function processFragment(  
     source: DocumentFragment | HTMLElement,
     ctx: RenderContext
 ){

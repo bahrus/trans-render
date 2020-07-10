@@ -12,7 +12,8 @@ import {
     UpdateTransform,
     Plugin,
 } from './types2.js';
-import {pluginLookup, transform, doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp} from './transform.js';
+
+import {pluginLookup, transform, doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp, processFragment} from './transform.js';
 
 type repeatethFnSig = (template: HTMLTemplateElement, ctx: RenderContext, items: any[], target: HTMLElement, initTransform: InitTransform, updateTransform: UpdateTransform) => void;
 
@@ -22,17 +23,7 @@ interface IRepeatethContainer{
 
 export const repeatethFnContainer: IRepeatethContainer = {};
 
-
-
-export function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ctx: RenderContext){
-    if(Array.isArray(tvoo)){
-        doArrayMatch(key, tvoo as TransformValueArrayOptions, ctx);
-    }else{
-        if(isTemplate(tvoo as HTMLTemplateElement)){
-            doTemplate(ctx, tvoo as HTMLTemplateElement);
-            return;
-        }
-
+function doTransform(ctx: RenderContext, tvoo: TransformValueObjectOptions){
         const ctxCopy = copyCtx(ctx);
         ctx.Transform = tvoo; //TODO -- don't do this line if this is a property setting
         const keys = Object.keys(tvoo);
@@ -52,6 +43,18 @@ export function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ct
           delete ctx.previousTransform;
         }
         restoreCtx(ctx, ctxCopy);
+}
+
+export function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ctx: RenderContext){
+    if(Array.isArray(tvoo)){
+        doArrayMatch(key, tvoo as TransformValueArrayOptions, ctx);
+    }else{
+        if(isTemplate(tvoo as HTMLTemplateElement)){
+            doTemplate(ctx, tvoo as HTMLTemplateElement);
+            return;
+        }
+
+        doTransform(ctx, tvoo);
     }
 }
 
@@ -166,12 +169,11 @@ function doPropSetting(key: string, peat: PEATUnionSettings, ctx: RenderContext)
     }
     if(len > 3){
       if(peat[3] !== undefined){
-        const transform = ctx.Transform;
-        ctx.Transform = peat[3];
-        processEl(ctx);
-        ctx.Transform = transform;
+        doTransform(ctx, peat[3] as TransformValueObjectOptions);
       }
 
+    }else{
+      return;
     }
     if(len > 4  && peat[4] !== undefined){
       ////////////// Symbol
