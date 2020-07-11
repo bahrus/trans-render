@@ -1,4 +1,4 @@
-export interface RenderContext<TTarget = HTMLElement, TItem = any>{
+export interface RenderContext<TTarget = HTMLElement | SVGElement, TItem = any>{
     target?: TTarget | null;
     ctx?: RenderContext | undefined;
     cache?: any;
@@ -7,7 +7,7 @@ export interface RenderContext<TTarget = HTMLElement, TItem = any>{
     level?: number | undefined;
     viewModel?: any;
     item?: TItem | undefined;
-    itemTagger?:  (el: HTMLElement) => void;
+    itemTagger?:  (el: HTMLElement | SVGElement) => void;
     idx?: number | undefined;
     options?: RenderOptions | undefined;
     host?: HTMLElement | undefined;

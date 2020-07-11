@@ -50,8 +50,11 @@ export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate) {
     ctx.mode = 'update';
     return ctx;
 }
-function init(sourceOrTemplate, ctx, target = sourceOrTemplate) {
-}
+// function init(
+//     sourceOrTemplate: HTMLElement | DocumentFragment | SVGElement,
+//     ctx: RenderContext,
+//     target: HTMLElement | DocumentFragment | SVGElement = sourceOrTemplate,){
+// }
 export function copyCtx(ctx) {
     return Object.assign({}, ctx);
 }

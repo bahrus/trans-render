@@ -75,11 +75,11 @@ export function transform(
     return ctx;
 }
 
-function init(
-    sourceOrTemplate: HTMLElement | DocumentFragment,
-    ctx: RenderContext,
-    target: HTMLElement | DocumentFragment = sourceOrTemplate,){
-}
+// function init(
+//     sourceOrTemplate: HTMLElement | DocumentFragment | SVGElement,
+//     ctx: RenderContext,
+//     target: HTMLElement | DocumentFragment | SVGElement = sourceOrTemplate,){
+// }
 
 export function copyCtx(ctx: RenderContext){
     return Object.assign({}, ctx) as RenderContext;
@@ -90,14 +90,14 @@ export function restoreCtx(ctx: RenderContext, originalCtx: RenderContext){
 }
 
 export function processFragment(  
-    source: DocumentFragment | HTMLElement,
+    source: DocumentFragment | HTMLElement | SVGElement,
     ctx: RenderContext
 ){
     const transf = ctx.Transform;
     if(transf === undefined) return;
     for(const sym of Object.getOwnPropertySymbols(transf) ) {
         const transformTemplateVal = (<any>transf)[sym];
-        const newTarget = ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement;
+        const newTarget = ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement | SVGElement;
         ctx.target = newTarget;
         switch(typeof(transformTemplateVal)){
           case 'function':
@@ -130,7 +130,7 @@ export function processEl(
         doNextStepSelect(ctx);
         doNextStepSibling(ctx)
     }
-    let nextElementSibling: HTMLElement | null = target;
+    let nextElementSibling: HTMLElement | SVGElement | null = target;
     const tm = ctx.Transform as TransformMatch;
     let matched = false;
     
@@ -211,7 +211,7 @@ export function getProp(val: any, pathTokens: string[]){
 }
 
 
-function closestNextSib(target: HTMLElement, match: string){
+function closestNextSib(target: HTMLElement | SVGElement, match: string){
     let nextElementSibling = target.nextElementSibling;
     while(nextElementSibling !== null){
         if(nextElementSibling.matches(match)) return nextElementSibling as HTMLElement;
