@@ -1,4 +1,4 @@
-export interface RenderContext<TTarget = HTMLElement | SVGElement, TItem = any>{
+export interface RenderContext<TTarget = HTMLElement | SVGElement, TItem = any> extends Plugins{
     target?: TTarget | null;
     ctx?: RenderContext | undefined;
     cache?: any;
@@ -13,6 +13,9 @@ export interface RenderContext<TTarget = HTMLElement | SVGElement, TItem = any>{
     host?: HTMLElement | undefined;
     mode?: 'init' | 'update';
     replacedElement?: HTMLElement;
+}
+
+export interface Plugins{
     customObjProcessor?: doObjectMatchFnSig;
     repeatProcessor?: repeatFnSig;
     plugins?: {[key: string]: Plugin};
