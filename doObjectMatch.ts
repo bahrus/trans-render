@@ -13,15 +13,9 @@ import {
     Plugin,
 } from './types2.js';
 
-import {pluginLookup, transform, doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp, processFragment} from './transform.js';
+import {doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp} from './transform.js';
 
-type repeatethFnSig = (template: HTMLTemplateElement, ctx: RenderContext, items: any[], target: HTMLElement, initTransform: InitTransform, updateTransform: UpdateTransform) => void;
-
-interface IRepeatethContainer{
-  repeateth?: undefined | repeatethFnSig;
-}
-
-export const repeatethFnContainer: IRepeatethContainer = {};
+//export const repeatethFnContainer: IRepeatethContainer = {};
 
 function doTransform(ctx: RenderContext, tvoo: TransformValueObjectOptions){
         const ctxCopy = copyCtx(ctx);
@@ -94,7 +88,7 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
             }
             break;
         case 'symbol':
-            pluginLookup[firstEl](ctx, tvao);
+            ctx.plugins![firstEl as any as string].fn(ctx, tvao);
             break;
     }
 }
@@ -187,6 +181,6 @@ function doRepeat(key: string, atriums: ATRIUM_Union, ctx: RenderContext){
     const newMode = ctx.mode;
     const vm = ctx.viewModel;
     ctx.viewModel = atriums[0];
-    const transform = repeatethFnContainer.repeateth!(atriums[1], ctx, atriums[0], ctx.target!, atriums[3], atriums[4]);
+    const transform = ctx.repeatProcessor!(atriums[1], ctx, atriums[0], ctx.target!, atriums[3], atriums[4]);
     ctx.viewModel = vm;
 }

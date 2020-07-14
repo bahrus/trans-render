@@ -1,5 +1,5 @@
-import { pluginLookup, doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp } from './transform.js';
-export const repeatethFnContainer = {};
+import { doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp } from './transform.js';
+//export const repeatethFnContainer: IRepeatethContainer = {};
 function doTransform(ctx, tvoo) {
     const ctxCopy = copyCtx(ctx);
     ctx.Transform = tvoo; //TODO -- don't do this line if this is a property setting
@@ -72,7 +72,7 @@ function doArrayMatch(key, tvao, ctx) {
             }
             break;
         case 'symbol':
-            pluginLookup[firstEl](ctx, tvao);
+            ctx.plugins[firstEl].fn(ctx, tvao);
             break;
     }
 }
@@ -170,6 +170,6 @@ function doRepeat(key, atriums, ctx) {
     const newMode = ctx.mode;
     const vm = ctx.viewModel;
     ctx.viewModel = atriums[0];
-    const transform = repeatethFnContainer.repeateth(atriums[1], ctx, atriums[0], ctx.target, atriums[3], atriums[4]);
+    const transform = ctx.repeatProcessor(atriums[1], ctx, atriums[0], ctx.target, atriums[3], atriums[4]);
     ctx.viewModel = vm;
 }

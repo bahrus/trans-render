@@ -51,7 +51,6 @@ function fromTuple(ctx: RenderContext, pia: PlugInArgs){
                 break;
         }
     }
-
     interpolate(ctx.target, pia[1] as string, val, pia[3]);
 }
 

@@ -12,10 +12,15 @@ export interface RenderContext<TTarget = HTMLElement | SVGElement, TItem = any>{
     options?: RenderOptions | undefined;
     host?: HTMLElement | undefined;
     mode?: 'init' | 'update';
-    replacedElement?: HTMLElement,
+    replacedElement?: HTMLElement;
+    customObjProcessor?: doObjectMatchFnSig;
+    repeatProcessor?: repeatFnSig;
+    plugins?: {[key: string]: Plugin};
 }
 
-export type PluginPromises = Promise<Plugin>[];
+type doObjectMatchFnSig = (key: string, tvoo: TransformValueObjectOptions, ctx: RenderContext) => void;
+type repeatFnSig = (template: HTMLTemplateElement, ctx: RenderContext, items: any[], target: HTMLElement | SVGElement, initTransform: InitTransform, updateTransform: UpdateTransform) => void;
+
 export interface Plugin{
     fn: Function;
     sym: symbol;

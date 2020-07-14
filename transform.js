@@ -1,34 +1,9 @@
 const SkipSibs = Symbol();
 const NextMatch = Symbol();
-let doObjMtch;
-export let pluginLookup = {};
-export async function doImports(objHandler = true, repeat = true, plugins) {
-    const { doObjectMatch, repeatethFnContainer } = await import('./doObjectMatch.js');
-    doObjMtch = doObjectMatch;
-    if (repeat && repeatethFnContainer.repeateth === undefined) {
-        const { repeateth } = await import('./repeateth2.js');
-        repeatethFnContainer.repeateth = repeateth;
-    }
-    if (plugins !== undefined) {
-        const pluginList = await Promise.all(plugins);
-        pluginList.forEach(plugin => {
-            pluginLookup[plugin.sym] = plugin.fn;
-        });
-    }
-    return pluginLookup;
-}
 export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate) {
     if (ctx.mode === undefined) {
         Object.assign(ctx, { mode: 'init', level: 0, idx: 0 });
     }
-    // const pluginPromises = ctx.pluginPromises;
-    // if(ctx.mode === 'init' && pluginPromises !== undefined){
-    //     const plugins = await Promise.all(pluginPromises);
-    //     if(ctx.plugins === undefined) ctx.plugins = {};
-    //     plugins.forEach(plugin =>{
-    //         ctx.plugins[plugin.sym as any as string] = plugin; //https://github.com/microsoft/TypeScript/issues/1863
-    //     });
-    // }
     ctx.ctx = ctx;
     const isTemplate = sourceOrTemplate.localName === "template";
     const source = isTemplate
@@ -77,7 +52,7 @@ export function processFragment(source, ctx) {
                 newTarget.textContent = transformTemplateVal;
                 break;
             case 'object':
-                doObjMtch('', transformTemplateVal, ctx);
+                ctx.customObjProcessor('', transformTemplateVal, ctx);
                 break;
         }
     }
@@ -139,7 +114,7 @@ export function processEl(ctx) {
                 case 'object':
                     if (tvo === null)
                         continue;
-                    doObjMtch(key, tvo, ctx);
+                    ctx.customObjProcessor(key, tvo, ctx);
                     break;
                 case 'symbol':
                     const cache = ctx.host || ctx;
@@ -250,7 +225,7 @@ function getRHS(expr, ctx) {
                         throw '?';
                     }
                 case 'symbol':
-                    return pluginLookup[pivot](ctx, expr);
+                    return ctx.plugins[pivot].fn(ctx, expr);
             }
         case 'number':
             return expr.toString();

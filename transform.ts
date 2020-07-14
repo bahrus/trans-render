@@ -8,34 +8,11 @@ import {
     TransformValueArrayOptions,
     ATRIUM_Union,
     PEATUnionSettings,
-    PluginPromises
 } from './types2.js';
 
 
 const SkipSibs = Symbol();
 const NextMatch = Symbol();
-
-type doObjectMatchFnSig = (key: string, tvoo: TransformValueObjectOptions, ctx: RenderContext) => void;
-
-let  doObjMtch: undefined | doObjectMatchFnSig;
-
-export let pluginLookup: any = {};
-
-export async function doImports(objHandler: boolean = true, repeat: boolean = true, plugins?: PluginPromises){
-    const {doObjectMatch, repeatethFnContainer} = await import('./doObjectMatch.js');
-    doObjMtch = doObjectMatch;
-    if(repeat && repeatethFnContainer.repeateth === undefined){
-        const {repeateth} = await import('./repeateth2.js');
-        repeatethFnContainer.repeateth = repeateth; 
-    }
-    if(plugins !== undefined){
-        const pluginList = await Promise.all(plugins);
-        pluginList.forEach(plugin =>{
-            pluginLookup[plugin.sym] = plugin.fn;
-        })
-    }
-    return pluginLookup;
-}
 
 export function transform(
     sourceOrTemplate: HTMLElement | DocumentFragment,
@@ -45,14 +22,7 @@ export function transform(
     if(ctx.mode === undefined){
         Object.assign<RenderContext, Partial<RenderContext>>(ctx, {mode: 'init', level: 0, idx: 0})
     }
-    // const pluginPromises = ctx.pluginPromises;
-    // if(ctx.mode === 'init' && pluginPromises !== undefined){
-    //     const plugins = await Promise.all(pluginPromises);
-    //     if(ctx.plugins === undefined) ctx.plugins = {};
-    //     plugins.forEach(plugin =>{
-    //         ctx.plugins[plugin.sym as any as string] = plugin; //https://github.com/microsoft/TypeScript/issues/1863
-    //     });
-    // }
+
     ctx.ctx = ctx;
     const isTemplate = (sourceOrTemplate as HTMLElement).localName === "template";
     const source = isTemplate
@@ -107,7 +77,7 @@ export function processFragment(
             newTarget.textContent = transformTemplateVal;
             break;
           case 'object':
-              doObjMtch!('', transformTemplateVal as TransformValueObjectOptions, ctx);
+              ctx.customObjProcessor!('', transformTemplateVal as TransformValueObjectOptions, ctx);
               break;
         }
     }
@@ -168,7 +138,7 @@ export function processEl(
                     break;
                 case 'object':
                     if(tvo === null) continue;
-                    doObjMtch!(key, tvo as TransformValueObjectOptions, ctx);
+                    ctx.customObjProcessor!(key, tvo as TransformValueObjectOptions, ctx);
                     break;
                 case 'symbol':
                     const cache = ctx.host || ctx;
@@ -281,7 +251,7 @@ function getRHS(expr: any, ctx: RenderContext): any{
                         throw '?';
                     }
                 case 'symbol':
-                    return pluginLookup[pivot](ctx, expr);
+                    return ctx.plugins![pivot as any as string].fn(ctx, expr);
             }
         case 'number':
             return expr.toString();
