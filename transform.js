@@ -25,11 +25,6 @@ export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate) {
     ctx.mode = 'update';
     return ctx;
 }
-// function init(
-//     sourceOrTemplate: HTMLElement | DocumentFragment | SVGElement,
-//     ctx: RenderContext,
-//     target: HTMLElement | DocumentFragment | SVGElement = sourceOrTemplate,){
-// }
 export function copyCtx(ctx) {
     return Object.assign({}, ctx);
 }
@@ -43,6 +38,8 @@ export function processFragment(source, ctx) {
     for (const sym of Object.getOwnPropertySymbols(transf)) {
         const transformTemplateVal = transf[sym];
         const newTarget = (ctx[sym] || ctx.host[sym]);
+        if (newTarget === undefined)
+            continue;
         ctx.target = newTarget;
         switch (typeof (transformTemplateVal)) {
             case 'function':

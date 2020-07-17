@@ -45,11 +45,6 @@ export function transform(
     return ctx;
 }
 
-// function init(
-//     sourceOrTemplate: HTMLElement | DocumentFragment | SVGElement,
-//     ctx: RenderContext,
-//     target: HTMLElement | DocumentFragment | SVGElement = sourceOrTemplate,){
-// }
 
 export function copyCtx(ctx: RenderContext){
     return Object.assign({}, ctx) as RenderContext;
@@ -68,6 +63,7 @@ export function processFragment(
     for(const sym of Object.getOwnPropertySymbols(transf) ) {
         const transformTemplateVal = (<any>transf)[sym];
         const newTarget = ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement | SVGElement;
+        if(newTarget === undefined) continue;
         ctx.target = newTarget;
         switch(typeof(transformTemplateVal)){
           case 'function':
