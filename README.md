@@ -196,8 +196,11 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
        -  If a match is found, replace the rhs expression with the matching expression found in the previous step.
        -  Otherwise, replace the first element of the array with the evaluated function (virtually) and reapply the logic.
   -  If the first element of the tuple is a boolean, then this represents a conditional statement.
-     - If the first element is true, replace the rhs expression with the second element, and reapply the logic.
-     - If the first element is false, replace the rhs expression with the third element, and reapply the logic.
+     - The acronym to remember for a conditional array is "CATMINTS".
+     - The first element is the **c**ondition.
+     - If the first element is true, replace the rhs expression with the second element, the **a**ffirmative **t**ransform (or **t**emplate) element, and reapply the logic.
+     - The third element of the array allows for "metadata instructions".  For example:  {dataKeyName: "conditionIsValid"} will set the target.dataset.conditionIsValid = 'true' or 'false' depending on the value of the first element.
+     - If the first element is false, replace the rhs expression with the fourth element, the **n**egative **t**ransform (or **template**) and reapply the logic.
   -  If the first element of the tuple is an ES6 symbol, then this represents a directive / plugin.
      - The syntax only makes sense if: 
          - that symbol, say mySymbol, is a key inside the plugins symbol of transform.js, and
@@ -295,10 +298,10 @@ Here the tag "section" will be removed.
 **NB:**  Be careful when using this technique.  Once a node is removed, there's no going back -- it will no longer match any css if you use trans-render updating (discussed below).  If your use of trans-render is mostly to display something once, and you recreate everything from scratch when your model changes, that's fine.  However, if you want to apply incremental updates, and need to display content conditionally, it would be better to use a [custom element](https://polymer-library.polymer-project.org/3.0/docs/devguide/templates#dom-if) [for that](https://github.com/bahrus/if-diff) [purpose](https://github.com/matthewp/if-else).
 
 
-### Limited Support for conditional templates [untested]
+### Limited Support for conditional templates
 
 ```JavaScript
-article: [isHotOutside, warmWeatherTemplate, coldWeatherTemplate]
+article: [isHotOutside, warmWeatherTemplate,, coldWeatherTemplate]
 ```
 
 ## What does wdwsf stand for?
