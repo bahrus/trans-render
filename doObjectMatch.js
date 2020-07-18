@@ -1,4 +1,4 @@
-import { doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp } from './transform.js';
+import { doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp, isTemplate } from './transform.js';
 //export const repeatethFnContainer: IRepeatethContainer = {};
 function doTransform(ctx, tvoo) {
     const ctxCopy = copyCtx(ctx);
@@ -34,9 +34,6 @@ export function doObjectMatch(key, tvoo, ctx) {
         doTransform(ctx, tvoo);
     }
 }
-function isTemplate(test) {
-    return test !== undefined && test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
-}
 const lastTempl = Symbol();
 function doTemplate(ctx, te) {
     const target = ctx.target;
@@ -71,9 +68,26 @@ function doArrayMatch(key, tvao, ctx) {
                 doPropSetting(key, tvao, ctx);
             }
             break;
+        case 'boolean':
+            doCondition(key, tvao, ctx);
         case 'symbol':
             ctx.plugins[firstEl].fn(ctx, tvao);
             break;
+    }
+}
+function doCondition(key, cu, ctx) {
+    const len = cu.length;
+    const [conditionVal, affirmTempl, mi, negativeTempl, sym] = cu;
+    const templateToClone = conditionVal ? affirmTempl : negativeTempl;
+    if (templateToClone !== undefined) {
+        ctx.target.appendChild(templateToClone.content.cloneNode());
+    }
+    if (mi !== undefined) {
+        if (mi.attributeName !== undefined) {
+            const val = conditionVal ? mi.affirmativeVal : mi.negativeVal;
+            if (val !== undefined)
+                ctx.target.setAttribute(mi.attributeName, val);
+        }
     }
 }
 function doPropSetting(key, peat, ctx) {

@@ -11,9 +11,10 @@ import {
     InitTransform,
     UpdateTransform,
     Plugin,
+    CATMINT_Union
 } from './types2.js';
 
-import {doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp} from './transform.js';
+import {doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp, isTemplate} from './transform.js';
 
 //export const repeatethFnContainer: IRepeatethContainer = {};
 
@@ -52,9 +53,7 @@ export function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ct
     }
 }
 
-function isTemplate(test: any | undefined){
-    return test !== undefined && test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
-}
+
 
 const lastTempl = Symbol();
 function doTemplate(ctx: RenderContext, te: HTMLTemplateElement){
@@ -87,10 +86,27 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
                 doPropSetting(key, tvao as PEATUnionSettings, ctx);
             }
             break;
+        case 'boolean':
+            doCondition(key, tvao as CATMINT_Union, ctx);
         case 'symbol':
             ctx.plugins![firstEl as any as string].fn(ctx, tvao);
             break;
     }
+}
+
+function doCondition(key: string, cu: CATMINT_Union, ctx: RenderContext){
+  const len = cu.length;
+  const [conditionVal, affirmTempl, mi, negativeTempl, sym] = cu;
+  const templateToClone = conditionVal ? affirmTempl : negativeTempl; 
+  if(templateToClone !== undefined){
+    ctx.target!.appendChild(templateToClone.content.cloneNode());
+  }
+  if(mi !== undefined){
+    if(mi.attributeName !== undefined){
+      const val = conditionVal ? mi.affirmativeVal : mi.negativeVal;
+      if(val !== undefined) ctx.target!.setAttribute(mi.attributeName, val) 
+    }
+  }
 }
 
 function doPropSetting(key: string, peat: PEATUnionSettings, ctx: RenderContext){

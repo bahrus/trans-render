@@ -5,8 +5,8 @@ export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate) {
         Object.assign(ctx, { mode: 'init', level: 0, idx: 0 });
     }
     ctx.ctx = ctx;
-    const isTemplate = sourceOrTemplate.localName === "template";
-    const source = isTemplate
+    const isATemplate = isTemplate(sourceOrTemplate);
+    const source = isATemplate
         ? sourceOrTemplate.content.cloneNode(true)
         : sourceOrTemplate;
     processFragment(source, ctx);
@@ -19,11 +19,14 @@ export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate) {
         if (callback !== undefined)
             callback(ctx, source, options);
     }
-    if (isTemplate && target) {
+    if (isATemplate && target) {
         target[verb](source);
     }
     ctx.mode = 'update';
     return ctx;
+}
+export function isTemplate(test) {
+    return test !== undefined && test.localName === 'template' && test.content && (typeof test.content.cloneNode === 'function');
 }
 export function copyCtx(ctx) {
     return Object.assign({}, ctx);
@@ -213,6 +216,8 @@ function getRHS(expr, ctx) {
                     const val = expr[0](ctx);
                     return getRHS([val, ...expr.slice(1)], ctx);
                 case 'boolean':
+                    if (isTemplate(expr[1]))
+                        return expr;
                     return getRHS(pivot ? expr[1] : expr[2], ctx);
                 case 'string':
                     if (expr.length === 2 && typeof (expr[1]) === 'object') {

@@ -62,6 +62,7 @@ export type TransformValueObjectOptions<TargetType extends Partial<HTMLElement> 
 export type TransformValueArrayOptions<TargetType extends Partial<HTMLElement> = HTMLElement> =
         PEATUnionSettings<TargetType>
     |   ATRIUM_Union
+    |   CATMINT_Union
     |   PlugInArgs
 ;
 
@@ -105,3 +106,15 @@ export type ATRIUMS = [any[], HTMLTemplateElement, Range, InitTransform, UpdateT
 export type ATRIUM_Union = AT | ATR | ATRI | ATRIU | ATRIUM | ATRIUMS;
 
 export type PlugInArgs = [symbol, ...any[]];
+
+export interface MetaInstructions{
+    attributeName?: string;
+    affirmativeVal?: string;
+    negativeVal?: string;
+}
+
+export type CAT = [boolean, HTMLTemplateElement];
+export type CATMI = [boolean, HTMLTemplateElement, MetaInstructions | undefined];
+export type CATMINT = [boolean, HTMLTemplateElement, MetaInstructions | undefined, HTMLTemplateElement];
+export type CATMINTS = [boolean, HTMLTemplateElement, MetaInstructions | undefined, HTMLTemplateElement | undefined, symbol];
+export type CATMINT_Union = CAT | CATMI | CATMINT | CATMINTS;
