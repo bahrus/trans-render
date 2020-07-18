@@ -88,6 +88,7 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
             break;
         case 'boolean':
             doCondition(key, tvao as CATMINT_Union, ctx);
+            break;
         case 'symbol':
             ctx.plugins![firstEl as any as string].fn(ctx, tvao);
             break;

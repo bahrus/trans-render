@@ -70,6 +70,7 @@ function doArrayMatch(key, tvao, ctx) {
             break;
         case 'boolean':
             doCondition(key, tvao, ctx);
+            break;
         case 'symbol':
             ctx.plugins[firstEl].fn(ctx, tvao);
             break;
