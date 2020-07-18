@@ -77,11 +77,10 @@ function doArrayMatch(key, tvao, ctx) {
     }
 }
 function doCondition(key, cu, ctx) {
-    const len = cu.length;
     const [conditionVal, affirmTempl, mi, negativeTempl, sym] = cu;
     const templateToClone = conditionVal ? affirmTempl : negativeTempl;
     if (templateToClone !== undefined) {
-        ctx.target.appendChild(templateToClone.content.cloneNode());
+        ctx.target.appendChild(templateToClone.content.cloneNode(true));
     }
     if (mi !== undefined) {
         if (mi.attributeName !== undefined) {
