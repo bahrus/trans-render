@@ -108,9 +108,9 @@ export type ATRIUM_Union = AT | ATR | ATRI | ATRIU | ATRIUM | ATRIUMS;
 export type PlugInArgs = [symbol, ...any[]];
 
 export interface MetaInstructions{
-    attributeName?: string;
-    affirmativeVal?: string;
-    negativeVal?: string;
+    attr?: string;
+    yesVal?: string;
+    noVal?: string;
 }
 
 export type CAT = [boolean, HTMLTemplateElement];

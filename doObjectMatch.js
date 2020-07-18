@@ -83,10 +83,10 @@ function doCondition(key, cu, ctx) {
         ctx.target.appendChild(templateToClone.content.cloneNode(true));
     }
     if (mi !== undefined) {
-        if (mi.attributeName !== undefined) {
-            const val = conditionVal ? mi.affirmativeVal : mi.negativeVal;
+        if (mi.attr !== undefined) {
+            const val = conditionVal ? mi.yesVal || 'true' : mi.noVal || 'false';
             if (val !== undefined)
-                ctx.target.setAttribute(mi.attributeName, val);
+                ctx.target.setAttribute(mi.attr, val);
         }
     }
 }
