@@ -213,6 +213,8 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
      - If the template element has property dataset.shadowRoot = 'open' | 'closed', create a shadowRoot with the given mode.
      - During updates, if the template element doesn't match the original cloned template, the content inside the (shadow) target is cleared first before cloning the new template (which may not be the optimal solution for your use case, in which case seek some alternatives, like if-diff custom element).-->
 
+    **NB:**  Typescript 4.0 is [adding support for labeled tuple elements].  Hopefully, that will reduce the need to memorize words like "Peat", "Atrium" and "Catmint", "Roy G Biv," etc, and what the letters on those words stand for.   
+
 </details>
 
 ## Arbitrary queries.
