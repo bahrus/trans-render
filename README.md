@@ -196,11 +196,14 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
        -  If a match is found, replace the rhs expression with the matching expression found in the previous step.
        -  Otherwise, replace the first element of the array with the evaluated function (virtually) and reapply the logic.
   -  If the first element of the tuple is a boolean, then this represents a conditional statement.
-     - The acronym to remember for a conditional array is "CATMINTS".
-     - The first element is the **c**ondition.
-     - If the first element is true, replace the rhs expression with the second element, the **a**ffirmative **t**ransform (or **t**emplate) element, and reapply the logic.
-     - The third element of the array allows for "metadata instructions".  For example:  {dataKeyName: "conditionIsValid"} will set the target.dataset.conditionIsValid = 'true' or 'false' depending on the value of the first element.
-     - If the first element is false, replace the rhs expression with the fourth element, the **n**egative **t**ransform (or **template**) and reapply the logic.
+     - If the second element of the tuple is an HTMLTemplateElement, then the tuple is treated as a conditional display rule.
+       - The acronym to remember for a conditional array is "CATMINTS".
+       - The first element is the **c**ondition.
+       - If the first element is true, replace the rhs expression with the second element, the **a**ffirmative **t**ransform (or **t**emplate) element, and reapply the logic.
+       - The third element of the array allows for "metadata instructions".  For example:  {dataKeyName: "conditionIsValid"} will set the target.dataset.conditionIsValid = 'true' or 'false' depending on the value of the first element.
+       - If the first element is false, replace the rhs expression with the fourth element, the **n**egative **t**ransform (or **template**) and reapply the logic.
+     - If the second element is not an HTMLTemplateElement, then the tuple is expected to have 3 elements.
+       - If the first element is true, replace the RHS by the second element.  If the first element is false, replace the RHS by the third element.
   -  If the first element of the tuple is an ES6 symbol, then this represents a directive / plugin.
      - The syntax only makes sense if: 
          - that symbol, say mySymbol, is a key inside the plugins symbol of transform.js, and
