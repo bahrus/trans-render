@@ -38,6 +38,8 @@ export function processFragment(source, ctx) {
     const transf = ctx.Transform;
     if (transf === undefined)
         return;
+    ctx.target = source.firstElementChild;
+    processEl(ctx);
     for (const sym of Object.getOwnPropertySymbols(transf)) {
         const transformTemplateVal = transf[sym];
         const newTarget = (ctx[sym] || ctx.host[sym]);
@@ -56,8 +58,6 @@ export function processFragment(source, ctx) {
                 break;
         }
     }
-    ctx.target = source.firstElementChild;
-    processEl(ctx);
 }
 export function processEl(ctx) {
     const target = ctx.target;

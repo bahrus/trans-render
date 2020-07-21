@@ -63,6 +63,8 @@ export function processFragment(
 ){
     const transf = ctx.Transform;
     if(transf === undefined) return;
+    ctx.target = source.firstElementChild as HTMLElement;
+    processEl(ctx);
     for(const sym of Object.getOwnPropertySymbols(transf) ) {
         const transformTemplateVal = (<any>transf)[sym];
         const newTarget = ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement | SVGElement;
@@ -80,8 +82,6 @@ export function processFragment(
               break;
         }
     }
-    ctx.target = source.firstElementChild as HTMLElement;
-    processEl(ctx);
 }
 
 export function processEl(
