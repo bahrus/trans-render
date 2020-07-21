@@ -106,6 +106,18 @@ function doCondition(key: string, cu: CATMINT_Union, ctx: RenderContext){
       const val = conditionVal ? mi.yesVal || 'true' : mi.noVal || 'false';
       if(val !== undefined) ctx.target!.setAttribute(mi.attr, val) 
     }
+    const cache = ctx.host || ctx;
+    if(mi.yesSym !== undefined && conditionVal){
+      (<any>cache)[mi.yesSym as any as string] = ctx.target;
+      if(mi.noSym !== undefined){
+        delete (<any>cache)[mi.noSym as any as string];
+      }
+    }else if(mi.noSym !== undefined && !conditionVal){
+      (<any>cache)[mi.noSym as any as string] = ctx.target;
+      if(mi.yesSym !== undefined){
+        delete (<any>cache)[mi.yesSym as any as string];
+      }
+    }
   }
 }
 

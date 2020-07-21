@@ -102,8 +102,8 @@ export type ATR = [any[], HTMLTemplateElement, Range];
 export type ATRI = [any[], HTMLTemplateElement, Range, InitTransform];
 export type ATRIU = [any[], HTMLTemplateElement, Range, InitTransform, UpdateTransform];
 export type ATRIUM = [any[], HTMLTemplateElement, Range, InitTransform, UpdateTransform, MetaSettings];
-export type ATRIUMS = [any[], HTMLTemplateElement, Range, InitTransform, UpdateTransform, MetaSettings, symbol];
-export type ATRIUM_Union = AT | ATR | ATRI | ATRIU | ATRIUM | ATRIUMS;
+//export type ATRIUMS = [any[], HTMLTemplateElement, Range, InitTransform, UpdateTransform, MetaSettings, symbol];
+export type ATRIUM_Union = AT | ATR | ATRI | ATRIU | ATRIUM; // | ATRIUMS;
 
 export type PlugInArgs = [symbol, ...any[]];
 
@@ -111,6 +111,8 @@ export interface MetaInstructions{
     attr?: string;
     yesVal?: string;
     noVal?: string;
+    yesSym?: Symbol;
+    noSym?: Symbol;
 }
 
 export type CAT = [boolean, HTMLTemplateElement];

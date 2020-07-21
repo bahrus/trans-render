@@ -88,6 +88,19 @@ function doCondition(key, cu, ctx) {
             if (val !== undefined)
                 ctx.target.setAttribute(mi.attr, val);
         }
+        const cache = ctx.host || ctx;
+        if (mi.yesSym !== undefined && conditionVal) {
+            cache[mi.yesSym] = ctx.target;
+            if (mi.noSym !== undefined) {
+                delete cache[mi.noSym];
+            }
+        }
+        else if (mi.noSym !== undefined && !conditionVal) {
+            cache[mi.noSym] = ctx.target;
+            if (mi.yesSym !== undefined) {
+                delete cache[mi.yesSym];
+            }
+        }
     }
 }
 function doPropSetting(key, peat, ctx) {
