@@ -40,6 +40,10 @@ export function processFragment(source, ctx) {
         return;
     ctx.target = source.firstElementChild;
     processEl(ctx);
+    processSymbols(ctx);
+}
+export function processSymbols(ctx) {
+    const transf = ctx.Transform;
     for (const sym of Object.getOwnPropertySymbols(transf)) {
         const transformTemplateVal = transf[sym];
         const newTarget = (ctx[sym] || ctx.host[sym]);

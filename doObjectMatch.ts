@@ -14,7 +14,7 @@ import {
     CATMINT_Union
 } from './types2.js';
 
-import {doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp, isTemplate} from './transform.js';
+import {doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp, isTemplate, processSymbols} from './transform.js';
 
 //export const repeatethFnContainer: IRepeatethContainer = {};
 
@@ -34,6 +34,7 @@ function doTransform(ctx: RenderContext, tvoo: TransformValueObjectOptions){
               ctx.level!++;
               ctx.idx = 0;
               processEl(ctx);
+              processSymbols(ctx);
           }
           delete ctx.previousTransform;
         }

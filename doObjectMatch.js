@@ -1,4 +1,4 @@
-import { doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp, isTemplate } from './transform.js';
+import { doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp, isTemplate, processSymbols } from './transform.js';
 //export const repeatethFnContainer: IRepeatethContainer = {};
 function doTransform(ctx, tvoo) {
     const ctxCopy = copyCtx(ctx);
@@ -17,6 +17,7 @@ function doTransform(ctx, tvoo) {
             ctx.level++;
             ctx.idx = 0;
             processEl(ctx);
+            processSymbols(ctx);
         }
         delete ctx.previousTransform;
     }

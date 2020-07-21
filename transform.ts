@@ -65,6 +65,11 @@ export function processFragment(
     if(transf === undefined) return;
     ctx.target = source.firstElementChild as HTMLElement;
     processEl(ctx);
+    processSymbols(ctx);
+}
+
+export function processSymbols(ctx: RenderContext){
+    const transf = ctx.Transform;
     for(const sym of Object.getOwnPropertySymbols(transf) ) {
         const transformTemplateVal = (<any>transf)[sym];
         const newTarget = ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement | SVGElement;

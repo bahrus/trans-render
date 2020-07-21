@@ -289,6 +289,8 @@ At this point, only a synchronous workflow is provided (except when piercing int
 
 ## Conditional Display
 
+
+
 ### Permanent Removal
 If a matching node returns a boolean value of *false*, the node is removed.  For example:
 
