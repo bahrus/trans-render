@@ -1,13 +1,9 @@
 import {
     RenderContext, 
-    RenderOptions, 
     NextStep, 
     TransformValueOptions, 
     TransformMatch,
     TransformValueObjectOptions,
-    TransformValueArrayOptions,
-    ATRIUM_Union,
-    PEATUnionSettings,
 } from './types2.js';
 
 

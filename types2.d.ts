@@ -61,8 +61,8 @@ export type TransformValueObjectOptions<TargetType extends Partial<HTMLElement> 
 
 export type TransformValueArrayOptions<TargetType extends Partial<HTMLElement> = HTMLElement> =
         PEATUnionSettings<TargetType>
-    |   ATRIUM_Union
-    |   CATMINT_Union
+    |   ATRIUM_Loop
+    |   CATMINT_Conditional
     |   PlugInArgs
 ;
 
@@ -102,21 +102,17 @@ export type ATR = [any[], HTMLTemplateElement, Range];
 export type ATRI = [any[], HTMLTemplateElement, Range, InitTransform];
 export type ATRIU = [any[], HTMLTemplateElement, Range, InitTransform, UpdateTransform];
 export type ATRIUM = [any[], HTMLTemplateElement, Range, InitTransform, UpdateTransform, MetaSettings];
-//export type ATRIUMS = [any[], HTMLTemplateElement, Range, InitTransform, UpdateTransform, MetaSettings, symbol];
-export type ATRIUM_Union = AT | ATR | ATRI | ATRIU | ATRIUM; // | ATRIUMS;
+export type ATRIUM_Loop = AT | ATR | ATRI | ATRIU | ATRIUM; // | ATRIUMS;
 
 export type PlugInArgs = [symbol, ...any[]];
 
 export interface MetaInstructions{
-    attr?: string;
-    yesVal?: string;
-    noVal?: string;
     yesSym?: Symbol;
     noSym?: Symbol;
+    eitherSym?: Symbol;
 }
 
 export type CAT = [boolean, HTMLTemplateElement];
 export type CATMI = [boolean, HTMLTemplateElement, MetaInstructions | undefined];
 export type CATMINT = [boolean, HTMLTemplateElement, MetaInstructions | undefined, HTMLTemplateElement];
-export type CATMINTS = [boolean, HTMLTemplateElement, MetaInstructions | undefined, HTMLTemplateElement | undefined, symbol];
-export type CATMINT_Union = CAT | CATMI | CATMINT | CATMINTS;
+export type CATMINT_Conditional = CAT | CATMI | CATMINT;

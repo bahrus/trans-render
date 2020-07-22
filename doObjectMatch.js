@@ -78,29 +78,31 @@ function doArrayMatch(key, tvao, ctx) {
     }
 }
 function doCondition(key, cu, ctx) {
-    const [conditionVal, affirmTempl, mi, negativeTempl, sym] = cu;
+    const [conditionVal, affirmTempl, mi, negativeTempl] = cu;
     const templateToClone = conditionVal ? affirmTempl : negativeTempl;
     if (templateToClone !== undefined) {
         ctx.target.appendChild(templateToClone.content.cloneNode(true));
     }
     if (mi !== undefined) {
-        if (mi.attr !== undefined) {
-            const val = conditionVal ? mi.yesVal || 'true' : mi.noVal || 'false';
-            if (val !== undefined)
-                ctx.target.setAttribute(mi.attr, val);
-        }
         const cache = ctx.host || ctx;
-        if (mi.yesSym !== undefined && conditionVal) {
-            cache[mi.yesSym] = ctx.target;
-            if (mi.noSym !== undefined) {
-                delete cache[mi.noSym];
+        if (mi.yesSym !== undefined) {
+            if (conditionVal) {
+                cache[mi.yesSym] = ctx.target;
             }
-        }
-        else if (mi.noSym !== undefined && !conditionVal) {
-            cache[mi.noSym] = ctx.target;
-            if (mi.yesSym !== undefined) {
+            else {
                 delete cache[mi.yesSym];
             }
+        }
+        if (mi.noSym !== undefined) {
+            if (conditionVal) {
+                delete cache[mi.noSym];
+            }
+            else {
+                cache[mi.noSym] = ctx.target;
+            }
+        }
+        if (mi.eitherSym !== undefined) {
+            cache[mi.eitherSym] = ctx.target;
         }
     }
 }

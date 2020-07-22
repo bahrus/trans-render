@@ -6,12 +6,12 @@ import {
     TransformMatch,
     TransformValueObjectOptions,
     TransformValueArrayOptions,
-    ATRIUM_Union,
+    ATRIUM_Loop,
     PEATUnionSettings,
     InitTransform,
     UpdateTransform,
     Plugin,
-    CATMINT_Union
+    CATMINT_Conditional
 } from './types2.js';
 
 import {doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp, isTemplate, processSymbols} from './transform.js';
@@ -82,13 +82,13 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
         case 'undefined':
         case 'object':
             if(Array.isArray(firstEl)){
-                doRepeat(key, tvao as ATRIUM_Union, ctx); 
+                doRepeat(key, tvao as ATRIUM_Loop, ctx); 
             }else{
                 doPropSetting(key, tvao as PEATUnionSettings, ctx);
             }
             break;
         case 'boolean':
-            doCondition(key, tvao as CATMINT_Union, ctx);
+            doCondition(key, tvao as CATMINT_Conditional, ctx);
             break;
         case 'symbol':
             ctx.plugins![firstEl as any as string].fn(ctx, tvao);
@@ -96,29 +96,31 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
     }
 }
 
-function doCondition(key: string, cu: CATMINT_Union, ctx: RenderContext){
-  const [conditionVal, affirmTempl, mi, negativeTempl, sym] = cu;
+function doCondition(key: string, cu: CATMINT_Conditional, ctx: RenderContext){
+  const [conditionVal, affirmTempl, mi, negativeTempl] = cu;
   const templateToClone = conditionVal ? affirmTempl : negativeTempl; 
   if(templateToClone !== undefined){
     ctx.target!.appendChild(templateToClone.content.cloneNode(true));
   }
   if(mi !== undefined){
-    if(mi.attr !== undefined){
-      const val = conditionVal ? mi.yesVal || 'true' : mi.noVal || 'false';
-      if(val !== undefined) ctx.target!.setAttribute(mi.attr, val) 
-    }
     const cache = ctx.host || ctx;
-    if(mi.yesSym !== undefined && conditionVal){
-      (<any>cache)[mi.yesSym as any as string] = ctx.target;
-      if(mi.noSym !== undefined){
-        delete (<any>cache)[mi.noSym as any as string];
-      }
-    }else if(mi.noSym !== undefined && !conditionVal){
-      (<any>cache)[mi.noSym as any as string] = ctx.target;
-      if(mi.yesSym !== undefined){
+    if(mi.yesSym !== undefined){
+      if(conditionVal){
+        (<any>cache)[mi.yesSym as any as string] = ctx.target;
+      }else{
         delete (<any>cache)[mi.yesSym as any as string];
       }
     }
+    if(mi.noSym !== undefined){
+      if(conditionVal){
+        delete (<any>cache)[mi.noSym as any as string];
+      }else{
+        (<any>cache)[mi.noSym as any as string] = ctx.target;
+      }
+    }
+    if(mi.eitherSym !== undefined){
+      (<any>cache)[mi.eitherSym as any as string] = ctx.target;
+    } 
   }
 }
 
@@ -205,7 +207,7 @@ function doPropSetting(key: string, peat: PEATUnionSettings, ctx: RenderContext)
 
 }
 
-function doRepeat(key: string, atriums: ATRIUM_Union, ctx: RenderContext){
+function doRepeat(key: string, atriums: ATRIUM_Loop, ctx: RenderContext){
     const mode = ctx.mode;
     const newMode = ctx.mode;
     const vm = ctx.viewModel;
