@@ -12,7 +12,7 @@ export interface RenderContext<TTarget = HTMLElement | SVGElement, TItem = any> 
     options?: RenderOptions | undefined;
     host?: HTMLElement | undefined;
     mode?: 'init' | 'update';
-    replacedElement?: HTMLElement;
+    replacedElement?: HTMLElement | SVGElement;
 }
 
 export interface Plugins{
