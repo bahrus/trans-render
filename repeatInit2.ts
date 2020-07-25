@@ -39,7 +39,8 @@ export function renderDynamicContent(template: ToTOrFnToTot, ctx: RenderContext,
     switch(typeof template){
         case 'string':
             const el = document.createElement(template);
-            transform(el, ctx, target);
+            target.appendChild(el);
+            transform(el, ctx);
             break;
         case 'object':
             transform(template as HTMLTemplateElement, ctx, target);

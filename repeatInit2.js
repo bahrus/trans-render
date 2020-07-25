@@ -35,7 +35,8 @@ export function renderDynamicContent(template, ctx, target) {
     switch (typeof template) {
         case 'string':
             const el = document.createElement(template);
-            transform(el, ctx, target);
+            target.appendChild(el);
+            transform(el, ctx);
             break;
         case 'object':
             transform(template, ctx, target);
