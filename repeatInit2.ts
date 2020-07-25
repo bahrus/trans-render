@@ -1,5 +1,5 @@
 import {TransformValueOptions, RenderContext, ToTOrFnToTot} from './types2.js';
-import {transform, isTemplate} from './transform.js';
+import {transform, isTemplate, processEl} from './transform.js';
 
 export const countKey: unique symbol = Symbol.for('04efa75f-dec8-4002-a091-153683691bd1'); //what a waste of bandwidth
 export const itemsKey: unique symbol = Symbol.for('bb247496-9c5d-459c-8127-fe80fee8c256');
@@ -40,7 +40,8 @@ export function renderDynamicContent(template: ToTOrFnToTot, ctx: RenderContext,
         case 'string':
             const el = document.createElement(template);
             target.appendChild(el);
-            transform(el, ctx);
+            ctx.target = el;
+            processEl(ctx);
             break;
         case 'object':
             transform(template as HTMLTemplateElement, ctx, target);
