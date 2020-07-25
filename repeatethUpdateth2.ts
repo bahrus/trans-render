@@ -1,10 +1,10 @@
-import { RenderContext, TransformValueOptions } from './types2.js';
+import { RenderContext, TransformValueOptions, ToTOrFnToTot } from './types2.js';
 import { countKey, idxKey, ubKey, itemsKey } from './repeatInit2.js';
 import { transform } from './transform.js';
 
 const origStyleKey = Symbol('origStyle');
 //type HTMLFn = (el: HTMLElement) => void
-export function repeatethUpdateth(template: HTMLTemplateElement, ctx: RenderContext, items: any[], target: HTMLElement, targetTransform?: TransformValueOptions){
+export function repeatethUpdateth(template: ToTOrFnToTot, ctx: RenderContext, items: any[], target: HTMLElement, targetTransform?: TransformValueOptions){
     const childCount = (<any>target)[countKey];
     const count = items.length;
     const ub = (<any>target)[ubKey];

@@ -7,6 +7,7 @@ import {
 } from './types2.js';
 import {repeatInit}from './repeatInit2.js';
 import {repeatethUpdateth} from './repeatethUpdateth2.js';
+const initialized = Symbol();
 export function repeateth(
     template: ToTOrFnToTot, 
     ctx: RenderContext, 
@@ -15,9 +16,10 @@ export function repeateth(
     initTransform: InitTransform,
     updateTransform: UpdateTransform = initTransform
     ){
-    if(ctx.mode === 'update'){
+    if((<any>target)[initialized as any as string] !== undefined){
         repeatethUpdateth(template, ctx, items, target, updateTransform)
     }else{
         repeatInit(template, ctx, items, target, initTransform);
+        (<any>target)[initialized as any as string] = true;
     }
 }
