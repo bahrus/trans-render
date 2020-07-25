@@ -164,12 +164,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 - If the rhs expression evaluates to the boolean "false", then remove the matching elements from the DOM Tree.
 - If the rhs expression evaluates to a symbol, create a reference to the matching target element with that symbol as a key, in the ctx.host (custom element instance) or ctx.cache property.
 - If the rhs expression evaluates to a function, then
-  -  that function is invoked, where an object with the following properties is passed in:
-     - target
-     - ctx
-     - idx
-     - level
-     - item
+  -  that function is invoked, where the context object is passed in
   - The evaluated function replaces the rhs expression.
 - If the rhs expression evaluates to an array, then
   -  Arrays are treated as "tuples" for common requirements.
@@ -214,7 +209,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
      - The benefits of a directive over an using an arrow function are:
        - Arrow functions are a bit cumbersome
        - Arrow functions are not really as declarative (kind of a subjective call)
-
+  -  If the first element of the tuple is a string, then this is a DOM tag that should be appended.  The second element is expected to be a PEATS object.
   <!---  If the first element of the tuple is a template, then the second element is expected to be a transform.
      - If the template element has property dataset.shadowRoot = 'open' | 'closed', create a shadowRoot with the given mode.
      - During updates, if the template element doesn't match the original cloned template, the content inside the (shadow) target is cleared first before cloning the new template (which may not be the optimal solution for your use case, in which case seek some alternatives, like if-diff custom element).-->

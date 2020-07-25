@@ -75,6 +75,14 @@ function doArrayMatch(key, tvao, ctx) {
         case 'symbol':
             ctx.plugins[firstEl].fn(ctx, tvao);
             break;
+        case 'string':
+            const el = document.createElement(firstEl);
+            const target = ctx.target;
+            target.appendChild(el);
+            ctx.target = el;
+            if (tvao.length > 1)
+                doPropSetting(key, tvao[1], ctx);
+            break;
     }
 }
 function doCondition(key, cu, ctx) {

@@ -93,6 +93,13 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
         case 'symbol':
             ctx.plugins![firstEl as any as string].fn(ctx, tvao);
             break;
+        case 'string':
+          const el = document.createElement(firstEl);
+          const target = ctx.target!;
+          target.appendChild(el);
+          ctx.target = el;
+          if(tvao.length > 1) doPropSetting(key, tvao[1] as PEATUnionSettings, ctx);
+          break;
     }
 }
 
