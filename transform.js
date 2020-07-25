@@ -67,6 +67,8 @@ export function processEl(ctx) {
     const target = ctx.target;
     if (target == null || ctx.Transform === undefined)
         return true;
+    if (target.hasAttribute('debug'))
+        debugger;
     const keys = Object.keys(ctx.Transform);
     if (keys.length === 0)
         return true;

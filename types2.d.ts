@@ -22,7 +22,7 @@ export interface Plugins{
 }
 
 type doObjectMatchFnSig = (key: string, tvoo: TransformValueObjectOptions, ctx: RenderContext) => void;
-type repeatFnSig = (template: HTMLTemplateElement, ctx: RenderContext, items: any[], target: HTMLElement | SVGElement, initTransform: InitTransform, updateTransform: UpdateTransform) => void;
+type repeatFnSig = (template: ToTOrFnToTot, ctx: RenderContext, items: any[], target: HTMLElement | SVGElement, initTransform: InitTransform, updateTransform: UpdateTransform) => void;
 
 export interface Plugin{
     fn: Function;
@@ -98,7 +98,7 @@ export type UpdateTransform = TransformValueOptions | undefined;
 export type MetaSettings = any;
 
 export type TemplateOrTag = HTMLTemplateElement | string;
-export type TemplateTagGetter<TTarget = HTMLElement | SVGElement, TItem = any> = (x: RenderContext<TTarget>) => TemplateOrTag;
+export type TemplateTagGetter<TTarget = HTMLElement | SVGElement, TItem = any> = (x: RenderContext<TTarget, TItem>) => TemplateOrTag;
 export type ToTOrFnToTot<TTarget = HTMLElement | SVGElement, TItem = any> = TemplateOrTag | TemplateTagGetter<TTarget>;
 export type AT = [any[], ToTOrFnToTot];
 export type ATR = [any[], ToTOrFnToTot, Range];
