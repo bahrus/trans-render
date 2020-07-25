@@ -238,19 +238,14 @@ function getRHS(expr: any, ctx: RenderContext): any{
             switch(typeof pivot){
                 case 'object':
                 case 'undefined':
+                case 'string';
                     return expr;
                 case 'function':
                     const val: any = expr[0](ctx);
                     return getRHS([val, ...expr.slice(1)], ctx);
                 case 'boolean':
                     if(isTemplate(expr[1])) return expr;
-                    return getRHS(pivot ? expr[1] : expr[2], ctx)
-                case 'string':
-                    if(expr.length === 2 && typeof(expr[1]) === 'object'){
-                        return getRHS(expr[1][pivot], ctx);
-                    }else{
-                        throw '?';
-                    }
+                    return getRHS(pivot ? expr[1] : expr[2], ctx);
                 case 'symbol':
                     return ctx.plugins![pivot as any as string].fn(ctx, expr);
             }

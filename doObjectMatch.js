@@ -78,11 +78,19 @@ function doArrayMatch(key, tvao, ctx) {
         case 'string':
             const el = document.createElement(firstEl);
             const target = ctx.target;
-            target.appendChild(el);
-            ctx.target = el;
-            if (tvao.length > 1)
-                doPropSetting(key, tvao[1], ctx);
-            break;
+            const position = tvao[1];
+            if (position !== undefined) {
+                target.insertAdjacentElement(position, el);
+            }
+            else {
+                target.appendChild(el);
+            }
+            const peat = tvao[2];
+            if (peat !== undefined) {
+                ctx.target = el;
+                doPropSetting(key, peat, ctx);
+                ctx.target = target;
+            }
     }
 }
 function doCondition(key, cu, ctx) {
