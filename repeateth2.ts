@@ -2,12 +2,13 @@ import {
     TransformValueOptions, 
     RenderContext, 
     InitTransform, 
-    UpdateTransform
+    UpdateTransform,
+    ToTOrFnToTot
 } from './types2.js';
 import {repeatInit}from './repeatInit2.js';
 import {repeatethUpdateth} from './repeatethUpdateth2.js';
 export function repeateth(
-    template: HTMLTemplateElement, 
+    template: ToTOrFnToTot, 
     ctx: RenderContext, 
     items: any[], 
     target: HTMLElement, 

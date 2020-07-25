@@ -97,11 +97,14 @@ export type UpdateTransform = TransformValueOptions | undefined;
 
 export type MetaSettings = any;
 
-export type AT = [any[], HTMLTemplateElement];
-export type ATR = [any[], HTMLTemplateElement, Range];
-export type ATRI = [any[], HTMLTemplateElement, Range, InitTransform];
-export type ATRIU = [any[], HTMLTemplateElement, Range, InitTransform, UpdateTransform];
-export type ATRIUM = [any[], HTMLTemplateElement, Range, InitTransform, UpdateTransform, MetaSettings];
+export type TemplateOrTag = HTMLTemplateElement | string;
+export type TemplateTagGetter<TTarget = HTMLElement | SVGElement, TItem = any> = (x: RenderContext<TTarget>) => TemplateOrTag;
+export type ToTOrFnToTot<TTarget = HTMLElement | SVGElement, TItem = any> = TemplateOrTag | TemplateTagGetter<TTarget>;
+export type AT = [any[], ToTOrFnToTot];
+export type ATR = [any[], ToTOrFnToTot, Range];
+export type ATRI = [any[], ToTOrFnToTot, Range, InitTransform];
+export type ATRIU = [any[], ToTOrFnToTot, Range, InitTransform, UpdateTransform];
+export type ATRIUM = [any[], ToTOrFnToTot, Range, InitTransform, UpdateTransform, MetaSettings];
 export type ATRIUM_Loop = AT | ATR | ATRI | ATRIU | ATRIUM; // | ATRIUMS;
 
 export type PlugInArgs = [symbol, ...any[]];

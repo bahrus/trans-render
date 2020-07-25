@@ -186,7 +186,8 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
      - First element of the tuple is the **a**rray of items to loop over.
      - Second element is either:
        -  A **t**emplate reference that should be repeated, or
-       -  A function that returns a string, used to generate a (custom element) with the name of the string [TODO]
+       -  A **t**ag of type string, that turns into a DOM element using document.createElement(tag)
+       -  A **toTagOrTemplate** function that returns a string, used to generate a (custom element) with the name of the string, or a template.
      - Third optional parameter is an optional **r**ange of indexes from the item array to render
      - Fourth optional parameter is the **i**nit transform for each item, which recursively uses the transform syntax described here.
      - Fifth optional parameter is the **u**pdate transform for each item.
