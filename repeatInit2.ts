@@ -7,8 +7,6 @@ export const idxKey: unique symbol = Symbol.for('ad7cf100-0c10-4184-b836-f560f2c
 export const ubKey: unique symbol = Symbol.for('7c6fd3aa-eea3-478c-b18c-32132b1bfc7c');
 
 export function repeatInit(template: ToTOrFnToTot, ctx: RenderContext, items: any[], target: HTMLElement, targetTransform?: TransformValueOptions){
-    if(ctx.mode === 'update') return;
-    
     const count = items.length;
     (<any>target)[countKey] = count;
     (<any>target)[ubKey] = count;
