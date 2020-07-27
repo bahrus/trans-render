@@ -10,7 +10,6 @@ export function repeatInit(template: ToTOrFnToTot, ctx: RenderContext, items: an
     const count = items.length;
     (<any>target)[countKey] = count;
     (<any>target)[ubKey] = count;
-    target.dataset.iah = 'hi';
     const ctxClone = Object.assign({}, ctx);
     ctxClone.Transform = targetTransform!;
     for(let i = 0; i < count; i++){

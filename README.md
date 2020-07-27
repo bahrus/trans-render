@@ -179,6 +179,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
   -  If the first element of the tuple itself is an array, then the array represents a declarative loop associated with those items.
      - The acronym to remember for a loop array is "ATRIUMS".
      - First element of the tuple is the **a**rray of items to loop over.
+     - **NB:** If the first element might be null or undefined, to guarantee being able to distinguish between an ATRIUM and a PEAT tuple, you can guarantee that the first element will be an array by doing:  myArrayOrUndefinedOrNull || []
      - Second element is either:
        -  A **t**emplate reference that should be repeated, or
        -  A **t**ag of type string, that turns into a DOM element using document.createElement(tag)
@@ -194,6 +195,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
        -  If a match is found, replace the rhs expression with the matching expression found in the previous step.
        -  Otherwise, replace the first element of the array with the evaluated function (virtually) and reapply the logic.
   -  If the first element of the tuple is a boolean, then this represents a conditional statement.
+     - **NB** If the first element is expected to be boolean, but might also be null or undefined, you can guarantee that the first element will be a boolean by doing:  myBoolOrUndefinedOrNull || false.
      - If the second element of the tuple is an HTMLTemplateElement, then the tuple is treated as a conditional display rule.
        - The acronym to remember for a conditional array is "CATMINTS".
        - The first element is the **c**ondition.
@@ -216,7 +218,10 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
      - If the template element has property dataset.shadowRoot = 'open' | 'closed', create a shadowRoot with the given mode.
      - During updates, if the template element doesn't match the original cloned template, the content inside the (shadow) target is cleared first before cloning the new template (which may not be the optimal solution for your use case, in which case seek some alternatives, like if-diff custom element).-->
 
-    **NB:**  Typescript 4.0 is [adding support for labeled tuple elements](https://devblogs.microsoft.com/typescript/announcing-typescript-4-0-beta/#labeled-tuple-elements).  Hopefully, that will reduce the need to memorize words like "Peat", "Atrium", "Catmint", "Roy G Biv," etc, and what the letters in those words stand for.   
+**NB 1:**  Typescript 4.0 is [adding support for labeled tuple elements](https://devblogs.microsoft.com/typescript/announcing-typescript-4-0-beta/#labeled-tuple-elements).  Hopefully, that will reduce the need to memorize words like "Peat", "Atrium", "Catmint", "Roy G Biv," etc, and what the letters in those words stand for.
+
+
+
 
 </details>
 

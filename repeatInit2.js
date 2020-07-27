@@ -7,7 +7,6 @@ export function repeatInit(template, ctx, items, target, targetTransform) {
     const count = items.length;
     target[countKey] = count;
     target[ubKey] = count;
-    target.dataset.iah = 'hi';
     const ctxClone = Object.assign({}, ctx);
     ctxClone.Transform = targetTransform;
     for (let i = 0; i < count; i++) {
