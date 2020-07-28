@@ -80,6 +80,8 @@ function doArrayMatch(key, tvao, ctx) {
             const target = ctx.target;
             const position = tvao[1];
             if (position !== undefined) {
+                if (position === 'replace') {
+                }
                 target.insertAdjacentElement(position, el);
             }
             else {

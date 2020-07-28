@@ -18,6 +18,9 @@ interface attrArgs{
 export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBase) {
     return class extends superClass implements IHydrate {
 
+        /**
+         * @private
+         */
         static defaultValues : any;
 
         __attribQueue: attrArgs[] | undefined;
@@ -51,6 +54,7 @@ export function hydrate<TBase extends Constructor<HTMLElement>>(superClass: TBas
         /**
          * Needed for asynchronous loading
          * @param props Array of property names to "upgrade", without losing value set while element was Unknown
+         * @private
          */
         __propUp(props: string[]) { //https://github.com/denoland/deno/issues/5258
             const defaultValues = (<any>this.constructor)['defaultValues'];

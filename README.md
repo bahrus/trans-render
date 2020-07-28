@@ -155,6 +155,8 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 - If the key is a string that starts with a lower case letter, then it is a "css match" expression.
 - If the key is a string that starts with double quote, then it is also a "css match" expression, but the css expression comes from the nearest previous sibling key which doesn't start with a double quote.
 - If the key is a string that starts with a capital letter, then it is part of a "Next Step" expression that indicates where to jump down to next in the DOM tree.
+- If the key is a string that starts with ^ then it matches if the tag name starts with the rest of the string [TODO]
+- If the key is a string that ends with $ then it matches if the tag name ends with the rest of the string [TODO]
 - If the key is an ES6 symbol, it is a shortcut to grab a reference to a DOM element previously stored either in context.host or context.cache, where context.host is a custom element instance.
 
 ### CSS Match Rules
@@ -212,7 +214,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
        - Arrow functions are a bit cumbersome
        - Arrow functions are not really as declarative (kind of a subjective call)
   -  If the first element of the tuple is a string, then this is a DOM tag that should be appended.  
-     -  The second optional element is the position of where to place the new element relative to the target -- afterEnd, beforeEnd, afterBegin, beforeBegin.
+     -  The second optional element is the position of where to place the new element relative to the target -- afterEnd, beforeEnd, afterBegin, beforeBegin, replace [TODO]
      -  The third optional element is expected to be a PEATS object if it is defined.
   <!---  If the first element of the tuple is a template, then the second element is expected to be a transform.
      - If the template element has property dataset.shadowRoot = 'open' | 'closed', create a shadowRoot with the given mode.

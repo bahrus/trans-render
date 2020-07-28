@@ -33,6 +33,7 @@ export function hydrate(superClass) {
         /**
          * Needed for asynchronous loading
          * @param props Array of property names to "upgrade", without losing value set while element was Unknown
+         * @private
          */
         __propUp(props) {
             const defaultValues = this.constructor['defaultValues'];

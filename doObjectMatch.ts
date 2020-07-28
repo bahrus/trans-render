@@ -98,6 +98,9 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
           const target = ctx.target!;
           const position = tvao[1];
           if(position !== undefined){
+            if(position === 'replace'){
+              
+            }
             target.insertAdjacentElement(position, el);
           }else{
             target.appendChild(el);
