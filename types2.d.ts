@@ -63,6 +63,7 @@ export type TransformValueArrayOptions<TargetType extends Partial<HTMLElement> =
         PEATUnionSettings<TargetType>
     |   ATRIUM_Loop
     |   CATMINT_Conditional
+    |   NappeUnion
     |   PlugInArgs
 ;
 
@@ -119,3 +120,9 @@ export type CAT = [boolean, HTMLTemplateElement];
 export type CATMI = [boolean, HTMLTemplateElement, MetaInstructions | undefined];
 export type CATMINT = [boolean, HTMLTemplateElement, MetaInstructions | undefined, HTMLTemplateElement];
 export type CATMINT_Conditional = CAT | CATMI | CATMINT;
+
+export type InsOrRep = InsertPosition | 'replace';
+export type Na = [string];
+export type Nap = [string, InsOrRep];
+export type Nappe = [string, InsOrRep, PEATUnionSettings];
+export type NappeUnion = Na | Nap | Nappe;

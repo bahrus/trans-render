@@ -81,8 +81,16 @@ function doArrayMatch(key, tvao, ctx) {
             const position = tvao[1];
             if (position !== undefined) {
                 if (position === 'replace') {
+                    //https://paulbakaus.com/2019/07/28/quickly-copy-dom-attributes-from-one-element-to-another/
+                    target.getAttributeNames().forEach(name => {
+                        el.setAttribute(name, target.getAttribute(name));
+                    });
+                    target.dataset.deleteMe = 'true';
+                    target.insertAdjacentElement('afterend', el);
                 }
-                target.insertAdjacentElement(position, el);
+                else {
+                    target.insertAdjacentElement(position, el);
+                }
             }
             else {
                 target.appendChild(el);

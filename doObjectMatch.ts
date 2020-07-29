@@ -95,13 +95,20 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
             break;
         case 'string':
           const el = document.createElement(firstEl);
-          const target = ctx.target!;
+          const target = ctx.target! as HTMLElement;
           const position = tvao[1];
           if(position !== undefined){
             if(position === 'replace'){
-              
+              //https://paulbakaus.com/2019/07/28/quickly-copy-dom-attributes-from-one-element-to-another/
+              target.getAttributeNames().forEach(name =>{
+                el.setAttribute(name, target.getAttribute(name)!);
+              });
+              target.dataset.deleteMe = 'true';
+              target.insertAdjacentElement('afterend', el);
+            }else{
+              target.insertAdjacentElement(position, el);
             }
-            target.insertAdjacentElement(position, el);
+            
           }else{
             target.appendChild(el);
           }

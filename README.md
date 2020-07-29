@@ -214,7 +214,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
        - Arrow functions are a bit cumbersome
        - Arrow functions are not really as declarative (kind of a subjective call)
   -  If the first element of the tuple is a string, then this is a DOM tag that should be appended.  
-     -  The second optional element is the position of where to place the new element relative to the target -- afterEnd, beforeEnd, afterBegin, beforeBegin, replace [TODO]
+     -  The second optional element is the position of where to place the new element relative to the target -- afterEnd, beforeEnd, afterBegin, beforeBegin, replace [TODO: untested]
      -  The third optional element is expected to be a PEATS object if it is defined.
   <!---  If the first element of the tuple is a template, then the second element is expected to be a transform.
      - If the template element has property dataset.shadowRoot = 'open' | 'closed', create a shadowRoot with the given mode.
