@@ -171,33 +171,32 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 - If the rhs expression evaluates to an array, then
   -  Arrays are treated as "tuples" for common requirements.
   -  The first element of the tuple indicates what type of tuple to expect.
-  -  If the first element of the tuple is a non-array, non HTMLTemplateElement object, or undefined, then the tuple is treated as a "PEATS" tuple -- property / event / attribute / transform / symbol reference setting:
+  -  If the first element of the tuple is undefined, just ignore the rest of the array and move on.
+  -  If the first element of the tuple is a non-array, non HTMLTemplateElement object, then the tuple is treated as a "PEATS" tuple -- property / event / attribute / transform / symbol reference setting:
      -  First optional parameter is a **p**roperty object, that gets shallow-merged into the matching element (target).
         - Shallow-merging goes one level deeper with style and dataset properties.
      -  Second optional parameter is an **e**vent object, that binds to events of the matching target element.
      -  Third optional parameter is an **a**ttribute object, that sets the attributes.  "null" values remove the attributes.
-     -  Fourth optional parameter is a sub-**t**ransform, which recursively performs transforms within the light children of the matching target element.
+     -  Fourth optional parameter is a sub-**t**ransform, which recursively performs a transform within the light children of the matching target element.
      -  Fifth optional parameter is of type **s**ymbol, to allow future referencing to the matching target element.
   -  If the first element of the tuple itself is an array, then the array represents a declarative loop associated with those items.
      - The acronym to remember for a loop array is "ATRIUMS".
      - First element of the tuple is the **a**rray of items to loop over.
-     - **NB:** If the first element might be null or undefined, to guarantee being able to distinguish between an ATRIUM and a PEAT tuple, you can guarantee that the first element will be an array by doing:  myArrayOrUndefinedOrNull || []
      - Second element is either:
        -  A **t**emplate reference that should be repeated, or
        -  A **t**ag of type string, that turns into a DOM element using document.createElement(tag)
-       -  A **toTagOrTemplate** function that returns a string, used to generate a (custom element) with the name of the string, or a template.
-     - Third optional parameter is an optional **r**ange of indexes from the item array to render
+       -  A **toTagOrTemplate** function that returns a string -- used to generate a (custom element) with the name of the string -- or a template.
+     - Third optional parameter is an optional **r**ange of indexes from the item array to render [TODO].
      - Fourth optional parameter is the **i**nit transform for each item, which recursively uses the transform syntax described here.
      - Fifth optional parameter is the **u**pdate transform for each item.
      - Sixth optional parameter is **m**etadata associated with the loop -- how to extract the identifier for each item, for example.
-     - Seventh optional parameter is a **s**ymbol to allow references to the matching target element
-  -  If the first element of the tuple is a function, then evaluate the function.
-     - If the function evaluates to a string or symbol, and if the second element is a non array object, then:
+     - Seventh optional parameter is a **s**ymbol to allow future referencing to the matching target element
+     - If the first element of the tuple is a function, then evaluate the function, passing in the render context, and that replaces the first element.(TODO?)
+  <!--  - If the function evaluates to a string or symbol, and if the second element is a non array object, then:
        -  The second element of the tuple is expected to be an object / map, where the keys are the possible values of the evaluated function.
        -  If a match is found, replace the rhs expression with the matching expression found in the previous step.
-       -  Otherwise, replace the first element of the array with the evaluated function (virtually) and reapply the logic.
+       -  Otherwise, replace the first element of the array with the evaluated function (virtually) and reapply the logic. -->
   -  If the first element of the tuple is a boolean, then this represents a conditional statement.
-     - **NB** If the first element is expected to be boolean, but might also be null or undefined, you can guarantee that the first element will be a boolean by doing:  myBoolOrUndefinedOrNull || false.
      - If the second element of the tuple is an HTMLTemplateElement, then the tuple is treated as a conditional display rule.
        - The acronym to remember for a conditional array is "CATMINTS".
        - The first element is the **c**ondition.
@@ -222,8 +221,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 
 **NB 1:**  Typescript 4.0 is [adding support for labeled tuple elements](https://devblogs.microsoft.com/typescript/announcing-typescript-4-0-beta/#labeled-tuple-elements).  Hopefully, that will reduce the need to memorize words like "Peat", "Atrium", "Catmint", "Roy G Biv," etc, and what the letters in those words stand for.
 
-
-
+**NB 2:**  A promising tuple related tc39 proposal is gaining momentum.  If implemented, it will affect the rules above to some degree. 
 
 </details>
 
@@ -294,27 +292,7 @@ If you use a rule like the one above, then the other selector rules will almost 
 
 At this point, only a synchronous workflow is provided (except when piercing into ShadowDOM).
 
-## Conditional Display
 
-### Permanent Removal
-If a matching node returns a boolean value of *false*, the node is removed.  For example:
-
-```TypeScript
-...
-"section[data-type='attributes']":false
-...
-```
-
-Here the tag "section" will be removed.
-
-**NB:**  Be careful when using this technique.  Once a node is removed, there's no going back -- it will no longer match any css if you use trans-render updating (discussed below).  If your use of trans-render is mostly to display something once, and you recreate everything from scratch when your model changes, that's fine.  However, if you want to apply incremental updates, and need to display content conditionally, it would be better to use a [custom element](https://polymer-library.polymer-project.org/3.0/docs/devguide/templates#dom-if) [for that](https://github.com/bahrus/if-diff) [purpose](https://github.com/matthewp/if-else).
-
-
-### Limited Support for conditional templates
-
-```JavaScript
-article: [isHotOutside, warmWeatherTemplate,, coldWeatherTemplate]
-```
 
 ## What does wdwsf stand for?
 
@@ -375,6 +353,37 @@ Demonstrates including sub templates.
 [Demo](https://jsfiddle.net/bahrus/zvfa6q2u/4/)
 
 Demonstrates use of update, rudimentary interpolation, recursive select.
+
+## Conditional Display
+
+### Permanent Removal
+If a matching node returns a boolean value of *false*, the node is removed.  For example:
+
+```TypeScript
+...
+"section[data-type='attributes']":false
+...
+```
+
+Here the tag "section" will be removed.
+
+**NB:**  Be careful when using this technique.  Once a node is removed, there's no going back -- it will no longer match any css if you use trans-render updating (discussed below).  If your use of trans-render is mostly to display something once, and you recreate everything from scratch when your model changes, that's fine.  However, if you want to apply incremental updates, and need to display content conditionally, it would be better to either use a [custom element](https://polymer-library.polymer-project.org/3.0/docs/devguide/templates#dom-if) [for that](https://github.com/bahrus/if-diff) [purpose](https://github.com/matthewp/if-else), or utilize the conditional template support shown below.
+
+
+### Limited Support for conditional templates
+
+```JavaScript
+article: [isHotOutside, warmWeatherTemplate,, coldWeatherTemplate]
+```
+
+You can also do different sub transforms within the article element:
+
+```JavaScript
+article: [isHotOutside, warmWeatherTransform,, coldWeatherTransform]
+```
+
+The missing element, after the warmWeather[Template|Transform], allows for a choice of reference symbols to be established for the target element (article in this case), 
+
 
 
 ## Simple Template Insertion
@@ -463,7 +472,7 @@ I.e. any selector that starts with a double quote (") will use the last selector
 import { transform} from '../transform.js';
 const Transform = {
     details: {
-        'my-custom-element': [
+        'my-custom-element': [ //Hi!
             //Prop Setting
             {prop1:{greeting: 'hello'}, prop2:'hello', },
             //Event Handler Setting
@@ -480,7 +489,14 @@ const Transform = {
 transform(sourceTemplate, { Transform }, target);
 ```
 
-Each of the elements are "optional" in the sense that you  can either end the array early, or you can skip over one or more of the settings by specifying an empty object ({}), or just a comma i.e. [,,{'my-attribute', 'myValue'}].  A more verbose but somewhat more powerful way of doing this is discussed with the [decorate function](https://github.com/bahrus/trans-render#behavior-enhancement) discussed later.
+
+Here, 'my-custom-element' is a custom element, and the array starting with [ //Hi! it matches to is treated as a tuple (and tuple support in JS and TypeScript seems to be gaining momentum).  An easy to remember trick for this particular Tuple is:  "PEAT", which stands for prop setting, event handler setting, attribute setting, transform.
+
+The first element of the tuple must be a JS Object, not undefined or null.  I.e. if it is undefined, the rest of the array will be ignored. 
+
+Tip:  If the first element of the tuple binds to some optional property, which might be undefined or null, you can ensure that the array be treated as a "PEAT" array
+
+Although the first If the first element of the tupleEach of the elements are "optional" in the sense that you  can either end the array early, or you can skip over one or more of the settings by specifying an empty object ({}), or just a comma i.e. [,,{'my-attribute', 'myValue'}].  A more verbose but somewhat more powerful way of doing this is discussed with the [decorate function](https://github.com/bahrus/trans-render#behavior-enhancement) discussed later.
 
 A suggestion for remembering the order these "arguments" come in -- Properties / Events / Attributes / Transform can be abbreviated as "PEAT."  Actually, there is a fifth "argument" of type symbol, which stores the target in ctx.host.  So the acronym to remember is really PEATS.
 

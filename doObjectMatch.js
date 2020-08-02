@@ -61,6 +61,8 @@ function doArrayMatch(key, tvao, ctx) {
     const firstEl = tvao[0];
     switch (typeof firstEl) {
         case 'undefined':
+            //do nothing!
+            return;
         case 'object':
             if (Array.isArray(firstEl)) {
                 doRepeat(key, tvao, ctx);

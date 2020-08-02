@@ -80,6 +80,8 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
     const firstEl = tvao[0];
     switch(typeof firstEl){
         case 'undefined':
+          //do nothing!
+          return;
         case 'object':
             if(Array.isArray(firstEl)){
                 doRepeat(key, tvao as ATRIUM_Loop, ctx); 
