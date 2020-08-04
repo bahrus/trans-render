@@ -612,7 +612,39 @@ Instead, trans-render supports another approach [TODO: no test coverage]:
     }]
 ```
 
+## Replacing / inserting tags declaratively
 
+One functionality that trans-render considers of utmost importance is the ability dynamically replace one tag with another elegantly.
+
+Examples of where tag substitution is useful are:
+
+1.  Cases where "polymorphism" between a similar family of tags is required.
+2.  Extending basic functionality, using built-in native HTML elements, with more functional, visually appealing design libraries.
+3.  [Using version specific custom elements](https://github.com/bahrus/xtal-element#versioning-experimental-implementation-in-place), in a micro-front-end environment (i.e. supporting parallel versions). 
+
+This is best done before a template's clone has been inserted into the live DOM tree, but trans-render imposes no rules on when it can be done.
+
+### Example syntax:
+
+```JavaScript
+const initTransform = {
+    ...
+    'my-element': [MyElement.isReally, 'replace'], 
+    ...
+}
+```
+
+In addition to replacing a tag, you can instead insert a tag, and specify the location relative to the target.  E.g.:  
+
+```JavaScript
+const initTransform = {
+    ...
+    details: ['summary', 'afterBegin'],
+    '"':{
+        summary:'Summary text'
+    }
+    ...
+}
 
 ## Utility functions
 
@@ -636,9 +668,6 @@ Templates shine most when they are created once, and cloned repeatedly as needed
 Caching inside the renderContext object (ctx) may be too tepid, because the renderContext is likely to be created with each instance of a web component.
 
 So the code checks whether the context object has a "cache" property, and if so, it caches it there.  If using this library inside a web component library, a suggestion would be to set ctx.cache = MyCustomElementClass.
-
-
-
 
 ###  Simple Loop support
 
