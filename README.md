@@ -494,9 +494,18 @@ Here, 'my-custom-element' is a custom element, and the array starting with [ //H
 
 The first element of the tuple must be a JS Object, not undefined or null.  I.e. if it is undefined, the rest of the array will be ignored. 
 
-Tip:  If the first element of the tuple binds to some optional property, which might be undefined or null, you can ensure that the array be treated as a "PEAT" array
+Tip:  If the first element of the tuple binds to some optional property, which might be undefined or null, you can ensure that the array be treated as a "PEAT" array by adding a union with an empty {}.  I.e. 
 
-Although the first If the first element of the tupleEach of the elements are "optional" in the sense that you  can either end the array early, or you can skip over one or more of the settings by specifying an empty object ({}), or just a comma i.e. [,,{'my-attribute', 'myValue'}].  A more verbose but somewhat more powerful way of doing this is discussed with the [decorate function](https://github.com/bahrus/trans-render#behavior-enhancement) discussed later.
+```JavaScript
+const settings = {...}
+const Transform = {
+    'my-custom-element':[setting.somePropThatMightBeUndefined || {}]
+}
+```
+
+Although the first element of the tuple can't be undefined, each of the renaming elements of the tuple are "optional" in the sense that you  can either end the array early, or you can skip over one or more of the settings by specifying an empty object ({}), or just a comma i.e. [{},,{'my-attribute', 'myValue'}].  
+
+
 
 A suggestion for remembering the order these "arguments" come in -- Properties / Events / Attributes / Transform can be abbreviated as "PEAT."  Actually, there is a fifth "argument" of type symbol, which stores the target in ctx.host.  So the acronym to remember is really PEATS.
 
@@ -505,6 +514,8 @@ The second element of the array, where event handlers can go, can actually pass 
 ```JavaScript
 {click: [this.clickHandler, val: 'dataset.keyName']}
 ```
+
+A more verbose but somewhat more powerful way of setting properties on an element is discussed with the [decorate function](https://github.com/bahrus/trans-render#behavior-enhancement) discussed later.
 
 ## Prop setting shortcut [No test coverage]
 
