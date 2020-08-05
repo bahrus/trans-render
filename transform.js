@@ -1,5 +1,6 @@
 const SkipSibs = Symbol();
 const NextMatch = Symbol();
+export const more = Symbol('more');
 export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate) {
     if (ctx.mode === undefined) {
         Object.assign(ctx, { mode: 'init', level: 0, idx: 0 });
@@ -46,6 +47,11 @@ export function processSymbols(ctx) {
     const transf = ctx.Transform;
     for (const sym of Object.getOwnPropertySymbols(transf)) {
         const transformTemplateVal = transf[sym];
+        if (sym === more) {
+            ctx.Transform = transformTemplateVal;
+            processSymbols(ctx);
+            ctx.Transform = transf;
+        }
         const newTarget = (ctx[sym] || ctx.host[sym]);
         if (newTarget === undefined)
             continue;
@@ -87,6 +93,10 @@ export function processEl(ctx) {
         let removeNextElementSibling = false;
         for (let i = 0, ii = keys.length; i < ii; i++) {
             const key = keys[i];
+            if (key === 'debug') {
+                debugger;
+                continue;
+            }
             if (key.startsWith('"')) {
                 if (!matched)
                     continue;

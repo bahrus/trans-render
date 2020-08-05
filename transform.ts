@@ -9,6 +9,7 @@ import {
 
 const SkipSibs = Symbol();
 const NextMatch = Symbol();
+export const more = Symbol('more');
 
 export function transform(
     sourceOrTemplate: HTMLElement | DocumentFragment,
@@ -67,7 +68,13 @@ export function processFragment(
 export function processSymbols(ctx: RenderContext){
     const transf = ctx.Transform;
     for(const sym of Object.getOwnPropertySymbols(transf) ) {
+
         const transformTemplateVal = (<any>transf)[sym];
+        if(sym === more){
+            ctx.Transform = transformTemplateVal;
+            processSymbols(ctx);
+            ctx.Transform = transf;
+        }
         const newTarget = ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement | SVGElement;
         if(newTarget === undefined) continue;
         ctx.target = newTarget;
@@ -109,6 +116,10 @@ export function processEl(
         let removeNextElementSibling = false;
         for(let i = 0, ii = keys.length; i < ii; i++){
             const key = keys[i];
+            if(key==='debug') {
+                debugger;
+                continue;
+            }
             if(key.startsWith('"')){
                 if(!matched) continue;
             }else{

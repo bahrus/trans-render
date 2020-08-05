@@ -157,6 +157,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 - If the key is a string that starts with a capital letter, then it is part of a "Next Step" expression that indicates where to jump down to next in the DOM tree.
 - If the key is a string that starts with ^ then it matches if the tag name starts with the rest of the string [TODO]
 - If the key is a string that ends with $ then it matches if the tag name ends with the rest of the string [TODO]
+- If the key is "debug" then set a breakpoint in the code at that point.
 - If the key is an ES6 symbol, it is a shortcut to grab a reference to a DOM element previously stored either in context.host or context.cache, where context.host is a custom element instance.
 
 ### CSS Match Rules
@@ -625,7 +626,7 @@ Instead, trans-render supports another approach [TODO: no test coverage]:
     }]
 ```
 
-## Multiple matching with "More" symbol [TODO]
+## Multiple matching with "More" symbol [TODO: Untested]
 
 Previously, we provided a strategy for matching duplicate css selectors, using "ditto" notation.  But what about symbol keys?  That won't work.
 
