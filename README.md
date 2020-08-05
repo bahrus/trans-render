@@ -466,6 +466,8 @@ transform(sourceTemplate, { Transform }, target);
 
 I.e. any selector that starts with a double quote (") will use the last selector that didn't.
 
+
+
 ## Property / attribute / event binding
 
 ```JavaScript
@@ -490,7 +492,7 @@ transform(sourceTemplate, { Transform }, target);
 ```
 
 
-Here, 'my-custom-element' is a custom element, and the array starting with [ //Hi! it matches to is treated as a tuple (and tuple support in JS and TypeScript seems to be gaining momentum).  An easy to remember trick for this particular Tuple is:  "PEAT", which stands for prop setting, event handler setting, attribute setting, transform.
+Here, 'my-custom-element' is a custom element, and the array starting with [ //Hi!  it matches to is treated as a tuple (and tuple support in JS and TypeScript seems to be gaining momentum).  An easy to remember trick for this particular Tuple is:  "PEAT", which stands for prop setting, event handler setting, attribute setting, transform.
 
 The first element of the tuple must be a JS Object, not undefined or null.  I.e. if it is undefined, the rest of the array will be ignored. 
 
@@ -621,6 +623,25 @@ Instead, trans-render supports another approach [TODO: no test coverage]:
             [myFastAccessSymbol]: ({target}) => target.myProp = fastChangingProp
         }
     }]
+```
+
+## Multiple matching with "More" symbol [TODO]
+
+Previously, we provided a strategy for matching duplicate css selectors, using "ditto" notation.  But what about symbol keys?  That won't work.
+
+Instead, do the following:
+
+```JavaScript
+import {transform, more} from 'trans-render/transform.js';
+
+...
+updateTransform = {
+    [mySymbol]: [do something],
+    [more]:{
+        [mySymbol]: [do something else]
+    }
+}
+
 ```
 
 ## Replacing / inserting tags declaratively
