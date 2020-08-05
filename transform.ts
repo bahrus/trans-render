@@ -9,7 +9,7 @@ import {
 
 const SkipSibs = Symbol();
 const NextMatch = Symbol();
-export const more = Symbol('more');
+export const more = Symbol.for('e35fe6cb-78d4-48fe-90f8-bf9da743d532');
 
 export function transform(
     sourceOrTemplate: HTMLElement | DocumentFragment,
