@@ -1,4 +1,4 @@
-import {TransformValueOptions, RenderContext} from './types.js';
+import {TransformValueOptions, RenderContext} from './types_old.js';
 import {repeatInit}from './repeatInit.js';
 import {repeatethUpdateth} from './repeatethUpdateth.js';
 export function repeateth(

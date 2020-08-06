@@ -1,4 +1,4 @@
-import {RenderContext} from './types2.js';
+import {RenderContext} from './types.js';
 /**
  * 
  * @param target 

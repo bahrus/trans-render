@@ -1,4 +1,4 @@
-import {RenderContext, TransformValueArrayOptions, PlugInArgs, Plugin} from './types2.d.js';
+import {RenderContext, TransformValueArrayOptions, PlugInArgs, Plugin} from './types.js';
 import {getProp} from './transform.js';
 const sk =  Symbol('sk');
 

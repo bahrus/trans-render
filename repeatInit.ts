@@ -1,4 +1,4 @@
-import {TransformValueOptions, RenderContext} from './types.js';
+import {TransformValueOptions, RenderContext} from './types_old.js';
 
 export const countKey: unique symbol = Symbol.for('04efa75f-dec8-4002-a091-153683691bd1'); //what a waste of bandwidth
 export const itemsKey: unique symbol = Symbol.for('bb247496-9c5d-459c-8127-fe80fee8c256');

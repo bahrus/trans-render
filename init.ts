@@ -7,7 +7,7 @@ import {
   TransformValueOptions,
   PEATSettings,
   PEATUnionSettings
-} from "./types.js";
+} from "./types_old.js";
 
 const stcRe = /(\-\w)/g;
 export function lispToCamel(s: string){

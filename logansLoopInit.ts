@@ -1,4 +1,4 @@
-import {TransformValueOptions, RenderContext, ItemStatus} from './types.js';
+import {TransformValueOptions, RenderContext, ItemStatus} from './types_old.js';
 import {TransRenderSymbols as TRS} from './trans-render-symbols.js';
 import {setSymbols} from './manageSymbols.js';
 

@@ -12,7 +12,7 @@ import {
     UpdateTransform,
     Plugin,
     CATMINT_Conditional
-} from './types2.js';
+} from './types.js';
 
 import {doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp, isTemplate, processSymbols} from './transform.js';
 
@@ -109,6 +109,9 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
                 target.getAttributeNames().forEach(name =>{
                   el.setAttribute(name, target.getAttribute(name)!);
                 });
+                target.childNodes.forEach(node =>{
+                  el.append(node);
+                })
                 target.dataset.deleteMe = 'true';
                 target.insertAdjacentElement('afterend', el);
               }

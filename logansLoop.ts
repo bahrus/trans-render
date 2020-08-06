@@ -1,4 +1,4 @@
-import {TransformValueOptions, RenderContext, ItemStatus} from './types.js';
+import {TransformValueOptions, RenderContext, ItemStatus} from './types_old.js';
 import {repeatInit} from './repeatInit.js';
 import {createTemplate} from './createTemplate.js';
 import {repeatUpdate} from './repeatUpdate.js';

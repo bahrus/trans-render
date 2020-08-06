@@ -1,4 +1,4 @@
-import { RenderContext, DecorateArgs, DecorateTuple, TransformValueOptions, AttribsSettings } from "./types.js";
+import { RenderContext, DecorateArgs, DecorateTuple, TransformValueOptions, AttribsSettings } from "./types_old.js";
 import {domMerge} from './domMerge.js';
 
 const evCount = Symbol('evtCount');

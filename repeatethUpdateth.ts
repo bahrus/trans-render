@@ -1,4 +1,4 @@
-import {TransformRules, RenderContext, TransformValueOptions} from './types.js';
+import {TransformRules, RenderContext, TransformValueOptions} from './types_old.js';
 import {countKey, idxKey, ubKey, itemsKey} from './repeatInit.js';
 import {update} from './update.js';
 

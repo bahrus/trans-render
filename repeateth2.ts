@@ -4,7 +4,7 @@ import {
     InitTransform, 
     UpdateTransform,
     ToTOrFnToTot
-} from './types2.js';
+} from './types.js';
 import {repeatInit}from './repeatInit2.js';
 import {repeatethUpdateth} from './repeatethUpdateth2.js';
 const initialized = Symbol();

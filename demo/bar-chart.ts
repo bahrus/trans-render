@@ -1,5 +1,5 @@
 import {createTemplate} from '../createTemplate.js';
-import {PEATUnionSettings} from '../types2.d.js';
+import {PEATUnionSettings} from '../types.js';
 
 const itemTemplate = createTemplate(/* html */`
 <g class="bar">

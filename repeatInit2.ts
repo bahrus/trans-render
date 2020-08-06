@@ -1,4 +1,4 @@
-import {TransformValueOptions, RenderContext, ToTOrFnToTot} from './types2.js';
+import {TransformValueOptions, RenderContext, ToTOrFnToTot} from './types.js';
 import {transform, isTemplate, processEl} from './transform.js';
 
 export const countKey: unique symbol = Symbol.for('04efa75f-dec8-4002-a091-153683691bd1'); //what a waste of bandwidth

@@ -90,6 +90,9 @@ function doArrayMatch(key, tvao, ctx) {
                         target.getAttributeNames().forEach(name => {
                             el.setAttribute(name, target.getAttribute(name));
                         });
+                        target.childNodes.forEach(node => {
+                            el.append(node);
+                        });
                         target.dataset.deleteMe = 'true';
                         target.insertAdjacentElement('afterend', el);
                     }

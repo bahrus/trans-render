@@ -1,4 +1,4 @@
-import {IHydrate, EvaluatedAttributeProps} from './types.js';
+import {IHydrate, EvaluatedAttributeProps} from './types_old.js';
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 

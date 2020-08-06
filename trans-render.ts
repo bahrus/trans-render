@@ -4,7 +4,7 @@ import {init} from './init.js';
 import {repeat} from './repeat.js';
 import {interpolate} from './interpolate.js';
 import {decorate} from './decorate.js';
-import {RenderContext, TransRenderWC} from './types.js';
+import {RenderContext, TransRenderWC} from './types_old.js';
 import { update } from './update.js';
 import {appendTag} from './appendTag.js';
 import {repeateth} from './repeateth.js';

@@ -4,7 +4,7 @@ import {
     TransformValueOptions, 
     TransformMatch,
     TransformValueObjectOptions,
-} from './types2.js';
+} from './types.js';
 
 
 const SkipSibs = Symbol();

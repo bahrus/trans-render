@@ -1,4 +1,4 @@
-import { RenderContext, TransformValueOptions, ToTOrFnToTot } from './types2.js';
+import { RenderContext, TransformValueOptions, ToTOrFnToTot } from './types.js';
 import { countKey, idxKey, ubKey, itemsKey } from './repeatInit2.js';
 import { transform } from './transform.js';
 
