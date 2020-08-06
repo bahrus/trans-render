@@ -115,6 +115,7 @@ function doArrayMatch(key, tvao, ctx) {
     }
 }
 function doCondition(key, cu, ctx) {
+    //TODO:  Deal with toggling conditions -- use some (data-)attribute / state 
     const [conditionVal, affirmTempl, mi, negativeTempl] = cu;
     const templateToClone = conditionVal ? affirmTempl : negativeTempl;
     if (templateToClone !== undefined) {

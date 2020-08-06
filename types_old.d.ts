@@ -99,31 +99,7 @@ export interface TransRenderWC{
 
 
 
-export interface IHydrate extends HTMLElement{
-    /**
-     * Any component that emits events should not do so if it is disabled.
-     * Note that this is not enforced, but the disabled property is made available.
-     * Users of this mix-in should ensure not to call "de" if this property is set to true.
-    */
-   disabled: boolean;
 
-    /**
-     * Set attribute value.
-     * @param name 
-     * @param val 
-     * @param trueVal String to set attribute if true.
-     */
-    attr(name: string, val: string | boolean, trueVal?: string): void;
-
-    connectedCallback(): void;
-
-    /**
-     * Needed for asynchronous loading
-     * @param props Array of property names to "upgrade", without losing value set while element was Unknown
-     */
-    __propUp<TKeys extends string[] = string[]>(props: TKeys): void;
-
-}
 
 export interface UpdateContext extends RenderContext {
     update: (ctx: RenderContext, target: HTMLElement | DocumentFragment) => UpdateContext;
