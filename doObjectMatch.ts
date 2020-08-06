@@ -135,6 +135,7 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
 }
 
 function doCondition(key: string, cu: CATMINT_Conditional, ctx: RenderContext){
+  //TODO:  Deal with toggling conditions -- use some (data-)attribute / state 
   const [conditionVal, affirmTempl, mi, negativeTempl] = cu;
   const templateToClone = conditionVal ? affirmTempl : negativeTempl; 
   if(templateToClone !== undefined){

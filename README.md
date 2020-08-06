@@ -190,7 +190,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
      - Third optional parameter is an optional **r**ange of indexes from the item array to render [TODO].
      - Fourth optional parameter is the **i**nit transform for each item, which recursively uses the transform syntax described here.
      - Fifth optional parameter is the **u**pdate transform for each item.
-     - Sixth optional parameter is **m**etadata associated with the loop -- how to extract the identifier for each item, for example.
+     - Sixth optional parameter is **m**etadata associated with the array we are looping over -- how to extract the identifier for each item, for example.
      - Seventh optional parameter is a **s**ymbol to allow future referencing to the matching target element
      - If the first element of the tuple is a function, then evaluate the function, passing in the render context, and that replaces the first element.(TODO?)
   <!--  - If the function evaluates to a string or symbol, and if the second element is a non array object, then:
@@ -212,8 +212,8 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
      - If that is the case, then that function is passed ctx, and the remaining items in the tuple.
      - The benefits of a directive over an using an arrow function are:
        - Arrow functions are a bit cumbersome
-       - Arrow functions are not really as declarative (kind of a subjective call)
-  -  If the first element of the tuple is a string, then this is a DOM tag that should be appended.  
+       - Arrow functions are not really as declarative (kind of a subjective call), possible more capable of being encoded as JSON.
+  -  If the first element of the tuple is a string, then this is a DOM tag that should be inserted.  
      -  The second optional element is the position of where to place the new element relative to the target -- afterEnd, beforeEnd, afterBegin, beforeBegin, replace [TODO: untested]
      -  The third optional element is expected to be a PEATS object if it is defined.
   <!---  If the first element of the tuple is a template, then the second element is expected to be a transform.
