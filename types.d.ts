@@ -152,3 +152,17 @@ export type Na = [string];
 export type Nap = [string, InsOrRep];
 export type Nappe = [string, InsOrRep, PEATUnionSettings];
 export type NappeUnion = Na | Nap | Nappe;
+
+export interface EvaluatedAttributeProps{
+    num: string[];
+    bool: string[];
+    str: string[];
+    obj: string[];
+    reflect: string[];
+    jsonProp: string[];
+    notify: string[];
+    dry: string[];
+    log?: string[];
+    debug?: string[];
+    async?: string[];
+}
