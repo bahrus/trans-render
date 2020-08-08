@@ -153,6 +153,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 ### LHS Key Scenarios
 
 - If the key is a string that starts with a lower case letter, then it is a "css match" expression.
+  - If the key starting with a lower case letter ends with the word "Part", then it is a css match expression: '[part="{{first part of the key before Part}}"]' [TODO]
 - If the key is a string that starts with double quote, then it is also a "css match" expression, but the css expression comes from the nearest previous sibling key which doesn't start with a double quote.
 - If the key is a string that starts with a capital letter, then it is part of a "Next Step" expression that indicates where to jump down to next in the DOM tree.
 - If the key is a string that starts with ^ then it matches if the tag name starts with the rest of the string [TODO]
