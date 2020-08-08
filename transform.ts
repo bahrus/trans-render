@@ -115,7 +115,7 @@ export function processEl(
         if(ctx.itemTagger !== undefined) ctx.itemTagger(nextElementSibling);
         let removeNextElementSibling = false;
         for(let i = 0, ii = keys.length; i < ii; i++){
-            let key = keys[i];
+            const key = keys[i];
             if(key==='debug') {
                 debugger;
                 continue;
@@ -123,10 +123,11 @@ export function processEl(
             if(key.startsWith('"')){
                 if(!matched) continue;
             }else{
+                let modifiedSelector = key;
                 if(key.endsWith('Part')){
-                    key = `[part="${key.substring(0, key.length - 4)}"]`;
+                    modifiedSelector = `[part="${key.substring(0, key.length - 4)}"]`;
                 }
-                if(!nextElementSibling.matches(key)) {
+                if(!nextElementSibling.matches(modifiedSelector)) {
                     matched = false;
                     continue;
                 }
