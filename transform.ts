@@ -115,7 +115,7 @@ export function processEl(
         if(ctx.itemTagger !== undefined) ctx.itemTagger(nextElementSibling);
         let removeNextElementSibling = false;
         for(let i = 0, ii = keys.length; i < ii; i++){
-            const key = keys[i];
+            let key = keys[i];
             if(key==='debug') {
                 debugger;
                 continue;
@@ -123,6 +123,9 @@ export function processEl(
             if(key.startsWith('"')){
                 if(!matched) continue;
             }else{
+                if(key.endsWith('Part')){
+                    key = `[part="${key.substring(0, key.length - 4)}"]`;
+                }
                 if(!nextElementSibling.matches(key)) {
                     matched = false;
                     continue;
@@ -249,7 +252,7 @@ function getRHS(expr: any, ctx: RenderContext): any{
             switch(typeof pivot){
                 case 'object':
                 case 'undefined':
-                case 'string';
+                case 'string':
                     return expr;
                 case 'function':
                     const val: any = expr[0](ctx);

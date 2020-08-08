@@ -92,7 +92,7 @@ export function processEl(ctx) {
             ctx.itemTagger(nextElementSibling);
         let removeNextElementSibling = false;
         for (let i = 0, ii = keys.length; i < ii; i++) {
-            const key = keys[i];
+            let key = keys[i];
             if (key === 'debug') {
                 debugger;
                 continue;
@@ -102,6 +102,9 @@ export function processEl(ctx) {
                     continue;
             }
             else {
+                if (key.endsWith('Part')) {
+                    key = `[part="${key.substring(0, key.length - 4)}"]`;
+                }
                 if (!nextElementSibling.matches(key)) {
                     matched = false;
                     continue;
@@ -228,7 +231,6 @@ function getRHS(expr, ctx) {
                 case 'object':
                 case 'undefined':
                 case 'string':
-                    ;
                     return expr;
                 case 'function':
                     const val = expr[0](ctx);
