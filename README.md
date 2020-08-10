@@ -218,7 +218,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
        - Arrow functions are not really as declarative (kind of a subjective call), possibly less capable of being encoded as JSON.
        - I am under some foggy assumption here that global Symbol.for([guid string])'s can be represented in JSON somehow, based on some special notation, like what is done for dates.
   -  If the first element of the tuple is a string, then this is the name of a DOM tag that should be inserted.  
-     -  The second optional element is the position of where to place the new element relative to the target -- afterEnd, beforeEnd, afterBegin, beforeBegin, replace [TODO: no test coverage]
+     -  The second optional element is the position of where to place the new element relative to the target -- afterEnd, beforeEnd, afterBegin, beforeBegin, or replace [TODO: no test coverage]
      -  The third optional element is expected to be a PEATS object if it is defined.
   <!---  If the first element of the tuple is a template, then the second element is expected to be a transform.
      - If the template element has property dataset.shadowRoot = 'open' | 'closed', create a shadowRoot with the given mode.
@@ -226,7 +226,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 
 **NB 1:**  Typescript 4.0 is [adding support for labeled tuple elements](https://devblogs.microsoft.com/typescript/announcing-typescript-4-0-beta/#labeled-tuple-elements).  Hopefully, that will reduce the need to memorize words like "Peat", "Atrium", "Catmint", "Roy G Biv," etc, and what the letters in those words stand for.
 
-**NB 2:**  A promising tuple related tc39 proposal is gaining momentum.  If implemented, it will affect the rules above to some degree. 
+**NB 2:**  A promising tuple related tc39 proposal is gaining momentum.  If implemented, it will likely affect the rules above to some degree. 
 
 </details>
 
