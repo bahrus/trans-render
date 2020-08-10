@@ -198,24 +198,26 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
        -  The second element of the tuple is expected to be an object / map, where the keys are the possible values of the evaluated function.
        -  If a match is found, replace the rhs expression with the matching expression found in the previous step.
        -  Otherwise, replace the first element of the array with the evaluated function (virtually) and reapply the logic. -->
-  -  If the first element of the tuple is a boolean, then this represents a conditional statement.
-     - If the second element of the tuple is an HTMLTemplateElement, then the tuple is treated as a conditional display rule.
-       - The acronym to remember for a conditional array is "CATMINTS".
-       - The first element is the **c**ondition.
-       - If the first element is true, replace the rhs expression with the second element, the **a**ffirmative **t**ransform (or **t**emplate) element, and reapply the logic.
-       - The third element of the array allows for "metadata instructions".  For example:  {dataKeyName: "conditionIsValid"} will set the target.dataset.conditionIsValid = 'true' or 'false' depending on the value of the first element.
-       - If the first element is false, replace the rhs expression with the fourth element, the **n**egative **t**ransform (or **template**) and reapply the logic.
-     - If the second element is not an HTMLTemplateElement, then the tuple is expected to have 3 elements.
-       - If the first element is true, replace the RHS by the second element.  If the first element is false, replace the RHS by the third element.
+  -  If the first element of the tuple is a boolean, then this represents a conditional display rule.
+     - The acronym to remember for a conditional array is "CATMINTS".
+     - The first element is the **c**ondition.
+     - The second element is where it looks for the **a**ffirmative **t**emplate.
+     - The third element contains **m**etadata instructions
+     - The fourth element is where it looks for the **n**egative **t**emplate.
+     - If the first element is true, then the affirmative template is cloned into the target.
+     - If the first element is false, then the negative template is cloned into the target.
+     - The third element of the array allows for "metadata instructions".  Currently it supports stamping the target with a "yesSymbol" and a "noSymbol", which later transform steps can then act on.
+     - A major TODO item here is if using a conditional expression as part of an update transform, how to deal with previously cloned content, out of sync with the current value of the condition.
   -  If the first element of the tuple is an ES6 symbol, then this represents a directive / plugin.
      - The syntax only makes sense if: 
-         - that symbol, say mySymbol, is a key inside the plugins symbol of transform.js, and
+         - that symbol, say mySymbol, is a key inside the "plugins" key of the ctx object
      - If that is the case, then that function is passed ctx, and the remaining items in the tuple.
      - The benefits of a directive over an using an arrow function are:
        - Arrow functions are a bit cumbersome
-       - Arrow functions are not really as declarative (kind of a subjective call), possible more capable of being encoded as JSON.
-  -  If the first element of the tuple is a string, then this is a DOM tag that should be inserted.  
-     -  The second optional element is the position of where to place the new element relative to the target -- afterEnd, beforeEnd, afterBegin, beforeBegin, replace [TODO: untested]
+       - Arrow functions are not really as declarative (kind of a subjective call), possibly less capable of being encoded as JSON.
+       - We are under some foggy assumption here that global Symbol.for([guid string])'s can be represented in JSON somehow, based on some special notation, like what is done for dates.
+  -  If the first element of the tuple is a string, then this is the name of a DOM tag that should be inserted.  
+     -  The second optional element is the position of where to place the new element relative to the target -- afterEnd, beforeEnd, afterBegin, beforeBegin, replace [TODO: no test coverage]
      -  The third optional element is expected to be a PEATS object if it is defined.
   <!---  If the first element of the tuple is a template, then the second element is expected to be a transform.
      - If the template element has property dataset.shadowRoot = 'open' | 'closed', create a shadowRoot with the given mode.
