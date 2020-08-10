@@ -36,7 +36,7 @@ For more musings on the question of what is this good for, please see the [rambl
 
 ## Workflow
 
-trans-render provides helper functions for either 1)  cloning a template, and then walking through the DOM, applying rules in document order, or, using the same syntax, applying changes on a live DOM fragment.  Note that the document can grow as processing takes place (due, for example, to cloning sub templates).  It's critical, therefore, that the processing occur in a logical order, and that order is down the document tree.  That way it is fine to append nodes before continuing processing.  
+trans-render provides helper functions for either 1)  cloning a template, and then walking through the DOM, applying rules in document order, or, 2) using the same syntax, applying changes on a live DOM fragment.  Note that the document can grow as processing takes place (due, for example, to cloning sub templates).  It's critical, therefore, that the processing occur in a logical order, and that order is down the document tree.  That way it is fine to append nodes before continuing processing.  
 
 ## Drilling down to children
 
@@ -147,7 +147,7 @@ const Transform = {
 };
 ```
 
-Due to the basic rules of object literals in JavaScript, keys can only be strings or ES6 symbols.  trans-render uses both.
+Due to the basic rules of object literals in JavaScript, keys can only be strings or ES6 symbols (or numbers, which aren't used).  trans-render uses both strings and ES6 symbols as keys.
 
 
 ### LHS Key Scenarios
