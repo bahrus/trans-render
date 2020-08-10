@@ -202,20 +202,21 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
      - The acronym to remember for a conditional array is "CATMINTS".
      - The first element is the **c**ondition.
      - The second element is where it looks for the **a**ffirmative **t**emplate.
-     - The third element contains **m**etadata instructions
+     - The third element contains **m**etadata **i**nstructions
      - The fourth element is where it looks for the **n**egative **t**emplate.
      - If the first element is true, then the affirmative template is cloned into the target.
      - If the first element is false, then the negative template is cloned into the target.
-     - The third element of the array allows for "metadata instructions".  Currently it supports stamping the target with a "yesSymbol" and a "noSymbol", which later transform steps can then act on.
+     - The third element of the array allows for "metadata instructions".  Currently it supports stamping the target with a "yesSymbol" and a "noSymbol", depending on the value of the condition, which later transform steps can then act on.
      - A major TODO item here is if using a conditional expression as part of an update transform, how to deal with previously cloned content, out of sync with the current value of the condition.
   -  If the first element of the tuple is an ES6 symbol, then this represents a directive / plugin.
-     - The syntax only makes sense if: 
-         - that symbol, say mySymbol, is a key inside the "plugins" key of the ctx object
+     - The syntax only does anything if: 
+         - that symbol, say mySymbol, is a key of the ctx object, and
+         - ctx[mySymbol] is of type function.
      - If that is the case, then that function is passed ctx, and the remaining items in the tuple.
-     - The benefits of a directive over an using an arrow function are:
+     - The benefits of a directive over an using an arrow function combined with an imperative function call are:
        - Arrow functions are a bit cumbersome
        - Arrow functions are not really as declarative (kind of a subjective call), possibly less capable of being encoded as JSON.
-       - We are under some foggy assumption here that global Symbol.for([guid string])'s can be represented in JSON somehow, based on some special notation, like what is done for dates.
+       - I am under some foggy assumption here that global Symbol.for([guid string])'s can be represented in JSON somehow, based on some special notation, like what is done for dates.
   -  If the first element of the tuple is a string, then this is the name of a DOM tag that should be inserted.  
      -  The second optional element is the position of where to place the new element relative to the target -- afterEnd, beforeEnd, afterBegin, beforeBegin, replace [TODO: no test coverage]
      -  The third optional element is expected to be a PEATS object if it is defined.
