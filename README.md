@@ -181,19 +181,21 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
      -  Third optional parameter is an **a**ttribute object, that sets the attributes.  "null" values remove the attributes.
      -  Fourth optional parameter is a sub-**t**ransform, which recursively performs a transform within the light children of the matching target element.
      -  Fifth optional parameter is of type **s**ymbol, to allow future referencing to the matching target element.
-  -  If the first element of the tuple itself is an array, then the array represents a declarative loop associated with those items.
+  -  If the first element of the tuple itself is an array, then the tuple represents a declarative loop associated with the array of items in the first tuple element.
      - The acronym to remember for a loop array is "ATRIUMS".
      - First element of the tuple is the **a**rray of items to loop over.
      - Second element is either:
        -  A **t**emplate reference that should be repeated, or
        -  A **t**ag of type string, that turns into a DOM element using document.createElement(tag)
-       -  A **toTagOrTemplate** function that returns a string -- used to generate a (custom element) with the name of the string -- or a template.
+       -  A **toTagOrTemplate** function that returns a string or template.
+          - If the function returns a string, it is used to generate a (custom element) with the name of the string.
+          - If the function returns a template, it is the template that should be repeated.
      - Third optional parameter is an optional **r**ange of indexes from the item array to render [TODO].
      - Fourth optional parameter is the **i**nit transform for each item, which recursively uses the transform syntax described here.
      - Fifth optional parameter is the **u**pdate transform for each item.
      - Sixth optional parameter is **m**etadata associated with the array we are looping over -- how to extract the identifier for each item, for example.
      - Seventh optional parameter is a **s**ymbol to allow future referencing to the matching target element
-     - If the first element of the tuple is a function, then evaluate the function, passing in the render context, and that replaces the first element.(TODO?)
+     - If the first element of the tuple is a function, then evaluate the function, passing in the render context, and the returned value of the function replaces the first element.[TODO]
   <!--  - If the function evaluates to a string or symbol, and if the second element is a non array object, then:
        -  The second element of the tuple is expected to be an object / map, where the keys are the possible values of the evaluated function.
        -  If a match is found, replace the rhs expression with the matching expression found in the previous step.
@@ -202,7 +204,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
      - The acronym to remember for a conditional array is "CATMINTS".
      - The first element is the **c**ondition.
      - The second element is where it looks for the **a**ffirmative **t**emplate.
-     - The third element contains **m**etadata **i**nstructions
+     - The third element contains **m**etadata **i**nstructions.
      - The fourth element is where it looks for the **n**egative **t**emplate.
      - If the first element is true, then the affirmative template is cloned into the target.
      - If the first element is false, then the negative template is cloned into the target.

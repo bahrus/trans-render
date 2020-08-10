@@ -96,28 +96,28 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
             ctx.plugins![firstEl as any as string].fn(ctx, tvao);
             break;
         case 'string':
-          
           const target = ctx.target! as HTMLElement;
           const position = tvao[1];
+          let el: HTMLElement | undefined;
           if(position !== undefined){
             if(position === 'replace'){
               //replace makes no sense if tag names are the same.
               //this logic allows declarative tag replace config to be simpler to maintain.
               if(target.localName !== firstEl){
-                const el = document.createElement(firstEl);
+                el = document.createElement(firstEl);
                 //https://paulbakaus.com/2019/07/28/quickly-copy-dom-attributes-from-one-element-to-another/
                 target.getAttributeNames().forEach(name =>{
-                  el.setAttribute(name, target.getAttribute(name)!);
+                  el!.setAttribute(name, target.getAttribute(name)!);
                 });
                 target.childNodes.forEach(node =>{
-                  el.append(node);
+                  el!.append(node);
                 })
                 target.dataset.deleteMe = 'true';
                 target.insertAdjacentElement('afterend', el);
               }
 
             }else{
-              const el = document.createElement(firstEl);
+              el = document.createElement(firstEl);
               target.insertAdjacentElement(position, el);
             }
             
@@ -126,7 +126,7 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
             target.appendChild(el);
           }
           const peat = tvao[2];
-          if(peat !== undefined){
+          if(peat !== undefined && el !== undefined){
             ctx.target = el;
             doPropSetting(key, peat as PEATUnionSettings, ctx);
             ctx.target = target;

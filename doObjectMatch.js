@@ -80,12 +80,13 @@ function doArrayMatch(key, tvao, ctx) {
         case 'string':
             const target = ctx.target;
             const position = tvao[1];
+            let el;
             if (position !== undefined) {
                 if (position === 'replace') {
                     //replace makes no sense if tag names are the same.
                     //this logic allows declarative tag replace config to be simpler to maintain.
                     if (target.localName !== firstEl) {
-                        const el = document.createElement(firstEl);
+                        el = document.createElement(firstEl);
                         //https://paulbakaus.com/2019/07/28/quickly-copy-dom-attributes-from-one-element-to-another/
                         target.getAttributeNames().forEach(name => {
                             el.setAttribute(name, target.getAttribute(name));
@@ -98,7 +99,7 @@ function doArrayMatch(key, tvao, ctx) {
                     }
                 }
                 else {
-                    const el = document.createElement(firstEl);
+                    el = document.createElement(firstEl);
                     target.insertAdjacentElement(position, el);
                 }
             }
@@ -107,7 +108,7 @@ function doArrayMatch(key, tvao, ctx) {
                 target.appendChild(el);
             }
             const peat = tvao[2];
-            if (peat !== undefined) {
+            if (peat !== undefined && el !== undefined) {
                 ctx.target = el;
                 doPropSetting(key, peat, ctx);
                 ctx.target = target;
