@@ -1,6 +1,6 @@
-import { RenderContext, TransformValueOptions, ToTOrFnToTot } from './types.js';
-import { countKey, idxKey, ubKey, itemsKey } from './repeatInit2.js';
-import { transform } from './transform.js';
+import { RenderContext, TransformValueOptions, ToTOrFnToTot } from '../types.js';
+import { countKey, idxKey, ubKey, itemsKey } from '../repeatInit2.js';
+import { transform } from '../transform.js';
 
 const origStyleKey = Symbol('origStyle');
 //type HTMLFn = (el: HTMLElement) => void
