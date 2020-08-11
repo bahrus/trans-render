@@ -7,11 +7,23 @@
     <title>Document</title>
 </head>
 <body>
-    <script>
-        const customElements = 'hello';
-        console.log(customElements);
-        customElements.define('a-g', class{});
-
+    <script type=module>
+        const testFn = ({self}) =>{
+            console.log(self.test2);
+            console.log(self);
+            console.log(self.#test);
+        }
+        class Test{
+            #test = 'hello';
+            test2 = 'goodbye'
+            self=this;
+            const bind = testFn.bind(this);
+            doSomething(){
+                bind(this);
+            }
+        }
+        const test = new Test();
+        test.doSomething();
     </script>
 </body>
 </html>

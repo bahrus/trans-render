@@ -194,7 +194,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
      - Fourth optional parameter is the **i**nit transform for each item, which recursively uses the transform syntax described here.
      - Fifth optional parameter is the **u**pdate transform for each item.
      - Sixth optional parameter is **m**etadata associated with the array we are looping over -- how to extract the identifier for each item, for example.
-     - Seventh optional parameter is a **s**ymbol to allow future referencing to the matching target element
+     - Seventh optional parameter is a **s**ymbol to allow future referencing to the matching target element.
      - If the first element of the tuple is a function, then evaluate the function, passing in the render context, and the returned value of the function replaces the first element.[TODO]
   <!--  - If the function evaluates to a string or symbol, and if the second element is a non array object, then:
        -  The second element of the tuple is expected to be an object / map, where the keys are the possible values of the evaluated function.
