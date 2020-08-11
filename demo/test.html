@@ -11,14 +11,15 @@
         const testFn = ({self}) =>{
             console.log(self.test2);
             console.log(self);
-            console.log(self.#test);
+            //console.log(self.#test);
         }
         class Test{
             #test = 'hello';
             test2 = 'goodbye'
             self=this;
-            const bind = testFn.bind(this);
+            
             doSomething(){
+                const bind = testFn.bind(this);
                 bind(this);
             }
         }
