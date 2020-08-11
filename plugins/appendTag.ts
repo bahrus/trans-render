@@ -1,6 +1,6 @@
-import {DecorateArgs, PEAUnionSettings, PEATUnionSettings, RenderContext} from './types_old.js';
+import {DecorateArgs, PEAUnionSettings, PEATUnionSettings, RenderContext} from '../types_old.js';
 import {decorate} from './decorate.js';
-import {applyPeatSettings} from './init.js';
+import {applyPeatSettings} from '../init.js';
 export function appendTag<T extends HTMLElement = HTMLElement>(container: HTMLElement, name: string, config?: PEAUnionSettings<T> | DecorateArgs<T>, ctx?: RenderContext) : T{
     const newElement = document.createElement(name) as T;
     if(config !== undefined){

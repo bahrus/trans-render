@@ -1,5 +1,5 @@
-import {RenderContext, TransformValueArrayOptions, PlugInArgs, Plugin} from './types.js';
-import {getProp} from './transform.js';
+import {RenderContext, TransformValueArrayOptions, PlugInArgs, Plugin} from '../types.js';
+import {getProp} from '../transform.js';
 const sk =  Symbol('sk');
 
 export function interpolate(target: any, prop: string, obj: any, isAttr: boolean = false){

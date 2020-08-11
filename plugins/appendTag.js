@@ -1,5 +1,5 @@
-import { decorate } from './plugins/decorate.js';
-import { applyPeatSettings } from './init.js';
+import { decorate } from './decorate.js';
+import { applyPeatSettings } from '../init.js';
 export function appendTag(container, name, config, ctx) {
     const newElement = document.createElement(name);
     if (config !== undefined) {

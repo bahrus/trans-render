@@ -75,7 +75,7 @@
     <div id=target></div>
     <script type=module>
         import {transform} from '../transform.js';
-        import {doObjectMatch} from '../doObjectMatch.js';
+        import {doObjectMatch} from '../plugins/doObjectMatch.js';
         transform(main, {
             customObjProcessor: doObjectMatch,
             Transform:{

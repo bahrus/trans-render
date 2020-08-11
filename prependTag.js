@@ -1,4 +1,4 @@
-import { decorate } from './decorate.js';
+import { decorate } from './plugins/decorate.js';
 import { applyPeatSettings } from './init.js';
 export function prependTag(container, name, config, ctx) {
     const newElement = document.createElement(name);

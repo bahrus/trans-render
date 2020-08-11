@@ -1,3 +1,3 @@
-export {doObjectMatch} from './doObjectMatch.js';
+export {doObjectMatch} from './plugins/doObjectMatch.js';
 export {repeateth} from './plugins/repeateth2.js';
-export {interpolateSym, plugin} from './interpolate.js';
+export {interpolateSym, plugin} from './plugins/interpolate.js';

@@ -12,9 +12,9 @@ import {
     UpdateTransform,
     Plugin,
     CATMINT_Conditional
-} from './types.js';
+} from '../types.js';
 
-import {doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp, isTemplate, processSymbols} from './transform.js';
+import {doNextStepSelect, copyCtx, doNextStepSibling, processEl, restoreCtx, getProp, isTemplate, processSymbols} from '../transform.js';
 
 //export const repeatethFnContainer: IRepeatethContainer = {};
 
