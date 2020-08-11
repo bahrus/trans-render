@@ -1,4 +1,4 @@
-import { transform, isTemplate, processEl } from './transform.js';
+import { transform, isTemplate, processEl } from '../transform.js';
 export const countKey = Symbol.for('04efa75f-dec8-4002-a091-153683691bd1'); //what a waste of bandwidth
 export const itemsKey = Symbol.for('bb247496-9c5d-459c-8127-fe80fee8c256');
 export const idxKey = Symbol.for('ad7cf100-0c10-4184-b836-f560f2c15c81');

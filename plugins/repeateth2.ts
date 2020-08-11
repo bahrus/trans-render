@@ -5,7 +5,7 @@ import {
     UpdateTransform,
     ToTOrFnToTot
 } from '../types.js';
-import {repeatInit}from '../repeatInit2.js';
+import {repeatInit}from './repeatInit2.js';
 import {repeatethUpdateth} from './repeatethUpdateth2.js';
 const initialized = Symbol();
 export function repeateth(
