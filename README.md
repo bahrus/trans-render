@@ -422,7 +422,7 @@ My summary Text
 
 Here we are relying on the fact that outside any Shadow DOM, id's become global constants.  So for simple HTML pages, this works.  Assuming HTML Modules someday bring the world back into balance, an open question remains how code will be able to reference templates defined within the HTML module.
 
-For now, typically, web components are written in JavaScript exclusively. Although creating a template is one of code, the code is a bit length, so a [utility to create a template](#create-template-element-programmatically) is provided that can then be referenced, in lieu of an HTML Template DOM node.
+For now, typically, web components are written in JavaScript exclusively. Although creating a template is one or two lines of code, the code is a bit lengthy, so a [utility to create a template](#create-template-element-programmatically) is provided that can then be referenced.  This allows the repetetive, scandalous code, required in lieu of an HTML Template DOM node, to be hidden from view.
 
 ##  Shadowed Template Insertion
 

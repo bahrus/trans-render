@@ -1,5 +1,5 @@
-import {Vals, AttribsSettings} from './types_old.js';
-import {mergeDeep} from './mergeDeep.js';
+import {Vals, AttribsSettings} from '../types_old.js';
+import {mergeDeep} from '../mergeDeep.js';
 
 function setAttribs(target: HTMLElement, source: Vals) {
   const attributes = source.attribs;

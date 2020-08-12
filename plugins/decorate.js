@@ -1,4 +1,4 @@
-import { domMerge } from '../domMerge.js';
+import { domMerge } from './domMerge.js';
 const evCount = Symbol('evtCount');
 const handlerKey = Symbol('handlerKey');
 /**
