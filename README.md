@@ -422,7 +422,7 @@ My summary Text
 
 Here we are relying on the fact that outside any Shadow DOM, id's become global constants.  So for simple HTML pages, this works.  Assuming HTML Modules someday bring the world back into balance, an open question remains how code will be able to reference templates defined within the HTML module.
 
-For now, typically, web components are written in JavaScript exclusively. Although creating a template is one or two lines of code, the code is a bit lengthy, so a [utility to create a template](#create-template-element-programmatically) is provided that can then be referenced.  This allows the repetetive, scandalous code, required in lieu of an HTML Template DOM node, to be hidden from view.
+For now, typically, web components are written in JavaScript exclusively. Although creating a template is one or two lines of code, the code is a bit lengthy, so a [utility to create a template](#create-template-element-programmatically) is provided that can then be referenced.  This allows the repetitive, scandalous code, required in lieu of an HTML Template DOM node, to be hidden from view.
 
 ##  Shadowed Template Insertion
 
@@ -508,20 +508,47 @@ Tip:  If the first element of the tuple binds to some optional property, which m
 ```JavaScript
 const settings = {...}
 const Transform = {
-    'my-custom-element':[setting.somePropThatMightBeUndefined || {}]
+    'my-custom-element':[settings.somePropThatMightBeUndefined || {}]
 }
 ```
 
 Although the first element of the tuple can't be undefined, each of the renaming elements of the tuple are "optional" in the sense that you  can either end the array early, or you can skip over one or more of the settings by specifying an empty object ({}), or just a comma i.e. [{},,{'my-attribute', 'myValue'}].  
 
 
-
 A suggestion for remembering the order these "arguments" come in -- Properties / Events / Attributes / Transform can be abbreviated as "PEAT."  Actually, there is a fifth "argument" of type symbol, which stores the target in ctx.host.  So the acronym to remember is really PEATS.
 
-The second element of the array, where event handlers can go, can actually pass arguments to the handler [Untested]:
+The second element of the array, where event handlers can go, can actually pass arguments to the handler:
 
 ```JavaScript
-{click: [this.clickHandler, val: 'dataset.keyName']}
+{click: [this.selectNewKey, val: 'dataset.keyName']}
+```
+
+which could allow the event handler to actually be a regular method expecting a parameter.  
+
+```Typescript
+class MyCustomElement extends XtalElement{
+    selectNewKey(key: string){
+        ...
+    }
+}
+
+```
+
+In this case, it would be a string parameter, since target.dataset.keyName will be of type script.  val supports a simple a.b.c type expressions, read fro the current matching target element.  The actual event object is still available as the second parameter of the method.
+
+If a third argument is provided, it is assumed to be a function which does some kind of conversion of the value extracted from the target:
+
+```JavaScript
+{click: [this.setAge, val: 'dataset.age', parseInt]}
+```
+
+```Typescript
+class MyCustomElement extends XtalElement{
+    setAge(age: number){
+        ...
+    }
+}
+
 ```
 
 A more verbose but somewhat more powerful way of setting properties on an element is discussed with the [decorate function](https://github.com/bahrus/trans-render#behavior-enhancement) discussed later.
@@ -579,7 +606,7 @@ const Transform = {
 ctx is an object meant to pass data through (repeated, nested) transforms.  It includes a number of [internal, reserved properties](https://github.com/bahrus/trans-render/blob/baseline/types2.d.ts#L1).
 
 
-TypeScript Tip: Some of the parameters, like target, are quite generic (e.g. target:HTMLElement, item: any). But one can add typing thusly:
+TypeScript Tip: Some of the properties of ctx, like target, are quite generic (e.g. target:HTMLElement, item: any). But one can add more specific typing thusly:
 
 ```Typescript
 summary: ({target, item} :  {target: HTMLInputElement, viewModel: MyModel, item: MyModelItem}) =>{
@@ -632,7 +659,7 @@ Instead, trans-render supports another approach [TODO: no test coverage]:
     }]
 ```
 
-## Multiple matching with "More" symbol [TODO: Untested]
+## Multiple matching with "More" symbol [TODO: No Test coverage]
 
 Previously, we provided a strategy for matching duplicate css selectors, using "ditto" notation.  But what about symbol keys?  That won't work.
 
@@ -696,7 +723,7 @@ createTemplate(html: string, context?: any, symbol?: symbol)
 Example:
 
 ```JavaScript
-    details: createTemplate(`<summary>SummaryText</summary>...`);
+    details: ({ctx}) => createTemplate(`<summary>SummaryText</summary>...`, ctx);
 ```
 
 An explanation for the second and third parameters is needed.
