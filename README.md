@@ -116,7 +116,7 @@ const Transform = {
 If using trans-rendering for a web component, you will very likely find it convenient to "stamp" individual elements of interest.  The quickest way to do this is via the templStamp plugin:
 
 ```JavaScript
-import {templStampSym} from 'trans-render/templStamp.js';
+import {templStampSym} from 'trans-render/plugins/templStamp.js';
 ...
 const uiRefs = {mySpecialElement: Symbol()};
 const Transform = {
@@ -124,7 +124,7 @@ const Transform = {
 }
 ```
 
-This will search the template / dom fragment / matching target for all elements whose id or "part" attribute is "mySpecialElement".  Only one element will get stamped for later use.  In otherwords, stamping is only useful if you have exactly one element whose id or part is equal to "mySpecialElement."
+This will search the template / dom fragment / matching target for all elements whose id or "part" attribute is "mySpecialElement".  Only one element will get stamped for later use.  In other words, stamping is only useful if you have exactly one element whose id or part is equal to "mySpecialElement."
 
 ## Syntax summary
 
