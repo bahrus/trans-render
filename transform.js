@@ -248,7 +248,7 @@ function getRHS(expr, ctx) {
                         return expr;
                     return getRHS(pivot ? expr[1] : expr[2], ctx);
                 case 'symbol':
-                    return ctx.plugins[pivot].fn(ctx, expr);
+                    return ctx[pivot].fn(ctx, expr);
             }
         case 'number':
             return expr.toString();

@@ -269,7 +269,7 @@ function getRHS(expr: any, ctx: RenderContext): any{
                     if(isTemplate(expr[1])) return expr;
                     return getRHS(pivot ? expr[1] : expr[2], ctx);
                 case 'symbol':
-                    return ctx.plugins![pivot as any as string].fn(ctx, expr);
+                    return (<any>ctx)[pivot as any as string].fn(ctx, expr);
             }
         case 'number':
             return expr.toString();
