@@ -103,12 +103,19 @@ export function processEl(ctx) {
             }
             else {
                 let modifiedSelector = key;
-                if (key.endsWith('Part')) {
-                    modifiedSelector = `[part="${key.substring(0, key.length - 4)}"]`;
+                if (key === ':host') {
+                    if (nextElementSibling !== ctx.host) {
+                        matched = false;
+                    }
                 }
-                if (!nextElementSibling.matches(modifiedSelector)) {
-                    matched = false;
-                    continue;
+                else {
+                    if (key.endsWith('Part')) {
+                        modifiedSelector = `[part="${key.substring(0, key.length - 4)}"]`;
+                    }
+                    if (!nextElementSibling.matches(modifiedSelector)) {
+                        matched = false;
+                        continue;
+                    }
                 }
             }
             matched = true;

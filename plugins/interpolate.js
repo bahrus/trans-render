@@ -38,7 +38,7 @@ export function interpolate(target, prop, obj, isAttr = false) {
         target[prop] = newVal;
     }
 }
-export const interpolateSym = Symbol.for('cac2869c-94ef-4d3e-8264-418103c7433c');
+export const interpolateSym = Symbol.for('+QWTsLO6pUq7e0dxjginwg');
 function fromTuple(ctx, pia) {
     let val = pia[2];
     if (Array.isArray(val)) {

@@ -38,7 +38,7 @@ export function interpolate(target: any, prop: string, obj: any, isAttr: boolean
     }
 }
 
-export const interpolateSym: unique symbol = Symbol.for('cac2869c-94ef-4d3e-8264-418103c7433c');
+export const interpolateSym: unique symbol = Symbol.for('+QWTsLO6pUq7e0dxjginwg');
 
 function fromTuple(ctx: RenderContext, pia: PlugInArgs){
     let val = pia[2];
