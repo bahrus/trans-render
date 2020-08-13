@@ -10,6 +10,7 @@ function stamp(fragment, attr, refs, ctx) {
 }
 function fromTuple(ctx, pia) {
     stamp(ctx.target, 'id', pia[1], ctx);
+    stamp(ctx.target, 'part', pia[1], ctx);
 }
 export const templStampSym = Symbol.for('Dd5nJwRNaEiFtfam5oaSkg');
 export const plugin = {
