@@ -639,26 +639,9 @@ The argument is of type "RenderContext" so you can also get the benefit of typin
 
 ## Planting flags
 
-Suppose during initialization you want to create references to specific elements that will require rapid updates during repeated update processes?
+It was mentioned earlier that there is a plugin, templStamp, that can map large swaths of uniquely named (via id or part attribute) elements to symbols for later use.
 
-One way to do that would be with a rule tied to id's.
-
-The initialization transform could look like:
-
-```JavaScript
-    '*': {
-        Select: '*' //check every element recursively -- sledgehammer approach
-    },
-    ['id']: ({ctx, target}) => ctx.host[target.id] = target;
-```
-
-where we assume we are using this within the context of a custom element, and ctx.host refers to the instance of the custom element.
-
-This can certainly be useful for code written within the custom element, where a method needs fast access to an element by id without having to do a querySelect.
-
-However, this approach doesn't lend itself to declarative fast access using trans-render notation.
-
-Instead, trans-render supports another approach [TODO: no test coverage]:
+This can alo be done on an individual element basis, with no plugin required:
 
 ```JavaScript
     const myFastAccessSymbol = Symbol();
