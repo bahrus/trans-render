@@ -206,7 +206,9 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
           - If the function returns a string, it is used to generate a (custom element) with the name of the string.
           - If the function returns a template, it is the template that should be repeated.
      - Third optional parameter is an optional **r**ange of indexes from the item array to render [TODO].
-     - Fourth optional parameter is the **i**nit transform for each item, which recursively uses the transform syntax described here.
+     - Fourth optional parameter is either:
+       - the **i**nit transform for each item, which recursively uses the transform syntax described here, or
+       - the 
      - Fifth optional parameter is the **u**pdate transform for each item.
      - Sixth optional parameter is **m**etadata associated with the array we are looping over -- how to extract the identifier for each item, for example.
      - Seventh optional parameter is a **s**ymbol to allow future referencing to the matching target element.

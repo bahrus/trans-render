@@ -153,7 +153,11 @@ function doPropSetting(key, peat, ctx) {
         /////////   Because of dataset, style (other?) assign at one level down
         const props = peat[0];
         if (props !== undefined) {
-            Object.assign(target, props);
+            //sigh
+            const safeProps = Object.assign({}, props);
+            delete safeProps.dataset;
+            delete safeProps.style;
+            Object.assign(target, safeProps);
             if (props.style !== undefined)
                 Object.assign(target.style, props.style);
             if (props.dataset !== undefined)
