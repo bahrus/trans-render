@@ -1,12 +1,15 @@
 function stamp(fragment, attr, refs, ctx) {
     const target = ctx.host || ctx.cache;
-    Array.from(fragment.querySelectorAll(`[${attr}]`)).forEach(el => {
+    if (target[templStampSym])
+        return;
+    Array.from(target.querySelectorAll(`[${attr}]`)).forEach(el => {
         const val = el.getAttribute(attr);
         const sym = refs[val];
         if (sym !== undefined) {
             target[sym] = el;
         }
     });
+    target[templStampSym] = true;
 }
 function fromTuple(ctx, pia) {
     stamp(ctx.target, 'id', pia[1], ctx);

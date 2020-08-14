@@ -1,13 +1,15 @@
 import {RenderContext, PlugInArgs, Plugin} from '../types.d.js';
 function stamp(fragment: HTMLElement | DocumentFragment | SVGElement, attr: string, refs:{[key: string]: symbol}, ctx: RenderContext){
     const target = ctx.host || ctx.cache;
-    Array.from(fragment.querySelectorAll(`[${attr}]`)).forEach(el =>{
-        const val = el.getAttribute(attr)!;
+    if((<any>target)[templStampSym]) return;
+    Array.from(target.querySelectorAll(`[${attr}]`)).forEach(el =>{
+        const val = (el as Element).getAttribute(attr)!;
         const sym = refs[val];
         if(sym !== undefined){
             target[sym] = el;
         }
-    })
+    });
+    (<any>target)[templStampSym] = true;
 }
 function fromTuple(ctx: RenderContext, pia: PlugInArgs){
     stamp(ctx.target!, 'id', pia[1] as {[key: string]: symbol}, ctx);
