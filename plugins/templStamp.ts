@@ -2,7 +2,7 @@ import {RenderContext, PlugInArgs, Plugin} from '../types.d.js';
 function stamp(fragment: HTMLElement | DocumentFragment | SVGElement, attr: string, refs:{[key: string]: symbol}, ctx: RenderContext){
     const target = ctx.host || ctx.cache;
     if((<any>target)[templStampSym]) return;
-    Array.from(target.querySelectorAll(`[${attr}]`)).forEach(el =>{
+    Array.from((fragment.getRootNode() as DocumentFragment).querySelectorAll(`[${attr}]`)).forEach(el =>{
         const val = (el as Element).getAttribute(attr)!;
         const sym = refs[val];
         if(sym !== undefined){

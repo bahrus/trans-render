@@ -2,7 +2,7 @@ function stamp(fragment, attr, refs, ctx) {
     const target = ctx.host || ctx.cache;
     if (target[templStampSym])
         return;
-    Array.from(target.querySelectorAll(`[${attr}]`)).forEach(el => {
+    Array.from(fragment.getRootNode().querySelectorAll(`[${attr}]`)).forEach(el => {
         const val = el.getAttribute(attr);
         const sym = refs[val];
         if (sym !== undefined) {

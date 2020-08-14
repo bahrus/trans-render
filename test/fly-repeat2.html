@@ -42,7 +42,7 @@
                 }
             }] 
         }
-        transform(target, {plugins:{[interpolateSym]:plugin}, customObjProcessor: doObjectMatch, repeatProcessor: repeateth, Transform});
+        transform(target, {[interpolateSym]:plugin, customObjProcessor: doObjectMatch, repeatProcessor: repeateth, Transform});
         if(target.innerText.length === 166) target.setAttribute('mark', '');
 
         
