@@ -31,9 +31,13 @@ export function repeatInit(template, ctx, items, target, targetTransform) {
     }
 }
 export function renderDynamicContent(template, ctx, target, targetTransform) {
-    if (typeof targetTransform === 'function') {
-        renderDynamicContent(template, ctx, target, targetTransform(ctx));
-        return;
+    switch (typeof targetTransform) {
+        case 'function':
+            renderDynamicContent(template, ctx, target, targetTransform(ctx));
+            return;
+        case 'symbol':
+            renderDynamicContent(template, ctx, target, ctx[targetTransform]);
+            return;
     }
     if (targetTransform !== undefined)
         ctx.Transform = targetTransform;

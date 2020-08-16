@@ -37,10 +37,15 @@ export function repeatInit(template: ToTOrFnToTot, ctx: RenderContext, items: an
 }
 
 export function renderDynamicContent(template: ToTOrFnToTot, ctx: RenderContext, target: HTMLElement, targetTransform?: TransformValueOptions | toTransform){
-    if(typeof targetTransform === 'function'){
-        renderDynamicContent(template, ctx, target, targetTransform(ctx));
-        return;
+    switch(typeof targetTransform){
+        case 'function':
+            renderDynamicContent(template, ctx, target, targetTransform(ctx));
+            return;
+        case 'symbol':
+            renderDynamicContent(template, ctx, target, (<any>ctx)[targetTransform]);
+            return;
     }
+
     if(targetTransform !== undefined) ctx.Transform = targetTransform;
     switch(typeof template){
         case 'string':
@@ -58,5 +63,6 @@ export function renderDynamicContent(template: ToTOrFnToTot, ctx: RenderContext,
         case 'function':
             renderDynamicContent((<any>template)(ctx) as ToTOrFnToTot, ctx, target, targetTransform);
             break;
+
     }
 }
