@@ -41,6 +41,9 @@ export function renderDynamicContent(template, ctx, target) {
             const el = document.createElement(template);
             target.appendChild(el);
             ctx.target = el;
+            if (typeof ctx.Transform === 'function') {
+                ctx.Transform = ctx.Transform(ctx);
+            }
             processEl(ctx);
             break;
         case 'object':
