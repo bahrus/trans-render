@@ -15,6 +15,8 @@ export interface RenderContext<TTarget = HTMLElement | SVGElement, TItem = any> 
     replacedElement?: HTMLElement | SVGElement;
 }
 
+export type toTransform<TTarget = HTMLElement | SVGElement, TItem = any> = (ctx: RenderContext<TTarget, TItem>) => TransformValueOptions<TTarget>;
+
 export interface IHydrate extends HTMLElement{
     /**
      * Any component that emits events should not do so if it is disabled.

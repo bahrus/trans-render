@@ -3,7 +3,8 @@ import {
     RenderContext, 
     InitTransform, 
     UpdateTransform,
-    ToTOrFnToTot
+    ToTOrFnToTot,
+    toTransform,
 } from '../types.js';
 import {repeatInit}from './repeatInit2.js';
 import {repeatethUpdateth} from './repeatethUpdateth2.js';
@@ -13,8 +14,8 @@ export function repeateth(
     ctx: RenderContext, 
     items: any[], 
     target: HTMLElement, 
-    initTransform: InitTransform,
-    updateTransform: UpdateTransform = initTransform
+    initTransform: InitTransform | toTransform,
+    updateTransform: UpdateTransform | toTransform = initTransform
     ){
     if((<any>target)[initialized as any as string] !== undefined){
         repeatethUpdateth(template, ctx, items, target, updateTransform)

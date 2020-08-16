@@ -8,7 +8,6 @@ export function repeatInit(template, ctx, items, target, targetTransform) {
     target[countKey] = count;
     target[ubKey] = count;
     const ctxClone = Object.assign({}, ctx);
-    ctxClone.Transform = targetTransform;
     for (let i = 0; i < count; i++) {
         const item = items[i];
         ctxClone.item = item;
@@ -17,12 +16,13 @@ export function repeatInit(template, ctx, items, target, targetTransform) {
             h[idxKey] = i;
             h[itemsKey] = item;
         };
-        if (isTemplate(template)) {
-            transform(template, ctxClone, target);
-        }
-        else {
-            renderDynamicContent(template, ctxClone, target);
-        }
+        renderDynamicContent(template, ctxClone, target, targetTransform);
+        // if(isTemplate(template)){
+        //     ctxClone.Transform = typeof targetTransform!;
+        //     transform(template as HTMLTemplateElement, ctxClone, target);
+        // }else{
+        //     renderDynamicContent(template, ctxClone, target);
+        // }
         // Array.from(clonedTemplate.children).forEach(templateChild =>{
         //     (<any>templateChild)[idxKey] = i;
         //     if(itemsProvided) (<any>templateChild)[itemsKey] = (countOrItems as any[])[i];
@@ -30,7 +30,11 @@ export function repeatInit(template, ctx, items, target, targetTransform) {
         //keep count to last batch, then update all children from last batch
     }
 }
-export function renderDynamicContent(template, ctx, target) {
+export function renderDynamicContent(template, ctx, target, targetTransform) {
+    if (typeof targetTransform === 'function') {
+        renderDynamicContent(template, ctx, target, targetTransform(ctx));
+        return;
+    }
     switch (typeof template) {
         case 'string':
             const el = document.createElement(template);
@@ -39,10 +43,12 @@ export function renderDynamicContent(template, ctx, target) {
             processEl(ctx);
             break;
         case 'object':
-            transform(template, ctx, target);
+            if (isTemplate(template)) {
+                transform(template, ctx, target);
+            }
             break;
         case 'function':
-            renderDynamicContent(template(ctx), ctx, target);
+            renderDynamicContent(template(ctx), ctx, target, targetTransform);
             break;
     }
 }
