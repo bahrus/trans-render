@@ -243,6 +243,10 @@ function doRepeat(key, atriums, ctx) {
     const newMode = ctx.mode;
     const vm = ctx.viewModel;
     ctx.viewModel = atriums[0];
-    const transform = ctx.repeatProcessor(atriums[1], ctx, atriums[0], ctx.target, atriums[3], atriums[4]);
+    let initTransform = atriums[4];
+    if (typeof initTransform === 'symbol') {
+        initTransform = ctx[initTransform];
+    }
+    const transform = ctx.repeatProcessor(atriums[1], ctx, atriums[0], ctx.target, atriums[3], initTransform);
     ctx.viewModel = vm;
 }

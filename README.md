@@ -208,7 +208,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
      - Third optional parameter is an optional **r**ange of indexes from the item array to render [TODO].
      - Fourth optional parameter is either:
        - the **i**nit transform for each item, which recursively uses the transform syntax described here, or
-       - the 
+       - a symbol, which is a key of ctx, and the key points to a function that returns a transform.
      - Fifth optional parameter is the **u**pdate transform for each item.
      - Sixth optional parameter is **m**etadata associated with the array we are looping over -- how to extract the identifier for each item, for example.
      - Seventh optional parameter is a **s**ymbol to allow future referencing to the matching target element.
