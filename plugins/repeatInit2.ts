@@ -6,11 +6,16 @@ export const itemsKey: unique symbol = Symbol.for('bb247496-9c5d-459c-8127-fe80f
 export const idxKey: unique symbol = Symbol.for('ad7cf100-0c10-4184-b836-f560f2c15c81');
 export const ubKey: unique symbol = Symbol.for('7c6fd3aa-eea3-478c-b18c-32132b1bfc7c');
 
-export function repeatInit(template: ToTOrFnToTot, ctx: RenderContext, items: any[], target: HTMLElement, targetTransform?: TransformValueOptions | toTransform){
+export function repeatInit(template: ToTOrFnToTot, ctx: RenderContext, items: any[], target: HTMLElement, targetTransform?: TransformValueOptions | symbol){
     const count = items.length;
     (<any>target)[countKey] = count;
     (<any>target)[ubKey] = count;
     const ctxClone = Object.assign({}, ctx);
+    if(typeof targetTransform === 'symbol'){
+        ctxClone.Transform = (<any>ctxClone)[targetTransform];
+    }else{
+        ctxClone.Transform = targetTransform!;
+    }
     
     for(let i = 0; i < count; i++){
         const item = items[i];
@@ -20,13 +25,11 @@ export function repeatInit(template: ToTOrFnToTot, ctx: RenderContext, items: an
             h[idxKey] = i
             h[itemsKey] = item;
         }
-        renderDynamicContent(template, ctxClone, target, targetTransform);
-        // if(isTemplate(template)){
-        //     ctxClone.Transform = typeof targetTransform!;
-        //     transform(template as HTMLTemplateElement, ctxClone, target);
-        // }else{
-        //     renderDynamicContent(template, ctxClone, target);
-        // }
+        if(isTemplate(template)){
+            transform(template as HTMLTemplateElement, ctxClone, target);
+        }else{
+            renderDynamicContent(template, ctxClone, target);
+        }
         
         // Array.from(clonedTemplate.children).forEach(templateChild =>{
         //     (<any>templateChild)[idxKey] = i;
@@ -36,17 +39,7 @@ export function repeatInit(template: ToTOrFnToTot, ctx: RenderContext, items: an
     }
 }
 
-export function renderDynamicContent(template: ToTOrFnToTot, ctx: RenderContext, target: HTMLElement, targetTransform?: TransformValueOptions | toTransform){
-    switch(typeof targetTransform){
-        case 'function':
-            renderDynamicContent(template, ctx, target, targetTransform(ctx));
-            return;
-        case 'symbol':
-            renderDynamicContent(template, ctx, target, (<any>ctx)[targetTransform]);
-            return;
-    }
-
-    if(targetTransform !== undefined) ctx.Transform = targetTransform;
+export function renderDynamicContent(template: ToTOrFnToTot, ctx: RenderContext, target: HTMLElement){
     switch(typeof template){
         case 'string':
             const el = document.createElement(template);
@@ -55,14 +48,10 @@ export function renderDynamicContent(template: ToTOrFnToTot, ctx: RenderContext,
             processEl(ctx);
             break;
         case 'object':
-            if(isTemplate(template)){
-                transform(template as HTMLTemplateElement, ctx, target);
-            }
-            
+            transform(template as HTMLTemplateElement, ctx, target);
             break;
         case 'function':
-            renderDynamicContent((<any>template)(ctx) as ToTOrFnToTot, ctx, target, targetTransform);
+            renderDynamicContent((<any>template)(ctx) as ToTOrFnToTot, ctx, target);
             break;
-
     }
 }

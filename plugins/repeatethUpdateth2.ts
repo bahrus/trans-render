@@ -4,7 +4,7 @@ import { transform } from '../transform.js';
 
 const origStyleKey = Symbol('origStyle');
 //type HTMLFn = (el: HTMLElement) => void
-export function repeatethUpdateth(template: ToTOrFnToTot, ctx: RenderContext, items: any[], target: HTMLElement, targetTransform?: TransformValueOptions | toTransform){
+export function repeatethUpdateth(template: ToTOrFnToTot, ctx: RenderContext, items: any[], target: HTMLElement, targetTransform?: TransformValueOptions | symbol){
     const childCount = (<any>target)[countKey];
     const count = items.length;
     const ub = (<any>target)[ubKey];
@@ -12,7 +12,12 @@ export function repeatethUpdateth(template: ToTOrFnToTot, ctx: RenderContext, it
     const diff = count - childCount;
     if(diff === 0) return;
     const ctxClone = Object.assign({}, ctx);
-
+    if(typeof targetTransform === 'symbol'){
+        ctxClone.Transform = (<any>ctx)[targetTransform];
+    }else{
+        ctxClone.Transform = targetTransform!;
+    }
+    
     if(diff > 0){
         for(let i = 0; i < diff; i++){
             const iOffset = i + childCount;
@@ -27,7 +32,6 @@ export function repeatethUpdateth(template: ToTOrFnToTot, ctx: RenderContext, it
                     h[idxKey] = iOffset;
                     h[itemsKey] = item;
                 }
-                ctxClone.Transform = typeof targetTransform === 'function' ? targetTransform(ctxClone) :  targetTransform!;
                 transform(template as HTMLTemplateElement, ctxClone, target);
             }
 

@@ -11,6 +11,12 @@ export function repeatethUpdateth(template, ctx, items, target, targetTransform)
     if (diff === 0)
         return;
     const ctxClone = Object.assign({}, ctx);
+    if (typeof targetTransform === 'symbol') {
+        ctxClone.Transform = ctx[targetTransform];
+    }
+    else {
+        ctxClone.Transform = targetTransform;
+    }
     if (diff > 0) {
         for (let i = 0; i < diff; i++) {
             const iOffset = i + childCount;
@@ -26,7 +32,6 @@ export function repeatethUpdateth(template, ctx, items, target, targetTransform)
                     h[idxKey] = iOffset;
                     h[itemsKey] = item;
                 };
-                ctxClone.Transform = typeof targetTransform === 'function' ? targetTransform(ctxClone) : targetTransform;
                 transform(template, ctxClone, target);
             }
         }
