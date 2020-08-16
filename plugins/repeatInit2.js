@@ -35,6 +35,8 @@ export function renderDynamicContent(template, ctx, target, targetTransform) {
         renderDynamicContent(template, ctx, target, targetTransform(ctx));
         return;
     }
+    if (targetTransform !== undefined)
+        ctx.Transform = targetTransform;
     switch (typeof template) {
         case 'string':
             const el = document.createElement(template);
@@ -44,7 +46,6 @@ export function renderDynamicContent(template, ctx, target, targetTransform) {
             break;
         case 'object':
             if (isTemplate(template)) {
-                ctx.Transform = targetTransform;
                 transform(template, ctx, target);
             }
             break;

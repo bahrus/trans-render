@@ -41,7 +41,7 @@ export function renderDynamicContent(template: ToTOrFnToTot, ctx: RenderContext,
         renderDynamicContent(template, ctx, target, targetTransform(ctx));
         return;
     }
-
+    if(targetTransform !== undefined) ctx.Transform = targetTransform;
     switch(typeof template){
         case 'string':
             const el = document.createElement(template);
@@ -51,7 +51,6 @@ export function renderDynamicContent(template: ToTOrFnToTot, ctx: RenderContext,
             break;
         case 'object':
             if(isTemplate(template)){
-                ctx.Transform = targetTransform;
                 transform(template as HTMLTemplateElement, ctx, target);
             }
             
