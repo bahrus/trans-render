@@ -44,6 +44,7 @@ export function renderDynamicContent(template, ctx, target, targetTransform) {
             break;
         case 'object':
             if (isTemplate(template)) {
+                ctx.Transform = targetTransform;
                 transform(template, ctx, target);
             }
             break;

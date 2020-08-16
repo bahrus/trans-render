@@ -51,6 +51,7 @@ export function renderDynamicContent(template: ToTOrFnToTot, ctx: RenderContext,
             break;
         case 'object':
             if(isTemplate(template)){
+                ctx.Transform = targetTransform;
                 transform(template as HTMLTemplateElement, ctx, target);
             }
             
