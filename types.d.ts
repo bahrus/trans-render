@@ -168,3 +168,16 @@ export interface EvaluatedAttributeProps{
     debug?: string[];
     async?: string[];
 }
+
+export interface Vals<TAttribsSettings = AttribsSettings, TProps = object> {
+    attribs?: AttribsSettings;
+    propVals?: object;
+  }
+
+export interface DecorateArgs<TAttribsSettings = AttribsSettings, TProps = object> extends Vals{
+    propDefs?: object,
+    methods?: {[key: string] : Function},
+    on?: {[key: string] : (e: Event) => void},
+}
+
+export type DecorateTuple = [object, AttribsSettings, {[key: string] : (e: Event) => void}, object, {[key: string] : Function}];
