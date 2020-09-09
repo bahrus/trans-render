@@ -113,18 +113,45 @@ const Transform = {
 
 ## Template Stamping
 
-If using trans-rendering for a web component, you will very likely find it convenient to "stamp" individual elements of interest.  The quickest way to do this is via the templStamp plugin:
+If using trans-rendering for a web component, you will very likely find it convenient to "stamp" a significant number of individual elements of interest.  The quickest way to do this is via the templStamp plugin:
 
 ```JavaScript
 import {templStampSym} from 'trans-render/plugins/templStamp.js';
 ...
-const uiRefs = {mySpecialElement: Symbol()};
+const uiRefs = {mySpecialElement1: Symbol(), mySpecialElement2: Symbol()};
 const Transform = {
     ':host': [templStampSym, uiRefs]
 }
 ```
 
-This will search the template / dom fragment / matching target for all elements whose id or "part" attribute is "mySpecialElement".  Only one element will get stamped for later use.  In other words, stamping is only useful if you have exactly one element whose id or part is equal to "mySpecialElement."
+This will search the template / DOM fragment / matching target for all elements whose id or "part" attribute is "mySpecialElement1" or "mySpecialElement2".  Only one element will get stamped for each reference later.  In other words, stamping is only useful if you have exactly one element whose id or part is equal to "mySpecialElement1".
+
+Here we also see the concept of being able to extend the trans-render library, while sticking to quite strict declarative syntax.  
+
+
+<details>
+    <summary>How declarative is this, really?</summary>
+
+The syntax:
+
+```JavaScript
+const Transform = {
+    ':host': [templStampSym, uiRefs]
+}
+```
+
+has no side effects from loading.  It could be turned into JSON if JSON had native support for Symbols.  Being that it doesn't, some sort of custom solution for symbols would be required, similar to working with dates.  The plugin symbol should be of type Symbol.for([guid]).  Likewise, the uiRefs would probably also require adopting Symbol.for([guid]).
+
+</details>
+
+<details>
+    <summary>Why use a plugin for this convenient functionality?</summary>
+
+Here's the thinking for why this convenient plugin is not part of the core trans-render syntax:  The core syntax is attempting to stick with rules which apply locally to the contextual DOM node.  This plug-in, on the other hand, traverses the whole DOM of the DOM fragment for matches.  So this syntax isn't compatible with [parsers that work with low memory streams](https://en.wikipedia.org/wiki/Simple_API_for_XML), which could be useful if an when browsers can easily stream HTML into any arbitrary element.
+
+[Later](#planting-flags) we will see a more SAX-compliant (but more tedious) way of creating symbolic UI references.
+
+</details>
 
 ## Syntax summary
 
@@ -885,7 +912,7 @@ trans-render straddles the fence somewhat between html-first vs js-first.  It is
 
 In the case of repeating structures, especially, a dilemma arises:  Sure, we know we need to bind to some array, like items, but now how do we bind items within the loop to HTML elements?  JS-first or HTML-first?  If using a template only markup system, like vueJS, or (non lit-html Polymer), the answer is fairly straight-forward, but it does mean the web component is tightly coupled to particular binding syntax.  
 
-trans-render is a fence straddler, as far as HTML-first vs JS (or JSON) - first.  Should HTML Modules become officially dead, this would definitely warrant putting more effort into Plugins that specialize in different approaches to conditional and/or repeating content.
+trans-render is a fence straddler, as far as HTML-first vs JS (or JSON) - first.  Should HTML Modules become officially dead, this would definitely warrant putting more effort into plugins that specialize in different approaches to conditional and/or repeating content.
 
 But if HTML Modules happen, what would a trans-render-friendly web component repeat component look like, that could also provide inline binding support for various syntaxes?
 
