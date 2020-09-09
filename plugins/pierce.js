@@ -1,4 +1,4 @@
-import { init } from './init.js';
+import { init } from '../init.js';
 export function pierce(el, ctx, targetTransform) {
     customElements.whenDefined(el.localName).then(() => {
         requestAnimationFrame(() => {

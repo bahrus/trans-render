@@ -1,5 +1,5 @@
-import {RenderContext, TransformRules} from './types_old.js';
-import {init} from './init.js';
+import {RenderContext, TransformRules} from '../types_old.js';
+import {init} from '../init.js';
 
 export function pierce<TargetType extends HTMLElement = HTMLElement>(el: TargetType, ctx: RenderContext, 
     targetTransform: TransformRules){

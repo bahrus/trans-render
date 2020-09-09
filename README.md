@@ -168,7 +168,7 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 ### LHS Key Scenarios
 
 - If the key is a string that starts with a lower case letter, then it is a "css match" expression.
-  - If the key starting with a lower case letter ends with the word "Part", then it maps to a css match expression: '[part="{{first part of the key before Part}}"]' [TODO]
+  - If the key starting with a lower case letter ends with the word "Part", then it maps to the css match expression: '[part="{{first part of the key before Part}}"]'
 - If the key is a string that starts with double quote, then it is also a "css match" expression, but the css expression comes from the nearest previous sibling key which doesn't start with a double quote.
 - If the key is a string that starts with a capital letter, then it is part of a "Next Step" expression that indicates where to jump down to next in the DOM tree.
 - If the key is a string that starts with ^ then it matches if the tag name starts with the rest of the string [TODO:  do we need with introduction of Part notation above?]
@@ -394,7 +394,7 @@ Here the tag "section" will be removed.
 **NB:**  Be careful when using this technique.  Once a node is removed, there's no going back -- it will no longer match any css if you use trans-render updating (discussed below).  If your use of trans-render is mostly to display something once, and you recreate everything from scratch when your model changes, that's fine.  However, if you want to apply incremental updates, and need to display content conditionally, it would be better to either use a [custom element](https://polymer-library.polymer-project.org/3.0/docs/devguide/templates#dom-if) [for that](https://github.com/bahrus/if-diff) [purpose](https://github.com/matthewp/if-else), or utilize the conditional template support shown below.
 
 
-### Limited Support for conditional templates
+### Lazy loading (and limited support for conditional display)
 
 ```JavaScript
 article: [isHotOutside, warmWeatherTemplate,, coldWeatherTemplate]
@@ -407,7 +407,6 @@ article: [isHotOutside, warmWeatherTransform,, coldWeatherTransform]
 ```
 
 The missing element, after the warmWeather[Template|Transform], allows for a choice of reference symbols to be established for the target element (article in this case), 
-
 
 
 ## Simple Template Insertion
@@ -711,6 +710,7 @@ const initTransform = {
     }
     ...
 }
+```
 
 ## Utility functions
 
@@ -864,6 +864,36 @@ Order of items doesn't matter after initialization --
 Non-validated conjecture -- it is cheaper to set the [order](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Ordering_Flex_Items) via css vs rearranging DOM source order.  But not ideal for keyboard navigation so maybe have some serious debouncing followed by specialized function that makes source order match css order in the background.
 
 </details>
+
+<details>
+<summary>Is limited support enough? -- rambling soliloquy</summary>
+
+**NB:**  trans-render follows a modular pattern.  Beyond the most basic functionality, most of the syntax is supported via "plugins" so that alternative implementations 
+can be adopted. Open ended extending of functionality is also supported.  That includes some functionality already discussed, such as conditional templates.
+
+There is quite a bit of nuance that applies to seemingly simple functionality, such as conditional display, and, even more so, repeating content.  In the case of conditional display -- what should happen to content that is no longer visible?  Delete it?  Hide it?  If hiding it seems best, by what mechanism?  How can we ensure that this hidden content isn't tapping the cpu unnecessarily?  If deleting it, how do we restore the same exact state the content was in should the conditions change back?  How can we integrate the original HTML provided by the server, in HTML format? Etc.
+
+There are two competing approaches for defining these more complex structures -- XML/HTML/template -- first, vs JS -- first.  
+
+In the context of build-less web components (which trans-render is designed to support), the preference for HTML-first vs JS-first will tend to be driven (or skewed) by what native import mechanisms are available.  If, without a build process, shared functionality can only be imported via JS, then this will tend to make it more convenient to provide and invest in rich JS-centric libraries for doing fancy things like rapid list updates or sophisticated conditional display.  In a JS-first world (discounting however ssr is categorized), these can take the form of directives for tagged template literal libraries, for example.  In a HTML-first world these can take the form [of](https://polymer-library.polymer-project.org/3.0/api/elements/dom-if) [web](https://polymer-library.polymer-project.org/3.0/api/elements/dom-repeat) components, or custom attributes like v-for.
+
+Should HTML modules become a thing, this could re-kindle interest in using markup tags, as opposed to JS expressions, to express loop and conditional logic, like those provided by build-oriented frameworks like VueJS or web component libraries like Lightning.  Now, choosing between competing approaches (e.g. virtual scrolling vs more accessible solutions) becomes as simple as replacing one tag-name, or attribute pattern, for another.  
+
+Including some indication of looping or conditional display in the pristine HTML markup also seems semantically meaningful, more so than property binding.
+
+trans-render straddles the fence somewhat between html-first vs js-first.  It is banking on the hope that HTML Modules will arrive someday.  This would tend to promote the idea of using web components or custom attributes to define conditional or repeating structures.
+
+In the case of repeating structures, especially, a dilemma arises:  Sure, we know we need to bind to some array, like items, but now how do we bind items within the loop to HTML elements?  JS-first or HTML-first?  If using a template only markup system, like vueJS, or (non lit-html Polymer), the answer is fairly straight-forward, but it does mean the web component is tightly coupled to particular binding syntax.  
+
+trans-render is a fence straddler, as far as HTML-first vs JS (or JSON) - first.  Should HTML Modules become officially dead, this would definitely warrant putting more effort into Plugins that specialize in different approaches to conditional and/or repeating content.
+
+But if HTML Modules happen, what would a trans-render-friendly web component repeat component look like, that could also provide inline binding support for various syntaxes?
+
+
+
+</summary>
+</details>
+
 
 ### Adjacent template insertion
 

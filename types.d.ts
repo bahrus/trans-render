@@ -158,6 +158,7 @@ export type NappeUnion = Na | Nap | Nappe;
 export interface EvaluatedAttributeProps{
     num: string[];
     bool: string[];
+    boolish: string[];
     str: string[];
     obj: string[];
     reflect: string[];
