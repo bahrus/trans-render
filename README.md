@@ -952,7 +952,7 @@ So a trans-render version of the loop above would look like:
 
 ```html
 <ul>
-    <template imma-be-loopier data-loopier-items='[{"name":"furgie"},{"name":"will.i.am"}]' data-loopier-transform='{"li": "${item.name}"}'>
+    <template imma-be-loopier data-loopier-items='[{"name":"furgie"},{"name":"will.i.am"}]' data-loopier-transform='{"li": "ctx.item.name"}'>
         <li></li>
     </template>
 </ul>
