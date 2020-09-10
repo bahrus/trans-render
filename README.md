@@ -147,7 +147,7 @@ has no side effects from loading.  It could be turned into JSON if JSON had nati
 <details>
     <summary>Why use a plugin for this convenient functionality?</summary>
 
-Here's the thinking for why this convenient plugin is not part of the core trans-render syntax:  The core syntax is attempting to stick with rules which apply locally to the contextual DOM node.  This plug-in, on the other hand, traverses the whole DOM of the DOM fragment for matches.  So this syntax isn't compatible with [parsers that work with low memory streams](https://en.wikipedia.org/wiki/Simple_API_for_XML), which could be useful if an when browsers can easily stream HTML into any arbitrary element.
+Here's the thinking for why this convenient plugin is not part of the core trans-render syntax:  The core syntax is attempting to stick with rules which apply locally to the contextual DOM node.  This plug-in, on the other hand, traverses the whole DOM of the DOM fragment for matches.  So this syntax isn't compatible with [parsers that work with low memory streams](https://en.wikipedia.org/wiki/Simple_API_for_XML), which could be useful if and when browsers can easily stream HTML into any arbitrary element.
 
 [Later](#planting-flags) we will see a more SAX-compliant (but more tedious) way of creating symbolic UI references.
 
@@ -906,9 +906,9 @@ In the context of build-less web components (which trans-render is designed to s
 
 Should HTML modules become a thing, this could re-kindle interest in using markup tags, as opposed to JS expressions, to express loop and conditional logic, like those provided by build-oriented frameworks like VueJS or web component libraries like Lightning.  Now, choosing between competing approaches (e.g. virtual scrolling vs more accessible solutions) becomes as simple as replacing one tag-name, or attribute pattern, for another.  
 
-Including some indication of looping or conditional display in the pristine HTML markup also seems semantically meaningful, more so than property binding.
+Including some indication of looping or conditional display in the pristine HTML markup also seems semantically meaningful, more so than property and event binding.
 
-trans-render straddles the fence somewhat between html-first vs js-first.  It is banking on the hope that HTML Modules will arrive someday.  This would tend to promote the idea of using web components or custom attributes to define conditional or repeating structures.
+trans-render straddles the fence somewhat between html-first vs js-first.  It is banking on the hope that HTML Modules will arrive someday, which would free us from having to map tagged template literal expressions into template parts.  This would tend to promote the idea of using web components or custom attributes to define conditional or repeating structures.
 
 In the case of repeating structures, especially, a dilemma arises:  Sure, we know we need to bind to some array, like items, but now how do we bind items within the loop to HTML elements?  JS-first or HTML-first?  If using a template only markup system, like vueJS, or (non lit-html Polymer), the answer is fairly straight-forward, but it does mean the web component is tightly coupled to particular binding syntax.  
 
@@ -916,8 +916,47 @@ trans-render is a fence straddler, as far as HTML-first vs JS (or JSON) - first.
 
 But if HTML Modules happen, what would a trans-render-friendly web component repeat component look like, that could also provide inline binding support for various syntaxes?
 
+We can assume the definition of what each item should render would be template based.  We also want the syntax to be succinct.  This poses a challenge for web components.
 
+vue, aurelia, angular have the most succinct markup when it comes to conditionals and loop.  It is one-level deep.
 
+This is followed by JSX, svelte, xslt, tagged template literals.  They are two-levels deep.
+
+If we were to make loops a web component, and define the repeating content via template, it would become the most verbose:
+
+```html
+<ul>
+    <my-repeater-element>
+        <template>
+            <li>{item.name}</li>
+        </template>
+    </my-repeater-element>
+</ul>
+```
+
+By my counting the loop above is three levels deep.
+
+So that leaves the option of "enhancing" the template, either using the controversial built-in "is" solution, which Apple rejects, or something like [xtal-decor](https://github.com/bahrus/xtal-decor):
+
+```html
+<ul>
+    <template imma-be-loopy data-items='[{"name":"furgie"},{"name":"will.i.am"}]'>
+        <li>{item.name}</li>
+    </template>
+</ul>
+```
+
+A base, abstract component that extends xtal-decor (for example) could be used, providing an abstract (TypeScript supports this) "render" method that needs implementing according to the syntactical tastes of the developer.
+
+So a trans-render version of the loop above would look like:
+
+```html
+<ul>
+    <template imma-be-loopier data-loopier-items='[{"name":"furgie"},{"name":"will.i.am"}]' data-loopier-transform='{"li": "${item.name}"}'>
+        <li></li>
+    </template>
+</ul>
+```
 </summary>
 </details>
 
