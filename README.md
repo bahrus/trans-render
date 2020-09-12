@@ -970,13 +970,13 @@ So a trans-render version of the loop above would look like:
 </ul>
 ```
 
-### Option 2 -- Enchance trans-render
+### Option 2 -- Enhance trans-render
 
 Another (not mutually exclusive) alternative is to think of template instantiation as a kind of build-on-the-fly opportunity.  The template syntax could look like:
 
 ```html
 <ul tr:use=mre>
-    <li tr:for=items tr:use=mre-pattern>
+    <li tr:for=items>
         <span><span>
     </li>
 </ul>
@@ -998,9 +998,9 @@ Then TR could be used to transform the syntax above into:
 </ul>
 ```
 
-What trans-render is currently missing, then, that seems quite useful, is built-in support for wrapping inside other tags, or a template.
+What trans-render is currently missing, then, that seems quite useful, is built-in support for wrapping inside other multi-level tags, or a template.
 
-I.e. we want to somehow be able to say: Define a wrapping template with name that looks like:
+I.e. we want to somehow be able to say: Define a wrapping template that looks like:
 
 ```JavaScript
 const trePatternTransformer = ({for, inner}) => /* html */`
@@ -1014,6 +1014,7 @@ const trePatternTransformer = ({for, inner}) => /* html */`
 
 and apply this wrapping template when you encounter attribute: tr:use=mre.
 
+Basically, trans-render needs "snippet" support.
 
 </summary>
 </details>
