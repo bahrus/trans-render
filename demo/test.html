@@ -7,24 +7,10 @@
     <title>Document</title>
 </head>
 <body>
-    <script type=module>
-        const testFn = ({self}) =>{
-            console.log(self.test2);
-            console.log(self);
-            //console.log(self.#test);
-        }
-        class Test{
-            #test = 'hello';
-            test2 = 'goodbye'
-            self=this;
-            
-            doSomething(){
-                const bind = testFn.bind(this);
-                bind(this);
-            }
-        }
-        const test = new Test();
-        test.doSomething();
-    </script>
+    <ul>
+        <li foreach item in items>
+            <span data-field=item.name></span>
+        </li>
+    </ul>
 </body>
 </html>

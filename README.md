@@ -365,7 +365,7 @@ This can be quite useful in converting compact loop into clunkier markup that a 
 </template>
 <script>
 const Transform = {
-    ul: repeatTemplate
+    ':has(> [foreach])': repeatTemplate
 }
 </script>
 ```
@@ -376,11 +376,9 @@ produces:
 <ul>
     <my-repeater-element>
         <template>
-            <slot>
-                <li foreach item in items>
-                    <span data-field=item.name></span>
-                </li>
-            </slot>
+            <li foreach item in items>
+                <span data-field=item.name></span>
+            </li>
         </template>
     </my-repeater-element>
 ```
