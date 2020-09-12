@@ -10,7 +10,7 @@
 <img src="https://badgen.net/bundlephobia/minzip/trans-render">
 
 
-trans-render provides a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, trans-render performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, trans-render uses css path tests via the element.matches() and element.querySelector() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
+trans-render (abbreviation: TR) provides a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, TR performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, tr uses css path tests via the element.matches() and element.querySelector() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
 
 XSLT can take pure XML with no formatting instructions as its input.  Generally speaking, the XML that XSLT acts on isn't a bunch of semantically  meaningless div tags, but rather a nice semantic document, whose intrinsic structure is enough to go on, in order to formulate a "transform" that doesn't feel like a hack.  
 
@@ -902,7 +902,7 @@ There is quite a bit of nuance that applies to seemingly simple functionality, s
 
 There are two competing approaches for defining these more complex structures -- XML/HTML/template -- first, vs JS -- first.  
 
-In the context of build-less web components (which trans-render is designed to support), the preference for HTML-first vs JS-first will tend to be driven (or skewed) by what native import mechanisms are available.  If, without a build process, shared functionality can only be imported via JS, then this will tend to make it more convenient to provide and invest in rich JS-centric libraries for doing fancy things like rapid list updates or sophisticated conditional display.  In a JS-first world (discounting however ssr is categorized), these can take the form of directives for tagged template literal libraries, for example.  In a HTML-first world these can take the form [of](https://polymer-library.polymer-project.org/3.0/api/elements/dom-if) [web](https://polymer-library.polymer-project.org/3.0/api/elements/dom-repeat) components, or custom attributes like v-for.
+In the context of build-less web components (which TR is designed to support), the preference for HTML-first vs JS-first will tend to be driven (or skewed) by what native import mechanisms are available.  If, without a build process, shared functionality can only be imported via JS, then this will tend to make it more convenient to provide and invest in rich JS-centric libraries for doing fancy things like rapid list updates or sophisticated conditional display.  In a JS-first world (discounting however SSR is categorized), these can take the form of directives for tagged template literal libraries, for example.  In a HTML-first world these can take the form [of](https://polymer-library.polymer-project.org/3.0/api/elements/dom-if) [web](https://polymer-library.polymer-project.org/3.0/api/elements/dom-repeat) components, or custom attributes like v-for.
 
 Should HTML modules become a thing, this could re-kindle interest in using markup tags, as opposed to JS expressions, to express loop and conditional logic, like those provided by build-oriented frameworks like VueJS or web component libraries like Lightning.  Now, choosing between competing approaches (e.g. virtual scrolling vs more accessible solutions) becomes as simple as replacing one tag-name, or attribute pattern, for another.  
 
@@ -912,9 +912,11 @@ trans-render straddles the fence somewhat between html-first vs js-first.  It is
 
 In the case of repeating structures, especially, a dilemma arises:  Sure, we know we need to bind to some array, like items, but now how do we bind items within the loop to HTML elements?  JS-first or HTML-first?  If using a template only markup system, like vueJS, or (non lit-html Polymer), the answer is fairly straight-forward, but it does mean the web component is tightly coupled to particular binding syntax.  
 
-trans-render is a fence straddler, as far as HTML-first vs JS (or JSON) - first.  Should HTML Modules become officially dead, this would definitely warrant putting more effort into plugins that specialize in different approaches to conditional and/or repeating content.
+trans-render is a fence straddler, as far as HTML-first vs JS (or JSON) - first.  Should HTML Modules become officially dead, this would likely warrant putting more effort into plugins that specialize in different approaches to conditional and/or repeating content.
 
-But if HTML Modules happen, what would a trans-render-friendly web component repeat component look like, that could also provide inline binding support for various syntaxes?
+But even in this dastardly world, there still seems to be a benefit in developing specialized logic that can effectively handle looping or conditional logic, including different scenarios / preferences, but which isn't tightly coupled to a particular binding syntax.  In other words, using web components for defining complex looping and conditional structures still has value, due to its interop nature (but as we will see below, has some disadvantages).
+
+And even if HTML Modules happen, what would a trans-render-friendly web component repeat component look like, that could also provide inline binding support for various syntaxes?
 
 We can assume the definition of what each item should render would be template based.  We also want the syntax to be succinct.  This poses a challenge for web components.
 
@@ -922,7 +924,7 @@ vue, aurelia, angular have the most succinct markup when it comes to conditional
 
 This is followed by JSX, svelte, xslt, tagged template literals.  They are two-levels deep.
 
-If we were to make loops a web component, and define the repeating content via template, it would become the most verbose:
+If we were to make a looping web component, and define the repeating content via template, it would become the most verbose:
 
 ```html
 <ul>
@@ -934,31 +936,88 @@ If we were to make loops a web component, and define the repeating content via t
 </ul>
 ```
 
-By my counting the loop above is three levels deep.
+By my counting the loop above is three levels deep.  That's a hard sell. 
 
-So that leaves the option of "enhancing" the template, either using the controversial built-in "is" solution, which Apple rejects, or something like [xtal-decor](https://github.com/bahrus/xtal-decor):
+So what to do?
+
+### Option 1 Supporting two-level deep repeat
+
+One option is to "enhance" the template element, either using the controversial built-in "is" solution, which Apple rejects, or something like [xtal-decor](https://github.com/bahrus/xtal-decor):
 
 ```html
 <ul>
-    <template imma-be-loopy data-items='[{"name":"furgie"},{"name":"will.i.am"}]'>
+    <proxy-props for=for items={model.items}></proxy-props>
+    <template be-for>
         <li>{item.name}</li>
     </template>
 </ul>
 ```
 
-A base, abstract component that extends xtal-decor (for example) could be used, providing an abstract (TypeScript supports this) "render" method that needs implementing according to the syntactical tastes of the developer.
+which, honestly, is still three-levels deep (sigh).  The proxy-props tag is necessary to "pipe" property settings to the proxy attached to the template element (without polluting the native template tag with custom properties).
+
+Anyway, a base, abstract component that extends xtal-decor (for example) could be used, providing an abstract (TypeScript supports this) "render" method that needs implementing according to the syntactical tastes of the developer.
 
 So a trans-render version of the loop above would look like:
 
 ```html
 <ul>
-    <template imma-be-loopier data-loopier-items='[{"name":"furgie"},{"name":"will.i.am"}]' data-loopier-transform='{"li": "ctx.item.name"}'>
+    <template be-for='{
+        "items": [{"name":"fergie"},{"name":"will.i.am"}]}
+        "transform": {"li": "ctx.item.name"}
+    '}>
         <li></li>
     </template>
 </ul>
 ```
+
+### Option 2 -- Enchance trans-render
+
+Another (not mutually exclusive) alternative is to think of template instantiation as a kind of build-on-the-fly opportunity.  The template syntax could look like:
+
+```html
+<ul tr:use=mre>
+    <li tr:for=items tr:use=mre-pattern>
+        <span><span>
+    </li>
+</ul>
+```
+
+The attributes tr:for and tr:use is some arbitrary markup that the transform could use.
+
+Then TR could be used to transform the syntax above into:
+
+```html
+<ul>
+    <my-repeater-element -items>
+        <template>
+            <li>
+                <span><span>
+            </li>
+        </template>
+    </my-repeater-element>
+</ul>
+```
+
+What trans-render is currently missing, then, that seems quite useful, is built-in support for wrapping inside other tags, or a template.
+
+I.e. we want to somehow be able to say: Define a wrapping template with name that looks like:
+
+```JavaScript
+const trePatternTransformer = ({for, inner}) => /* html */`
+    <my-repeater-element -${for}>
+        <template>
+            ${inner}
+        </template>
+    </my-repeater-element>
+`;
+```
+
+and apply this wrapping template when you encounter attribute: tr:use=mre.
+
+
 </summary>
 </details>
+
 
 
 ### Adjacent template insertion
