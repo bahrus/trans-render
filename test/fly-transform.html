@@ -24,6 +24,13 @@
     }
 
     </style>
+    <template id=repeatTemplate>
+        <my-repeater-element>
+            <template>
+                <slot></slot>
+            </template>
+        </my-repeater-element>
+    </template>
     <template id=bad>
         <div>
             <div mark err=true></div>
@@ -54,6 +61,11 @@
         <p></p>
         <div spider></div>
         <div shadow></div>
+        <ul>
+            <li foreach item in items>
+                <span data-field=item.name>I am here</span>
+            </li>
+        </ul>
     </template>
 
 
@@ -102,7 +114,8 @@
                 b: bad,
                 p: 'How absurd to swallow a bird!',
                 '[spider]':[{textContent: 'She swallowed the bird to catch the spider', style:{display:'block'}},,{mark: ''}],
-                '[shadow]': shadow
+                '[shadow]': shadow,
+                ul:repeatTemplate,
             }
         }, target, {
             prepend: true

@@ -61,7 +61,7 @@ function doTemplate(ctx: RenderContext, te: HTMLTemplateElement){
     const target = ctx.target!;
     if((<any>target)[lastTempl] !== undefined &&   (<any>target)[lastTempl] === (<any>te)[lastTempl]) return;
     const useShadow = te.dataset.shadowRoot !== undefined;
-    const clone = te.content.cloneNode(true);
+    const clone = te.content.cloneNode(true) as DocumentFragment;
     let fragmentTarget : Node = target;
     if(useShadow){
       if(target.shadowRoot === null){
@@ -70,9 +70,20 @@ function doTemplate(ctx: RenderContext, te: HTMLTemplateElement){
         target.shadowRoot.innerHTML = '';
       }
       fragmentTarget = target.shadowRoot!;
-    }else if(te.dataset.isSingle){
+    }else{
+      const innerHTML = target.innerHTML;
+      const slot = clone.querySelector('slot');
+      if(slot === null){
+        const templ = clone.querySelector('template');
+        if(templ !== null){
+          templ.innerHTML = templ.innerHTML.replace('<slot></slot>', innerHTML);
+        }
+      }else{
+        slot.insertAdjacentHTML('afterend', innerHTML);
+        slot.remove();
+      }
       target.innerHTML = '';
-    }
+    } 
     fragmentTarget.appendChild(clone);
 }
 

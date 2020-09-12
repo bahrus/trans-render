@@ -52,7 +52,19 @@ function doTemplate(ctx, te) {
         }
         fragmentTarget = target.shadowRoot;
     }
-    else if (te.dataset.isSingle) {
+    else {
+        const innerHTML = target.innerHTML;
+        const slot = clone.querySelector('slot');
+        if (slot === null) {
+            const templ = clone.querySelector('template');
+            if (templ !== null) {
+                templ.innerHTML = templ.innerHTML.replace('<slot></slot>', innerHTML);
+            }
+        }
+        else {
+            slot.insertAdjacentHTML('afterend', innerHTML);
+            slot.remove();
+        }
         target.innerHTML = '';
     }
     fragmentTarget.appendChild(clone);

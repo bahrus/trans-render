@@ -10,7 +10,7 @@ import { repeateth } from './repeateth.js';
 import { insertAdjacentTemplate } from './insertAdjacentTemplate.js';
 import { replaceElementWithTemplate } from './replaceElementWithTemplate.js';
 import { replaceTargetWithTag } from './replaceTargetWithTag.js';
-import { pierce } from './pierce.js';
+import { pierce } from './plugins/pierce.js';
 import { split } from './split.js';
 const view_model = 'view-model';
 /**

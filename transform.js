@@ -108,6 +108,13 @@ export function processEl(ctx) {
                         matched = false;
                     }
                 }
+                else if (key.startsWith(':has(')) {
+                    const query = key.substring(5, key.length - 1);
+                    if (nextElementSibling.querySelector(query) === null) {
+                        matched = false;
+                        continue;
+                    }
+                }
                 else {
                     if (key.endsWith('Part')) {
                         modifiedSelector = `[part="${key.substring(0, key.length - 4)}"]`;

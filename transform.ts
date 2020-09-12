@@ -128,6 +128,12 @@ export function processEl(
                     if(nextElementSibling !== ctx.host){
                         matched = false;
                     }
+                }else if(key.startsWith(':has(')){
+                    const query = key.substring(5, key.length - 1);
+                    if(nextElementSibling.querySelector(query) === null){
+                        matched = false;
+                        continue;
+                    }
                 }
                 else{
                     if(key.endsWith('Part')){
@@ -137,6 +143,7 @@ export function processEl(
                         matched = false;
                         continue;
                     }
+
                 }
             }
             matched = true;
