@@ -940,7 +940,7 @@ By my counting the loop above is three levels deep.  That's a hard sell.
 
 So what to do?
 
-### Option 1 Supporting two-level deep repeat
+### Option 1 Supporting two-level-deep repeat
 
 One option is to "enhance" the template element, either using the controversial built-in "is" solution, which Apple rejects, or something like [xtal-decor](https://github.com/bahrus/xtal-decor):
 
@@ -972,31 +972,31 @@ So a trans-render version of the loop above would look like:
 
 ### Option 2 -- Enhance trans-render
 
-Another (not mutually exclusive) alternative is to think of template instantiation as a kind of build-on-the-fly opportunity.  The template syntax could look like:
+Another (not mutually exclusive) alternative is to create a two step process -- a one-time (build time or run time) template to template transform, followed by repeated template instantiation transformations (per custom element instantiation, for example).  The human-edited template syntax could look like:
 
 ```html
-<ul tr:use=mre>
-    <li tr:for=items>
-        <span><span>
+<ul>
+    <li foreach item in items>
+        <span data-field=item.name><span>
     </li>
 </ul>
 ```
 
-The attributes tr:for and tr:use is some arbitrary markup that the transform could use.
-
-Then TR could be used to transform the syntax above into:
+Then TR could be used to transform the syntax above into something like:
 
 ```html
 <ul>
     <my-repeater-element -items>
         <template>
             <li>
-                <span><span>
+                <span data-field=name><span>
             </li>
         </template>
     </my-repeater-element>
 </ul>
 ```
+
+which, unlike the original template syntax, is 100% kosher HTML.
 
 What trans-render is currently missing, then, that seems quite useful, is built-in support for wrapping inside other multi-level tags, or a template.
 
@@ -1004,7 +1004,7 @@ I.e. we want to somehow be able to say: Define a wrapping template that looks li
 
 ```JavaScript
 const trePatternTransformer = ({for, inner}) => /* html */`
-    <my-repeater-element -${for}>
+    <my-repeater-element -items>
         <template>
             ${inner}
         </template>
@@ -1014,7 +1014,9 @@ const trePatternTransformer = ({for, inner}) => /* html */`
 
 and apply this wrapping template when you encounter attribute: tr:use=mre.
 
-Basically, trans-render needs "snippet" support.
+Basically, trans-render needs "snippet" support.  Or the kind of slot support ShadowDOM supports, but without ShadowDOM.
+
+
 
 </summary>
 </details>
