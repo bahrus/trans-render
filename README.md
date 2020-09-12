@@ -276,6 +276,102 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 
 </details>
 
+
+## Simple Template Insertion
+
+A template can be inserted directly inside the target element as follows:
+
+```html
+<template id="summaryTemplate">
+My summary Text
+</template>
+<template id="sourceTemplate">
+    <details>
+        ...
+        <summary></summary>
+        ...
+    </details>
+</template>
+<div id="target"></div>
+<script type="module">
+    import { transform } from '../transform.js';
+    const Transform = {
+        details: {
+            summary: summaryTemplate
+        }
+    };
+    transform(sourceTemplate, { Transform }, target);
+</script>
+```
+
+Here we are relying on the fact that outside any Shadow DOM, id's become global constants.  So for simple HTML pages, this works.  Assuming HTML Modules someday bring the world back into balance, an open question remains how code will be able to reference templates defined within the HTML module.
+
+For now, typically, web components are written in JavaScript exclusively. Although creating a template is one or two lines of code, the code is a bit lengthy, so a [utility to create a template](#create-template-element-programmatically) is provided that can then be referenced.  This allows the repetitive, scandalous code, required in lieu of an HTML Template DOM node, to be hidden from view.
+
+##  Shadowed Template Insertion
+
+```html
+<template id="articleTemplate" data-shadow-root="open">
+My interesting article...
+</template>
+<template id="sourceTemplate">
+    <details>
+        ...
+        <summary></summary>
+        <article>
+            <iframe slot=adInsert></iframe>
+        </article>
+        ...
+    </details>
+</template>
+<div id="target"></div>
+<script type="module">
+    import { init } from '../init.js';
+    const Transform = {
+        details: {
+            article: articleTemplate
+        }
+    };
+    init(sourceTemplate, { Transform }, target);
+</script>
+```
+
+When ShadowRoot is attached to the article element, the children can then be slotted into the ShadowDOM, which is quite convenient.
+
+##  Limited support for Slotted content when not using ShadowDOM.[TODO]
+
+It is unfortunate that use of slots is tightly coupled with ShadowDOM when it comes to native support.  Vue.js appears to demonstrate that slot concept is useful beyond ShadowDOM support.
+
+TR supports limited slot support.  For now the only support is this:
+
+If template insertion (mentioned above) is applied to an element that already has children, and if the inserted template has a slot element, the original children replace the slot element.
+
+## Multiple matching with "Ditto" notation
+
+Sometimes, one rule will cause the target to get (new) children.  We then want to apply another rule to process the target element, now that the children are there.
+
+But uniqueness of the keys of the JSON-like structure we are using prevents us from listing the same match expression twice.
+
+We can specify multiple matches as follows:
+
+```JavaScript
+import { transform } from '../transform.js';
+const Transform = {
+    details: {
+        article: articleTemplate,
+        '"': ({target}) => ...,
+        '""': ...,
+        '"3': ...
+    }
+};
+transform(sourceTemplate, { Transform }, target);
+```
+
+I.e. any selector that starts with a double quote (") will use the last selector that didn't.
+
+
+
+
 ## Arbitrary queries.
 
 If most of the template is static, but there's an isolated, deeply nested element that needs modifying, it is possible to drill straight down to that element by specifying a "Select" string value, which invokes querySelector.  But beware: there's no going back to previous elements once that's done (within that nested transform structure). 
@@ -434,88 +530,6 @@ article: [isHotOutside, warmWeatherTransform,, coldWeatherTransform]
 ```
 
 The missing element, after the warmWeather[Template|Transform], allows for a choice of reference symbols to be established for the target element (article in this case), 
-
-
-## Simple Template Insertion
-
-A template can be inserted directly inside the target element as follows:
-
-```html
-<template id="summaryTemplate">
-My summary Text
-</template>
-<template id="sourceTemplate">
-    <details>
-        ...
-        <summary></summary>
-        ...
-    </details>
-</template>
-<div id="target"></div>
-<script type="module">
-    import { transform } from '../transform.js';
-    const Transform = {
-        details: {
-            summary: summaryTemplate
-        }
-    };
-    transform(sourceTemplate, { Transform }, target);
-</script>
-```
-
-Here we are relying on the fact that outside any Shadow DOM, id's become global constants.  So for simple HTML pages, this works.  Assuming HTML Modules someday bring the world back into balance, an open question remains how code will be able to reference templates defined within the HTML module.
-
-For now, typically, web components are written in JavaScript exclusively. Although creating a template is one or two lines of code, the code is a bit lengthy, so a [utility to create a template](#create-template-element-programmatically) is provided that can then be referenced.  This allows the repetitive, scandalous code, required in lieu of an HTML Template DOM node, to be hidden from view.
-
-##  Shadowed Template Insertion
-
-```html
-<template id="articleTemplate" data-shadow-root="open">
-My interesting article...
-</template>
-<template id="sourceTemplate">
-    <details>
-        ...
-        <summary></summary>
-        <article></article>
-        ...
-    </details>
-</template>
-<div id="target"></div>
-<script type="module">
-    import { init } from '../init.js';
-    const Transform = {
-        details: {
-            article: articleTemplate
-        }
-    };
-    init(sourceTemplate, { Transform }, target);
-</script>
-```
-
-## Multiple matching with "Ditto" notation
-
-Sometimes, one rule will cause the target to get (new) children.  We then want to apply another rule to process the target element, now that the children are there.
-
-But uniqueness of the keys of the JSON-like structure we are using prevents us from listing the same match expression twice.
-
-We can specify multiple matches as follows:
-
-```JavaScript
-import { transform } from '../transform.js';
-const Transform = {
-    details: {
-        article: articleTemplate,
-        '"': ({target}) => ...,
-        '""': ...,
-        '"3': ...
-    }
-};
-transform(sourceTemplate, { Transform }, target);
-```
-
-I.e. any selector that starts with a double quote (") will use the last selector that didn't.
-
 
 
 ## Property / attribute / event binding
@@ -986,10 +1000,10 @@ Then TR could be used to transform the syntax above into something like:
 
 ```html
 <ul>
-    <my-repeater-element -items>
+    <my-repeater-element collection-name=items>
         <template>
             <li>
-                <span data-field=name><span>
+                <span data-field=item.name><span>
             </li>
         </template>
     </my-repeater-element>
