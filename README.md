@@ -346,6 +346,45 @@ TR supports limited slot support.  For now the only support is this:
 
 If template insertion (mentioned above) is applied to an element that already has children, and if the inserted template has a slot element, the original children replace the slot element.
 
+This can be quite useful in converting compact loop into clunkier markup that a web component may require:
+
+```html
+<template id=repeatTemplate>
+    <my-repeater-element>
+        <template>
+            <slot></slot>
+        </template>
+    </my-repeater-element>
+</template>
+<template id=mainTemplate>
+    <ul>
+        <li foreach item in items>
+            <span data-field=item.name></span>
+        </li>
+    </ul>
+</template>
+<script>
+const Transform = {
+    ul: repeatTemplate
+}
+</script>
+```
+
+produces:
+
+```html
+<ul>
+    <my-repeater-element>
+        <template>
+            <slot>
+                <li foreach item in items>
+                    <span data-field=item.name></span>
+                </li>
+            </slot>
+        </template>
+    </my-repeater-element>
+```
+
 ## Multiple matching with "Ditto" notation
 
 Sometimes, one rule will cause the target to get (new) children.  We then want to apply another rule to process the target element, now that the children are there.
@@ -1002,7 +1041,7 @@ Then TR could be used to transform the syntax above into something like:
 <ul>
     <my-repeater-element collection-name=items>
         <template>
-            <li>
+            <li foreach item in items>
                 <span data-field=item.name><span>
             </li>
         </template>
@@ -1010,7 +1049,7 @@ Then TR could be used to transform the syntax above into something like:
 </ul>
 ```
 
-which, unlike the original template syntax, is 100% kosher HTML.
+my-repeater-element would then examine the contents of template, see the "foreach item in items" attributes, interpret them, and then delete them, in order for the HTML to be 100% kosher.
 
 What trans-render is currently missing, then, that seems quite useful, is built-in support for wrapping inside other multi-level tags, or a template.
 
