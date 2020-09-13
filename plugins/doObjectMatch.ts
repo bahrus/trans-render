@@ -81,8 +81,9 @@ function doTemplate(ctx: RenderContext, te: HTMLTemplateElement){
       }else{
         slot.insertAdjacentHTML('afterend', innerHTML);
         slot.remove();
+        target.innerHTML = '';
       }
-      target.innerHTML = '';
+      //target.innerHTML = '';
     } 
     fragmentTarget.appendChild(clone);
 }
