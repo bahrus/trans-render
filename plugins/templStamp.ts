@@ -11,11 +11,8 @@ function stamp(fragment: HTMLElement | DocumentFragment | SVGElement, attr: stri
     
 }
 function fromTuple(ctx: RenderContext, pia: PlugInArgs){
-    const target = ctx.host || ctx.cache;
-    if((<any>target)[templStampSym]) return;
     stamp(ctx.target!, 'id', pia[1] as {[key: string]: symbol}, ctx);
     stamp(ctx.target!, 'part', pia[1] as {[key: string]: symbol}, ctx);
-    (<any>target)[templStampSym] = true;
 }
 export const templStampSym: unique symbol = Symbol.for('Dd5nJwRNaEiFtfam5oaSkg');
 

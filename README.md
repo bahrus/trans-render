@@ -340,9 +340,9 @@ My interesting article...
 
 When ShadowRoot is attached to the article element, the children can then be slotted into the ShadowDOM, which is quite convenient.
 
-##  Limited support for Slotted content when not using ShadowDOM.[TODO]
+##  Limited support for Slotted content when not using ShadowDOM.
 
-It is unfortunate that use of slots is tightly coupled with ShadowDOM when it comes to native support.  Vue.js appears to demonstrate that slot concept is useful beyond ShadowDOM support.
+It is unfortunate that use of slots is tightly coupled with ShadowDOM when it comes to native support.  Vue.js appears to demonstrate that the slot concept is useful beyond ShadowDOM support.
 
 TR supports limited slot support.  For now the only support is this:
 
@@ -351,7 +351,7 @@ If template insertion (mentioned above) is applied to an element that already ha
 This can be quite useful in converting compact loop into clunkier markup that a web component may require:
 
 ```html
-<template id=repeatTemplate>
+<template id=repeatTemplate data-has-slot>
     <my-repeater-element>
         <template>
             <slot></slot>
@@ -367,7 +367,7 @@ This can be quite useful in converting compact loop into clunkier markup that a 
 </template>
 <script>
 const Transform = {
-    ':has(> [foreach])': repeatTemplate
+    ':has([foreach])': repeatTemplate
 }
 </script>
 ```
@@ -383,6 +383,7 @@ produces:
             </li>
         </template>
     </my-repeater-element>
+</ul>
 ```
 
 ## Multiple matching with "Ditto" notation

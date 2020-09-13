@@ -9,12 +9,8 @@ function stamp(fragment, attr, refs, ctx) {
     });
 }
 function fromTuple(ctx, pia) {
-    const target = ctx.host || ctx.cache;
-    if (target[templStampSym])
-        return;
     stamp(ctx.target, 'id', pia[1], ctx);
     stamp(ctx.target, 'part', pia[1], ctx);
-    target[templStampSym] = true;
 }
 export const templStampSym = Symbol.for('Dd5nJwRNaEiFtfam5oaSkg');
 export const plugin = {
