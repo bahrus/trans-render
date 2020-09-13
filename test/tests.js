@@ -7,7 +7,7 @@ const xt = require('xtal-test/index');
         },
         {
             path: 'test/fly-transform.html',
-            expectedNoOfSuccessMarkers: 6,
+            expectedNoOfSuccessMarkers: 5,
         },
         {
             path: 'test/fly-repeat.html',

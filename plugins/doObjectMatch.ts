@@ -57,11 +57,12 @@ export function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ct
 
 
 const lastTempl = Symbol();
+const twm = Symbol(); // template weak map
 function doTemplate(ctx: RenderContext, te: HTMLTemplateElement){
     const target = ctx.target!;
     if((<any>target)[lastTempl] !== undefined &&   (<any>target)[lastTempl] === (<any>te)[lastTempl]) return;
     const useShadow = te.dataset.shadowRoot !== undefined;
-    const clone = te.content.cloneNode(true) as DocumentFragment;
+    
     let fragmentTarget : Node = target;
     if(useShadow){
       if(target.shadowRoot === null){
@@ -70,22 +71,51 @@ function doTemplate(ctx: RenderContext, te: HTMLTemplateElement){
         target.shadowRoot.innerHTML = '';
       }
       fragmentTarget = target.shadowRoot!;
+      const clone = te.content.cloneNode(true) as DocumentFragment;
+      fragmentTarget.appendChild(clone);
     }else{
-      const innerHTML = target.innerHTML;
-      const slot = clone.querySelector('slot');
-      if(slot === null){
-        const templ = clone.querySelector('template');
-        if(templ !== null){
-          templ.innerHTML = templ.innerHTML.replace('<slot></slot>', innerHTML);
+      if(te.dataset.hasSlot){
+        const clone = te.content.cloneNode(true) as DocumentFragment;
+        const innerHTML = target.innerHTML;
+        const slot = clone.querySelector('slot');
+        if(slot === null){
+          const templ = clone.querySelector('template');
+          if(templ !== null){
+            templ.innerHTML = templ.innerHTML.replace('<slot></slot>', innerHTML);
+          }
+        }else{
+          slot.insertAdjacentHTML('afterend', innerHTML);
+          slot.remove();
+          target.innerHTML = '';
         }
       }else{
-        slot.insertAdjacentHTML('afterend', innerHTML);
-        slot.remove();
-        target.innerHTML = '';
+        const templateContents = Array.from(target.querySelectorAll('template-content')) as HTMLElement[];
+        const aTarget = target as any;
+        if(aTarget[twm] === undefined){
+          aTarget[twm] = new WeakMap();
+        }
+        const wm = aTarget[twm] as WeakMap<any, any>;
+        const existingContent = wm.get(te);
+        templateContents.forEach(templateContent => {
+          if(existingContent === undefined || templateContent !== existingContent){
+            templateContent.style.display = 'none';
+          }else if(existingContent !== undefined && templateContent === existingContent){
+            existingContent.stye.display = 'block';
+          }
+        });
+        if(existingContent === undefined){
+          const templateContent = document.createElement('template-content');
+          templateContent.style.display = 'block';
+          const clone = te.content.cloneNode(true) as DocumentFragment;
+          templateContent.appendChild(clone);
+          wm.set(te, templateContent);
+          target.appendChild(templateContent);
+        }
       }
+      
       //target.innerHTML = '';
     } 
-    fragmentTarget.appendChild(clone);
+    
 }
 
 function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: RenderContext){
