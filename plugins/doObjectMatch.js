@@ -35,12 +35,9 @@ export function doObjectMatch(key, tvoo, ctx) {
         doTransform(ctx, tvoo);
     }
 }
-const lastTempl = Symbol();
 const twm = Symbol(); // template weak map
 function doTemplate(ctx, te) {
     const target = ctx.target;
-    if (target[lastTempl] !== undefined && target[lastTempl] === te[lastTempl])
-        return;
     const useShadow = te.dataset.shadowRoot !== undefined;
     let fragmentTarget = target;
     if (useShadow) {
@@ -82,14 +79,17 @@ function doTemplate(ctx, te) {
             templateContents.forEach(templateContent => {
                 if (existingContent === undefined || templateContent !== existingContent) {
                     templateContent.style.display = 'none';
+                    templateContent.removeAttribute('part');
                 }
                 else if (existingContent !== undefined && templateContent === existingContent) {
-                    existingContent.stye.display = 'block';
+                    existingContent.style.display = 'block';
+                    templateContent.setAttribute('part', 'content');
                 }
             });
             if (existingContent === undefined) {
                 const templateContent = document.createElement('template-content');
                 templateContent.style.display = 'block';
+                templateContent.setAttribute('part', 'content');
                 const clone = te.content.cloneNode(true);
                 templateContent.appendChild(clone);
                 wm.set(te, templateContent);

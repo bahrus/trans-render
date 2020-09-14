@@ -278,6 +278,28 @@ Due to the basic rules of object literals in JavaScript, keys can only be string
 
 </details>
 
+## Multiple matching with "Ditto" notation
+
+Sometimes, one rule will cause the target to get (new) children.  We then want to apply another rule to process the target element, now that the children are there.
+
+But uniqueness of the keys of the JSON-like structure we are using prevents us from listing the same match expression twice.
+
+We can specify multiple matches as follows:
+
+```JavaScript
+import { transform } from '../transform.js';
+const Transform = {
+    details: {
+        article: articleTemplate,
+        '"': ({target}) => ...,
+        '""': ...,
+        '"3': ...
+    }
+};
+transform(sourceTemplate, { Transform }, target);
+```
+
+I.e. any selector that starts with a double quote (") will use the last selector that didn't.
 
 ## Simple Template Insertion
 
@@ -310,6 +332,28 @@ Here we are relying on the fact that outside any Shadow DOM, id's become global 
 
 For now, typically, web components are written in JavaScript exclusively. Although creating a template is one or two lines of code, the code is a bit lengthy, so a [utility to create a template](#create-template-element-programmatically) is provided that can then be referenced.  This allows the repetitive, scandalous code, required in lieu of an HTML Template DOM node, to be hidden from view.
 
+If you don't use shadowed template insertion or slotted template insertion mentioned below, then the way the template cloning works is this:
+
+1.  Cloned content is inserted inside a tag called template-content.
+2.  Attribute 'part=content' is added to the template-content tag.
+3.  Old matching template-content's are hidden rather than deleted, via display: none, and attribute part=content is removed.
+
+These observations are important if you plan to do some node matching on the (newly) created content.
+
+You will need to add a rule that looks like:
+
+```
+const Transform = {
+    details: {
+        summary: summaryTemplate,
+        '"':{
+            contentPart:{
+                ...
+            }
+        }
+    }
+};
+```
 ##  Shadowed Template Insertion
 
 ```html
@@ -386,28 +430,9 @@ produces:
 </ul>
 ```
 
-## Multiple matching with "Ditto" notation
 
-Sometimes, one rule will cause the target to get (new) children.  We then want to apply another rule to process the target element, now that the children are there.
 
-But uniqueness of the keys of the JSON-like structure we are using prevents us from listing the same match expression twice.
 
-We can specify multiple matches as follows:
-
-```JavaScript
-import { transform } from '../transform.js';
-const Transform = {
-    details: {
-        article: articleTemplate,
-        '"': ({target}) => ...,
-        '""': ...,
-        '"3': ...
-    }
-};
-transform(sourceTemplate, { Transform }, target);
-```
-
-I.e. any selector that starts with a double quote (") will use the last selector that didn't.
 
 
 

@@ -54,13 +54,9 @@ export function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ct
     }
 }
 
-
-
-const lastTempl = Symbol();
 const twm = Symbol(); // template weak map
 function doTemplate(ctx: RenderContext, te: HTMLTemplateElement){
     const target = ctx.target!;
-    if((<any>target)[lastTempl] !== undefined &&   (<any>target)[lastTempl] === (<any>te)[lastTempl]) return;
     const useShadow = te.dataset.shadowRoot !== undefined;
     
     let fragmentTarget : Node = target;
@@ -99,13 +95,16 @@ function doTemplate(ctx: RenderContext, te: HTMLTemplateElement){
         templateContents.forEach(templateContent => {
           if(existingContent === undefined || templateContent !== existingContent){
             templateContent.style.display = 'none';
+            templateContent.removeAttribute('part');
           }else if(existingContent !== undefined && templateContent === existingContent){
-            existingContent.stye.display = 'block';
+            existingContent.style.display = 'block';
+            templateContent.setAttribute('part','content');
           }
         });
         if(existingContent === undefined){
           const templateContent = document.createElement('template-content');
           templateContent.style.display = 'block';
+          templateContent.setAttribute('part', 'content');
           const clone = te.content.cloneNode(true) as DocumentFragment;
           templateContent.appendChild(clone);
           wm.set(te, templateContent);
