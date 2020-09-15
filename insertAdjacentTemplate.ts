@@ -1,5 +1,6 @@
-export function insertAdjacentTemplate(template: HTMLTemplateElement, target: Element, position: InsertPosition){
+export function insertAdjacentTemplate(template: HTMLTemplateElement, target: Element, position: InsertPosition, callback?: (clone: DocumentFragment) => void){
     const clone = document.importNode(template.content, true);
+    if(callback !== undefined) callback(clone);
     let appendTarget = target;
     let isFirst = true;
     const appendedChildren : Element[] = [];
