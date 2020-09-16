@@ -340,7 +340,7 @@ If you don't use shadowed template insertion or slotted template insertion menti
 
 These observations are important if you plan to do some node matching on the (newly) created content.
 
-You will need to add a rule that looks like:
+You will need to add a rule that looks something like:
 
 ```
 const Transform = {
@@ -384,22 +384,20 @@ My interesting article...
 
 When ShadowRoot is attached to the article element, the children can then be slotted into the ShadowDOM, which is quite convenient.
 
-##  Limited support for Slotted content when not using ShadowDOM.
+##  Limited support for Slotted content when not using ShadowDOM (WIP).
 
-It is unfortunate that use of slots is tightly coupled with ShadowDOM when it comes to native support.  Vue.js appears to demonstrate that the slot concept is useful beyond ShadowDOM support.
+It is unfortunate that use of slots is tightly coupled with ShadowDOM when it comes to native support.  Vue.js and Svelte appear to demonstrate that the slot concept is useful beyond ShadowDOM support.
 
-TR supports limited slot support.  For now the only support is this:
+TR supports limited slot support outside the bounds of ShadowDOM.  For now the only support is this:
 
-If template insertion (mentioned above) is applied to an element that already has children, and if the inserted template has a slot element, the original children replace the slot element.
+If template insertion (mentioned above) is applied to an element that already has children, and if the inserted template has at least one slot element, the original children replace the slot elements, based on similar (first order) rules to Shadow DOM slotting.  A slot with attribute "as-template" will be converted to a template element.
 
-This can be quite useful in converting compact loop into clunkier markup that a web component may require:
+This can be quite useful in converting compact loop syntax into clunkier markup that a web component may require:
 
 ```html
 <template id=repeatTemplate data-has-slot>
     <my-repeater-element>
-        <template>
-            <slot></slot>
-        </template>
+        <slot as-template></slot>
     </my-repeater-element>
 </template>
 <template id=mainTemplate>
