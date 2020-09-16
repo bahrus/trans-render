@@ -386,7 +386,7 @@ When ShadowRoot is attached to the article element, the children can then be slo
 
 ##  Limited support for Slotted content when not using ShadowDOM (WIP).
 
-It is unfortunate that use of slots is tightly coupled with ShadowDOM when it comes to native support.  Vue.js and Svelte appear to demonstrate that the slot concept is useful beyond ShadowDOM support.
+It is unfortunate that use of slots is tightly coupled with ShadowDOM, when it comes to native support.  Vue.js and Svelte appear to demonstrate that the slot concept is useful beyond ShadowDOM support.
 
 TR supports limited slot support outside the bounds of ShadowDOM.  For now the only support is this:
 
@@ -395,11 +395,12 @@ If template insertion (mentioned above) is applied to an element that already ha
 This can be quite useful in converting compact loop syntax into clunkier markup that a web component may require:
 
 ```html
-<template id=repeatTemplate data-has-slot>
+<template id=repeatTemplate>
     <my-repeater-element>
         <slot as-template></slot>
     </my-repeater-element>
 </template>
+
 <template id=mainTemplate>
     <ul>
         <li foreach item in items>
@@ -428,11 +429,7 @@ produces:
 </ul>
 ```
 
-
-
-
-
-
+Unlike the more powerful native ShadowDOM, once the children are merged into the slots, there's no longer a distinction between light children and shadow children.  So non-shadow slotting makes the most sense when used during the init transform.
 
 
 ## Arbitrary queries.
