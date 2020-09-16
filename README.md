@@ -410,7 +410,7 @@ This can be quite useful in converting compact loop syntax into clunkier markup 
 </template>
 <script>
 const Transform = {
-    ':has([foreach])': repeatTemplate
+    ':has(> [foreach])': repeatTemplate
 }
 </script>
 ```
