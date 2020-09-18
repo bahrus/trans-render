@@ -358,6 +358,7 @@ const Transform = {
 
 ```html
 <template id="articleTemplate" data-shadow-root="open">
+    <slot name="adInsert"></slot>
 My interesting article...
 </template>
 <template id="sourceTemplate">
