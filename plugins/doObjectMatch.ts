@@ -54,12 +54,19 @@ export function doObjectMatch(key: string, tvoo: TransformValueObjectOptions, ct
     }
 }
 
+function bulkTransfer(src: Element, target: Element){
+  Array.from(src.childNodes).forEach(node => {
+    target.appendChild(node);
+  })
+}
+
 const twm = Symbol(); // template weak map
 function doTemplate(ctx: RenderContext, te: HTMLTemplateElement){
     const target = ctx.target!;
     const useShadow = te.dataset.shadowRoot !== undefined;
     
     let fragmentTarget : Node = target;
+    const clone = te.content.cloneNode(true) as DocumentFragment;
     if(useShadow){
       if(target.shadowRoot === null){
         target.attachShadow({mode: te.dataset.shadowRoot as 'open' | 'closed', delegatesFocus: true});
@@ -67,23 +74,30 @@ function doTemplate(ctx: RenderContext, te: HTMLTemplateElement){
         target.shadowRoot.innerHTML = '';
       }
       fragmentTarget = target.shadowRoot!;
-      const clone = te.content.cloneNode(true) as DocumentFragment;
       fragmentTarget.appendChild(clone);
     }else{
-      if(te.dataset.hasSlot){
-        const clone = te.content.cloneNode(true) as DocumentFragment;
-        const innerHTML = target.innerHTML;
-        const slot = clone.querySelector('slot');
-        if(slot === null){
-          const templ = clone.querySelector('template');
-          if(templ !== null){
-            templ.innerHTML = templ.innerHTML.replace('<slot></slot>', innerHTML);
+      const slots = Array.from(clone.querySelectorAll('slot')) as HTMLSlotElement[];
+
+      if(slots.length > 0){
+        slots.forEach(slot => {
+          let slotTarget = slot as Element;
+          
+          if(slotTarget.hasAttribute('as-template')){
+            const templ = document.createElement('template');
+            slotTarget.insertAdjacentElement('afterend', templ);
+            slotTarget = templ;
+            slot.remove();
           }
-        }else{
-          slot.insertAdjacentHTML('afterend', innerHTML);
-          slot.remove();
-          target.innerHTML = '';
-        }
+          const name = slot.name;
+          if(name){
+            const sourceSlot = target.querySelector(`[slot="${name}"]`);
+            if(sourceSlot !== null) bulkTransfer(sourceSlot, slotTarget);
+          }else{
+            bulkTransfer(target, slotTarget);
+          }
+        });
+        target.innerHTML = '';
+        target.appendChild(clone);
       }else{
         const templateContents = Array.from(target.querySelectorAll('template-content')) as HTMLElement[];
         const aTarget = target as any;
