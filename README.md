@@ -385,7 +385,7 @@ My interesting article...
 
 When ShadowRoot is attached to the article element, the children can then be slotted into the ShadowDOM, which is quite convenient.
 
-##  Limited support for Slotted content when not using ShadowDOM
+##  Limited support for Slotted content when not using ShadowDOM (WIP)
 
 It is unfortunate that use of slots is tightly coupled with ShadowDOM, when it comes to native support.  Vue.js and Svelte appear to demonstrate that the slot concept is useful beyond ShadowDOM support.
 
