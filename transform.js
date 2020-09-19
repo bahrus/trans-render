@@ -2,9 +2,6 @@ const SkipSibs = Symbol();
 const NextMatch = Symbol();
 export const more = Symbol.for('e35fe6cb-78d4-48fe-90f8-bf9da743d532');
 export function transform(sourceOrTemplate, ctx, target = sourceOrTemplate) {
-    if (ctx.mode === undefined) {
-        Object.assign(ctx, { mode: 'init', level: 0, idx: 0 });
-    }
     ctx.ctx = ctx;
     const isATemplate = isTemplate(sourceOrTemplate);
     const source = isATemplate
@@ -39,9 +36,19 @@ export function processFragment(source, ctx) {
     const transf = ctx.Transform;
     if (transf === undefined)
         return;
-    ctx.target = source.firstElementChild;
-    processEl(ctx);
-    processSymbols(ctx);
+    const transforms = Array.isArray(transf) ? transf : [transf];
+    const isInit = ctx.mode === undefined;
+    transforms.forEach(transform => {
+        const start = { level: 0, idx: 0 };
+        if (isInit) {
+            start.mode = 'init';
+        }
+        Object.assign(ctx, start);
+        ctx.target = source.firstElementChild;
+        ctx.Transform = transform;
+        processEl(ctx);
+        processSymbols(ctx);
+    });
 }
 export function processSymbols(ctx) {
     const transf = ctx.Transform;

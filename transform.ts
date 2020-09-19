@@ -16,10 +16,8 @@ export function transform(
     ctx: RenderContext,
     target: HTMLElement | DocumentFragment = sourceOrTemplate,
 ){
-    if(ctx.mode === undefined){
-        Object.assign<RenderContext, Partial<RenderContext>>(ctx, {mode: 'init', level: 0, idx: 0})
-    }
 
+    
     ctx.ctx = ctx;
     const isATemplate = isTemplate(sourceOrTemplate);
     const source = isATemplate
@@ -60,9 +58,20 @@ export function processFragment(
 ){
     const transf = ctx.Transform;
     if(transf === undefined) return;
-    ctx.target = source.firstElementChild as HTMLElement;
-    processEl(ctx);
-    processSymbols(ctx);
+    const transforms = Array.isArray(transf) ? transf : [transf];
+    const isInit = ctx.mode === undefined;
+    transforms.forEach(transform => {
+        const start = {level: 0, idx: 0} as Partial<RenderContext>;
+        if(isInit){
+            start.mode = 'init';
+        }
+        Object.assign<RenderContext, Partial<RenderContext>>(ctx, start);
+        ctx.target = source.firstElementChild as HTMLElement;
+        ctx.Transform = transform;
+        processEl(ctx);
+        processSymbols(ctx);
+    });
+
 }
 
 export function processSymbols(ctx: RenderContext){

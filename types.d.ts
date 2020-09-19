@@ -3,7 +3,7 @@ export interface RenderContext<TTarget = HTMLElement | SVGElement, TItem = any> 
     ctx?: RenderContext | undefined;
     cache?: any;
     previousTransform?: TransformValueOptions | undefined;
-    Transform?: TransformValueOptions;
+    Transform?: TransformValueOptions | TransformValueOptions[];
     level?: number | undefined;
     viewModel?: any;
     item?: TItem | undefined;
