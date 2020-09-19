@@ -117,7 +117,7 @@
                 p: 'How absurd to swallow a bird!',
                 '[spider]':[{textContent: 'She swallowed the bird to catch the spider', style:{display:'block'}},,{mark: ''}],
                 '[shadow]': shadow,
-                ul:repeatTemplate,
+                ':has(>[foreach])':repeatTemplate,
             }
         }, target, {
             prepend: true

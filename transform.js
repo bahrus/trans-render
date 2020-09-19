@@ -108,9 +108,17 @@ export function processEl(ctx) {
                         matched = false;
                     }
                 }
-                else if (key.startsWith(':has(')) {
-                    const query = key.substring(5, key.length - 1);
-                    if (nextElementSibling.querySelector(query) === null) {
+                else if (key.startsWith(':has(>')) {
+                    const query = key.substring(6, key.length - 1);
+                    let foundMatch = false;
+                    for (let i = 0, ii = nextElementSibling.children.length; i < ii; i++) {
+                        const el = nextElementSibling.children[i];
+                        if (el.matches(query)) {
+                            foundMatch = true;
+                            break;
+                        }
+                    }
+                    if (!foundMatch) {
                         matched = false;
                         continue;
                     }
