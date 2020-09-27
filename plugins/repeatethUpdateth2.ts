@@ -31,8 +31,10 @@ export function repeatethUpdateth(template: ToTOrFnToTot, ctx: RenderContext, it
         // }
         if(typeof(ctxClone.Transform) === 'function'){
             (<any>ctx).Transform(ctxClone);
+        }else{
+            processEl(ctxClone);
         }
-        processEl(ctxClone);
+        
     }
     if(diff > 0){
 

@@ -31,7 +31,9 @@ export function repeatethUpdateth(template, ctx, items, target, targetTransform)
         if (typeof (ctxClone.Transform) === 'function') {
             ctx.Transform(ctxClone);
         }
-        processEl(ctxClone);
+        else {
+            processEl(ctxClone);
+        }
     }
     if (diff > 0) {
         for (let i = 0; i < diff; i++) {
