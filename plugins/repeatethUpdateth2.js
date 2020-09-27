@@ -1,5 +1,5 @@
-import { countKey, idxKey, ubKey, itemsKey } from './repeatInit2.js';
-import { transform } from '../transform.js';
+import { countKey, idxKey, ubKey, itemsKey, renderDynamicContent } from './repeatInit2.js';
+import { transform, isTemplate } from '../transform.js';
 const origStyleKey = Symbol('origStyle');
 //type HTMLFn = (el: HTMLElement) => void
 export function repeatethUpdateth(template, ctx, items, target, targetTransform) {
@@ -8,8 +8,6 @@ export function repeatethUpdateth(template, ctx, items, target, targetTransform)
     const ub = target[ubKey];
     console.log(target.dataset);
     const diff = count - childCount;
-    if (diff === 0)
-        return;
     const ctxClone = Object.assign({}, ctx);
     if (typeof targetTransform === 'symbol') {
         ctxClone.Transform = ctx[targetTransform];
@@ -32,7 +30,7 @@ export function repeatethUpdateth(template, ctx, items, target, targetTransform)
                     h[idxKey] = iOffset;
                     h[itemsKey] = item;
                 };
-                transform(template, ctxClone, target);
+                //transform(template as HTMLTemplateElement, ctxClone, target);
             }
         }
         target[ubKey] = childCount + diff;
@@ -41,10 +39,20 @@ export function repeatethUpdateth(template, ctx, items, target, targetTransform)
         for (let i = target.children.length - 1; i > -1; i--) {
             const child = target.children[i];
             if (child[idxKey] >= count) {
-                //child.remove();
                 child[origStyleKey] = child.style.display;
                 child.style.display = 'none';
             }
+        }
+    }
+    for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        ctxClone.item = item;
+        ctxClone.idx = i;
+        if (isTemplate(template)) {
+            transform(template, ctxClone, target);
+        }
+        else {
+            renderDynamicContent(template, ctxClone, target);
         }
     }
     target[countKey] = count;

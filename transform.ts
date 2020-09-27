@@ -16,8 +16,6 @@ export function transform(
     ctx: RenderContext,
     target: HTMLElement | DocumentFragment = sourceOrTemplate,
 ){
-
-    
     ctx.ctx = ctx;
     const isATemplate = isTemplate(sourceOrTemplate);
     const source = isATemplate
