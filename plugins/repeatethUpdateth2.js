@@ -28,6 +28,9 @@ export function repeatethUpdateth(template, ctx, items, target, targetTransform)
         // }else{
         //     renderDynamicContent(template, ctxClone, target);
         // }
+        if (typeof (ctxClone.Transform) === 'function') {
+            ctx.Transform(ctxClone);
+        }
         processEl(ctxClone);
     }
     if (diff > 0) {
