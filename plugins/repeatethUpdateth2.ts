@@ -30,7 +30,7 @@ export function repeatethUpdateth(template: ToTOrFnToTot, ctx: RenderContext, it
         //     renderDynamicContent(template, ctxClone, target);
         // }
         if(typeof(ctxClone.Transform) === 'function'){
-            (<any>ctx).Transform(ctxClone);
+            (<any>ctxClone).Transform(ctxClone);
         }else{
             processEl(ctxClone);
         }
