@@ -1,6 +1,6 @@
 import { RenderContext, TransformValueOptions, ToTOrFnToTot, toTransform } from '../types.js';
 import { countKey, idxKey, ubKey, itemsKey, renderDynamicContent } from './repeatInit2.js';
-import { transform, isTemplate } from '../transform.js';
+import { transform, isTemplate, processEl } from '../transform.js';
 
 const origStyleKey = Symbol('origStyle');
 //type HTMLFn = (el: HTMLElement) => void
@@ -17,6 +17,19 @@ export function repeatethUpdateth(template: ToTOrFnToTot, ctx: RenderContext, it
         ctxClone.Transform = targetTransform!;
     }
     if(diff > 0){
+        for(let i = 0; i < childCount; i++){
+            const item = items[i];
+            ctxClone.item = item;
+            ctxClone.idx = i;
+            const childTarget = target.children[i];
+            ctxClone.target = childTarget as HTMLElement;
+            // if(isTemplate(template)){
+            //     transform(template as HTMLTemplateElement, ctxClone, target);
+            // }else{
+            //     renderDynamicContent(template, ctxClone, target);
+            // }
+            processEl(ctxClone);
+        }
         for(let i = 0; i < diff; i++){
             const iOffset = i + childCount;
             const item = items[iOffset];
@@ -30,7 +43,11 @@ export function repeatethUpdateth(template: ToTOrFnToTot, ctx: RenderContext, it
                     h[idxKey] = iOffset;
                     h[itemsKey] = item;
                 }
-                //transform(template as HTMLTemplateElement, ctxClone, target);
+                if(isTemplate(template)){
+                    transform(template as HTMLTemplateElement, ctxClone, target);
+                }else{
+                    renderDynamicContent(template, ctxClone, target);
+                }
             }
         }
         (<any>target)[ubKey] = childCount + diff;
@@ -43,16 +60,7 @@ export function repeatethUpdateth(template: ToTOrFnToTot, ctx: RenderContext, it
             }
         }
     }
-    for(let i = 0; i < items.length; i++){
-        const item = items[i];
-        ctxClone.item = item;
-        ctxClone.idx = i;
-        if(isTemplate(template)){
-            transform(template as HTMLTemplateElement, ctxClone, target);
-        }else{
-            renderDynamicContent(template, ctxClone, target);
-        }
-    }
+
     (<any>target)[countKey] = count;
 
 }

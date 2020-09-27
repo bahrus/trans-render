@@ -1,5 +1,5 @@
 import { countKey, idxKey, ubKey, itemsKey, renderDynamicContent } from './repeatInit2.js';
-import { transform, isTemplate } from '../transform.js';
+import { transform, isTemplate, processEl } from '../transform.js';
 const origStyleKey = Symbol('origStyle');
 //type HTMLFn = (el: HTMLElement) => void
 export function repeatethUpdateth(template, ctx, items, target, targetTransform) {
@@ -16,6 +16,19 @@ export function repeatethUpdateth(template, ctx, items, target, targetTransform)
         ctxClone.Transform = targetTransform;
     }
     if (diff > 0) {
+        for (let i = 0; i < childCount; i++) {
+            const item = items[i];
+            ctxClone.item = item;
+            ctxClone.idx = i;
+            const childTarget = target.children[i];
+            ctxClone.target = childTarget;
+            // if(isTemplate(template)){
+            //     transform(template as HTMLTemplateElement, ctxClone, target);
+            // }else{
+            //     renderDynamicContent(template, ctxClone, target);
+            // }
+            processEl(ctxClone);
+        }
         for (let i = 0; i < diff; i++) {
             const iOffset = i + childCount;
             const item = items[iOffset];
@@ -30,7 +43,12 @@ export function repeatethUpdateth(template, ctx, items, target, targetTransform)
                     h[idxKey] = iOffset;
                     h[itemsKey] = item;
                 };
-                //transform(template as HTMLTemplateElement, ctxClone, target);
+                if (isTemplate(template)) {
+                    transform(template, ctxClone, target);
+                }
+                else {
+                    renderDynamicContent(template, ctxClone, target);
+                }
             }
         }
         target[ubKey] = childCount + diff;
@@ -42,17 +60,6 @@ export function repeatethUpdateth(template, ctx, items, target, targetTransform)
                 child[origStyleKey] = child.style.display;
                 child.style.display = 'none';
             }
-        }
-    }
-    for (let i = 0; i < items.length; i++) {
-        const item = items[i];
-        ctxClone.item = item;
-        ctxClone.idx = i;
-        if (isTemplate(template)) {
-            transform(template, ctxClone, target);
-        }
-        else {
-            renderDynamicContent(template, ctxClone, target);
         }
     }
     target[countKey] = count;
