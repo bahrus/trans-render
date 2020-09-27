@@ -15,20 +15,22 @@ export function repeatethUpdateth(template, ctx, items, target, targetTransform)
     else {
         ctxClone.Transform = targetTransform;
     }
+    for (let i = 0; i < Math.max(childCount, count); i++) {
+        //TODO:  this is assuming each item maps to one element.
+        //Need to use (<any>child)[idxKey]
+        const item = items[i];
+        ctxClone.item = item;
+        ctxClone.idx = i;
+        const childTarget = target.children[i];
+        ctxClone.target = childTarget;
+        // if(isTemplate(template)){
+        //     transform(template as HTMLTemplateElement, ctxClone, target);
+        // }else{
+        //     renderDynamicContent(template, ctxClone, target);
+        // }
+        processEl(ctxClone);
+    }
     if (diff > 0) {
-        for (let i = 0; i < childCount; i++) {
-            const item = items[i];
-            ctxClone.item = item;
-            ctxClone.idx = i;
-            const childTarget = target.children[i];
-            ctxClone.target = childTarget;
-            // if(isTemplate(template)){
-            //     transform(template as HTMLTemplateElement, ctxClone, target);
-            // }else{
-            //     renderDynamicContent(template, ctxClone, target);
-            // }
-            processEl(ctxClone);
-        }
         for (let i = 0; i < diff; i++) {
             const iOffset = i + childCount;
             const item = items[iOffset];
