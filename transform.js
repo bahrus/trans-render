@@ -53,7 +53,7 @@ export function processFragment(source, ctx) {
 export function processSymbols(ctx) {
     const transf = ctx.Transform;
     for (const sym of Object.getOwnPropertySymbols(transf)) {
-        const transformTemplateVal = transf[sym];
+        let transformTemplateVal = transf[sym];
         if (sym === more) {
             ctx.Transform = transformTemplateVal;
             processSymbols(ctx);
@@ -63,10 +63,10 @@ export function processSymbols(ctx) {
         if (newTarget === undefined)
             continue;
         ctx.target = newTarget;
+        while (typeof transformTemplateVal === 'function') {
+            transformTemplateVal = transformTemplateVal(ctx);
+        }
         switch (typeof (transformTemplateVal)) {
-            case 'function':
-                transformTemplateVal(ctx);
-                break;
             case 'string':
                 newTarget.textContent = transformTemplateVal;
                 break;

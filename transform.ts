@@ -78,7 +78,8 @@ export function processSymbols(ctx: RenderContext){
     const transf = ctx.Transform;
     for(const sym of Object.getOwnPropertySymbols(transf) ) {
 
-        const transformTemplateVal = (<any>transf)[sym];
+        let transformTemplateVal = (<any>transf)[sym];
+
         if(sym === more){
             ctx.Transform = transformTemplateVal;
             processSymbols(ctx);
@@ -87,10 +88,10 @@ export function processSymbols(ctx: RenderContext){
         const newTarget = ((<any>ctx)[sym] || (<any>ctx).host![sym]) as HTMLElement | SVGElement;
         if(newTarget === undefined) continue;
         ctx.target = newTarget;
+        while(typeof transformTemplateVal === 'function'){
+            transformTemplateVal = transformTemplateVal(ctx);
+        }
         switch(typeof(transformTemplateVal)){
-          case 'function':
-            transformTemplateVal(ctx);
-            break;
           case 'string':
             newTarget.textContent = transformTemplateVal;
             break;
