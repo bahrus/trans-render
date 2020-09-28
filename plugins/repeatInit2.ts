@@ -44,11 +44,12 @@ export function renderDynamicContent(template: ToTOrFnToTot, ctx: RenderContext,
         case 'string':
             const el = document.createElement(template);
             target.appendChild(el);
-            ctx.target = el;
-            if(typeof ctx.Transform === 'function'){
-                ctx.Transform = (<any>ctx).Transform(ctx);
+            const ctxClone = Object.assign({}, ctx);
+            ctxClone.target = el;
+            if(typeof ctxClone.Transform === 'function'){
+                ctxClone.Transform = (<any>ctxClone).Transform(ctxClone);
             }
-            processEl(ctx);
+            processEl(ctxClone);
             break;
         case 'object':
             transform(template as HTMLTemplateElement, ctx, target);

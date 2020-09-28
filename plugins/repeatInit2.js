@@ -40,11 +40,12 @@ export function renderDynamicContent(template, ctx, target) {
         case 'string':
             const el = document.createElement(template);
             target.appendChild(el);
-            ctx.target = el;
-            if (typeof ctx.Transform === 'function') {
-                ctx.Transform = ctx.Transform(ctx);
+            const ctxClone = Object.assign({}, ctx);
+            ctxClone.target = el;
+            if (typeof ctxClone.Transform === 'function') {
+                ctxClone.Transform = ctxClone.Transform(ctxClone);
             }
-            processEl(ctx);
+            processEl(ctxClone);
             break;
         case 'object':
             transform(template, ctx, target);
