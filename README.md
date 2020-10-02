@@ -36,7 +36,9 @@ For more musings on the question of what is this good for, please see the [rambl
 
 ## Workflow
 
-trans-render provides helper functions for either 1)  cloning a template, and then walking through the DOM, applying rules in document order, or, 2) using the same syntax, applying changes on a live DOM fragment.  Note that the document can grow as processing takes place (due, for example, to cloning sub templates).  It's critical, therefore, that the processing occur in a logical order, and that order is down the document tree.  That way it is fine to append nodes before continuing processing.  
+trans-render provides helper functions for either 1)  cloning a template, and then walking through the DOM, applying rules in document order, or, 2) using the same syntax, applying changes on a live DOM fragment.  Note that the document can grow as processing takes place (due, for example, to cloning sub templates).  It's critical, therefore, that the processing occur in a logical order, and that order is down the document tree.  That way it is fine to append nodes before continuing processing.
+
+As such, trans-render could (in theory) be used to augment/finesse the results of template.createInstance of the [template instantiation proposal](https://w3c.github.io/webcomponents/proposals/Template-Instantiation.html).
 
 ## Drilling down to children
 
@@ -1472,9 +1474,9 @@ When defining an HTML based user interface, the question arises whether styles s
 
 The ability to keep the styles separate from the HTML does not invalidate support for inline styles.  The browser supports both, and probably always will.
 
-Likewise, arguing for the benefits of this library is not in any way meant to disparage the usefulness of the current prevailing orthodoxy of including the binding / formatting instructions in the markup.  I would be delighted to see the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with support for inline binding, added to the arsenal of tools developers could use.  Should that proposal come to fruition, this library would be in mind-share competition (my mind anyway) with one that is 0KB, with the full backing / optimization work of Chrome, Safari, Firefox.  Why would anyone use this library then?
+Likewise, arguing for the benefits of this library is not in any way meant to disparage the usefulness of the current prevailing orthodoxy of including the binding / formatting instructions in the markup.  I would be delighted to see the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with support for inline binding, added to the arsenal of tools developers could use.  Should that proposal come to fruition, this library could be used to augment the native template instantiation process.
 
-And in fact, the library described here is quite open ended.  Until template instantiation becomes built into the browser, this library could be used as a tiny stand-in.  Once template instantiation is built into the browser, this library could continue to supplement the native support (or the other way around, depending.)
+And in fact, the library described here is quite open ended.  Until template instantiation becomes built into the browser, this library could be used as a stand-in.  Once template instantiation is built into the browser, this library's scope could reduce, but could continue to supplement the native support when needed.
 
 For example, in the second example above, the core "init" function described here has nothing special to offer in terms of string interpolation, since CSS matching provides no help:
 
@@ -1486,17 +1488,17 @@ We provide a small helper function "interpolate" for this purpose, but as this i
 
 A question in my mind, is how does this rendering approach fit in with web components (I'm going to take a leap here and assume that [HTML Modules / Imports](https://github.com/w3c/webcomponents/issues/645) in some form makes it into browsers, even though I think the discussion still has some relevance without that).
 
-I think this alternative approach can provide value, by providing a process for "Pipeline Rendering":  Rendering starts with an HTML template element, which produces transformed markup using init or native template instantiation.  Then consuming / extending web components could insert additional bindings via the CSS-matching transformations this library provides.
+I think this alternative approach can provide value, by providing a process for "Pipeline Rendering":  Rendering starts with an HTML template element, which produces transformed markup using TR or (hopefully soon) native template instantiation.  Then consuming / extending web components could insert additional bindings via the CSS-matching transformations this library provides.
 
-To aid with this process, the init and update functions provide a rendering options parameter, which contains an optional "initializedCallback" and "updatedCallback" option.  This allows a pipeline processing sequence to be set up, similar in concept to [Apache Cocoon](http://cocoon.apache.org/2.2/1290_1_1.html).
+To aid with this process, the transform function provides a rendering options parameter, which contains an optional "initializedCallback" and "updatedCallback" option.  This allows a pipeline processing sequence to be set up, similar in concept to [Apache Cocoon](http://cocoon.apache.org/2.2/1290_1_1.html).
 
-**NB**  In re-reading the [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) with a fresh set of eyes, I see now that there has in fact [been some careful thought](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) given to the idea of providing a kind of pipeline of binding.  And as mentioned above, this library provides little help when it comes to string interpolation, so the fact that the proposal provides some hooks for callbacks is really nice to see.
+<!--**NB**  The [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) with a fresh set of eyes, I see now that there has in fact [been some careful thought](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) given to the idea of providing a kind of pipeline of binding.  And as mentioned above, this library provides little help when it comes to string interpolation, so the fact that the proposal provides some hooks for callbacks is really nice to see.
 
 I may not yet fully grasp the proposal, but it still does appear to me that the template instantiation proposal is only useful if one defines regions ahead of time in the markup where dynamic content may go.  
 
 This library, on the other hand, considers the entire template document open for amendment.  This may be alarming, if as me, you find yourself comparing this effort to the [::part ::theme initiative](https://meowni.ca/posts/part-theme-explainer/), where authors need to specify which elements can be themed.
 
-However, the use case is quite different.  In the case of stylesheets, we are talking about global theming, affecting large numbers of elements at the same time.  The use case I'm really considering is one web component extending another.  I don't just mean direct class inheritance, but compositional extensions as well.  It doesn't seem that unreasonable to provide maximum flexibility in that circumstance.  Yes, I suppose the ability to mark some tags as "undeletable / non negotiable" might be nice, and it is easy to speculate that a vendor could mark non mutable DOM nodes in some way, but I see no way to enforce that.  
+However, the use case is quite different.  In the case of stylesheets, we are talking about global theming, affecting large numbers of elements at the same time.  The use case I'm really considering is one web component extending another.  I don't just mean direct class inheritance, but compositional extensions as well.  It doesn't seem that unreasonable to provide maximum flexibility in that circumstance.  Yes, I suppose the ability to mark some tags as "undeletable / non negotiable" might be nice, and it is easy to speculate that a vendor could mark non mutable DOM nodes in some way, but I see no way to enforce that.-->  
 
 ## Client-side JS faster than SSR?
 
