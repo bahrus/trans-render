@@ -514,36 +514,6 @@ As you may have noticed, some abbreviations are used by this library:
 * props = properties
 * refs = references
 
-## Reapplying (some) of the transform
-
-Often, we want to reapply a transform, after something changes -- typically the source data.
-
-This can be done by holding on to the context from the initial transform.
-
-The ability to do this is illustrated below:
-
-```html
-<script type="module">
-    import { init } from '../init.js';
-    import { interpolate } from '../interpolate.js';
-    const ctx = init(Main, {
-        model:{
-            Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
-            Day6: 'Saturday', Day7: 'Sunday',
-        },
-        interpolate: interpolate,
-        $: id => window[id],
-    }, target);
-    changeDays.addEventListener('click', e=>{
-        ctx.model = {
-            Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
-            Day6: 'lördag', Day7: 'söndag',
-        }
-        transform(ctx, target);
-    })
-</script>
-```
-
 The ctx object has a "mode" property that becomes "update" after the initial transform completes.
 
 ## Use Case 1:  Applying the DRY principle to (post) punk rock lyrics

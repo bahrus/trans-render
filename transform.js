@@ -73,6 +73,9 @@ export function processSymbols(ctx) {
             case 'object':
                 ctx.customObjProcessor('', transformTemplateVal, ctx);
                 break;
+            case 'boolean':
+                if (transformTemplateVal === false)
+                    newTarget.remove();
         }
     }
 }

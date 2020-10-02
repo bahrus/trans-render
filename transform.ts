@@ -96,6 +96,8 @@ export function processSymbols(ctx: RenderContext){
           case 'object':
               ctx.customObjProcessor!('', transformTemplateVal as TransformValueObjectOptions, ctx);
               break;
+          case 'boolean':
+              if(transformTemplateVal === false) newTarget.remove();
         }
     }
 }
