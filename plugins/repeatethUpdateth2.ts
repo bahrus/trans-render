@@ -8,7 +8,6 @@ export function repeatethUpdateth(template: ToTOrFnToTot, ctx: RenderContext, it
     const childCount = (<any>target)[countKey];
     const count = items.length;
     const ub = (<any>target)[ubKey];
-    console.log(target.dataset);
     const diff = count - childCount;
     const ctxClone = Object.assign({}, ctx);
     if(typeof targetTransform === 'symbol'){

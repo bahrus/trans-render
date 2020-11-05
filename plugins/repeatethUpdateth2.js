@@ -6,7 +6,6 @@ export function repeatethUpdateth(template, ctx, items, target, targetTransform)
     const childCount = target[countKey];
     const count = items.length;
     const ub = target[ubKey];
-    console.log(target.dataset);
     const diff = count - childCount;
     const ctxClone = Object.assign({}, ctx);
     if (typeof targetTransform === 'symbol') {

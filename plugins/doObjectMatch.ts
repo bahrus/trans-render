@@ -243,6 +243,7 @@ function doPropSetting(key: string, peat: PEATUnionSettings, ctx: RenderContext)
         const eventSettings = peat[1];
         for (const key in eventSettings) {
           let eventHandler = eventSettings[key];
+          if(eventHandler === undefined) throw "No event handler found with name " + key;
           if(Array.isArray(eventHandler)){
             const objSelectorPath = eventHandler[1].split('.');
             const converter = eventHandler[2];
