@@ -12,6 +12,7 @@
 
 trans-render (abbreviation: TR) provides a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, TR performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, tr uses css path tests via the element.matches() and element.querySelector() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
 
+
 XSLT can take pure XML with no formatting instructions as its input.  Generally speaking, the XML that XSLT acts on isn't a bunch of semantically  meaningless div tags, but rather a nice semantic document, whose intrinsic structure is enough to go on, in order to formulate a "transform" that doesn't feel like a hack.  
 
 Likewise, with the advent of custom elements, the template markup will tend to be much more semantic, like XML. trans-render's usefulness grows as a result of the increasingly semantic nature of the template markup, because often the markup semantics provide enough clues on how to fill in the needed "potholes," like textContent and property setting, without the need for custom markup, like binding attributes.  But trans-render is completely extensible, so it can certainly accommodate custom binding attributes by using additional, optional helper libraries.  
@@ -19,6 +20,8 @@ Likewise, with the advent of custom elements, the template markup will tend to b
 This can leave the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may be needed to keep the binding rules in sync.  Much like how separate style rules often need adjusting when the document structure changes.
 
 ## Advantages
+
+TR will certainly take advantage of [phase I of template instantiation](https://github.com/w3c/webcomponents/blob/f69b4552e0f56d2292d7bdf8ab9c81ab54ff9c2c/proposals/DOM-Parts.md) when it's available.  TR sees itself as either an alternative, or a supplement, to any kind of inline binding future phases of template instantiation support.
 
 By keeping the binding separate, the same template can thus be used to bind with different object structures.
 
@@ -127,6 +130,8 @@ const Transform = {
 ```
 
 This will search the template / DOM fragment / matching target for all elements whose id or "part" attribute is "mySpecialElement1" or "mySpecialElement2".  Only one element will get stamped for each reference later.  In other words, stamping is only useful if you have exactly one element whose id or part is equal to "mySpecialElement1".
+
+A reassessment of this functionality will take place with the [advent of DOM Parts](https://github.com/w3c/webcomponents/blob/f69b4552e0f56d2292d7bdf8ab9c81ab54ff9c2c/proposals/DOM-Parts.md).
 
 Here we also see the concept of being able to extend the trans-render library, while sticking to quite strict declarative syntax.  
 
@@ -1491,14 +1496,7 @@ A question in my mind, is how does this rendering approach fit in with web compo
 I think this alternative approach can provide value, by providing a process for "Pipeline Rendering":  Rendering starts with an HTML template element, which produces transformed markup using TR or (hopefully soon) native template instantiation.  Then consuming / extending web components could insert additional bindings via the CSS-matching transformations this library provides.
 
 To aid with this process, the transform function provides a rendering options parameter, which contains an optional "initializedCallback" and "updatedCallback" option.  This allows a pipeline processing sequence to be set up, similar in concept to [Apache Cocoon](http://cocoon.apache.org/2.2/1290_1_1.html).
-
-<!--**NB**  The [template instantiation proposal](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md) with a fresh set of eyes, I see now that there has in fact [been some careful thought](https://github.com/w3c/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md#32-template-parts-and-custom-template-process-callback) given to the idea of providing a kind of pipeline of binding.  And as mentioned above, this library provides little help when it comes to string interpolation, so the fact that the proposal provides some hooks for callbacks is really nice to see.
-
-I may not yet fully grasp the proposal, but it still does appear to me that the template instantiation proposal is only useful if one defines regions ahead of time in the markup where dynamic content may go.  
-
-This library, on the other hand, considers the entire template document open for amendment.  This may be alarming, if as me, you find yourself comparing this effort to the [::part ::theme initiative](https://meowni.ca/posts/part-theme-explainer/), where authors need to specify which elements can be themed.
-
-However, the use case is quite different.  In the case of stylesheets, we are talking about global theming, affecting large numbers of elements at the same time.  The use case I'm really considering is one web component extending another.  I don't just mean direct class inheritance, but compositional extensions as well.  It doesn't seem that unreasonable to provide maximum flexibility in that circumstance.  Yes, I suppose the ability to mark some tags as "undeletable / non negotiable" might be nice, and it is easy to speculate that a vendor could mark non mutable DOM nodes in some way, but I see no way to enforce that.-->  
+ 
 
 ## Client-side JS faster than SSR?
 
