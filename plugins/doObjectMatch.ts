@@ -148,7 +148,7 @@ function doArrayMatch(key: string, tvao: TransformValueArrayOptions, ctx: Render
             doCondition(key, tvao as CATMINT_Conditional, ctx);
             break;
         case 'symbol':
-            ctx.plugins![firstEl as any as string].fn(ctx, tvao);
+            (<any>ctx)[firstEl as any as string].fn(ctx, tvao);
             break;
         case 'string':
           const target = ctx.target! as HTMLElement;

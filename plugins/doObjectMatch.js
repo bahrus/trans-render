@@ -129,7 +129,7 @@ function doArrayMatch(key, tvao, ctx) {
             doCondition(key, tvao, ctx);
             break;
         case 'symbol':
-            ctx.plugins[firstEl].fn(ctx, tvao);
+            ctx[firstEl].fn(ctx, tvao);
             break;
         case 'string':
             const target = ctx.target;
