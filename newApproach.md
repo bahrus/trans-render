@@ -10,18 +10,20 @@ function myPlugin(ctx: RenderContext, pia: PlugInArgs){
 }
 const ctx = new RenderContext(host);
 ctx[myPluginSymbol] = myPlugin;
-templuck(newTemplate, {idMaps, partMaps, classMaps}, 'id', ctx.host);
+templuck(newTemplate, {idMaps, partMaps, classMaps}, 'id', ctx.host | ctx.cache);
 
-transform(newTemplate, )
+bind(newTemplate, ctx);
 
 
 
 ```
 
-rules:  if lhs  is symbol, do as before
+rules:  
+
+bind only recognizes lhs of symbols
 
 rhs:  string
-      template
+      template shadow or simple slotted
       Peat
       that's it, rest is plugin
 
