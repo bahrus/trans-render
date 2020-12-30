@@ -3,24 +3,33 @@ Take 3
 
 
 ```JavaScript
-const newTemplate = createTemplate(...);
-const idMaps = {id1: symbol(), id2: symbol()};
-const partMaps = {part1: symbol(), part2: symbol()};
-const classMaps = {class1: symbol(), class2: symbol()};
-
-const ctx = new RenderContext(host);
-ctx.bySymbol = function...
-
-pinTheDomKeys(newTemplate, {idMaps, partMaps, classMaps}, ctx.host | ctx.cache);
+const p = Symbol('placeholder');
+const idMaps = {id1: p, id2: p};
+const partMaps = {part1: p, part2: p};
+const classMaps = {class1: p, class2: p};
+const templates = {main: p};
+const ctx = new RenderContext(host, {clone, bySymbol, pinTheDomKeys, byCSS}); 
 
 
-({prop1, prop2}) => {
+
+({self}) => { //initialize
+    requires: {
+
+    },  //any function which returns false, stops
+    clone:{
+        template: templates.main
+    },
+    pinTheDomKeys:[
+        {idMaps, partMaps, classMaps} //turns p into unique symbols
+    ],
     bySymbol:[
         {[id1]: ...},
         {[part1]: ...}
     ]
-
     byCSS:{
+
+    },
+    setRoot:{
 
     }
 }
