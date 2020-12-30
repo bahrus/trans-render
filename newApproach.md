@@ -3,6 +3,7 @@ Take 3
 
 
 ```JavaScript
+import {clone, bySymbol, pinTheDomKeys, byCSS} from 'somewhere';
 const p = Symbol('placeholder');
 const idMaps = {id1: p, id2: p};
 const partMaps = {part1: p, part2: p};
@@ -10,9 +11,18 @@ const classMaps = {class1: p, class2: p};
 const templates = {main: p};
 const ctx = new RenderContext(host, {clone, bySymbol, pinTheDomKeys, byCSS}); 
 
+propActions: [
+    ({self, mainTemplate}) => {
+        self.clonedTemplate = ...
+        await import(clone, bySymbol, pinTheDomKeys, byCSS);
+        self.ctx = new RenderContext(host, {clone, bySymbol...});
+    },
+    ({ctx, clonedTemplate}) => {
+        pinTheDomKeys(clonedTemplate, ctx.host, {idMaps, partMaps, classMaps});
+    }
+]
 
-
-({self}) => { //initialize
+({clonedTemplate, ctx}) => { //initialize
     requires: {
 
     },  //any function which returns false, stops
@@ -20,7 +30,7 @@ const ctx = new RenderContext(host, {clone, bySymbol, pinTheDomKeys, byCSS});
         template: templates.main
     },
     pinTheDomKeys:[
-        {idMaps, partMaps, classMaps} //turns p into unique symbols
+         //turns p into unique symbols
     ],
     bySymbol:[
         {[id1]: ...},
