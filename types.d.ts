@@ -104,9 +104,10 @@ export type EventSettings = {[key: string] : (Function | [Function, string] | [F
 export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null};
 export type PSettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T> | undefined]; 
 export type PESettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T> | undefined, EventSettings | undefined];
+export type PEUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PSettings<T> | PESettings<T>;
 export type PEASettings<T extends Partial<HTMLElement> = HTMLElement> = 
     [PropSettings<T> | undefined, EventSettings | undefined, AttribsSettings | undefined];
-export type PEAUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PSettings<T> | PESettings<T> | PEASettings<T>;
+export type PEAUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PEUnionSettings<T> | PEASettings<T>;
 export type PEATSettings<T extends Partial<HTMLElement> = HTMLElement> = 
     [PropSettings<T> | undefined, EventSettings | undefined, AttribsSettings | undefined, TransformValueOptions<T> | undefined];
 export type PEAT$ettings<T extends Partial<HTMLElement> = HTMLElement> =

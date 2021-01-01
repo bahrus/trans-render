@@ -11,6 +11,15 @@ const classMaps = {class1: p, class2: p};
 const templates = {main: p};
 const ctx = new RenderContext(host, {clone, bySymbol, pinTheDomKeys, byCSS}); 
 
+const rhsMapper = [
+    {
+        type: String,
+        action: ({ctx, rhs}) => ctx.target.textContent = rhs;
+    },
+
+]
+    
+
 propActions: [
     ({self, mainTemplate}) => {
         self.clonedTemplate = ...
@@ -19,7 +28,28 @@ propActions: [
     },
     ({ctx, clonedTemplate}) => {
         pinTheDomKeys(clonedTemplate, ctx.host, {idMaps, partMaps, classMaps});
+        transform()
     }
+]
+
+initTranforms: [
+    [ //symbols
+
+    ]
+    { //css
+
+    }
+]
+
+updateTransforms: [
+    ({prop1, prop2}) => ({
+        [ //symbols
+
+        ],
+        { //css
+
+        }
+    })  
 ]
 
 ({clonedTemplate, ctx}) => { //initialize
