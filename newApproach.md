@@ -115,10 +115,16 @@ transform(Main, {
     tr: {
         initData: ({val}) => [self[val]]
     },
-    ps: {
-        type: Array,
-        do: doTuple
-    }
+    ps: [
+        {
+            type: Array,
+            do: doTuple,
+            moduleLookup: {
+                type: HTMLTemplateElement
+                do: doTupleTemplate
+            }
+        }
+    ]
 }, target);
 ```
 
