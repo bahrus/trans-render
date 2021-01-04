@@ -86,7 +86,7 @@ supportsGeneralQuery by ending:  part, class, data, element
     <script type="module">
         import { transform } from '../transform.js';
         transform(Main, {
-            Transform: {
+            : {
                 initData: ({target, ctx}) => {
                     transform(self[target.dataset.init], ctx, target);
                 }
@@ -100,7 +100,7 @@ things that end with Data, Part, Class, Element, Id do querySelectorAll within i
 
 ```JavaScript
 transform(Main, {
-    Transform: {
+    tr: {
         initData: ({target, ctx, val, idx}) => {
             transform(self[val], ctx, target);
         }
@@ -108,4 +108,19 @@ transform(Main, {
 }, target);
 ```
 
-When search on initData, so pass in the value of data-init as "val"
+We search on data-init, so pass in the value of data-init as "val"
+
+```JavaScript
+transform(Main, {
+    tr: {
+        initData: ({val}) => [self[val]]
+    },
+    ps: {
+        type: Array,
+        do: doTuple
+    }
+}, target);
+```
+
+doTuple custom  function (part of Array with first element a template means clone and append, continue transforming)
+
