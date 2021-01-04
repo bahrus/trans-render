@@ -122,5 +122,5 @@ transform(Main, {
 }, target);
 ```
 
-doTuple custom  function (part of Array with first element a template means clone and append, continue transforming)
+doTuple custom  function (part of Array with first element a template means clone and append, continue transforming recursively)
 
