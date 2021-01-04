@@ -115,6 +115,10 @@ transform(Main, {
     tr: {
         initData: ({val}) => [self[val]]
     },
+    options:{
+        useShadow: boolean,
+        prepend: boolean
+    },
     ps: [
         {
             type: Array,
