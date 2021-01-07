@@ -78,11 +78,14 @@ function processTarget(
         }
     }
     
-    
-
-    let nextElementSibling: Element = target;
-    
-    while(nextElementSibling !== null){}
+    for(const child of target.children){
+        for(const key of scopeKeys){
+            if(child.matches(key)){
+                ctx.target = child;
+                doRHS(ctx, tr[key]);
+            }
+        }
+    }
 }
 
 function doRHS(ctx: RenderContext, rhs: any){
