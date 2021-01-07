@@ -4,7 +4,7 @@ export interface RenderContext<T = Element, TItem = any> {
     mode?: 'init' | 'update';
     target?: T | null;
     options?: RenderOptions | undefined;
-    psm?: PostScriptMap;
+    psm?: PostScriptMap[];
     val?: string | null;
 }
 
