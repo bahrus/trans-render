@@ -27,8 +27,9 @@ export function getQuery(key: string){
                     return {query, type, attrib};
                 }
                 case 'data':{
-                    const query = `[data-${attrib}="${attrib}"]`;
-                    return {query, type, attrib};
+                    const realAttrib = `data-${attrib}`;
+                    const query = `[${realAttrib}]`;
+                    return {query, type, attrib: realAttrib};
                 }
                 case 'element':{
                     const query = attrib;
