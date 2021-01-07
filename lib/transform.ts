@@ -56,7 +56,7 @@ function processTarget(
     const target = ctx.target;
     const tr = ctx.tr;
     if(target == null || tr === undefined) return true;
-    if(target.hasAttribute('debug')) debugger;
+    if(target.nodeType !== 11 && target.hasAttribute('debug')) debugger;
     const keys = Object.keys(tr);
     if(keys.length === 0) return true;
     const scopeKeys: string[] = [];
@@ -83,6 +83,7 @@ function processTarget(
             if(child.matches(key)){
                 ctx.target = child;
                 doRHS(ctx, tr[key]);
+                ctx.target = target;
             }
         }
     }
