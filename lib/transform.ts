@@ -116,7 +116,10 @@ function doRHS(ctx: RenderContext, rhs: any){
             case 'undefined':
                 return;
             case 'object':
-                ctor.do(ctx);
+                return ctor.do(ctx);
+            case 'function':
+                const psDO = new ctor();
+                return psDO.do(ctx);
         }
     }
 
