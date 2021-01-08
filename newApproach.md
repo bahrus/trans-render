@@ -1,8 +1,23 @@
-Take 3
+# trans-render
 
-trans-render limits scope.
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/trans-render)
 
-Not designed for binding a single element -- that can be handled by xtal-element's PEA support.
+<a href="https://nodei.co/npm/trans-render/"><img src="https://nodei.co/npm/trans-render.png"></a>
+
+[![Actions Status](https://github.com/bahrus/trans-render/workflows/CI/badge.svg)](https://github.com/bahrus/trans-render/actions?query=workflow%3ACI)
+
+<img src="https://badgen.net/bundlephobia/minzip/trans-render">
+
+
+trans-render (abbreviation: tr) provides a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, tr performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, tr uses css path tests via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
+
+XSLT can take pure XML with no formatting instructions as its input.  Generally speaking, the XML that XSLT acts on isn't a bunch of semantically  meaningless div tags, but rather a nice semantic document, whose intrinsic structure is enough to go on, in order to formulate a "transform" that doesn't feel like a hack.
+
+Likewise, with the advent of custom elements, the template markup will tend to be much more semantic, like XML. trans-render's usefulness grows as a result of the increasingly semantic nature of the template markup, because often the markup semantics provide enough clues on how to fill in the needed "potholes," like textContent and property setting, without the need for custom markup, like binding attributes.  But trans-render is completely extensible, so it can certainly accommodate custom binding attributes by using additional, optional helper libraries.
+
+This can leave the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may be needed to keep the binding rules in sync.  Much like how separate style rules often need adjusting when the document structure changes.
+
+<!--Not designed for binding a single element -- that can be handled by xtal-element's PEA support.
 
 Doesn't need to support what can be supported by custom elements -- loops, conditionals
 
@@ -12,6 +27,32 @@ Interpolation
 tag replacement 
 
 supportsGeneralQuery by ending:  part, class, data, element
+
+-->
+
+## The core library
+
+The core library, transform.js, is a tiny, 'non-committal' library that simply allows us to map css matches to user-defined functions.  
+
+The CSS matching takes one of two forms:
+
+1.  multi-matching for all DOM elements within the scope.
+2.  Single element, scoping matches.
+
+### Multi matching
+
+Consider the following example:
+
+```html
+<template id=Main>
+    <div></div>
+
+</template>
+```
+
+
+
+The file transform.js contain
 
 ```html
 <div>
@@ -83,16 +124,16 @@ supportsGeneralQuery by ending:  part, class, data, element
         </style>
     </template>
     <div id="target"></div>
-    <script type="module">
-        import { transform } from '../transform.js';
-        transform(Main, {
-            : {
-                initData: ({target, ctx}) => {
-                    transform(self[target.dataset.init], ctx, target);
+        <script type="module">
+            import { transform } from '../../lib/transform.js';
+            transform(Main, {
+                tr: {
+                    initData: ({target, ctx, val}) =>{
+                        transform(self[target.dataset.init], ctx, target);
+                    }
                 }
-            }
-        }, target);
-    </script>
+            }, target);
+        </script>
 </div>
 ```
 
