@@ -43,7 +43,10 @@ The CSS matching transform.js takes one of two forms:
 
 ### Multi-matching
 
-Consider the following example.  Don't worry, it looks quite complicated, but we will walk through it, and also, as we introduce more features, the code below will greatly simplify:
+Consider the following example (please expand).  Don't worry, it looks quite complicated, but we will walk through it, and also, as we introduce more features, the code below will greatly simplify:
+
+<details>
+    <summary>Example 1</summary>
 
 ```html
 <body>
@@ -87,6 +90,8 @@ Consider the following example.  Don't worry, it looks quite complicated, but we
     </script>
 </body>
 ```
+
+</details>
 
 The first thing to note is that id's become global constants outside of ShadowDOM.  Hence we can refer to "Main" and "container" directly in the JavaScript:
 
