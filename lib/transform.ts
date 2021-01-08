@@ -1,5 +1,6 @@
 import {RenderContext, PSDo} from './types.d.js';
 import {getQuery} from './specialKeys.js';
+import { lispToCamel } from './lispToCamel.js';
 
 export function transform(
     sourceOrTemplate: HTMLElement | DocumentFragment,
@@ -65,9 +66,15 @@ function processTarget(
         if(queryInfo !== null){
             for(const match of target.querySelectorAll(queryInfo.query)){
                 const {val, target} = ctx;
-                if(queryInfo.type === 'data'){
-                    ctx.val = match.getAttribute(queryInfo.attrib);
+                switch(queryInfo.type){
+                    case 'data':
+                        ctx.val = match.getAttribute(queryInfo.attrib);
+                        break;
+                    case 'prop':
+                        (<any>match)[lispToCamel(queryInfo.attrib)] = tr[key];
+                        continue;
                 }
+
                 ctx.target = match;
                 doRHS(ctx, tr[key]);
                 ctx.val = val;

@@ -1,6 +1,6 @@
 import { camelToLisp } from "./camelToLisp.js";
 
-export const attribs = ['id', 'part', 'class', 'data', 'element'];
+export const attribs = ['id', 'part', 'class', 'data', 'element', 'prop'];
 
 export interface queryInfo{
     query: string;
@@ -33,6 +33,10 @@ export function getQuery(key: string){
                 }
                 case 'element':{
                     const query = attrib;
+                    return {query, type, attrib};
+                }
+                case 'prop': {
+                    const query = `[-${attrib}]`;
                     return {query, type, attrib};
                 }
                 default:

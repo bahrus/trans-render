@@ -12,6 +12,7 @@
         <vitamin-d></vitamin-d>
         <div part="triple-decker j-k-l"></div>
         <div id="jan8"></div>
+        <div -text-content></div>
     </template>
     <div id=container></div>
     <script type="module">
@@ -35,7 +36,8 @@
                                 },
                                 jan8Id: ({target}) => {
                                     target.textContent = 4 * newCount;
-                                }
+                                },
+                                textContentProp: 5 * newCount,
                             }
                         });
                     })

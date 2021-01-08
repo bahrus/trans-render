@@ -56,6 +56,7 @@ Consider the following example (please expand).  Don't worry, it looks quite com
         <vitamin-d></vitamin-d>
         <div part="triple-decker j-k-l"></div>
         <div id="jan8"></div>
+        <div -text-content></div>
     </template>
     <div id=container></div>
     <script type="module">
@@ -79,7 +80,8 @@ Consider the following example (please expand).  Don't worry, it looks quite com
                                 },
                                 jan8Id: ({target}) => {
                                     target.textContent = 4 * newCount;
-                                }
+                                },
+                                textContentProp: 5 * newCount,
                             }
                         });
                     })
@@ -101,7 +103,7 @@ transform(Main, {
 }
 ```
 
-The keyword "match" indicates that within that block are CSS Matches.  In this example, all the matches are "multi-matches" because they end with either "Class", "Element", "Part", "Id".
+The keyword "match" indicates that within that block are CSS Matches.  In this example, all the matches are "multi-matches" because they end with either "Class", "Element", "Part", "Id", "Prop".
 
 So for example, this:
 
@@ -134,7 +136,7 @@ transform(Main, {...}, container)
 transform(container, {...})
 ```
 
-The file transform.js contain
+## Use Case 1:  Applying the DRY principle to (post) punk rock lyrics
 
 ```html
 <div>
@@ -219,7 +221,7 @@ The file transform.js contain
 </div>
 ```
 
-things that end with Data, Part, Class, Element, Id do querySelectorAll within its scope.  In this case, scope is root, so it searches all
+things that end with Data, Part, Class, Element, Id, Prop do querySelectorAll within its scope.  In this case, scope is root, so it searches all
 
 ```JavaScript
 transform(Main, {
