@@ -1,6 +1,4 @@
-const ctlRe = /[\w]([A-Z])/g;
+const ctlRe = /(?=[A-Z])/;
 export function camelToLisp(s: string) {
-    return s.replace(ctlRe, function(m) {
-        return m[0] + "-" + m[1];
-    }).toLowerCase();
+    return s.split(ctlRe).join('-').toLowerCase();
 }
