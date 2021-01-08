@@ -43,7 +43,7 @@ The CSS matching transform.js takes one of two forms:
 
 ### Multi-matching
 
-Consider the following example.  Don't worry, it looks quite complicated, but we will walk through it:
+Consider the following example.  Don't worry, it looks quite complicated, but we will walk through it, and also, as we introduce more features, the code below will greatly simplify:
 
 ```html
 <body>
@@ -114,6 +114,8 @@ target.querySelectorAll('dataset-count').forEach(target => {
     ...
 })
 ```
+
+What we also 
 
 
 The file transform.js contain
