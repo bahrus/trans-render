@@ -115,8 +115,19 @@ target.querySelectorAll('dataset-count').forEach(target => {
 })
 ```
 
-What we also 
+What we also see in this example, is that the transform function can be used for two scenarios:
 
+1.  Instantiating a template into a target container in the live DOM tree:
+
+```JavaScript
+transform(Main, {...}, container)
+```
+
+2.  Updating an existing DOM tree:
+
+```JavaScript
+transform(container, {...})
+```
 
 The file transform.js contain
 
