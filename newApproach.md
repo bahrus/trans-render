@@ -32,24 +32,88 @@ supportsGeneralQuery by ending:  part, class, data, element
 
 ## The core library
 
-The core library, transform.js, is a tiny, 'non-committal' library that simply allows us to map css matches to user-defined functions.  
+The core library, transform.js, is a tiny, 'non-committal' library that simply allows us to map css matches to user-defined functions. 
 
-The CSS matching takes one of two forms:
+Its first value-add proposition is it can reduce the amount of imperative *.selectQueryAll().forEach in your code.  However, by itself, transform.js is not a complete solution, if you are looking for declarative syntax.  That will come with the ability to extend transform.js
+
+The CSS matching transform.js takes one of two forms:
 
 1.  multi-matching for all DOM elements within the scope.
 2.  Single element, scoping matches.
 
-### Multi matching
+### Multi-matching
 
-Consider the following example:
+Consider the following example.  Don't worry, it looks quite complicated, but we will walk through it:
 
 ```html
-<template id=Main>
-    <div></div>
+<body>
+    <template id=Main>
+        <button data-count=10>Click</button>
+        <div class="count-wide otherClass"></div>
+        <vitamin-d></vitamin-d>
+        <div part="triple-decker j-k-l"></div>
+        <div id="jan8"></div>
+    </template>
+    <div id=container></div>
+    <script type="module">
+        import { transform } from '../../lib/transform.js';
+        transform(Main, {
+            match: {
+                countData: ({target, val}) =>{
+                    target.addEventListener('click', e => {
+                        const newCount = parseInt(e.target.dataset.count) + 1;
+                        e.target.dataset.count = newCount;
+                        transform(container, {
+                            match: {
+                                countWideClass: ({target}) => {
+                                    target.textContent = newCount;
+                                },
+                                vitaminDElement: ({target}) => {
+                                    target.textContent = 2 * newCount;
+                                },
+                                tripleDeckerPart: ({target}) => {
+                                    target.textContent = 3 * newCount;
+                                },
+                                jan8Id: ({target}) => {
+                                    target.textContent = 4 * newCount;
+                                }
+                            }
+                        });
+                    })
 
-</template>
+                }
+            }
+        }, container);
+    </script>
+</body>
 ```
 
+The first thing to note is that id's become global constants outside of ShadowDOM.  Hence we can refer to "Main" and "container" directly in the JavaScript:
+
+```JavaScript
+transform(Main, { 
+    ...
+}
+```
+
+The keyword "match" indicates that within that block are CSS Matches.  In this example, all the matches are "multi-matches" because they end with either "Class", "Element", "Part", "Id".
+
+So for example, this:
+
+```JavaScript
+countData: ({target, val}) =>{
+    ...
+}
+```
+
+is short-hand for:
+
+```JavaScript
+target.querySelectorAll('dataset-count').forEach(target => {
+    const val = target.dataset.count;
+    ...
+})
+```
 
 
 The file transform.js contain

@@ -34,7 +34,7 @@ function processFragment(
     source: DocumentFragment | HTMLElement | SVGElement,
     ctx: RenderContext
 ){
-    const transf = ctx.tr;
+    const transf = ctx.match;
     if(transf === undefined) return;
     const transforms = Array.isArray(transf) ? transf : [transf];
     const isInit = ctx.mode === undefined;
@@ -45,7 +45,7 @@ function processFragment(
         }
         Object.assign<RenderContext, Partial<RenderContext>>(ctx, start);
         ctx.target = source as HTMLElement;
-        ctx.tr = transform;
+        ctx.match = transform;
         processTarget(ctx);
     }
 }
@@ -54,7 +54,7 @@ function processTarget(
     ctx: RenderContext
 ){
     const target = ctx.target;
-    const tr = ctx.tr;
+    const tr = ctx.match;
     if(target == null || tr === undefined) return true;
     if(target.nodeType !== 11 && target.hasAttribute('debug')) debugger;
     const keys = Object.keys(tr);

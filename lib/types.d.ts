@@ -1,6 +1,6 @@
 export interface RenderContext<T = Element, TItem = any> {
     ctx?: RenderContext | undefined;
-    tr?: any;
+    match?: any;
     mode?: 'init' | 'update';
     target?: T | null;
     options?: RenderOptions | undefined;

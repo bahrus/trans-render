@@ -17,13 +17,13 @@
     <script type="module">
         import { transform } from '../../lib/transform.js';
         transform(Main, {
-            tr: {
-                countData: ({target, ctx, val}) =>{
+            match: {
+                countData: ({target, val}) =>{
                     target.addEventListener('click', e => {
                         const newCount = parseInt(e.target.dataset.count) + 1;
                         e.target.dataset.count = newCount;
                         transform(container, {
-                            tr: {
+                            match: {
                                 countWideClass: ({target}) => {
                                     target.textContent = newCount;
                                 },
