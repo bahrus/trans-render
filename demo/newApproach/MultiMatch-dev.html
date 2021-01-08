@@ -25,9 +25,17 @@
                         transform(container, {
                             tr: {
                                 countWideClass: ({target}) => {
-                                    target.textContent = val;
+                                    target.textContent = newCount;
                                 },
-
+                                vitaminDElement: ({target}) => {
+                                    target.textContent = 2 * newCount;
+                                },
+                                tripleDeckerPart: ({target}) => {
+                                    target.textContent = 3 * newCount;
+                                },
+                                jan8Id: ({target}) => {
+                                    target.textContent = 4 * newCount;
+                                }
                             }
                         });
                     })

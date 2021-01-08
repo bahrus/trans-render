@@ -19,7 +19,7 @@ export function getQuery(key: string){
                     return {query, type, attrib};
                 }
                 case 'part':{
-                    const query = `[part="${attrib}"]`;
+                    const query = `[part~="${attrib}"]`;
                     return {query, type, attrib};
                 }
                 case 'class':{
