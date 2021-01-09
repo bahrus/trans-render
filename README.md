@@ -391,3 +391,17 @@ One of the most common things we want to do is set the text content of a DOM Ele
 ```
 
 Sure, there are easier ways to set the summary to 'hello, world', but as the amount of binding grows, the amount of boilerplate will grow more slowly.
+
+The developer can use some other way of interpreting a right-hand-side of type String.  This is the amount of engineering firepower required to implement the Texter processor:
+
+```Typescript
+import {PSDo, RenderContext} from './types.js';
+
+export class Texter implements PSDo{
+    do(ctx: RenderContext){
+        ctx.target!.textContent = ctx.rhs;
+    }
+}
+```
+
+"rhs" stands for "right-hand-side."
