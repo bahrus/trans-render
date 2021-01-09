@@ -34,7 +34,7 @@ supportsGeneralQuery by ending:  part, class, data, element
 
 ## The core library
 
-The core library, transform.js, is a tiny, 'non-committal' library that simply allows us to map css matches to user-defined functions. 
+The core library, transform.js, is a tiny (1.2k gzip/minified), 'non-committal' library that simply allows us to map css matches to user-defined functions. 
 
 Its first value-add proposition is it can reduce the amount of imperative *.selectQueryAll().forEach's needed in your code.  However, by itself, transform.js is not a complete solution, if you are looking for declarative syntax.  That will come with the ability to extend transform.js, which will be discussed below.
 
@@ -140,6 +140,8 @@ transform(container, {...})
 
 ## Use Case 1:  Applying the DRY principle to punk rock lyrics
 
+[Demo](https://jsfiddle.net/bahrus/4897cbzj/1/)
+
 ```html
 <div>
     <a href="https://www.youtube.com/watch?v=2-Lb-JhsaEk" target="_blank">Something's gone wrong again</a>
@@ -213,7 +215,7 @@ transform(container, {...})
         <script type="module">
             import { transform } from '../../lib/transform.js';
             transform(Main, {
-                tr: {
+                match: {
                     initData: ({target, ctx, val}) =>{
                         transform(self[val], ctx, target);
                     }
@@ -223,7 +225,7 @@ transform(container, {...})
 </div>
 ```
 
-things that end with Data, Part, Class, Element, Id, Prop do querySelectorAll within its scope.  In this case, scope is root, so it searches all
+Transform matches that end with Data, Part, Class, Element, Id, Prop do querySelectorAll within its scope.  In this case, scope is root, so it searches the entire template.
 
 ```JavaScript
 transform(Main, {
@@ -235,29 +237,9 @@ transform(Main, {
 }, target);
 ```
 
-We search on data-init, so pass in the value of data-init as "val"
+We searched on data-init attribute, so it passes in the value of data-init as "val".  self[val] gets the named template by id.
 
-```JavaScript
-transform(Main, {
-    tr: {
-        initData: ({val}) => [self[val]]
-    },
-    options:{
-        useShadow: boolean,
-        prepend: boolean
-    },
-    ps: [
-        {
-            type: Array,
-            do: doTuple,
-            moduleLookup: {
-                type: HTMLTemplateElement
-                do: doTupleTemplate
-            }
-        }
-    ]
-}, target);
-```
+## An example of an imperative helper function
 
-doTuple custom  function (part of Array with first element a template means clone and append, continue transforming recursively)
+Since trans-render is built around css matching, it doesn't provide much help when it comes to string interpolation, something supported by virtually every templating library.  trans-render can support something like this via a reusable, shared transform helper function.  The library trans-render/lib/interpolate.js is provided for this purpose.
 

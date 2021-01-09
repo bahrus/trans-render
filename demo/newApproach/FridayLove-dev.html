@@ -86,7 +86,7 @@
 
         <script type="module">
             import { transform } from '../../lib/transform.js';
-            import { interpolate } from '../interpolate.js';
+            import { interpolate } from '../../lib/interpolate.js';
 
             let model = {
                 Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
@@ -97,11 +97,11 @@
                     intData: ({ target }) => {
                         interpolate(target, 'textContent', model);
                     },
-                    initData: ({ target, ctx }) => {
+                    initData: ({ target, ctx, val }) => {
                         if (ctx.mode === 'update') {
-                            return {}
+                            return;
                         } else {
-                            transform(self[target.dataset.init], {}, target);
+                            transform(self[val], ctx, target);
                         }
                     }
                 }
