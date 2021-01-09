@@ -98,11 +98,7 @@
                         interpolate(target, 'textContent', model);
                     },
                     initData: ({ target, ctx, val }) => {
-                        if (ctx.mode === 'update') {
-                            return;
-                        } else {
-                            transform(self[val], ctx, target);
-                        }
+                        transform(self[val], ctx, target);
                     }
                 }
             }, target);
@@ -111,6 +107,7 @@
                     Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
                     Day6: 'lördag', Day7: 'söndag',
                 }
+                delete ctx.match.initData;
                 transform(target, ctx);
             })
         </script>
