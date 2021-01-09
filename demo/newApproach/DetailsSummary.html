@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <details id=details>
+        <summary>E pluribus unum</summary>
+        ...
+    </details>
+
+    <script type="module">
+        import { transform } from '../../lib/transform.js';
+        import {Texter} from '../../lib/Texter.js'
+        const hello = 'hello, world';
+        transform(details, {
+            match:{
+                summary: hello
+            },
+            psm: [{type: String, ctor: Texter}]
+        })
+    </script>
+</body>
+</html>

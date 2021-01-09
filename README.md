@@ -349,3 +349,45 @@ Since trans-render is built around css matching, it doesn't provide much help wh
 ```
 
 </details>
+
+## Extending trans-render with declarative syntax
+
+The examples so far have heavy on arrow functions.  It provides support for 100% no-holds-barred non-declarative code:
+
+```TypeScript
+const matches = { //TODO check that this works
+    details:{
+        summary: ({target}: RenderContext<HTMLSummaryElement>) => {
+            ///knock yourself out
+            target.appendChild(document.body);
+        }
+    }
+}
+```
+
+These arrow functions can return a value.  trans-render's "post script mappings" allows us to expand route trans-render to some pre-built user-defined processors.  trans-render provides a few "standard" processors, address common concerns.
+
+## Mapping textContent
+
+One of the most common things we want to do is set the text content of a DOM Element, from some model value.
+
+```html
+<details id=details>
+    <summary>E pluribus unum</summary>
+    ...
+</details>
+
+<script type="module">
+    import { transform } from '../../lib/transform.js';
+    import {Texter} from '../../lib/Texter.js'
+    const hello = 'hello, world';
+    transform(details, {
+        match:{
+            summary: hello
+        },
+        psm: [{type: String, ctor: Texter}]
+    })
+</script>
+```
+
+Sure, there are easier ways to set the summary to 'hello, world', but as the amount of binding grows, the amount of boilerplate will grow more slowly.

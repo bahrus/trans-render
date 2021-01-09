@@ -6,6 +6,7 @@ export interface RenderContext<T = Element, TItem = any> {
     options?: RenderOptions | undefined;
     psm?: PostScriptMap[];
     val?: string | null;
+    rhs?: any;
 }
 
 export interface RenderOptions{

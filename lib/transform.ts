@@ -97,6 +97,7 @@ function processTarget(
 }
 
 function doRHS(ctx: RenderContext, rhs: any){
+    if(rhs === undefined) return;
     while(typeof rhs === 'function') rhs = rhs(ctx);
     const psm = ctx.psm;
     if(psm !== undefined){
@@ -127,10 +128,22 @@ function doRHS(ctx: RenderContext, rhs: any){
             case 'undefined':
                 return;
             case 'object':
-                return ctor.do(ctx);
+                {
+                    const prevRHS = ctx.rhs;
+                    ctx.rhs = rhs;
+                    doRHS(ctx, ctor.do(ctx));
+                    ctx.rhs = prevRHS;
+                }
+                break;
             case 'function':
-                const psDO = new ctor();
-                return psDO.do(ctx);
+                {
+                    const psDO = new ctor();
+                    const prevRHS = ctx.rhs;
+                    ctx.rhs = rhs;
+                    doRHS(ctx, psDO.do(ctx));
+                }
+                break;
+
         }
     }
 
