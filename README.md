@@ -142,6 +142,9 @@ transform(container, {...})
 
 [Demo](https://jsfiddle.net/bahrus/4897cbzj/1/)
 
+<details>
+    <summary>Markup</summary>
+
 ```html
 <div>
     <a href="https://www.youtube.com/watch?v=2-Lb-JhsaEk" target="_blank">Something's gone wrong again</a>
@@ -225,8 +228,12 @@ transform(container, {...})
 </div>
 ```
 
+</details>
+
 
 ## An example of an imperative helper function
+
+[Demo](https://jsfiddle.net/bahrus/4897cbzj/2/)
 
 Since trans-render is built around css matching, it doesn't provide much help when it comes to string interpolation, something supported by virtually every templating library.  trans-render can support something like this via a reusable, shared transform helper function.  The library trans-render/lib/interpolate.js is provided for this purpose.
 
@@ -235,6 +242,122 @@ Since trans-render is built around css matching, it doesn't provide much help wh
 <details>
     <summary>Markup</summary>
 
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Friday Love</title>
+</head>
+
+<body>
+    <div>
+        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a><br>
+        <button id="changeDays">Wi not trei a holiday in Sweeden this yer</button>
+        <template id="Friday">
+            <span data-int>It's |.Day5| I'm in love</span>
+        </template>
+        <template id="Opening">
+            <span data-int>I don't care if |.Day1|'s blue</span><br>
+            <span data-int>|.Day2|'s gray and |.Day3| too</span><br>
+            <span data-int>|.Day4| I don't care about you</span><br>
+            <span data-init="Friday"></span>
+        </template>
+
+        <template id="Main">
+            <div data-init="Opening" class="stanza"></div>
+            <div class="stanza">
+                <span data-int>|.Day1| you can fall apart</span><br>
+                <span data-int>|.Day2| |.Day3| break my heart</span><br>
+                <span data-int>Oh, |.Day4| doesn't even start</span><br>
+                <span data-init="Friday"></span>
+            </div>
+            <div class="stanza">
+                <span data-int>|.Day6| wait</span><br>
+                <span data-int>And |.Day7| always comes too late</span><br>
+                <span data-int>But |.Day5| never hesitate</span>
+            </div>
+
+            <div class="stanza">
+                <span data-int>I don't care if |.Day1|'s black</span><br>
+                <span data-int>|.Day2|, |.Day3| heart attack</span><br>
+                <span data-int>|.Day4| never looking back</span><br>
+                <span data-init="Friday"></span>
+            </div>
+            <div class="stanza">
+                <span data-int>|.Day1| you can hold your head</span><br>
+                <span data-int>|.Day2|, |.Day3| stay in bed</span><br>
+                <span data-int>Or |.Day4| watch the walls instead</span><br>
+                <span data-init="Friday"></span>
+            </div>
+            <div class="stanza">
+                <span data-int>|.Day6| wait</span><br>
+                <span data-int>And |.Day7| always comes too late</span><br>
+                <span data-int>But |.Day5| never hesitate</span>
+            </div>
+            <div class="stanza">
+                <span>Dressed up to the eyes</span><br>
+                <span>It's a wonderful surprise</span><br>
+                <span>To see your shoes and your spirits rise</span><br>
+                <span>Throwing out your frown</span><br>
+                <span>And just smiling at the sound</span><br>
+                <span>And as sleek as a shriek</span><br>
+                <span>Spinning round and round</span><br>
+                <span>Always take a big bite</span><br>
+                <span>It's such a gorgeous sight</span><br>
+                <span>To see you in the middle of the night</span><br>
+                <span>You can never get enough</span><br>
+                <span>Enough of this stuff</span><br>
+                <span data-int>It's |.Day5|</span><br>
+                <span>I'm in love</span>
+            </div>
+            <div data-init="Opening" class="stanza"></div>
+            <div class="stanza">
+                <span data-int>|.Day1| you can fall apart</span><br>
+                <span data-int>|.Day2|, |.Day3| break my heart</span><br>
+                <span data-int>|.Day4| doesn't even start</span><br>
+                <span data-init="Friday"></span>
+            </div>
+            <style>
+                .stanza{
+                padding-top: 20px;
+            }
+        </style>
+        </template>
+        <div id="target"></div>
+
+        <script type="module">
+            import { transform } from 'https://cdn.skypack.dev/trans-render';
+            import { interpolate } from 'https://cdn.skypack.dev/trans-render/lib/interpolate.js';
+
+            let model = {
+                Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
+                Day6: 'Saturday', Day7: 'Sunday',
+            };
+            const ctx = transform(Main, {
+                match: {
+                    intData: ({ target }) => {
+                        interpolate(target, 'textContent', model);
+                    },
+                    initData: ({ target, ctx, val }) => {
+                        transform(self[val], ctx, target);
+                    }
+                }
+            }, target);
+            changeDays.addEventListener('click', e => {
+                model = {
+                    Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
+                    Day6: 'lördag', Day7: 'söndag',
+                }
+                delete ctx.match.initData;
+                transform(target, ctx);
+            })
+        </script>
+    </div>
+</body>
+
+</html>
 
 </details>
