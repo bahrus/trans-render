@@ -17,7 +17,8 @@
     ".": "./lib/transform.js",
     "./lib/transform.js": "./lib/transform.js",
     "./lib/lispToCamel.js": "./lib/lispToCamel.js",
-    "./lib/camelToLisp.js": "./lib/camelToLisp.js"
+    "./lib/camelToLisp.js": "./lib/camelToLisp.js",
+    "./lib/interpolate.js": "./lib/interpolate.js"
   },
   "files": [
     "lib/*"

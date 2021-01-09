@@ -225,21 +225,16 @@ transform(container, {...})
 </div>
 ```
 
-Transform matches that end with Data, Part, Class, Element, Id, Prop do querySelectorAll within its scope.  In this case, scope is root, so it searches the entire template.
-
-```JavaScript
-transform(Main, {
-    tr: {
-        initData: ({target, ctx, val, idx}) => {
-            transform(self[val], ctx, target);
-        }
-    }
-}, target);
-```
-
-We searched on data-init attribute, so it passes in the value of data-init as "val".  self[val] gets the named template by id.
 
 ## An example of an imperative helper function
 
 Since trans-render is built around css matching, it doesn't provide much help when it comes to string interpolation, something supported by virtually every templating library.  trans-render can support something like this via a reusable, shared transform helper function.  The library trans-render/lib/interpolate.js is provided for this purpose.
 
+## Use Case 2:  Tränslåtyng pøst pünk lyriks tø Sweedisλ
+
+<details>
+    <summary>Markup</summary>
+
+
+
+</details>
