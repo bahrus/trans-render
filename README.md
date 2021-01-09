@@ -242,17 +242,7 @@ Since trans-render is built around css matching, it doesn't provide much help wh
 <details>
     <summary>Markup</summary>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Friday Love</title>
-</head>
-
-<body>
+```html
     <div>
         <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a><br>
         <button id="changeDays">Wi not trei a holiday in Sweeden this yer</button>
@@ -356,8 +346,6 @@ Since trans-render is built around css matching, it doesn't provide much help wh
             })
         </script>
     </div>
-</body>
-
-</html>
+```
 
 </details>
