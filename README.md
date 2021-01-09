@@ -405,3 +405,9 @@ export class Texter implements PSDo{
 ```
 
 "rhs" stands for "right-hand-side."
+
+The categories that currently can be declaratively processed are as follows:
+
+>  'string', 'boolean', 'number', 'object', 'bigint', 'symbol'
+
+We'll be walking through the "standard post script processors" that trans-render provides, but always remember that alternatives can be used based on the requirements.
