@@ -9,7 +9,9 @@
 <img src="https://badgen.net/bundlephobia/minzip/trans-render">
 
 
-trans-render (abbreviation: tr) provides a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, tr performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, tr uses css path tests via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
+*trans-render* provides a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, tr performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, tr uses css path tests via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
+
+It's designed to provide an alternative to the proposed [Template Instantiation proposal](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with the idea being that it could continue to supplement what that proposal provides if/when it lands in browsers.
 
 XSLT can take pure XML with no formatting instructions as its input.  Generally speaking, the XML that XSLT acts on isn't a bunch of semantically  meaningless div tags, but rather a nice semantic document, whose intrinsic structure is enough to go on, in order to formulate a "transform" that doesn't feel like a hack.
 
@@ -34,7 +36,7 @@ supportsGeneralQuery by ending:  part, class, data, element
 
 The core library, transform.js, is a tiny, 'non-committal' library that simply allows us to map css matches to user-defined functions. 
 
-Its first value-add proposition is it can reduce the amount of imperative *.selectQueryAll().forEach in your code.  However, by itself, transform.js is not a complete solution, if you are looking for declarative syntax.  That will come with the ability to extend transform.js
+Its first value-add proposition is it can reduce the amount of imperative *.selectQueryAll().forEach's needed in your code.  However, by itself, transform.js is not a complete solution, if you are looking for declarative syntax.  That will come with the ability to extend transform.js, which will be discussed below.
 
 The CSS matching transform.js takes one of two forms:
 
@@ -136,7 +138,7 @@ transform(Main, {...}, container)
 transform(container, {...})
 ```
 
-## Use Case 1:  Applying the DRY principle to (post) punk rock lyrics
+## Use Case 1:  Applying the DRY principle to punk rock lyrics
 
 ```html
 <div>
@@ -213,7 +215,7 @@ transform(container, {...})
             transform(Main, {
                 tr: {
                     initData: ({target, ctx, val}) =>{
-                        transform(self[target.dataset.init], ctx, target);
+                        transform(self[val], ctx, target);
                     }
                 }
             }, target);

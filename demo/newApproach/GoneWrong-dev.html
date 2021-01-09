@@ -80,7 +80,7 @@
             transform(Main, {
                 match: {
                     initData: ({target, ctx, val}) =>{
-                        transform(self[target.dataset.init], ctx, target);
+                        transform(self[val], ctx, target);
                     }
                 }
             }, target);
