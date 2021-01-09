@@ -8,10 +8,21 @@
   "scripts": {
     "test": "node test/tests.js",
     "serve": "node node_modules/xtal-test/serve.js",
-    "doc": "wca analyze trans-render.js --outFile custom-elements.json"
+    "doc": "wca analyze trans-render.js --outFile custom-elements.json",
+    "package-check": "package-check"
   },
+  "exports":{
+    ".": "./lib/transform.js",
+    "./lib/transform.js": "./lib/transform.js",
+    "./lib/lispToCamel.js": "./lib/lispToCamel.js",
+    "./lib/camelToLisp.js": "./lib/camelToLisp.js"
+  },
+  "files": [
+    "lib/*"
+  ],
   "dependencies": {},
   "devDependencies": {
+    "@skypack/package-check": "0.2.2",
     "xtal-test": "0.0.48"
   },
   "repository": {
