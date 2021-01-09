@@ -2,9 +2,9 @@
   "name": "trans-render",
   "version": "0.0.269",
   "description": "Instantiate an HTML Template",
-  "main": "transform.js",
-  "module": "transform.js",
-  "typings": "types.d.ts",
+  "main": "lib/transform.js",
+  "module": "lib/transform.js",
+  "typings": "lib/types.d.ts",
   "scripts": {
     "test": "node test/tests.js",
     "serve": "node node_modules/xtal-test/serve.js",
