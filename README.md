@@ -390,9 +390,9 @@ One of the most common things we want to do is set the text content of a DOM Ele
 </script>
 ```
 
-Sure, there are easier ways to set the summary to 'hello, world', but as the amount of binding grows, the amount of boilerplate will grow more slowly.
+Sure, there are easier ways to set the summary to 'hello, world', but as the amount of binding grows, the amount of boilerplate will grow more slowly, using this syntax.
 
-The developer can use some other way of interpreting a right-hand-side of type String.  This is the amount of engineering firepower required to implement the Texter processor:
+The brave developer can implement some other way of interpreting a right-hand-side of type String.  This is the amount of engineering firepower required to implement the Texter processor:
 
 ```Typescript
 import {PSDo, RenderContext} from './types.js';
@@ -408,6 +408,13 @@ export class Texter implements PSDo{
 
 The categories that currently can be declaratively processed are as follows:
 
->  'string', 'boolean', 'number', 'object', 'bigint', 'symbol'
+>  String, Boolean, Number, Array, HTMLTemplateElement, Object, 'bigint', 'symbol'
 
-We'll be walking through the "standard post script processors" that trans-render provides, but always remember that alternatives can be used based on the requirements.
+We'll be walking through the "standard post script processors" that trans-render provides, but always remember that alternatives can be used based on the requirements.  The standard processors are striving to make the binding syntax as JSON-friendly as possible.
+
+## P[E[A[T]]]
+
+After setting the string value of a node, setting properties, attaching event handlers, as well as attributes comes next in things we do over and over again.
+
+For this functionality, we use tuples to represent these settings.  P stands for Properties, E for events, A for attributes, and T for transform or template.  There are four nested, and subsequently larger processors that can do one or more of these 4 things.  It is a good idea to use the "weakest" processor for what you need, thereby reducing the footprint of your web component.
+

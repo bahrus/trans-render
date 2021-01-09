@@ -114,7 +114,10 @@ function doRHS(ctx: RenderContext, rhs: any){
                 ctor = psm.find(p => p.type === Number)?.ctor;
                 break;
             case 'object':
-                ctor = psm.find(p => p.type === Object)?.ctor;
+                
+                ctor =  (Array.isArray(rhs) ? psm.find(p => p.type === Array)?.ctor : undefined) || 
+                        (isTemplate(rhs) ? psm.find(p => p.type === HTMLTemplateElement)?.ctor : undefined) || 
+                        psm.find(p => p.type === Object)?.ctor;
                 break;
             case 'bigint':
                 ctor = psm.find(p => p.type === BigInt)?.ctor;

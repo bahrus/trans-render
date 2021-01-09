@@ -133,6 +133,8 @@ function processTarget(ctx) {
     }
 }
 function doRHS(ctx, rhs) {
+    if (rhs === undefined)
+        return;
     while (typeof rhs === 'function')
         rhs = rhs(ctx);
     const psm = ctx.psm;
@@ -149,7 +151,9 @@ function doRHS(ctx, rhs) {
                 ctor = psm.find(p => p.type === Number)?.ctor;
                 break;
             case 'object':
-                ctor = psm.find(p => p.type === Object)?.ctor;
+                ctor = (Array.isArray(rhs) ? psm.find(p => p.type === Array)?.ctor : undefined) ||
+                    (isTemplate(rhs) ? psm.find(p => p.type === HTMLTemplateElement)?.ctor : undefined) ||
+                    psm.find(p => p.type === Object)?.ctor;
                 break;
             case 'bigint':
                 ctor = psm.find(p => p.type === BigInt)?.ctor;
@@ -162,10 +166,21 @@ function doRHS(ctx, rhs) {
             case 'undefined':
                 return;
             case 'object':
-                return ctor.do(ctx);
+                {
+                    const prevRHS = ctx.rhs;
+                    ctx.rhs = rhs;
+                    doRHS(ctx, ctor.do(ctx));
+                    ctx.rhs = prevRHS;
+                }
+                break;
             case 'function':
-                const psDO = new ctor();
-                return psDO.do(ctx);
+                {
+                    const psDO = new ctor();
+                    const prevRHS = ctx.rhs;
+                    ctx.rhs = rhs;
+                    doRHS(ctx, psDO.do(ctx));
+                }
+                break;
         }
     }
 }
