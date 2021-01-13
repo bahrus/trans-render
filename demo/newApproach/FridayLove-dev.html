@@ -102,13 +102,23 @@
                     }
                 }
             }, target);
+            let count = 0;
+            let total = 0;
             changeDays.addEventListener('click', e => {
                 model = {
                     Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
                     Day6: 'lördag', Day7: 'söndag',
                 }
                 delete ctx.match.initData;
+                ctx.options = {
+                    cacheQueries:true,
+                };
+                const t0 = performance.now();
                 transform(target, ctx);
+                const t1 = performance.now();
+                total += t1 - t0;
+                count++;
+                console.log(total / count);
             })
         </script>
     </div>

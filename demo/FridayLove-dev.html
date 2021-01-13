@@ -114,7 +114,10 @@
                     Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
                     Day6: 'lördag', Day7: 'söndag',
                 }
+                const t0 = performance.now();
                 transform(target, ctx);
+                const t1 = performance.now();
+                console.log(t1 - t0);
             })
         </script>
     </div>

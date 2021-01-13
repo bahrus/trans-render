@@ -33,6 +33,7 @@ export function interpolate(target: any, prop: string, obj: any, isAttr: boolean
     if(isAttr) {
         target.setAttribute(prop, newVal);
     }else{
+        //if(target[prop] !== newVal) 
         target[prop] = newVal;
     }
 }

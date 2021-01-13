@@ -8,11 +8,13 @@ export interface RenderContext<T = Element, TItem = any> {
     val?: string | null;
     rhs?: any;
     host?: HTMLElement;
+    queryCache: WeakMap<Element, {[key: string]: NodeListOf<Element>}>;
 }
 
 export interface RenderOptions{
     prepend?: boolean | undefined;
     useShadow?: boolean;
+    cacheQueries?: boolean | undefined;
     initializedCallback?: (ctx: RenderContext, target: HTMLElement | DocumentFragment, options?: RenderOptions) => RenderContext | void,
     updatedCallback?: (ctx: RenderContext, target: HTMLElement | DocumentFragment, options?: RenderOptions) => RenderContext | void,
 }

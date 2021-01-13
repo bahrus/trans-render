@@ -12,6 +12,9 @@ export function transform(
     const source = isATemplate
         ? (sourceOrTemplate as HTMLTemplateElement).content.cloneNode(true) as DocumentFragment
         : sourceOrTemplate;
+    if(ctx.options?.cacheQueries){
+        if(ctx.queryCache === undefined) ctx.queryCache = new WeakMap<HTMLElement, {[key: string]: NodeListOf<Element>}>();
+    }
     processFragment(source, ctx);
     let verb = "appendChild";
     const options = ctx.options;
@@ -64,7 +67,29 @@ function processTarget(
     for(const key of keys){
         const queryInfo = getQuery(key);
         if(queryInfo !== null){
-            for(const match of target.querySelectorAll(queryInfo.query)){
+            let matches: NodeListOf<Element> | undefined;
+            let qcLookup: {[key: string]: NodeListOf<Element>} | undefined;
+            const qc = ctx.queryCache;
+            const query = queryInfo.query;
+            if(qc !== undefined){
+                if(qc.has(target)){
+                    qcLookup = qc.get(target)!;
+                    matches = qcLookup[query];
+                }//else{
+                //    qc.set(target, {});
+                //}
+            }
+            if(matches === undefined){
+                matches = target.querySelectorAll(query);
+                if(qc !== undefined){
+                    if(qcLookup !== undefined){
+                        qcLookup[query] = matches;
+                    }else{
+                        qc.set(target, {[query]: matches});
+                    }
+                }       
+            }
+            for(const match of matches){
                 const {val, target} = ctx;
                 switch(queryInfo.type){
                     case 'data':
