@@ -15,10 +15,19 @@
   },
   "exports": {
     ".": "./lib/transform.js",
-    "./lib/transform.js": "./lib/transform.js",
-    "./lib/lispToCamel.js": "./lib/lispToCamel.js",
+    "./lib/applyP.js": "./lib/applyP.js",
+    "./lib/applyPE.js": "./lib/applyPE.js",
+    "./lib/applyPEA.js": "./lib/applyPEA.js",
     "./lib/camelToLisp.js": "./lib/camelToLisp.js",
-    "./lib/interpolate.js": "./lib/interpolate.js"
+    "./lib/getProp.js": "./lib/getProp.js",
+    "./lib/interpolate.js": "./lib/interpolate.js",
+    "./lib/lispToCamel.js": "./lib/lispToCamel.js",
+    "./lib/P.js": "./lib/P.js",
+    "./lib/PE.js": "./lib/PE.js",
+    "./lib/specialKeys.js": "./lib/specialKeys.js",
+    "./lib/Templater.js": "./lib/Templater.js",
+    "./lib/Texter.js": "./lib/Texter.js",
+    "./lib/transform.js": "./lib/transform.js"
   },
   "files": [
     "lib/*"
