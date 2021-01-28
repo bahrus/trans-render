@@ -384,11 +384,31 @@ One of the most common things we want to do is set the text content of a DOM Ele
 
 <script type="module">
     import { transform } from '../../lib/transform.js';
-    import {Texter} from '../../lib/Texter.js'
+    import { Texter } from '../../lib/Texter.js'
     const hello = 'hello, world';
     transform(details, {
         match:{
             summary: hello
+        },
+        psp: [{type: String, ctor: Texter}]
+    })
+</script>
+```
+
+Or more simply, you can hardcode the greeting, and start to imagine that the binding could (partly) come from some (imported) JSON:
+
+```html
+<details id=details>
+    <summary>E pluribus unum</summary>
+    ...
+</details>
+
+<script type="module">
+    import { transform } from '../../lib/transform.js';
+    import { Texter } from '../../lib/Texter.js'
+    transform(details, {
+        match:{
+            summary: 'Hallå'
         },
         psp: [{type: String, ctor: Texter}]
     })
