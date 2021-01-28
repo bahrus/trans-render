@@ -27,7 +27,8 @@
     "./lib/specialKeys.js": "./lib/specialKeys.js",
     "./lib/Templater.js": "./lib/Templater.js",
     "./lib/Texter.js": "./lib/Texter.js",
-    "./lib/transform.js": "./lib/transform.js"
+    "./lib/transform.js": "./lib/transform.js",
+    "./lib/mergeDeep.js": "./lib/mergeDeep.js"
   },
   "files": [
     "lib/*"

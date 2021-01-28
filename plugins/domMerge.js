@@ -1,4 +1,4 @@
-import { mergeDeep } from '../mergeDeep.js';
+import { mergeDeep } from '../lib/mergeDeep.js';
 function setAttribs(target, source) {
     const attributes = source.attribs;
     if (attributes !== undefined) {
