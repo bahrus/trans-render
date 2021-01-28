@@ -124,7 +124,7 @@ function processTarget(
 function doRHS(ctx: RenderContext, rhs: any){
     if(rhs === undefined) return;
     while(typeof rhs === 'function') rhs = rhs(ctx);
-    const psm = ctx.psm;
+    const psm = ctx.psp;
     if(psm !== undefined){
         let  ctor: {new(): PSDo} | PSDo | undefined;
 

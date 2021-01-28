@@ -18,7 +18,7 @@ XSLT can take pure XML with no formatting instructions as its input.  Generally 
 
 There is a growing (🎉) list of semantically meaningful native-born DOM Elements which developers can and should utilize, including dialog, datalist, details/summary, popup (🤞) etc. which can certainly help reduce divitis.
 
-But even more dramatically, with the advent of imported, naturalized custom elements, the ratio between semantically meaningful tag names and divs/spans in the template markup will tend to be far more dramatic, looking far more like XML of yore. trans-render's usefulness grows as a result of the increasingly semantic nature of the template markup, because often the markup semantics provide enough clues on how to fill in the needed "potholes," like textContent and property setting, without the need for custom markup, like binding attributes.  But trans-render is completely extensible, so it can certainly accommodate custom binding attributes by using additional, optional helper libraries.
+But even more dramatically, with the advent of imported, naturalized custom elements, the ratio between semantically meaningful tag names and divs/spans in the template markup will tend to grow far more dramatically, looking much more like XML of yore. trans-render's usefulness grows as a result of the increasingly semantic nature of the template markup, because often the markup semantics provide enough clues on how to fill in the needed "potholes," like textContent and property setting, without the need for custom markup, like binding attributes.  But trans-render is completely extensible, so it can certainly accommodate custom binding attributes by using additional, optional helper libraries.
 
 This can leave the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may be needed to keep the binding rules in sync.  Much like how separate style rules often need adjusting when the document structure changes.
 
@@ -368,7 +368,7 @@ const matches = { //TODO check that this works
 }
 ```
 
-These arrow functions can return a value.  trans-render's "post-script mapping" (psm) allows us to enhance what any custom function does, some reusable (user-defined) processors.  If one of these reusable processors is sufficient for the task at hand, then the arrow function can be replaced by a JSON-like expression, allowing the reusable processor to do its thing, after being passed the context.  trans-render provides a few "standard" processors, which address common concerns.
+These arrow functions can return a value.  trans-render's "post-script processors" (psp) allows us to enhance what any custom function does, some reusable (user-defined) processors.  If one of these reusable processors is sufficient for the task at hand, then the arrow function can be replaced by a JSON-like expression, allowing the reusable processor to do its thing, after being passed the context.  trans-render provides a few "standard" processors, which address common concerns.
 
 The first common concern is setting the textContent of an element.
 
@@ -390,7 +390,7 @@ One of the most common things we want to do is set the text content of a DOM Ele
         match:{
             summary: hello
         },
-        psm: [{type: String, ctor: Texter}]
+        psp: [{type: String, ctor: Texter}]
     })
 </script>
 ```
@@ -425,7 +425,7 @@ As you may have noticed, some abbreviations are used by this library:
 
 * ctx = (rendering) context
 * idx = (numeric) index of array
-* psm = post-script mapping
+* psp = post-script processors
 
 ## P[E[A[T]]]
 
