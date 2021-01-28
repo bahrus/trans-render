@@ -411,8 +411,6 @@ export class Texter implements PSDo{
 }
 ```
 
-"rhs" stands for "right-hand-side."
-
 The categories that currently can be declaratively processed are as follows:
 
 >  String, Boolean, Number, Array, HTMLTemplateElement, Object, 'bigint', 'symbol'
@@ -426,6 +424,8 @@ As you may have noticed, some abbreviations are used by this library:
 * ctx = (rendering) context
 * idx = (numeric) index of array
 * psp = post-script processors
+* rhs = right-hand side
+* lhs = left-hand side
 
 ## P[E[A[T]]]
 
