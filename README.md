@@ -395,7 +395,7 @@ One of the most common things we want to do is set the text content of a DOM Ele
 </script>
 ```
 
-Or more simply, you can hardcode the greeting, and start to imagine that the binding could (partly) come from some (imported) JSON:
+Or more simply, you can hard-code the greeting, and start to imagine that the binding could (partly) come from some (imported) JSON:
 
 ```html
 <details id=details>
@@ -434,6 +434,8 @@ export class Texter implements PSDo{
 The categories that currently can be declaratively processed are as follows:
 
 >  String, Boolean, Number, Array, HTMLTemplateElement, Object, 'bigint', 'symbol'
+
+In the case of Array, if the first item of the array is of type string, special sub-category processing  
 
 We'll be walking through the "standard post script processors" that trans-render provides, but always remember that alternatives can be used based on the requirements.  The standard processors are striving to make the binding syntax as JSON-friendly as possible.
 
