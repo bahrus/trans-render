@@ -4,7 +4,7 @@ export interface RenderContext<T = Element, TItem = any> {
     mode?: 'init' | 'update';
     target?: T | null;
     options?: RenderOptions | undefined;
-    psp?: PostScriptProcessor[];
+    postMatch?: postMatchProcessor[];
     val?: string | null;
     rhs?: any;
     host?: HTMLElement;
@@ -19,12 +19,12 @@ export interface RenderOptions{
     updatedCallback?: (ctx: RenderContext, target: HTMLElement | DocumentFragment, options?: RenderOptions) => RenderContext | void,
 }
 
-export interface PostScriptProcessor {
-    type: Function;
-    ctor: {new(): PSDo} | PSDo;
+export interface postMatchProcessor {
+    rhsType: Function;
+    ctor: {new(): PMDo} | PMDo;
 }
 
-export interface PSDo{
+export interface PMDo{
     do(ctx: RenderContext): void;
 }
 

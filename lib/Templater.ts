@@ -1,6 +1,6 @@
-import {PSDo, RenderContext} from './types.d.js';
+import {PMDo, RenderContext} from './types.d.js';
 
-export class Templater implements PSDo {
+export class Templater implements PMDo {
     do(ctx: RenderContext){
         
     }

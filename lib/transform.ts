@@ -1,4 +1,4 @@
-import {RenderContext, PSDo} from './types.d.js';
+import {RenderContext, PMDo} from './types.d.js';
 import {getQuery} from './specialKeys.js';
 import { lispToCamel } from './lispToCamel.js';
 
@@ -124,31 +124,31 @@ function processTarget(
 function doRHS(ctx: RenderContext, rhs: any){
     if(rhs === undefined) return;
     while(typeof rhs === 'function') rhs = rhs(ctx);
-    const psm = ctx.psp;
-    if(psm !== undefined){
-        let  ctor: {new(): PSDo} | PSDo | undefined;
+    const pm = ctx.postMatch;
+    if(pm !== undefined){
+        let  ctor: {new(): PMDo} | PMDo | undefined;
 
         switch(typeof rhs){
             case 'string':
-                ctor = psm.find(p => p.type === String)?.ctor;
+                ctor = pm.find(p => p.rhsType === String)?.ctor;
                 break;
             case 'boolean':
-                ctor = psm.find(p => p.type === Boolean)?.ctor;
+                ctor = pm.find(p => p.rhsType === Boolean)?.ctor;
                 break;
             case 'number':
-                ctor = psm.find(p => p.type === Number)?.ctor;
+                ctor = pm.find(p => p.rhsType === Number)?.ctor;
                 break;
             case 'object':
                 
-                ctor =  (Array.isArray(rhs) ? psm.find(p => p.type === Array)?.ctor : undefined) || 
-                        (isTemplate(rhs) ? psm.find(p => p.type === HTMLTemplateElement)?.ctor : undefined) || 
-                        psm.find(p => p.type === Object)?.ctor;
+                ctor =  (Array.isArray(rhs) ? pm.find(p => p.rhsType === Array)?.ctor : undefined) || 
+                        (isTemplate(rhs) ? pm.find(p => p.rhsType === HTMLTemplateElement)?.ctor : undefined) || 
+                        pm.find(p => p.rhsType === Object)?.ctor;
                 break;
             case 'bigint':
-                ctor = psm.find(p => p.type === BigInt)?.ctor;
+                ctor = pm.find(p => p.rhsType === BigInt)?.ctor;
                 break;
             case 'symbol':
-                ctor = psm.find(p => p.type === Symbol)?.ctor;
+                ctor = pm.find(p => p.rhsType === Symbol)?.ctor;
                 break;
 
         }

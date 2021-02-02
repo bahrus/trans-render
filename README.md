@@ -390,7 +390,7 @@ One of the most common things we want to do is set the text content of a DOM Ele
         match:{
             summary: hello
         },
-        psp: [{type: String, ctor: Texter}]
+        psp: [{rhsType: String, ctor: Texter}]
     })
 </script>
 ```
@@ -410,7 +410,7 @@ Or more simply, you can hard-code the greeting, and start to imagine that the bi
         match:{
             summary: 'Hallå'
         },
-        psp: [{type: String, ctor: Texter}]
+        postMatch: [{rhsType: String, ctor: Texter}]
     })
 </script>
 ```
@@ -422,9 +422,9 @@ Sure, there are easier ways to set the summary to 'hello, world', but as the amo
 The brave developer can implement some other way of interpreting a right-hand-side of type "String".  This is the amount of engineering firepower required to implement the Texter processor:
 
 ```Typescript
-import {PSDo, RenderContext} from './types.js';
+import {PMDo, RenderContext} from './types.js';
 
-export class Texter implements PSDo{
+export class Texter implements PMDo{
     do(ctx: RenderContext){
         ctx.target!.textContent = ctx.rhs;
     }
