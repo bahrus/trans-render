@@ -108,7 +108,7 @@ transform(Main, {
 }
 ```
 
-The keyword "match" indicates that within that block are CSS Matches.  In this example, all the matches are "multi-matches" because they end with either "Class", "Element", "Part", "Id", "Prop".
+The keyword "match" indicates that within that block are CSS Matches.  In this example, all the matches are "multi-matches" because they end with either "Class", "Element", "Part", "Id", "Prop" or "Data".
 
 So for example, this:
 
@@ -368,7 +368,7 @@ const matches = { //TODO check that this works
 }
 ```
 
-These arrow functions can return a value.  trans-render's "post-script processors" (psp) allows us to enhance what any custom function does, some reusable (user-defined) processors.  If one of these reusable processors is sufficient for the task at hand, then the arrow function can be replaced by a JSON-like expression, allowing the reusable processor to do its thing, after being passed the context.  trans-render provides a few "standard" processors, which address common concerns.
+These arrow functions can return a value.  trans-render's "postMatch" processors allows us to enhance what any custom function does, via some reusable (user-defined) processors.  If one of these reusable processors is sufficient for the task at hand, then the arrow function can be replaced by a JSON-like expression, allowing the reusable processor to do its thing, after being passed the context.  trans-render provides a few "standard" processors, which address common concerns.
 
 The first common concern is setting the textContent of an element.
 
@@ -445,7 +445,7 @@ As you may have noticed, some abbreviations are used by this library:
 
 * ctx = (rendering) context
 * idx = (numeric) index of array
-* psp = post-script processors
+* ctor = class constructor
 * rhs = right-hand side
 * lhs = left-hand side
 
