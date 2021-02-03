@@ -1,6 +1,7 @@
-import {RenderContext, PMDo} from './types.d.js';
-import {getQuery} from './specialKeys.js';
+import { RenderContext, PMDo } from './types.d.js';
+import { getQuery} from './specialKeys.js';
 import { lispToCamel } from './lispToCamel.js';
+import { matchByType } from './matchByType.js';
 
 export function transform(
     sourceOrTemplate: HTMLElement | DocumentFragment,
@@ -127,30 +128,12 @@ function doRHS(ctx: RenderContext, rhs: any){
     const pm = ctx.postMatch;
     if(pm !== undefined){
         let  ctor: {new(): PMDo} | PMDo | undefined;
-
-        switch(typeof rhs){
-            case 'string':
-                ctor = pm.find(p => p.rhsType === String)?.ctor;
+        for(const postMatch of pm){
+            const result = matchByType(rhs, postMatch.rhsType);
+            if(result > 0){
+                ctor = postMatch.ctor;
                 break;
-            case 'boolean':
-                ctor = pm.find(p => p.rhsType === Boolean)?.ctor;
-                break;
-            case 'number':
-                ctor = pm.find(p => p.rhsType === Number)?.ctor;
-                break;
-            case 'object':
-                
-                ctor =  (Array.isArray(rhs) ? pm.find(p => p.rhsType === Array)?.ctor : undefined) || 
-                        (isTemplate(rhs) ? pm.find(p => p.rhsType === HTMLTemplateElement)?.ctor : undefined) || 
-                        pm.find(p => p.rhsType === Object)?.ctor;
-                break;
-            case 'bigint':
-                ctor = pm.find(p => p.rhsType === BigInt)?.ctor;
-                break;
-            case 'symbol':
-                ctor = pm.find(p => p.rhsType === Symbol)?.ctor;
-                break;
-
+            }
         }
         switch(typeof ctor){
             case 'undefined':
