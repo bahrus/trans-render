@@ -100,13 +100,13 @@ export type PropSettings<T extends Partial<HTMLElement> = HTMLElement> = {
     [P in keyof T]?: any
 };
 
-export type EventSettings = {[key: string] : (Function | [Function, string] | [Function, string, Function])};
+export type EventSettings = {[key: string] : (Function | [handler:Function, pathExpr: string] | [handler:Function, pathExpr: string, converter:Function])};
 export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null};
-export type PSettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T> | undefined]; 
-export type PESettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T> | undefined, EventSettings | undefined];
+export type PSettings<T extends Partial<HTMLElement> = HTMLElement> = [props: PropSettings<T> | undefined]; 
+export type PESettings<T extends Partial<HTMLElement> = HTMLElement> = [props: PropSettings<T> | undefined, on: EventSettings | undefined];
 export type PEUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PSettings<T> | PESettings<T>;
 export type PEASettings<T extends Partial<HTMLElement> = HTMLElement> = 
-    [PropSettings<T> | undefined, EventSettings | undefined, AttribsSettings | undefined];
+    [props: PropSettings<T> | undefined, on: EventSettings | undefined, attr: AttribsSettings | undefined];
 export type PEAUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PEUnionSettings<T> | PEASettings<T>;
 export type PEATSettings<T extends Partial<HTMLElement> = HTMLElement> = 
     [PropSettings<T> | undefined, EventSettings | undefined, AttribsSettings | undefined, TransformValueOptions<T> | undefined];

@@ -35,7 +35,7 @@ export type PropSettings<T extends Partial<HTMLElement> = HTMLElement> = {
 export type EventSettings = {[key: string] : (Function | [Function, string] | [Function, string, Function])};
 export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null};
 export type PSettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T> | undefined]; 
-export type PESettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T> | undefined, EventSettings | undefined];
+export type PESettings<T extends Partial<HTMLElement> = HTMLElement> = [props: PropSettings<T> | undefined, on: EventSettings | undefined];
 export type PEUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PSettings<T> | PESettings<T>;
 export type PEASettings<T extends Partial<HTMLElement> = HTMLElement> = 
     [PropSettings<T> | undefined, EventSettings | undefined, AttribsSettings | undefined];
