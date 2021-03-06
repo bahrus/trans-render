@@ -1,4 +1,4 @@
-import { insertAdjacentTemplate } from "./insertAdjacentTemplate.js";
+import { insertAdjacentTemplate } from "./lib/insertAdjacentTemplate.js";
 import {createTemplate} from './createTemplate.js';
 import {TransformValueOptions, RenderContext} from './types_old.js';
 /**

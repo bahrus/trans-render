@@ -1,4 +1,4 @@
-import { insertAdjacentTemplate } from "./insertAdjacentTemplate.js";
+import { insertAdjacentTemplate } from "./lib/insertAdjacentTemplate.js";
 import { createTemplate } from './createTemplate.js';
 /**
  * During pipeline processing, replace a tag with a template.

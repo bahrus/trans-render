@@ -8,7 +8,7 @@ import {RenderContext, TransRenderWC} from './types_old.js';
 import { update } from './update.js';
 import {appendTag} from './plugins/appendTag.js';
 import {repeateth} from './repeateth.js';
-import {insertAdjacentTemplate} from './insertAdjacentTemplate.js';
+import {insertAdjacentTemplate} from './lib/insertAdjacentTemplate.js';
 import {replaceElementWithTemplate} from './replaceElementWithTemplate.js';
 import {replaceTargetWithTag} from './replaceTargetWithTag.js';
 import {pierce} from './plugins/pierce.js';

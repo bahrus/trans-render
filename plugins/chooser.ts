@@ -1,4 +1,4 @@
-import {insertAdjacentTemplate} from '../insertAdjacentTemplate.js';
+import {insertAdjacentTemplate} from '../lib/insertAdjacentTemplate.js';
 /**
  * Clones the template element within the container, matching the select string, 
  * and inserts according to the position parameter, relative to the optional target element, 

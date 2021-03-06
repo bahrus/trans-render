@@ -38,7 +38,7 @@ export type PSettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSetti
 export type PESettings<T extends Partial<HTMLElement> = HTMLElement> = [props: PropSettings<T> | undefined, on: EventSettings | undefined];
 export type PEUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PSettings<T> | PESettings<T>;
 export type PEASettings<T extends Partial<HTMLElement> = HTMLElement> = 
-    [PropSettings<T> | undefined, EventSettings | undefined, AttribsSettings | undefined];
+    [props: PropSettings<T> | undefined, events: EventSettings | undefined, attribs: AttribsSettings | undefined];
 export type PEAUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PEUnionSettings<T> | PEASettings<T>;
 // export type PEATSettings<T extends Partial<HTMLElement> = HTMLElement> = 
 //     [PropSettings<T> | undefined, EventSettings | undefined, AttribsSettings | undefined, TransformValueOptions<T> | undefined];
