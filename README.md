@@ -114,7 +114,7 @@ The keyword "match" indicates that within that block are CSS Matches.  In this e
 So for example, this:
 
 ```JavaScript
-countData: ({target, val}) =>{
+countData: ({target, val}) => {
     ...
 }
 ```
@@ -354,6 +354,8 @@ Since trans-render is built around css matching, it doesn't provide much help wh
 
 </details>
 
+Is this as convenient as most templating libraries, where you don't have to add some indicator (like data-int) to every tag inside of which interpolating is to occur?  No.  Interpolation is definitely not TR's strongest use case.  This is definitely a feature I'd like to see with native template instantiation.
+
 ## Extending trans-render with declarative syntax
 
 The examples so far have relied heavily on arrow functions.  As we've seen, it provides support for 100% no-holds-barred non-declarative code:
@@ -391,7 +393,7 @@ One of the most common things we want to do is set the text content of a DOM Ele
         match:{
             summary: hello
         },
-        psp: [{rhsType: String, ctor: Texter}]
+        postMatch: [{rhsType: String, ctor: Texter}]
     })
 </script>
 ```
@@ -417,8 +419,15 @@ Or more simply, you can hard-code the greeting, and start to imagine that the bi
 ```
 
 
-
 Sure, there are easier ways to set the summary to 'hello, world', but as the amount of binding grows, the amount of boilerplate will grow more slowly, using this syntax.
+
+Note the configuration setting associated with the transform function, "postMatch".  postMatch is what allows us to reduce the amount of imperative code, replacing it with JSON-like declarative-ish binding instead.  What the postMatch expression is saying is "since the right-hand-side of the expression:
+
+```JavaScript
+summary: 'Hallå'
+```
+
+is a string, use the Textor class to process the rendering context." 
 
 The brave developer can implement some other way of interpreting a right-hand-side of type "String".  This is the amount of engineering firepower required to implement the Texter processor:
 
@@ -432,11 +441,30 @@ export class Texter implements PMDo{
 }
 ```
 
-The categories that currently can be declaratively processed are as follows:
+The categories that currently can be declaratively processed in this way are driven by how many primitive types [JavaScript supports](https://github.com/bahrus/trans-render/blob/baseline/lib/matchByType.ts):   
 
->  String, Boolean, Number, Array, HTMLTemplateElement, Object, 'bigint', 'symbol'
+```TypeScript
+export function matchByType(val: any, typOfProcessor: any){
+    if(typOfProcessor === undefined) return 0;
+    switch(typeof val){
+        case 'object':
+            return val instanceof typOfProcessor ? 1 : -1; 
+        case 'string':
+            return typOfProcessor === String ? 1 : -1;
+        case 'number':
+            return typOfProcessor === Number ? 1 : -1;
+        case 'boolean':
+            return typOfProcessor === Boolean ? 1 : -1;
+        case 'symbol':
+            return typOfProcessor === Symbol ? 1 : -1;
+        case 'bigint':
+            return typOfProcessor === BigInt ? 1 : -1;
+    }
+    return 0;    
+}
+```
 
-In the case of Array, if the first item of the array is of type string, special sub-category processing  
+The most interesting case is when the RHS is of type Object.  As you can see, we use the instanceOf to see if the rhs of the expression is an instance of the postMatch rule.  The first match of the postMatch array wins out. 
 
 We'll be walking through the "standard post script processors" that trans-render provides, but always remember that alternatives can be used based on the requirements.  The standard processors are striving to make the binding syntax as JSON-friendly as possible.
 
