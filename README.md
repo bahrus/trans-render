@@ -356,6 +356,24 @@ Since trans-render is built around css matching, it doesn't provide much help wh
 
 Is this as convenient as most templating libraries, where you don't have to add some indicator (like data-int) to every tag inside of which interpolating is to occur?  No.  Interpolation is definitely not TR's strongest use case.  This is definitely a feature I'd like to see with native template instantiation.
 
+[TODO] Actually, we need to add support for:
+
+```JavaScript
+match: {
+    '*': ({ target }) => {
+        interpolate(target, 'textContent', model);
+    },
+```
+
+so that developers can avoid the nuisance of specifying some attribute and marking them all (with the negative side-effect that performance might suffer).
+
+## Scoping
+
+*And* we need to be able to distinguish between that and scoping.
+
+Scoping rule is where the lhs contains no capital letters, but isn't '*'.  
+
+
 ## Extending trans-render with declarative syntax
 
 The examples so far have relied heavily on arrow functions.  As we've seen, it provides support for 100% no-holds-barred non-declarative code:
@@ -477,6 +495,53 @@ As you may have noticed, some abbreviations are used by this library:
 * ctor = class constructor
 * rhs = right-hand side
 * lhs = left-hand side
+
+## Template Merging [TODO]
+
+We've seen two examples where we merge other templates into the main one, which required imperative logic:
+
+```html
+<template id=myTemplate>
+...
+</template>
+<div data-init=myTemplate></div>
+```
+
+with transform fragment:
+
+```JavaScript
+initData: ({ target, ctx, val }) => {
+    transform(self[val], ctx, target);
+}
+```
+
+How can we make this declarative?
+
+One way would be to use a custom element like [carbon-copy](https://github.com/bahrus/carbon-copy):
+
+```html
+<template id=myTemplate>
+...
+</template>
+<b-c-c noshadow from=myTemplate></b-c-c>
+```
+
+But now we need to perform a transform on the cloned HTML.
+
+So we need to enhance b-c-c:
+
+```html
+<b-c-c wait-for-further-instructions -furtherInstructions noshadow from=myTemplate></b-c-c>
+```
+
+and the further instructions:
+
+```JavaScript
+furtherInstructionsProp: ctx.transform
+```
+
+
+
 
 ## P[E[A[T]]]
 
