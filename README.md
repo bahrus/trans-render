@@ -87,6 +87,9 @@ Consider the following example (please expand).  Don't worry, it looks quite com
                                     target.textContent = 4 * newCount;
                                 },
                                 textContentProp: 5 * newCount,
+                                '*': ({target}) => {
+                                    target.setAttribute(')
+                                }
                             }
                         });
                     })
@@ -107,7 +110,6 @@ transform(Main, {
     ...
 }
 ```
-
 
 The keyword "match" indicates that within that block are CSS Matches.  In this example, all the matches are "multi-matches" because they end with either "Class", "Element", "Part", "Id", "Prop" or "Data".
 

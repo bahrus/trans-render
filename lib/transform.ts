@@ -100,6 +100,7 @@ function processTarget(
                 }
 
                 ctx.target = match;
+                ctx.idx!++;
                 doRHS(ctx, tr[key]);
                 ctx.val = val;
                 ctx.target = target;
