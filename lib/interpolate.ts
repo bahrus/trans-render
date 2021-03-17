@@ -3,9 +3,14 @@ type nestedString = (string | string[])[];
 const weakMap = new WeakMap<Element, nestedString>();
 
 export function interpolate(target: any, prop: string, obj: any, isAttr: boolean = false){
+    if(!isAttr){
+        if(target.childNodes.length !== 1) return;
+        if(target.childNodes[0].nodeType !== 3) return;
+    }
     if(!weakMap.has(target as Element)){
         const txt = isAttr ?  target.getAttribute(prop) : target[prop] as string;
         const split = txt.split('|') as string[];
+        if(split.length === 0) return;
         weakMap.set(target as Element, split.map(s =>{
             const optionalChain = (s as string).split('??'); //todo trimend only -- waiting for universal browser support
             return optionalChain.length === 1 ? optionalChain[0] : optionalChain;
@@ -33,7 +38,6 @@ export function interpolate(target: any, prop: string, obj: any, isAttr: boolean
     if(isAttr) {
         target.setAttribute(prop, newVal);
     }else{
-        //if(target[prop] !== newVal) 
         target[prop] = newVal;
     }
 }

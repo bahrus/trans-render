@@ -10,71 +10,71 @@
 
 <body>
     <div>
-        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a><br>
+        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a>
         <button id="changeDays">Wi not trei a holiday in Sweeden this yer</button>
         <template id="Friday">
-            <span data-int>It's |.Day5| I'm in love</span>
+            <div>It's |.Day5| I'm in love</div>
         </template>
         <template id="Opening">
-            <span data-int>I don't care if |.Day1|'s blue</span><br>
-            <span data-int>|.Day2|'s gray and |.Day3| too</span><br>
-            <span data-int>|.Day4| I don't care about you</span><br>
-            <span data-init="Friday"></span>
+            <div>I don't care if |.Day1|'s blue</div>
+            <div>|.Day2|'s gray and |.Day3| too</div>
+            <div>|.Day4| I don't care about you</div>
+            <div data-init="Friday"></div>
         </template>
 
         <template id="Main">
             <div data-init="Opening" class="stanza"></div>
             <div class="stanza">
-                <span data-int>|.Day1| you can fall apart</span><br>
-                <span data-int>|.Day2| |.Day3| break my heart</span><br>
-                <span data-int>Oh, |.Day4| doesn't even start</span><br>
-                <span data-init="Friday"></span>
+                <div>|.Day1| you can fall apart</div>
+                <div>|.Day2| |.Day3| break my heart</div>
+                <div>Oh, |.Day4| doesn't even start</div>
+                <div data-init="Friday"></div>
             </div>
             <div class="stanza">
-                <span data-int>|.Day6| wait</span><br>
-                <span data-int>And |.Day7| always comes too late</span><br>
-                <span data-int>But |.Day5| never hesitate</span>
+                <div>|.Day6| wait</div>
+                <div>And |.Day7| always comes too late</div>
+                <div>But |.Day5| never hesitate</div>
             </div>
 
             <div class="stanza">
-                <span data-int>I don't care if |.Day1|'s black</span><br>
-                <span data-int>|.Day2|, |.Day3| heart attack</span><br>
-                <span data-int>|.Day4| never looking back</span><br>
-                <span data-init="Friday"></span>
+                <div>I don't care if |.Day1|'s black</div>
+                <div>|.Day2|, |.Day3| heart attack</div>
+                <div>|.Day4| never looking back</div>
+                <div data-init="Friday"></div>
             </div>
             <div class="stanza">
-                <span data-int>|.Day1| you can hold your head</span><br>
-                <span data-int>|.Day2|, |.Day3| stay in bed</span><br>
-                <span data-int>Or |.Day4| watch the walls instead</span><br>
-                <span data-init="Friday"></span>
+                <div>|.Day1| you can hold your head</div>
+                <div>|.Day2|, |.Day3| stay in bed</div>
+                <div>Or |.Day4| watch the walls instead</div>
+                <div data-init="Friday"></div>
             </div>
             <div class="stanza">
-                <span data-int>|.Day6| wait</span><br>
-                <span data-int>And |.Day7| always comes too late</span><br>
-                <span data-int>But |.Day5| never hesitate</span>
+                <div>|.Day6| wait</div>
+                <div>And |.Day7| always comes too late</div>
+                <div>But |.Day5| never hesitate</div>
             </div>
             <div class="stanza">
-                <span>Dressed up to the eyes</span><br>
-                <span>It's a wonderful surprise</span><br>
-                <span>To see your shoes and your spirits rise</span><br>
-                <span>Throwing out your frown</span><br>
-                <span>And just smiling at the sound</span><br>
-                <span>And as sleek as a shriek</span><br>
-                <span>Spinning round and round</span><br>
-                <span>Always take a big bite</span><br>
-                <span>It's such a gorgeous sight</span><br>
-                <span>To see you in the middle of the night</span><br>
-                <span>You can never get enough</span><br>
-                <span>Enough of this stuff</span><br>
-                <span data-int>It's |.Day5|</span><br>
-                <span>I'm in love</span>
+                <div>Dressed up to the eyes</div>
+                <div>It's a wonderful surprise</div>
+                <div>To see your shoes and your spirits rise</div>
+                <div>Throwing out your frown</div>
+                <div>And just smiling at the sound</div>
+                <div>And as sleek as a shriek</div>
+                <div>Spinning round and round</div>
+                <div>Always take a big bite</div>
+                <div>It's such a gorgeous sight</div>
+                <div>To see you in the middle of the night</div>
+                <div>You can never get enough</div>
+                <div>Enough of this stuff</div>
+                <div>It's |.Day5|</div>
+                <div>I'm in love</div>
             </div>
             <div data-init="Opening" class="stanza"></div>
             <div class="stanza">
-                <span data-int>|.Day1| you can fall apart</span><br>
-                <span data-int>|.Day2|, |.Day3| break my heart</span><br>
-                <span data-int>|.Day4| doesn't even start</span><br>
-                <span data-init="Friday"></span>
+                <div>|.Day1| you can fall apart</div>
+                <div>|.Day2|, |.Day3| break my heart</div>
+                <div>|.Day4| doesn't even start</div>
+                <div data-init="Friday"></div>
             </div>
             <style>
                 .stanza{
@@ -94,7 +94,7 @@
             };
             const ctx = transform(Main, {
                 match: {
-                    intData: ({ target }) => {
+                    '*': ({ target }) => {
                         interpolate(target, 'textContent', model);
                     },
                     initData: ({ target, ctx, val }) => {
@@ -119,7 +119,7 @@
                 total += t1 - t0;
                 count++;
                 console.log(total / count);
-            })
+            });
         </script>
     </div>
 </body>

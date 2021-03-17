@@ -239,7 +239,7 @@ transform(container, {...})
 
 [Demo](https://jsfiddle.net/bahrus/4897cbzj/2/)
 
-Since trans-render is built around css matching, it doesn't provide much help when it comes to string interpolation, something supported by virtually every templating library.  trans-render can support something like this via a reusable, shared transform helper function.  The library trans-render/lib/interpolate.js is provided for this purpose.
+Since trans-render is built around css matching, it doesn't provide much help when it comes to string interpolation, something supported by virtually every templating library.  trans-render can support something like this via a reusable, shared transform helper function.  The minimalist interpolation library trans-render/lib/interpolate.js is provided for this purpose, but it's scope is quite small (no expressions or anything).  More robust libraries that support expressions could be created, as needed.
 
 ## Use Case 2:  Tränslåtyng pøst pünk lyriks tø Sweedisλ
 
@@ -248,71 +248,71 @@ Since trans-render is built around css matching, it doesn't provide much help wh
 
 ```html
     <div>
-        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a><br>
+        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a>
         <button id="changeDays">Wi not trei a holiday in Sweeden this yer</button>
         <template id="Friday">
-            <span data-int>It's |.Day5| I'm in love</span>
+            <div>It's |.Day5| I'm in love</div>
         </template>
         <template id="Opening">
-            <span data-int>I don't care if |.Day1|'s blue</span><br>
-            <span data-int>|.Day2|'s gray and |.Day3| too</span><br>
-            <span data-int>|.Day4| I don't care about you</span><br>
-            <span data-init="Friday"></span>
+            <div>I don't care if |.Day1|'s blue</div>
+            <div>|.Day2|'s gray and |.Day3| too</div>
+            <div>|.Day4| I don't care about you</div>
+            <div data-init="Friday"></div>
         </template>
 
         <template id="Main">
             <div data-init="Opening" class="stanza"></div>
             <div class="stanza">
-                <span data-int>|.Day1| you can fall apart</span><br>
-                <span data-int>|.Day2| |.Day3| break my heart</span><br>
-                <span data-int>Oh, |.Day4| doesn't even start</span><br>
-                <span data-init="Friday"></span>
+                <div>|.Day1| you can fall apart</div>
+                <div>|.Day2| |.Day3| break my heart</div>
+                <div>Oh, |.Day4| doesn't even start</div>
+                <div data-init="Friday"></div>
             </div>
             <div class="stanza">
-                <span data-int>|.Day6| wait</span><br>
-                <span data-int>And |.Day7| always comes too late</span><br>
-                <span data-int>But |.Day5| never hesitate</span>
+                <div>|.Day6| wait</div>
+                <div>And |.Day7| always comes too late</div>
+                <div>But |.Day5| never hesitate</div>
             </div>
 
             <div class="stanza">
-                <span data-int>I don't care if |.Day1|'s black</span><br>
-                <span data-int>|.Day2|, |.Day3| heart attack</span><br>
-                <span data-int>|.Day4| never looking back</span><br>
-                <span data-init="Friday"></span>
+                <div>I don't care if |.Day1|'s black</div>
+                <div>|.Day2|, |.Day3| heart attack</div>
+                <div>|.Day4| never looking back</div>
+                <div data-init="Friday"></div>
             </div>
             <div class="stanza">
-                <span data-int>|.Day1| you can hold your head</span><br>
-                <span data-int>|.Day2|, |.Day3| stay in bed</span><br>
-                <span data-int>Or |.Day4| watch the walls instead</span><br>
-                <span data-init="Friday"></span>
+                <div>|.Day1| you can hold your head</div>
+                <div>|.Day2|, |.Day3| stay in bed</div>
+                <div>Or |.Day4| watch the walls instead</div>
+                <div data-init="Friday"></div>
             </div>
             <div class="stanza">
-                <span data-int>|.Day6| wait</span><br>
-                <span data-int>And |.Day7| always comes too late</span><br>
-                <span data-int>But |.Day5| never hesitate</span>
+                <div>|.Day6| wait</div>
+                <div>And |.Day7| always comes too late</div>
+                <div>But |.Day5| never hesitate</div>
             </div>
             <div class="stanza">
-                <span>Dressed up to the eyes</span><br>
-                <span>It's a wonderful surprise</span><br>
-                <span>To see your shoes and your spirits rise</span><br>
-                <span>Throwing out your frown</span><br>
-                <span>And just smiling at the sound</span><br>
-                <span>And as sleek as a shriek</span><br>
-                <span>Spinning round and round</span><br>
-                <span>Always take a big bite</span><br>
-                <span>It's such a gorgeous sight</span><br>
-                <span>To see you in the middle of the night</span><br>
-                <span>You can never get enough</span><br>
-                <span>Enough of this stuff</span><br>
-                <span data-int>It's |.Day5|</span><br>
-                <span>I'm in love</span>
+                <div>Dressed up to the eyes</div>
+                <div>It's a wonderful surprise</div>
+                <div>To see your shoes and your spirits rise</div>
+                <div>Throwing out your frown</div>
+                <div>And just smiling at the sound</div>
+                <div>And as sleek as a shriek</div>
+                <div>Spinning round and round</div>
+                <div>Always take a big bite</div>
+                <div>It's such a gorgeous sight</div>
+                <div>To see you in the middle of the night</div>
+                <div>You can never get enough</div>
+                <div>Enough of this stuff</div>
+                <div>It's |.Day5|</div>
+                <div>I'm in love</div>
             </div>
             <div data-init="Opening" class="stanza"></div>
             <div class="stanza">
-                <span data-int>|.Day1| you can fall apart</span><br>
-                <span data-int>|.Day2|, |.Day3| break my heart</span><br>
-                <span data-int>|.Day4| doesn't even start</span><br>
-                <span data-init="Friday"></span>
+                <div>|.Day1| you can fall apart</div>
+                <div>|.Day2|, |.Day3| break my heart</div>
+                <div>|.Day4| doesn't even start</div>
+                <div data-init="Friday"></div>
             </div>
             <style>
                 .stanza{
@@ -323,8 +323,8 @@ Since trans-render is built around css matching, it doesn't provide much help wh
         <div id="target"></div>
 
         <script type="module">
-            import { transform } from 'https://cdn.skypack.dev/trans-render';
-            import { interpolate } from 'https://cdn.skypack.dev/trans-render/lib/interpolate.js';
+            import { transform } from 'trans-render/lib/transform.js';
+            import { interpolate } from 'trans-render/lib/interpolate.js';
 
             let model = {
                 Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
@@ -332,7 +332,7 @@ Since trans-render is built around css matching, it doesn't provide much help wh
             };
             const ctx = transform(Main, {
                 match: {
-                    intData: ({ target }) => {
+                    '*': ({ target }) => {
                         interpolate(target, 'textContent', model);
                     },
                     initData: ({ target, ctx, val }) => {
@@ -340,38 +340,30 @@ Since trans-render is built around css matching, it doesn't provide much help wh
                     }
                 }
             }, target);
+            let count = 0;
+            let total = 0;
             changeDays.addEventListener('click', e => {
                 model = {
                     Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
                     Day6: 'lördag', Day7: 'söndag',
                 }
                 delete ctx.match.initData;
+                ctx.options = {
+                    cacheQueries:true,
+                };
+                const t0 = performance.now();
                 transform(target, ctx);
-            })
+                const t1 = performance.now();
+                total += t1 - t0;
+                count++;
+                console.log(total / count);
+            });
         </script>
     </div>
 ```
 
 </details>
 
-Is this as convenient as most templating libraries, where you don't have to add some indicator (like data-int) to every tag inside of which interpolating is to occur?  No.  Interpolation is definitely not TR's strongest use case.  This is definitely a feature I'd like to see with native template instantiation.
-
-[TODO] Actually, we need to add support for:
-
-```JavaScript
-match: {
-    '*': ({ target }) => {
-        interpolate(target, 'textContent', model);
-    },
-```
-
-so that developers can avoid the nuisance of specifying some attribute and marking them all (with the negative side-effect that performance might suffer).
-
-## Scoping
-
-*And* we need to be able to distinguish between that and scoping.
-
-Scoping rule is where the lhs contains no capital letters, but isn't '*'.  
 
 
 ## Extending trans-render with declarative syntax
@@ -436,7 +428,6 @@ Or more simply, you can hard-code the greeting, and start to imagine that the bi
 </script>
 ```
 
-
 Sure, there are easier ways to set the summary to 'hello, world', but as the amount of binding grows, the amount of boilerplate will grow more slowly, using this syntax.
 
 Note the configuration setting associated with the transform function, "postMatch".  postMatch is what allows us to reduce the amount of imperative code, replacing it with JSON-like declarative-ish binding instead.  What the postMatch expression is saying is "since the right-hand-side of the expression:
@@ -498,13 +489,21 @@ As you may have noticed, some abbreviations are used by this library:
 
 ## Template Merging [TODO]
 
-We've seen two examples where we merge other templates into the main one, which required imperative logic:
+We've seen examples where we merge other templates into the main one, which required imperative logic:
 
 ```html
-<template id=myTemplate>
-...
+<template id="Friday">
+    <span data-int>It's |.Day5| I'm in love</span>
 </template>
-<div data-init=myTemplate></div>
+<template id="Opening">
+    <span data-int>I don't care if |.Day1|'s blue</span><br>
+    <span data-int>|.Day2|'s gray and |.Day3| too</span><br>
+    <span data-int>|.Day4| I don't care about you</span><br>
+    <span data-init="Friday"></span>
+</template>
+<template id="Main">
+    <div data-init="Opening" class="stanza"></div>
+</template>
 ```
 
 with transform fragment:
@@ -517,27 +516,38 @@ initData: ({ target, ctx, val }) => {
 
 How can we make this declarative?
 
-One way would be to use a custom element like [carbon-copy](https://github.com/bahrus/carbon-copy):
+One suggestion would be to use a custom element like [carbon-copy](https://github.com/bahrus/carbon-copy):
 
 ```html
-<template id=myTemplate>
-...
+<template id="Friday">
+    <span>It's |.Day5| I'm in love</span>
 </template>
-<b-c-c noshadow from=myTemplate></b-c-c>
+<template id="Opening">
+    <span>I don't care if |.Day1|'s blue</span><br>
+    <span>|.Day2|'s gray and |.Day3| too</span><br>
+    <span>|.Day4| I don't care about you</span><br>
+    <b-c-c copy from=./Friday></b-c-c>
+</template>
+<template id="Main">
+    <b-c-c copy from=./Opening></b-c-c>
+    ...
+</template>
 ```
+
+Alternatively, we could define another declarative "PostMatch" rule that acts on instances of Template Elements.  This approach was adopted previously, but the web component way makes more sense in a futuristic HTML-friendly world. 
 
 But now we need to perform a transform on the cloned HTML.
 
 So we need to enhance b-c-c:
 
 ```html
-<b-c-c wait-for-further-instructions -furtherInstructions noshadow from=myTemplate></b-c-c>
+<b-c-c -to-be-transformed -tr noshadow from=myTemplate></b-c-c>
 ```
 
 and the further instructions:
 
 ```JavaScript
-furtherInstructionsProp: ctx.transform
+transformProp: [ctx.transform]
 ```
 
 

@@ -66,7 +66,7 @@ function processTarget(
     if(keys.length === 0) return true;
     const scopeKeys: string[] = [];
     for(const key of keys){
-        const queryInfo = getQuery(key);
+        const queryInfo = key ==='*' ? {query: '*', type: 'all', attrib: ''} :  getQuery(key);
         if(queryInfo !== null){
             let matches: NodeListOf<Element> | undefined;
             let qcLookup: {[key: string]: NodeListOf<Element>} | undefined;
@@ -76,9 +76,7 @@ function processTarget(
                 if(qc.has(target)){
                     qcLookup = qc.get(target)!;
                     matches = qcLookup[query];
-                }//else{
-                //    qc.set(target, {});
-                //}
+                }
             }
             if(matches === undefined){
                 matches = target.querySelectorAll(query);
