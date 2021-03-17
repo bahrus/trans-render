@@ -38,6 +38,9 @@
                                     target.textContent = 4 * newCount;
                                 },
                                 textContentProp: 5 * newCount,
+                                '*': ({target, idx}) => {
+                                    target.setAttribute('data-idx', idx);
+                                }
                             }
                         });
                     })

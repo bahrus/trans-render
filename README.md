@@ -87,8 +87,8 @@ Consider the following example (please expand).  Don't worry, it looks quite com
                                     target.textContent = 4 * newCount;
                                 },
                                 textContentProp: 5 * newCount,
-                                '*': ({target}) => {
-                                    target.setAttribute(')
+                                '*': ({target, idx}) => {
+                                    target.setAttribute('data-idx', idx);
                                 }
                             }
                         });
