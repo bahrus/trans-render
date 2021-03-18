@@ -9,6 +9,7 @@ export function transform(
     target: HTMLElement | DocumentFragment = sourceOrTemplate
 ){
     ctx.ctx = ctx;
+    ctx.transform = transform;
     const isATemplate = isTemplate(sourceOrTemplate);
     const source = isATemplate
         ? (sourceOrTemplate as HTMLTemplateElement).content.cloneNode(true) as DocumentFragment
