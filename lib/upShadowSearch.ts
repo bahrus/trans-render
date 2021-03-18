@@ -14,4 +14,5 @@ export function upShadowSearch(ref: Element, cssSel: string){
             throw 'Target Element Not found';
         }
     }
+    return targetElement;
 }
