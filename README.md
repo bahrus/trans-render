@@ -518,6 +518,8 @@ initData: ({ target, ctx, val }) => {
 
 How can we make this declarative?
 
+The approach we previous adopted was to define another declarative "PostMatch" rule that acts on instances of Template Elements.  But a web component approach makes more sense in a futuristic HTML-friendly world. 
+
 One suggestion would be to use a custom element like [carbon-copy](https://github.com/bahrus/carbon-copy):
 
 ```html
@@ -536,8 +538,6 @@ One suggestion would be to use a custom element like [carbon-copy](https://githu
 </template>
 ```
 
-Alternatively, we could define another declarative "PostMatch" rule that acts on instances of Template Elements.  This approach was adopted previously, but the web component way makes more sense in a futuristic HTML-friendly world. 
-
 But now we need to perform a transform on the cloned HTML.
 
 So we need to enhance b-c-c:
@@ -549,13 +549,11 @@ So we need to enhance b-c-c:
 and the further instructions:
 
 ```JavaScript
-transformProp: [ctx.transform]
+trProp: [ctx]
 ```
 
 
-
-
-## P[E[A[T]]]
+## P[E[A[T]]] [TODO]
 
 After setting the string value of a node, setting properties, attaching event handlers, as well as attributes comes next in things we do over and over again.
 
