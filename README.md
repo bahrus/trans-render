@@ -540,18 +540,19 @@ One suggestion would be to use a custom element like [carbon-copy](https://githu
 
 But now we need to perform a transform on the cloned HTML.
 
-So we need to enhance b-c-c:
+b-c-c (one of the three carbon-copy elements) supports this:
 
 ```html
-<b-c-c -to-be-transformed -tr noshadow from=myTemplate></b-c-c>
+<b-c-c -to-be-transformed -tr-context noshadow from=myTemplate></b-c-c>
 ```
 
 and the further instructions:
 
 ```JavaScript
-trProp: [ctx]
+trContext: ctx
 ```
 
+clinch the deal.
 
 ## P[E[A[T]]] [TODO]
 
