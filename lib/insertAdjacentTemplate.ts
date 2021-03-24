@@ -9,6 +9,6 @@ export function insertAdjacentTemplate(template: HTMLTemplateElement, target: El
       isFirst = false;
       appendTarget = appendTarget.insertAdjacentElement(modifiedPosition, child)!;
       appendedChildren.push(appendTarget);
-    })
+    });
     return appendedChildren;
 }
