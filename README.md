@@ -489,7 +489,7 @@ As you may have noticed, some abbreviations are used by this library:
 * rhs = right-hand side
 * lhs = left-hand side
 
-## Template Merging [TODO]
+## Template Merging Using a Custom Element
 
 We've seen examples where we merge other templates into the main one, which required imperative logic:
 
@@ -511,14 +511,12 @@ We've seen examples where we merge other templates into the main one, which requ
 with transform fragment:
 
 ```JavaScript
-initData: ({ target, ctx, val }) => {
+dataInitAttrib: ({ target, ctx, val }) => {
     transform(self[val], ctx, target);
 }
 ```
 
-How can we make this declarative?
-
-The approach we previous adopted was to define another declarative "PostMatch" rule that acts on instances of Template Elements.  But a web component approach makes more sense in a futuristic HTML-friendly world. 
+How can we make this declarative? 
 
 One suggestion would be to use a custom element like [carbon-copy](https://github.com/bahrus/carbon-copy):
 
@@ -546,13 +544,61 @@ b-c-c (one of the three carbon-copy elements) supports this:
 <b-c-c -to-be-transformed -tr-context noshadow from=myTemplate></b-c-c>
 ```
 
-and the further instructions:
+and we can recursively, declaratively apply a transform upon cloning:
 
 ```JavaScript
 trContext: ctx
 ```
 
-clinch the deal.
+## Loosely Coupled Template Merging [TODO]
+
+The markup above assumes the developer can, and wants to, dictate what the markup should look like.  But in some cases, the markup should be loosely coupled from the need to insert a template.  For example, maybe we want the markup to specialize in what is needed for the light children of a component, but we need to transform that markup into something that makes sense inside the ShadowDOM of a component, when using something like [slot-bot](https://github.com/bahrus/slot-bot).  How can we do this declaratively?
+
+Instead of having a RHS of a string, what if we define a declarative postMatch processor that contain a template?
+
+We could have a rule for this, if the RHS is a template:
+
+
+```JavaScript
+dataInitAttribEqFriday: FridayTemplate
+```
+
+## Extensible, Loosely Coupled PostMatches [TODO] Via JS Tuples
+
+This can be quite useful, but we have to make some assumptions about what to do with the template -- clone and append within the matching tag?  Append after the matching tag?  Use ShadowDOM?
+
+To pass more information, we could have an array on the RHS of the match, where the array forms the parameters passed in to the processor.
+
+But as we will see, the idea of using an array to declaratively bind the template extends well beyond just merging in a template.  In the next section, for example, we will want to use an array to bind properties / events / attributes.  In short, we want derive mileage out of [JS Tuples](https://www.tutorialsteacher.com/typescript/typescript-tuple).
+
+The trans-render library resolves this dilemma by placing significance on the type of the first element of the array.  If the first element is of type template, use a template processor.  If it is an object, using another processor.  If it is a boolean, use another one.
+
+To define the processors, we extend the postMatch syntax, using the word "head" to indicate the [first](https://www.geeksforgeeks.org/how-to-get-the-first-element-of-list-in-scala/) element of the array
+
+```html
+<template id=myTemplate>
+    ...
+</template>
+
+<script type="module">
+    import { transform } from 'trans-render/lib/transform.js';
+    import { Texter } from 'trans-render/lib/Texter.js';
+    import { TemplateMerger } from 'trans-render/lib/TemplateMerger.js';
+    import { ConditionalTransformer } from 'trans-render/lib/ConditionalTransformer.js';
+    transform(myTemplate, {
+        match:{
+            ...
+        },
+        postMatch: [
+            {rhsType: String, ctor: Texter},
+            {rhsType: Array, headType: Template, ctor: TemplateMerger},
+            {rhsType: Array, headType: Boolean, ctor:  ConditionalTransformer},
+            etc.
+        ]
+    })
+</script>
+```
+
 
 ## P[E[A[T]]] [TODO]
 
