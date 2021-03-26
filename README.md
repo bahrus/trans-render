@@ -48,6 +48,23 @@ The CSS matching transform.js takes one of two forms:
 
 ### Multi-matching
 
+Multi matching provides support for syntax that is convenient for JS development.  Syntax like this isn't very pleasant, considering how common such queries will be:
+
+```JavaScript
+"[part='my-special-section']": {
+    ...
+}
+```
+
+So transform.js supports special syntax for css matching that is more convenient for JS developers:
+
+```JavaScript
+mySpecialSectionPart: {
+    ...
+}
+```
+
+
 Consider the following example (please expand).  Don't worry, it looks quite complicated, but we will walk through it, and also, as we introduce more features, the code below will greatly simplify:
 
 <details>
@@ -68,7 +85,7 @@ Consider the following example (please expand).  Don't worry, it looks quite com
         import { transform } from '../../lib/transform.js';
         transform(Main, {
             match: {
-                countData: ({target, val}) =>{
+                dataCountAttrib: ({target, val}) =>{
                     target.addEventListener('click', e => {
                         const newCount = parseInt(e.target.dataset.count) + 1;
                         e.target.dataset.count = newCount;
@@ -111,12 +128,12 @@ transform(Main, {
 }
 ```
 
-The keyword "match" indicates that within that block are CSS Matches.  In this example, all the matches are "multi-matches" because they end with either "Class", "Element", "Part", "Id", "Prop" or "Data".
+The keyword "match" indicates that within that block are CSS Matches.  In this example, all the matches are "multi-matches" because they end with either "Class", "Element", "Part", "Id", "Prop" or "Attrib".
 
 So for example, this:
 
 ```JavaScript
-countData: ({target, val}) => {
+dataCountAttrib: ({target, val}) => {
     ...
 }
 ```
@@ -124,8 +141,8 @@ countData: ({target, val}) => {
 is short-hand for:
 
 ```JavaScript
-fragment.querySelectorAll('dataset-count').forEach(target => {
-    const val = target.dataset.count;
+fragment.querySelectorAll('[data-count]').forEach(target => {
+    const val = target.getAttribute('data-count');
     ...
 })
 ```
