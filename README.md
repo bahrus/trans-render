@@ -64,6 +64,7 @@ mySpecialSectionPart: {
 }
 ```
 
+Throughout this documentation, we will be referrring to the string before the colon as the "LHS" (left-hand-side) expression.
 
 Consider the following example (please expand).  Don't worry, it looks quite complicated, but we will walk through it, and also, as we introduce more features, the code below will greatly simplify:
 
@@ -160,6 +161,29 @@ transform(Main, {...}, container)
 ```JavaScript
 transform(container, {...})
 ```
+
+The following table lists how the LHS is translated into CSS multi-match queries:
+
+<table>
+    <tr>
+        <th>Pattern</th><th>Example</th><th>Query that is used</th><th>Notes</th>
+    </tr>
+    <tr>
+        <td>Ends with "Parts"</td><td>myRegionParts</td><td>.querySelectorAll('[part*="my-region"]')</td><td>May match more than bargained for when working with multiple parts on the same element.</td>
+    </tr>
+    <tr>
+        <td>Ends with "Attribs"</td><td>ariaLabelAttribs</td><td>.querySelectorAll('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
+    </tr>
+    <tr>
+        <td>Ends with "Elements"</td><td>flagIconElements</td><td>.querySelectorAll('flag-icon')</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td>Ends with "Props"</td><td>textContentProps</td><td>.querySelectorAll('[-text-content]')</td><td>Useful for binding properties in bulk</td>
+    </tr>
+    <tr>
+        <td>Starts with "$(" and ends with ")"</td><td>'$(a[href$=".mp3"])'</td><td>.querySelectorAll('a[href$=".mp3"')</td><td>
+    </tr>
+</table>
 
 ## Use Case 1:  Applying the DRY principle to punk rock lyrics
 
