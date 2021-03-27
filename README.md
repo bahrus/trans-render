@@ -164,7 +164,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>Ends with "Attribs"</td><td>ariaLabelAttribs</td><td>.querySelectorAll('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
     </tr>
     <tr>
-        <td>Contains Eq, ends with Attribs</td><td>ariaLabelEqHelloThereAttribs</td><td>.querySelectorAll('[arial-label="HelloThere"])</td><td>If space needed ("Hello There") then LHS needs to be wrapped in quotes</td>
+        <td>Contains Eq, ends with Attribs [TODO]</td><td>ariaLabelEqHelloThereAttribs</td><td>.querySelectorAll('[arial-label="HelloThere"])</td><td>If space needed ("Hello There") then LHS needs to be wrapped in quotes</td>
     <tr>
         <td>Ends with "Elements"</td><td>flagIconElements</td><td>.querySelectorAll('flag-icon')</td><td>&nbsp;</td>
     </tr>
@@ -597,9 +597,13 @@ trContext: ctx
 
 ## Loosely Coupled Template Merging [TODO]
 
-The markup above assumes the developer can, and wants to, dictate what the markup should look like.  But in some cases, the markup should be loosely coupled from the need to insert a template.  For example, maybe we want the markup to specialize in what is needed for the light children of a component, but we need to transform that markup into something that makes sense inside the ShadowDOM of a component, when using something like [slot-bot](https://github.com/bahrus/slot-bot).  How can we do this declaratively?
+The markup above assumes the developer can, and wants to, dictate what the markup should look like.  But in some cases, the markup should be loosely coupled from the need to insert a template.  For example, maybe we want the markup to specialize in what is needed for the light children of a component, but we need to transform that markup into something that makes sense inside the ShadowDOM of a component, when using something like [slot-bot](https://github.com/bahrus/slot-bot).  
 
-Instead of having a RHS of a string, what if we define a declarative postMatch processor that contain a template?
+Maybe the core HTML markup comes from a third party source, but we want to insert some custom content into that stream.
+
+How can we do this declaratively?
+
+Instead of having a RHS of type string, what if we define a declarative postMatch processor that acts when it sees a template on the RHS?
 
 We could have a rule for this, if the RHS is a template:
 
