@@ -22,19 +22,6 @@ But even more dramatically, with the advent of imported, naturalized custom elem
 
 This can leave the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may be needed to keep the binding rules in sync.  Much like how separate style rules often need adjusting when the document structure changes.
 
-<!--Not designed for binding a single element -- that can be handled by xtal-element's PEA support.
-
-Doesn't need to support what can be supported by custom elements -- loops, conditionals
-
-Use cases:
-
-Interpolation
-tag replacement 
-
-supportsGeneralQuery by ending:  part, class, data, element
-
--->
-
 ## The core library
 
 The core library, transform.js, is a tiny (1.2k gzip/minified), 'non-committal' library that simply allows us to map css matches to user-defined functions. 
@@ -191,7 +178,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
 
 ## Use Case 1:  Applying the DRY principle to punk rock lyrics
 
-[Demo](https://jsfiddle.net/bahrus/4897cbzj/1/)
+[Demo](https://jsfiddle.net/bahrus/4897cbzj/4/)
 
 <details>
     <summary>Markup</summary>

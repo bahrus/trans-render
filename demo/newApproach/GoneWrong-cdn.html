@@ -80,7 +80,7 @@
             //import {transform} from 'https://unpkg.com/trans-render/lib/transform.js?module'
             transform(Main, {
                 match: {
-                    initData: ({target, ctx, val}) =>{
+                    dataInitAttribs: ({target, ctx, val}) =>{
                         transform(self[val], ctx, target);
                     }
                 }
