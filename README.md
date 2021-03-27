@@ -634,8 +634,8 @@ To define the processors, we extend the postMatch syntax, using the word "head" 
         },
         postMatch: [
             {rhsType: String, ctor: Texter},
-            {rhsType: Array, headType: Template, ctor: TemplateMerger},
-            {rhsType: Array, headType: Boolean, ctor:  ConditionalTransformer},
+            {rhsType: Array, rhsHeadType: Template, ctor: TemplateMerger},
+            {rhsType: Array, rhsHeadType: Boolean, ctor:  ConditionalTransformer},
             etc.
         ]
     })
