@@ -184,169 +184,72 @@ The following table lists how the LHS is translated into CSS multi-match queries
     <summary>Markup</summary>
 
 ```html
-<div>
-    <a href="https://www.youtube.com/watch?v=2-Lb-JhsaEk" target="_blank">Something's gone wrong again</a>
-    <template id="Title">Something's gone wrong again</template>
-    <template id="Title2">Something goes wrong again</template>
-    <template id="Again">And again</template>
-    <template id="Again2">And again, and again, again and something's gone wrong again</template>
-    <template id="Again3">And again, and again, again and something goes wrong again</template>
-    <template id="Agains">
-        <span data-init="Again"></span><br>
-        <span data-init="Again2"></span><br>
-        <span data-init="Title"></span>
-    </template>
-    <template id="Agains2">
-        <span data-init="Title2"></span><br>
-        <span data-init="Again"></span><br>
-        <span data-init="Again3"></span><br>
-        <span data-init="Title2"></span>
-    </template>
-    <template id="bus">
-        <span>Nothing ever happens to people like us</span><br>
-        <span>'Cept we miss the bus, something goes wrong again</span><br>
-        <span>Need a smoke, use my last fifty P.</span><br>
-        <span>But the machine is broke, something's gone wrong again</span>
-    </template>
-    <template id="Main">
-        <div>
-            <span>Tried to find my sock</span><br>
-            <span>No good, it's lost</span><br>
-            <span data-init="Title"></span><br>
-            <span>Need a shave</span><br>
-            <span>Cut myself, need a new blade</span><br>
-            <span data-init="Title"></span>
-        </div>
-        <div data-init="Agains"></div>
-        <div>
-            <span>Tried to fry an egg</span><br>
-            <span>Broke the yolk, no joke</span><br>
-            <span data-init="Title"></span><br>
-            <span>Look at my watch, just to tell the time but the hand's come off mine</span><br>
-            <span data-init="Title"></span><br>
-            <span data-init="Title"></span>
-        </div>
-        <div data-init="Agains"></div>
-        <div data-init="bus"></div>
-        <div data-init="Agains2"></div>
-        <div data-init="Agains2"></div>
-        <div data-init="bus"></div>
-        <div data-init="Agains2"></div>
-        <div>
-            <span>I turned up early in time for our date</span><br>
-            <span>But then you turn up late, something goes wrong again</span><br>
-            <span>Need a drink, go to the pub</span><br>
-            <span>But the bugger's shut, something goes wrong again</span>
-        </div>
-        <div>
-            <span data-init="Title2"></span><br>
-            <span data-init="Again"></span><br>
-            <span data-init="Again3"></span><br>
-            <span>Ah, something goes wrong again</span><br>
-            <span data-init="Title2"></span><br>
-            <span data-init="Title2"></span>
-        </div>
-        <style>
-            div{
-                padding-top:20px;
-            }
-        </style>
-    </template>
-    <div id="target"></div>
-        <script type="module">
-            import { transform } from '../../lib/transform.js';
-            transform(Main, {
-                match: {
-                    initData: ({target, ctx, val}) =>{
-                        transform(self[val], ctx, target);
-                    }
-                }
-            }, target);
-        </script>
-</div>
-```
-
-</details>
-
-
-## An example of an imperative helper function
-
-[Demo](https://jsfiddle.net/bahrus/4897cbzj/2/)
-
-Since trans-render is built around css matching, it doesn't provide much help when it comes to string interpolation, something supported by virtually every templating library.  trans-render can support something like this via a reusable, shared transform helper function.  The minimalist interpolation library trans-render/lib/interpolate.js is provided for this purpose, but it's scope is quite small (no expressions or anything).  More robust libraries that support expressions could be created, as needed.
-
-## Use Case 2:  Tränslåtyng pøst pünk lyriks tø Sweedisλ
-
-<details>
-    <summary>Markup</summary>
-
-```html
     <div>
-        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a>
+        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a><br>
         <button id="changeDays">Wi not trei a holiday in Sweeden this yer</button>
         <template id="Friday">
-            <div>It's |.Day5| I'm in love</div>
+            <span>It's |.Day5| I'm in love</span>
         </template>
         <template id="Opening">
-            <div>I don't care if |.Day1|'s blue</div>
-            <div>|.Day2|'s gray and |.Day3| too</div>
-            <div>|.Day4| I don't care about you</div>
-            <div data-init="Friday"></div>
+            <span>I don't care if |.Day1|'s blue</span><br>
+            <span>|.Day2|'s gray and |.Day3| too</span><br>
+            <span>|.Day4| I don't care about you</span><br>
+            <span data-init="Friday"></span>
         </template>
 
         <template id="Main">
             <div data-init="Opening" class="stanza"></div>
             <div class="stanza">
-                <div>|.Day1| you can fall apart</div>
-                <div>|.Day2| |.Day3| break my heart</div>
-                <div>Oh, |.Day4| doesn't even start</div>
-                <div data-init="Friday"></div>
+                <span>|.Day1| you can fall apart</span><br>
+                <span>|.Day2| |.Day3| break my heart</span><br>
+                <span>Oh, |.Day4| doesn't even start</span><br>
+                <span data-init="Friday"></span>
             </div>
             <div class="stanza">
-                <div>|.Day6| wait</div>
-                <div>And |.Day7| always comes too late</div>
-                <div>But |.Day5| never hesitate</div>
+                <span>|.Day6| wait</span><br>
+                <span>And |.Day7| always comes too late</span><br>
+                <span>But |.Day5| never hesitate</span>
             </div>
 
             <div class="stanza">
-                <div>I don't care if |.Day1|'s black</div>
-                <div>|.Day2|, |.Day3| heart attack</div>
-                <div>|.Day4| never looking back</div>
-                <div data-init="Friday"></div>
+                <span>I don't care if |.Day1|'s black</span><br>
+                <span>|.Day2|, |.Day3| heart attack</span><br>
+                <span>|.Day4| never looking back</span><br>
+                <span data-init="Friday"></span>
             </div>
             <div class="stanza">
-                <div>|.Day1| you can hold your head</div>
-                <div>|.Day2|, |.Day3| stay in bed</div>
-                <div>Or |.Day4| watch the walls instead</div>
-                <div data-init="Friday"></div>
+                <span>|.Day1| you can hold your head</span><br>
+                <span>|.Day2|, |.Day3| stay in bed</span><br>
+                <span>Or |.Day4| watch the walls instead</span><br>
+                <span data-init="Friday"></span>
             </div>
             <div class="stanza">
-                <div>|.Day6| wait</div>
-                <div>And |.Day7| always comes too late</div>
-                <div>But |.Day5| never hesitate</div>
+                <span>|.Day6| wait</span><br>
+                <span>And |.Day7| always comes too late</span><br>
+                <span>But |.Day5| never hesitate</span>
             </div>
             <div class="stanza">
-                <div>Dressed up to the eyes</div>
-                <div>It's a wonderful surprise</div>
-                <div>To see your shoes and your spirits rise</div>
-                <div>Throwing out your frown</div>
-                <div>And just smiling at the sound</div>
-                <div>And as sleek as a shriek</div>
-                <div>Spinning round and round</div>
-                <div>Always take a big bite</div>
-                <div>It's such a gorgeous sight</div>
-                <div>To see you in the middle of the night</div>
-                <div>You can never get enough</div>
-                <div>Enough of this stuff</div>
-                <div>It's |.Day5|</div>
-                <div>I'm in love</div>
+                <span>Dressed up to the eyes</span><br>
+                <span>It's a wonderful surprise</span><br>
+                <span>To see your shoes and your spirits rise</span><br>
+                <span>Throwing out your frown</span><br>
+                <span>And just smiling at the sound</span><br>
+                <span>And as sleek as a shriek</span><br>
+                <span>Spinning round and round</span><br>
+                <span>Always take a big bite</span><br>
+                <span>It's such a gorgeous sight</span><br>
+                <span>To see you in the middle of the night</span><br>
+                <span>You can never get enough</span><br>
+                <span>Enough of this stuff</span><br>
+                <span>It's |.Day5|</span><br>
+                <span>I'm in love</span>
             </div>
             <div data-init="Opening" class="stanza"></div>
             <div class="stanza">
-                <div>|.Day1| you can fall apart</div>
-                <div>|.Day2|, |.Day3| break my heart</div>
-                <div>|.Day4| doesn't even start</div>
-                <div data-init="Friday"></div>
+                <span>|.Day1| you can fall apart</span><br>
+                <span>|.Day2|, |.Day3| break my heart</span><br>
+                <span>|.Day4| doesn't even start</span><br>
+                <span data-init="Friday"></span>
             </div>
             <style>
                 .stanza{
@@ -357,8 +260,8 @@ Since trans-render is built around css matching, it doesn't provide much help wh
         <div id="target"></div>
 
         <script type="module">
-            import { transform } from 'trans-render/lib/transform.js';
-            import { interpolate } from 'trans-render/lib/interpolate.js';
+            import { transform } from 'https://cdn.skypack.dev/trans-render';
+            import { interpolate } from 'https://cdn.skypack.dev/trans-render/lib/interpolate.js';
 
             let model = {
                 Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
@@ -369,29 +272,139 @@ Since trans-render is built around css matching, it doesn't provide much help wh
                     '*': ({ target }) => {
                         interpolate(target, 'textContent', model);
                     },
-                    initData: ({ target, ctx, val }) => {
+                    dataInitAttribs: ({ target, ctx, val }) => {
                         transform(self[val], ctx, target);
                     }
                 }
             }, target);
-            let count = 0;
-            let total = 0;
             changeDays.addEventListener('click', e => {
                 model = {
                     Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
                     Day6: 'lördag', Day7: 'söndag',
                 }
                 delete ctx.match.initData;
-                ctx.options = {
-                    cacheQueries:true,
-                };
-                const t0 = performance.now();
                 transform(target, ctx);
-                const t1 = performance.now();
-                total += t1 - t0;
-                count++;
-                console.log(total / count);
-            });
+            })
+        </script>
+    </div>
+```
+
+</details>
+
+
+## An example of an imperative helper function
+
+[Demo](https://jsfiddle.net/bahrus/4897cbzj/7/)
+
+Since trans-render is built around css matching, it doesn't provide much help when it comes to string interpolation, something supported by virtually every templating library.  trans-render can support something like this via a reusable, shared transform helper function.  The minimalist interpolation library trans-render/lib/interpolate.js is provided for this purpose, but it's scope is quite small (no expressions or anything).  More robust libraries that support expressions could be created, as needed.
+
+## Use Case 2:  Tränslåtyng pøst pünk lyriks tø Sweedisλ
+
+<details>
+    <summary>Markup</summary>
+
+```html
+    <div>
+        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a><br>
+        <button id="changeDays">Wi not trei a holiday in Sweeden this yer</button>
+        <template id="Friday">
+            <span>It's |.Day5| I'm in love</span>
+        </template>
+        <template id="Opening">
+            <span>I don't care if |.Day1|'s blue</span><br>
+            <span>|.Day2|'s gray and |.Day3| too</span><br>
+            <span>|.Day4| I don't care about you</span><br>
+            <span data-init="Friday"></span>
+        </template>
+
+        <template id="Main">
+            <div data-init="Opening" class="stanza"></div>
+            <div class="stanza">
+                <span>|.Day1| you can fall apart</span><br>
+                <span>|.Day2| |.Day3| break my heart</span><br>
+                <span>Oh, |.Day4| doesn't even start</span><br>
+                <span data-init="Friday"></span>
+            </div>
+            <div class="stanza">
+                <span>|.Day6| wait</span><br>
+                <span>And |.Day7| always comes too late</span><br>
+                <span>But |.Day5| never hesitate</span>
+            </div>
+
+            <div class="stanza">
+                <span>I don't care if |.Day1|'s black</span><br>
+                <span>|.Day2|, |.Day3| heart attack</span><br>
+                <span>|.Day4| never looking back</span><br>
+                <span data-init="Friday"></span>
+            </div>
+            <div class="stanza">
+                <span>|.Day1| you can hold your head</span><br>
+                <span>|.Day2|, |.Day3| stay in bed</span><br>
+                <span>Or |.Day4| watch the walls instead</span><br>
+                <span data-init="Friday"></span>
+            </div>
+            <div class="stanza">
+                <span>|.Day6| wait</span><br>
+                <span>And |.Day7| always comes too late</span><br>
+                <span>But |.Day5| never hesitate</span>
+            </div>
+            <div class="stanza">
+                <span>Dressed up to the eyes</span><br>
+                <span>It's a wonderful surprise</span><br>
+                <span>To see your shoes and your spirits rise</span><br>
+                <span>Throwing out your frown</span><br>
+                <span>And just smiling at the sound</span><br>
+                <span>And as sleek as a shriek</span><br>
+                <span>Spinning round and round</span><br>
+                <span>Always take a big bite</span><br>
+                <span>It's such a gorgeous sight</span><br>
+                <span>To see you in the middle of the night</span><br>
+                <span>You can never get enough</span><br>
+                <span>Enough of this stuff</span><br>
+                <span>It's |.Day5|</span><br>
+                <span>I'm in love</span>
+            </div>
+            <div data-init="Opening" class="stanza"></div>
+            <div class="stanza">
+                <span>|.Day1| you can fall apart</span><br>
+                <span>|.Day2|, |.Day3| break my heart</span><br>
+                <span>|.Day4| doesn't even start</span><br>
+                <span data-init="Friday"></span>
+            </div>
+            <style>
+                .stanza{
+                padding-top: 20px;
+            }
+        </style>
+        </template>
+        <div id="target"></div>
+
+        <script type="module">
+            import { transform } from 'https://cdn.skypack.dev/trans-render';
+            import { interpolate } from 'https://cdn.skypack.dev/trans-render/lib/interpolate.js';
+
+            let model = {
+                Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
+                Day6: 'Saturday', Day7: 'Sunday',
+            };
+            const ctx = transform(Main, {
+                match: {
+                    '*': ({ target }) => {
+                        interpolate(target, 'textContent', model);
+                    },
+                    dataInitAttribs: ({ target, ctx, val }) => {
+                        transform(self[val], ctx, target);
+                    }
+                }
+            }, target);
+            changeDays.addEventListener('click', e => {
+                model = {
+                    Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
+                    Day6: 'lördag', Day7: 'söndag',
+                }
+                delete ctx.match.initData;
+                transform(target, ctx);
+            })
         </script>
     </div>
 ```
