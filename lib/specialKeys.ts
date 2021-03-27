@@ -41,5 +41,7 @@ export function getQuery(key: string){
             }           
         }
     }
-    return null;
+    return {
+        query: key
+    };
 }

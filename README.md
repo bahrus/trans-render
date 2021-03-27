@@ -48,13 +48,15 @@ The CSS matching transform.js takes one of two forms:
 
 ### Multi-matching
 
-Multi matching provides support for syntax that is convenient for JS development.  Syntax like this isn't very pleasant, considering how common such queries will be:
+Multi matching provides support for syntax that is convenient for JS development.  Syntax like this isn't very pleasant:
 
 ```JavaScript
 "[part='my-special-section']": {
     ...
 }
 ```
+
+... especially when considering how common such queries will be.
 
 So transform.js supports special syntax for css matching that is more convenient for JS developers:
 
@@ -183,7 +185,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>Ends with "Props"</td><td>textContentProps</td><td>.querySelectorAll('[-text-content]')</td><td>Useful for binding properties in bulk</td>
     </tr>
     <tr>
-        <td>Starts with "$(" and ends with ")"</td><td>'$(a[href$=".mp3"])'</td><td>.querySelectorAll('a[href$=".mp3"')</td><td>
+        <td>Anything else</td><td>'a[href$=".mp3"]'</td><td>.querySelectorAll('a[href$=".mp3"')</td><td>
     </tr>
 </table>
 

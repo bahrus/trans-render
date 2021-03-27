@@ -65,61 +65,48 @@ function processTarget(
     if(target.nodeType !== 11 && target.hasAttribute('debug')) debugger;
     const keys = Object.keys(tr);
     if(keys.length === 0) return true;
-    const scopeKeys: string[] = [];
     for(const key of keys){
-        const queryInfo = key ==='*' ? {query: '*', type: 'all', attrib: ''} :  getQuery(key);
-        if(queryInfo !== null){
-            let matches: NodeListOf<Element> | undefined;
-            let qcLookup: {[key: string]: NodeListOf<Element>} | undefined;
-            const qc = ctx.queryCache;
-            const query = queryInfo.query;
+        const queryInfo = getQuery(key);
+        let matches: NodeListOf<Element> | undefined;
+        let qcLookup: {[key: string]: NodeListOf<Element>} | undefined;
+        const qc = ctx.queryCache;
+        const query = queryInfo.query;
+        if(qc !== undefined){
+            if(qc.has(target)){
+                qcLookup = qc.get(target)!;
+                matches = qcLookup[query];
+            }
+        }
+        if(matches === undefined){
+            matches = target.querySelectorAll(query);
             if(qc !== undefined){
-                if(qc.has(target)){
-                    qcLookup = qc.get(target)!;
-                    matches = qcLookup[query];
+                if(qcLookup !== undefined){
+                    qcLookup[query] = matches;
+                }else{
+                    qc.set(target, {[query]: matches});
                 }
+            }       
+        }
+        for(const match of matches){
+            const {val, target} = ctx;
+            switch(queryInfo.type){
+                case 'attribs':
+                    ctx.val = match.getAttribute(queryInfo.attrib);
+                    break;
+                case 'props':
+                    (<any>match)[lispToCamel(queryInfo.attrib)] = tr[key];
+                    continue;
             }
-            if(matches === undefined){
-                matches = target.querySelectorAll(query);
-                if(qc !== undefined){
-                    if(qcLookup !== undefined){
-                        qcLookup[query] = matches;
-                    }else{
-                        qc.set(target, {[query]: matches});
-                    }
-                }       
-            }
-            for(const match of matches){
-                const {val, target} = ctx;
-                switch(queryInfo.type){
-                    case 'attribs':
-                        ctx.val = match.getAttribute(queryInfo.attrib);
-                        break;
-                    case 'props':
-                        (<any>match)[lispToCamel(queryInfo.attrib)] = tr[key];
-                        continue;
-                }
 
-                ctx.target = match;
-                ctx.idx!++;
-                doRHS(ctx, tr[key]);
-                ctx.val = val;
-                ctx.target = target;
-            }
-        }else{
-            scopeKeys.push(key);
+            ctx.target = match;
+            ctx.idx!++;
+            doRHS(ctx, tr[key]);
+            ctx.val = val;
+            ctx.target = target;
         }
     }
     
-    for(const child of target.children){
-        for(const key of scopeKeys){
-            if(child.matches(key)){
-                ctx.target = child;
-                doRHS(ctx, tr[key]);
-                ctx.target = target;
-            }
-        }
-    }
+    
 }
 
 function doRHS(ctx: RenderContext, rhs: any){
