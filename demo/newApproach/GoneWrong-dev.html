@@ -79,7 +79,7 @@
             import { transform } from '../../lib/transform.js';
             transform(Main, {
                 match: {
-                    initData: ({target, ctx, val}) =>{
+                    dataInitAttribs: ({target, ctx, val}) =>{
                         transform(self[val], ctx, target);
                     }
                 }
