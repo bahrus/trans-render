@@ -92,10 +92,10 @@ function processTarget(
             for(const match of matches){
                 const {val, target} = ctx;
                 switch(queryInfo.type){
-                    case 'data':
+                    case 'attribs':
                         ctx.val = match.getAttribute(queryInfo.attrib);
                         break;
-                    case 'prop':
+                    case 'props':
                         (<any>match)[lispToCamel(queryInfo.attrib)] = tr[key];
                         continue;
                 }

@@ -64,7 +64,7 @@ mySpecialSectionPart: {
 }
 ```
 
-Throughout this documentation, we will be referrring to the string before the colon as the "LHS" (left-hand-side) expression.
+Throughout this documentation, we will be referring to the string before the colon as the "LHS" (left-hand-side) expression.
 
 Consider the following example (please expand).  Don't worry, it looks quite complicated, but we will walk through it, and also, as we introduce more features, the code below will greatly simplify:
 

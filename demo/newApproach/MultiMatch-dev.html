@@ -19,22 +19,24 @@
         import { transform } from '../../lib/transform.js';
         transform(Main, {
             match: {
-                countData: ({target, val}) =>{
+                dataCountAttribs: ({target, val}) => {
+                    console.log(val);
                     target.addEventListener('click', e => {
                         const newCount = parseInt(e.target.dataset.count) + 1;
                         e.target.dataset.count = newCount;
                         transform(container, {
                             match: {
-                                countWideClass: ({target}) => {
+                                countWideClasses: ({target}) => {
                                     target.textContent = newCount;
                                 },
-                                vitaminDElement: ({target}) => {
+                                vitaminDElements: ({target}) => {
                                     target.textContent = 2 * newCount;
                                 },
-                                tripleDeckerPart: ({target}) => {
+                                tripleDeckerParts: ({target}) => {
                                     target.textContent = 3 * newCount;
                                 },
-                                jan8Id: ({target}) => {
+                                idAttribs: ({target, val}) => {
+                                    console.log(val);
                                     target.textContent = 4 * newCount;
                                 },
                                 textContentProp: 5 * newCount,

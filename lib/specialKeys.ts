@@ -1,6 +1,6 @@
 import { camelToLisp } from "./camelToLisp.js";
 
-export const attribs = ['id', 'part', 'class', 'data', 'element', 'prop'];
+export const attribs = ['parts', 'classes', 'attribs', 'elements', 'props'];
 
 export interface queryInfo{
     query: string;
@@ -13,34 +13,31 @@ export function getQuery(key: string){
     for(const type of attribs){
         if(lpKey.endsWith(type)){
             const attrib = lpKey.substr(0, lpKey.length - type.length - 1);
+            let query: string | undefined;
             switch(type){
-                case 'id':{
-                    const query = `#${attrib}`;
-                    return {query, type, attrib};
+                case 'parts':{
+                    query = `[part*="${attrib}"]`;
+                    break;
                 }
-                case 'part':{
-                    const query = `[part~="${attrib}"]`;
-                    return {query, type, attrib};
+                case 'classes':{
+                    query = `.${attrib}`;
+                    break;
                 }
-                case 'class':{
-                    const query = `.${attrib}`;
-                    return {query, type, attrib};
+                case 'attribs':{
+                    query = `[${attrib}]`;
+                    break;
                 }
-                case 'data':{
-                    const realAttrib = `data-${attrib}`;
-                    const query = `[${realAttrib}]`;
-                    return {query, type, attrib: realAttrib};
+                case 'elements':{
+                    query = attrib;
+                    break;
                 }
-                case 'element':{
-                    const query = attrib;
-                    return {query, type, attrib};
+                case 'props': {
+                    query = `[-${attrib}]`;
+                    break;
                 }
-                case 'prop': {
-                    const query = `[-${attrib}]`;
-                    return {query, type, attrib};
-                }
-                default:
-                    
+            }
+            if(query !== undefined){
+                return {query, type, attrib};
             }           
         }
     }
