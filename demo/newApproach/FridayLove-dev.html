@@ -97,7 +97,7 @@
                     '*': ({ target }) => {
                         interpolate(target, 'textContent', model);
                     },
-                    initData: ({ target, ctx, val }) => {
+                    dataInitAttribs: ({ target, ctx, val }) => {
                         transform(self[val], ctx, target);
                     }
                 }
