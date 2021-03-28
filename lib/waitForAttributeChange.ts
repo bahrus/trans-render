@@ -7,11 +7,11 @@ export function waitForAttributeChange(el: HTMLElement, attributeName: string, t
                     if(test){
                         if(test(el.getAttribute(attributeName))){
                             observer.disconnect();
-                            resolve();
+                            resolve(mutation);
                         }
                     }else{
                         observer.disconnect();
-                        resolve();
+                        resolve(mutation);
                     }
                 }
             });    

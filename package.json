@@ -21,25 +21,26 @@
     "./lib/camelToLisp.js": "./lib/camelToLisp.js",
     "./lib/getProp.js": "./lib/getProp.js",
     "./lib/interpolate.js": "./lib/interpolate.js",
+    "./lib/insertAdjacentTemplate.js": "./lib/insertAdjacentTemplate.js",
     "./lib/lispToCamel.js": "./lib/lispToCamel.js",
+    "./lib/mergeDeep.js": "./lib/mergeDeep.js",
     "./lib/P.js": "./lib/P.js",
     "./lib/PE.js": "./lib/PE.js",
     "./lib/specialKeys.js": "./lib/specialKeys.js",
     "./lib/Templater.js": "./lib/Templater.js",
     "./lib/Texter.js": "./lib/Texter.js",
     "./lib/transform.js": "./lib/transform.js",
-    "./lib/mergeDeep.js": "./lib/mergeDeep.js",
-    "./lib/insertAdjacentTemplate.js": "./lib/insertAdjacentTemplate.js"
+    "./lib/waitForAttributeChange.js": "./lib/waitForAttributeChange.js"
   },
   "files": [
     "lib/*"
   ],
   "dependencies": {},
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "11.0.1",
+    "@rollup/plugin-node-resolve": "11.2.1",
     "@skypack/package-check": "0.2.2",
-    "terser": "5.5.1",
-    "xtal-test": "0.0.48"
+    "terser": "5.6.1",
+    "xtal-test": "0.0.50"
   },
   "repository": {
     "type": "git",
