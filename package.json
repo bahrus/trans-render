@@ -35,7 +35,6 @@
   "files": [
     "lib/*"
   ],
-  "dependencies": {},
   "devDependencies": {
     "@rollup/plugin-node-resolve": "11.2.1",
     "@skypack/package-check": "0.2.2",
