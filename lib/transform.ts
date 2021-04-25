@@ -109,8 +109,9 @@ function processTarget(
     
 }
 
-function doRHS(ctx: RenderContext, rhs: any){
+async function doRHS(ctx: RenderContext, rhs: any){
     if(rhs === undefined) return;
+    if(ctx.abort === true) return;
     while(typeof rhs === 'function') rhs = rhs(ctx);
     const pm = ctx.postMatch;
     if(pm !== undefined){

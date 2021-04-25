@@ -19,7 +19,18 @@ export function applyPE<T extends Partial<HTMLElement> = HTMLElement>(host: HTML
                     originalEventHandler(val, e);
                 }
             } else {
-                eventHandler = eventHandler.bind(host);
+                switch(typeof eventHandler){
+                    case 'function':
+                        eventHandler = eventHandler.bind(host);
+                        break;
+                    case 'object': {
+                        const props = eventHandler;
+                        eventHandler = (e: Event) => {
+                            if(e.target !== null) applyP(e.target, props as PSettings<T>);
+                        }
+                    }
+                }
+                
             }
             target.addEventListener(key, eventHandler as EventListenerOrEventListenerObject);
         }
