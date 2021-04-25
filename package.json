@@ -11,7 +11,8 @@
     "doc": "wca analyze trans-render.js --outFile custom-elements.json",
     "package-check": "package-check",
     "bundle": "rollup --config",
-    "compress": "terser --compress --mangle -- dist/transform.js > dist/transform.min.js"
+    "compress": "terser --compress --mangle -- dist/transform.js > dist/transform.min.js",
+    "publish": "git commit -m \"...\" && git push && npm version patch && npm publish && git pull && git push"
   },
   "exports": {
     ".": "./lib/transform.js",
