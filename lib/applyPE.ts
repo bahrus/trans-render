@@ -28,6 +28,7 @@ export function applyPE<T extends Partial<HTMLElement> = HTMLElement>(host: HTML
                         eventHandler = (e: Event) => {
                             if(e.target !== null) applyP(e.target, props as PSettings<T>);
                         }
+                        break;
                     }
                 }
                 
