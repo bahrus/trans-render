@@ -5,10 +5,14 @@ export function upShadowSearch(ref: Element, cssSel: string){
     let targetElement: Element | null;
     if (cssSel.startsWith('/')) {
         targetElement = (<any>self)[cssSel.substr(1)];
-    } else {
+    } else{
         const len = cssSel.startsWith('./') ? 0 : split.length;
         const host = getHost(<any>ref as HTMLElement, len) as HTMLElement;
         if (host !== undefined) {
+            if(len === 0){
+                targetElement = (<any>host)[id];
+                if(targetElement !== undefined) return targetElement;
+            }
             targetElement = host.querySelector('#' + id) as HTMLElement;
         } else {
             throw 'Target Element Not found';
