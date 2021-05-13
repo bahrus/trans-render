@@ -1,4 +1,4 @@
-import {getHost} from './getHost.js';
+import {getShadowRoot} from './getShadowRoot.js';
 export function upShadowSearch(ref: Element, cssSel: string){
     const split = cssSel.split('/');
     const id = split[split.length - 1];
@@ -7,13 +7,13 @@ export function upShadowSearch(ref: Element, cssSel: string){
         targetElement = (<any>self)[cssSel.substr(1)];
     } else{
         const len = cssSel.startsWith('./') ? 0 : split.length;
-        const host = getHost(<any>ref as HTMLElement, len) as HTMLElement;
-        if (host !== undefined) {
-            if(len === 0){
-                targetElement = (<any>host)[id];
+        const shadowRoot = getShadowRoot(<any>ref as HTMLElement, len) as ShadowRoot;
+        if (shadowRoot !== undefined) {
+            if(len === 0 && shadowRoot.host){
+                targetElement = ((<any>shadowRoot).host)[id];
                 if(targetElement !== undefined) return targetElement;
             }
-            targetElement = host.querySelector('#' + id) as HTMLElement;
+            targetElement = shadowRoot.querySelector('#' + id) as HTMLElement;
         } else {
             throw 'Target Element Not found';
         }

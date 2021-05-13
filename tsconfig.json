@@ -8,6 +8,12 @@
 		"strict": true,
 		"watch": true
 	},
+	"files":[
+		"lib/applyPEA.ts",
+		"lib/camelToLisp.ts",
+		"lib/transform.ts",
+		"lib/upShadowSearch.ts",
+	],
 	"exclude":[
 		"build",
 		"bower_components",
