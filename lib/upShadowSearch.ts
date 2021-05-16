@@ -7,7 +7,7 @@ export function upShadowSearch(ref: Element, cssSel: string){
     if (cssSel.startsWith('/')) {
         targetElement = (<any>self)[cssSel.substr(1)];
     } else{
-        const len = cssSel.startsWith('./') ? 0 : split.length;
+        const len = cssSel.startsWith('../') ? split.length : 0;
         const shadowRoot = getShadowRoot(<any>ref as HTMLElement, len) as ShadowRoot;
         if (shadowRoot !== undefined) {
             if(len === 0 && shadowRoot.host){
