@@ -6,6 +6,7 @@ export function applyP<T extends Partial<HTMLElement> = HTMLElement>(target: T, 
         delete safeProps.dataset;
         delete safeProps.style;
         delete safeProps.localName;
+        delete safeProps.tagName;
         Object.assign(target, safeProps);
         if (props.style !== undefined) Object.assign(target.style, props.style);
         if (props.dataset !== undefined) Object.assign(target.dataset, props.dataset);
