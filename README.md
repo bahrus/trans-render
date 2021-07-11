@@ -10,9 +10,9 @@
 
 **NB**:  This library is undergoing a face lift.  To see the old functionality that this new code is leading up to, go [here](README_OLD.md)
 
-*trans-render* (TR) provides a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, TR performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, TR uses css path tests via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
+*trans-rendering* (TR) provides a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, TR performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, TR uses css path tests via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
 
-Unlike XSLT, though, TR is not limited by declarative syntax and allows for imperative logic with side-effects.  A subset of TR, also described below is "Declarative trans-render" syntax [DTR], which is pure, 100% declarative syntax.  DTR supports dynamic capabilities by attaching DTR linked "action" transforms to DOM events.
+A subset of TR, also described below is "Declarative trans-render" syntax [DTR], which is pure, 100% declarative syntax.  DTR supports dynamic capabilities by attaching DTR linked "action" transforms to DOM events.
 
 It's designed to provide an alternative to the proposed [Template Instantiation proposal](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with the idea being that it could continue to supplement what that proposal provides if/when it lands in browsers.
 
