@@ -153,6 +153,8 @@ transform(Main, {...}, container)
 transform(container, {...})
 ```
 
+We can also start getting a sense of how transforms can be tied to custom element events.  Although the example above is hardly declarative, as we create more rules allow us to update the DOM, and link events to transforms, we will achieve a Turing complete(?) solution.
+
 The following table lists how the LHS is translated into CSS multi-match queries:
 
 <table>
