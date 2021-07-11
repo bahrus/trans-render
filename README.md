@@ -432,7 +432,7 @@ const matches = { //TODO check that this works
 }
 ```
 
-These arrow functions can return a value.  trans-render's "postMatch" processors allows us to enhance what any custom function does, via some reusable (user-defined) processors.  If one of these reusable processors is sufficient for the task at hand, then the arrow function can be replaced by a JSON-like expression, allowing the reusable processor to do its thing, after being passed the context.  trans-render provides a few "standard" processors, which address common concerns.
+These arrow functions can return a value.  trans-render's "postMatch" processors allows us to enhance what any custom function does, via some reusable (formally user-registered) processors.  If one of these reusable processors is sufficient for the task at hand, then the arrow function can be replaced by a JSON-like expression, allowing the reusable processor to do its thing, after being passed the context.  trans-render provides a few "standard" processors, which address common concerns.
 
 The first common concern is setting the textContent of an element.
 
@@ -469,11 +469,14 @@ Or more simply, you can hard-code the greeting, and start to imagine that the bi
 
 <script type="module">
     import { transform } from '../../lib/transform.js';
-    import { Texter } from '../../lib/Texter.js'
+    import { Texter } from '../../lib/Texter.js';
+    //imagine this JSON was obtained via JSON import or fetch:
+    import { swedishTransform } from 'myPackage/myUITransforms.js' {assert: {type: 'json'};
+    // transform = {
+    //    "summary":"Hallå"
+    //
     transform(details, {
-        match:{
-            summary: 'Hallå'
-        },
+        match:swedishTransform,
         postMatch: [{rhsType: String, ctor: Texter}]
     })
 </script>
