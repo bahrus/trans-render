@@ -602,7 +602,7 @@ and we can recursively, declaratively apply a transform upon cloning:
 trContext: ctx
 ```
 
-## Loosely Coupled Template Merging [TODO]
+## Loosely Coupled Template Merging When Template Is Specified on RHS[TODO]
 
 The markup above assumes the developer can, and wants to, dictate what the markup should look like.  But in some cases, the markup should be loosely coupled from the need to insert a template.  For example, maybe we want the markup to specialize in what is needed for the light children of a component, but we need to transform that markup into something that makes sense inside the ShadowDOM of a component, when using something like [slot-bot](https://github.com/bahrus/slot-bot).  
 
@@ -618,6 +618,19 @@ We could have a rule for this, if the RHS is a template:
 ```JavaScript
 dataInitAttribEqFriday: FridayTemplate
 ```
+
+## Transforming Templates matched on LHS [TODO]
+
+If the document search that we match on, for the RHS is a template, then replace the template by transforming the template:
+
+1.  Take the innerHTML, use the DOMParser to parse, then apply the transform, according to the transform rule on the RHS.
+2.  Use template instantiation, merging in the object on the RHS
+3.  Should we:
+      1.  Create a new template element from the transformed HTML, and replace the matched template with the new one? Or
+      2.  Replace the matching template with the Transformed HTML, so it becomes Live DOM?  Or
+      3.  Support both somehow?
+
+
 
 ## Extensible, Loosely Coupled PostMatches [TODO] Via JS Tuples
 
@@ -661,4 +674,10 @@ To define the processors, we extend the postMatch syntax, using the word "head" 
 After setting the string value of a node, setting properties, attaching event handlers, as well as attributes comes next in things we do over and over again.
 
 For this functionality, we use tuples to represent these settings.  P stands for Properties, E for events, A for attributes, and T for transform or template.  There are four nested, and subsequently larger processors that can do one or more of these 4 things.  It is a good idea to use the "weakest" processor for what you need, thereby reducing the footprint of your web component.
+
+In the case of E for events, use Transform on right hand side.
+
+## Dynamic transforms [TODO]
+
+
 
