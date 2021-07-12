@@ -670,7 +670,12 @@ To define the processors, we extend the postMatch syntax, using the word "head" 
 
 ## Boolean RHS
 
-Remove matching element if false (dangerous). 
+Remove matching element if false (dangerous). If true, instantiate template, with context.state(?) as object to bind to.
+
+## Custom Element RHS 
+
+Use static "is" property (until there's )
+
 
 ## P[E[A[T]]] [TODO]
 
