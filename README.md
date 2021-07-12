@@ -668,6 +668,9 @@ To define the processors, we extend the postMatch syntax, using the word "head" 
 </script>
 ```
 
+## Boolean RHS
+
+Remove matching element if false (dangerous). 
 
 ## P[E[A[T]]] [TODO]
 
@@ -675,9 +678,15 @@ After setting the string value of a node, setting properties, attaching event ha
 
 For this functionality, we use tuples to represent these settings.  P stands for Properties, E for events, A for attributes, and T for transform or template.  There are four nested, and subsequently larger processors that can do one or more of these 4 things.  It is a good idea to use the "weakest" processor for what you need, thereby reducing the footprint of your web component.
 
-In the case of E for events, use Transform on right hand side.
+In the case of E for events, use Transform on right hand side for DTR.
+
+For non DTR, if PEAT are functions, evaluate based on context first, then apply 
 
 ## Dynamic transforms [TODO]
+
+Create link to JSON transform based on context parameters
+
+
 
 
 
