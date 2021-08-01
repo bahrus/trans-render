@@ -83,16 +83,16 @@ Consider the following example (please expand).  Don't worry, it looks quite com
                         e.target.dataset.count = newCount;
                         transform(container, {
                             match: {
-                                countWideClass: ({target}) => {
+                                countWideClasses: ({target}) => {
                                     target.textContent = newCount;
                                 },
-                                vitaminDElement: ({target}) => {
+                                vitaminDElements: ({target}) => {
                                     target.textContent = 2 * newCount;
                                 },
-                                tripleDeckerPart: ({target}) => {
+                                tripleDeckerParts: ({target}) => {
                                     target.textContent = 3 * newCount;
                                 },
-                                jan8Id: ({target}) => {
+                                idAttribs: ({target}) => {
                                     target.textContent = 4 * newCount;
                                 },
                                 textContentProp: 5 * newCount,
@@ -690,6 +690,57 @@ For non DTR, if PEAT are functions, evaluate based on context first, then apply
 ## Dynamic transforms [TODO]
 
 Create link to JSON transform based on context parameters
+
+## Isomorphic Templating Language
+
+```html
+<a href=//cnn.com data-bind=msg>This is cnn</a>
+```
+
+maps to 
+
+```html
+<template><a href=//cnn.com>{{msg}}</a></template>
+```
+
+---
+
+```html
+<a href=//cnn.com data-bind="This is {{msg}}">This is cnn</a>
+```
+
+maps to
+
+```html
+<template><a href=//cnn.com>This is {{msg}}</a></template>
+```
+
+---
+
+```html
+<a href=//cnn.com data-bind='{"textContent":"This is {{msg}}"},{"href":"msgURL"}'>This is cnn</a>
+```
+
+maps to
+
+```html
+<template><a href={{msgURL}}>This is {{msg}}</a></template>
+```
+
+---
+
+```html
+<a href=//cnn.com data-bind='[{"repeat":3, "list": "newsStations",  "nodesPerIteration": 1},{"textContent":"This is {{msg}}"},{"href":"msgURL"}]'>This is cnn</a>
+<a href=//foxnews.com>This is Fox News</a>
+<a href=//msnbc.com>This is MSNBC</a>
+```
+
+maps to
+```html
+<template for:each={{newsStations}}><a href={{msgURL}}>This is {{msg}}</a>
+```
+
+
 
 
 
