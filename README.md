@@ -571,7 +571,7 @@ This feature is *not* part of the core transform function.  It requires one of t
     import { InTexter } from 'trans-render/lib/InTexter.js';
     transform(details, {
         match:{
-            "summary": "Hello, |.place|"
+            "summary": "Hello, ${host[0].place}"
         },
         postMatch: [{rhsType: String, ctor: InTexter}]
     })
