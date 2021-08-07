@@ -10,7 +10,7 @@ export interface RenderContext<T = Element, TItem = any> {
     postMatch?: postMatchProcessor[];
     val?: string | null;
     rhs?: any;
-    host?: HTMLElement;
+    host?: HTMLElement[] | undefined;
     queryCache: WeakMap<Element, {[key: string]: NodeListOf<Element>}>;
     abort?: boolean | undefined;
 }

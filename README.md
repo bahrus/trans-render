@@ -542,7 +542,7 @@ As you may have noticed, some abbreviations are used by this library:
 * lhs = left-hand side
 * PM = post match
 
-## Declarative, dynamic content based on presence of ctx.host [TODO]
+## Declarative, dynamic content based on presence of ctx.host [Untested]
 
 The inspiration for TR came from wanting a syntax for binding templates to a model provided by a hosting custom element.
 
@@ -558,19 +558,17 @@ But having standardized on a place where the dynamic data we need can be derived
 
 ... means "set the textContent of the summary element to "hello [the value of the world property of the host element or object]".
 
-This feature is *not* part of the core trans-render.js library.  It requires one of the standard declarative TR helpers that are part of this package:
-
-InTexter.js:
+This feature is *not* part of the core transform function.  It requires one of the standard declarative TR helpers that are part of this package, InTexter.js:
 
 ```html
 <details id=details>
-    <summary>Hello, world</summary>
+    <summary>Amor Omnia Vincit</summary>
     ...
 </details>
 
 <script type="module">
-    import { transform } from '../../lib/transform.js';
-    import { InTexter } from '../../lib/InTexter.js';
+    import { transform } from 'trans-render/lib/transform.js';
+    import { InTexter } from 'trans-render/lib/InTexter.js';
     transform(details, {
         match:{
             "summary": "Hello, |.place|"
@@ -579,6 +577,39 @@ InTexter.js:
     })
 </script>
 ```
+
+## P[E[A[T]]] [TODO]
+
+After setting the string value of a node, setting properties, attaching event handlers, as well as attributes comes next in things we do over and over again.
+
+```html
+<template id=template>
+<my-custom-element></my-custom-element>
+</template>
+
+<script type=module>
+    import { transform } from 'trans-render/lib/transform.js';
+    import { P } from 'trans-render/lib/P.js';
+    transform(template, {
+        match:{
+            myCustomElementElement: [{myProp0: {some:{harcoded:value}, myProp1: "|.someHostProp|", myProp2: "|..someHostPropOfHostProp|"}]
+        },
+        postMatch: [{
+            rhsType: Array,
+            rhsHeadType: Object,
+            ctor: P
+        }]
+    });
+</script>
+```
+
+For this functionality, we use tuples to represent these settings.  P stands for Properties, E for events, A for attributes, and T for transform or template.  There are four nested, and subsequently larger processors that can do one or more of these 4 things.  It is a good idea to use the "weakest" processor for what you need, thereby reducing the footprint of your web component.
+
+In the case of E for events, use Transform on right hand side for DTR.
+
+For non DTR, if PEAT are functions, evaluate based on context first, then apply 
+
+
 
 ## Template Merging Using a Custom Element
 
@@ -714,19 +745,7 @@ Remove matching element if false (dangerous). If true, instantiate template, wit
 Use static "is" property (until there's )
 
 
-## P[E[A[T]]] [TODO]
 
-After setting the string value of a node, setting properties, attaching event handlers, as well as attributes comes next in things we do over and over again.
-
-For this functionality, we use tuples to represent these settings.  P stands for Properties, E for events, A for attributes, and T for transform or template.  There are four nested, and subsequently larger processors that can do one or more of these 4 things.  It is a good idea to use the "weakest" processor for what you need, thereby reducing the footprint of your web component.
-
-In the case of E for events, use Transform on right hand side for DTR.
-
-For non DTR, if PEAT are functions, evaluate based on context first, then apply 
-
-## Dynamic transforms [TODO]
-
-Create link to JSON transform based on context parameters
 
 
 
