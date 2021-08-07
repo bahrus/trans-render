@@ -542,7 +542,7 @@ As you may have noticed, some abbreviations are used by this library:
 * lhs = left-hand side
 * PM = post match
 
-## Declarative, dynamic content based on presence of ctx.host [Untested]
+## Declarative, dynamic content based on presence of ctx.host
 
 The inspiration for TR came from wanting a syntax for binding templates to a model provided by a hosting custom element.
 
