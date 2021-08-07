@@ -5,6 +5,7 @@ export interface RenderContext<T = Element, TItem = any> {
     match?: any;
     mode?: 'init' | 'update';
     target?: T | null;
+    targetProp?: string;
     options?: RenderOptions | undefined;
     postMatch?: postMatchProcessor[];
     val?: string | null;

@@ -1,9 +1,9 @@
 {
 	"compilerOptions": {
 		"target": "ESNext",
-		"module":"esnext",
+		"module":"ESNext",
 		"sourceMap": false,
-		"experimentalDecorators": true,
+		"experimentalDecorators": false,
 		"newLine": "LF",
 		"strict": true,
 		"watch": true
@@ -12,7 +12,8 @@
 		"lib/applyPEA.ts",
 		"lib/camelToLisp.ts",
 		"lib/transform.ts",
-		"lib/upShadowSearch.ts",
+		"lib/InTexter.ts",
+		"lib/upShadowSearch.ts"
 	],
 	"exclude":[
 		"build",

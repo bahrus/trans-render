@@ -643,9 +643,7 @@ trContext: ctx
 
 ## Loosely Coupled Template Merging When Template Is Specified on RHS[TODO]
 
-The markup above assumes the developer can, and wants to, dictate what the markup should look like.  But in some cases, the markup should be loosely coupled from the need to insert a template.  For example, maybe we want the markup to specialize in what is needed for the light children of a component, but we need to transform that markup into something that makes sense inside the ShadowDOM of a component, when using something like [slot-bot](https://github.com/bahrus/slot-bot).  
-
-Maybe the core HTML markup comes from a third party source, but we want to insert some custom content into that stream.
+The markup above assumes the developer wants to decide where templates should be inserted. In many cases, that's perfectly appropriate.  But in some cases, the markup should be loosely coupled from the need to insert a template.  For example, maybe the core HTML markup comes from a third party source, but we want to insert some custom content into that stream.
 
 How can we do this declaratively?
 
