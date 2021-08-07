@@ -471,7 +471,7 @@ Or more simply, you can hard-code the greeting, and start to imagine that the bi
     import { transform } from '../../lib/transform.js';
     import { Texter } from '../../lib/Texter.js';
     //imagine this JSON was obtained via JSON import or fetch:
-    import { swedishTransform } from 'myPackage/myUITransforms.js' {assert: {type: 'json'};
+    import { swedishTransform } from 'myPackage/myUITransforms.json' {assert: {type: 'json'};
     // transform = {
     //    "summary":"Hallå"
     //
@@ -490,11 +490,11 @@ Note the configuration setting associated with the transform function, "postMatc
 summary: 'Hallå'
 ```
 
-is a string, use the Textor class to process the rendering context." 
+...is a string, use the Textor class to process the rendering context." 
 
 The brave developer can implement some other way of interpreting a right-hand-side of type "String".  This is the amount of engineering firepower required to implement the Texter processor:
 
-```Typescript
+```TypeScript
 import {PMDo, RenderContext} from './types.js';
 
 export class Texter implements PMDo{
@@ -540,6 +540,9 @@ As you may have noticed, some abbreviations are used by this library:
 * ctor = class constructor
 * rhs = right-hand side
 * lhs = left-hand side
+* PM = post match
+
+
 
 ## Template Merging Using a Custom Element
 
