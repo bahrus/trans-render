@@ -571,12 +571,17 @@ This feature is *not* part of the core transform function.  It requires one of t
     import { InTexter } from 'trans-render/lib/InTexter.js';
     transform(details, {
         match:{
-            "summary": "Hello, ${host[0].place}"
+            "summary": "Hello, ${host.place}"
+        },
+        host:{
+            place: 'Mars'
         },
         postMatch: [{rhsType: String, ctor: InTexter}]
     })
 </script>
 ```
+
+Yes, an eval is done behind the scenes.  But the eval will not be done if the rhs contains an open parenthesis, which should greatly reduce the risk of side effects.
 
 ## P[E[A[T]]] [TODO]
 
@@ -592,7 +597,7 @@ After setting the string value of a node, setting properties, attaching event ha
     import { P } from 'trans-render/lib/P.js';
     transform(template, {
         match:{
-            myCustomElementElements: [{myProp0: {some:{harcoded:value}, myProp1: "${host.someHostProp}", myProp2: "${host.someHostOfHostProp}"]
+            myCustomElementElements: [{myProp0: {some:{harcoded:value}}, myProp1: "${host.someHostProp}"}]
         },
         postMatch: [{
             rhsType: Array,

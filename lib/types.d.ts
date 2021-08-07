@@ -25,6 +25,7 @@ export interface RenderOptions{
 
 export interface postMatchProcessor {
     rhsType: Function;
+    rhsHeadType?: Function;
     ctor: {new(): PMDo} | PMDo;
 }
 

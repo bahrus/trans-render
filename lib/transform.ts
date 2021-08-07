@@ -117,7 +117,7 @@ async function doRHS(ctx: RenderContext, rhs: any){
     if(pm !== undefined){
         let  ctor: {new(): PMDo} | PMDo | undefined;
         for(const postMatch of pm){
-            const result = matchByType(rhs, postMatch.rhsType);
+            const result = matchByType(rhs, postMatch.rhsType, postMatch.rhsHeadType);
             if(result > 0){
                 ctor = postMatch.ctor;
                 break;

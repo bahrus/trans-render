@@ -10,7 +10,7 @@ export interface RenderContext<TTarget = HTMLElement | SVGElement, TItem = any> 
     itemTagger?:  (el: HTMLElement | SVGElement) => void;
     idx?: number | undefined;
     options?: RenderOptions | undefined;
-    host?: HTMLElement[] | undefined;
+    host?: HTMLElement | undefined;
     mode?: 'init' | 'update';
     replacedElement?: HTMLElement | SVGElement;
 }
