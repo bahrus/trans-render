@@ -1,9 +1,9 @@
 import {PMDo, RenderContext} from './types.js';
 
-//type NestedString = (string | string[])[];
 type Fn = (ctx: RenderContext) => string;
 
-const weakMap = new WeakMap<Element, Fn>();
+//const weakMap = new WeakMap<Element, Fn>();
+const compiledFns: {[key: string]: Fn} = {};
 
 export class InTexter implements PMDo{
     do(ctx: RenderContext){
@@ -12,10 +12,10 @@ export class InTexter implements PMDo{
         const host = ctx.host;
         if(host !== undefined && text.includes('${') && text.includes('}') && !text.includes('(')){
 
-            let fn = weakMap.get(target);
+            let fn = compiledFns[text];
             if(fn === undefined){
                 fn = eval('({ctx, host, target, idx, mode, targetProp, options, val, rhs  }) => `' + text + '`') as Fn;
-                weakMap.set(target, fn);
+                compiledFns[text] = fn;
             }
             text = fn(ctx);
         }
