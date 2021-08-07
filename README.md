@@ -455,7 +455,7 @@ One of the most common things we want to do is set the text content of a DOM Ele
             summary: hello
         },
         postMatch: [{rhsType: String, ctor: Texter}]
-    })
+    });
 </script>
 ```
 
@@ -542,7 +542,43 @@ As you may have noticed, some abbreviations are used by this library:
 * lhs = left-hand side
 * PM = post match
 
+## Declarative, dynamic content based on presence of ctx.host [TODO]
 
+The inspiration for TR came from wanting a syntax for binding templates to a model provided by a hosting custom element.
+
+The RenderContext object ctx supports a special placeholder for providing the hosting custom element:  ctx.host.  But the name "host" can be treated a bit loosely.  Really, it could be treated as the provider of the model that we want the template to bind to.
+
+But having standardized on a place where the dynamic data we need can be derived from, we can start adding declarative string interpolation:
+
+```JavaScript
+    match:{
+        "summary": "hello |.place|"
+    }
+```
+
+... means "set the textContent of the summary element to "hello [the value of the world property of the host element or object]".
+
+This feature is *not* part of the core trans-render.js library.  It requires one of the standard declarative TR helpers that are part of this package:
+
+InTexter.js:
+
+```html
+<details id=details>
+    <summary>Hello, world</summary>
+    ...
+</details>
+
+<script type="module">
+    import { transform } from '../../lib/transform.js';
+    import { InTexter } from '../../lib/InTexter.js';
+    transform(details, {
+        match:{
+            "summary": "Hello, |.place|"
+        },
+        postMatch: [{rhsType: String, ctor: InTexter}]
+    })
+</script>
+```
 
 ## Template Merging Using a Custom Element
 
