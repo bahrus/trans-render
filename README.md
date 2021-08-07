@@ -546,13 +546,13 @@ As you may have noticed, some abbreviations are used by this library:
 
 The inspiration for TR came from wanting a syntax for binding templates to a model provided by a hosting custom element.
 
-The RenderContext object ctx supports a special placeholder for providing the hosting custom element:  ctx.host.  But the name "host" can be treated a bit loosely.  Really, it could be treated as the provider of the model that we want the template to bind to.
+The RenderContext object ctx supports a special placeholder for providing the hosting custom element:  ctx.host.  But the name "host" can be treated a bit loosely.  Really, it could be treated as the provider of the model that we want the template to bind to.  To be precise, it is designed to hold reverse "stack" of host containers.  host[0] is the containing host, host[1] its containing host, etc.
 
 But having standardized on a place where the dynamic data we need can be derived from, we can start adding declarative string interpolation:
 
 ```JavaScript
     match:{
-        "summary": "hello |.place|"
+        "summary": "hello ${host.place}"
     }
 ```
 
@@ -592,7 +592,7 @@ After setting the string value of a node, setting properties, attaching event ha
     import { P } from 'trans-render/lib/P.js';
     transform(template, {
         match:{
-            myCustomElementElements: [{myProp0: {some:{harcoded:value}, myProp1: "${host[0].someHostProp}", myProp2: "${host[1].someHostOfHostProp}"]
+            myCustomElementElements: [{myProp0: {some:{harcoded:value}, myProp1: "${host.someHostProp}", myProp2: "${host.someHostOfHostProp}"]
         },
         postMatch: [{
             rhsType: Array,
