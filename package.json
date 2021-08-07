@@ -9,10 +9,7 @@
     "test": "node test/tests.js",
     "serve": "node node_modules/xtal-test/serve.js",
     "doc": "wca analyze trans-render.js --outFile custom-elements.json",
-    "package-check": "package-check",
-    "bundle": "rollup --config",
-    "compress": "terser --compress --mangle -- dist/transform.js > dist/transform.min.js",
-    "pub": "git commit -m \"...\" && git push && npm version patch && npm publish && git pull && git push"
+    "package-check": "package-check"
   },
   "exports": {
     ".": "./lib/transform.js",
@@ -38,10 +35,7 @@
     "lib/*"
   ],
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "11.2.1",
-    "@skypack/package-check": "0.2.2",
-    "terser": "5.6.1",
-    "xtal-test": "0.0.50"
+    "xtal-test": "0.0.51"
   },
   "repository": {
     "type": "git",

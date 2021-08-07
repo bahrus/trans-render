@@ -12,7 +12,7 @@
 
 *trans-rendering* (TR) describes a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, TR performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, TR uses css path tests via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
 
-A subset of TR, also described below, is "Declarative trans-rendering" [DTR], which is pure, 100% declarative syntax.  DTR supports dynamic capabilities by attaching DTR [linked?(https://json-ld.org/) "action" transforms to DOM events.
+A subset of TR, also described below, is "Declarative trans-rendering" [DTR], which is pure, 100% declarative syntax.  DTR supports dynamic capabilities by attaching DTR [linked?](https://json-ld.org/) "action" transforms to DOM events.
 
 It's designed to provide an alternative to the proposed [Template Instantiation proposal](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with the idea being that it could continue to supplement what that proposal includes if/when it lands in browsers.
 
@@ -20,9 +20,9 @@ XSLT can take pure XML with no formatting instructions as its input.  Generally 
 
 There is a growing (🎉) list of semantically meaningful native-born DOM Elements which developers can and should utilize, including dialog, datalist, details/summary, popup/tabs (🤞) etc. which can certainly help reduce divitis.
 
-But even more dramatically, with the advent of imported, naturalized custom elements, the ratio between semantically meaningful tag names and divs/spans in the template markup will tend to grow asymptotically to [14.8%](https://www.migrationpolicy.org/programs/data-hub/charts/immigrant-population-over-time) (🙏🏽), looking much more like XML of yore. trans-render's usefulness grows as a result of the increasingly semantic nature of the template markup.  Why? Because often the markup semantics provide enough clues on how to fill in the needed "potholes," like textContent and property setting, without the need for custom markup, like binding attributes.  But trans-render is completely extensible, so it can certainly accommodate custom binding attributes by using additional, optional helper libraries.
+But even more dramatically, with the advent of imported, naturalized custom elements, the ratio between semantically meaningful tag names and divs/spans in the template markup will tend to grow grow much higher, looking more like XML of yore. trans-render's usefulness grows as a result of the increasingly semantic nature of the template markup.  Why? Because often the markup semantics provide enough clues on how to fill in the needed "potholes," like textContent and property setting, without the need for custom markup, like binding attributes.  But trans-render is completely extensible, so it can certainly accommodate custom binding attributes by using additional, optional helper libraries.
 
-This can leave the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may be needed to keep the binding rules in sync.  Much like how separate style rules often need adjusting when the document structure changes.
+This can leave the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may be needed to keep the binding rules in sync.  Much like how separate css style rules often need adjusting when the document structure changes.
 
 ## The core library
 
@@ -30,7 +30,7 @@ The core library, transform.js, is a tiny (1.2k gzip/minified), 'non-committal' 
 
 Its first value-add proposition is it can reduce the amount of imperative *.selectQueryAll().forEach's needed in our code.  However, by itself, transform.js is not a complete solution, if you are looking for declarative syntax.  That will come with the ability to extend transform.js, which will be discussed below.
 
-The CSS matching transform.js takes one of two forms:
+The CSS matching transform.js supports takes one of two forms:
 
 1.  multi-matching for all (custom) DOM elements within the scope.
 2.  Scoping matches.
@@ -50,7 +50,7 @@ Multi matching provides support for syntax that is convenient for JS development
 So transform.js supports special syntax for css matching that is more convenient for JS developers:
 
 ```JavaScript
-mySpecialSectionPart: {
+mySpecialSectionParts: {
     ...
 }
 ```
@@ -120,12 +120,12 @@ transform(Main, {
 }
 ```
 
-The keyword "match" indicates that within that block are CSS Matches.  In this example, all the matches are "multi-matches" because they end with either "Class", "Element", "Part", "Id", "Prop" or "Attrib".
+The keyword "match" indicates that within that block are CSS Matches.  In this example, all the matches are "multi-matches" because they end with either "Classes", "Elements", "Parts", "Ids", "Props" or "Attribs".
 
 So for example, this:
 
 ```JavaScript
-dataCountAttrib: ({target, val}) => {
+dataCountAttribs: ({target, val}) => {
     ...
 }
 ```
@@ -153,7 +153,7 @@ transform(Main, {...}, container)
 transform(container, {...})
 ```
 
-We can also start getting a sense of how transforms can be tied to custom element events.  Although the example above is hardly declarative, as we create more rules allow us to update the DOM, and link events to transforms, we will achieve a Turing complete(?) solution.
+We can also start getting a sense of how transforms can be tied to custom element events.  Although the example above is hardly declarative, as we create more rules that allow us to update the DOM, and link events to transforms, we will achieve a Turing complete(?) solution.
 
 The following table lists how the LHS is translated into CSS multi-match queries:
 
@@ -286,9 +286,9 @@ The following table lists how the LHS is translated into CSS multi-match queries
                     Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
                     Day6: 'lördag', Day7: 'söndag',
                 }
-                delete ctx.match.initData;
+                delete ctx.match.dataInitAttribs;
                 transform(target, ctx);
-            })
+            });
         </script>
     </div>
 ```
@@ -691,54 +691,7 @@ For non DTR, if PEAT are functions, evaluate based on context first, then apply
 
 Create link to JSON transform based on context parameters
 
-## Isomorphic Templating Language
 
-```html
-<a href=//cnn.com data-bind=msg>This is cnn</a>
-```
-
-maps to 
-
-```html
-<template><a href=//cnn.com>{{msg}}</a></template>
-```
-
----
-
-```html
-<a href=//cnn.com data-bind="This is {{msg}}">This is cnn</a>
-```
-
-maps to
-
-```html
-<template><a href=//cnn.com>This is {{msg}}</a></template>
-```
-
----
-
-```html
-<a href=//cnn.com data-bind='{"textContent":"This is {{msg}}"},{"href":"msgURL"}'>This is cnn</a>
-```
-
-maps to
-
-```html
-<template><a href={{msgURL}}>This is {{msg}}</a></template>
-```
-
----
-
-```html
-<a href=//cnn.com data-bind='[{"repeat":3, "list": "newsStations",  "nodesPerIteration": 1},{"textContent":"This is {{msg}}"},{"href":"msgURL"}]'>This is cnn</a>
-<a href=//foxnews.com>This is Fox News</a>
-<a href=//msnbc.com>This is MSNBC</a>
-```
-
-maps to
-```html
-<template for:each={{newsStations}}><a href={{msgURL}}>This is {{msg}}</a>
-```
 
 
 
