@@ -16,6 +16,7 @@
 		"lib/P.ts",
 		"lib/PE.ts",
 		"lib/PEA.ts",
+		"lib/PEAT.ts",
 		"lib/TemplateMerge.ts",
 		"lib/transform.ts",
 		"lib/upShadowSearch.ts",

@@ -9,6 +9,7 @@ export class P implements PMDo{
 
 export function modifyRHS(ctx: RenderContext, idx: number){
     const rhs = ctx.rhs![idx];
+    if(rhs === undefined) return;
     const modifiedRHS: any = {};
     for(const key in rhs){
         let val = evalRHS(key, rhs);
