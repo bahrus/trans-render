@@ -597,7 +597,7 @@ After setting the string value of a node, setting properties, attaching event ha
     import { P } from 'trans-render/lib/P.js';
     transform(template, {
         match:{
-            myCustomElementElements: [{myProp0: {some:{harcoded:value}}, myProp1: "${host.someHostProp}"}]
+            myCustomElementElements: [{myProp0: {some:{hardcoded:value}}, myProp1: "${host.someHostProp}"}]
         },
         postMatch: [{
             rhsType: Array,

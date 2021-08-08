@@ -13,7 +13,9 @@
 		"lib/camelToLisp.ts",
 		"lib/transform.ts",
 		"lib/InTexter.ts",
-		"lib/upShadowSearch.ts"
+		"lib/upShadowSearch.ts",
+		"lib/P.ts",
+		"lib/PE.ts"
 	],
 	"exclude":[
 		"build",
