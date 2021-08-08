@@ -11,12 +11,13 @@
 	"files":[
 		"lib/applyPEA.ts",
 		"lib/camelToLisp.ts",
-		"lib/transform.ts",
 		"lib/InTexter.ts",
-		"lib/upShadowSearch.ts",
+		"lib/NestedTransform.ts",
 		"lib/P.ts",
 		"lib/PE.ts",
-		"lib/PEA.ts"
+		"lib/PEA.ts",
+		"lib/transform.ts",
+		"lib/upShadowSearch.ts",
 	],
 	"exclude":[
 		"build",

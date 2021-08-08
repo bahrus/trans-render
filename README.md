@@ -12,7 +12,7 @@
 
 *trans-rendering* (TR) describes a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, TR performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, TR uses css path tests via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
 
-A subset of TR, also described below, is "Declarative trans-rendering" [DTR], which is pure, 100% declarative syntax.  DTR supports dynamic capabilities by attaching DTR [linked?](https://json-ld.org/) "action" transforms to DOM events.
+A subset of TR, also described below, is "Declarative trans-rendering" [DTR], which is pure, 100% declarative syntax.  
 
 It's designed to provide an alternative to the proposed [Template Instantiation proposal](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with the idea being that it could continue to supplement what that proposal includes if/when it lands in browsers.
 
@@ -20,7 +20,7 @@ XSLT can take pure XML with no formatting instructions as its input.  Generally 
 
 There is a growing (🎉) list of semantically meaningful native-born DOM Elements which developers can and should utilize, including dialog, datalist, details/summary, popup/tabs (🤞) etc. which can certainly help reduce divitis.
 
-But even more dramatically, with the advent of imported, naturalized custom elements, the ratio between semantically meaningful tag names and divs/spans in the template markup will tend to grow grow much higher, looking more like XML of yore. trans-render's usefulness grows as a result of the increasingly semantic nature of the template markup.  Why? Because often the markup semantics provide enough clues on how to fill in the needed "potholes," like textContent and property setting, without the need for custom markup, like binding attributes.  But trans-render is completely extensible, so it can certainly accommodate custom binding attributes by using additional, optional helper libraries.
+But even more dramatically, with the advent of imported, naturalized custom elements, the ratio between semantically meaningful tag names and divs/spans in the template markup will tend to grow much higher, looking more like XML of yore. trans-render's usefulness grows as a result of the increasingly semantic nature of the template markup.  Why? Because often the markup semantics provide enough clues on how to fill in the needed "potholes," like textContent and property setting, without the need for custom markup, like binding attributes.  But trans-render is completely extensible, so it can certainly accommodate custom binding attributes by using additional, optional helper libraries.
 
 This can leave the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may be needed to keep the binding rules in sync.  Much like how separate css style rules often need adjusting when the document structure changes.
 
@@ -30,17 +30,16 @@ The core library, transform.js, is a tiny (1.2k gzip/minified), 'non-committal' 
 
 Its first value-add proposition is it can reduce the amount of imperative *.selectQueryAll().forEach's needed in our code.  However, by itself, transform.js is not a complete solution, if you are looking for declarative syntax.  That will come with the ability to extend transform.js, which will be discussed below.
 
-The CSS matching transform.js supports takes one of two forms:
+The CSS matching the core transform.js supports simply does multi-matching for all (custom) DOM elements within the scope.
 
-1.  multi-matching for all (custom) DOM elements within the scope.
-2.  Scoping matches.
+One of the plug-in's that extends transform.js can then apply nested transforms where the scope is narrowed.
 
 ### Multi-matching
 
 Multi matching provides support for syntax that is convenient for JS development.  Syntax like this isn't very pleasant:
 
 ```JavaScript
-"[part='my-special-section']": {
+"[part*='my-special-section']": {
     ...
 }
 ```
@@ -613,6 +612,10 @@ For this functionality, we use tuples to represent these settings.  P stands for
 In the case of E for events, use Transform on right hand side for DTR.
 
 For non DTR, if PEAT are functions, evaluate based on context first, then apply 
+
+## Nested, Scoped Transforms
+
+One useful plug-in for transform.js is nestedTransform.js, which allows the RHS of a match to serve as a springboard for performing a sub transform.
 
 
 
