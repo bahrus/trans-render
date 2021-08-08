@@ -13,18 +13,21 @@
     <div id=container></div>
     <script type="module">
         import { transform } from '../../lib/transform.js';
-        import { P } from '../../lib/P.js';
+        import { PE } from '../../lib/PE.js';
         transform(Main, {
             match: {
-                div: [{someProp: '${host.soundVerb}'}]
+                div: [{someProp: '${host.soundVerb}', textContent: 'hello'}, {click: '${host.handleClick}'}]
             },
             host: {
                 soundVerb: 'roar',
+                handleClick: e => {
+                    console.log(e);
+                }
             },
             postMatch: [{
                 rhsType: Array,
                 rhsHeadType: Object,
-                ctor: P
+                ctor: PE
             }]
         }, container);
         console.log(inner.someProp);
