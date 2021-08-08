@@ -607,19 +607,16 @@ After setting the string value of a node, setting properties, attaching event ha
 </script>
 ```
 
-For this functionality, we use tuples to represent these settings.  P stands for Properties, E for events, A for attributes, and T for transform or template.  There are four nested, and subsequently larger processors that can do one or more of these 4 things.  It is a good idea to use the "weakest" processor for what you need, thereby reducing the footprint of your web component.
+For this functionality, we use tuples to represent these settings.  P stands for Properties, E for events, A for attributes, and T for template or transform, or tuple of template and transform.  There are four nested, and subsequently larger processors that can do one or more of these 4 things.  It is a good idea to use the "weakest" processor for what you need, thereby reducing the footprint of your web component.
 
-In the case of E for events, use Transform on right hand side for DTR.
-
-For non DTR, if PEAT are functions, evaluate based on context first, then apply 
+[TODO]  Explain in more detail with more examples 
 
 ## Nested, Scoped Transforms
 
-One useful plug-in for transform.js is nestedTransform.js, which allows the RHS of a match to serve as a springboard for performing a sub transform.
+One useful plug-in for transform.js is NestedTransform.js, which allows the RHS of a match to serve as a springboard for performing a sub transform.
 
 
-
-## Template Merging Using a Custom Element
+## Template Merging Using a Custom Element (Inline Binding)
 
 We've seen examples where we merge other templates into the main one, which required imperative logic:
 
@@ -680,11 +677,11 @@ and we can recursively, declaratively apply a transform upon cloning:
 trContext: ctx
 ```
 
-## Loosely Coupled Template Merging When Template Is Specified on RHS[TODO]
+## Loosely Coupled Template Merging When Template Is Specified on RHS [Untested]
 
 The markup above assumes the developer wants to decide where templates should be inserted. In many cases, that's perfectly appropriate.  But in some cases, the markup should be loosely coupled from the need to insert a template.  For example, maybe the core HTML markup comes from a third party source, but we want to insert some custom content into that stream.
 
-How can we do this declaratively?
+How can we do this declaratively?  The plug-in TemplateMerge serves this purpose.
 
 Instead of having a RHS of type string, what if we define a declarative postMatch processor that acts when it sees a template on the RHS?
 
@@ -694,6 +691,10 @@ We could have a rule for this, if the RHS is a template:
 ```JavaScript
 dataInitAttribEqFriday: FridayTemplate
 ```
+
+If the template has attribute "shadowroot", then a shadow root will be attached (if there isn't one already) before cloning the template into the shadow root.  If the template has attribute "data-insert-position=afterend" then the template will be appended after and adjacent to the target element.
+
+
 
 ## Transforming Templates matched on LHS [TODO]
 
