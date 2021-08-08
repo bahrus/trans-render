@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <template id=Main>
+        <div id=inner></div>
+    </template>
+    <div id=container></div>
+    <script type="module">
+        import { transform } from '../../lib/transform.js';
+        import { P } from '../../lib/P.js';
+        transform(Main, {
+            match: {
+                div: [{someProp: '${host.soundVerb}'}]
+            },
+            host: {
+                soundVerb: 'roar',
+            },
+            postMatch: [{
+                rhsType: Array,
+                rhsHeadType: Object,
+                ctor: P
+            }]
+        }, container);
+        console.log(inner.someProp);
+    </script>
+</body>
+</html>

@@ -5,7 +5,8 @@ import {applyPE} from './applyPE.js';
 export class PE implements PMDo{
     do(ctx: RenderContext){
         if(ctx.host=== undefined) throw 'Unknown host.';
-        const modifiedRHS = modifyRHS(ctx);
-        applyPE(ctx.host, ctx.target as HTMLElement, modifiedRHS as PEUnionSettings);
+        const modifiedProps = modifyRHS(ctx, 0);
+        const modifiedEvents = modifyRHS(ctx, 1);
+        applyPE(ctx.host, ctx.target as HTMLElement, [modifiedProps, modifiedEvents] as PEUnionSettings);
     }
 }
