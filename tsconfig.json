@@ -15,7 +15,8 @@
 		"lib/InTexter.ts",
 		"lib/upShadowSearch.ts",
 		"lib/P.ts",
-		"lib/PE.ts"
+		"lib/PE.ts",
+		"lib/PEA.ts"
 	],
 	"exclude":[
 		"build",
