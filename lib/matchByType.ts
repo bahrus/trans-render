@@ -1,9 +1,9 @@
-export function matchByType(val: any, typOfProcessor: any, typeOfHeadProcessor: any){
+export function matchByType(val: any, typOfProcessor: any, typeOfHeadProcessor: any): -1 | 0 | 1{
     if(typOfProcessor === undefined) return 0;
     switch(typeof val){
         case 'object':
             if(typOfProcessor === Array &&  Array.isArray(val) && val.length > 0 && typeOfHeadProcessor !== undefined){
-                return val[0] instanceof typeOfHeadProcessor;
+                return matchByType(val[0], typeOfHeadProcessor, undefined);
             }
             return val instanceof typOfProcessor ? 1 : -1; 
         case 'string':
@@ -18,4 +18,8 @@ export function matchByType(val: any, typOfProcessor: any, typeOfHeadProcessor: 
             return typOfProcessor === BigInt ? 1 : -1;
     }
     return 0;    
+}
+
+function matchType(valType: string, typ: any){
+
 }

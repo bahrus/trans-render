@@ -582,6 +582,39 @@ This feature is *not* part of the core transform function.  It requires one of t
 
 Yes, an eval is done behind the scenes.  But the eval will not be done if the rhs contains an open parenthesis, which should greatly reduce the risk of side effects.
 
+However, this raises the question:  Why are we trying to make the binding truly declarative, via the less pleasant to type JSON, if we end up doing an eval anyways?  One of the benefits of parsing JSON vs JS is it is faster.  But this benefit is outweighed by costs if we end up doing lots of evals anyway.
+
+So the developer who is willing to put up with JSON editing, and is probably also willing to do a little extra work to avoid "guesswork" during run time.
+
+An alternative processor, SplitText is available [TODO]:
+
+```html
+<details id=details>
+    <summary>Amor Omnia Vincit</summary>
+    ...
+</details>
+
+<script type="module">
+    import { transform } from 'trans-render/lib/transform.js';
+    import { SplitText } from 'trans-render/lib/SplitText.js';
+    transform(details, {
+        match:{
+            "summary": ["Hello", "place", ".  What a beautiful world you are"]
+        },
+        host:{
+            place: 'Mars'
+        },
+        postMatch: [{
+            rhsType: Array, 
+            rhsHeadType: String,
+            ctor: SplitText
+        }]
+    })
+</script>
+```
+
+The array alternates between static content, and dynamic properties coming from the host.
+
 ## P[E[A[T]]] [TODO]
 
 After setting the string value of a node, setting properties, attaching event handlers, as well as attributes comes next in things we do over and over again.

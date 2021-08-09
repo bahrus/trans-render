@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <template id=Main>
+        <div></div>
+    </template>
+    <div id=container></div>
+    <script type="module">
+        import { transform } from '../../lib/transform.js';
+        import { SplitText } from '../../lib/SplitText.js';
+        transform(Main, {
+            match: {
+                div: ['Hear me ', 'soundVerb']
+            },
+            host: {
+                soundVerb: 'roar',
+            },
+            postMatch: [{
+                rhsType: Array,
+                rhsHeadType: String,
+                ctor: SplitText}]
+        }, container);
+    </script>
+</body>
+</html>
