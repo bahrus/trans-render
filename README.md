@@ -652,7 +652,7 @@ We follow the approach adopted with SplitText -- Slightly verbose binding is use
 
 For this functionality, we use tuples to represent these settings.  P stands for Properties, E for events, A for attributes, and T for template or transform, or tuple of template and transform.  There are four nested, and subsequently larger processors that can do one or more of these 4 things.  It is a good idea to use the "weakest" processor for what you need, thereby reducing the footprint of your web component.
 
-[TODO]  Explain in more detail with more examples 
+[TODO]  Explain in more detail with more examples when the dust has settled.
 
 ## Nested, Scoped Transforms
 

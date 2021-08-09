@@ -3,12 +3,12 @@ import {interpolate} from './SplitText.js';
 import {applyP} from './applyP.js';
 export class P implements PMDo{
     do(ctx: RenderContext){
-        const modifiedRHS = modifyRHS(ctx, 0);
+        const modifiedRHS = modifyPRHS(ctx, 0);
         applyP(ctx.target!, [modifiedRHS] as PSettings);
     }
 }
 
-export function modifyRHS(ctx: RenderContext, idx: number){
+export function modifyPRHS(ctx: RenderContext, idx: number){
     const rhs = ctx.rhs![idx];
     if(rhs === undefined) return;
     const modifiedRHS: any = {};
