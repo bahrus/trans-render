@@ -7,6 +7,9 @@ export class SplitText implements PMDo{
         const textNodes = ctx.rhs as string[];
         const host = ctx.host as any;
         if(host === undefined) throw "No host";
+        if(textNodes.length === 1){
+            return host[textNodes[0]];
+        }
         const evNodes = textNodes.map((val, idx) => {
             if(idx % 2 === 0) return val;
             return host[val] as string;

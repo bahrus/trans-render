@@ -591,6 +591,7 @@ An alternative processor, SplitText is available [TODO]:
 ```html
 <details id=details>
     <summary>Amor Omnia Vincit</summary>
+    <article></article>
     ...
 </details>
 
@@ -599,7 +600,8 @@ An alternative processor, SplitText is available [TODO]:
     import { SplitText } from 'trans-render/lib/SplitText.js';
     transform(details, {
         match:{
-            "summary": ["Hello", "place", ".  What a beautiful world you are"]
+            "summary": ["Hello", "place", ".  What a beautiful world you are."],
+            "article": ["mainContent"]
         },
         host:{
             place: 'Mars'
@@ -615,9 +617,17 @@ An alternative processor, SplitText is available [TODO]:
 
 The array alternates between static content, and dynamic properties coming from the host.
 
+If there is an array with a single string item, extract that property from the host.
+
+So "article": ["mainContent"] means article.textContent = host.mainContent;
+
+
+
 ## P[E[A[T]]] [TODO]
 
 After setting the string value of a node, setting properties, attaching event handlers, as well as attributes comes next in things we do over and over again.
+
+We follow the approach adopted with SplitText -- Slightly verbose binding is used, in order to avoid expensive evals or other kinds of fancy string parsing.
 
 ```html
 <template id=template>
@@ -629,7 +639,7 @@ After setting the string value of a node, setting properties, attaching event ha
     import { P } from 'trans-render/lib/P.js';
     transform(template, {
         match:{
-            myCustomElementElements: [{myProp0: {some:{hardcoded:value}}, myProp1: "${host.someHostProp}"}]
+            myCustomElementElements: [{myProp0: "Some Hardcoded String", myProp1: ["hostPropName"], myProp2: ["Some interpolated ", "hostPropNameForText"]}]
         },
         postMatch: [{
             rhsType: Array,
