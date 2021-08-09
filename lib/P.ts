@@ -1,4 +1,5 @@
 import {PMDo, RenderContext, PSettings} from './types.d.js';
+import {interpolate} from './SplitText.js';
 import {applyP} from './applyP.js';
 export class P implements PMDo{
     do(ctx: RenderContext){
@@ -12,26 +13,35 @@ export function modifyRHS(ctx: RenderContext, idx: number){
     if(rhs === undefined) return;
     const modifiedRHS: any = {};
     for(const key in rhs){
-        let val = evalRHS(key, rhs);
-        if(typeof val === 'function'){
-            modifiedRHS[key] = val(ctx);
-        }else{
-            modifiedRHS[key] = val;
-        }
+        let val = modifyVal(key, rhs, ctx);
+        modifiedRHS[key] = val;
     }
     ctx.rhs![idx] = modifiedRHS;
     return modifiedRHS;
 }
 
-function evalRHS(key: string, rhs: any){
+export function modifyVal(key: string, rhs: any, ctx: RenderContext){
     let val = rhs[key];
-    if(typeof val === 'string'){
-        if(val.startsWith('${') && val.endsWith('}')){
-            val = val.substring(2, val.length - 1);
-            const fn = eval('({ctx, host, target, idx, mode, targetProp, options, val, rhs  }) => ' + val );
-            val = fn;
-            rhs[key] = fn;
-        }
+    const host = ctx.host! as any;
+    if(host === undefined) return val;
+    switch(typeof val){
+        case 'string':
+            return val;
+        case 'object':
+            if(Array.isArray(val)){
+                const innerVal = val[0];
+                if(typeof innerVal !== 'string'){
+                    return val;
+                }
+                if(val.length === 1){
+                    return host[innerVal];
+                }else{
+                    return interpolate(val, host);
+                }
+
+
+            }else{
+                throw "NI"; //Not implemented
+            }
     }
-    return val;
 }

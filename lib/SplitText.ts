@@ -10,10 +10,13 @@ export class SplitText implements PMDo{
         if(textNodes.length === 1){
             return host[textNodes[0]];
         }
-        const evNodes = textNodes.map((val, idx) => {
-            if(idx % 2 === 0) return val;
-            return host[val] as string;
-        });
-        ctx.target!.textContent = evNodes.join('');
+        ctx.target!.textContent = interpolate(textNodes, host);
     }
+}
+
+export function interpolate(textNodes: string[], host: any){
+    return textNodes.map((val, idx) => {
+        if(idx % 2 === 0) return val;
+        return host[val] as string;
+    }).join('');
 }
