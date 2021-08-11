@@ -9,8 +9,10 @@ export class SplitText implements PMDo{
         if(host === undefined) throw "No host";
         if(textNodes.length === 1){
             ctx.target!.textContent = host[textNodes[0]];
+        }else{
+            ctx.target!.textContent = interpolate(textNodes, host);
         }
-        ctx.target!.textContent = interpolate(textNodes, host);
+        
     }
 }
 
