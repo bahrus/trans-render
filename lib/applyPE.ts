@@ -16,7 +16,7 @@ export function applyPE<T extends Partial<HTMLElement> = HTMLElement>(host: HTML
                 eventHandler = (e: Event) => {
                     let val = getProp(e.target, objSelectorPath);
                     if (converter !== undefined) val = converter(val);
-                    originalEventHandler(val, e);
+                    originalEventHandler(host, val, e);
                 }
             } else {
                 switch(typeof eventHandler){
