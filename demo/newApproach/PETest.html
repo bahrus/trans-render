@@ -16,7 +16,7 @@
         import { PE } from '../../lib/PE.js';
         transform(Main, {
             match: {
-                div: [{textContent: 'hello'}, {click: 'handleClick'}]
+                div: [{textContent: 'hello'}, {click: e => console.log(e)}]
             },
             host: {
                 handleClick: e => {

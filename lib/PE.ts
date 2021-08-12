@@ -49,7 +49,9 @@ export function modifyVal(key: string, rhs: any, ctx: RenderContext){
             }else{
                 throw "NI"; //Not implemented
             }
+        
     }
+    return val;
 }
 
 function gFn(host: any, val: string){
