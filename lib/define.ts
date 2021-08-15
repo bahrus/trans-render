@@ -122,18 +122,7 @@ function getAttributeNames(props: {[key: string]: PropInfo}){
     const returnArr: string[] = [];
     for(const key in props){
         const prop = props[key];
-        let isAttr = false;
-        switch(prop.type){
-            case 'Boolean':
-            case 'Number':
-            case 'String':
-                isAttr = true;
-                break;
-            case 'Object':
-                isAttr = prop.parse === true;
-                break;
-        }
-        if(isAttr){
+        if(prop.parse){
             returnArr.push(camelToLisp(key));
         }
     }
