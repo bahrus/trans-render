@@ -23,6 +23,7 @@
 		"lib/PEA.ts",
 		"lib/PEAT.ts",
 		"lib/SplitText.ts",
+		"lib/structuralClone.ts",
 		"lib/TemplMgmtBase.ts",
 		"lib/TemplMgmtWithPEST.ts",
 		"lib/TemplateMerge.ts",
