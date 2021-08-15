@@ -77,7 +77,7 @@ export interface HasUpon<TMixinComposite = any>{
     /**
      * refrain if falsy
      */
-    riff?: (Extract<keyof TMixinComposite, string>)[];
+    riff?: "'" | '"' | (Extract<keyof TMixinComposite, string>)[];
     /**
      * refrain if truthy
      */

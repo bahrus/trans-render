@@ -223,9 +223,10 @@ function addPropsToClass<T extends HTMLElement = HTMLElement>(newClass: {new(): 
 }
 
 function checkRifs(action: Action<any>, self: any){
-    const {riff, rift} = action;
+    const {riff, rift, upon} = action;
     if(riff !== undefined){
-        for(const key of riff){
+        const realRiff = (riff === '"' || riff === "'") ? upon! : riff;
+        for(const key of realRiff){
             if(!self[key]) return false;
         }
     }
