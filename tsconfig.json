@@ -9,8 +9,12 @@
 		"watch": true
 	},
 	"files":[
+		"demo/counter-so.ts",
 		"lib/applyPEA.ts",
 		"lib/camelToLisp.ts",
+		"lib/def.ts",
+		"lib/define.ts",
+		"lib/html.ts",
 		"lib/InTexter.ts",
 		"lib/MatchByType.ts",
 		"lib/NestedTransform.ts",
@@ -19,9 +23,11 @@
 		"lib/PEA.ts",
 		"lib/PEAT.ts",
 		"lib/SplitText.ts",
+		"lib/TemplMgmtBase.ts",
+		"lib/TemplMgmtWithPEST.ts",
 		"lib/TemplateMerge.ts",
 		"lib/transform.ts",
-		"lib/upShadowSearch.ts",
+		"lib/upShadowSearch.ts"
 	],
 	"exclude":[
 		"build",
