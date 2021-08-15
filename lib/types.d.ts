@@ -66,7 +66,8 @@ export interface WCConfig<TMixinComposite = any>{
     tagName: string;
     initMethod?: keyof TMixinComposite;
     propDefaults?: Partial<TMixinComposite>;
-    propInfo?: {[key in Extract<keyof TMixinComposite, string>]: PropInfo} 
+    //propInfo?: {[key in Extract<keyof TMixinComposite, string>]: PropInfo} 
+    propInfo?: Partial<{[key in keyof TMixinComposite]: PropInfo}> 
     actions?: Action<TMixinComposite>[];
     notifyProps?: (keyof TMixinComposite)[];
 }
