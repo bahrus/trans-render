@@ -5,7 +5,7 @@
  * @private
  */
 export function propUp<T = any>(self: HTMLElement, props: string[], defaultValues?: T){
-    props.forEach(prop => {
+    for(const prop of props){
         let value = (<any>self)[prop];
         if(value === undefined && defaultValues !== undefined){
             value = (<any>defaultValues)[prop];
@@ -15,6 +15,5 @@ export function propUp<T = any>(self: HTMLElement, props: string[], defaultValue
         }
         //some properties are read only.
         try{(<any>self)[prop] = value;}catch{}
-        
-    });
+    }
 }

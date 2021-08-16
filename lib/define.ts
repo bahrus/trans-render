@@ -10,7 +10,7 @@ export { Action, PropInfo } from './types.d.js';
 export function define<T = any>(args: DefineArgs<T>): {new(): T}{
     const c = args.config;
     const propInfos  = createPropInfos(args);
-    let ext = HTMLElement;
+    let ext = args.superclass || HTMLElement;
     const mixins = args.mixins;
     if(mixins !== undefined){
         for(const mix of mixins){
@@ -25,7 +25,12 @@ export function define<T = any>(args: DefineArgs<T>): {new(): T}{
 
         static is = c.tagName;
         static observedAttributes = getAttributeNames(propInfos);
+        constructor(){
+            super();
+            this.attachQR();
+        }
         attributeChangedCallback(n: string, ov: string, nv: string){
+            if(super.attributeChangedCallback) super.attributeChangedCallback(n, ov, nv);
             const propName = lispToCamel(n);
             const prop = propInfos[propName];
             if(prop !== undefined){
@@ -51,12 +56,11 @@ export function define<T = any>(args: DefineArgs<T>): {new(): T}{
         }
         connectedCallback(){
             //TODO merge attributes?
-            this.attachQR();
             const defaults: any = {...args.config.propDefaults, ...args.complexPropDefaults};
-            for(const key in defaults){
-                (<any>this)[key] = defaults[key];
-            }
-            propUp(this, Object.keys(propInfos), defaults);
+            // for(const key in defaults){
+            //     (<any>this)[key] = defaults[key];
+            // }
+            propUp(this as any as HTMLElement, Object.keys(propInfos), defaults);
             this.detachQR();
             if(c.initMethod !== undefined){
                 (<any>this)[c.initMethod](this);
@@ -101,6 +105,15 @@ export function define<T = any>(args: DefineArgs<T>): {new(): T}{
             }
             delete this.propChangeQueue;
         }
+        subscribers: {propsOfInterest: Set<string>, callBack: (rs: newClass) => void}[] = [];
+        subscribe(propsOfInterest: Set<string>, callBack: (rs: newClass) => void){
+            this.subscribers.push({propsOfInterest, callBack});
+        }
+    
+        unsubscribe(propsOfInterest: Set<string>, callBack: (rs: newClass) => void){
+            const idx = this.subscribers.findIndex(s => s.propsOfInterest === propsOfInterest && s.callBack === callBack);
+            if(idx > -1) this.subscribers.splice(idx, 1);
+        }
     }
     if(mixins !== undefined){
         const proto = newClass.prototype;
@@ -112,7 +125,7 @@ export function define<T = any>(args: DefineArgs<T>): {new(): T}{
         }
     }
     interface newClass extends HasPropChangeQueue{}
-    addPropsToClass(newClass, propInfos, args);
+    addPropsToClass(newClass as any as {new(): HTMLElement}, propInfos, args);
     def(newClass);
     return newClass as any as {new(): T};
 }
@@ -193,6 +206,11 @@ function addPropsToClass<T extends HTMLElement = HTMLElement>(newClass: {new(): 
                 const ov = this[privateKey];
                 if(prop.dry && this[privateKey] === nv) return;
                 this[privateKey] = nv;
+                for(const subscriber of this.subscribers){
+                    if(subscriber.propsOfInterest.has(key)){
+                        subscriber.callback(this);
+                    }
+                }
                 if(this.QR){
                     this.QR(key, this);
                     return;

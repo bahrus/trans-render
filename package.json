@@ -2,8 +2,8 @@
   "name": "trans-render",
   "version": "0.0.299",
   "description": "Instantiate an HTML Template",
-  "main": "lib/transform.js",
-  "module": "lib/transform.js",
+  "main": "lib/define.js",
+  "module": "lib/define.js",
   "typings": "lib/types.d.ts",
   "scripts": {
     "test": "node test/tests.js",
@@ -12,7 +12,7 @@
     "package-check": "package-check"
   },
   "exports": {
-    ".": "./lib/transform.js",
+    ".": "./lib/define.js",
     "./lib/applyP.js": "./lib/applyP.js",
     "./lib/applyPE.js": "./lib/applyPE.js",
     "./lib/applyPEA.js": "./lib/applyPEA.js",
