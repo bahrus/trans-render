@@ -54,8 +54,8 @@ export type PEAUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PEU
 
 export interface DefineArgs<TMixinComposite = any>{
     //mixins?: {new(): Object}[];
-    superclass: any,
-    mixins: any[],
+    superclass?: any,
+    mixins?: any[],
     mainTemplate?: HTMLTemplateElement;
     /** use this only for defaults that can't be JSON serialized in config */
     complexPropDefaults?: Partial<TMixinComposite>;
