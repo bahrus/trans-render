@@ -37,6 +37,7 @@
     "./lib/TemplateMerge.js": "./lib/TemplateMerge.js",
     "./lib/Texter.js": "./lib/Texter.js",
     "./lib/transform.js": "./lib/transform.js",
+    "./lib/upSearch.js": "./lib/upSearch.js",
     "./lib/upShadowSearch.js": "./lib/upShadowSearch.js",
     "./lib/waitForAttributeChange.js": "./lib/waitForAttributeChange.js"
   },

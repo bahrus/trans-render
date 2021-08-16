@@ -28,6 +28,7 @@
 		"lib/TemplMgmtWithPEST.ts",
 		"lib/TemplateMerge.ts",
 		"lib/transform.ts",
+		"lib/upSearch.ts",
 		"lib/upShadowSearch.ts"
 	],
 	"exclude":[
