@@ -214,6 +214,7 @@ function addPropsToClass<T extends HTMLElement = HTMLElement>(newClass: {new(): 
                 // }
                 if(this.QR){
                     this.QR(key, this);
+                    if(methodIsDefined) thisPropChangeMethod!(this, arg, '+qr');
                     return;
                 }
                 if(methodIsDefined) if(thisPropChangeMethod!(this, arg, '-a') === false) return; //-a = pre actions

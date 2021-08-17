@@ -115,4 +115,4 @@ export interface PropChangeInfo {
     prop: PropInfo
 }
 
-export type PropChangeMoment = 'v' | '-a' | '+a'
+export type PropChangeMoment = 'v' | '-a' | '+a' | '+qr';
