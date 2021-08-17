@@ -77,11 +77,10 @@ export interface HasUpon<TMixinComposite = any>{
      * refrain if falsy
      */
     riff?: "'" | '"' | (Extract<keyof TMixinComposite, string>)[];
-    /**
-     * refrain if truthy
-     */
-    rift?: (Extract<keyof TMixinComposite, string>)[];
-    //dry?: boolean,
+    // /**
+    //  * refrain if truthy
+    //  */
+    // rift?: (Extract<keyof TMixinComposite, string>)[];
 }
 
 export interface Transform<TMixinComposite = any> extends HasUpon<TMixinComposite>{
@@ -99,7 +98,6 @@ export interface PropInfo{
     type?: PropInfoTypes;
     dry?: boolean;
     parse?: boolean;
-    //notify?: boolean;
 }
 
 
