@@ -1,4 +1,5 @@
 import { tm } from '../lib/TemplMgmtWithPEST.js';
+import { NotifyMixin } from '../lib/mixins/notify.js';
 const mainTemplate = tm.html `
 <button part=down data-d=-1>-</button><span part=count></span><button part=up data-d=1>+</button>
 <style>
@@ -38,6 +39,11 @@ tm.define({
                 cacheQueries: true,
             },
         },
+        propInfo: {
+            count: {
+                notify: true,
+            }
+        },
         actions: [
             ...tm.doInitTransform,
             {
@@ -45,12 +51,13 @@ tm.define({
                 ...tm.doUpdateTransform
             }
         ],
+        propChangeMethod: 'onPropChange',
     },
     //This is where non serializable stuff goes
     complexPropDefaults: {
         mainTemplate: mainTemplate
     },
-    mixins: [tm.TemplMgmtMixin, {
+    mixins: [NotifyMixin, tm.TemplMgmtMixin, {
             changeCount: (self, d, e) => self.count += d,
         }],
 });

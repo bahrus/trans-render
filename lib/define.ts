@@ -1,5 +1,5 @@
 import { def } from './def.js';
-import { DefineArgs, HasUpon, PropInfo, HasPropChangeQueue, Action, PropInfoTypes } from './types.d.js';
+import { DefineArgs, HasUpon, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment } from './types.d.js';
 import { propUp } from './propUp.js';
 import { camelToLisp } from './camelToLisp.js';
 import { lispToCamel } from './lispToCamel.js';
@@ -201,10 +201,10 @@ function addPropsToClass<T extends HTMLElement = HTMLElement>(newClass: {new(): 
                 const ov = this[privateKey];
                 if(prop.dry && this[privateKey] === nv) return;
                 const propChangeMethod = config.propChangeMethod;
-                const thisPropChangeMethod = propChangeMethod !== undefined ? this[propChangeMethod] : undefined;
+                const thisPropChangeMethod = (propChangeMethod !== undefined ? this[propChangeMethod] : undefined)  as undefined | ((self: EventTarget, pci: PropChangeInfo, moment: PropChangeMoment) => boolean);
                 const methodIsDefined = thisPropChangeMethod !== undefined;
-                const arg = {key, ov, nv, prop};
-                if(methodIsDefined) if(thisPropChangeMethod(arg, 'v') === false) return; //v = validate
+                const arg: PropChangeInfo = {key, ov, nv, prop};
+                if(methodIsDefined) if(thisPropChangeMethod!(this, arg, 'v') === false) return; //v = validate
                 this[privateKey] = nv;
                 //TODO:  turn this into mixin
                 // for(const subscriber of this.subscribers){
@@ -216,7 +216,7 @@ function addPropsToClass<T extends HTMLElement = HTMLElement>(newClass: {new(): 
                     this.QR(key, this);
                     return;
                 }
-                if(methodIsDefined) if(thisPropChangeMethod(arg, '-a') === false) return; //-a = pre actions
+                if(methodIsDefined) if(thisPropChangeMethod!(this, arg, '-a') === false) return; //-a = pre actions
                 if(actions !== undefined){
                     const filteredActions = actions.filter(x => {
                         if(!checkRifs(x, this)) return false;
@@ -235,7 +235,7 @@ function addPropsToClass<T extends HTMLElement = HTMLElement>(newClass: {new(): 
                         this[action.do](this, key, ov, nv);
                     }
                 }
-                if(methodIsDefined) thisPropChangeMethod(arg, '+a'); //+a = post actions
+                if(methodIsDefined) thisPropChangeMethod!(this, arg, '+a'); //+a = post actions
             },
             enumerable: true,
             configurable: true,

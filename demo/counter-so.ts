@@ -1,6 +1,7 @@
 import {tm, TemplMgmtBase} from '../lib/TemplMgmtWithPEST.js';
+import {INotifyMixin, NotifyMixin} from '../lib/mixins/notify.js';
 
-export interface CounterSo extends  TemplMgmtBase{
+export interface CounterSo extends  TemplMgmtBase, INotifyMixin{
     count: number;
 }
 
@@ -45,6 +46,11 @@ tm.define<CounterSo>({
                 cacheQueries: true,
             },
         },
+        propInfo:{
+            count: {
+                notify: true,
+            }
+        },
         actions: [
             ...tm.doInitTransform,
             {
@@ -52,12 +58,13 @@ tm.define<CounterSo>({
                 ...tm.doUpdateTransform
             }
         ],
+        propChangeMethod: 'onPropChange',
     },
     //This is where non serializable stuff goes
     complexPropDefaults:{
         mainTemplate: mainTemplate
     },
-    mixins: [tm.TemplMgmtMixin, {
+    mixins: [NotifyMixin, tm.TemplMgmtMixin, {
         changeCount: (self: CounterSo, d: number, e: Event) => self.count += d,
 
     }],

@@ -99,6 +99,7 @@ export interface PropInfo{
     type?: PropInfoTypes;
     dry?: boolean;
     parse?: boolean;
+    notify?: boolean;
 }
 
 
@@ -106,3 +107,12 @@ export interface HasPropChangeQueue{
     propChangeQueue: Set<string> | undefined;
     QR: undefined | ((name: string, self: HasPropChangeQueue) => void);
 }
+
+export interface PropChangeInfo {
+    key: string,
+    ov: any,
+    nv: any,
+    prop: PropInfo
+}
+
+export type PropChangeMoment = 'v' | '-a' | '+a'
