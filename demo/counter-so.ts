@@ -49,7 +49,7 @@ tm.define<CounterSo, INotifyPropInfo>({
         },
         propInfo:{
             count: {
-                notify: true,
+                notify: {viaCustEvt:true},
             }
         },
         actions: [

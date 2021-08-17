@@ -41,7 +41,7 @@ tm.define({
         },
         propInfo: {
             count: {
-                notify: true,
+                notify: { viaCustEvt: true },
             }
         },
         actions: [
