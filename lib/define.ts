@@ -94,7 +94,7 @@ export function define<T = any>(args: DefineArgs<T>): {new(): T}{
             }
             const values = Array.from(actionsToDo);
             for(const action of values){
-                (<any>this)[action](this);
+                (<any>this)[action](this, propChangeQueue);
             }
             delete this.propChangeQueue;
         }
