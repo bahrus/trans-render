@@ -52,21 +52,21 @@ export type PEAUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PEU
 // export type PEATUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = 
 //     PSettings<T> | PESettings<T> | PEASettings<T> | PEATSettings<T> | PEAT$ettings<T>;
 
-export interface DefineArgs<TMixinComposite = any>{
+export interface DefineArgs<TMixinComposite = any, TPropInfo = PropInfo>{
     //mixins?: {new(): Object}[];
     superclass?: any,
     mixins?: any[],
     mainTemplate?: HTMLTemplateElement;
     /** use this only for defaults that can't be JSON serialized in config */
     complexPropDefaults?: Partial<TMixinComposite>;
-    config: WCConfig<TMixinComposite>;
+    config: WCConfig<TMixinComposite, TPropInfo>;
     
 }
 
-export interface WCConfig<TMixinComposite = any>{
+export interface WCConfig<TMixinComposite = any, TPropInfo = PropInfo>{
     tagName: string;
     propDefaults?: Partial<TMixinComposite>;
-    propInfo?: Partial<{[key in keyof TMixinComposite]: PropInfo}> 
+    propInfo?: Partial<{[key in keyof TMixinComposite]: TPropInfo}> 
     actions?: Action<TMixinComposite>[];
     propChangeMethod?: keyof TMixinComposite;
 }
@@ -99,7 +99,7 @@ export interface PropInfo{
     type?: PropInfoTypes;
     dry?: boolean;
     parse?: boolean;
-    notify?: boolean;
+    //notify?: boolean;
 }
 
 
@@ -108,11 +108,11 @@ export interface HasPropChangeQueue{
     QR: undefined | ((name: string, self: HasPropChangeQueue) => void);
 }
 
-export interface PropChangeInfo {
+export interface PropChangeInfo<TPropInfo = PropInfo> {
     key: string,
     ov: any,
     nv: any,
-    prop: PropInfo
+    prop: TPropInfo
 }
 
 export type PropChangeMoment = 'v' | '-a' | '+a' | '+qr';

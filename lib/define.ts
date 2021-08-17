@@ -7,7 +7,7 @@ export { camelToLisp } from './camelToLisp.js';
 export { Action, PropInfo } from './types.d.js';
 
 
-export function define<T = any>(args: DefineArgs<T>): {new(): T}{
+export function define<T = any, P = PropInfo>(args: DefineArgs<T, P>): {new(): T}{
     const c = args.config;
     const propInfos  = createPropInfos(args);
     let ext = args.superclass || HTMLElement;
