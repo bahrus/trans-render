@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.303",
+  "version": "0.0.304",
   "description": "Instantiate an HTML Template",
   "main": "lib/define.js",
   "module": "lib/define.js",
