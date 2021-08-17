@@ -55,17 +55,10 @@ export function define<T = any>(args: DefineArgs<T>): {new(): T}{
             }
         }
         connectedCallback(){
-            //TODO merge attributes?
+            if(super.connectedCallback) super.connectedCallback();
             const defaults: any = {...args.config.propDefaults, ...args.complexPropDefaults};
-            // for(const key in defaults){
-            //     (<any>this)[key] = defaults[key];
-            // }
             propUp(this as any as HTMLElement, Object.keys(propInfos), defaults);
             this.detachQR();
-            if(c.initMethod !== undefined){
-                (<any>this)[c.initMethod](this);
-            }
-            
         }
 
         attachQR(){
@@ -105,15 +98,16 @@ export function define<T = any>(args: DefineArgs<T>): {new(): T}{
             }
             delete this.propChangeQueue;
         }
-        subscribers: {propsOfInterest: Set<string>, callBack: (rs: newClass) => void}[] = [];
-        subscribe(propsOfInterest: Set<string>, callBack: (rs: newClass) => void){
-            this.subscribers.push({propsOfInterest, callBack});
-        }
+        //TODO:  turn this into a mixin
+        // subscribers: {propsOfInterest: Set<string>, callBack: (rs: newClass) => void}[] = [];
+        // subscribe(propsOfInterest: Set<string>, callBack: (rs: newClass) => void){
+        //     this.subscribers.push({propsOfInterest, callBack});
+        // }
     
-        unsubscribe(propsOfInterest: Set<string>, callBack: (rs: newClass) => void){
-            const idx = this.subscribers.findIndex(s => s.propsOfInterest === propsOfInterest && s.callBack === callBack);
-            if(idx > -1) this.subscribers.splice(idx, 1);
-        }
+        // unsubscribe(propsOfInterest: Set<string>, callBack: (rs: newClass) => void){
+        //     const idx = this.subscribers.findIndex(s => s.propsOfInterest === propsOfInterest && s.callBack === callBack);
+        //     if(idx > -1) this.subscribers.splice(idx, 1);
+        // }
     }
     if(mixins !== undefined){
         const proto = newClass.prototype;
@@ -194,7 +188,8 @@ function createPropInfos(args: DefineArgs){
 
 function addPropsToClass<T extends HTMLElement = HTMLElement>(newClass: {new(): T}, props: {[key: string]: PropInfo}, args: DefineArgs){
     const proto = newClass.prototype;
-    const actions = args.config.actions;
+    const config = args.config;
+    const actions = config.actions;
     for(const key in props){
         const prop = props[key];
         const privateKey = '_' + key;
@@ -205,16 +200,23 @@ function addPropsToClass<T extends HTMLElement = HTMLElement>(newClass: {new(): 
             set(nv){
                 const ov = this[privateKey];
                 if(prop.dry && this[privateKey] === nv) return;
+                const propChangeMethod = config.propChangeMethod;
+                const thisPropChangeMethod = propChangeMethod !== undefined ? this[propChangeMethod] : undefined;
+                const methodIsDefined = thisPropChangeMethod !== undefined;
+                const arg = {key, ov, nv, prop};
+                if(methodIsDefined) if(thisPropChangeMethod(arg, 'v') === false) return; //v = validate
                 this[privateKey] = nv;
-                for(const subscriber of this.subscribers){
-                    if(subscriber.propsOfInterest.has(key)){
-                        subscriber.callback(this);
-                    }
-                }
+                //TODO:  turn this into mixin
+                // for(const subscriber of this.subscribers){
+                //     if(subscriber.propsOfInterest.has(key)){
+                //         subscriber.callback(this);
+                //     }
+                // }
                 if(this.QR){
                     this.QR(key, this);
                     return;
                 }
+                if(methodIsDefined) if(thisPropChangeMethod(arg, '-a') === false) return; //-a = pre actions
                 if(actions !== undefined){
                     const filteredActions = actions.filter(x => {
                         if(!checkRifs(x, this)) return false;
@@ -233,6 +235,7 @@ function addPropsToClass<T extends HTMLElement = HTMLElement>(newClass: {new(): 
                         this[action.do](this, key, ov, nv);
                     }
                 }
+                if(methodIsDefined) thisPropChangeMethod(arg, '+a'); //+a = post actions
             },
             enumerable: true,
             configurable: true,

@@ -59,6 +59,7 @@ tm.define<CounterSo>({
     },
     mixins: [tm.TemplMgmtMixin, {
         changeCount: (self: CounterSo, d: number, e: Event) => self.count += d,
+
     }],
 });
 

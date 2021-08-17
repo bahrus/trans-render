@@ -65,12 +65,10 @@ export interface DefineArgs<TMixinComposite = any>{
 
 export interface WCConfig<TMixinComposite = any>{
     tagName: string;
-    initMethod?: keyof TMixinComposite;
     propDefaults?: Partial<TMixinComposite>;
-    //propInfo?: {[key in Extract<keyof TMixinComposite, string>]: PropInfo} 
     propInfo?: Partial<{[key in keyof TMixinComposite]: PropInfo}> 
     actions?: Action<TMixinComposite>[];
-    notifyProps?: (keyof TMixinComposite)[];
+    propChangeMethod?: keyof TMixinComposite;
 }
 
 export interface HasUpon<TMixinComposite = any>{
@@ -99,7 +97,6 @@ export type MatchRHS<TMixinComposite = any> = string;
 type PropInfoTypes = "String" | "Number" | "Boolean" | "Object";
 export interface PropInfo{
     type?: PropInfoTypes;
-    //default?: any;
     dry?: boolean;
     parse?: boolean;
 }
