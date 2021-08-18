@@ -236,7 +236,7 @@ function addPropsToClass<T extends HTMLElement = HTMLElement>(newClass: {new(): 
                         const fn = this[action.do];
                         if(fn === undefined) throw (action.do.toString() + " undefined");
                         const ret = this[action.do](this, key, ov, nv);
-                        if(to !== undefined) this[to] = ret;
+                        if(to !== undefined && ret !== undefined) this[to] = ret;
                     }
                 }
                 if(methodIsDefined) thisPropChangeMethod!(this, arg, '+a'); //+a = post actions
