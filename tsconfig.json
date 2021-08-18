@@ -17,6 +17,8 @@
 		"lib/html.ts",
 		"lib/InTexter.ts",
 		"lib/MatchByType.ts",
+		"lib/mixins/notify.ts",
+		"lib/mixins/observeCssSelector.ts",
 		"lib/NestedTransform.ts",
 		"lib/P.ts",
 		"lib/PE.ts",
