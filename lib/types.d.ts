@@ -82,6 +82,7 @@ export interface HasUpon<TMixinComposite = any>{
     //  * refrain if truthy
     //  */
     // rift?: (Extract<keyof TMixinComposite, string>)[];
+    to?: keyof TMixinComposite;
 }
 
 export interface Transform<TMixinComposite = any> extends HasUpon<TMixinComposite>{

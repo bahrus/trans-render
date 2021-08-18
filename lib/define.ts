@@ -232,9 +232,11 @@ function addPropsToClass<T extends HTMLElement = HTMLElement>(newClass: {new(): 
 
                     });
                     for(const action of filteredActions){
+                        const {to} = action;
                         const fn = this[action.do];
                         if(fn === undefined) throw (action.do.toString() + " undefined");
-                        this[action.do](this, key, ov, nv);
+                        const ret = this[action.do](this, key, ov, nv);
+                        if(to !== undefined) this[to] = ret;
                     }
                 }
                 if(methodIsDefined) thisPropChangeMethod!(this, arg, '+a'); //+a = post actions
