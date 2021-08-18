@@ -8,30 +8,8 @@
 		"strict": true,
 		"watch": true
 	},
-	"files":[
-		"demo/counter-so.ts",
-		"lib/applyPEA.ts",
-		"lib/camelToLisp.ts",
-		"lib/def.ts",
-		"lib/define.ts",
-		"lib/html.ts",
-		"lib/InTexter.ts",
-		"lib/MatchByType.ts",
-		"lib/mixins/notify.ts",
-		"lib/mixins/observeCssSelector.ts",
-		"lib/NestedTransform.ts",
-		"lib/P.ts",
-		"lib/PE.ts",
-		"lib/PEA.ts",
-		"lib/PEAT.ts",
-		"lib/SplitText.ts",
-		"lib/structuralClone.ts",
-		"lib/TemplMgmtBase.ts",
-		"lib/TemplMgmtWithPEST.ts",
-		"lib/TemplateMerge.ts",
-		"lib/transform.ts",
-		"lib/upSearch.ts",
-		"lib/upShadowSearch.ts"
+	"include": [
+		"lib/*"
 	],
 	"exclude":[
 		"build",

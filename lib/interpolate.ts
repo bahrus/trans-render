@@ -8,7 +8,7 @@ export function interpolate(target: any, prop: string, obj: any, isAttr: boolean
         if(target.childNodes[0].nodeType !== 3) return;
     }
     if(!weakMap.has(target as Element)){
-        const txt = isAttr ?  target.getAttribute(prop) : target[prop] as string;
+        const txt = (isAttr ?  target.getAttribute(prop) : target[prop]) as string;
         const split = txt.split('|');
         if(split.length === 0) return;
         weakMap.set(target as Element, split.map(s =>{
