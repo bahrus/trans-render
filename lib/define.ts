@@ -72,7 +72,7 @@ export function define<T = any, P = PropInfo>(args: DefineArgs<T, P>): {new(): T
             delete this.QR;
             const propChangeQueue = this.propChangeQueue;
             const actions = c.actions;
-            const actionsToDo = new Set<string>();
+            const actionsToDo = new Set<Action>();
             if(propChangeQueue !== undefined && actions !== undefined){
                 for(const action of actions){
                     const {upon} = action;
@@ -82,13 +82,13 @@ export function define<T = any, P = PropInfo>(args: DefineArgs<T, P>): {new(): T
                     switch(typeof upon){
                         case 'string':
                             if(propChangeQueue.has(upon)){
-                                actionsToDo.add(doAct);
+                                actionsToDo.add(action);
                             }
                             break;
                         case 'object':
                             for(const dependency of upon){
                                 if(propChangeQueue.has(dependency)){
-                                    actionsToDo.add(doAct);
+                                    actionsToDo.add(action);
                                     break;
                                 }
                             }
@@ -98,7 +98,8 @@ export function define<T = any, P = PropInfo>(args: DefineArgs<T, P>): {new(): T
             }
             const values = Array.from(actionsToDo);
             for(const action of values){
-                (<any>this)[action](this, propChangeQueue);
+                const ret = (<any>this)[action.do](this, propChangeQueue);
+                if(action.merge) Object.assign(this, ret);
             }
             delete this.propChangeQueue;
         }
