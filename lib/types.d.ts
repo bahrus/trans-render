@@ -69,7 +69,7 @@ export interface WCConfig<TMixinComposite = any, TPropInfo = PropInfo>{
     propInfo?: Partial<{[key in keyof TMixinComposite]: TPropInfo}> 
     actions?: Action<TMixinComposite>[];
     propChangeMethod?: keyof TMixinComposite;
-    style?: CSSStyleDeclaration;
+    style?: Partial<CSSStyleDeclaration>;
 }
 
 export interface HasUpon<TMixinComposite = any>{
