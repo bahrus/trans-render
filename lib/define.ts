@@ -235,11 +235,11 @@ function addPropsToClass<T extends HTMLElement = HTMLElement>(newClass: {new(): 
 
                     });
                     for(const action of filteredActions){
-                        const {to} = action;
+                        const {merge} = action;
                         const fn = this[action.do];
                         if(fn === undefined) throw (action.do.toString() + " undefined");
                         const ret = this[action.do](this, key, ov, nv);
-                        if(to !== undefined && ret !== undefined) this[to] = ret;
+                        if(merge !== undefined) Object.assign(this, ret);
                     }
                 }
                 if(methodIsDefined) thisPropChangeMethod!(this, arg, '+a'); //+a = post actions
