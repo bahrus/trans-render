@@ -11,11 +11,14 @@ export function define<T = any, P = PropInfo>(args: DefineArgs<T, P>): {new(): T
     const c = args.config;
     const propInfos  = createPropInfos(args);
     let ext = args.superclass || HTMLElement;
+    const proto = ext.prototype;
     const mixins = args.mixins;
     if(mixins !== undefined){
         for(const mix of mixins){
             if(typeof mix === 'function'){
                 ext = mix(ext);
+            }else{
+                Object.assign(proto, mix);
             }
             
         }
@@ -110,15 +113,15 @@ export function define<T = any, P = PropInfo>(args: DefineArgs<T, P>): {new(): T
         //     if(idx > -1) this.subscribers.splice(idx, 1);
         // }
     }
-    if(mixins !== undefined){
-        const proto = newClass.prototype;
-        for(const mix of mixins){
-            if(typeof mix === 'object'){
-                Object.assign(proto, mix);
-            }
+    // if(mixins !== undefined){
+    //     const proto = newClass.prototype;
+    //     for(const mix of mixins){
+    //         if(typeof mix === 'object'){
+    //             Object.assign(proto, mix);
+    //         }
             
-        }
-    }
+    //     }
+    // }
     interface newClass extends HasPropChangeQueue{}
     addPropsToClass(newClass as any as {new(): HTMLElement}, propInfos, args);
     def(newClass);
