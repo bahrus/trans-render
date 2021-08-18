@@ -56,6 +56,7 @@ export function define<T = any, P = PropInfo>(args: DefineArgs<T, P>): {new(): T
         }
         connectedCallback(){
             if(super.connectedCallback) super.connectedCallback();
+            Object.assign(this.style, c.style);
             const defaults: any = {...args.config.propDefaults, ...args.complexPropDefaults};
             propUp(this as any as HTMLElement, Object.keys(propInfos), defaults);
             this.detachQR();
