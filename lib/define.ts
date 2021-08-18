@@ -97,10 +97,7 @@ export function define<T = any, P = PropInfo>(args: DefineArgs<T, P>): {new(): T
                 }
             }
             const values = Array.from(actionsToDo);
-            for(const action of values){
-                const ret = (<any>this)[action.do](this, propChangeQueue);
-                if(action.merge) Object.assign(this, ret);
-            }
+            doActions(values, this, propChangeQueue);
             delete this.propChangeQueue;
         }
         //TODO:  turn this into a mixin
@@ -127,6 +124,12 @@ export function define<T = any, P = PropInfo>(args: DefineArgs<T, P>): {new(): T
     addPropsToClass(newClass as any as {new(): HTMLElement}, propInfos, args);
     def(newClass);
     return newClass as any as {new(): T};
+}
+function doActions(actions: Action[], self: any, arg: any){
+    for(const action of actions){
+        const ret = (<any>self)[action.do](self, arg);
+        if(action.merge) Object.assign(self, ret);
+    }
 }
 
 
@@ -235,13 +238,7 @@ function addPropsToClass<T extends HTMLElement = HTMLElement>(newClass: {new(): 
                         }
 
                     });
-                    for(const action of filteredActions){
-                        const {merge} = action;
-                        const fn = this[action.do];
-                        if(fn === undefined) throw (action.do.toString() + " undefined");
-                        const ret = this[action.do](this, key, ov, nv);
-                        if(merge !== undefined) Object.assign(this, ret);
-                    }
+                    doActions(filteredActions, this, {key, ov, nv});
                 }
                 if(methodIsDefined) thisPropChangeMethod!(this, arg, '+a'); //+a = post actions
             },
