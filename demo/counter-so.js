@@ -23,7 +23,7 @@ const mainTemplate = tm.html `
     }
 </style>
 `;
-(new tm.CE()).de({
+(new tm.CE()).def({
     //config should be JSON serializable, importable via JSON import
     config: {
         tagName: 'counter-so',

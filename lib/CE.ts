@@ -10,7 +10,7 @@ export class CE<T = any, P = PropInfo>{
         parse: true,
     };
 
-    de(args: DefineArgs<T, P>): {new(): T}{
+    def(args: DefineArgs<T, P>): {new(): T}{
         const {getAttributeNames, doActions, fine, checkRifs, toCamel, toLisp} = this;
         const {config} = args;
         const {tagName, style, actions} = config;

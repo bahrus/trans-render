@@ -31,7 +31,7 @@ const mainTemplate = tm.html`
 `;
 
 
-(new tm.CE<CounterSo, INotifyPropInfo>()).de({
+(new tm.CE<CounterSo, INotifyPropInfo>()).def({
     //config should be JSON serializable, importable via JSON import
     config:  {
         tagName:'counter-so',
