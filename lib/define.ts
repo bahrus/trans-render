@@ -127,7 +127,8 @@ export function define<T = any, P = PropInfo>(args: DefineArgs<T, P>): {new(): T
 }
 async function doActions(actions: Action[], self: any, arg: any){
     for(const action of actions){
-        const ret = await (<any>self)[action.do](self, arg);
+        const fn = (<any>self)[action.do];
+        const ret = action.async ? await fn(self, arg) : fn(self, arg);
         if(action.merge) Object.assign(self, ret);
     }
 }

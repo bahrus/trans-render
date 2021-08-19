@@ -91,6 +91,7 @@ export interface Transform<TMixinComposite = any> extends HasUpon<TMixinComposit
 
 export interface Action<TMixinComposite = any> extends HasUpon<TMixinComposite>{
     do: Extract<keyof TMixinComposite, string>;
+    async?: boolean;
 }
 
 export type MatchRHS<TMixinComposite = any> = string;
