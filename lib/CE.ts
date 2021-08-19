@@ -10,11 +10,11 @@ export class CE<T = any, P = PropInfo>{
         dry: true,
         parse: true,
     };
-    def(args: DefineArgs<T, P>): {new(): T}{
-        const {createPropInfos, getAttributeNames, doActions, addPropsToClass, ine} = this;
+    de(args: DefineArgs<T, P>): {new(): T}{
+        const {getAttributeNames, doActions, fine, checkRifs} = this;
         const {config} = args;
         const {tagName, style, actions} = config;
-        const propInfos  = createPropInfos(args);
+        const propInfos  = this.createPropInfos(args);
         let ext = args.superclass || HTMLElement;
         const proto = ext.prototype;
         const mixins = args.mixins;
@@ -117,18 +117,18 @@ export class CE<T = any, P = PropInfo>{
             // }
         }
 
-        addPropsToClass(newClass as any as {new(): HTMLElement}, propInfos, args);
-        ine(tagName, newClass as any as ({new(): HTMLElement}));
+        this.addPropsToClass(newClass as any as {new(): HTMLElement}, propInfos, args);
+        fine(tagName, newClass as any as ({new(): HTMLElement}));
         return newClass as any as {new(): T};
     }
 
-    ine(tagName: string, newClass: {new(): HTMLElement}){
+    fine(tagName: string, newClass: {new(): HTMLElement}){
         customElements.define(tagName, newClass);
     }
 
     async doActions(actions: Action[], self: any, arg: any){
         for(const action of actions){
-            const fn = (<any>self)[action.do];
+            const fn = (<any>self)[action.do].bind(self);
             const ret = action.async ? await fn(self, arg) : fn(self, arg);
             if(action.merge) Object.assign(self, ret);
         }
@@ -154,6 +154,7 @@ export class CE<T = any, P = PropInfo>{
     }
 
     createPropInfos(args: DefineArgs){
+        const {defaultProp, setType} = this;
         const props: {[key: string]: PropInfo} = {};
         const defaults = {...args.complexPropDefaults, ...args.config.propDefaults};
         for(const key in defaults){
@@ -189,7 +190,7 @@ export class CE<T = any, P = PropInfo>{
     }
 
     addPropsToClass<T extends HTMLElement = HTMLElement>(newClass: {new(): T}, props: {[key: string]: PropInfo}, args: DefineArgs){
-        const {doActions} = this;
+        const {doActions, checkRifs} = this;
         const proto = newClass.prototype;
         const config = args.config;
         const actions = config.actions;
@@ -242,32 +243,19 @@ export class CE<T = any, P = PropInfo>{
             });
         }
     }
-}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function checkRifs(action: Action<any>, self: any){
-    const {riff, upon} = action;
-    if(riff !== undefined){
-        const realRiff = (riff === '"' || riff === "'") ? upon! : riff;
-        for(const key of realRiff){
-            if(!self[key]) return false;
+    checkRifs(action: Action<any>, self: any){
+        const {riff, upon} = action;
+        if(riff !== undefined){
+            const realRiff = (riff === '"' || riff === "'") ? upon! : riff;
+            for(const key of realRiff){
+                if(!self[key]) return false;
+            }
         }
+        return true;
     }
-    return true;
 }
+
 
 
 const QR = (propName: string, self: HasPropChangeQueue) => {

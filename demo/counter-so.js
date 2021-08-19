@@ -23,7 +23,7 @@ const mainTemplate = tm.html `
     }
 </style>
 `;
-tm.define({
+(new tm.CE()).de({
     //config should be JSON serializable, importable via JSON import
     config: {
         tagName: 'counter-so',
@@ -46,10 +46,7 @@ tm.define({
         },
         actions: [
             ...tm.doInitTransform,
-            {
-                upon: ['count', 'updateTransform'],
-                ...tm.doUpdateTransform
-            }
+            Object.assign({ upon: ['count', 'updateTransform'] }, tm.doUpdateTransform)
         ],
         propChangeMethod: 'onPropChange',
     },
