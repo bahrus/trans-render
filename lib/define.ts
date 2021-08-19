@@ -125,9 +125,9 @@ export function define<T = any, P = PropInfo>(args: DefineArgs<T, P>): {new(): T
     def(newClass);
     return newClass as any as {new(): T};
 }
-function doActions(actions: Action[], self: any, arg: any){
+async function doActions(actions: Action[], self: any, arg: any){
     for(const action of actions){
-        const ret = (<any>self)[action.do](self, arg);
+        const ret = await (<any>self)[action.do](self, arg);
         if(action.merge) Object.assign(self, ret);
     }
 }
