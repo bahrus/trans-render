@@ -1,4 +1,3 @@
-import { def } from './def.js';
 import { DefineArgs, HasUpon, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment } from './types.js';
 import { propUp } from './propUp.js';
 import { camelToLisp } from './camelToLisp.js';
@@ -12,8 +11,9 @@ export class CE<T = any, P = PropInfo>{
         parse: true,
     };
     def(args: DefineArgs<T, P>): {new(): T}{
-        const {createPropInfos, getAttributeNames, doActions, addPropsToClass} = this;
-        const c = args.config;
+        const {createPropInfos, getAttributeNames, doActions, addPropsToClass, ine} = this;
+        const {config} = args;
+        const {tagName, style, actions} = config;
         const propInfos  = createPropInfos(args);
         let ext = args.superclass || HTMLElement;
         const proto = ext.prototype;
@@ -31,7 +31,7 @@ export class CE<T = any, P = PropInfo>{
 
         class newClass extends ext{
 
-            static is = c.tagName;
+            static is = tagName;
             static observedAttributes = getAttributeNames(propInfos);
             constructor(){
                 super();
@@ -64,7 +64,7 @@ export class CE<T = any, P = PropInfo>{
             }
             connectedCallback(){
                 if(super.connectedCallback) super.connectedCallback();
-                Object.assign(this.style, c.style);
+                Object.assign(this.style, style);
                 const defaults: any = {...args.config.propDefaults, ...args.complexPropDefaults};
                 propUp(this as any as HTMLElement, Object.keys(propInfos), defaults);
                 this.detachQR();
@@ -76,10 +76,10 @@ export class CE<T = any, P = PropInfo>{
             detachQR(){
                 delete this.QR;
                 const propChangeQueue = this.propChangeQueue;
-                const actions = c.actions;
+                const acts = actions;
                 const actionsToDo = new Set<Action>();
-                if(propChangeQueue !== undefined && actions !== undefined){
-                    for(const action of actions){
+                if(propChangeQueue !== undefined && acts !== undefined){
+                    for(const action of acts){
                         const {upon} = action;
                         const doAct = action.do as any;
                         if(upon === undefined) continue;
@@ -118,11 +118,13 @@ export class CE<T = any, P = PropInfo>{
         }
 
         addPropsToClass(newClass as any as {new(): HTMLElement}, propInfos, args);
-        def(newClass);
+        ine(tagName, newClass as any as ({new(): HTMLElement}));
         return newClass as any as {new(): T};
     }
 
-
+    ine(tagName: string, newClass: {new(): HTMLElement}){
+        customElements.define(tagName, newClass);
+    }
 
     async doActions(actions: Action[], self: any, arg: any){
         for(const action of actions){
