@@ -23,6 +23,27 @@ export const NotifyMixin = (superclass: {new(): any}) => class extends superclas
         return true;
     }
 };
+
+export interface CommonProps {
+    disabled?: boolean,
+    enabled?: boolean,
+    value?: any,
+}
+
+export const commonPropsInfo: Partial<{[key in keyof CommonProps]: INotifyPropInfo<CommonProps>}> = {
+    disabled: {
+        notify:{
+            toggleTo: 'enabled'
+        }
+    },
+    value:{
+        notify:{
+            viaCustEvt: true,
+        }
+    }
+};
+
+
 export interface INotifyMixin{
     onPropChange(self: EventTarget, propChange: PropChangeInfo, moment: PropChangeMoment): boolean;
 }

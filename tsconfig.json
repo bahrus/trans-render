@@ -9,7 +9,8 @@
 		"watch": true
 	},
 	"include": [
-		"lib/*"
+		"lib/*",
+		"lib/mixins/*"
 	],
 	"exclude":[
 		"build",
