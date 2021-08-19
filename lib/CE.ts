@@ -2,6 +2,8 @@ import { DefineArgs, HasUpon, PropInfo, HasPropChangeQueue, Action, PropInfoType
 import { propUp } from './propUp.js';
 import { camelToLisp } from './camelToLisp.js';
 import { lispToCamel } from './lispToCamel.js';
+export { camelToLisp } from './camelToLisp.js';
+export { lispToCamel } from './lispToCamel.js';
 export { Action, PropInfo } from './types.js';
 
 export class CE<T = any, P = PropInfo>{
