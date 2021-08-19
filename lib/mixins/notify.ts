@@ -7,7 +7,7 @@ export const NotifyMixin = (superclass: {new(): any}) => class extends superclas
         if(notify === undefined || (moment !== '+a' && moment != '+qr')) return;
         const {viaCustEvt, echoTo, toggleTo} = notify;
         if(viaCustEvt === true){
-            self.dispatchEvent(new CustomEvent(camelToLisp(propChange.key), {
+            self.dispatchEvent(new CustomEvent(camelToLisp(propChange.key) + '-changed', {
                 detail:{
                     oldValue: propChange.ov,
                     value: propChange.nv,
