@@ -1,9 +1,6 @@
 import { DefineArgs, HasUpon, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment } from './types.js';
 import { propUp } from './propUp.js';
-import { camelToLisp } from './camelToLisp.js';
-import { lispToCamel } from './lispToCamel.js';
-export { camelToLisp } from './camelToLisp.js';
-export { lispToCamel } from './lispToCamel.js';
+
 export { Action, PropInfo } from './types.js';
 
 export class CE<T = any, P = PropInfo>{
@@ -12,8 +9,9 @@ export class CE<T = any, P = PropInfo>{
         dry: true,
         parse: true,
     };
+
     de(args: DefineArgs<T, P>): {new(): T}{
-        const {getAttributeNames, doActions, fine, checkRifs} = this;
+        const {getAttributeNames, doActions, fine, checkRifs, toCamel, toLisp} = this;
         const {config} = args;
         const {tagName, style, actions} = config;
         const propInfos  = this.createPropInfos(args);
@@ -34,14 +32,14 @@ export class CE<T = any, P = PropInfo>{
         class newClass extends ext{
 
             static is = tagName;
-            static observedAttributes = getAttributeNames(propInfos);
+            static observedAttributes = getAttributeNames(propInfos, toLisp);
             constructor(){
                 super();
                 this.attachQR();
             }
             attributeChangedCallback(n: string, ov: string, nv: string){
                 if(super.attributeChangedCallback) super.attributeChangedCallback(n, ov, nv);
-                const propName = lispToCamel(n);
+                const propName = toCamel(n);
                 const prop = propInfos[propName];
                 if(prop !== undefined){
                     if(prop.dry && ov === nv) return;
@@ -136,12 +134,12 @@ export class CE<T = any, P = PropInfo>{
         }
     }
 
-    getAttributeNames(props: {[key: string]: PropInfo}){
+    getAttributeNames(props: {[key: string]: PropInfo}, toLisp: (s: string) => string){
         const returnArr: string[] = [];
         for(const key in props){
             const prop = props[key];
             if(prop.parse){
-                returnArr.push(camelToLisp(key));
+                returnArr.push(toLisp((key)));
             }
         }
         return returnArr;
@@ -256,14 +254,19 @@ export class CE<T = any, P = PropInfo>{
         }
         return true;
     }
+
+    toLisp(s: string){return s.split(ctlRe).join('-').toLowerCase();}
+    toCamel(s: string){return s.replace(stcRe, function(m){return m[1].toUpperCase();});}
 }
-
-
 
 const QR = (propName: string, self: HasPropChangeQueue) => {
     if(self.propChangeQueue === undefined) self.propChangeQueue = new Set<string>();
     self.propChangeQueue.add(propName);
 }
+
+
+const ctlRe = /(?=[A-Z])/;
+const stcRe = /(\-\w)/g;
 
 
 
