@@ -5,8 +5,8 @@ export const NotifyMixin = (superclass: {new(): any}) => class extends superclas
         if(super.onPropChange) super.onPropChange(self, propChange, moment);
         const notify = propChange.prop.notify;
         if(notify === undefined || (moment !== '+a' && moment != '+qr')) return;
-        const {dispatch: viaCustEvt, echoTo, toggleTo} = notify;
-        if(viaCustEvt === true){
+        const {dispatch, echoTo, toggleTo, echoDelay} = notify;
+        if(dispatch){
             self.dispatchEvent(new CustomEvent(camelToLisp(propChange.key) + '-changed', {
                 detail:{
                     oldValue: propChange.ov,
@@ -15,7 +15,14 @@ export const NotifyMixin = (superclass: {new(): any}) => class extends superclas
             }));
         }
         if(echoTo !== undefined){
-            (<any>self)[echoTo] = propChange.nv;
+            if(echoDelay){
+                setTimeout(() => {
+                    (<any>self)[echoTo] = propChange.nv;
+                }, echoDelay);
+            }else{
+                (<any>self)[echoTo] = propChange.nv;
+            }
+            
         }
         if(toggleTo !== undefined){
             (<any>self)[toggleTo] = !propChange.nv;

@@ -1,5 +1,4 @@
 import { DefineArgs, HasUpon, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment } from './types.js';
-import { propUp } from './propUp.js';
 
 export { Action, PropInfo } from './types.js';
 
@@ -11,7 +10,7 @@ export class CE<T = any, P = PropInfo>{
     };
 
     def(args: DefineArgs<T, P>): {new(): T}{
-        const {getAttributeNames, doActions, fine, checkRifs, toCamel, toLisp} = this;
+        const {getAttributeNames, doActions, fine, checkRifs, toCamel, toLisp, propUp} = this;
         const {config} = args;
         const {tagName, style, actions} = config;
         const propInfos  = this.createPropInfos(args);
@@ -28,6 +27,8 @@ export class CE<T = any, P = PropInfo>{
                 
             }
         }
+
+
 
         class newClass extends ext{
 
@@ -137,6 +138,26 @@ export class CE<T = any, P = PropInfo>{
             }
         }
         return returnArr;
+    }
+
+    /**
+     * Needed for asynchronous loading
+     * @param props Array of property names to "upgrade", without losing value set while element was Unknown
+     * @param defaultValues:   If property value not set, set it from the defaultValues lookup
+     * @private
+     */
+    propUp<T>(self: HTMLElement, props: string[], defaultValues?: T){
+        for(const prop of props){
+            let value = (<any>self)[prop];
+            if(value === undefined && defaultValues !== undefined){
+                value = (<any>defaultValues)[prop];
+            }
+            if (self.hasOwnProperty(prop)) {
+                delete (<any>self)[prop];
+            }
+            //some properties are read only.
+            try{(<any>self)[prop] = value;}catch{}
+        }
     }
 
     setType(prop: PropInfo, val: any){
