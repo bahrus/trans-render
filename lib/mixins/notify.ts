@@ -5,7 +5,7 @@ export const NotifyMixin = (superclass: {new(): any}) => class extends superclas
         if(super.onPropChange) super.onPropChange(self, propChange, moment);
         const notify = propChange.prop.notify;
         if(notify === undefined || (moment !== '+a' && moment != '+qr')) return;
-        const {viaCustEvt, echoTo, toggleTo} = notify;
+        const {dispatch: viaCustEvt, echoTo, toggleTo} = notify;
         if(viaCustEvt === true){
             self.dispatchEvent(new CustomEvent(camelToLisp(propChange.key) + '-changed', {
                 detail:{
@@ -38,7 +38,7 @@ export const commonPropsInfo: Partial<{[key in keyof CommonProps]: INotifyPropIn
     },
     value:{
         notify:{
-            viaCustEvt: true,
+            dispatch: true,
         }
     }
 };
@@ -50,8 +50,9 @@ export interface INotifyMixin{
 
 export interface INotifyPropInfo<TMixinComposite = any> extends PropInfo{ //yikes!  How many combinations will we need to support for this?
     notify?: {
-        viaCustEvt?: boolean,
+        dispatch?: boolean,
         echoTo?: keyof TMixinComposite,
+        echoDelay?: number,
         toggleTo?: keyof TMixinComposite,
     }
 }

@@ -41,7 +41,7 @@ const mainTemplate = tm.html `
         },
         propInfo: {
             count: {
-                notify: { viaCustEvt: true },
+                notify: { dispatch: true },
             }
         },
         actions: Object.assign(Object.assign({}, tm.doInitTransform), { doUpdateTransform: {

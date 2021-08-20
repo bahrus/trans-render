@@ -49,7 +49,7 @@ const mainTemplate = tm.html`
         },
         propInfo:{
             count: {
-                notify: {viaCustEvt:true},
+                notify: {dispatch:true},
             }
         },
         actions: {
