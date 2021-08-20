@@ -16,9 +16,10 @@ export const NotifyMixin = (superclass: {new(): any}) => class extends superclas
         }
         if(echoTo !== undefined){
             if(echoDelay){
+                let echoDelayNum: number = typeof(echoDelay) === 'number' ? echoDelay : (<any>self)[echoDelay];
                 setTimeout(() => {
                     (<any>self)[echoTo] = propChange.nv;
-                }, echoDelay);
+                }, echoDelayNum);
             }else{
                 (<any>self)[echoTo] = propChange.nv;
             }
@@ -59,7 +60,7 @@ export interface INotifyPropInfo<TMixinComposite = any> extends PropInfo{ //yike
     notify?: {
         dispatch?: boolean,
         echoTo?: keyof TMixinComposite,
-        echoDelay?: number,
+        echoDelay?: number | (keyof TMixinComposite),
         toggleTo?: keyof TMixinComposite,
     }
 }
