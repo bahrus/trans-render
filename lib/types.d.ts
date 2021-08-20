@@ -72,7 +72,7 @@ export interface WCConfig<TMixinComposite = any, TPropInfo = PropInfo>{
     style?: Partial<CSSStyleDeclaration>;
 }
 
-export interface HasUpon<TMixinComposite = any>{
+export interface LogicOp<TMixinComposite = any>{
     upon?: (Extract<keyof TMixinComposite, string>)[];
     /**
      * refrain if falsy
@@ -82,13 +82,17 @@ export interface HasUpon<TMixinComposite = any>{
     //  * refrain if truthy
     //  */
     // rift?: (Extract<keyof TMixinComposite, string>)[];
+    ifAllOf?: LogicOp<TMixinComposite> | (keyof TMixinComposite | LogicOp<TMixinComposite>)[],
+    ifAnyOf?: LogicOp<TMixinComposite> | (keyof TMixinComposite | LogicOp<TMixinComposite>)[],
+    ifNot?: keyof TMixinComposite,
+    ifEquals?: [string | number | [keyof TMixinComposite], string | number | [keyof TMixinComposite]]
 }
 
-export interface Transform<TMixinComposite = any> extends HasUpon<TMixinComposite>{
+export interface Transform<TMixinComposite = any> extends LogicOp<TMixinComposite>{
     match: {[key: string]: MatchRHS<TMixinComposite>}
 }
 
-export interface Action<TMixinComposite = any> extends HasUpon<TMixinComposite>{
+export interface Action<TMixinComposite = any> extends LogicOp<TMixinComposite>{
     //do: Extract<keyof TMixinComposite, string>;
     async?: boolean;
 
