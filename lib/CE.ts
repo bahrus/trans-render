@@ -84,6 +84,7 @@ export class CE<T = any, P = PropInfo>{
                     for(const doAct in acts){
                         const action = acts[doAct] as Action;
                         if(!pq(action, self, this, 'and')) continue;
+                        actionsToDo[doAct] = action;
                         // switch(typeof upon){
                         //     case 'string':
                         //         if(propChangeQueue.has(upon)){
@@ -190,7 +191,7 @@ export class CE<T = any, P = PropInfo>{
         if(actions !== undefined){
             for(const methodName in actions){
                 const action = actions[methodName] as Action;
-                const upon = action.upon;
+                const upon = action.ifAnyOf as string[];
                 if(upon === undefined) continue;
                 for(const dependency of upon){
                     if(props[dependency] === undefined){
@@ -237,19 +238,11 @@ export class CE<T = any, P = PropInfo>{
                         for(const methodName in actions){
                             const action = actions[methodName]!;
                             if(self.pq(action, self, this, 'and')){
-                                const upon = action.upon;
-                                switch(typeof upon){
-                                    case 'string':
-                                        if(upon === key){
-                                            filteredActions[methodName] = action;
-                                        }
-                                        break;
-                                    case 'object':
-                                        if(upon.includes(key)){
-                                            filteredActions[methodName] = action;
-                                        }
-                                        break;
+                                const upon = action.ifAnyOf as string[];
+                                if(upon.includes(key)){
+                                    filteredActions[methodName] = action;
                                 }
+                                break;
                             }
                         }
 

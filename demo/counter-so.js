@@ -45,7 +45,7 @@ const mainTemplate = tm.html `
             }
         },
         actions: Object.assign(Object.assign({}, tm.doInitTransform), { doUpdateTransform: {
-                upon: ['count', 'updateTransform']
+                ifAnyOf: ['count', 'updateTransform']
             } }),
         propChangeMethod: 'onPropChange',
     },

@@ -55,7 +55,7 @@ const mainTemplate = tm.html`
         actions: {
             ...tm.doInitTransform,
             doUpdateTransform: {
-                upon: ['count', 'updateTransform']
+                ifAnyOf: ['count', 'updateTransform']
             }
         },
         propChangeMethod: 'onPropChange',

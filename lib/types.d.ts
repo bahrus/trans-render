@@ -77,11 +77,11 @@ export type ListOfLogicalExpressions<TMixinComposite = any> = (keyof TMixinCompo
 export type LogicOpProp<TMixinComposite = any> = LogicOp<TMixinComposite> | (keyof TMixinComposite | LogicOp<TMixinComposite>)[];
 
 export interface LogicOp<TMixinComposite = any>{
-    upon?: (Extract<keyof TMixinComposite, string>)[];
+    //upon?: (Extract<keyof TMixinComposite, string>)[];
     /**
      * refrain if falsy
      */
-    riff?: "'" | '"' | (Extract<keyof TMixinComposite, string>)[];
+    //riff?: "'" | '"' | (Extract<keyof TMixinComposite, string>)[];
         // /**
     //  * refrain if truthy
     //  */
