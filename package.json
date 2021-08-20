@@ -17,6 +17,7 @@
     "./lib/applyPE.js": "./lib/applyPE.js",
     "./lib/applyPEA.js": "./lib/applyPEA.js",
     "./lib/camelToLisp.js": "./lib/camelToLisp.js",
+    "./lib/CE.js": "./lib/CE.js",
     "./lib/def.js": "./lib/def.js",
     "./lib/define.js": "./lib/define.js",
     "./lib/getProp.js": "./lib/getProp.js",
