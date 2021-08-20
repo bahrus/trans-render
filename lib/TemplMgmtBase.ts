@@ -33,23 +33,39 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
 }
 
 
-export const  doInitTransform : Action<TemplMgmtBase>[] = [
-    {
-        upon: ['mainTemplate', 'noshadow'],
-        do: 'cloneTemplate'
-    },
-    {
-        upon: ['clonedTemplate', 'initTransform'],
-        riff: ['clonedTemplate', 'initTransform'],
-        do: 'doInitTransform'
-    }
-];
+// export const  doInitTransform : Action<TemplMgmtBase>[] = [
+//     {
+//         upon: ['mainTemplate', 'noshadow'],
+//         do: 'cloneTemplate'
+//     },
+//     {
+//         upon: ['clonedTemplate', 'initTransform'],
+//         riff: ['clonedTemplate', 'initTransform'],
+//         do: 'doInitTransform'
+//     }
+// ];
 
-export const doUpdateTransform: Action<TemplMgmtBase> = {
+export const doInitTransform: Partial<{[key in keyof TemplMgmtBase]: Action<TemplMgmtBase>}> = {
+    cloneTemplate: {
+        upon: ['mainTemplate', 'noshadow']
+    },
+    doInitTransform: {
+        upon: ['clonedTemplate', 'initTransform'],
+        riff: '"'
+    }
+}
+
+export const doUpdateTransform: Partial<{[key in keyof TemplMgmtBase]: Action<TemplMgmtBase>}> = {
+    doUpdateTransform: {
+        upon: ['updateTransform']
+    }
+}
+
+// export const doUpdateTransform: Action<TemplMgmtBase> = {
     
-    riff: ['updateTransform'],
-    do: 'doUpdateTransform',
-};
+//     riff: ['updateTransform'],
+//     do: 'doUpdateTransform',
+// };
 
 export interface TemplMgmtBase extends HTMLElement{
     doUpdateTransform(self: TemplMgmtBase): void;

@@ -67,7 +67,7 @@ export interface WCConfig<TMixinComposite = any, TPropInfo = PropInfo>{
     tagName: string;
     propDefaults?: Partial<TMixinComposite>;
     propInfo?: Partial<{[key in keyof TMixinComposite]: TPropInfo}> 
-    actions?: Action<TMixinComposite>[];
+    actions?: Partial<{[key in keyof TMixinComposite]: Action<TMixinComposite>}> 
     propChangeMethod?: keyof TMixinComposite;
     style?: Partial<CSSStyleDeclaration>;
 }
@@ -78,11 +78,10 @@ export interface HasUpon<TMixinComposite = any>{
      * refrain if falsy
      */
     riff?: "'" | '"' | (Extract<keyof TMixinComposite, string>)[];
-    // /**
+        // /**
     //  * refrain if truthy
     //  */
     // rift?: (Extract<keyof TMixinComposite, string>)[];
-    merge?: boolean;
 }
 
 export interface Transform<TMixinComposite = any> extends HasUpon<TMixinComposite>{
@@ -90,8 +89,10 @@ export interface Transform<TMixinComposite = any> extends HasUpon<TMixinComposit
 }
 
 export interface Action<TMixinComposite = any> extends HasUpon<TMixinComposite>{
-    do: Extract<keyof TMixinComposite, string>;
+    //do: Extract<keyof TMixinComposite, string>;
     async?: boolean;
+
+    merge?: boolean;
 }
 
 export type MatchRHS<TMixinComposite = any> = string;

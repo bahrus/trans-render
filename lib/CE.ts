@@ -77,23 +77,26 @@ export class CE<T = any, P = PropInfo>{
                 delete this.QR;
                 const propChangeQueue = this.propChangeQueue;
                 const acts = actions;
-                const actionsToDo = new Set<Action>();
+                //const actionsToDo = new Set<Action>();
+                const actionsToDo: any = {};
                 if(propChangeQueue !== undefined && acts !== undefined){
-                    for(const action of acts){
+                    for(const doAct in acts){
+                        const action = acts[doAct] as Action;
                         const {upon} = action;
-                        const doAct = action.do as any;
                         if(upon === undefined) continue;
                         if(!checkRifs(action, this)) continue;
                         switch(typeof upon){
                             case 'string':
                                 if(propChangeQueue.has(upon)){
-                                    actionsToDo.add(action);
+                                    actionsToDo[doAct] = action;
+                                    //actionsToDo.add(action);
                                 }
                                 break;
                             case 'object':
                                 for(const dependency of upon){
                                     if(propChangeQueue.has(dependency)){
-                                        actionsToDo.add(action);
+                                        //actionsToDo.add(action);
+                                        actionsToDo[doAct] = action;
                                         break;
                                     }
                                 }
@@ -101,8 +104,8 @@ export class CE<T = any, P = PropInfo>{
                         }
                     }
                 }
-                const values = Array.from(actionsToDo);
-                doActions(values, this, propChangeQueue);
+                //const values = Array.from(actionsToDo);
+                doActions(actionsToDo, this, propChangeQueue);
                 delete this.propChangeQueue;
             }
             //TODO:  turn this into a mixin
@@ -126,9 +129,10 @@ export class CE<T = any, P = PropInfo>{
         customElements.define(tagName, newClass);
     }
 
-    async doActions(actions: Action[], self: any, arg: any){
-        for(const action of actions){
-            const fn = (<any>self)[action.do].bind(self);
+    async doActions(actions: {[methodName: string]: Action}, self: any, arg: any){
+        for(const methodName in actions){
+            const fn = (<any>self)[methodName].bind(self);
+            const action = actions[methodName];
             const ret = action.async ? await fn(self, arg) : fn(self, arg);
             if(action.merge) Object.assign(self, ret);
         }
@@ -175,7 +179,8 @@ export class CE<T = any, P = PropInfo>{
         }
         const actions = args.config.actions;
         if(actions !== undefined){
-            for(const action of actions){
+            for(const methodName in actions){
+                const action = actions[methodName] as Action;
                 const upon = action.upon;
                 if(upon === undefined) continue;
                 for(const dependency of upon){
@@ -210,12 +215,7 @@ export class CE<T = any, P = PropInfo>{
                     const arg: PropChangeInfo = {key, ov, nv, prop};
                     if(methodIsDefined) if(thisPropChangeMethod!(this, arg, 'v') === false) return; //v = validate
                     this[privateKey] = nv;
-                    //TODO:  turn this into mixin
-                    // for(const subscriber of this.subscribers){
-                    //     if(subscriber.propsOfInterest.has(key)){
-                    //         subscriber.callback(this);
-                    //     }
-                    // }
+
                     if(this.QR){
                         this.QR(key, this);
                         if(methodIsDefined) thisPropChangeMethod!(this, arg, '+qr');
@@ -223,17 +223,36 @@ export class CE<T = any, P = PropInfo>{
                     }
                     if(methodIsDefined) if(thisPropChangeMethod!(this, arg, '-a') === false) return; //-a = pre actions
                     if(actions !== undefined){
-                        const filteredActions = actions.filter(x => {
-                            if(!checkRifs(x, this)) return false;
-                            const upon = x.upon;
-                            switch(typeof upon){
-                                case 'string':
-                                    return upon === key;
-                                case 'object':
-                                    return upon.includes(key);
+                        const filteredActions: any = {};
+                        for(const methodName in actions){
+                            const action = actions[methodName]!;
+                            if(checkRifs(action, this)){
+                                const upon = action.upon;
+                                switch(typeof upon){
+                                    case 'string':
+                                        if(upon === key){
+                                            filteredActions[methodName] = action;
+                                        }
+                                        break;
+                                    case 'object':
+                                        if(upon.includes(key)){
+                                            filteredActions[methodName] = action;
+                                        }
+                                        break;
+                                }
                             }
+                        }
+                        // const filteredActions = Object.values(actions).filter(x => {
+                        //     if(!checkRifs(x!, this)) return false;
+                        //     const upon = x!.upon;
+                        //     switch(typeof upon){
+                        //         case 'string':
+                        //             return upon === key;
+                        //         case 'object':
+                        //             return upon.includes(key);
+                        //     }
     
-                        });
+                        // });
                         doActions(filteredActions, this, {key, ov, nv});
                     }
                     if(methodIsDefined) thisPropChangeMethod!(this, arg, '+a'); //+a = post actions

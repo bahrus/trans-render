@@ -52,13 +52,20 @@ const mainTemplate = tm.html`
                 notify: {viaCustEvt:true},
             }
         },
-        actions: [
+        actions: {
             ...tm.doInitTransform,
-            {
-                upon: ['count', 'updateTransform'],
-                ...tm.doUpdateTransform
+            doUpdateTransform: {
+                upon: ['count', 'updateTransform']
             }
-        ],
+            // {
+            //     ...tm.doUpdateTransform,
+            //     upon: ['count', 'updateTransform']
+            // }
+            // {
+            //     upon: ['count', 'updateTransform'],
+            //     ...tm.doUpdateTransform
+            // }
+        },
         propChangeMethod: 'onPropChange',
     },
     //This is where non serializable stuff goes

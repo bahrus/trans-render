@@ -44,10 +44,9 @@ const mainTemplate = tm.html `
                 notify: { viaCustEvt: true },
             }
         },
-        actions: [
-            ...tm.doInitTransform,
-            Object.assign({ upon: ['count', 'updateTransform'] }, tm.doUpdateTransform)
-        ],
+        actions: Object.assign(Object.assign({}, tm.doInitTransform), { doUpdateTransform: {
+                upon: ['count', 'updateTransform']
+            } }),
         propChangeMethod: 'onPropChange',
     },
     //This is where non serializable stuff goes
