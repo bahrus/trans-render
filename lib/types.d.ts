@@ -72,6 +72,10 @@ export interface WCConfig<TMixinComposite = any, TPropInfo = PropInfo>{
     style?: Partial<CSSStyleDeclaration>;
 }
 
+export type ListOfLogicalExpressions<TMixinComposite = any> = (keyof TMixinComposite | LogicOp<TMixinComposite>)[];
+
+export type LogicOpProp<TMixinComposite = any> = LogicOp<TMixinComposite> | (keyof TMixinComposite | LogicOp<TMixinComposite>)[];
+
 export interface LogicOp<TMixinComposite = any>{
     upon?: (Extract<keyof TMixinComposite, string>)[];
     /**
@@ -82,11 +86,20 @@ export interface LogicOp<TMixinComposite = any>{
     //  * refrain if truthy
     //  */
     // rift?: (Extract<keyof TMixinComposite, string>)[];
-    ifAllOf?: LogicOp<TMixinComposite> | (keyof TMixinComposite | LogicOp<TMixinComposite>)[],
-    ifAnyOf?: LogicOp<TMixinComposite> | (keyof TMixinComposite | LogicOp<TMixinComposite>)[],
-    ifNot?: keyof TMixinComposite,
-    ifEquals?: [string | number | [keyof TMixinComposite], string | number | [keyof TMixinComposite]]
+    ifAllOf?: LogicOpProp<TMixinComposite>,
+    andAllOf?: LogicOpProp<TMixinComposite>,
+    orAllOf?: LogicOpProp<TMixinComposite>,
+    ifAnyOf?: LogicOpProp<TMixinComposite>,
+    andAnyOf?: LogicOpProp<TMixinComposite>,
+    ifNot?: LogicOpProp<TMixinComposite>,
+    andIfNot?: LogicOpProp<TMixinComposite>,
+    orIfNot?: LogicOpProp<TMixinComposite>,
+    ifEquals?: LogicOpProp<TMixinComposite>,
+    andIfEquals?: LogicOpProp<TMixinComposite>,
+    orIfEquals?: LogicOpProp<TMixinComposite>,
 }
+
+export type lop = 'and' | 'or';
 
 export interface Transform<TMixinComposite = any> extends LogicOp<TMixinComposite>{
     match: {[key: string]: MatchRHS<TMixinComposite>}

@@ -1,6 +1,5 @@
-import { DefineArgs, LogicOp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment } from './types.js';
-
-export { Action, PropInfo } from './types.js';
+import { DefineArgs, LogicOp, lop, LogicOpProp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions } from './types.js';
+export { Action, PropInfo} from './types.js';
 
 export class CE<T = any, P = PropInfo>{
     defaultProp: PropInfo = {
@@ -10,7 +9,8 @@ export class CE<T = any, P = PropInfo>{
     };
 
     def(args: DefineArgs<T, P>): {new(): T}{
-        const {getAttributeNames, doActions, fine, checkRifs, toCamel, toLisp, propUp} = this;
+        const {getAttributeNames, doActions, fine, pq, toCamel, toLisp, propUp} = this;
+        const self = this;
         const {config} = args;
         const {tagName, style, actions} = config;
         const propInfos  = this.createPropInfos(args);
@@ -83,26 +83,24 @@ export class CE<T = any, P = PropInfo>{
                 if(propChangeQueue !== undefined && acts !== undefined){
                     for(const doAct in acts){
                         const action = acts[doAct] as Action;
-                        const {upon} = action;
-                        if(upon === undefined) continue;
-                        if(!checkRifs(action, this)) continue;
-                        switch(typeof upon){
-                            case 'string':
-                                if(propChangeQueue.has(upon)){
-                                    actionsToDo[doAct] = action;
-                                    //actionsToDo.add(action);
-                                }
-                                break;
-                            case 'object':
-                                for(const dependency of upon){
-                                    if(propChangeQueue.has(dependency)){
-                                        //actionsToDo.add(action);
-                                        actionsToDo[doAct] = action;
-                                        break;
-                                    }
-                                }
-                                break;
-                        }
+                        if(!pq(action, self, this, 'and')) continue;
+                        // switch(typeof upon){
+                        //     case 'string':
+                        //         if(propChangeQueue.has(upon)){
+                        //             actionsToDo[doAct] = action;
+                        //             //actionsToDo.add(action);
+                        //         }
+                        //         break;
+                        //     case 'object':
+                        //         for(const dependency of upon){
+                        //             if(propChangeQueue.has(dependency)){
+                        //                 //actionsToDo.add(action);
+                        //                 actionsToDo[doAct] = action;
+                        //                 break;
+                        //             }
+                        //         }
+                        //         break;
+                        // }
                     }
                 }
                 doActions(actionsToDo, this, propChangeQueue);
@@ -206,7 +204,8 @@ export class CE<T = any, P = PropInfo>{
     }
 
     addPropsToClass<T extends HTMLElement = HTMLElement>(newClass: {new(): T}, props: {[key: string]: PropInfo}, args: DefineArgs){
-        const {doActions, checkRifs} = this;
+        const {doActions, pq} = this;
+        const self = this;
         const proto = newClass.prototype;
         const config = args.config;
         const actions = config.actions;
@@ -237,7 +236,7 @@ export class CE<T = any, P = PropInfo>{
                         const filteredActions: any = {};
                         for(const methodName in actions){
                             const action = actions[methodName]!;
-                            if(checkRifs(action, this)){
+                            if(self.pq(action, self, this, 'and')){
                                 const upon = action.upon;
                                 switch(typeof upon){
                                     case 'string':
@@ -264,16 +263,61 @@ export class CE<T = any, P = PropInfo>{
         }
     }
 
-    checkRifs(action: Action<any>, self: any){
-        const {riff, upon} = action;
-        if(riff !== undefined){
-            const realRiff = (riff === '"' || riff === "'") ? upon! : riff;
-            for(const key of realRiff){
-                if(!self[key]) return false;
+    pq(expr: LogicOp<any>, self: this, src: any, op: lop): boolean{
+        let answer = op === 'and' ? true : false;
+        for(const logicalOp in expr){
+            const rhs: any = (<any>expr)[logicalOp];
+            if(!Array.isArray(rhs)) throw 'NI'; //not implemented
+            let arrayLogicalOp: lop = 'and';
+            if(logicalOp.endsWith('AnyOf')) arrayLogicalOp = 'or';
+            const subAnswer = self.pqs(rhs, self, src, arrayLogicalOp);
+            switch(op){
+                case 'and':
+                    if(!subAnswer) return false;
+                    break;
+                case 'or':
+                    if(subAnswer) return true;
+                    break;
             }
         }
-        return true;
+        // const {riff, upon} = action;
+        // if(riff !== undefined){
+        //     const realRiff = (riff === '"' || riff === "'") ? upon! : riff;
+        //     for(const key of realRiff){
+        //         if(!self[key]) return false;
+        //     }
+        // }
+        
+        return answer;
     }
+
+    pqs(expr: ListOfLogicalExpressions, self: this, src: any, op: lop): boolean{
+        let answer = op === 'and' ? true : false;
+        for(const subExpr of expr){
+            let subAnswer = false;
+            switch(typeof subExpr){
+                case 'string':
+                    subAnswer = !!src[subExpr];
+                    break;
+                case 'object':
+                    subAnswer = self.pq(subExpr, self, src, 'and');
+                    break;
+                default:
+                    throw 'NI'; //Not Implemented
+             }
+             switch(op){
+                case 'and':
+                    if(!subAnswer) return false;
+                    break;
+                case 'or':
+                    if(subAnswer) return true;
+                    break;
+            }
+        }
+        return answer;
+    }
+
+
 
     toLisp(s: string){return s.split(ctlRe).join('-').toLowerCase();}
     toCamel(s: string){return s.replace(stcRe, function(m){return m[1].toUpperCase();});}
