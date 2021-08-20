@@ -104,20 +104,10 @@ export class CE<T = any, P = PropInfo>{
                         }
                     }
                 }
-                //const values = Array.from(actionsToDo);
                 doActions(actionsToDo, this, propChangeQueue);
                 delete this.propChangeQueue;
             }
-            //TODO:  turn this into a mixin
-            // subscribers: {propsOfInterest: Set<string>, callBack: (rs: newClass) => void}[] = [];
-            // subscribe(propsOfInterest: Set<string>, callBack: (rs: newClass) => void){
-            //     this.subscribers.push({propsOfInterest, callBack});
-            // }
-        
-            // unsubscribe(propsOfInterest: Set<string>, callBack: (rs: newClass) => void){
-            //     const idx = this.subscribers.findIndex(s => s.propsOfInterest === propsOfInterest && s.callBack === callBack);
-            //     if(idx > -1) this.subscribers.splice(idx, 1);
-            // }
+
         }
 
         this.addPropsToClass(newClass as any as {new(): HTMLElement}, propInfos, args);
@@ -242,17 +232,7 @@ export class CE<T = any, P = PropInfo>{
                                 }
                             }
                         }
-                        // const filteredActions = Object.values(actions).filter(x => {
-                        //     if(!checkRifs(x!, this)) return false;
-                        //     const upon = x!.upon;
-                        //     switch(typeof upon){
-                        //         case 'string':
-                        //             return upon === key;
-                        //         case 'object':
-                        //             return upon.includes(key);
-                        //     }
-    
-                        // });
+
                         doActions(filteredActions, this, {key, ov, nv});
                     }
                     if(methodIsDefined) thisPropChangeMethod!(this, arg, '+a'); //+a = post actions

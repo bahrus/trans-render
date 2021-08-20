@@ -3,7 +3,7 @@ import { PE } from './PE.js';
 import { SplitText } from './SplitText.js';
 import { CE} from './CE.js';
 import { html } from './html.js';
-import {doInitTransform, doUpdateTransform, } from './TemplMgmtBase.js'; 
+import {doInitTransform, } from './TemplMgmtBase.js'; 
 
 export { TemplMgmtBase }  from './TemplMgmtBase.js'; 
 
@@ -31,7 +31,7 @@ const TemplMgmtMixin = (superclass: any) => class TemplMgmt extends TemplMgmtBas
 
 export const tm = {
     doInitTransform,
-    doUpdateTransform,
+    //doUpdateTransform,
     CE,
     html,
     TemplMgmtMixin

@@ -55,11 +55,11 @@ export const doInitTransform: Partial<{[key in keyof TemplMgmtBase]: Action<Temp
     }
 }
 
-export const doUpdateTransform: Partial<{[key in keyof TemplMgmtBase]: Action<TemplMgmtBase>}> = {
-    doUpdateTransform: {
-        upon: ['updateTransform']
-    }
-}
+// export const doUpdateTransform: Partial<{[key in keyof TemplMgmtBase]: Action<TemplMgmtBase>}> = {
+//     doUpdateTransform: {
+//         upon: ['updateTransform']
+//     }
+// }
 
 // export const doUpdateTransform: Action<TemplMgmtBase> = {
     

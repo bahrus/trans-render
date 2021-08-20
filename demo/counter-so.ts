@@ -57,14 +57,6 @@ const mainTemplate = tm.html`
             doUpdateTransform: {
                 upon: ['count', 'updateTransform']
             }
-            // {
-            //     ...tm.doUpdateTransform,
-            //     upon: ['count', 'updateTransform']
-            // }
-            // {
-            //     upon: ['count', 'updateTransform'],
-            //     ...tm.doUpdateTransform
-            // }
         },
         propChangeMethod: 'onPropChange',
     },
