@@ -9,7 +9,7 @@ export class CE<T = any, P = PropInfo>{
     };
 
     def(args: DefineArgs<T, P>): {new(): T}{
-        const {getAttributeNames, doActions, fine, pq, toCamel, toLisp, propUp} = this;
+        const {getAttributeNames, doActions, fine, pq, toCamel, toLisp, propUp, getProps} = this;
         const self = this;
         const {config} = args;
         const {tagName, style, actions} = config;
@@ -76,14 +76,22 @@ export class CE<T = any, P = PropInfo>{
             }
             detachQR(){
                 delete this.QR;
-                const propChangeQueue = this.propChangeQueue;
+                const propChangeQueue = this.propChangeQueue as Set<string> | undefined;
                 const acts = actions;
                 //const actionsToDo = new Set<Action>();
                 const actionsToDo: any = {};
                 if(propChangeQueue !== undefined && acts !== undefined){
                     for(const doAct in acts){
                         const action = acts[doAct] as Action;
-                        if(!pq(action, self, this, 'and')) continue;
+                        const props = getProps(action);
+                        let actionIsApplicable = false;
+                        for(const prop of props){
+                            if(propChangeQueue.has(prop)){
+                                actionIsApplicable = true;
+                                break;
+                            }
+                        }
+                        if(!actionIsApplicable || !pq(action, self, this, 'and')) continue;
                         actionsToDo[doAct] = action;
                     }
                 }
@@ -174,8 +182,7 @@ export class CE<T = any, P = PropInfo>{
         if(actions !== undefined){
             for(const methodName in actions){
                 const action = actions[methodName] as Action;
-                const upon = action.ifAnyOf as string[];
-                if(upon === undefined) continue;
+                const upon = this.getProps(action);
                 for(const dependency of upon){
                     if(props[dependency] === undefined){
                         const prop: PropInfo = {...defaultProp};
@@ -186,9 +193,12 @@ export class CE<T = any, P = PropInfo>{
         }
         return props;
     }
+    getProps(action: Action): string[]{
+        return [...(action.ifAllOf || []) as string[], ...(action.ifAnyOf || []) as string[]];
+    }
 
     addPropsToClass<T extends HTMLElement = HTMLElement>(newClass: {new(): T}, props: {[key: string]: PropInfo}, args: DefineArgs){
-        const {doActions, pq} = this;
+        const {doActions, pq, getProps} = this;
         const self = this;
         const proto = newClass.prototype;
         const config = args.config;
@@ -220,14 +230,12 @@ export class CE<T = any, P = PropInfo>{
                         const filteredActions: any = {};
                         for(const methodName in actions){
                             const action = actions[methodName]!;
-                            if(self.pq(action, self, this, 'and')){
-                                const upon = action.ifAnyOf as string[];
-                                if(upon.includes(key)){
-                                    filteredActions[methodName] = action;
-                                }
+                            const props = getProps(action);
+                            if(!props.includes(key)) continue;
+                            if(pq(action, self, this, 'and')){
+                                filteredActions[methodName] = action;
                             }
                         }
-
                         doActions(filteredActions, this, {key, ov, nv});
                     }
                     if(methodIsDefined) thisPropChangeMethod!(this, arg, '+a'); //+a = post actions
