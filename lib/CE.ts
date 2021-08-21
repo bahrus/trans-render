@@ -257,21 +257,24 @@ export class CE<T = any, P = PropInfo>{
         }
         return answer;
     }
-
+    pqsv(self: this, src: any, subExpr: string | number | symbol | LogicOp<any>): boolean{
+        return !!src[subExpr as any as string];
+    }
     pqs(expr: ListOfLogicalExpressions, self: this, src: any, op: lop): boolean{
         let answer = op === 'and' ? true : false;
         for(const subExpr of expr){
-            let subAnswer = false;
-            switch(typeof subExpr){
-                case 'string':
-                    subAnswer = !!src[subExpr];
-                    break;
-                case 'object':
-                    subAnswer = self.pq(subExpr, self, src, 'and');
-                    break;
-                default:
-                    throw 'NI'; //Not Implemented
-             }
+            const subAnswer = self.pqsv(self, src, subExpr);
+            //let subAnswer = false;
+            // switch(typeof subExpr){
+            //     case 'string':
+            //         subAnswer = !!src[subExpr];
+            //         break;
+            //     case 'object':
+            //         subAnswer = self.pq(subExpr, self, src, 'and');
+            //         break;
+            //     default:
+            //         throw 'NI'; //Not Implemented
+            //  }
              switch(op){
                 case 'and':
                     if(!subAnswer) return false;
