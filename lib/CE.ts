@@ -255,14 +255,6 @@ export class CE<T = any, P = PropInfo>{
                     break;
             }
         }
-        // const {riff, upon} = action;
-        // if(riff !== undefined){
-        //     const realRiff = (riff === '"' || riff === "'") ? upon! : riff;
-        //     for(const key of realRiff){
-        //         if(!self[key]) return false;
-        //     }
-        // }
-        
         return answer;
     }
 
