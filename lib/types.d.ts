@@ -52,51 +52,56 @@ export type PEAUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PEU
 // export type PEATUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = 
 //     PSettings<T> | PESettings<T> | PEASettings<T> | PEATSettings<T> | PEAT$ettings<T>;
 
-export interface DefineArgs<TMixinComposite = any, TPropInfo = PropInfo>{
-    //mixins?: {new(): Object}[];
-    superclass?: any,
+
+
+export interface TRElementMixin {
+    propChangeQueue?: Set<string>;
+    attributeChangedCallback?(n: string, ov: string, nv: string): void;
+}
+
+export interface DefineArgs<MixinCompositeProps = any, TPropInfo = PropInfo, MixinCompositeActions = MixinCompositeProps>{
+    superclass?: {new(): any},
     mixins?: any[],
     mainTemplate?: HTMLTemplateElement;
     /** use this only for defaults that can't be JSON serialized in config */
-    complexPropDefaults?: Partial<TMixinComposite>;
-    config: WCConfig<TMixinComposite, TPropInfo>;
+    complexPropDefaults?: Partial<MixinCompositeProps>;
+    /** Config should be 100% JSON serializable */
+    config: WCConfig<MixinCompositeProps, TPropInfo, MixinCompositeActions>;
     
 }
 
-export interface WCConfig<TMixinComposite = any, TPropInfo = PropInfo>{
+export interface WCConfig<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
     tagName: string;
-    propDefaults?: Partial<TMixinComposite>;
-    propInfo?: Partial<{[key in keyof TMixinComposite]: TPropInfo}> 
-    actions?: Partial<{[key in keyof TMixinComposite]: Action<TMixinComposite>}> 
-    propChangeMethod?: keyof TMixinComposite;
+    propDefaults?: Partial<MCProps>;
+    propInfo?: Partial<{[key in keyof MCProps]: TPropInfo}> 
+    actions?: Partial<{[key in keyof MCActions]: Action<MCProps>}> 
+    propChangeMethod?: keyof MCProps;
     style?: Partial<CSSStyleDeclaration>;
 }
 
-export type ListOfLogicalExpressions<TMixinComposite = any> = (keyof TMixinComposite | LogicOp<TMixinComposite>)[];
+export type ListOfLogicalExpressions<MCProps = any> = (keyof MCProps | LogicOp<MCProps>)[];
 
-export type LogicOpProp<TMixinComposite = any> = LogicOp<TMixinComposite> | (keyof TMixinComposite | LogicOp<TMixinComposite>)[];
+export type LogicOpProp<MCProps = any> = LogicOp<MCProps> | (keyof MCProps | LogicOp<MCProps>)[];
 
-export interface LogicOp<TMixinComposite = any>{
-    //upon?: (Extract<keyof TMixinComposite, string>)[];
+export interface LogicOp<MCProps = any>{
+    ifAllOf?: LogicOpProp<MCProps>,
+    andAllOf?: LogicOpProp<MCProps>,
+    orAllOf?: LogicOpProp<MCProps>,
+    ifAnyOf?: LogicOpProp<MCProps>,
+    andAnyOf?: LogicOpProp<MCProps>,
+    orAnyOf?: LogicOpProp<MCProps>
     /**
-     * refrain if falsy
+     * Not supported by trans-render
      */
-    //riff?: "'" | '"' | (Extract<keyof TMixinComposite, string>)[];
-        // /**
-    //  * refrain if truthy
-    //  */
-    // rift?: (Extract<keyof TMixinComposite, string>)[];
-    ifAllOf?: LogicOpProp<TMixinComposite>,
-    andAllOf?: LogicOpProp<TMixinComposite>,
-    orAllOf?: LogicOpProp<TMixinComposite>,
-    ifAnyOf?: LogicOpProp<TMixinComposite>,
-    andAnyOf?: LogicOpProp<TMixinComposite>,
-    ifNot?: LogicOpProp<TMixinComposite>,
-    andIfNot?: LogicOpProp<TMixinComposite>,
-    orIfNot?: LogicOpProp<TMixinComposite>,
-    ifEquals?: LogicOpProp<TMixinComposite>,
-    andIfEquals?: LogicOpProp<TMixinComposite>,
-    orIfEquals?: LogicOpProp<TMixinComposite>,
+    ifNot?: LogicOpProp<MCProps>,
+    andIfNot?: LogicOpProp<MCProps>,
+    orIfNot?: LogicOpProp<MCProps>,
+    /**
+     * Not supported by trans-render
+     */
+    ifEquals?: LogicOpProp<MCProps>,
+    andIfEquals?: LogicOpProp<MCProps>,
+    orIfEquals?: LogicOpProp<MCProps>,
 }
 
 export type lop = 'and' | 'or';
@@ -105,10 +110,8 @@ export interface Transform<TMixinComposite = any> extends LogicOp<TMixinComposit
     match: {[key: string]: MatchRHS<TMixinComposite>}
 }
 
-export interface Action<TMixinComposite = any> extends LogicOp<TMixinComposite>{
-    //do: Extract<keyof TMixinComposite, string>;
+export interface Action<MCProps = any> extends LogicOp<MCProps>{
     async?: boolean;
-
     merge?: boolean;
 }
 

@@ -1,4 +1,4 @@
-import { DefineArgs, LogicOp, lop, LogicOpProp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions } from './types.js';
+import { DefineArgs, LogicOp, lop, LogicOpProp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementMixin } from './types.js';
 export { Action, PropInfo} from './types.js';
 
 export class CE<T = any, P = PropInfo>{
@@ -100,6 +100,8 @@ export class CE<T = any, P = PropInfo>{
             }
 
         }
+
+        interface newClass extends TRElementMixin{};
 
         this.addPropsToClass(newClass as any as {new(): HTMLElement}, propInfos, args);
         fine(tagName, newClass as any as ({new(): HTMLElement}));
