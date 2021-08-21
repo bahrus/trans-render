@@ -8,6 +8,91 @@ export class CE<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
         parse: true,
     };
 
+    addProps<T extends HTMLElement = HTMLElement>(newClass: {new(): T}, props: {[key: string]: PropInfo}, args: DefineArgs){
+        const {doActions, pq, getProps} = this;
+        const self = this;
+        const proto = newClass.prototype;
+        const config = args.config;
+        const actions = config.actions;
+        for(const key in props){
+            const prop = props[key];
+            const privateKey = '_' + key;
+            Object.defineProperty(proto, key, {
+                get(){
+                    return this[privateKey];
+                },
+                set(nv){
+                    const ov = this[privateKey];
+                    if(prop.dry && this[privateKey] === nv) return;
+                    const propChangeMethod = config.propChangeMethod;
+                    const thisPropChangeMethod = (propChangeMethod !== undefined ? this[propChangeMethod] : undefined)  as undefined | ((self: EventTarget, pci: PropChangeInfo, moment: PropChangeMoment) => boolean);
+                    const methodIsDefined = thisPropChangeMethod !== undefined;
+                    const arg: PropChangeInfo = {key, ov, nv, prop};
+                    if(methodIsDefined) if(thisPropChangeMethod!(this, arg, 'v') === false) return; //v = validate
+                    this[privateKey] = nv;
+
+                    if(this.QR){
+                        this.QR(key, this);
+                        if(methodIsDefined) thisPropChangeMethod!(this, arg, '+qr');
+                        return;
+                    }
+                    if(methodIsDefined) if(thisPropChangeMethod!(this, arg, '-a') === false) return; //-a = pre actions
+                    if(actions !== undefined){
+                        const filteredActions: any = {};
+                        for(const methodName in actions){
+                            const action = actions[methodName]!;
+                            const props = getProps(action);
+                            if(!props.has(key)) continue;
+                            if(pq(self, action, this, 'and', key)){
+                                filteredActions[methodName] = action;
+                            }
+                        }
+                        doActions(self, filteredActions, this, {key, ov, nv});
+                    }
+                    if(methodIsDefined) thisPropChangeMethod!(this, arg, '+a'); //+a = post actions
+                },
+                enumerable: true,
+                configurable: true,
+            });
+        }
+    }
+
+    createPropInfos(args: DefineArgs){
+        const {defaultProp, setType} = this;
+        const props: {[key: string]: PropInfo} = {};
+        const defaults = {...args.complexPropDefaults, ...args.config.propDefaults};
+        for(const key in defaults){
+            const prop: PropInfo = {...defaultProp};
+            setType(prop, defaults[key]);
+            props[key] = prop;
+        }
+        const specialProps = args.config.propInfo;
+        if(specialProps !== undefined){
+            for(const key in specialProps){
+                if(props[key] === undefined){
+                    const prop: PropInfo = {...defaultProp};
+                    props[key] = prop;
+                }
+                const prop = props[key];
+                Object.assign(prop, specialProps[key]);
+            }
+        }
+        const actions = args.config.actions;
+        if(actions !== undefined){
+            for(const methodName in actions){
+                const action = actions[methodName] as Action;
+                const upon = this.getProps(action);
+                for(const dependency of upon){
+                    if(props[dependency] === undefined){
+                        const prop: PropInfo = {...defaultProp};
+                        props[dependency] = prop;
+                    }
+                }
+            }
+        }
+        return props;
+    }
+
     def(args: DefineArgs<MCProps, TPropInfo, MCActions>): {new(): MCProps}{
         const {getAttrNames: getAttributeNames, doActions, fine, pq, toCamel, toLisp, propUp, getProps} = this;
         const self = this;
@@ -114,10 +199,6 @@ export class CE<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
         return newClass as any as {new(): MCProps};
     }
 
-    fine(tagName: string, newClass: {new(): HTMLElement}){
-        customElements.define(tagName, newClass);
-    }
-
     async doActions(self: this, actions: {[methodName: string]: Action}, target: any, arg: any){
         for(const methodName in actions){
             const fn = (<any>target)[methodName].bind(target);
@@ -127,8 +208,8 @@ export class CE<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
         }
     }
 
-    postHoc(self: this, action: Action, target: any, returnVal: any){
-        Object.assign(target, returnVal);
+    fine(tagName: string, newClass: {new(): HTMLElement}){
+        customElements.define(tagName, newClass);
     }
 
     getAttrNames(props: {[key: string]: PropInfo}, toLisp: (s: string) => string){
@@ -141,6 +222,16 @@ export class CE<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
         }
         return returnArr;
     }
+
+    getProps(action: Action): Set<string>{
+        return new Set<string>([...(action.ifAllOf || []) as string[], ...(action.actIfKeyIn || []), ...(action.andAlsoActIfKeyIn || []) as string[]]);
+    }
+
+    postHoc(self: this, action: Action, target: any, returnVal: any){
+        Object.assign(target, returnVal);
+    }
+
+
 
     /**
      * Needed for asynchronous loading
@@ -170,93 +261,10 @@ export class CE<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
         }
     }
 
-    createPropInfos(args: DefineArgs){
-        const {defaultProp, setType} = this;
-        const props: {[key: string]: PropInfo} = {};
-        const defaults = {...args.complexPropDefaults, ...args.config.propDefaults};
-        for(const key in defaults){
-            const prop: PropInfo = {...defaultProp};
-            setType(prop, defaults[key]);
-            props[key] = prop;
-        }
-        const specialProps = args.config.propInfo;
-        if(specialProps !== undefined){
-            for(const key in specialProps){
-                if(props[key] === undefined){
-                    const prop: PropInfo = {...defaultProp};
-                    props[key] = prop;
-                }
-                const prop = props[key];
-                Object.assign(prop, specialProps[key]);
-            }
-        }
-        const actions = args.config.actions;
-        if(actions !== undefined){
-            for(const methodName in actions){
-                const action = actions[methodName] as Action;
-                const upon = this.getProps(action);
-                for(const dependency of upon){
-                    if(props[dependency] === undefined){
-                        const prop: PropInfo = {...defaultProp};
-                        props[dependency] = prop;
-                    }
-                }
-            }
-        }
-        return props;
-    }
-    getProps(action: Action): Set<string>{
-        return new Set<string>([...(action.ifAllOf || []) as string[], ...(action.actIfKeyIn || []), ...(action.andAlsoActIfKeyIn || []) as string[]]);
-    }
 
-    addProps<T extends HTMLElement = HTMLElement>(newClass: {new(): T}, props: {[key: string]: PropInfo}, args: DefineArgs){
-        const {doActions, pq, getProps} = this;
-        const self = this;
-        const proto = newClass.prototype;
-        const config = args.config;
-        const actions = config.actions;
-        for(const key in props){
-            const prop = props[key];
-            const privateKey = '_' + key;
-            Object.defineProperty(proto, key, {
-                get(){
-                    return this[privateKey];
-                },
-                set(nv){
-                    const ov = this[privateKey];
-                    if(prop.dry && this[privateKey] === nv) return;
-                    const propChangeMethod = config.propChangeMethod;
-                    const thisPropChangeMethod = (propChangeMethod !== undefined ? this[propChangeMethod] : undefined)  as undefined | ((self: EventTarget, pci: PropChangeInfo, moment: PropChangeMoment) => boolean);
-                    const methodIsDefined = thisPropChangeMethod !== undefined;
-                    const arg: PropChangeInfo = {key, ov, nv, prop};
-                    if(methodIsDefined) if(thisPropChangeMethod!(this, arg, 'v') === false) return; //v = validate
-                    this[privateKey] = nv;
 
-                    if(this.QR){
-                        this.QR(key, this);
-                        if(methodIsDefined) thisPropChangeMethod!(this, arg, '+qr');
-                        return;
-                    }
-                    if(methodIsDefined) if(thisPropChangeMethod!(this, arg, '-a') === false) return; //-a = pre actions
-                    if(actions !== undefined){
-                        const filteredActions: any = {};
-                        for(const methodName in actions){
-                            const action = actions[methodName]!;
-                            const props = getProps(action);
-                            if(!props.has(key)) continue;
-                            if(pq(self, action, this, 'and', key)){
-                                filteredActions[methodName] = action;
-                            }
-                        }
-                        doActions(self, filteredActions, this, {key, ov, nv});
-                    }
-                    if(methodIsDefined) thisPropChangeMethod!(this, arg, '+a'); //+a = post actions
-                },
-                enumerable: true,
-                configurable: true,
-            });
-        }
-    }
+
+
 
     pq(self: this, expr: LogicOp<any>, src: any, op: lop, key: string): boolean{
         // let answer = op === 'and' ? true : false;
