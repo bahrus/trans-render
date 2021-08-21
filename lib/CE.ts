@@ -205,8 +205,8 @@ export class CE<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
         }
         return props;
     }
-    getProps(action: Action): string[]{
-        return [...(action.ifAllOf || []) as string[], ...(action.orKeyIn || []), ...(action.ifKeyIn || []) as string[]];
+    getProps(action: Action): Set<string>{
+        return new Set<string>([...(action.ifAllOf || []) as string[], ...(action.actIfKeyIn || []), ...(action.andAlsoActIfKeyIn || []) as string[]]);
     }
 
     addProps<T extends HTMLElement = HTMLElement>(newClass: {new(): T}, props: {[key: string]: PropInfo}, args: DefineArgs){
@@ -243,7 +243,7 @@ export class CE<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
                         for(const methodName in actions){
                             const action = actions[methodName]!;
                             const props = getProps(action);
-                            if(!props.includes(key)) continue;
+                            if(!props.has(key)) continue;
                             if(pq(self, action, this, 'and', key)){
                                 filteredActions[methodName] = action;
                             }
@@ -281,18 +281,10 @@ export class CE<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
         //             break;
         //     }
         // }
-        const {ifAllOf, orKeyIn, ifKeyIn: keyIn} = expr;
+        const {ifAllOf} = expr;
         const {pqs} = self;
         if(ifAllOf !== undefined){
-            if(!pqs(self, ifAllOf as ListOfLogicalExpressions, src, 'and')){
-                if(orKeyIn === undefined) return false;
-                return orKeyIn.includes(key);
-            }
-            
-        }else{
-            if(keyIn !== undefined){
-                return keyIn.includes(key);
-            }
+            if(!pqs(self, ifAllOf as ListOfLogicalExpressions, src, 'and')) return false;
         }
         return true;
     }
