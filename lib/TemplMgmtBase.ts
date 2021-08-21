@@ -47,11 +47,10 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
 
 export const doInitTransform: Partial<{[key in keyof TemplMgmtBase]: Action<TemplMgmtBase>}> = {
     cloneTemplate: {
-        ifAnyOf: ['mainTemplate', 'noshadow']
+        ifKeyIn: ['mainTemplate', 'noshadow']
     },
     doInitTransform: {
-        ifAnyOf: ['clonedTemplate', 'initTransform'],
-        andAllOf: ['clonedTemplate', 'initTransform']
+        ifAllOf: ['clonedTemplate', 'initTransform'],
     }
 }
 

@@ -53,7 +53,7 @@ export const commonPropsInfo: Partial<{[key in keyof CommonProps]: INotifyPropIn
 
 
 export interface INotifyMixin{
-    onPropChange(self: EventTarget, propChange: PropChangeInfo, moment: PropChangeMoment): boolean;
+    onPropChange(self: this, propChange: PropChangeInfo, moment: PropChangeMoment): boolean;
 }
 
 export interface INotifyPropInfo<TMixinComposite = any> extends PropInfo{ //yikes!  How many combinations will we need to support for this?

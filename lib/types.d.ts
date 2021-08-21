@@ -75,7 +75,7 @@ export interface WCConfig<MCProps = any, TPropInfo = PropInfo, MCActions = MCPro
     propDefaults?: Partial<MCProps>;
     propInfo?: Partial<{[key in keyof MCProps]: TPropInfo}> 
     actions?: Partial<{[key in keyof MCActions]: Action<MCProps>}> 
-    propChangeMethod?: keyof MCProps;
+    propChangeMethod?: keyof MCActions;
     style?: Partial<CSSStyleDeclaration>;
 }
 
@@ -84,21 +84,23 @@ export type ListOfLogicalExpressions<MCProps = any> = (keyof MCProps | LogicOp<M
 export type LogicOpProp<MCProps = any> = LogicOp<MCProps> | (keyof MCProps | LogicOp<MCProps>)[];
 
 export interface LogicOp<MCProps = any>{
+    /**
+     * Supported by trans-render
+     */
     ifAllOf?: LogicOpProp<MCProps>,
+    ifKeyIn?: (keyof MCProps & string)[],
+    orKeyIn?: (keyof MCProps & string)[],  
+    /**
+     * The following are not supported by trans-render
+     */
     andAllOf?: LogicOpProp<MCProps>,
     orAllOf?: LogicOpProp<MCProps>,
     ifAnyOf?: LogicOpProp<MCProps>,
     andAnyOf?: LogicOpProp<MCProps>,
     orAnyOf?: LogicOpProp<MCProps>
-    /**
-     * Not supported by trans-render
-     */
     ifNot?: LogicOpProp<MCProps>,
     andIfNot?: LogicOpProp<MCProps>,
     orIfNot?: LogicOpProp<MCProps>,
-    /**
-     * Not supported by trans-render
-     */
     ifEquals?: LogicOpProp<MCProps>,
     andIfEquals?: LogicOpProp<MCProps>,
     orIfEquals?: LogicOpProp<MCProps>,

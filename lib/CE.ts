@@ -91,11 +91,13 @@ export class CE<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
                         let actionIsApplicable = false;
                         for(const prop of props){
                             if(propChangeQueue.has(prop)){
-                                actionIsApplicable = true;
-                                break;
+                                actionIsApplicable = pq(self, action, this, 'and', prop);
+                                if(actionIsApplicable){
+                                    break;
+                                }
                             }
                         }
-                        if(!actionIsApplicable || !pq(action, self, this, 'and')) continue;
+                        if(!actionIsApplicable) continue;
                         actionsToDo[doAct] = action;
                     }
                 }
@@ -204,7 +206,7 @@ export class CE<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
         return props;
     }
     getProps(action: Action): string[]{
-        return [...(action.ifAllOf || []) as string[], ...(action.ifAnyOf || []) as string[]];
+        return [...(action.ifAllOf || []) as string[], ...(action.orKeyIn || []), ...(action.ifKeyIn || []) as string[]];
     }
 
     addProps<T extends HTMLElement = HTMLElement>(newClass: {new(): T}, props: {[key: string]: PropInfo}, args: DefineArgs){
@@ -242,7 +244,7 @@ export class CE<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
                             const action = actions[methodName]!;
                             const props = getProps(action);
                             if(!props.includes(key)) continue;
-                            if(pq(action, self, this, 'and')){
+                            if(pq(self, action, this, 'and', key)){
                                 filteredActions[methodName] = action;
                             }
                         }
@@ -256,29 +258,49 @@ export class CE<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
         }
     }
 
-    pq(expr: LogicOp<any>, self: this, src: any, op: lop): boolean{
-        let answer = op === 'and' ? true : false;
-        for(const logicalOp in expr){
-            const rhs: any = (<any>expr)[logicalOp];
-            if(!Array.isArray(rhs)) throw 'NI'; //not implemented
-            let arrayLogicalOp: lop = 'and';
-            if(logicalOp.endsWith('AnyOf')) arrayLogicalOp = 'or';
-            const subAnswer = self.pqs(rhs, self, src, arrayLogicalOp);
-            switch(op){
-                case 'and':
-                    if(!subAnswer) return false;
-                    break;
-                case 'or':
-                    if(subAnswer) return true;
-                    break;
+    pq(self: this, expr: LogicOp<any>, src: any, op: lop, key: string): boolean{
+        // let answer = op === 'and' ? true : false;
+        // for(const logicalOp in expr){
+        //     const rhs: any = (<any>expr)[logicalOp];
+        //     let arrayLogicalOp: lop;
+        //     if(logicalOp.endsWith('AnyOf')) {
+        //         arrayLogicalOp = 'or';
+        //     }else if(logicalOp.endsWith('AllOf')){
+        //         arrayLogicalOp = 'and';
+        //     }else{
+        //         continue;
+        //     }
+        //     if(!Array.isArray(rhs)) throw 'NI'; //Not Implemented
+        //     const subAnswer = self.pqs(rhs, self, src, arrayLogicalOp);
+        //     switch(op){
+        //         case 'and':
+        //             if(!subAnswer) return false;
+        //             break;
+        //         case 'or':
+        //             if(subAnswer) return true;
+        //             break;
+        //     }
+        // }
+        const {ifAllOf, orKeyIn, ifKeyIn: keyIn} = expr;
+        const {pqs} = self;
+        if(ifAllOf !== undefined){
+            if(!pqs(self, ifAllOf as ListOfLogicalExpressions, src, 'and')){
+                if(orKeyIn === undefined) return false;
+                return orKeyIn.includes(key);
+            }
+            
+        }else{
+            if(keyIn !== undefined){
+                return keyIn.includes(key);
             }
         }
-        return answer;
+        return true;
     }
+    
     pqsv(self: this, src: any, subExpr: string | number | symbol | LogicOp<any>): boolean{
         return !!src[subExpr as any as string];
     }
-    pqs(expr: ListOfLogicalExpressions, self: this, src: any, op: lop): boolean{
+    pqs(self: this, expr: ListOfLogicalExpressions,  src: any, op: lop): boolean{
         let answer = op === 'and' ? true : false;
         for(const subExpr of expr){
             const subAnswer = self.pqsv(self, src, subExpr);
