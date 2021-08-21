@@ -12,7 +12,7 @@
 
 *trans-rendering* (TR) describes a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, TR performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, TR uses css path tests via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
 
-A subset of TR, also described below, is "Declarative trans-rendering" [DTR], which is pure, 100% declarative syntax.  
+A subset of TR, also described below, is "declarative trans-rendering" [DTR], which is pure, 100% declarative syntax.  
 
 It's designed to provide an alternative to the proposed [Template Instantiation proposal](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with the idea being that it could continue to supplement what that proposal includes if/when it lands in browsers.
 
@@ -24,11 +24,21 @@ But even more dramatically, with the advent of imported, naturalized custom elem
 
 This can leave the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may be needed to keep the binding rules in sync.  Much like how separate css style rules often need adjusting when the document structure changes.
 
-## The core library
+## The core libraries
 
-The core library, transform.js, is a tiny (1.2k gzip/minified), 'non-committal' library that simply allows us to map css matches to user-defined functions. 
+This package contains two core libraries.  
 
-Its first value-add proposition is it can reduce the amount of imperative *.selectQueryAll().forEach's needed in our code.  However, by itself, transform.js is not a complete solution, if you are looking for declarative syntax.  That will come with the ability to extend transform.js, which will be discussed below.
+The first, lib/transform.js, is a tiny (1.2k gzip/minified), 'non-committal' library that simply allows us to map css matches to user-defined functions. 
+
+In addition, this package contains a fairly primitive library for defining custom elements, lib/define.js, which can be combined with lib/transform.js via lib/TemplMgmt*.js.
+
+The package xtal-element builds on this package, and the documentation on defining custom elements, with trans-rendering in mind, is documented there [TODO].
+
+So the rest of this document will focus on the trans-rendering aspect, leaving the documentation for xtal-element to fill in the missing details regarding how lib/define.js works.
+
+## value-add by trans-rendering
+
+The first value-add proposition lib/transform.js provides, is it can reduce the amount of imperative *.selectQueryAll().forEach's needed in our code.  However, by itself, transform.js is not a complete solution, if you are looking for declarative syntax.  That will come with the ability to extend transform.js, which will be discussed below.
 
 The CSS matching the core transform.js supports simply does multi-matching for all (custom) DOM elements within the scope.
 
