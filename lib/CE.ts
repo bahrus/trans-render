@@ -85,23 +85,6 @@ export class CE<T = any, P = PropInfo>{
                         const action = acts[doAct] as Action;
                         if(!pq(action, self, this, 'and')) continue;
                         actionsToDo[doAct] = action;
-                        // switch(typeof upon){
-                        //     case 'string':
-                        //         if(propChangeQueue.has(upon)){
-                        //             actionsToDo[doAct] = action;
-                        //             //actionsToDo.add(action);
-                        //         }
-                        //         break;
-                        //     case 'object':
-                        //         for(const dependency of upon){
-                        //             if(propChangeQueue.has(dependency)){
-                        //                 //actionsToDo.add(action);
-                        //                 actionsToDo[doAct] = action;
-                        //                 break;
-                        //             }
-                        //         }
-                        //         break;
-                        // }
                     }
                 }
                 doActions(actionsToDo, this, propChangeQueue);
@@ -242,7 +225,6 @@ export class CE<T = any, P = PropInfo>{
                                 if(upon.includes(key)){
                                     filteredActions[methodName] = action;
                                 }
-                                break;
                             }
                         }
 
