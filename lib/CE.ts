@@ -1,15 +1,15 @@
 import { DefineArgs, LogicOp, lop, LogicOpProp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementMixin } from './types.js';
 export { Action, PropInfo} from './types.js';
 
-export class CE<T = any, P = PropInfo>{
+export class CE<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
     defaultProp: PropInfo = {
         type: 'Object',
         dry: true,
         parse: true,
     };
 
-    def(args: DefineArgs<T, P>): {new(): T}{
-        const {getAttributeNames, doActions, fine, pq, toCamel, toLisp, propUp, getProps} = this;
+    def(args: DefineArgs<MCProps, TPropInfo, MCActions>): {new(): MCProps}{
+        const {getAttrNames: getAttributeNames, doActions, fine, pq, toCamel, toLisp, propUp, getProps} = this;
         const self = this;
         const {config} = args;
         const {tagName, style, actions} = config;
@@ -51,7 +51,11 @@ export class CE<T = any, P = PropInfo>{
                             break;
                         case 'Object':
                             if(prop.parse){
-                                aThis[propName] = JSON.parse(nv);
+                                let val = nv;
+                                try{
+                                    val = JSON.parse(nv);
+                                }catch(e){}
+                                aThis[propName] = val;
                             }
                             break;
                         case 'Number':
@@ -95,7 +99,7 @@ export class CE<T = any, P = PropInfo>{
                         actionsToDo[doAct] = action;
                     }
                 }
-                doActions(actionsToDo, this, propChangeQueue);
+                doActions(self, actionsToDo, this, propChangeQueue);
                 delete this.propChangeQueue;
             }
 
@@ -103,25 +107,29 @@ export class CE<T = any, P = PropInfo>{
 
         interface newClass extends TRElementMixin{};
 
-        this.addPropsToClass(newClass as any as {new(): HTMLElement}, propInfos, args);
+        this.addProps(newClass as any as {new(): HTMLElement}, propInfos, args);
         fine(tagName, newClass as any as ({new(): HTMLElement}));
-        return newClass as any as {new(): T};
+        return newClass as any as {new(): MCProps};
     }
 
     fine(tagName: string, newClass: {new(): HTMLElement}){
         customElements.define(tagName, newClass);
     }
 
-    async doActions(actions: {[methodName: string]: Action}, self: any, arg: any){
+    async doActions(self: this, actions: {[methodName: string]: Action}, target: any, arg: any){
         for(const methodName in actions){
-            const fn = (<any>self)[methodName].bind(self);
+            const fn = (<any>target)[methodName].bind(target);
             const action = actions[methodName];
-            const ret = action.async ? await fn(self, arg) : fn(self, arg);
-            if(action.merge) Object.assign(self, ret);
+            const ret = action.async ? await fn(target, arg) : fn(target, arg);
+            self.postHoc(self, action, target, ret);
         }
     }
 
-    getAttributeNames(props: {[key: string]: PropInfo}, toLisp: (s: string) => string){
+    postHoc(self: this, action: Action, target: any, returnVal: any){
+        Object.assign(target, returnVal);
+    }
+
+    getAttrNames(props: {[key: string]: PropInfo}, toLisp: (s: string) => string){
         const returnArr: string[] = [];
         for(const key in props){
             const prop = props[key];
@@ -199,7 +207,7 @@ export class CE<T = any, P = PropInfo>{
         return [...(action.ifAllOf || []) as string[], ...(action.ifAnyOf || []) as string[]];
     }
 
-    addPropsToClass<T extends HTMLElement = HTMLElement>(newClass: {new(): T}, props: {[key: string]: PropInfo}, args: DefineArgs){
+    addProps<T extends HTMLElement = HTMLElement>(newClass: {new(): T}, props: {[key: string]: PropInfo}, args: DefineArgs){
         const {doActions, pq, getProps} = this;
         const self = this;
         const proto = newClass.prototype;
@@ -238,7 +246,7 @@ export class CE<T = any, P = PropInfo>{
                                 filteredActions[methodName] = action;
                             }
                         }
-                        doActions(filteredActions, this, {key, ov, nv});
+                        doActions(self, filteredActions, this, {key, ov, nv});
                     }
                     if(methodIsDefined) thisPropChangeMethod!(this, arg, '+a'); //+a = post actions
                 },
