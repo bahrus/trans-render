@@ -1,4 +1,4 @@
-import { DefineArgs, LogicOp, LogicEvalContext, LogicOpProp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementMixin } from './types.js';
+import { DefineArgs, LogicOp, LogicEvalContext, LogicOpProp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementMixin, PropChangeMethod } from './types.js';
 export { Action, PropInfo} from './types.js';
 
 export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction extends Action<MCProps> = Action<MCProps>>{
@@ -9,7 +9,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
     };
 
     addProps<T extends HTMLElement = HTMLElement>(newClass: {new(): T}, props: {[key: string]: PropInfo}, args: DefineArgs){
-        const {doActions, pq, getProps} = this;
+        const {doActions, pq, getProps, doPA} = this;
         const self = this;
         const proto = newClass.prototype;
         const config = args.config;
@@ -25,23 +25,25 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                     const ov = this[privateKey];
                     if(prop.dry && this[privateKey] === nv) return;
                     const propChangeMethod = config.propChangeMethod;
-                    const thisPropChangeMethod = (propChangeMethod !== undefined ? this[propChangeMethod] : undefined)  as undefined | ((self: EventTarget, pci: PropChangeInfo, moment: PropChangeMoment) => boolean);
-                    const methodIsDefined = thisPropChangeMethod !== undefined;
-                    const arg: PropChangeInfo = {key, ov, nv, prop};
-                    if(methodIsDefined) if(thisPropChangeMethod!(this, arg, 'v') === false) return; //v = validate
+                    const pcm = (propChangeMethod !== undefined ? this[propChangeMethod] : undefined)  as undefined | PropChangeMethod;
+                    //const methodIsDefined = pcm !== undefined;
+                    const pci: PropChangeInfo = {key, ov, nv, prop, pcm};
+                    if(!doPA(self, this, pci, 'v')) return;
                     this[privateKey] = nv;
 
                     if(this.QR){
                         this.QR(key, this);
-                        if(methodIsDefined) thisPropChangeMethod!(this, arg, '+qr');
-                        return;
+                        if(!doPA(self, this, pci, '+qr')) return;
+                    }else{
+                        if(!doPA(self, this, pci, '-a')) return; //-a = pre actions
                     }
-                    if(methodIsDefined) if(thisPropChangeMethod!(this, arg, '-a') === false) return; //-a = pre actions
+                    
+
                     if(actions !== undefined){
                         const filteredActions: any = {};
                         for(const methodName in actions){
                             const action = actions[methodName]!;
-                            const props = getProps(action);
+                            const props = getProps(action); //TODO:  cache this
                             if(!props.has(key)) continue;
                             if(pq(self, action, this)){
                                 filteredActions[methodName] = action;
@@ -49,12 +51,16 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                         }
                         doActions(self, filteredActions, this, {key, ov, nv});
                     }
-                    if(methodIsDefined) thisPropChangeMethod!(this, arg, '+a'); //+a = post actions
+                    doPA(self, this, pci, '+a'); //+a = post actions
                 },
                 enumerable: true,
                 configurable: true,
             });
         }
+    }
+
+    doPA(self: this, src: any, pci: PropChangeInfo, m: PropChangeMoment): boolean{ //post actions
+        if(pci.pcm !== undefined) return pci.pcm(src, pci, m) !== false;
     }
 
     createPropInfos(args: DefineArgs){
@@ -172,11 +178,11 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                 if(propChangeQueue !== undefined && acts !== undefined){
                     for(const doAct in acts){
                         const action = acts[doAct] as Action;
-                        const props = getProps(action);
+                        const props = getProps(action); //TODO:  Cache this
                         let actionIsApplicable = false;
                         for(const prop of props){
                             if(propChangeQueue.has(prop)){
-                                actionIsApplicable = pq(self, action, this, 'and', prop);
+                                actionIsApplicable = pq(self, action, this as any as MCProps);
                                 if(actionIsApplicable){
                                     break;
                                 }
