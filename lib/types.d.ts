@@ -59,18 +59,18 @@ export interface TRElementMixin {
     attributeChangedCallback?(n: string, ov: string, nv: string): void;
 }
 
-export interface DefineArgs<MixinCompositeProps = any, TPropInfo = PropInfo, MixinCompositeActions = MixinCompositeProps>{
+export interface DefineArgs<MixinCompositeProps = any, MixinCompositeActions = MixinCompositeProps, TPropInfo = PropInfo>{
     superclass?: {new(): any},
     mixins?: any[],
     mainTemplate?: HTMLTemplateElement;
     /** use this only for defaults that can't be JSON serialized in config */
     complexPropDefaults?: Partial<MixinCompositeProps>;
     /** Config should be 100% JSON serializable */
-    config: WCConfig<MixinCompositeProps, TPropInfo, MixinCompositeActions>;
+    config: WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo>;
     
 }
 
-export interface WCConfig<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
+export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo>{
     tagName: string;
     propDefaults?: Partial<MCProps>;
     propInfo?: Partial<{[key in keyof MCProps]: TPropInfo}> 

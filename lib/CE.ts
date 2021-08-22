@@ -1,7 +1,7 @@
 import { DefineArgs, LogicOp, lop, LogicOpProp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementMixin } from './types.js';
 export { Action, PropInfo} from './types.js';
 
-export class CE<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
+export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo>{
     defaultProp: PropInfo = {
         type: 'Object',
         dry: true,
@@ -93,7 +93,7 @@ export class CE<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
         return props;
     }
 
-    def(args: DefineArgs<MCProps, TPropInfo, MCActions>): {new(): MCProps}{
+    def(args: DefineArgs<MCProps, MCActions, TPropInfo>): {new(): MCProps & MCActions}{
         const {getAttrNames: getAttributeNames, doActions, fine, pq, toCamel, toLisp, propUp, getProps} = this;
         const self = this;
         const {config} = args;
@@ -196,7 +196,7 @@ export class CE<MCProps = any, TPropInfo = PropInfo, MCActions = MCProps>{
 
         this.addProps(newClass as any as {new(): HTMLElement}, propInfos, args);
         fine(tagName, newClass as any as ({new(): HTMLElement}));
-        return newClass as any as {new(): MCProps};
+        return newClass as any as {new(): MCProps & MCActions};
     }
 
     async doActions(self: this, actions: {[methodName: string]: Action}, target: any, arg: any){
