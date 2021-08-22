@@ -59,22 +59,22 @@ export interface TRElementMixin {
     attributeChangedCallback?(n: string, ov: string, nv: string): void;
 }
 
-export interface DefineArgs<MixinCompositeProps = any, MixinCompositeActions = MixinCompositeProps, TPropInfo = PropInfo>{
+export interface DefineArgs<MixinCompositeProps = any, MixinCompositeActions = MixinCompositeProps, TPropInfo = PropInfo, TAction extends Action = Action<MixinCompositeProps>>{
     superclass?: {new(): any},
     mixins?: any[],
     mainTemplate?: HTMLTemplateElement;
     /** use this only for defaults that can't be JSON serialized in config */
     complexPropDefaults?: Partial<MixinCompositeProps>;
     /** Config should be 100% JSON serializable */
-    config: WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo>;
+    config: WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo, TAction>;
     
 }
 
-export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo>{
+export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction = Action>{
     tagName: string;
     propDefaults?: Partial<MCProps>;
     propInfo?: Partial<{[key in keyof MCProps]: TPropInfo}> 
-    actions?: Partial<{[key in keyof MCActions]: Action<MCProps>}> 
+    actions?: Partial<{[key in keyof MCActions]: TAction}> 
     propChangeMethod?: keyof MCActions;
     style?: Partial<CSSStyleDeclaration>;
 }
@@ -90,20 +90,7 @@ export interface LogicOp<MCProps = any>{
     ifAllOf?: LogicOpProp<MCProps>,
     andAlsoActIfKeyIn?: (keyof MCProps & string)[],
     actIfKeyIn?: (keyof MCProps & string)[],  
-    /**
-     * The following are not supported by trans-render
-     */
-    andAllOf?: LogicOpProp<MCProps>,
-    orAllOf?: LogicOpProp<MCProps>,
-    ifAnyOf?: LogicOpProp<MCProps>,
-    andAnyOf?: LogicOpProp<MCProps>,
-    orAnyOf?: LogicOpProp<MCProps>
-    ifNot?: LogicOpProp<MCProps>,
-    andIfNot?: LogicOpProp<MCProps>,
-    orIfNot?: LogicOpProp<MCProps>,
-    ifEquals?: LogicOpProp<MCProps>,
-    andIfEquals?: LogicOpProp<MCProps>,
-    orIfEquals?: LogicOpProp<MCProps>,
+
 }
 
 export type lop = 'and' | 'or';

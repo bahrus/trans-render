@@ -1,7 +1,7 @@
 import { DefineArgs, LogicOp, lop, LogicOpProp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementMixin } from './types.js';
 export { Action, PropInfo} from './types.js';
 
-export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo>{
+export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction extends Action<MCProps> = Action<MCProps>>{
     defaultProp: PropInfo = {
         type: 'Object',
         dry: true,
