@@ -94,7 +94,7 @@ export interface LogicOp<MCProps = any>{
 }
 
 export interface LogicEvalContext{
-    op: 'and' | 'or';
+    op: 'and' | 'or' | 'nand' | 'nor' | 'eq'
 }
 
 
