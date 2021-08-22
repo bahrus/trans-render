@@ -61,6 +61,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
     doPA(self: this, src: any, pci: PropChangeInfo, m: PropChangeMoment): boolean{ //post actions
         if(pci.pcm !== undefined) return pci.pcm(src, pci, m) !== false;
+        return true;
     }
 
     createPropInfos(args: DefineArgs){
