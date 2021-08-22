@@ -43,7 +43,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                             const action = actions[methodName]!;
                             const props = getProps(action);
                             if(!props.has(key)) continue;
-                            if(pq(self, action, this, 'and', key)){
+                            if(pq(self, action, this)){
                                 filteredActions[methodName] = action;
                             }
                         }
@@ -231,7 +231,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         Object.assign(target, returnVal);
     }
 
-    pq(self: this, expr: LogicOp<any>, src: MCProps, ctx: LogicEvalContext): boolean{
+    pq(self: this, expr: LogicOp<any>, src: MCProps, ctx: LogicEvalContext = {op:'and'}): boolean{
         const {ifAllOf} = expr;
         const {pqs} = self;
         if(ifAllOf !== undefined){
@@ -240,23 +240,12 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         return true;
     }
     
-    pqsv(self: this, src: any, subExpr: string | number | symbol | LogicOp<any>): boolean{
+    pqsv(self: this, src: any, subExpr: string | number | symbol | LogicOp<any>, ctx: LogicEvalContext): boolean{
         return !!src[subExpr as any as string];
     }
     pqs(self: this, expr: ListOfLogicalExpressions,  src: MCProps, ctx: LogicEvalContext): boolean{
         for(const subExpr of expr){
-            if(!self.pqsv(self, src, subExpr)) return false;
-            //let subAnswer = false;
-            // switch(typeof subExpr){
-            //     case 'string':
-            //         subAnswer = !!src[subExpr];
-            //         break;
-            //     case 'object':
-            //         subAnswer = self.pq(subExpr, self, src, 'and');
-            //         break;
-            //     default:
-            //         throw 'NI'; //Not Implemented
-            //  }
+            if(!self.pqsv(self, src, subExpr, ctx)) return false;
         }
         return true;
     }
