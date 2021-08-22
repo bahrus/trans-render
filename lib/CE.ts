@@ -1,4 +1,4 @@
-import { DefineArgs, LogicOp, lop, LogicOpProp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementMixin } from './types.js';
+import { DefineArgs, LogicOp, LogicEvalContext, LogicOpProp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementMixin } from './types.js';
 export { Action, PropInfo} from './types.js';
 
 export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction extends Action<MCProps> = Action<MCProps>>{
@@ -231,7 +231,43 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         Object.assign(target, returnVal);
     }
 
-
+    pq(self: this, expr: LogicOp<any>, src: MCProps, ctx: LogicEvalContext): boolean{
+        const {ifAllOf} = expr;
+        const {pqs} = self;
+        if(ifAllOf !== undefined){
+            if(!pqs(self, ifAllOf as ListOfLogicalExpressions, src, ctx)) return false;
+        }
+        return true;
+    }
+    
+    pqsv(self: this, src: any, subExpr: string | number | symbol | LogicOp<any>): boolean{
+        return !!src[subExpr as any as string];
+    }
+    pqs(self: this, expr: ListOfLogicalExpressions,  src: MCProps, ctx: LogicEvalContext): boolean{
+        for(const subExpr of expr){
+            if(!self.pqsv(self, src, subExpr)) return false;
+            //let subAnswer = false;
+            // switch(typeof subExpr){
+            //     case 'string':
+            //         subAnswer = !!src[subExpr];
+            //         break;
+            //     case 'object':
+            //         subAnswer = self.pq(subExpr, self, src, 'and');
+            //         break;
+            //     default:
+            //         throw 'NI'; //Not Implemented
+            //  }
+             switch(op){
+                case 'and':
+                    if(!subAnswer) return false;
+                    break;
+                case 'or':
+                    if(subAnswer) return true;
+                    break;
+            }
+        }
+        return true;
+    }
 
     /**
      * Needed for asynchronous loading
@@ -260,74 +296,6 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             prop.type = t as PropInfoTypes;
         }
     }
-
-
-
-
-
-
-    pq(self: this, expr: LogicOp<any>, src: any, op: lop, key: string): boolean{
-        // let answer = op === 'and' ? true : false;
-        // for(const logicalOp in expr){
-        //     const rhs: any = (<any>expr)[logicalOp];
-        //     let arrayLogicalOp: lop;
-        //     if(logicalOp.endsWith('AnyOf')) {
-        //         arrayLogicalOp = 'or';
-        //     }else if(logicalOp.endsWith('AllOf')){
-        //         arrayLogicalOp = 'and';
-        //     }else{
-        //         continue;
-        //     }
-        //     if(!Array.isArray(rhs)) throw 'NI'; //Not Implemented
-        //     const subAnswer = self.pqs(rhs, self, src, arrayLogicalOp);
-        //     switch(op){
-        //         case 'and':
-        //             if(!subAnswer) return false;
-        //             break;
-        //         case 'or':
-        //             if(subAnswer) return true;
-        //             break;
-        //     }
-        // }
-        const {ifAllOf} = expr;
-        const {pqs} = self;
-        if(ifAllOf !== undefined){
-            if(!pqs(self, ifAllOf as ListOfLogicalExpressions, src, 'and')) return false;
-        }
-        return true;
-    }
-    
-    pqsv(self: this, src: any, subExpr: string | number | symbol | LogicOp<any>): boolean{
-        return !!src[subExpr as any as string];
-    }
-    pqs(self: this, expr: ListOfLogicalExpressions,  src: any, op: lop): boolean{
-        let answer = op === 'and' ? true : false;
-        for(const subExpr of expr){
-            const subAnswer = self.pqsv(self, src, subExpr);
-            //let subAnswer = false;
-            // switch(typeof subExpr){
-            //     case 'string':
-            //         subAnswer = !!src[subExpr];
-            //         break;
-            //     case 'object':
-            //         subAnswer = self.pq(subExpr, self, src, 'and');
-            //         break;
-            //     default:
-            //         throw 'NI'; //Not Implemented
-            //  }
-             switch(op){
-                case 'and':
-                    if(!subAnswer) return false;
-                    break;
-                case 'or':
-                    if(subAnswer) return true;
-                    break;
-            }
-        }
-        return answer;
-    }
-
-
 
     toLisp(s: string){return s.split(ctlRe).join('-').toLowerCase();}
     toCamel(s: string){return s.replace(stcRe, function(m){return m[1].toUpperCase();});}

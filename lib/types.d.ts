@@ -93,7 +93,10 @@ export interface LogicOp<MCProps = any>{
 
 }
 
-export type lop = 'and' | 'or';
+export interface LogicEvalContext{
+    op: 'and' | 'or';
+}
+
 
 export interface Transform<TMixinComposite = any> extends LogicOp<TMixinComposite>{
     match: {[key: string]: MatchRHS<TMixinComposite>}
