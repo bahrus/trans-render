@@ -257,14 +257,6 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             //     default:
             //         throw 'NI'; //Not Implemented
             //  }
-             switch(op){
-                case 'and':
-                    if(!subAnswer) return false;
-                    break;
-                case 'or':
-                    if(subAnswer) return true;
-                    break;
-            }
         }
         return true;
     }
