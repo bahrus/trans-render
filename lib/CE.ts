@@ -43,7 +43,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                         const filteredActions: any = {};
                         for(const methodName in actions){
                             const action = actions[methodName]!;
-                            const props = getProps(action); //TODO:  cache this
+                            const props = getProps(self, action); //TODO:  cache this
                             if(!props.has(key)) continue;
                             if(pq(self, action, this)){
                                 filteredActions[methodName] = action;
@@ -59,7 +59,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         }
     }
 
-    doPA(self: this, src: any, pci: PropChangeInfo, m: PropChangeMoment): boolean{ //post actions
+    doPA(self: this, src: any, pci: PropChangeInfo, m: PropChangeMoment): boolean{ //[TODO rename]
         if(pci.pcm !== undefined) return pci.pcm(src, pci, m) !== false;
         return true;
     }
@@ -88,7 +88,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         if(actions !== undefined){
             for(const methodName in actions){
                 const action = actions[methodName] as Action;
-                const upon = this.getProps(action);
+                const upon = this.getProps(this, action);
                 for(const dependency of upon){
                     if(props[dependency] === undefined){
                         const prop: PropInfo = {...defaultProp};
@@ -179,7 +179,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                 if(propChangeQueue !== undefined && acts !== undefined){
                     for(const doAct in acts){
                         const action = acts[doAct] as Action;
-                        const props = getProps(action); //TODO:  Cache this
+                        const props = getProps(self, action); //TODO:  Cache this
                         let actionIsApplicable = false;
                         for(const prop of props){
                             if(propChangeQueue.has(prop)){
@@ -230,7 +230,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         return returnArr;
     }
 
-    getProps(action: Action): Set<string>{
+    getProps(self: this, action: Action): Set<string>{
         return new Set<string>([...(action.ifAllOf || []) as string[], ...(action.actIfKeyIn || []), ...(action.andAlsoActIfKeyIn || []) as string[]]);
     }
 
