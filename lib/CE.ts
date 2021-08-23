@@ -100,7 +100,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         return props;
     }
 
-    def(args: DefineArgs<MCProps, MCActions, TPropInfo>): {new(): MCProps & MCActions}{
+    def(args: DefineArgs<MCProps, MCActions, TPropInfo, TAction>): {new(): MCProps & MCActions}{
         const {getAttrNames: getAttributeNames, doActions, fine, pq, toCamel, toLisp, propUp, getProps} = this;
         const self = this;
         const {config} = args;
@@ -208,9 +208,9 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
     async doActions(self: this, actions: {[methodName: string]: Action}, target: any, arg: any){
         for(const methodName in actions){
-            const fn = (<any>target)[methodName].bind(target);
+            const fn = (<any>target)[methodName]; //.bind(target);
             const action = actions[methodName];
-            const ret = action.async ? await fn(target, arg) : fn(target, arg);
+            const ret = action.async ? await fn.call(target, arg) : fn.call(target, arg);
             self.postHoc(self, action, target, ret);
         }
     }
