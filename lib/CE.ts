@@ -33,7 +33,8 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
                     if(this.QR){
                         this.QR(key, this);
-                        if(!doPA(self, this, pci, '+qr')) return;
+                        doPA(self, this, pci, '+qr');
+                        return;
                     }else{
                         if(!doPA(self, this, pci, '-a')) return; //-a = pre actions
                     }
@@ -208,9 +209,9 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
     async doActions(self: this, actions: {[methodName: string]: Action}, target: any, arg: any){
         for(const methodName in actions){
-            const fn = (<any>target)[methodName]; //.bind(target);
+            const fn = (<any>target)[methodName].bind(target);
             const action = actions[methodName];
-            const ret = action.async ? await fn.call(target, arg) : fn.call(target, arg);
+            const ret = action.async ? await fn(target, arg) : fn(target, arg);
             self.postHoc(self, action, target, ret);
         }
     }
