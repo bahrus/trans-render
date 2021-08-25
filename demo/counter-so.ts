@@ -31,7 +31,7 @@ const mainTemplate = tm.html`
 `;
 
 
-(new tm.CE<CounterSo, CounterSo, INotifyPropInfo>()).def({
+(new tm.CE<CounterSo, CounterSo, INotifyPropInfo>({
     //config should be JSON serializable, importable via JSON import
     config:  {
         tagName:'counter-so',
@@ -68,5 +68,5 @@ const mainTemplate = tm.html`
         changeCount: (self: CounterSo, d: number, e: Event) => self.count += d,
 
     }],
-});
+}));
 

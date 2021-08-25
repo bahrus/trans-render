@@ -23,7 +23,7 @@ const mainTemplate = tm.html `
     }
 </style>
 `;
-(new tm.CE()).def({
+(new tm.CE({
     //config should be JSON serializable, importable via JSON import
     config: {
         tagName: 'counter-so',
@@ -56,4 +56,4 @@ const mainTemplate = tm.html `
     mixins: [NotifyMixin, tm.TemplMgmtMixin, {
             changeCount: (self, d, e) => self.count += d,
         }],
-});
+}));

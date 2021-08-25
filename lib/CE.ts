@@ -2,6 +2,11 @@ import { DefineArgs, LogicOp, LogicEvalContext, LogicOpProp, PropInfo, HasPropCh
 export { Action, PropInfo} from './types.js';
 
 export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction extends Action<MCProps> = Action<MCProps>>{
+
+    constructor(public args?: DefineArgs<MCProps, MCActions, TPropInfo, TAction>){
+        if(args !== undefined) this.def(args);
+    }
+
     defaultProp: PropInfo = {
         type: 'Object',
         dry: true,
@@ -102,6 +107,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
     }
 
     def(args: DefineArgs<MCProps, MCActions, TPropInfo, TAction>): {new(): MCProps & MCActions}{
+        this.args = args;
         const {getAttrNames: getAttributeNames, doActions, fine, pq, toCamel, toLisp, propUp, getProps} = this;
         const self = this;
         const {config} = args;
@@ -145,10 +151,13 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                         case 'Object':
                             if(prop.parse){
                                 let val = nv;
-                                try{
-                                    val = JSON.parse(nv);
-                                }catch(e){}
-                                aThis[propName] = val;
+                                if(nv!==null && ['[', '{'].includes(nv[0])){
+                                    try{
+                                        val = JSON.parse(nv);
+                                        return;
+                                    }catch(e){}
+                                    aThis[propName] = val;  
+                                }
                             }
                             break;
                         case 'Number':
