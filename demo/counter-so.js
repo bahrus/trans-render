@@ -51,7 +51,7 @@ const mainTemplate = tm.html `
     },
     //This is where non serializable stuff goes
     complexPropDefaults: {
-        mainTemplate: mainTemplate
+        mainTemplate
     },
     mixins: [NotifyMixin, tm.TemplMgmtMixin, {
             changeCount: (self, d, e) => self.count += d,
