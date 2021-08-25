@@ -106,6 +106,8 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         return props;
     }
 
+    classDef: {new(): MCProps & MCActions & TRElementMixin} | undefined;
+
     def(args: DefineArgs<MCProps, MCActions, TPropInfo, TAction>): {new(): MCProps & MCActions}{
         this.args = args;
         const {getAttrNames: getAttributeNames, doActions, fine, pq, toCamel, toLisp, propUp, getProps} = this;
@@ -213,7 +215,8 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
         this.addProps(newClass as any as {new(): HTMLElement}, propInfos, args);
         fine(tagName, newClass as any as ({new(): HTMLElement}));
-        return newClass as any as {new(): MCProps & MCActions};
+        this.classDef = newClass as any as {new(): MCProps & MCActions & TRElementMixin};
+        return this.classDef;
     }
 
     async doActions(self: this, actions: {[methodName: string]: Action}, target: any, arg: any){
