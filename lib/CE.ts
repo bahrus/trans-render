@@ -153,7 +153,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                             break;
                         case 'Object':
                             if(prop.parse){
-                                let val = nv;
+                                let val = nv.trim();
                                 if(nv!==null && ['[', '{'].includes(nv[0])){
                                     try{
                                         val = JSON.parse(nv);
