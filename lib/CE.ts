@@ -158,8 +158,8 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                                     try{
                                         val = JSON.parse(val);
                                     }catch(e){}
-                                    aThis[propName] = val;  
                                 }
+                                aThis[propName] = val;  
                             }
                             break;
                         case 'Number':
