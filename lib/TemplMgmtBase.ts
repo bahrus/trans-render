@@ -1,5 +1,6 @@
 import { transform } from './transform.js';
-import { Action, RenderContext, RenderOptions } from './types.d.js';
+import { getQuery} from './specialKeys.js';
+import { Action, PropInfo, RenderContext, RenderOptions } from './types.d.js';
 export { transform } from './transform.js';
 
 export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => class extends superclass{
@@ -16,11 +17,22 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
     loadPlugins(self: TemplMgmtBase): void {}
 
     doInitTransform(self: TemplMgmtBase): void{
+        const {clonedTemplate} = self;
         this.loadPlugins(self);
-        transform(self.clonedTemplate as DocumentFragment, this.__ctx!);
+        transform(clonedTemplate as DocumentFragment, this.__ctx!);
+        const propInfos = (self.constructor as any)['reactiveProps'] as {[key: string]: PropInfo};
+        for(const refKey in propInfos){
+            const propInfo = propInfos[refKey];
+            if(propInfo.isRef){
+                const queryInfo = getQuery(refKey);
+                (<any>self)[refKey] = (clonedTemplate as DocumentFragment).querySelectorAll(queryInfo.query); 
+            }
+
+        }
         const root = self.noshadow ? self : self.shadowRoot!;
         root.appendChild(self.clonedTemplate!);
         delete self.clonedTemplate;
+
     }
 
     doUpdateTransform(self: TemplMgmtBase){
@@ -28,6 +40,7 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
         const root = self.noshadow ? self : self.shadowRoot!;
         transform(root, this.__ctx!);
     }
+
 
 
 }

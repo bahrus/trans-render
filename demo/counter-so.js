@@ -42,6 +42,9 @@ const mainTemplate = tm.html `
         propInfo: {
             count: {
                 notify: { dispatch: true },
+            },
+            buttonElements: {
+                isRef: true,
             }
         },
         actions: Object.assign(Object.assign({}, tm.doInitTransform), { doUpdateTransform: {

@@ -4,6 +4,7 @@ import {INotifyMixin, INotifyPropInfo, NotifyMixin} from '../lib/mixins/notify.j
 
 export interface CounterSo extends  TemplMgmtBase, INotifyMixin{
     count: number;
+    buttonElements: any;
 }
 
 const mainTemplate = tm.html`
@@ -50,6 +51,9 @@ const mainTemplate = tm.html`
         propInfo:{
             count: {
                 notify: {dispatch:true},
+            },
+            buttonElements:{
+                isRef: true,
             }
         },
         actions: {

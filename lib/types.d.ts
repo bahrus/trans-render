@@ -11,6 +11,7 @@ export interface RenderContext<T = Element, TItem = any> {
     val?: string | null;
     rhs?: any;
     host?: HTMLElement | undefined;
+    key?: string;
     queryCache?: WeakMap<Element, {[key: string]: NodeListOf<Element>}>;
     abort?: boolean | undefined;
 }
@@ -116,6 +117,7 @@ export interface PropInfo{
     type?: PropInfoTypes;
     dry?: boolean;
     parse?: boolean;
+    isRef?: boolean;
 }
 
 
