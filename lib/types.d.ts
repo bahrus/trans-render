@@ -94,7 +94,7 @@ export interface LogicOp<MCProps = any>{
 
 }
 
-export type OpOptions = 'and' | 'or' | 'nand' | 'nor' | 'eq';
+export type OpOptions = 'and' | 'or' | 'nand' | 'nor' | 'eq' | 'na';
 
 export interface LogicEvalContext{
     op: OpOptions
@@ -108,6 +108,7 @@ export interface Transform<TMixinComposite = any> extends LogicOp<TMixinComposit
 export interface Action<MCProps = any> extends LogicOp<MCProps>{
     async?: boolean;
     merge?: boolean;
+    target?: keyof MCProps; 
 }
 
 export type MatchRHS<TMixinComposite = any> = string;

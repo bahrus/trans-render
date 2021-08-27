@@ -2,7 +2,7 @@ import { PEAUnionSettings, PSettings, PESettings } from './types.js';
 import {applyP} from './applyP.js';
 import {applyPE} from './applyPE.js';
 
-export function applyPEA<T extends Partial<HTMLElement> = HTMLElement>(host: HTMLElement, target: HTMLElement, pea: PEAUnionSettings<T>) {
+export function applyPEA<T extends Partial<Element> = Element>(host: HTMLElement, target: HTMLElement, pea: PEAUnionSettings<T>) {
     applyP(target, pea as PSettings<T>);
     applyPE(host, target, pea as PESettings<T>);
     const attribSettings = pea[2];
