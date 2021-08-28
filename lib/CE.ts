@@ -221,8 +221,9 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
     async doActions(self: this, actions: {[methodName: string]: Action}, target: any, arg: any){
         for(const methodName in actions){
-            const fn = (<any>target)[methodName].bind(target);
             const action = actions[methodName];
+            if(action.debug) debugger;
+            const fn = (<any>target)[methodName].bind(target);
             const ret = action.async ? await fn(target, arg) : fn(target, arg);
             if(ret === undefined) continue;
             self.postHoc(self, action, target, ret);

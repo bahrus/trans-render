@@ -109,6 +109,7 @@ export interface Action<MCProps = any> extends LogicOp<MCProps>{
     async?: boolean;
     merge?: boolean;
     target?: keyof MCProps; 
+    debug?: boolean;
 }
 
 export type MatchRHS<TMixinComposite = any> = string;
