@@ -5,7 +5,7 @@ import { CE} from './CE.js';
 import { html } from './html.js';
 import {doInitTransform, } from './TemplMgmtBase.js'; 
 
-export { TemplMgmtBase }  from './TemplMgmtBase.js'; 
+export { TemplMgmtProps, TemplMgmtActions }  from './TemplMgmtBase.js'; 
 
 const TemplMgmtMixin = (superclass: any) => class TemplMgmt extends TemplMgmtBaseMixin(superclass){
     loadPlugins(self: TemplMgmt){
@@ -31,7 +31,6 @@ const TemplMgmtMixin = (superclass: any) => class TemplMgmt extends TemplMgmtBas
 
 export const tm = {
     doInitTransform,
-    //doUpdateTransform,
     CE,
     html,
     TemplMgmtMixin

@@ -10,7 +10,7 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
             self.attachShadow({mode: 'open'});
         }
         
-        self.clonedTemplate = self.mainTemplate.content.cloneNode(true);
+        self.clonedTemplate = self.mainTemplate!.content.cloneNode(true);
         
     }
 
@@ -46,47 +46,28 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
 }
 
 
-// export const  doInitTransform : Action<TemplMgmtBase>[] = [
-//     {
-//         upon: ['mainTemplate', 'noshadow'],
-//         do: 'cloneTemplate'
-//     },
-//     {
-//         upon: ['clonedTemplate', 'initTransform'],
-//         riff: ['clonedTemplate', 'initTransform'],
-//         do: 'doInitTransform'
-//     }
-// ];
-
-export const doInitTransform: Partial<{[key in keyof TemplMgmtBase]: Action<TemplMgmtBase>}> = {
+export const doInitTransform: Partial<{[key in keyof TemplMgmtActions]: Action<TemplMgmtProps>}> = {
     cloneTemplate: {
         actIfKeyIn: ['mainTemplate', 'noshadow']
     },
     doInitTransform: {
-        ifAllOf: ['clonedTemplate', 'initTransform'],
+        ifAllOf: ['clonedTemplate'],
     }
 }
 
-// export const doUpdateTransform: Partial<{[key in keyof TemplMgmtBase]: Action<TemplMgmtBase>}> = {
-//     doUpdateTransform: {
-//         upon: ['updateTransform']
-//     }
-// }
-
-// export const doUpdateTransform: Action<TemplMgmtBase> = {
-    
-//     riff: ['updateTransform'],
-//     do: 'doUpdateTransform',
-// };
-
-export interface TemplMgmtBase extends HTMLElement{
-    doUpdateTransform(self: TemplMgmtBase): void;
-    doInitTransform(self: TemplMgmtBase): void;
-    cloneTemplate(self: TemplMgmtBase): void;
-    mainTemplate: HTMLTemplateElement;
-    clonedTemplate: Node | undefined;
-    initTransform: any;
-    updateTransform: any;
-    noshadow: boolean;
-    renderOptions: RenderOptions;
+export interface TemplMgmtProps{
+    mainTemplate?: HTMLTemplateElement;
+    clonedTemplate?: Node | undefined;
+    initTransform?: any;
+    updateTransform?: any;
+    noshadow?: boolean;
+    renderOptions?: RenderOptions;
 }
+
+export interface TemplMgmtActions{
+    doUpdateTransform(self: this): void;
+    doInitTransform(self: this): void;
+    cloneTemplate(self: this): void;
+}
+
+export interface TemplMgmtBase extends HTMLElement, TemplMgmtProps, TemplMgmtActions{}

@@ -1,8 +1,8 @@
-import {tm, TemplMgmtBase} from '../lib/TemplMgmtWithPEST.js';
+import {tm, TemplMgmtProps, TemplMgmtActions} from '../lib/TemplMgmtWithPEST.js';
 import {INotifyMixin, INotifyPropInfo, NotifyMixin} from '../lib/mixins/notify.js';
 //import { PropInfo } from '../lib/types.js';
 
-export interface CounterSo extends  TemplMgmtBase, INotifyMixin{
+export interface CounterSo extends  TemplMgmtProps, INotifyMixin, HTMLElement{
     count: number;
     buttonElements: any;
 }
@@ -32,7 +32,7 @@ const mainTemplate = tm.html`
 `;
 
 
-(new tm.CE<CounterSo, CounterSo, INotifyPropInfo>({
+(new tm.CE<CounterSo & TemplMgmtProps, CounterSo & TemplMgmtActions, INotifyPropInfo>({
     //config should be JSON serializable, importable via JSON import
     config:  {
         tagName:'counter-so',
