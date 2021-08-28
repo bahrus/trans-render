@@ -2,7 +2,7 @@ import {PEUnionSettings, PSettings} from './types.d.js';
 import {applyP} from './applyP.js';
 import { getProp } from './getProp.js';
 
-export function applyPE<T extends Partial<HTMLElement> = HTMLElement>(host: HTMLElement, target: HTMLElement, pe: PEUnionSettings<T>) {
+export function applyPE<T extends Partial<HTMLElement> = HTMLElement>(host: Element, target: Element, pe: PEUnionSettings<T>) {
     applyP(target, pe as PSettings<T>);
     const eventSettings = pe[1];
     if (eventSettings !== undefined) {
