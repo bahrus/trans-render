@@ -224,7 +224,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             const fn = (<any>target)[methodName].bind(target);
             const action = actions[methodName];
             const ret = action.async ? await fn(target, arg) : fn(target, arg);
-            if(ret === undefined) return;
+            if(ret === undefined) continue;
             self.postHoc(self, action, target, ret);
         }
     }
