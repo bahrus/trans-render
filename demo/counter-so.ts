@@ -1,4 +1,4 @@
-import {tm, TemplMgmtProps, TemplMgmtActions} from '../lib/TemplMgmtWithPEST.js';
+import {tm, TemplMgmtProps, TemplMgmtActions} from '../lib/mixins/TemplMgmtWithPEST.js';
 import {INotifyMixin, INotifyPropInfo, NotifyMixin} from '../lib/mixins/notify.js';
 //import { PropInfo } from '../lib/types.js';
 

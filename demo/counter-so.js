@@ -1,4 +1,4 @@
-import { tm } from '../lib/TemplMgmtWithPEST.js';
+import { tm } from '../lib/mixins/TemplMgmtWithPEST.js';
 import { NotifyMixin } from '../lib/mixins/notify.js';
 const mainTemplate = tm.html `
 <button part=down data-d=-1>-</button><span part=count></span><button part=up data-d=1>+</button>

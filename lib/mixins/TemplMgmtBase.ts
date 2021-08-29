@@ -1,7 +1,7 @@
-import { transform } from './transform.js';
-import { getQuery} from './specialKeys.js';
-import { Action, PropInfo, RenderContext, RenderOptions } from './types.d.js';
-export { transform } from './transform.js';
+import { transform } from '../transform.js';
+import { getQuery} from '../specialKeys.js';
+import { Action, PropInfo, RenderContext, RenderOptions } from '../types.js';
+export { transform } from '../transform.js';
 
 export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => class extends superclass{
     __ctx: RenderContext | undefined;
