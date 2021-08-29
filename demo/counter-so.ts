@@ -59,7 +59,7 @@ const mainTemplate = tm.html`
         actions: {
             ...tm.doInitTransform,
             doUpdateTransform: {
-                actIfKeyIn: ['count', 'updateTransform']
+                ifKeyIn: ['count', 'updateTransform']
             }
         },
         propChangeMethod: 'onPropChange',

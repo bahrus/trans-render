@@ -89,8 +89,8 @@ export interface LogicOp<MCProps = any>{
      * Supported by trans-render
      */
     ifAllOf?: LogicOpProp<MCProps>,
-    andAlsoActIfKeyIn?: (keyof MCProps & string)[],
-    actIfKeyIn?: (keyof MCProps & string)[],  
+    //andAlsoActIfKeyIn?: (keyof MCProps & string)[],
+    ifKeyIn?: (keyof MCProps & string)[],  
 
 }
 

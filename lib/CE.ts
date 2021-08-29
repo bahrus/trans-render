@@ -187,10 +187,11 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                 const propChangeQueue = this.propChangeQueue as Set<string> | undefined;
                 const acts = actions;
                 //const actionsToDo = new Set<Action>();
-                const actionsToDo: any = {};
+                const syncActionsToDo: Partial<{[key in keyof MCActions]: TAction}> = {};
+                const asyncActionsToDo: Partial<{[key in keyof MCActions]: TAction}> = {};
                 if(propChangeQueue !== undefined && acts !== undefined){
                     for(const doAct in acts){
-                        const action = acts[doAct] as Action;
+                        const action = acts[doAct] as TAction;
                         const props = getProps(self, action); //TODO:  Cache this
                         let actionIsApplicable = false;
                         for(const prop of props){
@@ -202,10 +203,16 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                             }
                         }
                         if(!actionIsApplicable) continue;
-                        actionsToDo[doAct] = action;
+                        if(action.async){
+                            asyncActionsToDo[doAct] = action;
+                        }else{
+                            syncActionsToDo[doAct] = action;
+                        }
+                        
                     }
                 }
-                doActions(self, actionsToDo, this, propChangeQueue);
+                doActions(self, syncActionsToDo as {[key: string]: Action<any>}, this, propChangeQueue);
+                doActions(self, asyncActionsToDo as {[key: string]: Action<any>}, this, propChangeQueue);
                 delete this.propChangeQueue;
             }
 
@@ -246,7 +253,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
     }
 
     getProps(self: this, action: Action): Set<string>{
-        return new Set<string>([...(action.ifAllOf || []) as string[], ...(action.actIfKeyIn || []), ...(action.andAlsoActIfKeyIn || []) as string[]]);
+        return new Set<string>([...(action.ifAllOf || []) as string[], ...(action.ifKeyIn || []) as string[]]);
     }
 
     postHoc(self: this, action: Action, target: any, returnVal: any){
