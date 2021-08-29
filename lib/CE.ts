@@ -230,7 +230,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         for(const methodName in actions){
             const action = actions[methodName];
             if(action.debug) debugger;
-            const ret = action.async ? await (<any>target)[methodName](target) : (<any>target)[methodName];
+            const ret = action.async ? await (<any>target)[methodName](target) : (<any>target)[methodName](target);
             if(ret === undefined) continue;
             self.postHoc(self, action, target, ret);
         }
