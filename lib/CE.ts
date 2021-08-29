@@ -142,8 +142,9 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             }
             attributeChangedCallback(n: string, ov: string, nv: string){
                 if(super.attributeChangedCallback) super.attributeChangedCallback(n, ov, nv);
-                const propName = toCamel(n);
+                let propName = toCamel(n);
                 const prop = propInfos[propName];
+                if(this.inReflectMode) propName = '_' + propName;
                 if(prop !== undefined){
                     if(prop.dry && ov === nv) return;
                     const aThis = this as any;

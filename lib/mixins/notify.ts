@@ -5,9 +5,10 @@ export const NotifyMixin = (superclass: {new(): any}) => class extends superclas
         if(super.onPropChange) super.onPropChange(self, propChange, moment);
         const notify = propChange.prop.notify;
         if(notify === undefined || (moment !== '+a' && moment != '+qr')) return;
-        const {dispatch, echoTo, toggleTo, echoDelay} = notify;
+        const {dispatch, echoTo, toggleTo, echoDelay, reflect} = notify;
+        const lispName = camelToLisp(propChange.key);
         if(dispatch){
-            self.dispatchEvent(new CustomEvent(camelToLisp(propChange.key) + '-changed', {
+            self.dispatchEvent(new CustomEvent(lispName + '-changed', {
                 detail:{
                     oldValue: propChange.ov,
                     value: propChange.nv,
@@ -27,6 +28,30 @@ export const NotifyMixin = (superclass: {new(): any}) => class extends superclas
         }
         if(toggleTo !== undefined){
             (<any>self)[toggleTo] = !propChange.nv;
+        }
+        if(reflect !== undefined){
+            if(reflect.asAttr){
+                this.inReflectMode = true;
+                let val = propChange.nv;
+                switch(propChange.prop.type){
+                    case 'Number':
+                        val = val.toString();
+                        break;
+                    case 'Boolean':
+                        if(val){
+                            val = ''
+                        }else{
+                            this.removeAttribute(lispName);
+                            return true; //dangerous!!!!!!
+                        }
+                        break;
+                    case 'Object':
+                        val = JSON.stringify(val);
+                        break;
+                }
+                this.setAttribute(camelToLisp(propChange.key), val);
+                this.inReflectMode = false;
+            }
         }
         return true;
     }
@@ -62,5 +87,8 @@ export interface INotifyPropInfo<TMixinComposite = any> extends PropInfo{ //yike
         echoTo?: keyof TMixinComposite,
         echoDelay?: number | (keyof TMixinComposite),
         toggleTo?: keyof TMixinComposite,
+        reflect?:{
+            asAttr?:boolean;
+        }
     }
 }
