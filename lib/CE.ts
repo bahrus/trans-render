@@ -174,10 +174,10 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                     }
                 }
             }
-            connectedCallback(){
-                if(super.connectedCallback) super.connectedCallback();
+            connectedCallback(myArgs = undefined){ //TODO:  problematic
+                if(super.connectedCallback) super.connectedCallback(super.constructor.ceDef);
                 Object.assign(this.style, style);
-                const args = (<any>this.constructor).ceDef;
+                const args = myArgs || (<any>this.constructor).ceDef;
                 const defaults: any = {...args.config.propDefaults, ...args.complexPropDefaults};
                 propUp(this as any as HTMLElement, Object.keys(propInfos), defaults);
                 this.detachQR();
