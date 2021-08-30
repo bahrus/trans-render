@@ -22,7 +22,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         for(const key in props){
             const prop = props[key];
             const privateKey = '_' + key;
-            if(Object.getOwnPropertyDescriptor(proto, key) !== undefined) continue;
+            if(key in proto) continue;
             Object.defineProperty(proto, key, {
                 get(){
                     return this[privateKey];
