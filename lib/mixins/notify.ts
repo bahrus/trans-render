@@ -3,6 +3,7 @@ import {PropChangeInfo, PropChangeMoment, PropInfo} from '../types.d.js';
 export const NotifyMixin = (superclass: {new(): any}) => class extends superclass{
     onPropChange(self: EventTarget, propChange: PropChangeInfo<INotifyPropInfo>, moment: PropChangeMoment){
         if(super.onPropChange) super.onPropChange(self, propChange, moment);
+        const aSelf = self as any;
         const notify = propChange.prop.notify;
         if(notify === undefined || (moment !== '+a' && moment != '+qr')) return;
         const {dispatch, echoTo, toggleTo, echoDelay, reflect} = notify;
@@ -19,19 +20,19 @@ export const NotifyMixin = (superclass: {new(): any}) => class extends superclas
             if(echoDelay){
                 let echoDelayNum: number = typeof(echoDelay) === 'number' ? echoDelay : (<any>self)[echoDelay];
                 setTimeout(() => {
-                    (<any>self)[echoTo] = propChange.nv;
+                    aSelf[echoTo] = propChange.nv;
                 }, echoDelayNum);
             }else{
-                (<any>self)[echoTo] = propChange.nv;
+                aSelf[echoTo] = propChange.nv;
             }
             
         }
         if(toggleTo !== undefined){
-            (<any>self)[toggleTo] = !propChange.nv;
+            aSelf[toggleTo] = !propChange.nv;
         }
         if(reflect !== undefined){
             if(reflect.asAttr){
-                this.inReflectMode = true;
+                aSelf.inReflectMode = true;
                 let val = propChange.nv;
                 let remAttr = false;
                 switch(propChange.prop.type){
@@ -50,11 +51,11 @@ export const NotifyMixin = (superclass: {new(): any}) => class extends superclas
                         break;
                 }
                 if(remAttr){
-                    this.removeAttribute(lispName);
+                    aSelf.removeAttribute(lispName);
                 }else{
-                    this.setAttribute(lispName, val);
+                    aSelf.setAttribute(lispName, val);
                 }
-                this.inReflectMode = false;
+                aSelf.inReflectMode = false;
             }
         }
         return true;
