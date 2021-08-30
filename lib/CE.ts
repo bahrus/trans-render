@@ -137,6 +137,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             static is = tagName;
             static observedAttributes = getAttributeNames(propInfos, toLisp, ext);
             static reactiveProps = propInfos;
+            static ceDef = args;
             constructor(){
                 super();
                 this.attachQR();
