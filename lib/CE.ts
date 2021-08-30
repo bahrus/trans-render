@@ -106,7 +106,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         return props;
     }
 
-    classDef: {new(): MCProps & MCActions & TRElementMixin} | undefined;
+    classDef: {new(): MCProps & MCActions & TRElementMixin & HTMLElement} | undefined;
 
     def(args: DefineArgs<MCProps, MCActions, TPropInfo, TAction>): {new(): MCProps & MCActions}{
         this.args = args;
@@ -134,7 +134,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         class newClass extends ext{
 
             static is = tagName;
-            static observedAttributes = getAttributeNames(propInfos, toLisp);
+            static observedAttributes = getAttributeNames(propInfos, toLisp, ext);
             static reactiveProps = propInfos;
             constructor(){
                 super();
@@ -217,7 +217,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
         this.addProps(newClass as any as {new(): HTMLElement}, propInfos, args);
         fine(tagName, newClass as any as ({new(): HTMLElement}));
-        this.classDef = newClass as any as {new(): MCProps & MCActions & TRElementMixin};
+        this.classDef = newClass as any as {new(): MCProps & MCActions & TRElementMixin & HTMLElement};
         return this.classDef;
     }
 
@@ -235,8 +235,8 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         customElements.define(tagName, newClass);
     }
 
-    getAttrNames(props: {[key: string]: PropInfo}, toLisp: (s: string) => string){
-        const returnArr: string[] = [];
+    getAttrNames(props: {[key: string]: PropInfo}, toLisp: (s: string) => string, ext: any){
+        const returnArr: string[] = ext.observedAttributes || [];
         for(const key in props){
             const prop = props[key];
             if(prop.parse){
