@@ -33,23 +33,27 @@ export const NotifyMixin = (superclass: {new(): any}) => class extends superclas
             if(reflect.asAttr){
                 this.inReflectMode = true;
                 let val = propChange.nv;
+                let remAttr = false;
                 switch(propChange.prop.type){
                     case 'Number':
                         val = val.toString();
                         break;
                     case 'Boolean':
                         if(val){
-                            val = ''
+                            val = '';
                         }else{
-                            this.removeAttribute(lispName);
-                            return true; //dangerous!!!!!!
+                            remAttr = true;
                         }
                         break;
                     case 'Object':
                         val = JSON.stringify(val);
                         break;
                 }
-                this.setAttribute(camelToLisp(propChange.key), val);
+                if(remAttr){
+                    this.removeAttribute(lispName);
+                }else{
+                    this.setAttribute(lispName, val);
+                }
                 this.inReflectMode = false;
             }
         }
