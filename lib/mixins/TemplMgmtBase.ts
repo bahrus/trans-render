@@ -19,6 +19,7 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
     doInitTransform({clonedTemplate, noshadow}: this): void{
         this.loadPlugins(this);
         transform(clonedTemplate as DocumentFragment, this.__ctx!);
+        this.doTemplMount(this, clonedTemplate as DocumentFragment);
         const propInfos = (this.constructor as any)['reactiveProps'] as {[key: string]: PropInfo};
         for(const refKey in propInfos){
             const propInfo = propInfos[refKey];
