@@ -30,7 +30,7 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
         }
         const root = noshadow ? this : this.shadowRoot!;
         root.appendChild(clonedTemplate!);
-        this.clonedTemplate = undefined;
+        //this.clonedTemplate = undefined;
     }
 
     doTemplMount(self: this, clonedTemplate: DocumentFragment){}
