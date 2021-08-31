@@ -14,28 +14,28 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
         
     }
 
-    loadPlugins(self: TemplMgmtBase): void {}
+    loadPlugins(self: this): void {}
 
     doInitTransform({clonedTemplate, noshadow}: this): void{
         this.loadPlugins(this);
         transform(clonedTemplate as DocumentFragment, this.__ctx!);
-        const propInfos = (self.constructor as any)['reactiveProps'] as {[key: string]: PropInfo};
+        const propInfos = (this.constructor as any)['reactiveProps'] as {[key: string]: PropInfo};
         for(const refKey in propInfos){
             const propInfo = propInfos[refKey];
             if(propInfo.isRef){
                 const queryInfo = getQuery(refKey);
-                (<any>self)[refKey] = (clonedTemplate as DocumentFragment).querySelectorAll(queryInfo.query); 
+                (<any>this)[refKey] = (clonedTemplate as DocumentFragment).querySelectorAll(queryInfo.query); 
             }
 
         }
         const root = noshadow ? this : this.shadowRoot!;
         root.appendChild(clonedTemplate!);
-        //this.clonedTemplate = undefined;
+        this.clonedTemplate = undefined;
     }
 
     doTemplMount(self: this, clonedTemplate: DocumentFragment){}
 
-    doUpdateTransform(self: TemplMgmtBase){
+    doUpdateTransform(self: this){
         this.__ctx!.match = self.updateTransform;
         const root = self.noshadow ? self : self.shadowRoot!;
         transform(root, this.__ctx!);
