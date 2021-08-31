@@ -16,9 +16,8 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
 
     loadPlugins(self: TemplMgmtBase): void {}
 
-    doInitTransform(self: TemplMgmtBase): void{
-        const {clonedTemplate} = self;
-        this.loadPlugins(self);
+    doInitTransform({clonedTemplate, noshadow}: this): void{
+        this.loadPlugins(this);
         transform(clonedTemplate as DocumentFragment, this.__ctx!);
         const propInfos = (self.constructor as any)['reactiveProps'] as {[key: string]: PropInfo};
         for(const refKey in propInfos){
@@ -29,11 +28,12 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
             }
 
         }
-        const root = self.noshadow ? self : self.shadowRoot!;
-        root.appendChild(self.clonedTemplate!);
-        delete self.clonedTemplate;
-
+        const root = noshadow ? this : this.shadowRoot!;
+        root.appendChild(clonedTemplate!);
+        this.clonedTemplate = undefined;
     }
+
+    doTemplMount(self: this, clonedTemplate: DocumentFragment){}
 
     doUpdateTransform(self: TemplMgmtBase){
         this.__ctx!.match = self.updateTransform;
