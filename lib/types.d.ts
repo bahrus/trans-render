@@ -108,9 +108,9 @@ export interface Transform<TMixinComposite = any> extends LogicOp<TMixinComposit
 
 export interface Action<MCProps = any> extends LogicOp<MCProps>{
     async?: boolean;
-    merge?: boolean;
     target?: keyof MCProps; 
     debug?: boolean;
+    setFree?: (keyof MCProps & string)[],
 }
 
 export type MatchRHS<TMixinComposite = any> = string;

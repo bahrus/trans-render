@@ -271,6 +271,12 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
     postHoc(self: this, action: Action, target: any, returnVal: any){
         Object.assign(target, returnVal);
+        const setFree = action.setFree;
+        if(setFree !== undefined){
+            for(const key of setFree){
+                target[key] = undefined;
+            }
+        }
     }
 
     pq(self: this, expr: LogicOp<any>, src: MCProps, ctx: LogicEvalContext = {op:'and'}): boolean{
