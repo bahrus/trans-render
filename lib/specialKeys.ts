@@ -31,6 +31,10 @@ export function getQuery(key: string){
                     query = attrib;
                     break;
                 }
+                case 'placeholders':{
+                    query = attrib + '-';
+                    break;
+                }
                 case 'props': {
                     query = `[-${attrib}]`;
                     break;

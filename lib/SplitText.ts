@@ -8,7 +8,8 @@ export class SplitText implements PMDo{
         const host = ctx.host as any;
         if(host === undefined) throw "No host";
         if(textNodes.length === 1){
-            ctx.target!.textContent = host[textNodes[0]];
+            const path = textNodes[0];
+            ctx.target!.textContent = path === '.' ? host : host[path];
         }else{
             ctx.target!.textContent = interpolate(textNodes, host);
         }
