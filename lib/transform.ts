@@ -40,9 +40,9 @@ function processFragment(
     source: DocumentFragment | Element,
     ctx: RenderContext
 ){
-    const transf = ctx.match;
-    if(transf === undefined) return;
-    const transforms = Array.isArray(transf) ? transf : [transf];
+    const {match} = ctx;
+    if(match === undefined) return;
+    const transforms = Array.isArray(match) ? match : [match];
     const isInit = ctx.mode === undefined;
     for(var transform of transforms){
         const start = {level: 0, idx: 0} as Partial<RenderContext>;
@@ -56,14 +56,15 @@ function processFragment(
     }
 }
 
-function processTarget(
+
+
+export function processTarget(
     ctx: RenderContext
 ){
-    const target = ctx.target;
-    const tr = ctx.match;
-    if(target == null || tr === undefined) return true;
+    const {target, match} = ctx;
+    if(target == null || match === undefined) return true;
     if(target.nodeType !== 11 && target.hasAttribute('debug')) debugger;
-    const keys = Object.keys(tr);
+    const keys = Object.keys(match);
     if(keys.length === 0) return true;
     for(const key of keys){
         const queryInfo = getQuery(key);
@@ -87,20 +88,20 @@ function processTarget(
                 }
             }       
         }
-        for(const match of matches){
+        for(const matchedElement of matches){
             const {val, target} = ctx;
             switch(queryInfo.type){
                 case 'attribs':
-                    ctx.val = match.getAttribute(queryInfo.attrib);
+                    ctx.val = matchedElement.getAttribute(queryInfo.attrib);
                     break;
                 case 'props':
-                    (<any>match)[lispToCamel(queryInfo.attrib)] = tr[key];
+                    (<any>matchedElement)[lispToCamel(queryInfo.attrib)] = match[key];
                     continue;
             }
 
-            ctx.target = match;
+            ctx.target = matchedElement;
             ctx.idx!++;
-            doRHS(ctx, tr[key]);
+            doRHS(ctx, match[key]);
             ctx.val = val;
             ctx.target = target;
         }
