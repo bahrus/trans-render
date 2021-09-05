@@ -56,9 +56,25 @@ function processFragment(
     }
 }
 
+export function processTargets(
+    ctx: RenderContext,
+    elements: Element[]
+){
+    const {match} = ctx;
+    
+    for(const key in match){
+        const queryInfo = getQuery(key);
+        const query = queryInfo.query;
+        let matches: Element[] = [];
+        for(const element of elements){
+            matches = [...matches, ...Array.from(element.querySelectorAll(query))];
+            if(element.matches(query)) matches.push(element);
+        }
+        doMatches(ctx, matches, queryInfo, match, key);
+    }
+}
 
-
-export function processTarget(
+function processTarget(
     ctx: RenderContext
 ){
     const {target, match} = ctx;
@@ -88,26 +104,27 @@ export function processTarget(
                 }
             }       
         }
-        for(const matchedElement of matches){
-            const {val, target} = ctx;
-            switch(queryInfo.type){
-                case 'attribs':
-                    ctx.val = matchedElement.getAttribute(queryInfo.attrib);
-                    break;
-                case 'props':
-                    (<any>matchedElement)[lispToCamel(queryInfo.attrib)] = match[key];
-                    continue;
-            }
-
-            ctx.target = matchedElement;
-            ctx.idx!++;
-            doRHS(ctx, match[key]);
-            ctx.val = val;
-            ctx.target = target;
+        doMatches(ctx, Array.from(matches), queryInfo, match, key);
+    }     
+}
+function doMatches(ctx: RenderContext, matches: Element[], queryInfo: any, match: any, key: string){
+    for(const matchedElement of matches){
+        const {val, target} = ctx;
+        switch(queryInfo.type){
+            case 'attribs':
+                ctx.val = matchedElement.getAttribute(queryInfo.attrib);
+                break;
+            case 'props':
+                (<any>matchedElement)[lispToCamel(queryInfo.attrib)] = match[key];
+                continue;
         }
-    }
-    
-    
+
+        ctx.target = matchedElement;
+        ctx.idx!++;
+        doRHS(ctx, match[key]);
+        ctx.val = val;
+        ctx.target = target;
+    }   
 }
 
 async function doRHS(ctx: RenderContext, rhs: any){
