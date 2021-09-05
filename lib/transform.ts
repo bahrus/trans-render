@@ -4,9 +4,9 @@ import { lispToCamel } from './lispToCamel.js';
 import { matchByType } from './matchByType.js';
 
 export function transform(
-    sourceOrTemplate: HTMLElement | DocumentFragment,
+    sourceOrTemplate: Element | DocumentFragment,
     ctx: RenderContext,
-    target: HTMLElement | DocumentFragment = sourceOrTemplate
+    target: Element | DocumentFragment = sourceOrTemplate
 ){
     ctx.ctx = ctx;
     ctx.transform = transform;
@@ -37,7 +37,7 @@ export function isTemplate(test: any | undefined){
 }
 
 function processFragment(  
-    source: DocumentFragment | HTMLElement | SVGElement,
+    source: DocumentFragment | Element,
     ctx: RenderContext
 ){
     const transf = ctx.match;

@@ -20,8 +20,8 @@ export interface RenderOptions{
     prepend?: boolean | undefined;
     useShadow?: boolean;
     cacheQueries?: boolean | undefined;
-    initializedCallback?: (ctx: RenderContext, target: HTMLElement | DocumentFragment, options?: RenderOptions) => RenderContext | void,
-    updatedCallback?: (ctx: RenderContext, target: HTMLElement | DocumentFragment, options?: RenderOptions) => RenderContext | void,
+    initializedCallback?: (ctx: RenderContext, target: Element | DocumentFragment, options?: RenderOptions) => RenderContext | void,
+    updatedCallback?: (ctx: RenderContext, target: Element | DocumentFragment, options?: RenderOptions) => RenderContext | void,
 }
 
 export interface postMatchProcessor {
