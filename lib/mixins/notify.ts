@@ -100,7 +100,7 @@ export interface INotifyPropInfo<TMixinComposite = any> extends PropInfo{ //yike
         echoTo?: keyof TMixinComposite,
         echoDelay?: number | (keyof TMixinComposite),
         toggleTo?: keyof TMixinComposite,
-        toggleToDelay?: number | (keyof TMixinComposite),
+        toggleDelay?: number | (keyof TMixinComposite),
         reflect?:{
             asAttr?:boolean;
         }
