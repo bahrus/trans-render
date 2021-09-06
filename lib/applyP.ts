@@ -22,7 +22,7 @@ export function applyP<T extends Partial<HTMLElement> = HTMLElement>(target: T, 
         }
         const dataset = props.dataset;
         if(dataset !== undefined){
-            if(dataset instanceof DOMStringMap){
+            if(typeof dataset === 'object'){
                 Object.assign(target.dataset, dataset);
                 delete safeProps.dataset;
             }else{
