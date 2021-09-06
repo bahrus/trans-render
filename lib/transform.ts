@@ -127,7 +127,7 @@ function doMatches(ctx: RenderContext, matches: Element[], queryInfo: any, match
     }   
 }
 
-async function doRHS(ctx: RenderContext, rhs: any){
+function doRHS(ctx: RenderContext, rhs: any){
     if(rhs === undefined) return;
     if(ctx.abort === true) return;
     while(typeof rhs === 'function') rhs = rhs(ctx);
