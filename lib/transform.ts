@@ -158,6 +158,7 @@ function doRHS(ctx: RenderContext, rhs: any){
                     const prevRHS = ctx.rhs;
                     ctx.rhs = rhs;
                     doRHS(ctx, psDO.do(ctx));
+                    ctx.rhs = prevRHS;
                 }
                 break;
 
