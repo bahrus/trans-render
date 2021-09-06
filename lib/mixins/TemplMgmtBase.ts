@@ -61,7 +61,7 @@ export const doInitTransform: Partial<{[key in keyof TemplMgmtActions]: Action<T
 
 export interface TemplMgmtProps{
     mainTemplate?: HTMLTemplateElement;
-    styles?: any[];
+    styles?: CSSStyleSheet[];
     clonedTemplate?: Node | undefined;
     initTransform?: any;
     updateTransform?: any;
