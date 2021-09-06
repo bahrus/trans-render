@@ -7,7 +7,10 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
     __ctx: RenderContext | undefined;
     cloneTemplate(self: TemplMgmtBase){
         if(self.shadowRoot === null && !self.noshadow){
-            self.attachShadow({mode: 'open'});
+            const root = self.attachShadow({mode: 'open'});
+            if(self.styles){
+                (<any>root).adoptedStyleSheets = self.styles;
+            }
         }
         
         self.clonedTemplate = self.mainTemplate!.content.cloneNode(true);
@@ -58,6 +61,7 @@ export const doInitTransform: Partial<{[key in keyof TemplMgmtActions]: Action<T
 
 export interface TemplMgmtProps{
     mainTemplate?: HTMLTemplateElement;
+    styles?: any[];
     clonedTemplate?: Node | undefined;
     initTransform?: any;
     updateTransform?: any;
