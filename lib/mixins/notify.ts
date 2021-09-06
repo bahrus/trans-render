@@ -6,7 +6,7 @@ export const NotifyMixin = (superclass: {new(): any}) => class extends superclas
         const aSelf = self as any;
         const notify = propChange.prop.notify;
         if(notify === undefined || (moment !== '+a' && moment != '+qr')) return;
-        const {dispatch, echoTo, toggleTo, echoDelay, reflect} = notify;
+        const {dispatch, echoTo, toggleTo, echoDelay, toggleDelay, reflect} = notify;
         const lispName = camelToLisp(propChange.key);
         if(dispatch){
             self.dispatchEvent(new CustomEvent(lispName + '-changed', {
@@ -18,7 +18,7 @@ export const NotifyMixin = (superclass: {new(): any}) => class extends superclas
         }
         if(echoTo !== undefined){
             if(echoDelay){
-                let echoDelayNum: number = typeof(echoDelay) === 'number' ? echoDelay : (<any>self)[echoDelay];
+                const echoDelayNum: number = typeof(echoDelay) === 'number' ? echoDelay : (<any>self)[echoDelay];
                 setTimeout(() => {
                     aSelf[echoTo] = propChange.nv;
                 }, echoDelayNum);
@@ -28,6 +28,14 @@ export const NotifyMixin = (superclass: {new(): any}) => class extends superclas
             
         }
         if(toggleTo !== undefined){
+            if(toggleDelay){
+                const toggleDelayNum: number = typeof(toggleDelay) === 'number' ? toggleDelay : (<any>self)[toggleDelay];
+                setTimeout(() => {
+                    aSelf[toggleTo] = !propChange.nv;
+                }, toggleDelayNum);
+            }else{
+                aSelf[toggleTo] = !propChange.nv;
+            }
             aSelf[toggleTo] = !propChange.nv;
         }
         if(reflect !== undefined){
@@ -92,6 +100,7 @@ export interface INotifyPropInfo<TMixinComposite = any> extends PropInfo{ //yike
         echoTo?: keyof TMixinComposite,
         echoDelay?: number | (keyof TMixinComposite),
         toggleTo?: keyof TMixinComposite,
+        toggleToDelay?: number | (keyof TMixinComposite),
         reflect?:{
             asAttr?:boolean;
         }
