@@ -36,7 +36,6 @@ export const NotifyMixin = (superclass: {new(): any}) => class extends superclas
             }else{
                 aSelf[toggleTo] = !propChange.nv;
             }
-            aSelf[toggleTo] = !propChange.nv;
         }
         if(reflect !== undefined){
             if(reflect.asAttr){
