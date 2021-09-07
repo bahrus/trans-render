@@ -10,12 +10,16 @@ export function applyPE<T extends Partial<HTMLElement> = HTMLElement>(host: Elem
             let eventHandler = eventSettings[key];
             if (eventHandler === undefined) throw "Missing " + key;
             if (Array.isArray(eventHandler)) {
-                const objSelectorPath = eventHandler[1].split('.');
+                const objSelector = eventHandler[1];
                 const converter = eventHandler[2];
                 const originalEventHandler = eventHandler[0].bind(host);
                 eventHandler = (e: Event) => {
-                    let val = getProp(e.target, objSelectorPath);
-                    if (converter !== undefined) val = converter(val);
+                    let val: any;
+                    if(objSelector !== undefined){
+                        const objSelectorPath = objSelector.split('.');
+                        val = getProp(e.target, objSelectorPath);
+                        if (converter !== undefined) val = converter(val);
+                    }  
                     originalEventHandler(host, val, e);
                 }
             } else {
