@@ -55,10 +55,17 @@ export type PEAUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PEU
 
 
 
-export interface TRElementMixin {
+export interface TRElementProps {
     propChangeQueue?: Set<string>;
-    attributeChangedCallback?(n: string, ov: string, nv: string): void;
     inReflectMode?: boolean;
+
+}
+
+export interface TRElementActions{
+    attachQR(): void;
+    detachQR(): void;
+    attributeChangedCallback?(n: string, ov: string, nv: string): void;
+    setValsQuietly(vals: this): void;
 }
 
 export interface DefineArgs<MixinCompositeProps = any, MixinCompositeActions = MixinCompositeProps, TPropInfo = PropInfo, TAction extends Action = Action<MixinCompositeProps>>{

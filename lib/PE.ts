@@ -21,7 +21,9 @@ export function modifyERHS(ctx: RenderContext, idx: number){
         let val = modifyVal(key, rhs, ctx);
         modifiedRHS[key] = val;
     }
-    ctx.rhs![idx] = modifiedRHS;
+    const newRHS = [...ctx.rhs];
+    newRHS[idx] = modifiedRHS;
+    ctx.rhs = newRHS;
     return modifiedRHS;
 }
 

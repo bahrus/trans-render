@@ -1,5 +1,5 @@
-import { DefineArgs, LogicOp, LogicEvalContext, LogicOpProp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementMixin, PropChangeMethod } from './types.js';
-export { Action, PropInfo} from './types.js';
+import { DefineArgs, LogicOp, LogicEvalContext, LogicOpProp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementProps, PropChangeMethod, TRElementActions } from './types.js';
+export { Action, PropInfo, TRElementActions, TRElementProps} from './types.js';
 
 export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction extends Action<MCProps> = Action<MCProps>>{
 
@@ -107,7 +107,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         return props;
     }
 
-    classDef: {new(): MCProps & MCActions & TRElementMixin & HTMLElement} | undefined;
+    classDef: {new(): MCProps & MCActions & TRElementProps & HTMLElement} | undefined;
     mergedActions: Partial<{[key in keyof MCActions]: TAction}> | undefined;
     def(args: DefineArgs<MCProps, MCActions, TPropInfo, TAction>): {new(): MCProps & MCActions}{
         this.args = args;
@@ -148,7 +148,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
 
 
-        class newClass extends ext{
+        class newClass extends ext implements TRElementProps, TRElementActions{
 
             static is = tagName;
             static observedAttributes = getAttributeNames(propInfos, toLisp, ext);
@@ -236,11 +236,11 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
         }
 
-        interface newClass extends TRElementMixin{};
+        interface newClass extends TRElementProps{};
 
         this.addProps(newClass as any as {new(): HTMLElement}, propInfos, args);
         fine(tagName, newClass as any as ({new(): HTMLElement}));
-        this.classDef = newClass as any as {new(): MCProps & MCActions & TRElementMixin & HTMLElement};
+        this.classDef = newClass as any as {new(): MCProps & MCActions & TRElementProps & HTMLElement};
         return this.classDef;
     }
 
