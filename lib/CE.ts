@@ -228,7 +228,11 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                 doActions(self, actionsToDo, this, propChangeQueue);
                 delete this.propChangeQueue;
             }
-
+            setValsQuietly(vals: this){
+                for(const key in vals){
+                    (<any>this)['_' + key] = vals[key];
+                }
+            }
 
         }
 
