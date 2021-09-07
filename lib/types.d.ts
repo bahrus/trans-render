@@ -144,6 +144,6 @@ export interface PropChangeInfo<TPropInfo = PropInfo> {
     pcm: PropChangeMethod | undefined;
 }
 
-export type PropChangeMoment = 'v' | '-a' | '+a' | '+qr';
+export type PropChangeMoment = 'v' | '-a' | '+a' | '+qr' | '+qm';
 
 export type PropChangeMethod = (self: EventTarget, pci: PropChangeInfo, moment: PropChangeMoment) => boolean;

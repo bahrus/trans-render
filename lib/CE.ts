@@ -36,7 +36,9 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                     const pci: PropChangeInfo = {key, ov, nv, prop, pcm};
                     if(!doPA(self, this, pci, 'v')) return;
                     this[privateKey] = nv;
-
+                    if(this.isInQuietMode){
+                        doPA(self, this, pci, '+qm');
+                    }
                     if(this.QR){
                         this.QR(key, this);
                         doPA(self, this, pci, '+qr');
@@ -162,7 +164,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                 if(super.attributeChangedCallback) super.attributeChangedCallback(n, ov, nv);
                 let propName = toCamel(n);
                 const prop = propInfos[propName];
-                if(this.inReflectMode) propName = '_' + propName;
+                if(this.inAbsorbMode || this.inReflectMode) propName = '_' + propName;
                 if(prop !== undefined){
                     if(prop.dry && ov === nv) return;
                     const aThis = this as any;
@@ -232,6 +234,9 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                 for(const key in vals){
                     (<any>this)['_' + key] = vals[key];
                 }
+            }
+            get inAbsorbMode(){
+                return this.hasAttribute('defer-hydration');
             }
 
         }
