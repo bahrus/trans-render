@@ -51,7 +51,26 @@ export function modifyVal(key: string, rhs: any, ctx: RenderContext){
                 }
                 return newVal;
             }else{
-                throw "NI"; //Not implemented
+                for(const subKey in val){
+                    const subVal = val[subKey];
+                    if(Array.isArray(subVal)){
+                        throw 'NI';
+                        // const newVal = [];
+                        // let idx = 0;
+                        // for(const part of val){
+                        //     let newPart = part;
+                        //     switch(idx){
+                        //         case 0:
+                        //         case 2:
+                        //             newPart = gFn(host, part);
+                        //             break;
+                        //     }
+                        //     newVal.push(newPart);
+                        //     idx++;
+                        // }
+                        // val[subKey] = newVal;                    
+                    }
+                }
             }
         
     }
