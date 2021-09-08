@@ -12,7 +12,9 @@ export function applyPE<T extends Partial<HTMLElement> = HTMLElement>(host: Elem
             if (Array.isArray(eventHandler)) {
                 const objSelector = eventHandler[1];
                 const converter = eventHandler[2];
-                const originalEventHandler = eventHandler[0].bind(host);
+                let handler = eventHandler[0];
+                if(typeof(handler) === 'string') handler = (<any>host)[handler] as Function;
+                const originalEventHandler = handler.bind(host); //do we need bind?
                 eventHandler = (e: Event) => {
                     let val: any;
                     if(objSelector !== undefined){
