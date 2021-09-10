@@ -5,16 +5,32 @@ export { transform } from '../transform.js';
 
 export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => class extends superclass{
     __ctx: RenderContext | undefined;
-    cloneTemplate(self: TemplMgmtBase){
-        if(self.shadowRoot === null && !self.noshadow){
-            const root = self.attachShadow({mode: 'open'});
-            if(self.styles){
-                (<any>root).adoptedStyleSheets = self.styles;
+    #repeatVisit = false;
+    cloneTemplate({noshadow, shadowRoot, mainTemplate, styles}: TemplMgmtBase){
+        let root = this as any;
+        if(!noshadow){
+            if(shadowRoot === null){
+                root = this.attachShadow({mode: 'open'});
+                if(styles !== undefined){
+                    (<any>root).adoptedStyleSheets = styles;
+                }
+            }else{
+                root = this.shadowRoot;
+                if(!this.#repeatVisit){
+                    //assume the shadow root came from declarative shadow dom, so no need to clone template
+                    if(styles !== undefined){
+                        //controversial!
+                        (<any>root).adoptedStyleSheets = styles;
+                    }                    
+                    this.clonedTemplate = root;
+                    this.#repeatVisit = true;
+                    return;
+                } 
             }
+
         }
-        
-        self.clonedTemplate = self.mainTemplate!.content.cloneNode(true);
-        
+        this.clonedTemplate = mainTemplate!.content.cloneNode(true);
+        this.#repeatVisit = true;
     }
 
     loadPlugins(self: this): void {}
