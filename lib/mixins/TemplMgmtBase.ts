@@ -6,6 +6,7 @@ export { transform } from '../transform.js';
 export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => class extends superclass{
     __ctx: RenderContext | undefined;
     #repeatVisit = false;
+    #isDSD = false;
     cloneTemplate({noshadow, shadowRoot, mainTemplate, styles}: TemplMgmtBase){
         let root = this as any;
         if(!noshadow){
@@ -21,13 +22,17 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
                     if(styles !== undefined){
                         //controversial!
                         (<any>root).adoptedStyleSheets = styles;
-                    }                    
+                    }
+                    this.#isDSD = true;                    
                     this.clonedTemplate = root;
                     this.#repeatVisit = true;
                     return;
                 } 
             }
 
+        }
+        if(this.#repeatVisit){
+            root.innerHTML = '';
         }
         this.clonedTemplate = mainTemplate!.content.cloneNode(true);
         this.#repeatVisit = true;
@@ -49,7 +54,11 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
 
         }
         const root = noshadow ? this : this.shadowRoot!;
-        root.appendChild(clonedTemplate!);
+        if(!this.#isDSD){
+            root.appendChild(clonedTemplate!);
+        }else{
+            this.#isDSD = false;
+        }
         this.clonedTemplate = undefined;
     }
 
