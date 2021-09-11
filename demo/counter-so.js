@@ -32,7 +32,7 @@ const mainTemplate = tm.html `
                 buttonElements: [{}, { click: ['changeCount', 'dataset.d', 'parseInt'] }]
             },
             updateTransform: {
-                "countParts": ["count"]
+                "countParts": "count"
             },
             count: 30,
             renderOptions: {

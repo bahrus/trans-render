@@ -3,30 +3,32 @@ import {getProp} from './getProp.js';
 
 
 export class SplitText implements PMDo{
-    do(ctx: RenderContext){
-        const textNodes = ctx.rhs as string[];
-        const host = ctx.host as any;
+    do({host, ctx, rhs}: RenderContext){
+        const textNodes =  typeof rhs === 'string' ? [rhs] : rhs as string[];
+        //const host = ctx.host as any;
         if(host === undefined) throw "No host";
         if(textNodes.length === 1){
             const path = textNodes[0];
-            ctx.target!.textContent = path === '.' ? host : getVal(host, path);
+            ctx!.target!.textContent = path === '.' ? host as any : getVal(host, path);
         }else{
-            ctx.target!.textContent = interpolate(textNodes, host);
+            ctx!.target!.textContent = interpolate(textNodes, host);
         }
         
     }
 }
 
-function getVal(host:any, path: string): string{
+export function getVal(host:any, path: string): string{
+    if(path[0] !== '.') return host[path];
+    path = path.substr(1);
     const qSplit = path.split('??');
     const deflt = qSplit[1];
     const dSplit = qSplit[0].split('.');
     let val = getProp(host, dSplit);
     if(val === undefined && deflt){
-        if(deflt[0] === "'"){
-            return deflt.substr(1, deflt.length - 1);
-        }else{
+        if(deflt[0] === "."){
             return getVal(host, deflt);
+        }else{
+            return deflt;
         }
     }
     return val;

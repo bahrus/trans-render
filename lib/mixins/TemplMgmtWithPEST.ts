@@ -22,6 +22,10 @@ const TemplMgmtMixin = (superclass: any) => class TemplMgmt extends TemplMgmtBas
                     rhsType: Array,
                     rhsHeadType: String,
                     ctor: SplitText
+                },
+                {
+                    rhsType: String,
+                    ctor: SplitText,
                 }
             ],
             options: self.renderOptions,

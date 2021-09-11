@@ -1,5 +1,5 @@
 import {PMDo, RenderContext, PSettings} from './types.d.js';
-import {interpolate} from './SplitText.js';
+import {interpolate, getVal} from './SplitText.js';
 import {applyP} from './applyP.js';
 export class P implements PMDo{
     do(ctx: RenderContext){
@@ -23,25 +23,16 @@ export function modifyPRHS(ctx: RenderContext, idx: number){
 }
 
 export function modifyVal(key: string, rhs: any, ctx: RenderContext){
-    let val = rhs[key];
+    let path = rhs[key];
     const host = ctx.host! as any;
-    if(host === undefined) return val;
-    switch(typeof val){
+    if(host === undefined) return path;
+    switch(typeof path){
         case 'string':
-            return val;
+            return getVal(host, path);
+            return path;
         case 'object':
-            if(Array.isArray(val)){
-                const innerVal = val[0];
-                if(typeof innerVal !== 'string'){
-                    return val;
-                }
-                if(val.length === 1){
-                    return host[innerVal];
-                }else{
-                    return interpolate(val, host);
-                }
-
-
+            if(Array.isArray(path)){
+                return interpolate(path, host);
             }else{
                 throw "NI"; //Not implemented
             }
