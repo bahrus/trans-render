@@ -4,18 +4,16 @@ import {getProp} from './getProp.js';
 
 export class SplitText implements PMDo{
     do({host, target, rhs}: RenderContext){
+        if(rhs === '.') {
+            target!.textContent = host as any as string;
+        }
         const textNodes =  typeof rhs === 'string' ? [rhs] : rhs as string[];
         //const host = ctx.host as any;
         if(host === undefined) {
             target!.textContent = textNodes[0];
             return;
         }
-        if(textNodes.length === 1){
-            const path = textNodes[0];
-            target!.textContent = path === '.' ? host as any : getVal(host, path);
-        }else{
-            target!.textContent = interpolate(textNodes, host);
-        }
+        target!.textContent = interpolate(textNodes, host);
         
     }
 }
