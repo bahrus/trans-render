@@ -30,6 +30,7 @@ const TemplMgmtMixin = (superclass: any) => class TemplMgmt extends TemplMgmtBas
             ],
             options: self.renderOptions,
         };
+        self.__ctx.ctx = self.__ctx;
     }
 }
 
