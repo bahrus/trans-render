@@ -186,7 +186,9 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                                 if(val!==null && ['[', '{'].includes(val[0])){
                                     try{
                                         val = JSON.parse(val);
-                                    }catch(e){}
+                                    }catch(e){
+                                        console.error(e);
+                                    }
                                 }
                                 aThis[propName] = val;  
                             }
