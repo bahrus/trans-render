@@ -22,10 +22,11 @@ export function getVal(host:any, path: string): string{
     if(path[0] !== '.') return host[path];
     path = path.substr(1);
     const qSplit = path.split('??');
-    const deflt = qSplit[1];
-    const dSplit = qSplit[0].split('.');
+    let deflt = qSplit[1];
+    const dSplit = qSplit[0].trim().split('.');
     let val = getProp(host, dSplit);
     if(val === undefined && deflt){
+        deflt = deflt.trim();
         if(deflt[0] === "."){
             return getVal(host, deflt);
         }else{
