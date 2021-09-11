@@ -6,7 +6,10 @@ export class SplitText implements PMDo{
     do({host, target, rhs}: RenderContext){
         const textNodes =  typeof rhs === 'string' ? [rhs] : rhs as string[];
         //const host = ctx.host as any;
-        if(host === undefined) throw "No host";
+        if(host === undefined) {
+            target!.textContent = textNodes[0];
+            return;
+        }
         if(textNodes.length === 1){
             const path = textNodes[0];
             target!.textContent = path === '.' ? host as any : getVal(host, path);
