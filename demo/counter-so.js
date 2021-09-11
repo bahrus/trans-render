@@ -47,9 +47,12 @@ const mainTemplate = tm.html `
                 isRef: true,
             }
         },
-        actions: Object.assign(Object.assign({}, tm.doInitTransform), { doUpdateTransform: {
+        actions: {
+            ...tm.doInitTransform,
+            doUpdateTransform: {
                 ifKeyIn: ['count', 'updateTransform']
-            } }),
+            }
+        },
         propChangeMethod: 'onPropChange',
     },
     //This is where non serializable stuff goes

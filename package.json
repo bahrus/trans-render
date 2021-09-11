@@ -46,7 +46,8 @@
     "lib/*"
   ],
   "devDependencies": {
-    "xtal-test": "0.0.51"
+    "xtal-test": "0.0.51",
+    "terser": "5.7.2"
   },
   "repository": {
     "type": "git",
