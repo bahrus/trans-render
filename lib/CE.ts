@@ -18,7 +18,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         const self = this;
         const proto = newClass.prototype;
         const config = args.config;
-        const actions = this.mergedActions;
+        //const actions = this.mergedActions;
         for(const key in props){
             const prop = props[key];
             const privateKey = '_' + key;
@@ -47,7 +47,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                         if(!doPA(self, this, pci, '-a')) return; //-a = pre actions
                     }
                     
-
+                    const actions = this.mergedActions;
                     if(actions !== undefined){
                         const filteredActions: any = {};
                         for(const methodName in actions){
@@ -110,29 +110,29 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
     }
 
     classDef: {new(): MCProps & MCActions & TRElementProps & HTMLElement} | undefined;
-    mergedActions: Partial<{[key in keyof MCActions]: TAction}> | undefined;
+    //mergedActions: Partial<{[key in keyof MCActions]: TAction}> | undefined;
     def(args: DefineArgs<MCProps, MCActions, TPropInfo, TAction>): {new(): MCProps & MCActions}{
         this.args = args;
         const {getAttrNames: getAttributeNames, doActions, fine, pq, toCamel, toLisp, propUp, getProps} = this;
         const self = this;
         const {config} = args;
         const {tagName, style, actions} = config;
-        const inheritedActions = actions ? [actions] : [];
-        let sc = args.superclass as any;
-        while(sc && sc.ceDef){
-            const inheritedA = sc.ceDef.config.actions;
-            if(inheritedA){
-                inheritedActions.push(inheritedA);
-            }
-            sc = sc.superclass;
-        }
-        const mergedActions: Partial<{[key in keyof MCActions]: TAction}> = {};
-        let poppedAction = inheritedActions.pop();
-        while(poppedAction !== undefined){
-            Object.assign(mergedActions, poppedAction);
-            poppedAction = inheritedActions.pop();
-        }
-        this.mergedActions = mergedActions;
+        // const inheritedActions = actions ? [actions] : [];
+        // let sc = args.superclass as any;
+        // while(sc && sc.ceDef){
+        //     const inheritedA = sc.ceDef.config.actions;
+        //     if(inheritedA){
+        //         inheritedActions.push(inheritedA);
+        //     }
+        //     sc = sc.superclass;
+        // }
+        // const mergedActions: Partial<{[key in keyof MCActions]: TAction}> = {};
+        // let poppedAction = inheritedActions.pop();
+        // while(poppedAction !== undefined){
+        //     Object.assign(mergedActions, poppedAction);
+        //     poppedAction = inheritedActions.pop();
+        // }
+        // this.mergedActions = mergedActions;
         const propInfos  = this.createPropInfos(args);
         let ext = args.superclass || HTMLElement;
         const proto = ext.prototype;
@@ -159,6 +159,14 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             constructor(){
                 super();
                 this.attachQR();
+            }
+            #mergedActions: Partial<{[key in keyof MCActions]: TAction}> | undefined;
+            get mergedActions(){
+                if(this.#mergedActions === undefined){
+                    this.#mergedActions = super.mergedActions || {};
+                    Object.assign(this.#mergedActions, config.actions);
+                }
+                return this.#mergedActions!;
             }
             attributeChangedCallback(n: string, ov: string, nv: string){
                 if(super.attributeChangedCallback) super.attributeChangedCallback(n, ov, nv);
@@ -207,7 +215,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             detachQR(){
                 delete this.QR;
                 const propChangeQueue = this.propChangeQueue as Set<string> | undefined;
-                const acts = mergedActions;
+                const acts = this.mergedActions;
                 //const actionsToDo = new Set<Action>();
                 const actionsToDo: any = {};
                 if(propChangeQueue !== undefined && acts !== undefined){
