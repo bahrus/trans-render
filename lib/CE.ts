@@ -187,7 +187,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                                     try{
                                         val = JSON.parse(val);
                                     }catch(e){
-                                        console.error(e);
+                                        console.error({val, e});
                                     }
                                 }
                                 aThis[propName] = val;  
