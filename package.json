@@ -9,7 +9,8 @@
     "test": "node test/tests.js",
     "serve": "node node_modules/xtal-test/serve.js",
     "doc": "wca analyze trans-render.js --outFile custom-elements.json",
-    "package-check": "package-check"
+    "package-check": "package-check",
+    "compress": "terser lib/CE.js -o dist/CE.min.js -c -m "
   },
   "exports": {
     ".": "./lib/CE.js",
