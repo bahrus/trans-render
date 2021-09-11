@@ -6,19 +6,20 @@ export class SplitText implements PMDo{
     do({host, target, rhs}: RenderContext){
         if(rhs === '.') {
             target!.textContent = host as any as string;
-        }
-        const textNodes =  typeof rhs === 'string' ? [rhs] : rhs as string[];
-        //const host = ctx.host as any;
-        if(host === undefined) {
-            target!.textContent = textNodes[0];
             return;
         }
-        target!.textContent = interpolate(textNodes, host);
+        if(typeof rhs === 'string'){
+            target!.textContent = getVal(host, rhs);
+            return;
+        }
+
+        target!.textContent = interpolate(rhs, host);
         
     }
 }
 
 export function getVal(host:any, path: string): string{
+    if(host === undefined) return path;
     if(path[0] !== '.') return host[path];
     path = path.substr(1);
     const qSplit = path.split('??');
