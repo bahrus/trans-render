@@ -85,22 +85,34 @@ function processTarget(
     for(const key of keys){
         const queryInfo = getQuery(key);
         let matches: NodeListOf<Element> | undefined;
-        let qcLookup: {[key: string]: NodeListOf<Element>} | undefined;
+        
         const qc = ctx.queryCache;
-        const query = queryInfo.query;
+        
         if(qc !== undefined){
-            if(qc.has(target)){
-                qcLookup = qc.get(target)!;
-                matches = qcLookup[query];
+            if(qc instanceof WeakMap){
+                let qcLookup: {[key: string]: NodeListOf<Element>} | undefined;
+                if(qc.has(target)){
+                    qcLookup = qc.get(target)!;
+                    matches = qcLookup[key];
+                }
+            }else{
+                matches = qc[key]
             }
         }
         if(matches === undefined){
+            
+            const query = queryInfo.query;
             matches = target.querySelectorAll(query);
             if(qc !== undefined){
-                if(qcLookup !== undefined){
-                    qcLookup[query] = matches;
+                if(qc instanceof WeakMap){
+                    let qcLookup: {[key: string]: NodeListOf<Element>} | undefined;
+                    if(qc.has(target)){
+                        qc.get(target)![key] = matches;
+                    }else{
+                        qc.set(target, {[key]: matches});
+                    }
                 }else{
-                    qc.set(target, {[query]: matches});
+                    qc[key] = matches;
                 }
             }       
         }

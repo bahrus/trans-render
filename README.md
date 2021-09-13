@@ -12,9 +12,9 @@
 
 *trans-rendering* (TR) describes a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, TR performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, TR uses css path tests via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
 
-A subset of TR, also described below, is "declarative trans-rendering" [DTR], which is pure, 100% declarative syntax.  
+A subset of TR, also described below, is "declarative trans-render" syntax [DTR], which is pure, 100% declarative syntax.  
 
-It's designed to provide an alternative to the proposed [Template Instantiation proposal](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with the idea being that it could continue to supplement what that proposal includes if/when it lands in browsers.
+DTR is designed to provide an alternative to the proposed [Template Instantiation proposal](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), with the idea being that DTR could continue to supplement what that proposal includes if/when template instantiation support lands in browsers.
 
 XSLT can take pure XML with no formatting instructions as its input.  Generally speaking, the XML that XSLT acts on isn't a bunch of semantically  meaningless div tags, but rather a nice semantic document, whose intrinsic structure is enough to go on, in order to formulate a "transform" that doesn't feel like a hack.
 
@@ -30,9 +30,9 @@ This package contains two core libraries.
 
 The first, lib/transform.js, is a tiny (1.2k gzip/minified), 'non-committal' library that simply allows us to map css matches to user-defined functions. 
 
-In addition, this package contains a fairly primitive library for defining custom elements, lib/define.js, which can be combined with lib/transform.js via lib/TemplMgmt*.js.
+In addition, this package contains a fairly primitive library for defining custom elements, lib/CE.js, which can be combined with lib/transform.js via lib/TemplMgmt*.js.
 
-The package xtal-element builds on this package, and the documentation on defining custom elements, with trans-rendering in mind, is documented there [TODO].
+The package xtal-element builds on this package, and the documentation on defining custom elements, with trans-rendering in mind, is documented there [WIP].
 
 So the rest of this document will focus on the trans-rendering aspect, leaving the documentation for xtal-element to fill in the missing details regarding how lib/define.js works.
 
@@ -431,7 +431,7 @@ Since trans-render is built around css matching, it doesn't provide much help wh
 The examples so far have relied heavily on arrow functions.  As we've seen, it provides support for 100% no-holds-barred non-declarative code:
 
 ```TypeScript
-const matches = { //TODO check that this works
+const matches = { //TODO: check that this works
     details:{
         summary: ({target}: RenderContext<HTMLSummaryElement>) => {
             ///knock yourself out
@@ -441,7 +441,7 @@ const matches = { //TODO check that this works
 }
 ```
 
-These arrow functions can return a value.  trans-render's "postMatch" processors allows us to enhance what any custom function does, via some reusable (formally user-registered) processors.  If one of these reusable processors is sufficient for the task at hand, then the arrow function can be replaced by a JSON-like expression, allowing the reusable processor to do its thing, after being passed the context.  trans-render provides a few "standard" processors, which address common concerns.
+These arrow functions can return a value.  trans-render's "postMatch" processors allow us to enhance what any custom function does, via some reusable (formally user-registered) processors.  If one of these reusable processors is sufficient for the task at hand, then the arrow function can be replaced by a JSON-like expression, allowing the reusable processor to do its thing, after being passed the context.  trans-render provides a few "standard" processors, which address common concerns.
 
 The first common concern is setting the textContent of an element.
 
