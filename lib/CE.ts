@@ -270,7 +270,11 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
     }
 
     fine(tagName: string, newClass: {new(): HTMLElement}){
-        customElements.define(tagName, newClass);
+        try{
+            customElements.define(tagName, newClass);
+        }catch(e){
+            console.warn(e);
+        }
     }
 
     getAttrNames(props: {[key: string]: PropInfo}, toLisp: (s: string) => string, ext: any){
