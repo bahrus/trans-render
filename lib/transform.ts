@@ -103,7 +103,7 @@ function processTarget(
                 matches = qc[key]
             }
         }
-        if(matches === undefined){
+        if(matches === undefined || !(matches instanceof NodeList)){
             
             const query = queryInfo.query;
             matches = target.querySelectorAll(query);
