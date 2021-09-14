@@ -29,13 +29,13 @@ export function modifyVal(key: string, rhs: any, ctx: RenderContext){
     switch(typeof path){
         case 'string':
             return getVal(host, path);
-            return path;
         case 'object':
             if(Array.isArray(path)){
                 return interpolate(path, host);
             }else{
                 throw "NI"; //Not implemented
             }
-        
+        default:
+            return path;
     }
 }
