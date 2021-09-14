@@ -66,6 +66,7 @@ export function processTargets(
         const queryInfo = getQuery(key);
         const query = queryInfo.query;
         let matches: Element[] = [];
+        //TODO:  use cache?
         for(const element of elements){
             matches = [...matches, ...Array.from(element.querySelectorAll(query))];
             if(element.matches(query)) matches.push(element);
@@ -85,7 +86,10 @@ function processTarget(
     for(const key of keys){
         const queryInfo = getQuery(key);
         let matches: NodeListOf<Element> | undefined;
-        
+        if(ctx.host !== undefined && key === ':host'){
+            doMatches(ctx, [ctx.host], queryInfo, match, key);
+            continue;
+        }
         const qc = ctx.queryCache;
         
         if(qc !== undefined){
