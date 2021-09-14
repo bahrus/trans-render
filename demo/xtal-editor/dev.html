@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="dev.html" method="POST">
+        <xtal-editor key=abc id=editor>
+            <textarea name=jsonField slot="initVal">
+                {
+                    "string":"foo",
+                    "number":5,
+                    "array":[1,2,3],
+                    "object":{
+                        "property":"value",
+                        "subobj":{
+                            "arr":["foo","ha"],
+                            "numero":1
+                        }
+                    }
+                }
+            </textarea>
+        </xtal-editor>
+        <button type="submit">submit</button>
+    </form>
+
+    <div id=target></div>
+
+    <button onclick=moveTarget()>Move target</button>
+
+    <script>
+        function moveTarget(){
+            target.appendChild(editor);
+        }
+    </script>
+
+    <script type=importmap>
+        {
+            "imports": {
+                "xtal-element/": "../../node_modules/xtal-element/",
+                "trans-render/": "../../",
+                "ib-id/": "../../node_modules/ib-id/",
+                "on-to-me/": "../../node_modules/on-to-me/",
+                "tran-sister/": "../../node_modules/tran-sister/",
+                "pass-down/": "../../node_modules/pass-down/",
+                "pass-up/": "../../node_modules/pass-up/",
+                "pass-prop/": "../../node_modules/pass-prop/",
+                "plus-equals/": "../../node_modules/plus-equals/",
+                "pass-message/": "../../node_modules/pass-message/",
+                "xtal-editor/": "../../node_modules/xtal-editor/"
+            }
+        }
+    </script>
+    <script type=module>
+        import 'xtal-editor/src/xtal-editor.js';
+    </script>
+</body>
+</html>

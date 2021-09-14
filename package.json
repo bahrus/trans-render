@@ -48,6 +48,7 @@
   ],
   "devDependencies": {
     "xtal-test": "0.0.51",
+    "xtal-editor": "0.0.50",
     "terser": "5.7.2"
   },
   "repository": {
