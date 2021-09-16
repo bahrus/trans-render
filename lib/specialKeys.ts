@@ -1,6 +1,7 @@
 import { camelToLisp } from "./camelToLisp.js";
 
 export const attribs = ['parts', 'classes', 'attribs', 'elements', 'props'];
+const attribsUC = attribs.map(s => s[0].toUpperCase() + s.substr(1));
 
 export interface queryInfo{
     query: string;
@@ -10,8 +11,9 @@ export interface queryInfo{
 
 export function getQuery(key: string){
     const lpKey = camelToLisp(key);
+    let idx = 0;
     for(const type of attribs){
-        if(lpKey.endsWith(type)){
+        if(key.endsWith(attribsUC[idx])){
             const attrib = lpKey.substr(0, lpKey.length - type.length - 1);
             let query: string | undefined;
             switch(type){
@@ -44,6 +46,7 @@ export function getQuery(key: string){
                 return {query, type, attrib};
             }           
         }
+        idx++;
     }
     return {
         query: key
