@@ -137,6 +137,7 @@ function doMatches(ctx: RenderContext, matches: Element[], queryInfo: any, match
 
         ctx.target = matchedElement;
         ctx.idx!++;
+        ctx.key = key;
         doRHS(ctx, match[key]);
         ctx.val = val;
         ctx.target = target;

@@ -17,9 +17,9 @@ export interface RenderContext<T = Element, TItem = any> {
 }
 
 export interface RenderOptions{
-    prepend?: boolean | undefined;
     useShadow?: boolean;
     cacheQueries?: boolean | undefined;
+    prepend?: boolean | undefined;
     initializedCallback?: (ctx: RenderContext, target: Element | DocumentFragment, options?: RenderOptions) => RenderContext | void,
     updatedCallback?: (ctx: RenderContext, target: Element | DocumentFragment, options?: RenderOptions) => RenderContext | void,
 }
