@@ -31,6 +31,7 @@ export function applyP<T extends Partial<HTMLElement> = HTMLElement>(target: T, 
         }
         for(const prop of renameProps){
             const val = safeProps[prop];
+            if(val===undefined) continue;
             delete safeProps[prop];
             safeProps['_' + prop] = val;
         }
