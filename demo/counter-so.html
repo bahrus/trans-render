@@ -7,7 +7,10 @@
     <title>Document</title>
 </head>
 <body>
-    <counter-so count=20></counter-so>
+    <counter-so id=cso></counter-so>
+    <script>
+        cso.count = 13;
+    </script>
     <script type=importmap>{
         "imports":{
             "xtal-element/": "../node_modules/xtal-element/",
@@ -15,7 +18,7 @@
         }
     }</script>
     <script type=module>
-        import './counter-so.js';
+        import './counter-so2.js';
     </script>
 </body>
 </html>
