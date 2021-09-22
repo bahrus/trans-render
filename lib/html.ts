@@ -9,6 +9,6 @@ export function html(strings: TemplateStringsArray, ...keys: string[]) {
         }
       }
     const templateEl = document.createElement('template');
-    templateEl.innerHTML = strings.join('');
+    templateEl.innerHTML = out.join('');
     return templateEl;
 }
