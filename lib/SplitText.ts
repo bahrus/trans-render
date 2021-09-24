@@ -1,6 +1,6 @@
 import {PMDo, RenderContext} from './types.js';
 import {getProp} from './getProp.js';
-
+import {lispToCamel} from './lispToCamel.js';
 
 export class SplitText implements PMDo{
     do({host, target, rhs, key, ctx}: RenderContext){
@@ -28,11 +28,8 @@ export class SplitText implements PMDo{
         if (key[iPos + 1] !== '-')
             return;
         key = key.substring(iPos + 2, key.length - 1);
-        return key;
+        return lispToCamel(key);
     }
-
-
-
 
 }
 
