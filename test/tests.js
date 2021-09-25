@@ -1,6 +1,10 @@
 const xt = require('xtal-test/index');
 (async () => {
     const passed = await xt.runTests([
+        {
+            path: 'test/xtal-editor/dev.html',
+            expectedNoOfSuccessMarkers: 1
+        }
         // {
         //     path: 'test/fly-init.html',
         //     expectedNoOfSuccessMarkers: 6,
