@@ -14,7 +14,7 @@ export function transform(
     const source = isATemplate
         ? (sourceOrTemplate as HTMLTemplateElement).content.cloneNode(true) as DocumentFragment
         : sourceOrTemplate;
-    if(ctx.options?.cacheQueries){
+    if(ctx.options?.cacheQueries || ctx.host){
         if(ctx.queryCache === undefined) ctx.queryCache = new WeakMap<HTMLElement, {[key: string]: NodeListOf<Element>}>();
     }
     processFragment(source, ctx);
@@ -108,15 +108,11 @@ function processTarget(
             const query = queryInfo.query;
             matches = target.querySelectorAll(query);
             if(qc !== undefined){
-                if(qc instanceof WeakMap){
-                    let qcLookup: {[key: string]: NodeListOf<Element>} | undefined;
-                    if(qc.has(target)){
-                        qc.get(target)![key] = matches;
-                    }else{
-                        qc.set(target, {[key]: matches});
-                    }
+                let qcLookup: {[key: string]: NodeListOf<Element>} | undefined;
+                if(qc.has(target)){
+                    qc.get(target)![key] = matches;
                 }else{
-                    qc[key] = matches;
+                    qc.set(target, {[key]: matches});
                 }
             }       
         }

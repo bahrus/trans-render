@@ -12,7 +12,6 @@ const TemplMgmtMixin = (superclass: any) => class TemplMgmt extends TemplMgmtBas
         self.__ctx = {
             match: self.initTransform,
             host: self,
-            queryCache: self as any as {[key: string]: NodeListOf<Element>},
             postMatch: [
                 {
                     rhsType: Array,
