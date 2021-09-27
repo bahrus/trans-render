@@ -33,7 +33,7 @@ export function modifyVal(key: string, rhs: any, ctx: RenderContext){
             if(Array.isArray(path)){
                 return interpolate(path, host);
             }else{
-                throw "NI"; //Not implemented
+                return path; //Not implemented
             }
         default:
             return path;
