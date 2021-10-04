@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.414",
+  "version": "0.0.415",
   "description": "Instantiate an HTML Template",
   "main": "lib/CE.js",
   "module": "lib/CE.js",
@@ -28,7 +28,7 @@
     "./lib/lispToCamel.js": "./lib/lispToCamel.js",
     "./lib/mergeDeep.js": "./lib/mergeDeep.js",
     "./lib/NestedTransform.js": "./lib/NestedTransform.js",
-    "./lib/onRemove.js":"./lib/onRemove.js",
+    "./lib/onRemove.js": "./lib/onRemove.js",
     "./lib/P.js": "./lib/P.js",
     "./lib/PE.js": "./lib/PE.js",
     "./lib/PEA.js": "./lib/PEA.js",
