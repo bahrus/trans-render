@@ -5,7 +5,7 @@ export function onRemove(element: Element, callback: Function) {
         mutations.forEach(mutation =>{
             mutation.removedNodes.forEach(removed =>{
                 if(element === removed){
-                    callback();
+                    callback(removed);
                     observer.disconnect();
                 }
             })
