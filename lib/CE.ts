@@ -183,7 +183,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                         case 'Object':
                             if(prop.parse){
                                 let val = nv.trim();
-                                if(val!==null && ['[', '{'].includes(val[0])){
+                                if(val!==null){
                                     try{
                                         val = JSON.parse(val);
                                     }catch(e){
