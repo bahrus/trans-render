@@ -664,6 +664,14 @@ For this functionality, we use tuples to represent these settings.  P stands for
 
 [TODO]  Explain in more detail with more examples when the dust has settled.
 
+## Archival Services [TODO]
+
+If lhs is an active DOM element, and rhs is false, turns lhs into a template (in-place replacement).
+
+If lhs is a template, and rhs is true, clones the template, replaces itself.
+
+
+
 ## Nested, Scoped Transforms
 
 One useful plug-in for transform.js is NestedTransform.js, which allows the RHS of a match to serve as a springboard for performing a sub transform.
