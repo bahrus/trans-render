@@ -670,7 +670,7 @@ If lhs is an active DOM element, and rhs is false, turns lhs into a template (in
 
 If lhs is a template, and rhs is true, clones the template, replaces itself.
 
-
+Useful especially for be-loaded, to avoid loading active content, for example.
 
 ## Nested, Scoped Transforms
 
