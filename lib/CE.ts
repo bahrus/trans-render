@@ -259,13 +259,13 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         return this.classDef;
     }
 
-    async doActions(self: this, actions: {[methodName: string]: Action}, target: any, arg: any){
+    async doActions(self: this, actions: {[methodName: string]: Action}, target: any, proxy?: any){
         for(const methodName in actions){
             const action = actions[methodName];
             if(action.debug) debugger;
             const ret = action.async ? await (<any>target)[methodName](target) : (<any>target)[methodName](target);
             if(ret === undefined) continue;
-            self.postHoc(self, action, target, ret);
+            self.postHoc(self, action, target, ret, proxy);
         }
     }
 
@@ -292,12 +292,13 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         return new Set<string>([...(action.ifAllOf || []) as string[], ...(action.ifKeyIn || []) as string[]]);
     }
 
-    postHoc(self: this, action: Action, target: any, returnVal: any){
-        Object.assign(target, returnVal);
+    postHoc(self: this, action: Action, target: any, returnVal: any, proxy?: any){
+        const dest = proxy === undefined ? proxy : target;
+        Object.assign(dest, returnVal);
         const setFree = action.setFree;
         if(setFree !== undefined){
             for(const key of setFree){
-                target[key] = undefined;
+                dest[key] = undefined;
             }
         }
     }
