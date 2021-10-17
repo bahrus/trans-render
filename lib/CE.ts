@@ -58,7 +58,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                                 filteredActions[methodName] = action;
                             }
                         }
-                        doActions(self, filteredActions, this, {key, ov, nv});
+                        doActions(self, filteredActions, this);
                     }
                     doPA(self, this, pci, '+a'); //+a = post actions
                 },
@@ -237,7 +237,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                         actionsToDo[doAct] = action;
                     }
                 }
-                doActions(self, actionsToDo, this, propChangeQueue);
+                doActions(self, actionsToDo, this);
                 delete this.propChangeQueue;
             }
             setValsQuietly(vals: this){
