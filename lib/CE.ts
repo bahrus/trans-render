@@ -293,7 +293,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
     }
 
     postHoc(self: this, action: Action, target: any, returnVal: any, proxy?: any){
-        const dest = proxy === undefined ? proxy : target;
+        const dest = proxy !== undefined ? proxy : target;
         Object.assign(dest, returnVal);
         const setFree = action.setFree;
         if(setFree !== undefined){
