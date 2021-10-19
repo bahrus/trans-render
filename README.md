@@ -562,44 +562,15 @@ But having standardized on a place where the dynamic data we need can be derived
 
 ```JavaScript
     match:{
-        "summary": ["hello",  "${host.place}"]
+        "summary": ["hello",  "place"]
     }
 ```
 
-**NB** The syntax above is not 
 
 ... means "set the textContent of the summary element to "hello [the value of the world property of the host element or object]".
 
-This feature is *not* part of the core transform function.  It requires one of the standard declarative TR helpers that are part of this package, InTexter.js:
+This feature is *not* part of the core transform function.  It requires one of the standard declarative TR helpers that are part of this package, SplitText.js:
 
-```html
-<details id=details>
-    <summary>Amor Omnia Vincit</summary>
-    ...
-</details>
-
-<script type="module">
-    import { transform } from 'trans-render/lib/transform.js';
-    import { InTexter } from 'trans-render/lib/InTexter.js';
-    transform(details, {
-        match:{
-            "summary": "Hello, ${host.place}"
-        },
-        host:{
-            place: 'Mars'
-        },
-        postMatch: [{rhsType: String, ctor: InTexter}]
-    })
-</script>
-```
-
-Yes, an eval is done behind the scenes.  But the eval will not be done if the rhs contains an open parenthesis, which should greatly reduce the risk of side effects.
-
-However, this raises the question:  Why are we trying to make the binding truly declarative, via the less pleasant to type JSON, if we end up doing an eval anyway?  One of the benefits of parsing JSON vs JS is it is faster.  But this benefit is outweighed by costs if we end up doing lots of evals to gain back the power of JS.
-
-So where does this leave the developer who is willing to put up with JSON editing, and is probably also willing to do a little extra work to avoid "guesswork" during run time?
-
-An alternative processor, SplitText is available:
 
 ```html
 <details id=details>
@@ -629,7 +600,6 @@ An alternative processor, SplitText is available:
 ```
 
 The array alternates between static content, and dynamic properties coming from the host.
-
 
 
 ## P[E[A]] 
