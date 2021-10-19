@@ -633,10 +633,6 @@ An alternative processor, SplitText is available:
 
 The array alternates between static content, and dynamic properties coming from the host.
 
-If there is an array with a single string item, extract that property from the host.
-
-So "article": ["mainContent"] means article.textContent = host.mainContent;
-
 
 
 ## P[E[A]] 
