@@ -681,7 +681,7 @@ Useful especially for be-loaded, to avoid loading active content, for example.
 One useful plug-in for transform.js is NestedTransform.js, which allows the RHS of a match to serve as a springboard for performing a sub transform.
 
 
-## Template Merging Using a Custom Element (Inline Binding)
+## Template Merging Using a Custom Element (Inline Binding) [TODO]
 
 We've seen examples where we merge other templates into the main one, which required imperative logic:
 
