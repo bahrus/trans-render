@@ -189,6 +189,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
     </tr>
 </table>
 
+<!--
 ## Use Case 1:  Applying the DRY principle to punk rock lyrics
 
 [Demo](https://jsfiddle.net/bahrus/4897cbzj/4/)
@@ -303,13 +304,9 @@ The following table lists how the LHS is translated into CSS multi-match queries
 ```
 
 </details>
+-->
 
-
-## An example of an imperative helper function
-
-[Demo](https://jsfiddle.net/bahrus/4897cbzj/7/)
-
-Since trans-render is built around css matching, it doesn't provide much help when it comes to string interpolation, something supported by virtually every templating library.  trans-render can support something like this via a reusable, shared transform helper function.  The minimalist interpolation library trans-render/lib/interpolate.js is provided for this purpose, but it's scope is quite small (no expressions or anything).  More robust libraries that support expressions could be created, as needed.
+<!--
 
 ## Use Case 2:  Tränslåtyng pøst pünk lyriks tø Sweedisλ
 
@@ -423,7 +420,7 @@ Since trans-render is built around css matching, it doesn't provide much help wh
 ```
 
 </details>
-
+-->
 
 
 ## Extending trans-render with declarative syntax
