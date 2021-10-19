@@ -633,9 +633,13 @@ So "article": ["mainContent"] means article.textContent = host.mainContent;
 
 
 
-## P[E[A[T]]] [WIP]
+## P[E[A]] 
 
 After setting the string value of a node, setting properties, attaching event handlers, as well as attributes comes next in things we do over and over again.
+
+We do that via using an Array for the rhs of a match expression.  F
+
+### Property setting (P)
 
 We follow the approach adopted with SplitText -- Slightly verbose binding is used, in order to avoid expensive evals or other kinds of fancy string parsing.
 
@@ -662,7 +666,27 @@ We follow the approach adopted with SplitText -- Slightly verbose binding is use
 
 For this functionality, we use tuples to represent these settings.  P stands for Properties, E for events, A for attributes, and T for template or transform, or tuple of template and transform.  There are four nested, and subsequently larger processors that can do one or more of these 4 things.  It is a good idea to use the "weakest" processor for what you need, thereby reducing the footprint of your web component.
 
-[TODO]  Explain in more detail with more examples when the dust has settled.
+### Add event listeners
+
+The second element of the array allows us to add event listeners to the element.  For example:
+
+```JS
+match:{
+    myCustomElementElements: [{}, {click: myEventHandlerFn, mouseover: 'myHostMouseOverFn'}]
+}
+```
+
+[TODO] Document Array event handlers
+
+### Set attributes / classes / parts.
+
+Example:
+
+```JS
+match:{
+    myCustomElementElements: [{}, {}, {"my-attr": "myHostProp1", ".my-class": true, "my-bool-attr": true, "my-go-away-attr": null, "::my-part": true}]
+}
+```
 
 ## Archival Services [TODO]
 
