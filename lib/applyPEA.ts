@@ -35,7 +35,11 @@ export function applyPEA<T extends Partial<Element> = Element>(host: Element, ta
                     target.setAttribute(key, val.toString());
                     break;
                 case 'object':
-                    if (val === null) target.removeAttribute(key);
+                    if (val === null) {
+                        target.removeAttribute(key);
+                    }else{
+                        target.setAttribute(key, JSON.stringify(val));
+                    }
                     break;
             }
         }
