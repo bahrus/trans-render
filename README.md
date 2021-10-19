@@ -561,7 +561,7 @@ But having standardized on a place where the dynamic data we need can be derived
 
 ```JavaScript
     match:{
-        "summary": "hello ${host.place}"
+        "summary": ["hello",  ${host.place}"
     }
 ```
 

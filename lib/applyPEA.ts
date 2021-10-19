@@ -11,11 +11,22 @@ export function applyPEA<T extends Partial<Element> = Element>(host: Element, ta
             const val = attribSettings[key];
             switch (typeof val) {
                 case 'boolean':
-                    if (val) {
-                        target.setAttribute(key, '');
-                    } else {
-                        target.removeAttribute(key);
+                    if(key.startsWith('.')){
+                        const className = key.substr(1);
+                        const verb = val ? 'add' : 'remove';
+                        (<any>target.classList)[verb](className);
+                    }else if(key.startsWith('::')){
+                        const partName = key.substr(2);
+                        const verb = val ? 'add' : 'remove';
+                        (<any>target.part)[verb](partName);
+                    }else{
+                        if (val) {
+                            target.setAttribute(key, '');
+                        } else {
+                            target.removeAttribute(key);
+                        }
                     }
+
                     break;
                 case 'string':
                     target.setAttribute(key, val);
