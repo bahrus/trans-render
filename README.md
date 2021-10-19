@@ -606,11 +606,13 @@ The array alternates between static content, and dynamic properties coming from 
 
 After setting the string value of a node, setting properties, attaching event handlers, as well as attributes comes next in things we do over and over again.
 
-We do that via using an Array for the rhs of a match expression.  F
+We do that via using an Array for the rhs of a match expression.  We interpret that array as a tuple to represent these settings.  P stands for Properties, E for events, A for attributes, and T for template or transform, or tuple of template and transform.  There are four nested, and subsequently larger processors that can do one or more of these 4 things.  It is a good idea to use the "weakest" processor for what you need, thereby reducing the footprint of your web component.
 
 ### Property setting (P)
 
-We follow the approach adopted with SplitText -- Slightly verbose binding is used, in order to avoid expensive evals or other kinds of fancy string parsing.
+We follow a similar approach for setting properties.  If the rhs of a match is of type Array, we interpret the array to be a relatively compact way of notifying property setting (and attaching event handlers and setting attributes and classes, which we will see shortly).
+
+The first element of the RHS array is devoted to property setting:
 
 ```html
 <template id=template>
@@ -622,7 +624,7 @@ We follow the approach adopted with SplitText -- Slightly verbose binding is use
     import { P } from 'trans-render/lib/P.js';
     transform(template, {
         match:{
-            myCustomElementElements: [{myProp0: "Some Hardcoded String", myProp1: ["hostPropName"], myProp2: ["Some interpolated ", "hostPropNameForText"]}]
+            myCustomElementElements: [{myProp0: ["Some Hardcoded String"], myProp1: "hostPropName", myProp2: ["Some interpolated ", "hostPropNameForText"]}]
         },
         postMatch: [{
             rhsType: Array,
@@ -633,7 +635,7 @@ We follow the approach adopted with SplitText -- Slightly verbose binding is use
 </script>
 ```
 
-For this functionality, we use tuples to represent these settings.  P stands for Properties, E for events, A for attributes, and T for template or transform, or tuple of template and transform.  There are four nested, and subsequently larger processors that can do one or more of these 4 things.  It is a good idea to use the "weakest" processor for what you need, thereby reducing the footprint of your web component.
+
 
 ### Add event listeners
 
