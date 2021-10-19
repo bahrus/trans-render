@@ -604,13 +604,13 @@ The array alternates between static content, and dynamic properties coming from 
 
 ## P[E[A]] 
 
-After setting the string value of a node, setting properties, attaching event handlers, as well as attributes comes next in things we do over and over again.
+After setting the string value of a node, setting properties, attaching event handlers, and setting attributes (including classes and parts) comes next in things we do over and over again.
 
-We do that via using an Array for the rhs of a match expression.  We interpret that array as a tuple to represent these settings.  P stands for Properties, E for events, A for attributes, and T for template or transform, or tuple of template and transform.  There are four nested, and subsequently larger processors that can do one or more of these 4 things.  It is a good idea to use the "weakest" processor for what you need, thereby reducing the footprint of your web component.
+We do that via using an Array for the rhs of a match expression.  We interpret that array as a tuple to represent these settings.  P stands for Properties, E for events, A for attributes. <!-- and T for template or transform, or tuple of template and transform.-->  There are three nested, and subsequently larger processors that can do one or more of these 3 things.  It is a good idea to use the "weakest" processor for what you need, thereby reducing the footprint of your web component.
 
 ### Property setting (P)
 
-We follow a similar approach for setting properties.  If the rhs of a match is of type Array, we interpret the array to be a relatively compact way of notifying property setting (and attaching event handlers and setting attributes and classes, which we will see shortly).
+We follow a similar approach for setting properties as we did with the SplitText plug-in.  
 
 The first element of the RHS array is devoted to property setting:
 
@@ -649,13 +649,22 @@ match:{
 
 [TODO] Document Array event handlers
 
-### Set attributes / classes / parts.
+### Set attributes / classes / parts / [decorator attributes](https://github.com/bahrus/be-decorated).
 
 Example:
 
 ```JS
 match:{
-    myCustomElementElements: [{}, {}, {"my-attr": "myHostProp1", ".my-class": true, "my-bool-attr": true, "my-go-away-attr": null, "::my-part": true}]
+    myCustomElementElements: [{}, {}, {
+        "my-attr": "myHostProp1", 
+        ".my-class": true, 
+        "my-bool-attr": true, 
+        "my-go-away-attr": null, 
+        "::my-part": true, 
+        "be-all-you-can-be": {
+            some: "JSON",
+            object: true,
+        }}]
 }
 ```
 
