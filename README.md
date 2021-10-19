@@ -447,6 +447,10 @@ The first common concern is setting the textContent of an element.
 
 ## Mapping textContent
 
+### Setting the text content without the presence of a host
+
+**NB:** The syntax below works and is supported, but will rarely be used in practice.  The syntax more likely to be used in practice [begins here](https://github.com/bahrus/trans-render#declarative-dynamic-content-based-on-presence-of-ctxhost)
+
 One of the most common things we want to do is set the text content of a DOM Element, from some model value.
 
 ```html
@@ -561,9 +565,11 @@ But having standardized on a place where the dynamic data we need can be derived
 
 ```JavaScript
     match:{
-        "summary": ["hello",  ${host.place}"
+        "summary": ["hello",  "${host.place}"]
     }
 ```
+
+**NB** The syntax above is not 
 
 ... means "set the textContent of the summary element to "hello [the value of the world property of the host element or object]".
 
