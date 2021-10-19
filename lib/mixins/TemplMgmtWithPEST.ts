@@ -1,5 +1,5 @@
 import { TemplMgmtBaseMixin } from './TemplMgmtBase.js';
-import { PE } from '../PE.js';
+import { PEA } from '../PEA.js';
 import { SplitText } from '../SplitText.js';
 import { CE} from '../CE.js';
 import { html } from '../html.js';
@@ -16,7 +16,7 @@ const TemplMgmtMixin = (superclass: any) => class TemplMgmt extends TemplMgmtBas
                 {
                     rhsType: Array,
                     rhsHeadType: Object,
-                    ctor: PE
+                    ctor: PEA
                 },
                 {
                     rhsType: Array,
