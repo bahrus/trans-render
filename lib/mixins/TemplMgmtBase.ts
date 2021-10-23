@@ -7,7 +7,8 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
     __ctx: RenderContext | undefined;
     #repeatVisit = false;
     #isDSD = false;
-    cloneTemplate({noshadow, shadowRoot, mainTemplate, styles}: TemplMgmtBase){
+    cloneTemplate({noshadow, shadowRoot, mainTemplate, styles, waitToInit}: TemplMgmtBase){
+        if(waitToInit) return;
         let root = this as any;
         if(!noshadow){
             if(shadowRoot === null){
