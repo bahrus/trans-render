@@ -41,6 +41,7 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
     loadPlugins(self: this): void {}
 
     doInitTransform({clonedTemplate, noshadow}: this): void{
+        if(this.waitToInit) return;
         this.loadPlugins(this);
         const propInfos = (this.constructor as any)['reactiveProps'] as {[key: string]: PropInfo};
         for(const refKey in propInfos){
@@ -85,7 +86,8 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
 
 export const doInitTransform: Partial<{[key in keyof TemplMgmtActions]: Action<TemplMgmtProps>}> = {
     cloneTemplate: {
-        ifKeyIn: ['mainTemplate', 'noshadow']
+        ifAllOf: ['mainTemplate'],
+        ifKeyIn: ['noshadow', 'waitToInit']
     },
     doInitTransform: {
         ifAllOf: ['clonedTemplate'],
@@ -100,6 +102,7 @@ export interface TemplMgmtProps{
     updateTransform?: any;
     noshadow?: boolean;
     renderOptions?: RenderOptions;
+    waitToInit?: boolean;
 }
 
 export interface TemplMgmtActions{
