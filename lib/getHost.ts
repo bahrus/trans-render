@@ -1,5 +1,10 @@
-export function getHost(self:Element): HTMLElement{
-    let host = (<any>self.getRootNode()).host;
+export function getHost(self:Element, tocoho?: boolean): Element | null{
+    let host: Element | null | undefined;
+    if(tocoho){
+        host = self.closest('[data-is-hostish]');
+        if(host) return host;
+    }
+    host = (<any>self.getRootNode()).host;
     if(host === undefined){
         host = self.parentElement;
         while(host && !host.localName.includes('-')){
