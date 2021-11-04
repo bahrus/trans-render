@@ -1,7 +1,8 @@
-export function getHost(self:Element, tocoho?: boolean): Element | null{
+export function getHost(self:Element, tocoho?: boolean | string): Element | null{
     let host: Element | null | undefined;
     if(tocoho){
-        host = (self.parentElement || self).closest('[data-is-hostish]');
+        const closest = tocoho === true ? '[data-is-hostish]' : tocoho;
+        host = (self.parentElement || self).closest(closest);
         if(host) return host;
     }
     host = (<any>self.getRootNode()).host;
