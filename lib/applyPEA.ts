@@ -18,7 +18,7 @@ export function applyPEA<T extends Partial<Element> = Element>(host: Element, ta
                     }else if(key.startsWith('::')){
                         const partName = key.substr(2);
                         const verb = val ? 'add' : 'remove';
-                        (<any>target.part)[verb](partName);
+                        (<any>target).part[verb](partName);
                     }else{
                         if (val) {
                             target.setAttribute(key, '');
