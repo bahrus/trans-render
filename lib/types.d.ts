@@ -14,6 +14,7 @@ export interface RenderContext<T = Element, TItem = any> {
     key?: string;
     queryCache?: WeakMap<Element, {[key: string]: NodeListOf<Element>}>;
     abort?: boolean | undefined;
+    templateIds?: string[];
 }
 
 export interface RenderOptions{

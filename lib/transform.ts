@@ -2,6 +2,7 @@ import { RenderContext, PMDo } from './types.d.js';
 import { getQuery} from './specialKeys.js';
 import { lispToCamel } from './lispToCamel.js';
 import { matchByType } from './matchByType.js';
+import { linkTemplates } from './linkTemplates.js';
 
 export function transform(
     sourceOrTemplate: Element | DocumentFragment,
@@ -14,12 +15,15 @@ export function transform(
     const source = isATemplate
         ? (sourceOrTemplate as HTMLTemplateElement).content.cloneNode(true) as DocumentFragment
         : sourceOrTemplate;
-    if(ctx.options?.cacheQueries || ctx.host){
+    const {host, options, templateIds} = ctx;
+    if(options?.cacheQueries || ctx.host){
         if(ctx.queryCache === undefined) ctx.queryCache = new WeakMap<HTMLElement, {[key: string]: NodeListOf<Element>}>();
+    }
+    if(ctx.host !== undefined && ctx.templateIds !== undefined){
+        linkTemplates(sourceOrTemplate as Element, ctx.host, ctx.templateIds);
     }
     processFragment(source, ctx);
     let verb = "appendChild";
-    const options = ctx.options;
     if (options !== undefined) {
       if (options.prepend) verb = "prepend";
       const callback = options.initializedCallback;
