@@ -26,6 +26,7 @@
     "./lib/interpolate.js": "./lib/interpolate.js",
     "./lib/insertAdjacentTemplate.js": "./lib/insertAdjacentTemplate.js",
     "./lib/InTexter.js": "./lib/InTexter.js",
+    "./lib/linkTemplates.js": "./lib/linkTemplates.js",
     "./lib/lispToCamel.js": "./lib/lispToCamel.js",
     "./lib/mergeDeep.js": "./lib/mergeDeep.js",
     "./lib/NestedTransform.js": "./lib/NestedTransform.js",
