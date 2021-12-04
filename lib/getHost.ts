@@ -1,7 +1,7 @@
 export function getHost(self:Element, tocoho?: boolean | string): Element | null{
     let host: Element | null | undefined;
     if(tocoho){
-        const closest = tocoho === true ? '[data-is-hostish]' : tocoho;
+        const closest = tocoho === true ? '[itemscope]' : tocoho;
         host = (self.parentElement || self).closest(closest);
         if(host) return host;
     }

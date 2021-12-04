@@ -14,7 +14,7 @@ export class SplitText implements PMDo{
             (<any>target!)[toProp] = getVal(host, rhs);
             return;
         }
-
+        //rhs is an array, with first element a string
         (<any>target!)[toProp] = interpolate(rhs, host);
         
     }
@@ -30,6 +30,8 @@ export class SplitText implements PMDo{
         key = key.substring(iPos + 2, key.length - 1);
         return lispToCamel(key);
     }
+
+    
 
 }
 
