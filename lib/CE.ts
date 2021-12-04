@@ -13,8 +13,10 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         parse: true,
     };
 
+    act2Props: {[key:string]: Set<string>} = {};
+
     addProps<T extends HTMLElement = HTMLElement>(newClass: {new(): T}, props: {[key: string]: PropInfo}, args: DefineArgs){
-        const {doActions, pq, getProps, doPA} = this;
+        const {doActions, pq, getProps, doPA, act2Props} = this;
         const self = this;
         const proto = newClass.prototype;
         const config = args.config;
@@ -52,7 +54,12 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                         const filteredActions: any = {};
                         for(const methodName in actions){
                             const action = actions[methodName]!;
-                            const props = getProps(self, action); //TODO:  cache this
+                            let props = act2Props[methodName];
+                            if(props === undefined){
+                                props = getProps(self, action);
+                                act2Props[methodName] = props;
+                            }
+                            
                             if(!props.has(key)) continue;
                             if(pq(self, action, this)){
                                 filteredActions[methodName] = action;
@@ -218,7 +225,6 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                 delete this.QR;
                 const propChangeQueue = this.propChangeQueue as Set<string> | undefined;
                 const acts = this.mergedActions;
-                //const actionsToDo = new Set<Action>();
                 const actionsToDo: any = {};
                 if(propChangeQueue !== undefined && acts !== undefined){
                     for(const doAct in acts){
