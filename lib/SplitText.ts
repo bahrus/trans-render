@@ -2,6 +2,7 @@ import {PMDo, RenderContext} from './types.js';
 import {getProp} from './getProp.js';
 import {lispToCamel} from './lispToCamel.js';
 
+//TODO:  see if you using range, like be-searching does, makes things a little faster
 export class SplitText implements PMDo{
     do({host, target, rhs, key, ctx}: RenderContext){
         const toProp = this.getToProp(key) || 'textContent';
