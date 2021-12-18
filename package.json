@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.437",
+  "version": "0.0.438",
   "description": "Instantiate an HTML Template",
   "main": "lib/CE.js",
   "module": "lib/CE.js",
