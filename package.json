@@ -42,6 +42,7 @@
     "./lib/structuralClone.js": "./lib/structuralClone.js",
     "./lib/mixins/TemplMgmtBase.js": "./lib/mixins/TemplMgmtBase.js",
     "./lib/mixins/TemplMgmtWithPEST.js": "./lib/mixins/TemplMgmtWithPEST.js",
+    "./lib/mixins/notify.js": "./lib/mixins/notify.js",
     "./lib/mixins/doInitTransform.mjs": "./lib/mixins/doInitTransform.mjs",
     "./lib/TemplateMerge.js": "./lib/TemplateMerge.js",
     "./lib/Texter.js": "./lib/Texter.js",
