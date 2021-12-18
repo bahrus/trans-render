@@ -23,6 +23,8 @@
     "./lib/define.js": "./lib/define.js",
     "./lib/getHost.js": "./lib/getHost.js",
     "./lib/getProp.js": "./lib/getProp.js",
+    "./lib/html.js": "./lib/html.js",
+    "./lib/html.mjs": "./lib/html.mjs",
     "./lib/interpolate.js": "./lib/interpolate.js",
     "./lib/insertAdjacentTemplate.js": "./lib/insertAdjacentTemplate.js",
     "./lib/InTexter.js": "./lib/InTexter.js",
