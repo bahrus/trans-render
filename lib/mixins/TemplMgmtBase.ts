@@ -7,6 +7,7 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
     __ctx: RenderContext | undefined;
     #repeatVisit = false;
     #isDSD = false;
+    #compiledTemplate:HTMLTemplateElement | undefined;
     cloneTemplate({noshadow, shadowRoot, mainTemplate, styles, waitToInit}: TemplMgmtBase){
         if(waitToInit) return;
         let root = this as any;
@@ -35,7 +36,19 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
         if(this.#repeatVisit){
             root.innerHTML = '';
         }
-        this.clonedTemplate = mainTemplate!.content.cloneNode(true);
+        switch(typeof mainTemplate){
+            case 'string':
+                if(this.#compiledTemplate === undefined){
+                    const templ = document.createElement('template');
+                    templ.innerHTML = mainTemplate;
+                    this.#compiledTemplate = templ;
+                }
+                this.clonedTemplate = this.#compiledTemplate!.content.cloneNode(true);
+                break;
+            default:
+                this.clonedTemplate = mainTemplate!.content.cloneNode(true);
+        }
+        
         this.#repeatVisit = true;
     }
 
@@ -96,7 +109,7 @@ export const doInitTransform: Partial<{[key in keyof TemplMgmtActions]: Action<T
 }
 
 export interface TemplMgmtProps{
-    mainTemplate?: HTMLTemplateElement;
+    mainTemplate?: HTMLTemplateElement | string;
     styles?: CSSStyleSheet[];
     clonedTemplate?: Node | undefined;
     initTransform?: any;
