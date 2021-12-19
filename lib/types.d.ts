@@ -148,3 +148,22 @@ export interface PropChangeInfo<TPropInfo = PropInfo> {
 export type PropChangeMoment = 'v' | '-a' | '+a' | '+qr' | '+qm';
 
 export type PropChangeMethod = (self: EventTarget, pci: PropChangeInfo, moment: PropChangeMoment) => boolean;
+
+export interface TemplMgmtProps{
+    mainTemplate?: HTMLTemplateElement | string;
+    styles?: CSSStyleSheet[];
+    clonedTemplate?: Node | undefined;
+    initTransform?: any;
+    updateTransform?: any;
+    noshadow?: boolean;
+    renderOptions?: RenderOptions;
+    waitToInit?: boolean;
+}
+
+export interface TemplMgmtActions{
+    doUpdateTransform(self: this): void;
+    doInitTransform(self: this): void;
+    cloneTemplate(self: this): void;
+}
+
+export interface TemplMgmtBase extends HTMLElement, TemplMgmtProps, TemplMgmtActions{}

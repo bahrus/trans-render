@@ -1,7 +1,8 @@
 import { transform } from '../transform.js';
 import { getQuery} from '../specialKeys.js';
-import { Action, PropInfo, RenderContext, RenderOptions } from '../types.js';
+import { Action, PropInfo, RenderContext, RenderOptions, TemplMgmtActions, TemplMgmtBase, TemplMgmtProps } from '../types.js';
 export { transform } from '../transform.js';
+export {TemplMgmtActions, TemplMgmtProps, TemplMgmtBase} from '../types.js';
 
 export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => class extends superclass{
     __ctx: RenderContext | undefined;
@@ -108,21 +109,4 @@ export const doInitTransform: Partial<{[key in keyof TemplMgmtActions]: Action<T
     }
 }
 
-export interface TemplMgmtProps{
-    mainTemplate?: HTMLTemplateElement | string;
-    styles?: CSSStyleSheet[];
-    clonedTemplate?: Node | undefined;
-    initTransform?: any;
-    updateTransform?: any;
-    noshadow?: boolean;
-    renderOptions?: RenderOptions;
-    waitToInit?: boolean;
-}
 
-export interface TemplMgmtActions{
-    doUpdateTransform(self: this): void;
-    doInitTransform(self: this): void;
-    cloneTemplate(self: this): void;
-}
-
-export interface TemplMgmtBase extends HTMLElement, TemplMgmtProps, TemplMgmtActions{}
