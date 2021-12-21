@@ -103,8 +103,9 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         const actions = args.config.actions;
         if(actions !== undefined){
             for(const methodName in actions){
-                const action = actions[methodName] as Action;
-                const upon = this.getProps(this, action);
+                const action = actions[methodName];
+                const typedAction = (typeof action === 'string') ? {ifAllOf:[action]} as Action : action!;
+                const upon = this.getProps(this, typedAction);
                 for(const dependency of upon){
                     if(props[dependency] === undefined){
                         const prop: PropInfo = {...defaultProp};
