@@ -104,7 +104,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         if(actions !== undefined){
             for(const methodName in actions){
                 const action = actions[methodName];
-                const typedAction = (typeof action === 'string') ? {ifAllOf:[action]} as Action : action!;
+                const typedAction = (typeof action === 'string') ? {ifAllOf:[action]} as Action : action! as Action;
                 const upon = this.getProps(this, typedAction);
                 for(const dependency of upon){
                     if(props[dependency] === undefined){

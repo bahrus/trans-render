@@ -81,7 +81,7 @@ export interface DefineArgs<MixinCompositeProps = any, MixinCompositeActions = M
 }
 
 export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction = Action>{
-    tagName: string;
+    tagName?: string;
     propDefaults?: Partial<MCProps>;
     propInfo?: Partial<{[key in keyof MCProps]: TPropInfo}> 
     actions?: Partial<{[key in keyof MCActions]: TAction | keyof MCProps}> 
