@@ -10,7 +10,7 @@
 
 **NB**:  This library is undergoing a face lift.  To see the old functionality that this new code is leading up to, go [here](README_OLD.md)
 
-*trans-rendering* (TR) describes a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, TR performs transforms on elements by matching tests on elements.  Whereas XSLT uses XPath for its tests, TR uses css path tests via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
+*trans-rendering* (TR) describes a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, TR performs transforms on elements by matching tests on those elements.  Whereas XSLT uses XPath for its tests, TR uses css path tests via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
 
 A subset of TR, also described below, is "declarative trans-render" syntax [DTR], which is pure, 100% declarative syntax.  
 
@@ -30,19 +30,17 @@ This package contains two core libraries.
 
 The first, lib/transform.js, is a tiny (1.2k gzip/minified), 'non-committal' library that simply allows us to map css matches to user-defined functions. 
 
-In addition, this package contains a fairly primitive library for defining custom elements, lib/CE.js, which can be combined with lib/transform.js via lib/TemplMgmt*.js.
+In addition, this package contains a fairly primitive library for defining custom elements, lib/CE.js, which can be combined with lib/transform.js via lib/mixins/TemplMgmt*.js.
 
 The package xtal-element builds on this package, and the documentation on defining custom elements, with trans-rendering in mind, is documented there [WIP].
 
-So the rest of this document will focus on the trans-rendering aspect, leaving the documentation for xtal-element to fill in the missing details regarding how lib/define.js works.
+So the rest of this document will focus on the trans-rendering aspect, leaving the documentation for xtal-element to fill in the missing details regarding how lib/CE.js works.
 
 ## value-add by trans-rendering
 
 The first value-add proposition lib/transform.js provides, is it can reduce the amount of imperative *.selectQueryAll().forEach's needed in our code.  However, by itself, transform.js is not a complete solution, if you are looking for declarative syntax.  That will come with the ability to extend transform.js, which will be discussed below.
 
 The CSS matching the core transform.js supports simply does multi-matching for all (custom) DOM elements within the scope.
-
-One of the plug-in's that extends transform.js can then apply nested transforms where the scope is narrowed.
 
 ### Multi-matching
 
@@ -162,7 +160,7 @@ transform(Main, {...}, container)
 transform(container, {...})
 ```
 
-We can also start getting a sense of how transforms can be tied to custom element events.  Although the example above is hardly declarative, as we create more rules that allow us to update the DOM, and link events to transforms, we will achieve a Turing complete(?) solution.
+We can also start getting a sense of how transforms can be tied to custom element events.  Although the example above is hardly declarative, as we create more rules that allow us to update the DOM, and link events to transforms, we will achieve something approaching a Turing complete(?) solution.
 
 The following table lists how the LHS is translated into CSS multi-match queries:
 
@@ -189,240 +187,6 @@ The following table lists how the LHS is translated into CSS multi-match queries
     </tr>
 </table>
 
-<!--
-## Use Case 1:  Applying the DRY principle to punk rock lyrics
-
-[Demo](https://jsfiddle.net/bahrus/4897cbzj/4/)
-
-<details>
-    <summary>Markup</summary>
-
-```html
-    <div>
-        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a><br>
-        <button id="changeDays">Wi not trei a holiday in Sweeden this yer</button>
-        <template id="Friday">
-            <span>It's |.Day5| I'm in love</span>
-        </template>
-        <template id="Opening">
-            <span>I don't care if |.Day1|'s blue</span><br>
-            <span>|.Day2|'s gray and |.Day3| too</span><br>
-            <span>|.Day4| I don't care about you</span><br>
-            <span data-init="Friday"></span>
-        </template>
-
-        <template id="Main">
-            <div data-init="Opening" class="stanza"></div>
-            <div class="stanza">
-                <span>|.Day1| you can fall apart</span><br>
-                <span>|.Day2| |.Day3| break my heart</span><br>
-                <span>Oh, |.Day4| doesn't even start</span><br>
-                <span data-init="Friday"></span>
-            </div>
-            <div class="stanza">
-                <span>|.Day6| wait</span><br>
-                <span>And |.Day7| always comes too late</span><br>
-                <span>But |.Day5| never hesitate</span>
-            </div>
-
-            <div class="stanza">
-                <span>I don't care if |.Day1|'s black</span><br>
-                <span>|.Day2|, |.Day3| heart attack</span><br>
-                <span>|.Day4| never looking back</span><br>
-                <span data-init="Friday"></span>
-            </div>
-            <div class="stanza">
-                <span>|.Day1| you can hold your head</span><br>
-                <span>|.Day2|, |.Day3| stay in bed</span><br>
-                <span>Or |.Day4| watch the walls instead</span><br>
-                <span data-init="Friday"></span>
-            </div>
-            <div class="stanza">
-                <span>|.Day6| wait</span><br>
-                <span>And |.Day7| always comes too late</span><br>
-                <span>But |.Day5| never hesitate</span>
-            </div>
-            <div class="stanza">
-                <span>Dressed up to the eyes</span><br>
-                <span>It's a wonderful surprise</span><br>
-                <span>To see your shoes and your spirits rise</span><br>
-                <span>Throwing out your frown</span><br>
-                <span>And just smiling at the sound</span><br>
-                <span>And as sleek as a shriek</span><br>
-                <span>Spinning round and round</span><br>
-                <span>Always take a big bite</span><br>
-                <span>It's such a gorgeous sight</span><br>
-                <span>To see you in the middle of the night</span><br>
-                <span>You can never get enough</span><br>
-                <span>Enough of this stuff</span><br>
-                <span>It's |.Day5|</span><br>
-                <span>I'm in love</span>
-            </div>
-            <div data-init="Opening" class="stanza"></div>
-            <div class="stanza">
-                <span>|.Day1| you can fall apart</span><br>
-                <span>|.Day2|, |.Day3| break my heart</span><br>
-                <span>|.Day4| doesn't even start</span><br>
-                <span data-init="Friday"></span>
-            </div>
-            <style>
-                .stanza{
-                padding-top: 20px;
-            }
-        </style>
-        </template>
-        <div id="target"></div>
-
-        <script type="module">
-            import { transform } from 'https://cdn.skypack.dev/trans-render';
-            import { interpolate } from 'https://cdn.skypack.dev/trans-render/lib/interpolate.js';
-
-            let model = {
-                Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
-                Day6: 'Saturday', Day7: 'Sunday',
-            };
-            const ctx = transform(Main, {
-                match: {
-                    '*': ({ target }) => {
-                        interpolate(target, 'textContent', model);
-                    },
-                    dataInitAttribs: ({ target, ctx, val }) => {
-                        transform(self[val], ctx, target);
-                    }
-                }
-            }, target);
-            changeDays.addEventListener('click', e => {
-                model = {
-                    Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
-                    Day6: 'lördag', Day7: 'söndag',
-                }
-                delete ctx.match.dataInitAttribs;
-                transform(target, ctx);
-            });
-        </script>
-    </div>
-```
-
-</details>
--->
-
-<!--
-
-## Use Case 2:  Tränslåtyng pøst pünk lyriks tø Sweedisλ
-
-<details>
-    <summary>Markup</summary>
-
-```html
-    <div>
-        <a href="https://www.youtube.com/watch?v=ucX9hVCQT_U" target="_blank">Friday I'm in Love</a><br>
-        <button id="changeDays">Wi not trei a holiday in Sweeden this yer</button>
-        <template id="Friday">
-            <span>It's |.Day5| I'm in love</span>
-        </template>
-        <template id="Opening">
-            <span>I don't care if |.Day1|'s blue</span><br>
-            <span>|.Day2|'s gray and |.Day3| too</span><br>
-            <span>|.Day4| I don't care about you</span><br>
-            <span data-init="Friday"></span>
-        </template>
-
-        <template id="Main">
-            <div data-init="Opening" class="stanza"></div>
-            <div class="stanza">
-                <span>|.Day1| you can fall apart</span><br>
-                <span>|.Day2| |.Day3| break my heart</span><br>
-                <span>Oh, |.Day4| doesn't even start</span><br>
-                <span data-init="Friday"></span>
-            </div>
-            <div class="stanza">
-                <span>|.Day6| wait</span><br>
-                <span>And |.Day7| always comes too late</span><br>
-                <span>But |.Day5| never hesitate</span>
-            </div>
-
-            <div class="stanza">
-                <span>I don't care if |.Day1|'s black</span><br>
-                <span>|.Day2|, |.Day3| heart attack</span><br>
-                <span>|.Day4| never looking back</span><br>
-                <span data-init="Friday"></span>
-            </div>
-            <div class="stanza">
-                <span>|.Day1| you can hold your head</span><br>
-                <span>|.Day2|, |.Day3| stay in bed</span><br>
-                <span>Or |.Day4| watch the walls instead</span><br>
-                <span data-init="Friday"></span>
-            </div>
-            <div class="stanza">
-                <span>|.Day6| wait</span><br>
-                <span>And |.Day7| always comes too late</span><br>
-                <span>But |.Day5| never hesitate</span>
-            </div>
-            <div class="stanza">
-                <span>Dressed up to the eyes</span><br>
-                <span>It's a wonderful surprise</span><br>
-                <span>To see your shoes and your spirits rise</span><br>
-                <span>Throwing out your frown</span><br>
-                <span>And just smiling at the sound</span><br>
-                <span>And as sleek as a shriek</span><br>
-                <span>Spinning round and round</span><br>
-                <span>Always take a big bite</span><br>
-                <span>It's such a gorgeous sight</span><br>
-                <span>To see you in the middle of the night</span><br>
-                <span>You can never get enough</span><br>
-                <span>Enough of this stuff</span><br>
-                <span>It's |.Day5|</span><br>
-                <span>I'm in love</span>
-            </div>
-            <div data-init="Opening" class="stanza"></div>
-            <div class="stanza">
-                <span>|.Day1| you can fall apart</span><br>
-                <span>|.Day2|, |.Day3| break my heart</span><br>
-                <span>|.Day4| doesn't even start</span><br>
-                <span data-init="Friday"></span>
-            </div>
-            <style>
-                .stanza{
-                padding-top: 20px;
-            }
-        </style>
-        </template>
-        <div id="target"></div>
-
-        <script type="module">
-            import { transform } from 'https://cdn.skypack.dev/trans-render';
-            import { interpolate } from 'https://cdn.skypack.dev/trans-render/lib/interpolate.js';
-
-            let model = {
-                Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
-                Day6: 'Saturday', Day7: 'Sunday',
-            };
-            const ctx = transform(Main, {
-                match: {
-                    '*': ({ target }) => {
-                        interpolate(target, 'textContent', model);
-                    },
-                    dataInitAttribs: ({ target, ctx, val }) => {
-                        transform(self[val], ctx, target);
-                    }
-                }
-            }, target);
-            changeDays.addEventListener('click', e => {
-                model = {
-                    Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
-                    Day6: 'lördag', Day7: 'söndag',
-                }
-                delete ctx.match.initData;
-                transform(target, ctx);
-            })
-        </script>
-    </div>
-```
-
-</details>
--->
-
-
 ## Extending trans-render with declarative syntax
 
 The examples so far have relied heavily on arrow functions.  As we've seen, it provides support for 100% no-holds-barred non-declarative code:
@@ -438,7 +202,11 @@ const matches = { //TODO: check that this works
 }
 ```
 
-These arrow functions can return a value.  trans-render's "postMatch" processors allow us to enhance what any custom function does, via some reusable (formally user-registered) processors.  If one of these reusable processors is sufficient for the task at hand, then the arrow function can be replaced by a JSON-like expression, allowing the reusable processor to do its thing, after being passed the context.  trans-render provides a few "standard" processors, which address common concerns.
+These arrow functions can return a value.  trans-render's "postMatch" processors allow us to enhance what any custom function does, via some reusable (formally user-registered) processors.  If one of these reusable processors is sufficient for the task at hand, then the arrow function can be replaced by a JSON-like expression, allowing the reusable processor to do its thing, after being passed the context.  
+
+This is the key to how the unconstrained TR syntax can, in a large number of cases, be made purely declarative.
+
+trans-render provides a few "standard" processors, which address common concerns.
 
 The first common concern is setting the textContent of an element.
 
@@ -500,7 +268,7 @@ Note the configuration setting associated with the transform function, "postMatc
 summary: 'Hallå'
 ```
 
-...is a string, use the Textor class to process the rendering context." 
+...is a string, use the Texter class to process the rendering context." 
 
 The brave developer can implement some other way of interpreting a right-hand-side of type "String".  This is the amount of engineering firepower required to implement the Texter processor:
 
@@ -556,7 +324,7 @@ As you may have noticed, some abbreviations are used by this library:
 
 The inspiration for TR came from wanting a syntax for binding templates to a model provided by a hosting custom element.
 
-The RenderContext object ctx supports a special placeholder for providing the hosting custom element:  ctx.host.  But the name "host" can be treated a bit loosely.  Really, it could be treated as the provider of the model that we want the template to bind to.  To be precise, it is designed to hold reverse "stack" of host containers.  host[0] is the containing host, host[1] its containing host, etc.
+The RenderContext object "ctx" supports a special placeholder for providing the hosting custom element:  ctx.host.  But the name "host" can be interpreted a bit loosely.  Really, it could be treated as the provider of the model that we want the template to bind to. 
 
 But having standardized on a place where the dynamic data we need can be derived from, we can start adding declarative string interpolation:
 
@@ -585,10 +353,11 @@ This feature is *not* part of the core transform function.  It requires one of t
     transform(details, {
         match:{
             "summary": ["Hello", "place", ".  What a beautiful world you are."],
-            "article": ["mainContent"]
+            "article": "mainContent"
         },
         host:{
-            place: 'Mars'
+            place: 'Mars',
+            mainContent: "Mars is a red planet."
         },
         postMatch: [{
             rhsType: Array, 
