@@ -38,6 +38,7 @@
     "./lib/PEA.js": "./lib/PEA.js",
     "./lib/PEAT.js": "./lib/PEAT.js",
     "./lib/specialKeys.js": "./lib/specialKeys.js",
+    "./lib/SplitText.js": "./lib/SplitText.js",
     "./lib/structuralClone.js": "./lib/structuralClone.js",
     "./lib/mixins/TemplMgmtBase.js": "./lib/mixins/TemplMgmtBase.js",
     "./lib/mixins/TemplMgmtWithPEST.js": "./lib/mixins/TemplMgmtWithPEST.js",
