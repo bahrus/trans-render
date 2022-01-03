@@ -87,6 +87,10 @@ export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropIn
     actions?: Partial<{[key in keyof MCActions]: TAction | keyof MCProps}> 
     propChangeMethod?: keyof MCActions;
     style?: Partial<CSSStyleDeclaration>;
+    /**
+     * Used for providing hints to server side processing what css queries should be observed if using HTMLRewriter.
+     */
+    keyQueries?: string[];
 }
 
 export type ListOfLogicalExpressions<MCProps = any> = (keyof MCProps | LogicOp<MCProps>)[];
