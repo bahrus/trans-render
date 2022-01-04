@@ -261,7 +261,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         interface newClass extends TRElementProps{};
 
         this.addProps(newClass as any as {new(): HTMLElement}, propInfos, args);
-        fine(tagName, newClass as any as ({new(): HTMLElement}));
+        fine(tagName!, newClass as any as ({new(): HTMLElement}));
         this.classDef = newClass as any as {new(): MCProps & MCActions & TRElementProps & HTMLElement};
         return this.classDef;
     }
@@ -292,6 +292,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                 returnArr.push(toLisp((key)));
             }
         }
+        returnArr.push('defer-hydration');
         return returnArr;
     }
 
