@@ -55,7 +55,7 @@
   ],
   "devDependencies": {
     "xtal-test": "0.0.54",
-    "xtal-editor": "0.0.111",
+    "xtal-editor": "0.0.116",
     "xtal-shell": "0.0.25"
   },
   "repository": {

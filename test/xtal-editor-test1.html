@@ -7,43 +7,61 @@
     <title>Document</title>
 </head>
 <body>
-    <xtal-editor-example1></xtal-editor-example1>
+    <xtal-editor key=abc>
+        <textarea slot=initVal>
+            {
+                "string":"foo",
+                "number":5,
+                "array":[1,2,3],
+                "object":{
+                    "property":"value",
+                    "subobj":{
+                        "arr":["foo","ha"],
+                        "numero":1
+                    }
+                }
+            }
+        </textarea>
+    </xtal-editor>
     <script type=importmap>
         {
             "imports": {
                 "xtal-element/": "../node_modules/xtal-element/",
-                "trans-render/": "../../node_modules/trans-render/",
+                "trans-render/": "../",
                 "on-to-me/": "../node_modules/on-to-me/",
                 "tran-sister/": "../node_modules/tran-sister/",
                 "xtal-side-nav/": "../node_modules/xtal-side-nav/",
                 "d-fine/": "../node_modules/d-fine/",
                 "xodus/": "../node_modules/xodus/",
                 "@power-elements/": "../node_modules/@power-elements/",
+                "be-active/": "../node_modules/be-active/",
+                "be-definitive/": "../node_modules/be-definitive/",
+                "be-deslotted/": "../node_modules/be-deslotted/",
+                "be-loaded/": "../node_modules/be-loaded/",
                 "be-observant/": "../node_modules/be-observant/",
                 "be-noticed/": "../node_modules/be-noticed/",
                 "be-decorated/": "../node_modules/be-decorated/",
-                "be-definitive/": "../node_modules/be-definitive/",
                 "css-observe/": "../node_modules/css-observe/",
                 "be-transformative/": "../node_modules/be-transformative/",
                 "be-switched/": "../node_modules/be-switched/",
                 "be-repeated/": "../node_modules/be-repeated/",
-                "be-hive/": "../node_modules/be-hive/",
-                "xtal-editor/": "../node_modules/xtal-editor/"
+                "be-hive/": "../node_modules/be-hive/"
             }
         }
     </script>
     <button onclick="runScript()">runScript</button>
     <script>
         function runScript(){
-            $hell.cd('/xtal-editor-example1/div/div[0]/div[0]/button');
+            $hell.cd('/xtal-editor/xtal-editor-field/div/div/div[0]/button');
             $hell.$0.click();
             setTimeout(() => {
-                $hell.cd('/xtal-editor-example1/div/div[1]/xtal-editor[0]/div/div[0]/div[0]/input[1]');
+                $hell.cd('/xtal-editor/xtal-editor-field/div/div[1]/xtal-editor-field[0]/div/div/div[0]/input[1]');
                 $hell.$0.value = 'jethro tull';
                 const event = new Event('change');
                 $hell.$0.dispatchEvent(event);
-                $hell.cd('/xtal-editor-example1');
+                $hell.cd('/xtal-editor/xtal-editor-field');
                 if($hell.$0.parsedObject.string === 'jethro tull'){
+                    $hell.cd('/xtal-editor');
                     $hell.$0.setAttribute('mark', '');
                 }else{
                     console.error('jethro tull not found in higher nodes.');
@@ -56,8 +74,8 @@
         }, 2000);
     </script>
     <script type=module>
-        import 'xtal-editor/src/xtal-editor-example1.js';
-        import '../node_modules/xtal-shell/$hell.js?module'
+        import '../node_modules/xtal-editor/xtal-editor.js';
+        import '../node_modules/xtal-shell/$hell.js'
     </script>
     <be-hive></be-hive>
 </body>
