@@ -19,7 +19,7 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
                     (<any>root).adoptedStyleSheets = styles;
                 }
             }else{
-                root = this.shadowRoot;
+                root = shadowRoot;
                 if(!this.#repeatVisit){
                     //assume the shadow root came from declarative shadow dom, so no need to clone template
                     if(styles !== undefined){
@@ -57,7 +57,7 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
 
     doInitTransform({clonedTemplate, noshadow}: this): void{
         if(this.waitToInit) return;
-        this.loadPlugins(this);
+        this.loadPlugins(this); // this is where the initTransform is added to the ctx
         const propInfos = (this.constructor as any)['reactiveProps'] as {[key: string]: PropInfo};
         for(const refKey in propInfos){
             const propInfo = propInfos[refKey];
@@ -89,6 +89,10 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
     doTemplMount(self: this, clonedTemplate: DocumentFragment){}
 
     doUpdateTransform(self: this){
+        if(this.hasAttribute('defer-rendering')){
+            this.removeAttribute('defer-rendering');
+            return;
+        }
         this.__ctx!.match = self.updateTransform;
         const root = self.noshadow ? self : self.shadowRoot!;
         transform(root, this.__ctx!);
