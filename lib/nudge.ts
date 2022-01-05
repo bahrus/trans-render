@@ -1,16 +1,16 @@
 /**
  * Decrement "disabled" counter, remove when reaches 0
- * @param prevSib 
+ * @param el 
  */
- export function nudge(prevSib: Element) { //TODO:  Share with be-observant
-    const da = prevSib.getAttribute('disabled');
+ export function nudge(el: Element, attr = 'disabled') { //TODO:  Share with be-observant
+    const da = el.getAttribute(attr);
     if (da !== null) {
         if (da.length === 0 || da === "1") {
-            prevSib.removeAttribute('disabled');
-            (<any>prevSib).disabled = false;
+            el.removeAttribute(attr);
+            if(attr === 'disabled') (<any>el).disabled = false;
         }
         else {
-            prevSib.setAttribute('disabled', (parseInt(da) - 1).toString());
+            el.setAttribute(attr, (parseInt(da) - 1).toString());
         }
     }
 }
