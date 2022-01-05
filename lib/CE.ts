@@ -178,9 +178,13 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             }
             attributeChangedCallback(n: string, ov: string, nv: string){
                 if(super.attributeChangedCallback) super.attributeChangedCallback(n, ov, nv);
+                if(n === 'defer-hydration' && nv === null && ov !== null){
+                    this.detachQR();
+                }
+
                 let propName = toCamel(n);
                 const prop = propInfos[propName];
-                if(this.inAbsorbMode || this.inReflectMode) propName = '_' + propName;
+                if(this.inReflectMode) propName = '_' + propName;
                 if(prop !== undefined){
                     if(prop.dry && ov === nv) return;
                     const aThis = this as any;
@@ -223,6 +227,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                 this.QR = QR;
             }
             detachQR(){
+                if(this.hasAttribute('defer-hydration')) return;
                 delete this.QR;
                 const propChangeQueue = this.propChangeQueue as Set<string> | undefined;
                 const acts = this.mergedActions;
@@ -252,9 +257,9 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                     (<any>this)['_' + key] = vals[key];
                 }
             }
-            get inAbsorbMode(){
-                return this.hasAttribute('defer-hydration');
-            }
+            // get inAbsorbMode(){
+            //     return this.hasAttribute('defer-hydration');
+            // }
 
         }
 
