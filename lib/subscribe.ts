@@ -34,7 +34,9 @@ export async function subscribe(element: Element, propName: string, callback: Ca
                 if(callbacks){
                     callbacks.forEach(callback => callback(element, propName, nv));
                 }
-            }
+            },
+            enumerable: true,
+            configurable: true,
         });
     }else{
         subscribers[propName].push(callback);
