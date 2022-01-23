@@ -42,3 +42,7 @@ export async function subscribe(element: Element, propName: string, callback: Ca
         subscribers[propName].push(callback);
     }
 }
+
+export function unsubscribe(element: Element){
+    propSubscribers.delete(element);
+}
