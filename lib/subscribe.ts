@@ -30,6 +30,12 @@ export async function subscribe(element: Element, propName: string, callback: Ca
             },
             set(nv){
                 setter(nv);
+                try{
+                    const isConnected = element.isConnected;
+                }catch{
+                    propSubscribers.delete(element);
+                    return;
+                }
                 const callbacks = subscribers[propName];
                 if(callbacks){
                     callbacks.forEach(callback => callback(element, propName, nv));
