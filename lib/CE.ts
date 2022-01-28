@@ -142,7 +142,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         // }
         // this.mergedActions = mergedActions;
         const propInfos  = this.createPropInfos(args);
-        let ext = args.superclass || HTMLElement;
+        let ext = (args.superclass || HTMLElement) as {new(): any};
         const proto = ext.prototype;
         const mixins = args.mixins;
         if(mixins !== undefined){
