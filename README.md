@@ -30,6 +30,8 @@ This package contains two core libraries.
 
 The first, lib/transform.js, is a tiny (1.2k gzip/minified), 'non-committal' library that simply allows us to map css matches to user-defined functions. 
 
+However, this core library serves as a launching pad for an extensible, customizable list of plugins that can make the transform approach a purely declarative syntax.
+
 In addition, this package contains a fairly primitive library for defining custom elements, lib/CE.js, which can be combined with lib/transform.js via lib/mixins/TemplMgmt*.js.
 
 The package xtal-element builds on this package, and the documentation on defining custom elements, with trans-rendering in mind, is documented there [WIP].
@@ -305,7 +307,9 @@ export function matchByType(val: any, typOfProcessor: any){
 }
 ```
 
-The most interesting case is when the RHS is of type Object.  As you can see, we use the instanceOf to see if the rhs of the expression is an instance of the "rhsType" value of any of the postMatch rules.  The first match of the postMatch array wins out. 
+The most interesting case is when the RHS is of type Object.  As you can see, we use the instanceOf to see if the rhs of the expression is an instance of the "rhsType" value of any of the postMatch rules.  The first match of the postMatch array wins out.
+
+However, let's be honest -- JSON is quite limited when it comes to types.  Since DTR must be 100% pure JSON, we will first see how we can use these sets of rules, and see how far it takes us (narrator:  not very far).  Later we will discuss an additional layer of custom processors we can add to the mix (that provides a synergistic solution with other solutions, including "may-it-be" attributes and Cloudflares HTMLRewriter).
 
 We'll be walking through the "standard post script processors" that trans-render provides, but always remember that alternatives can be used based on the requirements.  The standard processors are striving to make the binding syntax as JSON-friendly as possible.
 
