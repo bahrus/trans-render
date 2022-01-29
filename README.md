@@ -189,7 +189,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
     </tr>
 </table>
 
-## Extending trans-render with declarative syntax
+## Extending trans-render with declarative syntax -- Part I
 
 The examples so far have relied heavily on arrow functions.  As we've seen, it provides support for 100% no-holds-barred non-declarative code:
 
@@ -441,113 +441,13 @@ match:{
 }
 ```
 
-## Archival Services [TODO]
-
-If lhs is an active DOM element, and rhs is false, turns lhs into a template (in-place replacement).
-
-If lhs is a template, and rhs is true, clones the template, replaces itself.
-
-Useful especially for be-loaded, to avoid loading active content, for example.
-
 ## Nested, Scoped Transforms
 
 One useful plug-in for transform.js is NestedTransform.js, which allows the RHS of a match to serve as a springboard for performing a sub transform.
 
 
-## Template Merging Using a Custom Element (Inline Binding) [TODO]
 
-We've seen examples where we merge other templates into the main one, which required imperative logic:
-
-```html
-<template id="Friday">
-    <span data-int>It's |.Day5| I'm in love</span>
-</template>
-<template id="Opening">
-    <span data-int>I don't care if |.Day1|'s blue</span><br>
-    <span data-int>|.Day2|'s gray and |.Day3| too</span><br>
-    <span data-int>|.Day4| I don't care about you</span><br>
-    <span data-init="Friday"></span>
-</template>
-<template id="Main">
-    <div data-init="Opening" class="stanza"></div>
-</template>
-```
-
-with transform fragment:
-
-```JavaScript
-dataInitAttrib: ({ target, ctx, val }) => {
-    transform(self[val], ctx, target);
-}
-```
-
-How can we make this declarative? 
-
-One suggestion would be to use a custom element like [carbon-copy](https://github.com/bahrus/carbon-copy):
-
-```html
-<template id="Friday">
-    <span>It's |.Day5| I'm in love</span>
-</template>
-<template id="Opening">
-    <span>I don't care if |.Day1|'s blue</span><br>
-    <span>|.Day2|'s gray and |.Day3| too</span><br>
-    <span>|.Day4| I don't care about you</span><br>
-    <b-c-c copy from=./Friday></b-c-c>
-</template>
-<template id="Main">
-    <b-c-c copy from=./Opening></b-c-c>
-    ...
-</template>
-```
-
-But now we need to perform a transform on the cloned HTML.
-
-b-c-c (one of the three carbon-copy elements) supports this:
-
-```html
-<b-c-c -to-be-transformed -tr-context noshadow from=myTemplate></b-c-c>
-```
-
-and we can recursively, declaratively apply a transform upon cloning:
-
-```JavaScript
-trContext: ctx
-```
-
-## Loosely Coupled Template Merging When Template Is Specified on RHS [Untested]
-
-The markup above assumes the developer wants to decide where templates should be inserted. In many cases, that's perfectly appropriate.  But in some cases, the markup should be loosely coupled from the need to insert a template.  For example, maybe the core HTML markup comes from a third party source, but we want to insert some custom content into that stream.
-
-How can we do this declaratively?  The plug-in TemplateMerge serves this purpose.
-
-Instead of having a RHS of type string, what if we define a declarative postMatch processor that acts when it sees a template on the RHS?
-
-We could have a rule for this, if the RHS is a template:
-
-
-```JavaScript
-dataInitAttribEqFriday: FridayTemplate
-```
-
-If the template has attribute "shadowroot", then a shadow root will be attached (if there isn't one already) before cloning the template into the shadow root.  If the template has attribute "data-insert-position=afterend" then the template will be appended after and adjacent to the target element.
-
-
-
-## Transforming Templates matched on LHS [TODO]
-
-If the document search that we match on, for the RHS is a template, then replace the template by transforming the template:
-
-1.  Take the innerHTML, use the DOMParser to parse, then apply the transform, according to the transform rule on the RHS.
-2.  Use template instantiation, merging in the object on the RHS
-3.  Should we:
-      1.  Create a new template element from the transformed HTML, and replace the matched template with the new one? Or
-      2.  Replace the matching template with the Transformed HTML, so it becomes Live DOM?  Or
-      3.  Support both somehow?
-
-
-
-## Extensible, Loosely Coupled PostMatches [TODO] Via JS Tuples
+## Extensible, Loosely Coupled PostMatches Via JS Tuples
 
 This can be quite useful, but we have to make some assumptions about what to do with the template -- clone and append within the matching tag?  Append after the matching tag?  Use ShadowDOM?
 
@@ -587,9 +487,53 @@ To define the processors, we extend the postMatch syntax, using the word "head" 
 
 Remove matching element if false (dangerous). If true, instantiate template, with context.state(?) as object to bind to.
 
-## Custom Element RHS 
+[TODO] -- did we eer implement this?
 
-Use static "is" property (until there's )
+## Extending trans-render with declarative syntax -- Part II [TODO]
+
+So we have tried mightily to express complex rules based entirely on the intrinsic data structures JSON provides.  It takes a fair distance, and may, combined with client-side web components / element decorators, be sufficient for many scenarios.
+
+However, it leaves an unsatisfying gap.  Often we would like to express more manipulation that should occur to a template, prior to the "stamped" template hitting the Live DOM tree.
+
+And we want a syntax that could be interpreted not just in the browser, but via Cloudflare's HTMLRewriter, as maybe even service workers, should service workers ever support something like Cloudflares's HTMLRewriter.
+
+For example, a common requirement is to include some other common HTML template inside the template we are transforming.  JSON-serializing an HTML template is somewhat doable, but runs into issues as one takes that approach to a logical extreme (hard to explain what I mean at this point).  Maybe that template should come from a URL.  Since JSON doesn't support a native URL type, we are stuck representing the URL as a string, and it raises the question of how we can differentiate that string with other stings, like for properties, etc.
+
+So what to do?
+
+In parallel, web components built with the trans-render have built what is turning out to be a rather large number of DOM "decorators" or "behavior" -- special attributes that are executed in the browser to enhance the behavior of the element.  These form a HTML framework referred to as the "May-It-Be" framework -- all the attributes start with be-.
+
+A (smallish) subset of those behaviors make just as much sense to be performed on the server, or on a futuristic service worker, W3C willing, as it does to be performed on the client.  The vision here is pipeline of transformations, some of them being done in the server, some in a service worker, some while stamping the template, some "post stamping" in the live DOM tree.
+
+Examples include [be-inclusive](https://github.com/bahrus/be-inclusive), be-importing, be-definitive (where a transform is specified).
+
+This is the syntax to register processors tied to these declarative attributes / behaviors:
+
+```JavaScript
+postMatch: [
+    {
+        rhsType: Array,
+        rhsHeadType: Object,
+        ctor: PEA,
+        attrProcessors:{
+            beInclusive: true,
+            beImporting: true,
+            beDefinitive: true
+        }
+    },
+    {
+        rhsType: Array,
+        rhsHeadType: String,
+        ctor: SplitText
+    },
+    {
+        rhsType: String,
+        ctor: SplitText,
+    }
+],
+```
+
+
 
 
 
