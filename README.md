@@ -487,7 +487,7 @@ Remove matching element if false (dangerous). If true, instantiate template, wit
 
 [TODO] -- did we eer implement this?
 
-## Extending trans-render with declarative syntax -- Part II [TODO]
+## Extending trans-render with declarative syntax -- Part II
 
 So we have tried mightily to express complex rules based entirely on the intrinsic data structures JSON provides.  It takes a fair distance, and may, combined with client-side web components / element decorators, be sufficient for many scenarios.
 
