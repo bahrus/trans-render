@@ -509,7 +509,7 @@ So built into the core transform function is the following additional rule:
 
 **If the rhs of a match is a string, and if that string is a key of the plugin ctx field, then the corresponding plugin function will be evaluated, passing in the context, and the rhs replaced by whatever the function returns.**
 
-Yeah, I know, maybe I should have led with that.
+Yeah, I know, maybe I should have led with that.  But hopefully it is for the best -- the intention is to use bespoke plugins sparingly, only when needed.
 
 In parallel, web components built with the trans-render have built what is turning out to be a rather large number of DOM "decorators" or "behavior" -- special attributes that are executed in the browser to enhance the behavior of the element.  These form a HTML framework referred to as the "May-It-Be" framework -- all the attributes start with be-.
 
