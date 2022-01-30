@@ -445,8 +445,6 @@ match:{
 
 One useful plug-in for transform.js is NestedTransform.js, which allows the RHS of a match to serve as a springboard for performing a sub transform.
 
-
-
 ## Extensible, Loosely Coupled PostMatches Via JS Tuples
 
 This can be quite useful, but we have to make some assumptions about what to do with the template -- clone and append within the matching tag?  Append after the matching tag?  Use ShadowDOM?
@@ -495,11 +493,21 @@ So we have tried mightily to express complex rules based entirely on the intrins
 
 However, it leaves an unsatisfying gap.  Often we would like to express more manipulation that should occur to a template, prior to the "stamped" template hitting the Live DOM tree.
 
-And we want a syntax that could be interpreted not just in the browser, but via Cloudflare's HTMLRewriter, as maybe even service workers, should service workers ever support something like Cloudflares's HTMLRewriter.
+And we want a syntax that could be interpreted not just in the browser, but via Cloudflare's HTMLRewriter, as well as service workers, should service workers ever support something like Cloudflares's HTMLRewriter.
 
-For example, a common requirement is to include some other common HTML template inside the template we are transforming.  JSON-serializing an HTML template is somewhat doable, but runs into issues as one takes that approach to a logical extreme (hard to explain what I mean at this point).  Maybe that template should come from a URL.  Since JSON doesn't support a native URL type, we are stuck representing the URL as a string, and it raises the question of how we can differentiate that string with other stings, like for properties, etc.
+For example, a common requirement is to include some other common HTML template inside the template we are transforming.  JSON-serializing an HTML template is somewhat doable, but runs into issues as one takes that approach to a logical extreme, especially with nested JSON attributes.  Maybe that template should come from a URL.  Since JSON doesn't support a native URL type, we are stuck representing the URL as a string, and it raises the question of how we can differentiate that string with other stings, like for properties, etc.
 
 So what to do?
+
+Earlier, we mentioned that the ctx object has a host property, where we can pass the model or the custom element host from which binding takes place.  This allows us to make strings in our JSON transform bind to the model.
+
+We do something similar with an additional field of the ctx object:  "plugins".
+
+The plugins field allows us to specify name / value pairs of functions that will be passed the context object.
+
+So built into the core transform function is the following additional rule:
+
+**If the rhs of an match is a string, and if that string is a name of a plugin function, then that plugin function will be evaluated, passing in the context, and the rhs replaced by whatever the function returns.**
 
 In parallel, web components built with the trans-render have built what is turning out to be a rather large number of DOM "decorators" or "behavior" -- special attributes that are executed in the browser to enhance the behavior of the element.  These form a HTML framework referred to as the "May-It-Be" framework -- all the attributes start with be-.
 

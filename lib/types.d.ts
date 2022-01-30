@@ -11,6 +11,7 @@ export interface RenderContext<T = Element, TItem = any> {
     val?: string | null;
     rhs?: any;
     host?: HTMLElement | undefined;
+    plugins?: {[key: string]: (ctx: RenderContext<T, TItem>, options: RenderOptions) => any};
     key?: string;
     queryCache?: WeakMap<Element, {[key: string]: NodeListOf<Element>}>;
     abort?: boolean | undefined;
@@ -34,6 +35,7 @@ export interface postMatchProcessor {
 export interface PMDo{
     do(ctx: RenderContext): void;
 }
+
 
 export type PropSettings<T extends Partial<HTMLElement> = HTMLElement> = {
     [P in keyof T]?: any
