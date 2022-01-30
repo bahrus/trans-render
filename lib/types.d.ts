@@ -11,7 +11,7 @@ export interface RenderContext<T = Element, TItem = any> {
     val?: string | null;
     rhs?: any;
     host?: HTMLElement | undefined;
-    plugins?: {[key: string]: (ctx: RenderContext<T, TItem>, options: RenderOptions) => any};
+    plugins?: {[key: string]: (ctx: RenderContext<T, TItem>) => any};
     key?: string;
     queryCache?: WeakMap<Element, {[key: string]: NodeListOf<Element>}>;
     abort?: boolean | undefined;

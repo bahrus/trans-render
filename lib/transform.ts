@@ -148,6 +148,9 @@ function doRHS(ctx: RenderContext, rhs: any){
     if(rhs === undefined) return;
     if(ctx.abort === true) return;
     while(typeof rhs === 'function') rhs = rhs(ctx);
+    while(ctx.plugins !== undefined && ctx.plugins[rhs] !== undefined){
+        rhs = ctx.plugins[rhs](ctx);
+    }
     const pm = ctx.postMatch;
     if(pm !== undefined){
         let  ctor: {new(): PMDo} | PMDo | undefined;
