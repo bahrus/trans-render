@@ -28,6 +28,7 @@ const TemplMgmtMixin = (superclass: any) => class TemplMgmt extends TemplMgmtBas
                     ctor: SplitText,
                 }
             ],
+            plugins: self.transformPlugins,
             options: self.renderOptions,
         };
         self.__ctx.ctx = self.__ctx;

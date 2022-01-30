@@ -12,12 +12,14 @@ export interface RenderContext<T = Element, TItem = any> {
     val?: string | null;
     rhs?: any;
     host?: HTMLElement | undefined;
-    plugins?: {[key: string]: (ctx: RenderContext<T, TItem>) => any};
+    plugins?: TransformPlugins<T, TItem>;
     key?: string;
     queryCache?: WeakMap<Element, {[key: string]: NodeListOf<Element>}>;
     abort?: boolean | undefined;
     templateIds?: string[];
 }
+
+export type TransformPlugins<T = Element, TItem = any> = {[key: string]: (ctx: RenderContext<T, TItem>) => any};
 
 export interface RenderOptions{
     useShadow?: boolean;
@@ -165,6 +167,7 @@ export interface TemplMgmtProps{
     noshadow?: boolean;
     renderOptions?: RenderOptions;
     waitToInit?: boolean;
+    transformPlugins?: TransformPlugins;
 }
 
 export interface TemplMgmtActions{
