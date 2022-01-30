@@ -125,9 +125,10 @@ function processTarget(
 }
 function doMatches(ctx: RenderContext, matches: Element[], queryInfo: any, match: any, key: string){
     for(const matchedElement of matches){
-        const {val, target} = ctx;
+        const {val, target, attrib} = ctx;
         switch(queryInfo.type){
             case 'attribs':
+                ctx.attrib = queryInfo.attrib;
                 ctx.val = matchedElement.getAttribute(queryInfo.attrib);
                 break;
             case 'props':
@@ -140,6 +141,7 @@ function doMatches(ctx: RenderContext, matches: Element[], queryInfo: any, match
         ctx.key = key;
         doRHS(ctx, match[key]);
         ctx.val = val;
+        ctx.attrib = attrib;
         ctx.target = target;
     }   
 }

@@ -8,6 +8,7 @@ export interface RenderContext<T = Element, TItem = any> {
     targetProp?: string;
     options?: RenderOptions | undefined;
     postMatch?: postMatchProcessor[];
+    attrib?: string | null;
     val?: string | null;
     rhs?: any;
     host?: HTMLElement | undefined;
