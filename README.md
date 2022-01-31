@@ -189,7 +189,45 @@ The following table lists how the LHS is translated into CSS multi-match queries
     </tr>
 </table>
 
-## Extending trans-render with declarative syntax -- Part I
+## Declarative trans-render syntax via Plugins
+
+Previously, we saw the core value-add that trans-rendering library provides:
+
+Making
+
+```JavaScript
+dataCountAttribs: ({target, val}) => {
+    ...
+}
+```
+
+short-hand for:
+
+```JavaScript
+fragment.querySelectorAll('[data-count]').forEach(target => {
+    const val = target.getAttribute('data-count');
+    ...
+})
+```
+
+We can make this declarative, by using the RenderContext's plugin object:
+
+```JavaScript
+transform(Main, {
+    plugins: {
+        myPlugin: {
+            selector: '[data-count]', //optional
+            processor: ({target, val}) => {
+                ...
+            }
+        }
+    }, 
+    match:{
+        dataCountAttribs: 'myPlugin'
+    }
+})
+
+## Declarative trans-render syntax via PostMatch Processors 
 
 The examples so far have relied heavily on arrow functions.  As we've seen, it provides support for 100% no-holds-barred non-declarative code:
 
@@ -487,61 +525,7 @@ Remove matching element if false (dangerous). If true, instantiate template, wit
 
 [TODO] -- did we eer implement this?
 
-## Extending trans-render with declarative syntax -- Part II
 
-So we have tried mightily to express complex rules based entirely on the intrinsic data structures JSON provides.  It takes a fair distance, and may, combined with client-side web components / element decorators, be sufficient for many scenarios.
-
-However, it leaves an unsatisfying gap.  Often we would like to express more manipulation that should occur to a template, prior to the "stamped" template hitting the Live DOM tree.
-
-And we want a syntax that could be interpreted not just in the browser, but via Cloudflare's HTMLRewriter, as well as service workers, should service workers ever support something like Cloudflares's HTMLRewriter.
-
-For example, a common requirement is to include some other common HTML template inside the template we are transforming.  JSON-serializing an HTML template is somewhat doable, but runs into issues as one takes that approach to a logical extreme, especially with nested JSON attributes.  Maybe that template should come from a URL.  Since JSON doesn't support a native URL type, we are stuck representing the URL as a string, and it raises the question of how we can differentiate that string with other stings, like for properties, etc.
-
-So what to do?
-
-Earlier, we mentioned that the ctx object has a host property, where we can pass the model or the custom element host from which binding takes place.  This allows us to make strings in our JSON transform bind to the model.
-
-We do something similar with an additional field of the ctx object:  "plugins".
-
-The plugins field allows us to specify name / value pairs of functions that will be passed the context object.
-
-So built into the core transform function is the following additional rule:
-
-**If the rhs of a match is a string, and if that string is a key of the ctx.plugin field, then the corresponding plugin function will be evaluated, passing in the context, and the rhs replaced by whatever the function returns.**
-
-Yeah, I know, maybe I should have led with that.  But hopefully it is for the best -- the intention is to use bespoke plugins sparingly, only when needed.
-
-In parallel, web components built with the trans-render have built what is turning out to be a rather large number of DOM "decorators" or "behavior" -- special attributes that are executed in the browser to enhance the behavior of the element.  These form a HTML framework referred to as the "May-It-Be" framework -- all the attributes start with be-.
-
-A (smallish) subset of those behaviors make just as much sense to be performed on the server, or on a futuristic service worker, W3C willing, as it does to be performed on the client.  The vision here is pipeline of transformations, some of them being done in the server, some in a service worker, some while stamping the template, some "post stamping" in the live DOM tree.
-
-Examples include [be-inclusive](https://github.com/bahrus/be-inclusive), be-importing, be-definitive (where a transform is specified).
-
-This is the syntax to register processors tied to these declarative attributes / behaviors:
-
-```JavaScript
-postMatch: [
-    {
-        rhsType: Array,
-        rhsHeadType: Object,
-        ctor: PEA,
-        attrProcessors:{
-            beInclusive: true,
-            beImporting: true,
-            beDefinitive: true
-        }
-    },
-    {
-        rhsType: Array,
-        rhsHeadType: String,
-        ctor: SplitText
-    },
-    {
-        rhsType: String,
-        ctor: SplitText,
-    }
-],
-```
 
 
 

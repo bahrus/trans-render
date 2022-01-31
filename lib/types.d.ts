@@ -19,7 +19,12 @@ export interface RenderContext<T = Element, TItem = any> {
     templateIds?: string[];
 }
 
-export type TransformPlugins<T = Element, TItem = any> = {[key: string]: (ctx: RenderContext<T, TItem>) => any};
+export interface TransformPluginSettings<T = Element, TItem = any> {
+    processor: (ctx: RenderContext<T, TItem>) => any;
+    selector?: string;
+}
+
+export type TransformPlugins<T = Element, TItem = any> = {[key: string]: TransformPluginSettings<T, TItem>};
 
 export interface RenderOptions{
     useShadow?: boolean;
