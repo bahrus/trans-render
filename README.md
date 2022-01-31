@@ -189,7 +189,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
     </tr>
 </table>
 
-## Declarative trans-render syntax via Plugins
+## Declarative trans-render syntax via plugins
 
 Previously, we saw the core value-add that trans-rendering library provides:
 
@@ -213,17 +213,18 @@ fragment.querySelectorAll('[data-count]').forEach(target => {
 We can make this declarative, by using the RenderContext's plugin object:
 
 ```JavaScript
+const dataCountPlugin = {
+    selector: 'dataCountAttribs',
+    processor: ({target, val}) => {
+        ...
+    }
+}
 transform(Main, {
     plugins: {
-        myPlugin: {
-            selector: '[data-count]', //optional
-            processor: ({target, val}) => {
-                ...
-            }
-        }
+        myPlugin: dataCountPlugin
     }, 
     match:{
-        dataCountAttribs: 'myPlugin'
+        [dataCountPlugin.selector]: 'myPlugin'
     }
 })
 

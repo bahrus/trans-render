@@ -151,7 +151,7 @@ function doRHS(ctx: RenderContext, rhs: any){
     if(ctx.abort === true) return;
     while(typeof rhs === 'function') rhs = rhs(ctx);
     while(ctx.plugins !== undefined && ctx.plugins[rhs] !== undefined){
-        rhs = ctx.plugins[rhs](ctx);
+        rhs = ctx.plugins[rhs].processor(ctx);
     }
     const pm = ctx.postMatch;
     if(pm !== undefined){
