@@ -21,11 +21,20 @@ export async function awaitTransforms(plugins: TransformPlugins): Promise<Transf
             const ce = await customElements.whenDefined(ceName) as any as TransformPluginSettings;
             returnObj[key] = ce;
             continue;
+        }else{
+            returnObj[key] = plugin;
         }
     }
+    return returnObj;
 }
 
-export function toTransformMatch(plugins: TransformPlugins): Promise<{[key: string]: string}>{
-
+export function toTransformMatch(plugins: TransformPlugins): {[key: string]: string}{
+    const returnObj: {[key: string]: string} = {};
+    for(const key in plugins){
+        const {ready, selector} = plugins[key];
+        if(!ready || selector === undefined) continue;
+        returnObj[selector] = key;
+    }
+    return returnObj;
 }
 
