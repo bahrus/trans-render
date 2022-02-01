@@ -40,6 +40,7 @@
     "./lib/PE.js": "./lib/PE.js",
     "./lib/PEA.js": "./lib/PEA.js",
     "./lib/PEAT.js": "./lib/PEAT.js",
+    "./lib/pluginMgr.js": "./lib/pluginMgr.js",
     "./lib/specialKeys.js": "./lib/specialKeys.js",
     "./lib/SplitText.js": "./lib/SplitText.js",
     "./lib/structuralClone.js": "./lib/structuralClone.js",

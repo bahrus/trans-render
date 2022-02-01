@@ -22,6 +22,7 @@ export interface RenderContext<T = Element, TItem = any> {
 export interface TransformPluginSettings<T = Element, TItem = any> {
     processor: (ctx: RenderContext<T, TItem>) => any;
     selector?: string;
+    blockWhileWaiting?: boolean;
 }
 
 export type TransformPlugins<T = Element, TItem = any> = {[key: string]: TransformPluginSettings<T, TItem>};
