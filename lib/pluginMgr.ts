@@ -7,6 +7,7 @@ export function register({selector, processor}: TransformPluginSettings){
         static is = camelToLisp(selector!);
         static ready = true;
         static processor = processor;
+        static selector = selector;
     }
     def(cls);
 }
