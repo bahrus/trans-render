@@ -1,8 +1,14 @@
 import {TransformPluginSettings, TransformPlugins} from './types';
 import {camelToLisp} from './camelToLisp.js';
+import {def} from './def.js';
 
-export function register(plugin: TransformPluginSettings){
-
+export function register({selector, processor}: TransformPluginSettings){
+    const cls = class extends HTMLElement{
+        static is = camelToLisp(selector!);
+        static ready = true;
+        static processor = processor;
+    }
+    def(cls);
 }
 
 export async function awaitTransforms(plugins: TransformPlugins): Promise<TransformPlugins> {
