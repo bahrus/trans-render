@@ -24,6 +24,7 @@ export interface TransformPluginSettings<T = Element, TItem = any> {
     selector?: string;
     blockWhileWaiting?: boolean;
     ready?: boolean;
+    //TODO:  support for registering instances
 }
 
 export type TransformPlugins<T = Element, TItem = any> = {[key: string]: TransformPluginSettings<T, TItem>};

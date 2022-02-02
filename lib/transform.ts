@@ -9,7 +9,11 @@ export async function transform(
     ctx: RenderContext,
     target: Element | DocumentFragment = sourceOrTemplate
 ){
-
+    if(ctx.mode === undefined && ctx.plugins){
+        const {awaitTransforms, toTransformMatch} = await import('./pluginMgr.js');
+        await awaitTransforms(ctx.plugins);
+        ctx.match = {...ctx.match, ...toTransformMatch(ctx.plugins)};
+    }
     ctx.ctx = ctx;
     ctx.transform = transform;
     const isATemplate = isTemplate(sourceOrTemplate);
