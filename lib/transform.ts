@@ -4,11 +4,12 @@ import { lispToCamel } from './lispToCamel.js';
 import { matchByType } from './matchByType.js';
 import { linkTemplates } from './linkTemplates.js';
 
-export function transform(
+export async function transform(
     sourceOrTemplate: Element | DocumentFragment,
     ctx: RenderContext,
     target: Element | DocumentFragment = sourceOrTemplate
 ){
+
     ctx.ctx = ctx;
     ctx.transform = transform;
     const isATemplate = isTemplate(sourceOrTemplate);

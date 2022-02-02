@@ -55,7 +55,7 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
 
     loadPlugins(self: this): void {}
 
-    doInitTransform({clonedTemplate, noshadow}: this): void{
+    async doInitTransform({clonedTemplate, noshadow}: this): Promise<void>{
         if(this.waitToInit) return;
         this.loadPlugins(this); // this is where the initTransform is added to the ctx
         const propInfos = (this.constructor as any)['reactiveProps'] as {[key: string]: PropInfo};
@@ -65,7 +65,7 @@ export const TemplMgmtBaseMixin = (superclass: {new(): TemplMgmtBase} )  => clas
                 (<any>this)[refKey] = undefined;
             }
         }
-        transform(clonedTemplate as DocumentFragment, this.__ctx!);
+        await transform(clonedTemplate as DocumentFragment, this.__ctx!);
         this.doTemplMount(this, clonedTemplate as DocumentFragment);
         
         for(const refKey in propInfos){
@@ -110,6 +110,7 @@ export const doInitTransform: Partial<{[key in keyof TemplMgmtActions]: Action<T
     },
     doInitTransform: {
         ifAllOf: ['clonedTemplate'],
+        async: true,
     }
 }
 

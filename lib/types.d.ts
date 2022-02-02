@@ -1,6 +1,6 @@
 export interface RenderContext<T = Element, TItem = any> {
     ctx?: RenderContext | undefined;
-    transform?: (sourceOrTemplate: HTMLElement | DocumentFragment, ctx: RenderContext, target?: HTMLElement | DocumentFragment) => RenderContext<T>;
+    transform?: (sourceOrTemplate: HTMLElement | DocumentFragment, ctx: RenderContext, target?: HTMLElement | DocumentFragment) => Promise<RenderContext<T>>;
     idx?: number;
     match?: any;
     mode?: 'init' | 'update';
