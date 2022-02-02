@@ -27,6 +27,10 @@ export interface TransformPluginSettings<T = Element, TItem = any> {
     //TODO:  support for registering instances
 }
 
+export interface TransformPluginState<T extends Element = Element, TItem = any, TState = any>  extends TransformPluginSettings<T, TItem> {
+    states: WeakMap<T, TState>
+}
+
 export type TransformPlugins<T = Element, TItem = any> = {[key: string]: TransformPluginSettings<T, TItem>};
 
 export interface RenderOptions{

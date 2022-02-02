@@ -8,6 +8,7 @@ export function register({selector, processor}: TransformPluginSettings){
         static ready = true;
         static processor = processor;
         static selector = selector;
+        static states = new WeakMap();
     }
     def(cls);
 }
