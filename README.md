@@ -229,6 +229,45 @@ transform(Main, {
 })
 ```
 
+## Developing a dynamically loaded be-* plugin
+
+A special class of plugins can be developed with these characteristics:
+
+1.  Transform is associated with a custom attribute that starts with be- or data-be-
+2.  If the plugin isn't yet loaded before the transform starts, it can be skipped over, and executed after the library has downloaded (and the cloned template has already been added to the DOM live tree).  This allows the user to see the rest of the HTML content, and apply the plugin once progressively (but this is a bit costlier, as the browser needs to update the UI that is already visible now).
+
+We call such plugins be-plugins.
+
+To create a be-plugin created a script as follows:
+
+```TypeScript
+import {RenderContext, TransformPluginSettings} from 'trans-render/lib/types';
+import {register} from 'trans-render/lib/pluginMgr.js';
+import { hookUp } from './hookUp';
+
+export const trPlugin: TransformPluginSettings = {
+    selector: 'beMybehaviorAttribs',
+    processor: async ({target, val, attrib, host}: RenderContext) => {
+        ...   
+    }
+}
+
+register(trPlugin);
+```
+
+We can now reference this be-plugin via a simple string:
+
+```JavaScript
+transform(Main, {
+    plugins: {
+        beMybehaviorAttribs: true,
+    }, 
+    match:{
+        
+    }
+})
+```
+
 ## Declarative trans-render syntax via PostMatch Processors 
 
 The examples so far have relied heavily on arrow functions.  As we've seen, it provides support for 100% no-holds-barred non-declarative code:
