@@ -2,8 +2,12 @@ export type Callback = (element: Element, propName: string, newValue: any) => vo
 
 const propSubscribers = new WeakMap<Element, {[key: string]: Callback[]}>();
 
+export function tooSoon(element: Element){
+    return element.localName.includes('-') && customElements.get(element.localName) === undefined;
+}
+
 export async function subscribe(element: Element, propName: string, callback: Callback) {
-    if(element.localName.includes('-')){
+    if(tooSoon(element)){
         await customElements.whenDefined(element.localName);
     }
     if(!propSubscribers.has(element)){

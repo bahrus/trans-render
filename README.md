@@ -349,7 +349,7 @@ export function matchByType(val: any, typOfProcessor: any){
 
 The most interesting case is when the RHS is of type Object.  As you can see, we use the instanceOf to see if the rhs of the expression is an instance of the "rhsType" value of any of the postMatch rules.  The first match of the postMatch array wins out.
 
-However, let's be honest -- JSON is quite limited when it comes to types.  Since DTR must be 100% pure JSON, we will first see how we can use these sets of rules, and see how far it takes us (narrator:  not very far).  Later we will discuss an additional layer of custom processors we can add to the mix (that provides a synergistic solution with other solutions, including "may-it-be" attributes and Cloudflares HTMLRewriter).
+However, let's be honest -- JSON is quite limited when it comes to types.  Since DTR must be 100% pure JSON, we will first see how we can use these sets of rules, and see how far it takes us (narrator:  not very far).  So we can only use this approach for fundamental, frequently used requirements -- namely, based binding, and rely heavily on plugins mentioned above to handle the rest.
 
 We'll be walking through the "standard post script processors" that trans-render provides, but always remember that alternatives can be used based on the requirements.  The standard processors are striving to make the binding syntax as JSON-friendly as possible.
 
