@@ -49,7 +49,10 @@ export function toTransformMatch(plugins: TransformPlugins): {[key: string]: str
     for(const key in plugins){
         const {ready, selector} = plugins[key];
         if(!ready || selector === undefined) continue;
-        returnObj[`${selector},data-${selector}`] = key;
+        returnObj[selector] = key;
+        if(selector.startsWith('be-')){
+            returnObj[`data-${selector}`] = key;
+        }
     }
     return returnObj;
 }
