@@ -1,6 +1,7 @@
 import { PEAUnionSettings, PSettings, PESettings } from './types.js';
 import {applyP} from './applyP.js';
 import {applyPE} from './applyPE.js';
+import { camelToLisp } from './camelToLisp.js';
 
 export function applyPEA<T extends Partial<Element> = Element>(host: Element, target: Element, pea: PEAUnionSettings<T>) {
     applyP(target, pea as PSettings<T>);
@@ -9,36 +10,37 @@ export function applyPEA<T extends Partial<Element> = Element>(host: Element, ta
     if (attribSettings !== undefined) {
         for (const key in attribSettings) {
             const val = attribSettings[key];
+            const cKey = camelToLisp(key);
             switch (typeof val) {
                 case 'boolean':
                     if(key.startsWith('.')){
-                        const className = key.substr(1);
+                        const className = cKey.substr(1);
                         const verb = val ? 'add' : 'remove';
                         (<any>target.classList)[verb](className);
                     }else if(key.startsWith('::')){
-                        const partName = key.substr(2);
+                        const partName = cKey.substr(2);
                         const verb = val ? 'add' : 'remove';
                         (<any>target).part[verb](partName);
                     }else{
                         if (val) {
-                            target.setAttribute(key, '');
+                            target.setAttribute(cKey, '');
                         } else {
-                            target.removeAttribute(key);
+                            target.removeAttribute(cKey);
                         }
                     }
 
                     break;
                 case 'string':
-                    target.setAttribute(key, val);
+                    target.setAttribute(cKey, val);
                     break;
                 case 'number':
-                    target.setAttribute(key, val.toString());
+                    target.setAttribute(cKey, val.toString());
                     break;
                 case 'object':
                     if (val === null) {
-                        target.removeAttribute(key);
+                        target.removeAttribute(cKey);
                     }else{
-                        target.setAttribute(key, JSON.stringify(val));
+                        target.setAttribute(cKey, JSON.stringify(val));
                     }
                     break;
             }

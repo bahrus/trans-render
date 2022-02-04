@@ -35,7 +35,7 @@ export class TR{
             qc.set(fragment, {});
         }
         const matchMap = qc.get(fragment)!;
-        for(const key of match){
+        for(const key in match){
             let rhs = match[key];
             const verb = 'do_' + typeof(rhs);
             if(key === ':host'){

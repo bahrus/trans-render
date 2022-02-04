@@ -12,14 +12,14 @@
     </details>
 
     <script type="module">
-        import { transform } from '../../lib/transform.js';
-        import {Texter} from '../../lib/Texter.js'
-        const hello = 'hello, world';
-        transform(details, {
+        import { TR } from '../../lib/TR.js';
+        TR.transform(details, {
             match:{
-                summary: hello
+                summary: 'hello'
             },
-            postMatch: [{rhsType: String, ctor: Texter}]
+            host:{
+                hello: 'hello, world'
+            }
         })
     </script>
 </body>
