@@ -92,7 +92,7 @@
                 Day1: 'Monday', Day2: 'Tuesday', Day3: 'Wednesday', Day4: 'Thursday', Day5: 'Friday',
                 Day6: 'Saturday', Day7: 'Sunday',
             };
-            const tr = TR.transform(Main, {
+            const tr = await TR.transform(Main, {
                 match: {
                     '*': ({ target }) => {
                         interpolate(target, 'textContent', model);
@@ -109,12 +109,9 @@
                     Day1: 'måndag', Day2: 'tisdag', Day3: 'onsdag', Day4: 'torsdag', Day5: 'fredag',
                     Day6: 'lördag', Day7: 'söndag',
                 }
-                delete ctx.match.dataInitAttribs;
-                ctx.options = {
-                    cacheQueries:true,
-                };
+                delete tr.ctx.match.dataInitAttribs;
                 const t0 = performance.now();
-                tr.transform(target, ctx);
+                tr.transform(target);
                 const t1 = performance.now();
                 total += t1 - t0;
                 count++;
