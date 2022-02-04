@@ -26,23 +26,23 @@ This can leave the template markup quite pristine, but it does mean that the sep
 
 ## The core libraries
 
-This package contains two core libraries.  
+This package contains three core libraries.  
 
-The first, lib/transform.js, is a tiny (1.2k gzip/minified), 'non-committal' library that simply allows us to map css matches to user-defined functions. 
+The first, lib/TR.js, is a tiny, 'non-committal' library that simply allows us to map css matches to user-defined functions, and a little more. 
 
-However, this core library serves as a launching pad for an extensible, customizable list of plugins that can make the transform approach a purely declarative syntax.
+The second, lib/DTR.js, extends TR.js but provides robust declarative syntax support.  With the help of "hook like" web component decorators / trans-render plugins, we rarely if ever need to define user-defined functions, and can accomplish full, turing complete (?) rendering support while sticking to 100% declarative JSON.
 
-In addition, this package contains a fairly primitive library for defining custom elements, lib/CE.js, which can be combined with lib/transform.js via lib/mixins/TemplMgmt*.js.
+In addition, this package contains a fairly primitive library for defining custom elements, lib/CE.js, which can be combined with lib/DTR.js via lib/mixins/TemplMgmt*.js.
 
 The package xtal-element builds on this package, and the documentation on defining custom elements, with trans-rendering in mind, is documented there [WIP].
 
 So the rest of this document will focus on the trans-rendering aspect, leaving the documentation for xtal-element to fill in the missing details regarding how lib/CE.js works.
 
-## value-add by trans-rendering
+## value-add by trans-rendering (TR.js)
 
-The first value-add proposition lib/transform.js provides, is it can reduce the amount of imperative *.selectQueryAll().forEach's needed in our code.  However, by itself, transform.js is not a complete solution, if you are looking for declarative syntax.  That will come with the ability to extend transform.js, which will be discussed below.
+The first value-add proposition lib/TR.js provides, is it can reduce the amount of imperative *.selectQueryAll().forEach's needed in our code.  However, by itself, TR.js is not a complete solution, if you are looking for a robust declarative solution.  That will come with the ability to extend TR.js, which DTR.js does, and which is discussed later.
 
-The CSS matching the core transform.js supports simply does multi-matching for all (custom) DOM elements within the scope.
+The CSS matching the core TR.js supports simply does multi-matching for all (custom) DOM elements within the scope, and also scoped sub transforms.
 
 ### Multi-matching
 
@@ -66,68 +66,9 @@ mySpecialSectionParts: {
 
 Throughout this documentation, we will be referring to the string before the colon as the "LHS" (left-hand-side) expression.
 
-Consider the following example (please expand).  Don't worry, it looks quite complicated, but we will walk through it, and also, as we introduce more features, the code below will greatly simplify:
+### Syntax Example
 
-<details>
-    <summary>Example 1</summary>
 
-```html
-<body>
-    <template id=Main>
-        <button data-count=10>Click</button>
-        <div class="count-wide otherClass"></div>
-        <vitamin-d></vitamin-d>
-        <div part="triple-decker j-k-l"></div>
-        <div id="jan8"></div>
-        <div -text-content></div>
-    </template>
-    <div id=container></div>
-    <script type="module">
-        import { transform } from '../../lib/transform.js';
-        transform(Main, {
-            match: {
-                dataCountAttrib: ({target, val}) =>{
-                    target.addEventListener('click', e => {
-                        const newCount = parseInt(e.target.dataset.count) + 1;
-                        e.target.dataset.count = newCount;
-                        transform(container, {
-                            match: {
-                                countWideClasses: ({target}) => {
-                                    target.textContent = newCount;
-                                },
-                                vitaminDElements: ({target}) => {
-                                    target.textContent = 2 * newCount;
-                                },
-                                tripleDeckerParts: ({target}) => {
-                                    target.textContent = 3 * newCount;
-                                },
-                                idAttribs: ({target}) => {
-                                    target.textContent = 4 * newCount;
-                                },
-                                textContentProp: 5 * newCount,
-                                '*': ({target, idx}) => {
-                                    target.setAttribute('data-idx', idx);
-                                }
-                            }
-                        });
-                    })
-
-                }
-            }
-        }, container);
-    </script>
-</body>
-```
-
-</details>
-
-The first thing to note is that id's become global constants outside of ShadowDOM.  Hence we can refer to "Main" and "container" directly in the JavaScript:
-
-```JavaScript
-transform(Main, { 
-    ...
-}
-```
 
 The keyword "match" indicates that within that block are CSS Matches.  In this example, all the matches are "multi-matches" because they end with either "Classes", "Elements", "Parts", "Ids", "Props" or "Attribs".
 
