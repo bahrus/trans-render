@@ -16,22 +16,30 @@ export function register({selector, processor}: TransformPluginSettings){
 export async function awaitTransforms(plugins: TransformPlugins): Promise<TransformPlugins> {
     const returnObj: TransformPlugins = {};
     for(const key in plugins){
-        
         const plugin = plugins[key];
-        const {selector, processor, blockWhileWaiting} = plugin
-        if(typeof(processor) === 'function' || selector === undefined){
-            plugin.ready = true;
-            returnObj[key] = plugin;
-            continue;
-        }
-        const ceName = camelToLisp(selector);
-        if(blockWhileWaiting){
-            const ce = await customElements.whenDefined(ceName) as any as TransformPluginSettings;
-            returnObj[key] = ce;
-            continue;
+        if(plugin as any === true){
+            const ceName = camelToLisp(key + 'Attribs');
+            const ce = customElements.get(ceName);
+            if(ce){
+                returnObj[key] = ce as any as TransformPluginSettings;
+            }
         }else{
-            returnObj[key] = customElements.get(ceName) as any as TransformPluginSettings || plugin;
+            const {selector, processor, blockWhileWaiting} = plugin
+            if(typeof(processor) === 'function' || selector === undefined){
+                plugin.ready = true;
+                returnObj[key] = plugin;
+                continue;
+            }
+            const ceName = camelToLisp(selector);
+            if(blockWhileWaiting){
+                const ce = await customElements.whenDefined(ceName) as any as TransformPluginSettings;
+                returnObj[key] = ce;
+                continue;
+            }else{
+                returnObj[key] = customElements.get(ceName) as any as TransformPluginSettings || plugin;
+            }
         }
+
     }
     return returnObj;
 }
@@ -41,7 +49,7 @@ export function toTransformMatch(plugins: TransformPlugins): {[key: string]: str
     for(const key in plugins){
         const {ready, selector} = plugins[key];
         if(!ready || selector === undefined) continue;
-        returnObj[selector] = key;
+        returnObj[`${selector},data-${selector}`] = key;
     }
     return returnObj;
 }
