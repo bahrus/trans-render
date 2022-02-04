@@ -17,6 +17,7 @@ export interface RenderContext<T = Element, TItem = any> {
     queryCache?: WeakMap<Element | DocumentFragment, {[key: string]: NodeListOf<Element>}>;
     abort?: boolean | undefined;
     templateIds?: string[];
+    queryInfo?: queryInfo;
 }
 
 export interface TransformPluginSettings<T = Element, TItem = any> {
@@ -25,6 +26,15 @@ export interface TransformPluginSettings<T = Element, TItem = any> {
     blockWhileWaiting?: boolean;
     ready?: boolean;
     //TODO:  support for registering instances
+}
+
+export type matchTypes = 'parts'| 'classes' | 'attribs' | 'elements' | 'props' | 'placeholders';
+
+export interface queryInfo{
+    query: string;
+    type?: matchTypes;
+    attrib?: string;
+    lhsProp?: string;
 }
 
 export interface TransformPluginStates<T extends Element = Element, TItem = any, TState = any>  extends TransformPluginSettings<T, TItem> {

@@ -144,13 +144,13 @@ What we also see in this example, is that the transform function can be used for
 1.  Instantiating a template into a target container in the live DOM tree:
 
 ```JavaScript
-transform(Main, {...}, container)
+tr.transform(Main, {...}, container)
 ```
 
 2.  Updating an existing DOM tree:
 
 ```JavaScript
-transform(container, {...})
+tr.transform(container, {...})
 ```
 
 We can also start getting a sense of how transforms can be tied to custom element events.  Although the example above is hardly declarative, as we create more rules that allow us to update the DOM, and link events to transforms, we will achieve something approaching a declarative yet Turing complete(?) solution.
@@ -179,6 +179,10 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>Anything else</td><td>'a[href$=".mp3"]'</td><td>.querySelectorAll('a[href$=".mp3"')</td><td>
     </tr>
 </table>
+
+## Nested Matching
+
+Just as CSS will support nesting, TR supports nesting out-of-the-box.  If the RHS is an object, a sub transform is performed within that scope.
 
 ## Declarative trans-render syntax via plugins
 

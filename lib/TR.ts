@@ -45,6 +45,7 @@ export class TR{
                 continue;
             }
             const queryInfo = getQuery(key);
+            ctx.queryInfo = queryInfo;
             let fromCache = matchMap[key];
             if(fromCache !== undefined){
                 fromCache = fromCache.filter(ref => {
@@ -63,10 +64,10 @@ export class TR{
                 switch(queryInfo.type){
                     case 'attribs':
                         ctx.attrib = queryInfo.attrib;
-                        ctx.val = match.getAttribute(queryInfo.attrib);
+                        ctx.val = match.getAttribute(queryInfo.attrib!);
                         break;
                     case 'props':
-                        (<any>match)[lispToCamel(queryInfo.attrib)] = rhs;
+                        (<any>match)[lispToCamel(queryInfo.attrib!)] = rhs;
                         continue;
                 }
                 await (<any>this)[verb]();
@@ -85,10 +86,16 @@ export class TR{
         if(rhs === false) target!.remove();
     }
     async do_object(){
-        const {target, rhs, host, match} = this.ctx;
-        this.ctx.match = {...match, ...rhs};
-        await this.transform(target!);
-        this.ctx.match = match;
+        const {target, rhs, host, match, queryInfo} = this.ctx;
+        const {lhsProp} = queryInfo!;
+        if(lhsProp){
+            (<any>target)[lhsProp] = rhs;
+        }else{
+            this.ctx.match = {...match, ...rhs};
+            await this.transform(target!);
+            this.ctx.match = match;
+        }
+
     }
     do_function(){
         const ctx = this.ctx;
