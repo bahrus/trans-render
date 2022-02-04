@@ -24,6 +24,7 @@ export class TR{
         return tr;
     }
     static new(ctx: RenderContext){
+        ctx.ctx = ctx;
         return new TR(ctx);
     }
     constructor(public ctx: RenderContext){}
@@ -81,8 +82,10 @@ export class TR{
     }
     do_function(){
         const ctx = this.ctx;
-        ctx.rhs = ctx.rhs(ctx);
-        const verb = 'do_' + typeof(ctx.rhs);
+        const rhs = ctx.rhs(ctx);
+        if(rhs === undefined) return;
+        ctx.rhs = rhs;
+        const verb = 'do_' + typeof(rhs);
         (<any>this)[verb]();
     }
 
