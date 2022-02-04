@@ -30,7 +30,7 @@ export async function awaitTransforms(plugins: TransformPlugins): Promise<Transf
             returnObj[key] = ce;
             continue;
         }else{
-            returnObj[key] = plugin;
+            returnObj[key] = customElements.get(ceName) as any as TransformPluginSettings || plugin;
         }
     }
     return returnObj;
