@@ -14,7 +14,7 @@ export interface RenderContext<T = Element, TItem = any> {
     host?: HTMLElement | undefined;
     plugins?: TransformPlugins<T, TItem>;
     key?: string;
-    queryCache?: WeakMap<Element, {[key: string]: NodeListOf<Element>}>;
+    queryCache?: WeakMap<Element | DocumentFragment, {[key: string]: NodeListOf<Element>}>;
     abort?: boolean | undefined;
     templateIds?: string[];
 }

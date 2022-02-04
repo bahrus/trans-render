@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <template id=templ>
+        <div>i am here</div>
+    </template>
+    <div id=target></div>
+    <button onclick="onClick1()">click1</button>
+    <button onclick="onClick2()">click2</button>
+    <script>
+        var clone;
+        function onClick1(){
+            clone = templ.content.cloneNode(true);
+            target.appendChild(clone);
+        }
+        function onClick2(){
+            clone.querySelector('div').innerHTML = 'i am changed';
+        }
+    </script>
+</body>
+</html>
