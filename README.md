@@ -8,7 +8,6 @@
 
 <img src="https://badgen.net/bundlephobia/minzip/trans-render">
 
-**NB**:  This library is undergoing a face lift.  To see the old functionality that this new code is leading up to, go [here](README_OLD.md)
 
 *trans-rendering* (TR) describes a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, TR performs transforms on elements by matching tests on those elements.  Whereas XSLT uses XPath for its tests, TR uses css path tests via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
 
@@ -68,7 +67,58 @@ Throughout this documentation, we will be referring to the string before the col
 
 ### Syntax Example
 
+<details>
+    <summary>Example 1</summary>
 
+```html
+<body>
+    <template id=Main>
+        <button data-count=10>Click</button>
+        <div class="count-wide otherClass"></div>
+        <vitamin-d></vitamin-d>
+        <div part="triple-decker j-k-l"></div>
+        <div id="jan8"></div>
+        <div -text-content></div>
+    </template>
+    <div id=container></div>
+    <script type="module">
+        import { TR } from '../../lib/TR.js';
+        TR.transform(Main, {
+            match: {
+                dataCountAttrib: ({target, val}) =>{
+                    target.addEventListener('click', e => {
+                        const newCount = parseInt(e.target.dataset.count) + 1;
+                        e.target.dataset.count = newCount;
+                        transform(container, {
+                            match: {
+                                countWideClasses: ({target}) => {
+                                    target.textContent = newCount;
+                                },
+                                vitaminDElements: ({target}) => {
+                                    target.textContent = 2 * newCount;
+                                },
+                                tripleDeckerParts: ({target}) => {
+                                    target.textContent = 3 * newCount;
+                                },
+                                idAttribs: ({target}) => {
+                                    target.textContent = 4 * newCount;
+                                },
+                                textContentProp: 5 * newCount,
+                                '*': ({target, idx}) => {
+                                    target.setAttribute('data-idx', idx);
+                                }
+                            }
+                        });
+                    })
+
+                }
+            }
+        }, container);
+    </script>
+</body>
+```
+
+</details>
 
 The keyword "match" indicates that within that block are CSS Matches.  In this example, all the matches are "multi-matches" because they end with either "Classes", "Elements", "Parts", "Ids", "Props" or "Attribs".
 
@@ -103,7 +153,7 @@ transform(Main, {...}, container)
 transform(container, {...})
 ```
 
-We can also start getting a sense of how transforms can be tied to custom element events.  Although the example above is hardly declarative, as we create more rules that allow us to update the DOM, and link events to transforms, we will achieve something approaching a Turing complete(?) solution.
+We can also start getting a sense of how transforms can be tied to custom element events.  Although the example above is hardly declarative, as we create more rules that allow us to update the DOM, and link events to transforms, we will achieve something approaching a declarative yet Turing complete(?) solution.
 
 The following table lists how the LHS is translated into CSS multi-match queries:
 
