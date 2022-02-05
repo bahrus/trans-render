@@ -1,5 +1,6 @@
 import {TR} from './TR.js';
 import {RenderContext} from 'types';
+export {TR} from './TR.js';
 
 export class DTR extends TR{
     static new(ctx: RenderContext){

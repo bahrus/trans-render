@@ -4,9 +4,9 @@ import { lispToCamel } from './lispToCamel.js';
 
 export class TR{
     #queryCache = new WeakMap<Element | DocumentFragment, {[key: string]: WeakRef<Element>[]}>();
-    static async transform(sourceOrTemplate: Element | DocumentFragment,
+    static async transform(sourceOrTemplate: Element | DocumentFragment | Element[],
         ctx: RenderContext,
-        target: Element | DocumentFragment = sourceOrTemplate){
+        target?: Element | DocumentFragment){
         const tr = this.new(ctx);
         const isATemplate = tr.isTemplate(sourceOrTemplate);
         const source = isATemplate
@@ -84,7 +84,7 @@ export class TR{
     }
     async do_string(){
         const {target, rhs, host}  = this.ctx;
-        target!.textContent = (<any>host)[rhs as string];
+        target!.textContent = rhs === '.' ? host : (<any>host)[rhs as string];
     }
     do_number(){}
     do_boolean(){
