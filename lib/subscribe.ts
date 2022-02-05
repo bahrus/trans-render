@@ -11,8 +11,7 @@ export async function subscribe(element: Element, propName: string, callback: Ca
         await customElements.whenDefined(element.localName);
     }
     if(!propSubscribers.has(element)){
-        propSubscribers.set(element, {
-        });
+        propSubscribers.set(element, {});
     }
     const subscribers = propSubscribers.get(element)!;
     if(subscribers[propName] === undefined){

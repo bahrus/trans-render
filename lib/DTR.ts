@@ -1,6 +1,7 @@
 import {TR} from './TR.js';
 import {RenderContext} from 'types';
 export {TR} from './TR.js';
+import { subscribe } from './subscribe.js';
 
 export class DTR extends TR{
     static new(ctx: RenderContext){
@@ -11,7 +12,9 @@ export class DTR extends TR{
     }
     #initialized = false;
     async transform(fragment: Element | DocumentFragment){
+        let subscribed = true;
         if(!this.#initialized){
+            subscribed = false;
             const {ctx} = this;
             const {match, plugins} = ctx;
             if(plugins !== undefined){
@@ -22,7 +25,18 @@ export class DTR extends TR{
             }
             this.#initialized = true;
         }
-        return await super.transform(fragment);
+        const ctx = await super.transform(fragment);
+        const {host} = ctx;
+        if(!subscribed && host instanceof Element){
+            const deps = this.dep;
+            const fragment = host.shadowRoot || host;
+            for(const key of deps){
+                await subscribe(host, key, async () => {
+                    await this.transform(fragment);
+                })
+            }
+        }
+        return ctx;
     }
     async do_string(): Promise<void> {
         const {ctx} = this;

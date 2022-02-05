@@ -6,7 +6,7 @@ export class TR{
     #queryCache = new WeakMap<Element | DocumentFragment, {[key: string]: WeakRef<Element>[]}>();
     static async transform(sourceOrTemplate: Element | DocumentFragment | Element[],
         ctx: RenderContext,
-        target?: Element | DocumentFragment){
+        target?: Element | DocumentFragment) {
         const tr = this.new(ctx);
         const isATemplate = tr.isTemplate(sourceOrTemplate);
         const source = isATemplate
@@ -28,7 +28,7 @@ export class TR{
         return new TR(ctx);
     }
     constructor(public ctx: RenderContext){}
-    async transform(fragment: Element | DocumentFragment | Element[]){
+    async transform(fragment: Element | DocumentFragment | Element[]) {
         const {ctx} = this;
         const {host, options, match} = ctx;
         const qc = this.#queryCache;
