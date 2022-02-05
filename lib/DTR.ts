@@ -74,4 +74,33 @@ export class DTR extends TR{
                 }
         }
     }
+    /**
+     * Gets the host properties the template depends on.
+     */
+    get dep(): Set<string>{
+        const returnObj = new Set<string>();
+        const {ctx} = this;
+        const {match} = ctx;
+        for(const key in match){
+            const rhs = match[key];
+            switch(typeof rhs){
+                case 'string':
+                    returnObj.add(rhs);
+                    break;
+                case 'object':
+                    if(Array.isArray(rhs)){
+                        switch(typeof rhs[0]){
+                            case 'string':
+                                let isProp = false;
+                                for(const item of rhs){
+                                    if(isProp) returnObj.add(item);
+                                    isProp = !isProp;
+                                }
+                        }
+                    }
+                    break;
+            }
+        }
+        return returnObj;
+    }
 }
