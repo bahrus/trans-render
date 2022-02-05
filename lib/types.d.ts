@@ -180,12 +180,17 @@ export type PropChangeMoment = 'v' | '-a' | '+a' | '+qr' | '+qm';
 
 export type PropChangeMethod = (self: EventTarget, pci: PropChangeInfo, moment: PropChangeMoment) => boolean;
 
+export type RHS = string | boolean | PSettings | PESettings | PEASettings | {[key: string]: Matches};
+
+export type Matches = {[key: string]: RHS};
+
 export interface TemplMgmtProps{
     mainTemplate?: HTMLTemplateElement | string;
     styles?: CSSStyleSheet[];
     clonedTemplate?: Node | undefined;
-    initTransform?: any;
-    updateTransform?: any;
+    // initTransform?: any;
+    // updateTransform?: any;
+    transform?: Matches | Matches[];
     noshadow?: boolean;
     renderOptions?: RenderOptions;
     waitToInit?: boolean;
@@ -193,8 +198,9 @@ export interface TemplMgmtProps{
 }
 
 export interface TemplMgmtActions{
-    doUpdateTransform(self: this): void;
-    doInitTransform(self: this): void;
+    // doUpdateTransform(self: this): void;
+    // doInitTransform(self: this): void;
+    doTransforms(self: this): void;
     cloneTemplate(self: this): void;
 }
 

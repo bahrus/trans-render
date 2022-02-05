@@ -1,4 +1,6 @@
-import {tm, TemplMgmtProps, TemplMgmtActions} from '../lib/mixins/TemplMgmtWithPEST.js';
+import {TemplMgmt, TemplMgmtProps, TemplMgmtActions, beTransformed} from '../lib/mixins/TemplMgmt.js';
+import {html} from '../lib/html.js';
+import {CE} from '../lib/CE.js';
 import {INotifyMixin, INotifyPropInfo, NotifyMixin} from '../lib/mixins/notify.js';
 
 export class CounterSoCore extends HTMLElement{
@@ -12,7 +14,7 @@ export interface CounterSo extends  TemplMgmtProps, INotifyMixin, HTMLElement{
     buttonElements: any;
 }
 
-const mainTemplate = tm.html`
+const mainTemplate = html`
 <button part=down data-d=-1>-</button><span part=count></span><button part=up data-d=1>+</button>
 <style>
     * {
@@ -36,19 +38,18 @@ const mainTemplate = tm.html`
 </style>
 `;
 
-const ce = new tm.CE<CounterSo & TemplMgmtProps, CounterSo & TemplMgmtActions, INotifyPropInfo>({
+const ce = new CE<CounterSo & TemplMgmtProps, CounterSo & TemplMgmtActions, INotifyPropInfo>({
     config:  {
         tagName:'counter-so',
         propDefaults:{
-            initTransform: {
-                buttonElements: [{}, {click:['changeCount', 'dataset.d', 'parseInt']}]
-            },
-            updateTransform: {
-                "countParts": "count"
-            },
-            renderOptions: {
-                cacheQueries: true,
-            },
+            transform: [
+                {
+                    buttonElements: [{}, {click:['changeCount', 'dataset.d', 'parseInt']}]
+                },
+                {
+                    countParts: "count"
+                }
+            ]
         },
         propInfo:{
             count: {
@@ -59,10 +60,7 @@ const ce = new tm.CE<CounterSo & TemplMgmtProps, CounterSo & TemplMgmtActions, I
             }
         },
         actions: {
-            ...tm.doInitTransform,
-            doUpdateTransform: {
-                ifKeyIn: ['count', 'updateTransform']
-            }
+            ...beTransformed,
         },
         propChangeMethod: 'onPropChange',
     },
@@ -71,5 +69,5 @@ const ce = new tm.CE<CounterSo & TemplMgmtProps, CounterSo & TemplMgmtActions, I
         mainTemplate
     },
     superclass: CounterSoCore,
-    mixins: [NotifyMixin, tm.TemplMgmtMixin],
+    mixins: [NotifyMixin, TemplMgmt],
 });

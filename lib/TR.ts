@@ -62,15 +62,15 @@ export class TR{
             ctx.rhs = rhs;
             
             for(const el of matches){
-                const match = el instanceof Element ? el : el.deref()!;
-                ctx.target = match;
+                const matchingElement = el instanceof Element ? el : el.deref()!;
+                ctx.target = matchingElement;
                 switch(queryInfo.type){
                     case 'attribs':
                         ctx.attrib = queryInfo.attrib;
-                        ctx.val = match.getAttribute(queryInfo.attrib!);
+                        ctx.val = matchingElement.getAttribute(queryInfo.attrib!);
                         break;
                     case 'props':
-                        (<any>match)[lispToCamel(queryInfo.attrib!)] = rhs;
+                        (<any>matchingElement)[lispToCamel(queryInfo.attrib!)] = rhs;
                         continue;
                 }
                 await (<any>this)[verb]();

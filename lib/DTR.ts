@@ -12,9 +12,7 @@ export class DTR extends TR{
     }
     #initialized = false;
     async transform(fragment: Element | DocumentFragment){
-        let subscribed = true;
         if(!this.#initialized){
-            subscribed = false;
             const {ctx} = this;
             const {match, plugins} = ctx;
             if(plugins !== undefined){
@@ -25,18 +23,19 @@ export class DTR extends TR{
             }
             this.#initialized = true;
         }
-        const ctx = await super.transform(fragment);
-        const {host} = ctx;
-        if(!subscribed && host instanceof Element){
-            const deps = this.dep;
-            const fragment = host.shadowRoot || host;
-            for(const key of deps){
-                await subscribe(host, key, async () => {
-                    await this.transform(fragment);
-                })
-            }
+        return await super.transform(fragment);
+    }
+    async subscribe(){
+        const {host} = this.ctx;
+        //if(host instanceof Element){
+        const deps = this.dep;
+        const fragment = host!.shadowRoot || host!;
+        for(const key of deps){
+            await subscribe(host!, key, async () => {
+                await this.transform(fragment);
+            })
         }
-        return ctx;
+        //}
     }
     async do_string(): Promise<void> {
         const {ctx} = this;
@@ -51,21 +50,25 @@ export class DTR extends TR{
         }
     }
     async do_object(): Promise<void> {
-        const rhs = this.ctx.rhs;
+        const {rhs} = this.ctx;
         if(Array.isArray(rhs)){
             return await this.do_array();
+        }else{
+            return await super.do_object();
         }
-        return await super.do_object();
+        
     }
     async do_array(): Promise<void> {
         const {ctx} = this;
         const {rhs}  = ctx;
         const head = rhs[0];
+        const ctxCopy = {...ctx};
+        ctxCopy.match = {...ctx.match};
         switch(typeof head){
             case 'string':
                 const {SplitText} = await import('./splitText.js');
                 const st = new SplitText();
-                st.do(ctx);
+                st.do(ctxCopy);
                 break;
             default:
                 const len = rhs.length;
@@ -73,48 +76,52 @@ export class DTR extends TR{
                     case 1:
                         const {P} = await import('./P.js');
                         const p = new P();
-                        p.do(ctx);
+                        p.do(ctxCopy);
                         break;
                     case 2:
                         const {PE} = await import('./PE.js');
                         const pe = new PE();
-                        pe.do(ctx);
+                        pe.do(ctxCopy);
                         break;
                     default:
                         const {PEA} = await import('./PEA.js');
                         const pea = new PEA();
-                        pea.do(ctx);
+                        pea.do(ctxCopy);
                         break;
                 }
         }
     }
+    #dependencies: Set<string> | undefined;
     /**
      * Gets the host properties the template depends on.
      */
     get dep(): Set<string>{
-        const returnObj = new Set<string>();
-        const {ctx} = this;
-        const {match} = ctx;
-        for(const key in match){
-            const rhs = match[key];
-            switch(typeof rhs){
-                case 'string':
-                    returnObj.add(rhs);
-                    break;
-                case 'object':
-                    if(Array.isArray(rhs)){
-                        switch(typeof rhs[0]){
-                            case 'string':
-                                let isProp = false;
-                                for(const item of rhs){
-                                    if(isProp) returnObj.add(item);
-                                    isProp = !isProp;
-                                }
+        if(this.#dependencies === undefined){
+            const returnObj = new Set<string>();
+            const {ctx} = this;
+            const {match} = ctx;
+            for(const key in match){
+                const rhs = match[key];
+                switch(typeof rhs){
+                    case 'string':
+                        returnObj.add(rhs);
+                        break;
+                    case 'object':
+                        if(Array.isArray(rhs)){
+                            switch(typeof rhs[0]){
+                                case 'string':
+                                    let isProp = false;
+                                    for(const item of rhs){
+                                        if(isProp) returnObj.add(item);
+                                        isProp = !isProp;
+                                    }
+                            }
                         }
-                    }
-                    break;
+                        break;
+                }
             }
+            this.#dependencies = returnObj;
         }
-        return returnObj;
+        return this.#dependencies;
     }
 }

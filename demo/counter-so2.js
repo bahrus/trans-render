@@ -1,10 +1,12 @@
-import { tm } from '../lib/mixins/TemplMgmtWithPEST.js';
+import { TemplMgmt, beTransformed } from '../lib/mixins/TemplMgmt.js';
+import { html } from '../lib/html.js';
+import { CE } from '../lib/CE.js';
 import { NotifyMixin } from '../lib/mixins/notify.js';
 export class CounterSoCore extends HTMLElement {
     count = 30;
     changeCount = (self, d, e) => self.count += d;
 }
-const mainTemplate = tm.html `
+const mainTemplate = html `
 <button part=down data-d=-1>-</button><span part=count></span><button part=up data-d=1>+</button>
 <style>
     * {
@@ -27,19 +29,18 @@ const mainTemplate = tm.html `
     }
 </style>
 `;
-const ce = new tm.CE({
+const ce = new CE({
     config: {
         tagName: 'counter-so',
         propDefaults: {
-            initTransform: {
-                buttonElements: [{}, { click: ['changeCount', 'dataset.d', 'parseInt'] }]
-            },
-            updateTransform: {
-                "countParts": "count"
-            },
-            renderOptions: {
-                cacheQueries: true,
-            },
+            transform: [
+                {
+                    buttonElements: [{}, { click: ['changeCount', 'dataset.d', 'parseInt'] }]
+                },
+                {
+                    countParts: "count"
+                }
+            ]
         },
         propInfo: {
             count: {
@@ -50,10 +51,7 @@ const ce = new tm.CE({
             }
         },
         actions: {
-            ...tm.doInitTransform,
-            doUpdateTransform: {
-                ifKeyIn: ['count', 'updateTransform']
-            }
+            ...beTransformed,
         },
         propChangeMethod: 'onPropChange',
     },
@@ -62,5 +60,5 @@ const ce = new tm.CE({
         mainTemplate
     },
     superclass: CounterSoCore,
-    mixins: [NotifyMixin, tm.TemplMgmtMixin],
+    mixins: [NotifyMixin, TemplMgmt],
 });
