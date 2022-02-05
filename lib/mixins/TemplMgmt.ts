@@ -67,6 +67,10 @@ export const TemplMgmt = (superclass: {new(): TemplMgmtBase}) => class extends s
             }
             await dtr.subscribe();
         }
+        if(clonedTemplate !== undefined){
+            const root = noshadow ? this : this.shadowRoot!;
+            root.appendChild(fragment);
+        }
         this.removeAttribute('defer-rendering');
         this.clonedTemplate = undefined;
     }
