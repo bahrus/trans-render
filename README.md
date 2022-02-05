@@ -228,12 +228,12 @@ transform(Main, {
 
 A special class of plugins can be developed with these characteristics:
 
-1.  Transform is associated with a custom attribute that starts with be- or data-be-
-2.  If the plugin isn't yet loaded before the transform starts, it can be skipped over, and executed after the library has downloaded (and the cloned template has already been added to the DOM live tree).  This allows the user to see the rest of the HTML content, and apply the plugin once progressively (but this is a bit costlier, as the browser needs to update the UI that is already visible now).
+1.  Transform is associated with a [be-decorated](https://github.com/bahrus/be-decorated) custom attribute / decorator/ behavior, where the attribute starts with be- or data-be-.
+2.  Optionally, ff the plugin isn't yet loaded before the transform starts, it can be skipped over, and fallback to the decorator being executed after the library has downloaded (and the cloned template has already been added to the DOM live tree).  This allows the user to see the rest of the HTML content, and apply the plugin once progressively loaded (but DOM manipulation is now a bit costlier, as the browser may need to update the UI that is already visible).
 
-We call such plugins be-plugins.
+We call such plugins "be-plugins".
 
-To create a be-plugin created a script as follows:
+To create a be-plugin create a script as follows:
 
 ```TypeScript
 import {RenderContext, TransformPluginSettings} from 'trans-render/lib/types';
@@ -263,6 +263,12 @@ transform(Main, {
 })
 ```
 
+Useful plugins that are available:
+
+1.  [be-plugin](https://github.com/bahrus/be-observant/blob/baseline/trPlugin.ts) for [be-observant](https://github.com/bahrus/be-observant/)
+2.  [be-plugin](https://github.com/bahrus/be-repeated/blob/baseline/trPlugin.ts) for [be-repeated](https://github.com/bahrus/be-repeated)
+
+
 ## Declarative trans-render syntax via PostMatch Processors 
 
 The examples so far have relied heavily on arrow functions.  As we've seen, it provides support for 100% no-holds-barred non-declarative code:
@@ -285,118 +291,6 @@ This is the key to how the unconstrained TR syntax can, in a large number of cas
 trans-render provides a few "standard" processors, which address common concerns.
 
 The first common concern is setting the textContent of an element.
-
-## Mapping textContent
-
-### Setting the text content without the presence of a host
-
-**NB:** The syntax below works and is supported, but will rarely be used in practice.  The syntax more likely to be used in practice [begins here](https://github.com/bahrus/trans-render#declarative-dynamic-content-based-on-presence-of-ctxhost)
-
-One of the most common things we want to do is set the text content of a DOM Element, from some model value.
-
-```html
-<details id=details>
-    <summary>E pluribus unum</summary>
-    ...
-</details>
-
-<script type="module">
-    import { transform } from '../../lib/transform.js';
-    import { Texter } from '../../lib/Texter.js'
-    const hello = 'hello, world';
-    transform(details, {
-        match:{
-            summary: hello
-        },
-        postMatch: [{rhsType: String, ctor: Texter}]
-    });
-</script>
-```
-
-Or more simply, you can hard-code the greeting, and start to imagine that the binding could (partly) come from some (imported) JSON:
-
-```html
-<details id=details>
-    <summary>E pluribus unum</summary>
-    ...
-</details>
-
-<script type="module">
-    import { transform } from '../../lib/transform.js';
-    import { Texter } from '../../lib/Texter.js';
-    //imagine this JSON was obtained via JSON import or fetch:
-    import { swedishTransform } from 'myPackage/myUITransforms.json' {assert: {type: 'json'};
-    // transform = {
-    //    "summary":"Hallå"
-    //
-    transform(details, {
-        match:swedishTransform,
-        postMatch: [{rhsType: String, ctor: Texter}]
-    })
-</script>
-```
-
-Sure, there are easier ways to set the summary to 'hello, world', but as the amount of binding grows, the amount of boilerplate will grow more slowly, using this syntax.
-
-Note the configuration setting associated with the transform function, "postMatch".  postMatch is what allows us to reduce the amount of imperative code, replacing it with JSON-like declarative-ish binding instead.  What the postMatch expression is saying is "since the right-hand-side of the expression:
-
-```JavaScript
-summary: 'Hallå'
-```
-
-...is a string, use the Texter class to process the rendering context." 
-
-The brave developer can implement some other way of interpreting a right-hand-side of type "String".  This is the amount of engineering firepower required to implement the Texter processor:
-
-```TypeScript
-import {PMDo, RenderContext} from './types.js';
-
-export class Texter implements PMDo{
-    do(ctx: RenderContext){
-        ctx.target!.textContent = ctx.rhs;
-    }
-}
-```
-
-The categories that currently can be declaratively processed in this way are driven by how many primitive types [JavaScript supports](https://github.com/bahrus/trans-render/blob/baseline/lib/matchByType.ts):   
-
-```TypeScript
-export function matchByType(val: any, typOfProcessor: any){
-    if(typOfProcessor === undefined) return 0;
-    switch(typeof val){
-        case 'object':
-            return val instanceof typOfProcessor ? 1 : -1; 
-        case 'string':
-            return typOfProcessor === String ? 1 : -1;
-        case 'number':
-            return typOfProcessor === Number ? 1 : -1;
-        case 'boolean':
-            return typOfProcessor === Boolean ? 1 : -1;
-        case 'symbol':
-            return typOfProcessor === Symbol ? 1 : -1;
-        case 'bigint':
-            return typOfProcessor === BigInt ? 1 : -1;
-    }
-    return 0;    
-}
-```
-
-The most interesting case is when the RHS is of type Object.  As you can see, we use the instanceOf to see if the rhs of the expression is an instance of the "rhsType" value of any of the postMatch rules.  The first match of the postMatch array wins out.
-
-However, let's be honest -- JSON is quite limited when it comes to types.  Since DTR must be 100% pure JSON, we will first see how we can use these sets of rules, and see how far it takes us (narrator:  not very far).  So we can only use this approach for fundamental, frequently used requirements -- namely, based binding, and rely heavily on plugins mentioned above to handle the rest.
-
-We'll be walking through the "standard post script processors" that trans-render provides, but always remember that alternatives can be used based on the requirements.  The standard processors are striving to make the binding syntax as JSON-friendly as possible.
-
-## What does wdwsf stand for?
-
-As you may have noticed, some abbreviations are used by this library:
-
-* ctx = (rendering) context
-* idx = (numeric) index of array
-* ctor = class constructor
-* rhs = right-hand side
-* lhs = left-hand side
-* PM = post match
 
 ## Declarative, dynamic content based on presence of ctx.host
 
@@ -426,9 +320,8 @@ This feature is *not* part of the core transform function.  It requires one of t
 </details>
 
 <script type="module">
-    import { transform } from 'trans-render/lib/transform.js';
-    import { SplitText } from 'trans-render/lib/SplitText.js';
-    transform(details, {
+    import { DTR } from 'trans-render/lib/DTR.js';
+    DTR.transform(details, {
         match:{
             "summary": ["Hello", "place", ".  What a beautiful world you are."],
             "article": "mainContent"
@@ -437,12 +330,7 @@ This feature is *not* part of the core transform function.  It requires one of t
             place: 'Mars',
             mainContent: "Mars is a red planet."
         },
-        postMatch: [{
-            rhsType: Array, 
-            rhsHeadType: String,
-            ctor: SplitText
-        }]
-    })
+    });
 </script>
 ```
 
@@ -467,17 +355,11 @@ The first element of the RHS array is devoted to property setting:
 </template>
 
 <script type=module>
-    import { transform } from 'trans-render/lib/transform.js';
-    import { P } from 'trans-render/lib/P.js';
-    transform(template, {
+    import { DTR } from 'trans-render/lib/DTR.js';
+    DTR.transform(template, {
         match:{
             myCustomElementElements: [{myProp0: ["Some Hardcoded String"], myProp1: "hostPropName", myProp2: ["Some interpolated ", "hostPropNameForText"]}]
         },
-        postMatch: [{
-            rhsType: Array,
-            rhsHeadType: Object,
-            ctor: P
-        }]
     });
 </script>
 ```
@@ -503,63 +385,25 @@ Example:
 ```JS
 match:{
     myCustomElementElements: [{}, {}, {
-        "my-attr": "myHostProp1", 
+        myAttr: "myHostProp1", 
         ".my-class": true, 
-        "my-bool-attr": true, 
-        "my-go-away-attr": null, 
+        myBoolAttr": true, 
+        myGoAwayAttr: null, 
         "::my-part": true, 
-        "be-all-you-can-be": {
+        beAllYouCanBe: {
             some: "JSON",
             object: true,
         }}]
 }
 ```
 
-## Nested, Scoped Transforms
 
-One useful plug-in for transform.js is NestedTransform.js, which allows the RHS of a match to serve as a springboard for performing a sub transform.
-
-## Extensible, Loosely Coupled PostMatches Via JS Tuples
-
-This can be quite useful, but we have to make some assumptions about what to do with the template -- clone and append within the matching tag?  Append after the matching tag?  Use ShadowDOM?
-
-To pass more information, we could have an array on the RHS of the match, where the array forms the parameters passed in to the processor.
-
-But as we will see, the idea of using an array to declaratively bind the template extends well beyond just merging in a template.  In the next section, for example, we will want to use an array to bind properties / events / attributes.  In short, we want derive mileage out of [JS Tuples](https://www.tutorialsteacher.com/typescript/typescript-tuple).
-
-The trans-render library resolves this dilemma by placing significance on the type of the first element of the array.  If the first element is of type template, use a template processor.  If it is an object, using another processor.  If it is a boolean, use another one.
-
-To define the processors, we extend the postMatch syntax, using the word "head" to indicate the [first](https://www.geeksforgeeks.org/how-to-get-the-first-element-of-list-in-scala/) element of the array
-
-```html
-<template id=myTemplate>
-    ...
-</template>
-
-<script type="module">
-    import { transform } from 'trans-render/lib/transform.js';
-    import { Texter } from 'trans-render/lib/Texter.js';
-    import { TemplateMerger } from 'trans-render/lib/TemplateMerger.js';
-    import { ConditionalTransformer } from 'trans-render/lib/ConditionalTransformer.js';
-    transform(myTemplate, {
-        match:{
-            ...
-        },
-        postMatch: [
-            {rhsType: String, ctor: Texter},
-            {rhsType: Array, rhsHeadType: Template, ctor: TemplateMerger},
-            {rhsType: Array, rhsHeadType: Boolean, ctor:  ConditionalTransformer},
-            etc.
-        ]
-    })
-</script>
-```
 
 ## Boolean RHS
 
-Remove matching element if false (dangerous). If true, instantiate template, with context.state(?) as object to bind to.
+Remove matching element if false (dangerous). 
 
-[TODO] -- did we eer implement this?
+
 
 
 

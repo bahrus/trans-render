@@ -28,14 +28,15 @@ export class TR{
         return new TR(ctx);
     }
     constructor(public ctx: RenderContext){}
-    async transform(fragment: Element | DocumentFragment){
+    async transform(fragment: Element | DocumentFragment | Element[]){
         const {ctx} = this;
         const {host, options, match} = ctx;
         const qc = this.#queryCache;
-        if(!qc.has(fragment)){
+        const isArray = Array.isArray(fragment);
+        if(!isArray && !qc.has(fragment)){
             qc.set(fragment, {});
         }
-        const matchMap = qc.get(fragment)!;
+        const matchMap = isArray ? {} :  qc.get(fragment)!;
         for(const key in match){
             let rhs = match[key];
             const verb = 'do_' + typeof(rhs);
@@ -55,11 +56,13 @@ export class TR{
                 });
                 matchMap[key] = fromCache;
             }
-            let matches = fromCache || (matchMap[key] = Array.from(fragment.querySelectorAll(queryInfo.query)).map(el => new WeakRef(el)));
+            let matches = isArray ? 
+                                    fragment.filter(x => x.matches(queryInfo.query)) 
+                                  : fromCache || (matchMap[key] = Array.from(fragment.querySelectorAll(queryInfo.query)).map(el => new WeakRef(el)));
             ctx.rhs = rhs;
             
             for(const el of matches){
-                const match = el.deref()!;
+                const match = el instanceof Element ? el : el.deref()!;
                 ctx.target = match;
                 switch(queryInfo.type){
                     case 'attribs':
@@ -75,6 +78,9 @@ export class TR{
         }
 
         return ctx;
+    }
+    flushCache(){
+        this.#queryCache = new WeakMap<Element | DocumentFragment, {[key: string]: WeakRef<Element>[]}>();
     }
     async do_string(){
         const {target, rhs, host}  = this.ctx;
