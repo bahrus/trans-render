@@ -52,7 +52,7 @@ export const TemplMgmt = (superclass: {new(): TemplMgmtBase}) => class extends s
         this.#repeatVisit = true;
     }
 
-    async doTemplMount({transform, waitToInit, clonedTemplate, noshadow}: TemplMgmtBase){
+    async doTemplMount({transform, waitToInit, clonedTemplate, noshadow, transformPlugins}: TemplMgmtBase){
         if(waitToInit) return;
         const transforms = Array.isArray(transform) ? transform : [transform];
         const fragment = clonedTemplate === undefined ? 
@@ -62,7 +62,7 @@ export const TemplMgmt = (superclass: {new(): TemplMgmtBase}) => class extends s
             const ctx: RenderContext = {
                 host: this,
                 match: t,
-
+                plugins: transformPlugins,
             }
             const dtr = new DTR(ctx);
             if(!this.hasAttribute('defer-rendering')){
