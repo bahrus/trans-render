@@ -56,7 +56,6 @@ const ce = new CE<CounterSo & TemplMgmtProps, CounterSo & TemplMgmtActions, INot
                 notify: {dispatch:true},
             },
             buttonElements:{
-                isRef: true,
             }
         },
         actions: {

@@ -234,7 +234,10 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                 const actionsToDo: any = {};
                 if(propChangeQueue !== undefined && acts !== undefined){
                     for(const doAct in acts){
-                        const action = acts[doAct] as Action;
+                        let action = acts[doAct] as Action;
+                        if(typeof action === 'string'){
+                            action = {ifAllOf: [action]};
+                        }
                         const props = getProps(self, action); //TODO:  Cache this
                         let actionIsApplicable = false;
                         for(const prop of props){

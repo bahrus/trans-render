@@ -46,9 +46,7 @@ const ce = new CE({
             count: {
                 notify: { dispatch: true },
             },
-            buttonElements: {
-                isRef: true,
-            }
+            buttonElements: {}
         },
         actions: {
             ...beTransformed,
