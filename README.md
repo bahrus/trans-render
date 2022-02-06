@@ -403,7 +403,7 @@ match:{
 
 If the RHS is boolean value "false", then the match elements are removed.
 
-If the RHS is boolean value "true", then the matching elements are placed in the Host element with property key equal to the LHS. This is the "ref" equivalent of other templating libraries.
+If the RHS is boolean value "true", then the matching elements are placed in the Host element with property key equal to the LHS. This is the "ref" equivalent of other templating libraries.  One difference, perhaps, is the property is set to an array of weak references.
 
 
 
