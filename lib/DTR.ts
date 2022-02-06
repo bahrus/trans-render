@@ -102,26 +102,49 @@ export class DTR extends TR{
             const {match} = ctx;
             for(const key in match){
                 const rhs = match[key];
-                switch(typeof rhs){
-                    case 'string':
-                        returnObj.add(rhs);
-                        break;
-                    case 'object':
-                        if(Array.isArray(rhs)){
-                            switch(typeof rhs[0]){
-                                case 'string':
-                                    let isProp = false;
-                                    for(const item of rhs){
-                                        if(isProp) returnObj.add(item);
-                                        isProp = !isProp;
-                                    }
-                            }
-                        }
-                        break;
-                }
+                this.#getDepRHS(rhs, returnObj)
             }
             this.#dependencies = returnObj;
         }
         return this.#dependencies;
+    }
+
+    #getDepRHS(rhs: any, returnObj: Set<string>){
+        switch(typeof rhs){
+            case 'string':
+                returnObj.add(rhs);
+                break;
+            case 'object':
+                if(Array.isArray(rhs)){
+                    switch(typeof rhs[0]){
+                        case 'string':
+                            let isProp = false;
+                            for(const item of rhs){
+                                if(isProp) returnObj.add(item);
+                                isProp = !isProp;
+                            }
+                            break;
+                        default:
+                            this.#getDepPropAttr(rhs[0], returnObj); //Prop
+                            this.#getDepPropAttr(rhs[2], returnObj); //Attr
+                    }
+                }
+                break;
+        }
+    }
+
+    #getDepPropAttr(rhs: {[key: string]: any}, returnObj: Set<string>){
+        if(rhs === undefined) return;
+        for(const key in rhs){
+            const item = rhs[key];
+            switch(typeof item){
+                case 'string':
+                    returnObj.add(item);
+                    break;
+                case 'object':
+                    this.#getDepRHS(item, returnObj);
+                    break;
+            }
+        }
     }
 }
