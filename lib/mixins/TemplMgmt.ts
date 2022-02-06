@@ -1,6 +1,6 @@
 import { DTR } from '../DTR.js';
-import { RenderContext, TemplMgmtBase } from '../types.js';
-export {TemplMgmtProps, TemplMgmtActions} from '../types.js';
+import { RenderContext, TemplMgmtBase, TemplMgmtProps, Action } from '../types.js';
+export {TemplMgmtProps, TemplMgmtActions, Action} from '../types.js';
 
 export const TemplMgmt = (superclass: {new(): TemplMgmtBase}) => class extends superclass{
     #repeatVisit = false;
@@ -80,7 +80,7 @@ export const beTransformed = {
     cloneTemplate: {
         ifAllOf: ['mainTemplate'],
         ifKeyIn: ['noshadow', 'waitToInit']
-    },
+    } as Action<TemplMgmtProps>,
     doTemplMount: {
         ifAllOf: ['clonedTemplate', 'transform'],
         ifKeyIn: ['waitToInit'],
