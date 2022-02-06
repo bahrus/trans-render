@@ -20,7 +20,16 @@ export function applyPE<T extends Partial<HTMLElement> = HTMLElement>(host: Elem
                     if(objSelector !== undefined){
                         const objSelectorPath = objSelector.split('.');
                         val = getProp(e.target, objSelectorPath);
-                        if (converter !== undefined) val = converter(val);
+                        if (converter !== undefined){
+                            switch(typeof converter){
+                                case 'string':
+                                    val = (<any>self)[converter](val);
+                                    break;
+                                case 'function':
+                                    val = converter(val);
+                                    break;
+                            }
+                        }
                     }  
                     originalEventHandler(host, val, e);
                 }
