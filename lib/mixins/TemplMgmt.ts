@@ -31,6 +31,8 @@ export const TemplMgmt = (superclass: {new(): TemplMgmtBase}) => class extends s
                     return;
                 }                
             }
+        }else{
+            this.#needToAppendClone = true;
         }
         if(this.#repeatVisit){
             root.innerHTML = '';
