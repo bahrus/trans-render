@@ -6,12 +6,14 @@ export const TemplMgmt = (superclass: {new(): TemplMgmtBase}) => class extends s
     #repeatVisit = false;
     #isDeclarativeShadowDOM = false;
     #compiledTemplate:HTMLTemplateElement | undefined;
+    #needToAppendClone = false;
     cloneTemplate({noshadow, shadowRoot, mainTemplate, styles, waitToInit}: TemplMgmtBase){
         if(waitToInit) return;
         let root = this as any;
         if(!noshadow){
             if(shadowRoot === null){
                 root = this.attachShadow({mode: 'open'});
+                this.#needToAppendClone = true;
                 if(styles !== undefined){
                     (<any>root).adoptedStyleSheets = styles;
                 }                
@@ -32,6 +34,7 @@ export const TemplMgmt = (superclass: {new(): TemplMgmtBase}) => class extends s
         }
         if(this.#repeatVisit){
             root.innerHTML = '';
+            this.#needToAppendClone = true;
         }
         switch(typeof mainTemplate){
             case 'string':
@@ -67,9 +70,10 @@ export const TemplMgmt = (superclass: {new(): TemplMgmtBase}) => class extends s
             }
             await dtr.subscribe();
         }
-        if(clonedTemplate !== undefined){
+        if(this.#needToAppendClone){
             const root = noshadow ? this : this.shadowRoot!;
             root.appendChild(fragment);
+            this.#needToAppendClone = false;
         }
         this.removeAttribute('defer-rendering');
         this.clonedTemplate = undefined;
