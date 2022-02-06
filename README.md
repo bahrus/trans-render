@@ -182,7 +182,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
 
 ## Nested Matching
 
-Just as CSS will support nesting, TR supports nesting out-of-the-box.  If the RHS is an object, a sub transform is performed within that scope.
+Just as CSS will support nesting (Cascade Layers), TR supports nesting out-of-the-box.  If the RHS is a non-array object, a sub transform is performed within that scope (Only one exception -- if using lhs that ends with Props for bulk prop setting).
 
 ## Declarative trans-render syntax via plugins
 
@@ -399,9 +399,11 @@ match:{
 
 
 
-## Boolean RHS
+## Boolean RHS -- Remove and Refs
 
-Remove matching element if false (dangerous). 
+If the RHS is boolean value "false", then the match elements are removed.
+
+If the RHS is boolean value "true", then the matching elements are placed in the Host element with property key equal to the LHS. This is the "ref" equivalent of other templating libraries.
 
 
 

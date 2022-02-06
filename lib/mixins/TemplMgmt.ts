@@ -89,5 +89,5 @@ export const beTransformed = {
         ifAllOf: ['clonedTemplate', 'transform'],
         ifKeyIn: ['waitToInit'],
         async: true,
-    }
+    } as Action<TemplMgmtProps>,
 };

@@ -59,6 +59,10 @@ export class TR{
             let matches = isArray ? 
                                     fragment.filter(x => x.matches(queryInfo.query)) 
                                   : fromCache || (matchMap[key] = Array.from(fragment.querySelectorAll(queryInfo.query)).map(el => new WeakRef(el)));
+            if(rhs === true){
+                (<any>host)[key] = matches;
+                continue;
+            }
             ctx.rhs = rhs;
             
             for(const el of matches){
