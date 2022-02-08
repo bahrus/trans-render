@@ -42,9 +42,11 @@ export class DTR extends TR{
         const {plugins, rhs} = ctx;
         if(plugins !== undefined && plugins[rhs] !== undefined){
             const newRHS = plugins[rhs].processor(ctx);
-            const verb = 'do_' + typeof(newRHS);
-            ctx.rhs = newRHS;
-            await (<any>this)[verb]();
+            if(newRHS !== undefined){
+                const verb = 'do_' + typeof(newRHS);
+                ctx.rhs = newRHS;
+                await (<any>this)[verb]();
+            }
         }else{
             return await super.do_string();
         }
