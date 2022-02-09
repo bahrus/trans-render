@@ -182,7 +182,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
 
 ## Nested Matching
 
-Just as CSS will support nesting (Cascade Layers), TR supports nesting out-of-the-box.  If the RHS is a non-array object, a sub transform is performed within that scope (Only one exception -- if using lhs that ends with Props for bulk prop setting).
+Just as CSS will support nesting (hopefully, eventually), TR supports nesting out-of-the-box.  If the RHS is a non-array object, a sub transform is performed within that scope (Only one exception -- if using lhs that ends with Props for bulk prop setting).
 
 ## Declarative trans-render syntax via plugins
 
