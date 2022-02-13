@@ -9,7 +9,7 @@
 <img src="https://badgen.net/bundlephobia/minzip/trans-render">
 
 
-*trans-rendering* (TR) describes a methodical way of instantiating a template.  It draws inspiration from the (least) popular features of XSLT.  Like XSLT, TR performs transforms on elements by matching tests on those elements.  Whereas XSLT uses XPath for its tests, TR uses css path tests via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
+*trans-rendering* (TR) describes a methodical way of instantiating a template.  It originally drew inspiration from the (least) popular features of XSLT, but has since evolved to resemble standard CSS.  Like XSLT, TR performs transforms on elements by matching tests on those elements.  Whereas XSLT uses XPath for its tests, TR uses css path tests via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
 
 A subset of TR, also described below, is "declarative trans-render" syntax [DTR], which is pure, 100% declarative syntax.  
 
@@ -31,9 +31,9 @@ The first, lib/TR.js, is a tiny, 'non-committal' library that simply allows us t
 
 The second, lib/DTR.js, extends TR.js but provides robust declarative syntax support.  With the help of "hook like" web component decorators / trans-render plugins, we rarely if ever need to define user-defined functions, and can accomplish full, turing complete (?) rendering support while sticking to 100% declarative JSON.
 
-In addition, this package contains a fairly primitive library for defining custom elements, lib/CE.js, which can be combined with lib/DTR.js via lib/mixins/TemplMgmt*.js.
+In addition, this package contains a fairly primitive library for defining custom elements, lib/CE.js, which can be combined with lib/DTR.js via lib/mixins/TemplMgmt.js.
 
-The package xtal-element builds on this package, and the documentation on defining custom elements, with trans-rendering in mind, is documented there [WIP].
+The package [xtal-element](https://github.com/bahrus/xtal-element) builds on this package, and the documentation on defining custom elements, with trans-rendering in mind, is documented there [WIP].
 
 So the rest of this document will focus on the trans-rendering aspect, leaving the documentation for xtal-element to fill in the missing details regarding how lib/CE.js works.
 
@@ -41,7 +41,7 @@ So the rest of this document will focus on the trans-rendering aspect, leaving t
 
 The first value-add proposition lib/TR.js provides, is it can reduce the amount of imperative *.selectQueryAll().forEach's needed in our code.  However, by itself, TR.js is not a complete solution, if you are looking for a robust declarative solution.  That will come with the ability to extend TR.js, which DTR.js does, and which is discussed later.
 
-The CSS matching the core TR.js supports simply does multi-matching for all (custom) DOM elements within the scope, and also scoped sub transforms.
+The CSS matching that the core TR.js supports simply does multi-matching for all (custom) DOM elements within the scope, and also scoped sub transforms.
 
 ### Multi-matching
 
@@ -120,7 +120,7 @@ Throughout this documentation, we will be referring to the string before the col
 
 </details>
 
-The keyword "match" indicates that within that block are CSS Matches.  In this example, all the matches are "multi-matches" because they end with either "Classes", "Elements", "Parts", "Ids", "Props" or "Attribs".
+The keyword "match" indicates that within that block are CSS Matches.
 
 So for example, this:
 
@@ -176,7 +176,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>Ends with "Props"</td><td>textContentProps</td><td>.querySelectorAll('[-text-content]')</td><td>Useful for binding properties in bulk</td>
     </tr>
     <tr>
-        <td>Anything else</td><td>'a[href$=".mp3"]'</td><td>.querySelectorAll('a[href$=".mp3"')</td><td>
+        <td>Anything else</td><td>'a[href$=".mp3"]'</td><td>.querySelectorAll('a[href$=".mp3"]')</td><td>&nbsp;</td>
     </tr>
 </table>
 
@@ -205,7 +205,7 @@ fragment.querySelectorAll('[data-count]').forEach(target => {
 })
 ```
 
-We can make this declarative, by using the RenderContext's plugin object:
+We can make this more declarative, by using the RenderContext's plugin object:
 
 ```JavaScript
 const dataCountPlugin = {
@@ -229,7 +229,7 @@ transform(Main, {
 A special class of plugins can be developed with these characteristics:
 
 1.  Transform is associated with a [be-decorated](https://github.com/bahrus/be-decorated) custom attribute / decorator/ behavior, where the attribute starts with be- or data-be-.
-2.  Optionally, ff the plugin isn't yet loaded before the transform starts, it can be skipped over, and fallback to the decorator being executed after the library has downloaded (and the cloned template has already been added to the DOM live tree).  This allows the user to see the rest of the HTML content, and apply the plugin once progressively loaded (but DOM manipulation is now a bit costlier, as the browser may need to update the UI that is already visible).
+2.  Optionally, if the plugin isn't yet loaded before the transform starts, it can be skipped over, and fall back to the decorator being executed after the library has downloaded (and the cloned template has already been added to the DOM live tree).  This allows the user to see the rest of the HTML content without being blocked waiting for the library to download, and apply the plugin once progressively loaded (but DOM manipulation is now a bit costlier, as the browser may need to update the UI that is already visible).
 
 We call such plugins "be-plugins".
 
@@ -238,10 +238,9 @@ To create a be-plugin create a script as follows:
 ```TypeScript
 import {RenderContext, TransformPluginSettings} from 'trans-render/lib/types';
 import {register} from 'trans-render/lib/pluginMgr.js';
-import { hookUp } from './hookUp';
 
 export const trPlugin: TransformPluginSettings = {
-    selector: 'beMybehaviorAttribs',
+    selector: 'beMyBehaviorAttribs',
     processor: async ({target, val, attrib, host}: RenderContext) => {
         ...   
     }
@@ -255,7 +254,7 @@ We can now reference this be-plugin via a simple string:
 ```JavaScript
 transform(Main, {
     plugins: {
-        beMybehaviorAttribs: true,
+        beMyBehaviorAttribs: true,
     }, 
     match:{
         
@@ -271,7 +270,9 @@ Useful plugins that are available:
 
 ## Declarative trans-render syntax via PostMatch Processors 
 
-The examples so far have relied heavily on arrow functions.  As we've seen, it provides support for 100% no-holds-barred non-declarative code:
+The examples so far have relied heavily on arrow functions.  (In the case of plugins, we are, behind the scenes, amending the matches to include additional, hidden arrow functions on the RHS.)
+
+As we've seen, this provides support for 100% no-holds-barred non-declarative code:
 
 ```TypeScript
 const matches = { //TODO: check that this works
@@ -284,13 +285,13 @@ const matches = { //TODO: check that this works
 }
 ```
 
-These arrow functions can return a value.  trans-render's "postMatch" processors allow us to enhance what any custom function does, via some reusable (formally user-registered) processors.  If one of these reusable processors is sufficient for the task at hand, then the arrow function can be replaced by a JSON-like expression, allowing the reusable processor to do its thing, after being passed the context.  
+These arrow functions can return a value.  DTR.js has some built-in standard  "post match" processors that allow us to "act" based on the data contained on the RHS, including data that might be returned from a arrow function above.  
 
-This is the key to how the unconstrained TR syntax can, in a large number of cases, be made purely declarative.
+The capabilities of these post-match processors are quite limited in what they can do, due to the small number of expression types JavaScript (and especially JSON) supports.
 
-trans-render provides a few "standard" processors, which address common concerns.
+So we reserve the limited declarative syntax JSON provides for the most common use cases.
 
-The first common concern is setting the textContent of an element.
+The first common use case is setting the textContent of an element, which we lead up to below.
 
 ## Declarative, dynamic content based on presence of ctx.host
 
@@ -307,10 +308,9 @@ But having standardized on a place where the dynamic data we need can be derived
 ```
 
 
-... means "set the textContent of the summary element to "hello [the value of the world property of the host element or object]".
+... means "set the textContent of the summary element to "hello [the value of the "place" property of the host element or object]".
 
-This feature is *not* part of the core transform function.  It requires one of the standard declarative TR helpers that are part of this package, SplitText.js:
-
+Let's look at an example in more detail:
 
 ```html
 <details id=details>
@@ -341,7 +341,9 @@ The array alternates between static content, and dynamic properties coming from 
 
 After setting the string value of a node, setting properties, attaching event handlers, and setting attributes (including classes and parts) comes next in things we do over and over again.
 
-We do that via using an Array for the rhs of a match expression.  We interpret that array as a tuple to represent these settings.  P stands for Properties, E for events, A for attributes. <!-- and T for template or transform, or tuple of template and transform.-->  There are three nested, and subsequently larger processors that can do one or more of these 3 things.  It is a good idea to use the "weakest" processor for what you need, thereby reducing the footprint of your web component.
+So we reserve another of our extremely limited RHS types JSON supports to this use case.
+
+We do that via using an Array for the rhs of a match expression.  We interpret that array as a tuple to represent these settings.  P stands for Properties, E for events, A for attributes. 
 
 ### Property setting (P)
 
@@ -396,8 +398,6 @@ match:{
         }}]
 }
 ```
-
-
 
 ## Boolean RHS -- Remove and Refs
 
