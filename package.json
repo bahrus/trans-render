@@ -55,8 +55,8 @@
     "lib/*"
   ],
   "devDependencies": {
-    "xtal-test": "0.0.54",
-    "xtal-editor": "0.0.116",
+    "xtal-test": "0.0.55",
+    "xtal-editor": "0.0.131",
     "xtal-shell": "0.0.25"
   },
   "repository": {
