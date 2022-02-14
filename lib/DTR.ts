@@ -114,6 +114,9 @@ export class DTR extends TR{
     #getDepRHS(rhs: any, returnObj: Set<string>){
         switch(typeof rhs){
             case 'string':
+                if(rhs[0] === '.'){
+                    throw 'TODO';
+                }
                 returnObj.add(rhs);
                 break;
             case 'object':
