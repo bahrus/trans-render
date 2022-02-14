@@ -43,6 +43,7 @@
     "./lib/pluginMgr.js": "./lib/pluginMgr.js",
     "./lib/specialKeys.js": "./lib/specialKeys.js",
     "./lib/SplitText.js": "./lib/SplitText.js",
+    "./lib/structuralClone.js": "./lib/structuralClone.js",
     "./lib/subscribe.js": "./lib/subscribe.js",
     "./lib/TemplateMerge.js": "./lib/TemplateMerge.js",
     "./lib/Texter.js": "./lib/Texter.js",

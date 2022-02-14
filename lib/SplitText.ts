@@ -1,8 +1,7 @@
 import {PMDo, RenderContext} from './types.js';
-
+import {getProp} from './getProp.js';
 import {lispToCamel} from './lispToCamel.js';
 
-//TODO:  see if you using range, like be-searching does, makes things a little faster
 export class SplitText implements PMDo{
     async do({host, target, rhs, key, ctx}: RenderContext){
         const toProp = this.getToProp(key) || 'textContent';
@@ -12,11 +11,11 @@ export class SplitText implements PMDo{
             return;
         }
         if(typeof rhs === 'string'){
-            (<any>target!)[toProp] = await getVal(host, rhs);
+            (<any>target!)[toProp] = getVal(host, rhs);
             return;
         }
         //rhs is an array, with first element a string
-        (<any>target!)[toProp] = interpolate(rhs, host);
+        (<any>target!)[toProp] = await interpolate(rhs, host);
         
     }
 
@@ -39,19 +38,17 @@ export class SplitText implements PMDo{
 export async function interpolate(textNodes: string[], host: any){
     return textNodes.map(async (path, idx) => {
         if(idx % 2 === 0) return path;
-        return await getVal(host, path) as string;
+        return getVal(host, path) as string;
     }).join('');
 }
 
-export async function getVal(host:any, path: string): Promise<string>{
+export function getVal(host:any, path: string): string{
     if(host === undefined) return path;
     if(path[0] !== '.') return host[path];
-    //TODO:  cache this?
     path = path.substr(1);
     const qSplit = path.split('??');
     let deflt = qSplit[1];
     const dSplit = qSplit[0].trim().split('.');
-    const {getProp} = await import('./getProp.js');
     let val = getProp(host, dSplit);
     if(val === undefined && deflt){
         deflt = deflt.trim();
