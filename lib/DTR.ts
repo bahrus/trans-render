@@ -1,7 +1,7 @@
 import {TR} from './TR.js';
 import {RenderContext} from 'types';
 export {TR} from './TR.js';
-import { subscribe } from './subscribe.js';
+
 
 export class DTR extends TR{
     static new(ctx: RenderContext){
@@ -27,7 +27,7 @@ export class DTR extends TR{
     }
     async subscribe(){
         const {host} = this.ctx;
-        //if(host instanceof Element){
+        const { subscribe } = await import( './subscribe.js' );
         const deps = this.dep;
         const fragment = host!.shadowRoot || host!;
         for(const key of deps){
