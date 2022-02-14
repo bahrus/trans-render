@@ -336,6 +336,18 @@ Let's look at an example in more detail:
 
 The array alternates between static content, and dynamic properties coming from the host.
 
+The binding support for string properties isn't limited to a single property key.
+
+If the property key starts with a ".", then the property key supports a dot-delimited path to a property.  And "??" is supported.  So:
+
+```JavaScript
+    match:{
+        "summary": ["Hello ", "place.location ?? world"],
+        
+    }
+```
+
+will bind to host.place.location.  If that is undefined, then the "world" default will be used.
 
 ## P[E[A]] 
 

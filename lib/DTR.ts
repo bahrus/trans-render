@@ -70,7 +70,7 @@ export class DTR extends TR{
             case 'string':
                 const {SplitText} = await import('./splitText.js');
                 const st = new SplitText();
-                st.do(ctxCopy);
+                await st.do(ctxCopy);
                 break;
             default:
                 const len = rhs.length;
