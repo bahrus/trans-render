@@ -2,10 +2,13 @@ import { DTR } from '../DTR.js';
 import { RenderContext, TemplMgmtBase, TemplMgmtProps, Action } from '../types.js';
 export {TemplMgmtProps, TemplMgmtActions, Action} from '../types.js';
 
-export const TemplMgmt = (superclass: {new(): TemplMgmtBase}) => class extends superclass{
+export type TemplMgmtBaseMixin = {new(): TemplMgmtBase};
+
+const compiledTemplateMap = new Map<TemplMgmtBaseMixin, HTMLTemplateElement>();
+const compiledStyleMap = new Map<TemplMgmtBaseMixin, CSSStyleSheet[]>();
+export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends superclass{
     #repeatVisit = false;
     #isDeclarativeShadowDOM = false;
-    #compiledTemplate:HTMLTemplateElement | undefined;
     #needToAppendClone = false;
     cloneTemplate({noshadow, shadowRoot, mainTemplate, styles, waitToInit}: TemplMgmtBase){
         if(waitToInit) return;
@@ -22,8 +25,18 @@ export const TemplMgmt = (superclass: {new(): TemplMgmtBase}) => class extends s
                 if(!this.#repeatVisit){
                     //assume the shadow root came from declarative shadow dom, so no need to clone template
                     if(styles !== undefined){
-                        //controversial!
-                        (<any>root).adoptedStyleSheets = styles;
+                        let styleSheets = styles;
+                        if(typeof styles === 'string'){
+                            if(!compiledStyleMap.has(superclass)){
+                                const sheet = new CSSStyleSheet();
+                                (<any>sheet).replaceSync(styles); //Safari and Firefox do not support replaceSync
+                                compiledStyleMap.set(superclass, [sheet]);
+                            }
+                            styleSheets = compiledStyleMap.get(superclass)!;
+
+                        }
+                        (<any>root).adoptedStyleSheets = [...root.adoptedStyleSheets, styles];
+                        
                     }
                     this.#isDeclarativeShadowDOM = true;                    
                     this.clonedTemplate = root;
@@ -40,12 +53,12 @@ export const TemplMgmt = (superclass: {new(): TemplMgmtBase}) => class extends s
         }
         switch(typeof mainTemplate){
             case 'string':
-                if(this.#compiledTemplate === undefined){
+                if(!compiledTemplateMap.has(superclass)){
                     const templ = document.createElement('template');
                     templ.innerHTML = mainTemplate;
-                    this.#compiledTemplate = templ;
+                    compiledTemplateMap.set(superclass, templ);
                 }
-                this.clonedTemplate = this.#compiledTemplate!.content.cloneNode(true);
+                this.clonedTemplate = compiledTemplateMap.get(superclass)!.content.cloneNode(true);
                 break;
             default:
                 this.clonedTemplate = mainTemplate!.content.cloneNode(true);

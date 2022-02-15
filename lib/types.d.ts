@@ -186,7 +186,7 @@ export type Matches = {[key: string]: RHS};
 
 export interface TemplMgmtProps{
     mainTemplate?: HTMLTemplateElement | string;
-    styles?: CSSStyleSheet[];
+    styles?: CSSStyleSheet[] | string;
     clonedTemplate?: Node | undefined;
     // initTransform?: any;
     // updateTransform?: any;
