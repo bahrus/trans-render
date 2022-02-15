@@ -1,5 +1,4 @@
 import {PMDo, RenderContext, PSettings} from './types.d.js';
-import {interpolate} from './SplitText.js';
 import {applyP} from './applyP.js';
 export class P implements PMDo{
     async do(ctx: RenderContext){
@@ -32,7 +31,8 @@ export async function modifyVal(key: string, rhs: any, ctx: RenderContext){
             return getVal(host, path);
         case 'object':
             if(Array.isArray(path)){
-                return interpolate(path, host);
+                const {weave} = await import ('./weave.js');
+                return weave(path, host);
             }else{
                 return path; //Not implemented
             }
