@@ -33,5 +33,7 @@ export async function applyPE<T extends Partial<HTMLElement> = HTMLElement>(host
 }
 
 export async function hookUp(host: Element, target: Element, key: string, eventSettings: INotify){
-
+    const isPropSet = key.endsWith(':onSet');
+    const propName = isPropSet ?  key.substr(0, key.length - 6) : undefined;
+    
 }

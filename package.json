@@ -28,6 +28,7 @@
     "./lib/DTR.js": "./lib/DTR.js",
     "./lib/getHost.js": "./lib/getHost.js",
     "./lib/getProp.js": "./lib/getProp.js",
+    "./lib/getRecipientElement": "./lib/getRecipientElement.js",
     "./lib/getVal.js": "./lib/getVal.js",
     "./lib/html.js": "./lib/html.js",
     "./lib/interpolate.js": "./lib/interpolate.js",
