@@ -150,6 +150,8 @@ export interface INotify<TSelf = any, TProps = any, TActions = TProps>{
     propName?: string;
 
     transform?: any;
+
+    eventListenerOptions?: boolean | AddEventListenerOptions | undefined;
     
 }
 export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null};

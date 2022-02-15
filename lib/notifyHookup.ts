@@ -21,6 +21,11 @@ export async function notifyHookUp(host: Element, target: Element, key: string, 
             if(recipientElement !== null) doAction(host, recipientElement, eventSettings);
         });
     }else{
-        
+        target.addEventListener(key, async e => {
+            const {doAction} = await import ('./doAction.js');
+            const {getRecipientElement} = await import ('./getRecipientElement.js');
+            const recipientElement = await getRecipientElement(host, eventSettings);
+            if(recipientElement !== null) doAction(host, recipientElement, eventSettings);
+        }, eventSettings.eventListenerOptions);
     }
 }

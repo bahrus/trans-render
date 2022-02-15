@@ -1,6 +1,5 @@
 import {PEUnionSettings, PSettings, INotify} from './types.d.js';
 import {applyP} from './applyP.js';
-//import { getProp } from './getProp.js';
 
 export async function applyPE<T extends Partial<HTMLElement> = HTMLElement>(host: Element, target: Element, pe: PEUnionSettings<T>) {
     applyP(target, pe as PSettings<T>);
@@ -22,9 +21,6 @@ export async function applyPE<T extends Partial<HTMLElement> = HTMLElement>(host
                     break;
                 default:
                     throw 'NI'; 
-
-            // target.addEventListener(key, e => {
-
             }
             if(fn !== undefined){
                 target.addEventListener(key, fn);
