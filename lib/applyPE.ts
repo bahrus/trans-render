@@ -17,7 +17,8 @@ export async function applyPE<T extends Partial<HTMLElement> = HTMLElement>(host
                     fn = (<any>host)[eventSettings];
                     break;
                 case 'object':
-                    await hookUp(host, target, key, eventSettings);
+                    const {notifyHookUp} = await import ('./notifyHookup.js');
+                    await notifyHookUp(host, target, key, eventSettings);
                     break;
                 default:
                     throw 'NI'; 
@@ -32,8 +33,3 @@ export async function applyPE<T extends Partial<HTMLElement> = HTMLElement>(host
     }
 }
 
-export async function hookUp(host: Element, target: Element, key: string, eventSettings: INotify){
-    const isPropSet = key.endsWith(':onSet');
-    const propName = isPropSet ?  key.substr(0, key.length - 6) : undefined;
-    
-}

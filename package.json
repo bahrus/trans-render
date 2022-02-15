@@ -40,6 +40,7 @@
     "./lib/mixins/TemplMgmt.js": "./lib/mixins/TemplMgmt.js",
     "./lib/mixins/notify.js": "./lib/mixins/notify.js",
     "./lib/NestedTransform.js": "./lib/NestedTransform.js",
+    "./lib/notifyHookup.js": "./lib/notifyHookup.js",
     "./lib/nudge.js": "./lib/nudge.js",
     "./lib/onRemove.js": "./lib/onRemove.js",
     "./lib/P.js": "./lib/P.js",
