@@ -6,8 +6,8 @@ export class PE implements PMDo{
     async do(ctx: RenderContext){
         if(ctx.host=== undefined) throw 'Unknown host.';
         const prevRHS = {...ctx.rhs};
-        const modifiedProps = modifyPRHS(ctx, 0);
-        const modifiedEvents = modifyERHS(ctx, 1);
+        const modifiedProps = await modifyPRHS(ctx, 0);
+        const modifiedEvents = await modifyERHS(ctx, 1);
         applyPE(ctx.host, ctx.target as HTMLElement, [modifiedProps, modifiedEvents] as PEUnionSettings);
         ctx.rhs = prevRHS;
     }
