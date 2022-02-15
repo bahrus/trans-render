@@ -13,7 +13,7 @@ export async function modifyPRHS(ctx: RenderContext, idx: number){
     if(rhs === undefined) return;
     const modifiedRHS: any = {};
     for(const key in rhs){
-        let val = modifyVal(key, rhs, ctx);
+        let val = await modifyVal(key, rhs, ctx);
         modifiedRHS[key] = val;
     }
     const newRHS = [...ctx.rhs];
@@ -22,7 +22,7 @@ export async function modifyPRHS(ctx: RenderContext, idx: number){
     return modifiedRHS;
 }
 
-export function modifyVal(key: string, rhs: any, ctx: RenderContext){
+export async function modifyVal(key: string, rhs: any, ctx: RenderContext){
     let path = rhs[key];
     const host = ctx.host! as any;
     if(host === undefined) return path;
