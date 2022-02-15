@@ -66,7 +66,90 @@ export type PropSettings<T extends Partial<HTMLElement> = HTMLElement> = {
     [P in keyof T]?: any
 };
 
-export type EventSettings = {[key: string] : (Function | string | [Function, string] | [Function | string, string, Function | string])};
+export type EventSettings = {[key: string] : INotify};
+
+export interface INotify<TSelf = any, TProps = any, TActions = TProps>{
+    /**
+     * path to get value from target
+     */
+    valFromTarget?: keyof TSelf;
+    /**
+     * path to get value from target
+     */
+    vft?: keyof TSelf | `${keyof TSelf & string}.${string}`;
+    /**
+     * path to get value from event
+     */
+    valFromEvent?: string;
+    /**
+     * path to get value from event
+     */
+    vfe?: string;
+    /**
+     * Pass property or invoke fn onto custom or built-in element hosting the contents of p-u element.
+     */
+    //toHost: boolean;
+    /**
+     * Id of Dom Element.  Uses import-like syntax:
+     * ./my-id searches for #my-id within ShadowDOM realm of  instance.
+     * ../my-id searches for #my-id one ShadowDOM level up.
+     * /my-id searches from outside any ShadowDOM.
+     * @attr
+     */
+    toUpShadow?: string;
+
+    /**
+     * Pass property or invoke fn onto itself
+     */
+    toSelf?: boolean;
+    
+    /**
+     * Pass property to the nearest previous sibling / ancestor element matching this css pattern, using .previousElement(s)/.parentElement.matches method. 
+     * Does not pass outside ShadowDOM realm.
+     */
+    toNearestUpMatch?: string;
+
+    toClosest?: string;
+
+    /**
+     * to closest or host ("itemscope" attribute or shadow DOM boundary)
+     */
+    tocoho?: boolean | string; //to closest or host
+
+    /**
+     * Name of property to set on matching (upstream) element.
+     * @attr
+     */
+    prop?: keyof TProps & string;
+
+    /**
+     * Name of method or property arrow function to invoke on matching (upstream) element.
+     */
+    fn?: keyof TActions & string;
+
+    withArgs?: ('self' | 'val' | 'event')[];
+
+    doInit?: boolean;
+
+    clone?: boolean;
+
+    parseValAs?: 'int' | 'float' | 'bool' | 'date' | 'truthy' | 'falsy' | undefined | 'string' | 'object';
+
+    plusEq?: boolean;
+
+    eqConst?: any;
+
+    toggleProp?: boolean;
+
+    trueVal?: any;
+
+    falseVal?: any;
+
+    as?: 'str-attr' | 'bool-attr' | 'obj-attr',
+
+    propName?: string;
+    
+}
 export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null};
 export type PSettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T> | undefined]; 
 export type PESettings<T extends Partial<HTMLElement> = HTMLElement> = [props: PropSettings<T> | undefined, on: EventSettings | undefined];
