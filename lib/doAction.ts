@@ -1,7 +1,7 @@
 import {INotify} from './types';
 declare function structuredClone<T>(val: T): T;
 
-async function doAction(self: Element, recipientElement: Element, {
+export async function doAction(self: Element, recipientElement: Element, {
     valFromEvent, vfe, valFromTarget, vft, clone, parseValAs, trueVal, falseVal, as, prop, fn, toggleProp, plusEq, withArgs, propName
 }: INotify, event?: Event){
     const valFE = vfe || valFromEvent;
@@ -16,6 +16,7 @@ async function doAction(self: Element, recipientElement: Element, {
     if(val === undefined) return;
     if(clone) val = structuredClone(val);
     if(parseValAs !== undefined){
+        const {convert} = await import('./convert.js');
         val = convert(val, parseValAs);
     }
     if(trueVal && val){
@@ -24,7 +25,6 @@ async function doAction(self: Element, recipientElement: Element, {
         val = falseVal;
     }
     if(as !== undefined){
-        //const propKeyLispCase = camelToLisp(propKey);
         switch(as){
             case 'str-attr':
                 recipientElement.setAttribute(prop!, val.toString());
@@ -38,15 +38,7 @@ async function doAction(self: Element, recipientElement: Element, {
                 }else{
                     recipientElement.removeAttribute(prop!);
                 }
-                break;
-            // default:
-            //     if(toProp === '...'){
-            //         Object.assign(subMatch, val);
-            //     }else{
-            //         (<any>subMatch)[toProp] = val;
-            //     }
-                
-    
+                break;                
         }
     }else{
         if(prop !== undefined){

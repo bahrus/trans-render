@@ -19,6 +19,7 @@
     "./lib/applyPEA.js": "./lib/applyPEA.js",
     "./lib/camelToLisp.js": "./lib/camelToLisp.js",
     "./lib/CE.js": "./lib/CE.js",
+    "./lib/convert.js": "./lib/convert.js",
     "./lib/def.js": "./lib/def.js",
     "./lib/define.js": "./lib/define.js",
     "./lib/doAction.js": "./lib/doAction.js",

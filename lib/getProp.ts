@@ -1,4 +1,4 @@
-export function getProp(val: any, pathTokens: string[]){
+export function getProp(val: any, pathTokens: (string | string[])[]){
     let context = val;
     for(const token of pathTokens){
       switch(typeof token){
