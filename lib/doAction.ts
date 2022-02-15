@@ -42,8 +42,10 @@ export async function doAction(self: Element, recipientElement: Element, {
         }
     }else{
         if(prop !== undefined){
+            const {doSet} = await import ('./doSet.js');
             doSet(recipientElement, prop, val, plusEq, toggleProp)
         }else if(fn !== undefined){
+            const {doInvoke} = await import ('./doInvoke.js');
             doInvoke(recipientElement, fn, val, withArgs, event);
         }else{
             throw 'NI'; //Not Implemented
