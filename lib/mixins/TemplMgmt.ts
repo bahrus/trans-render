@@ -5,7 +5,7 @@ export {TemplMgmtProps, TemplMgmtActions, Action} from '../types.js';
 export type TemplMgmtBaseMixin = {new(): TemplMgmtBase};
 
 const compiledTemplateMap = new Map<TemplMgmtBaseMixin, HTMLTemplateElement>();
-const compiledStyleMap = new Map<TemplMgmtBaseMixin, CSSStyleSheet[]>();
+const compiledStyleMap = new Map<TemplMgmtBaseMixin, CSSStyleSheet[] | HTMLTemplateElement>();
 export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends superclass{
     #repeatVisit = false;
     #isDeclarativeShadowDOM = false;
@@ -25,17 +25,29 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
                 if(!this.#repeatVisit){
                     //assume the shadow root came from declarative shadow dom, so no need to clone template
                     if(styles !== undefined){
-                        let styleSheets = styles;
+                        let styleSheets: CSSStyleSheet[] | HTMLTemplateElement | undefined;
                         if(typeof styles === 'string'){
                             if(!compiledStyleMap.has(superclass)){
                                 const sheet = new CSSStyleSheet();
-                                (<any>sheet).replaceSync(styles); //Safari and Firefox do not support replaceSync
-                                compiledStyleMap.set(superclass, [sheet]);
+                                if((<any>sheet).replaceSync === undefined){
+                                    //SafariFox
+                                    const tm = document.createElement('template');
+                                    tm.innerHTML = styles;
+                                    compiledStyleMap.set(superclass, tm);
+                                }else{
+                                    (<any>sheet).replaceSync(styles.replace('<style>', '').replace('</style>', '')); //Safari and Firefox do not support replaceSync
+                                    compiledStyleMap.set(superclass, [sheet]);
+                                }
                             }
-                            styleSheets = compiledStyleMap.get(superclass)!;
-
+                            styleSheets = compiledStyleMap.get(superclass);
+                        }else{
+                            styleSheets = styles;
                         }
-                        (<any>root).adoptedStyleSheets = [...root.adoptedStyleSheets, styles];
+                        if(styleSheets instanceof HTMLTemplateElement){
+                            root.appendChild(styleSheets.content.cloneNode(true));
+                        }else{
+                            (<any>root).adoptedStyleSheets = [...root.adoptedStyleSheets, styleSheets];
+                        }
                         
                     }
                     this.#isDeclarativeShadowDOM = true;                    
