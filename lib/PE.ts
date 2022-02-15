@@ -3,7 +3,7 @@ import {modifyPRHS} from './P.js';
 import {applyPE} from './applyPE.js';
 
 export class PE implements PMDo{
-    do(ctx: RenderContext){
+    async do(ctx: RenderContext){
         if(ctx.host=== undefined) throw 'Unknown host.';
         const prevRHS = {...ctx.rhs};
         const modifiedProps = modifyPRHS(ctx, 0);

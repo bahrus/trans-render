@@ -4,7 +4,7 @@ import {modifyERHS} from './PE.js';
 import {applyPEA} from './applyPEA.js';
 
 export class PEA implements PMDo{
-    do(ctx: RenderContext){
+    async do(ctx: RenderContext){
         if(ctx.host=== undefined) throw 'Unknown host.';
         const modifiedProps = modifyPRHS(ctx, 0);
         const modifiedEvents = modifyERHS(ctx, 1);

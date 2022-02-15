@@ -2,7 +2,7 @@ import {PMDo, RenderContext, PSettings} from './types.d.js';
 import {interpolate, getVal} from './SplitText.js';
 import {applyP} from './applyP.js';
 export class P implements PMDo{
-    do(ctx: RenderContext){
+    async do(ctx: RenderContext){
         const modifiedRHS = modifyPRHS(ctx, 0);
         applyP(ctx.target!, [modifiedRHS] as PSettings);
     }
