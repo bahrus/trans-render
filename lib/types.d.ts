@@ -148,6 +148,8 @@ export interface INotify<TSelf = any, TProps = any, TActions = TProps>{
     as?: 'str-attr' | 'bool-attr' | 'obj-attr',
 
     propName?: string;
+
+    transform?: any;
     
 }
 export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null};

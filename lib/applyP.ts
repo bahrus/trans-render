@@ -1,5 +1,5 @@
 import {PSettings} from './types.d.js';
-export function applyP<T extends Partial<HTMLElement> = HTMLElement>(target: T, p: PSettings<T>) {
+export async function applyP<T extends Partial<HTMLElement> = HTMLElement>(target: T, p: PSettings<T>) {
     const props = p[0];
     if (props !== undefined) {
         const safeProps = {...props} as any;

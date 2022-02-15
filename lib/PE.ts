@@ -8,7 +8,7 @@ export class PE implements PMDo{
         const prevRHS = {...ctx.rhs};
         const modifiedProps = await modifyPRHS(ctx, 0);
         const modifiedEvents = await modifyERHS(ctx, 1);
-        applyPE(ctx.host, ctx.target as HTMLElement, [modifiedProps, modifiedEvents] as PEUnionSettings);
+        await applyPE(ctx.host, ctx.target as HTMLElement, [modifiedProps, modifiedEvents] as PEUnionSettings);
         ctx.rhs = prevRHS;
     }
 }

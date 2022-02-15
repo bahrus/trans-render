@@ -3,9 +3,9 @@ import {applyP} from './applyP.js';
 import {applyPE} from './applyPE.js';
 import { camelToLisp } from './camelToLisp.js';
 
-export function applyPEA<T extends Partial<Element> = Element>(host: Element, target: Element, pea: PEAUnionSettings<T>) {
-    applyP(target, pea as PSettings<T>);
-    applyPE(host, target, pea as PESettings<T>);
+export async function applyPEA<T extends Partial<Element> = Element>(host: Element, target: Element, pea: PEAUnionSettings<T>) {
+    await applyP(target, pea as PSettings<T>);
+    await applyPE(host, target, pea as PESettings<T>);
     const attribSettings = pea[2];
     if (attribSettings !== undefined) {
         for (const key in attribSettings) {

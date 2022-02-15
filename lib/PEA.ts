@@ -9,6 +9,6 @@ export class PEA implements PMDo{
         const modifiedProps = await modifyPRHS(ctx, 0);
         const modifiedEvents = await modifyERHS(ctx, 1);
         const modifiedAttribs = await modifyPRHS(ctx, 2);
-        applyPEA(ctx.host, ctx.target as HTMLElement, [modifiedProps, modifiedEvents, modifiedAttribs] as PEAUnionSettings);
+        await applyPEA(ctx.host, ctx.target as HTMLElement, [modifiedProps, modifiedEvents, modifiedAttribs] as PEAUnionSettings);
     }
 }
