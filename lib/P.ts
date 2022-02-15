@@ -1,5 +1,5 @@
 import {PMDo, RenderContext, PSettings} from './types.d.js';
-import {interpolate, getVal} from './SplitText.js';
+import {interpolate} from './SplitText.js';
 import {applyP} from './applyP.js';
 export class P implements PMDo{
     async do(ctx: RenderContext){
@@ -28,6 +28,7 @@ export async function modifyVal(key: string, rhs: any, ctx: RenderContext){
     if(host === undefined) return path;
     switch(typeof path){
         case 'string':
+            const {getVal} = await import ('./getVal.js');
             return getVal(host, path);
         case 'object':
             if(Array.isArray(path)){
