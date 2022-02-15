@@ -1,5 +1,4 @@
 import {PMDo, RenderContext} from './types.js';
-import {getProp} from './getProp.js';
 import {lispToCamel} from './lispToCamel.js';
 
 export class SplitText implements PMDo{
