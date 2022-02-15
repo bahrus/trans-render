@@ -386,11 +386,17 @@ The second element of the array allows us to add event listeners to the element.
 
 ```JS
 match:{
-    myCustomElementElements: [{}, {click: myEventHandlerFn, mouseover: 'myHostMouseOverFn'}]
+    myCustomElementElements: [{}, {click: myEventHandlerFn, mouseover: 'myHostMouseOverFn', 'myProp:onSet': {...}}]
 }
 ```
 
-[TODO] Document Array event handlers
+As you can see, TR/DTR supports three ways to hookup an event handler.  The first one is not JSON serializable, so it doesn't qualify as "declarative".  It works best with arrow function properties of the host (no binding attempt is made).  Likewise with the second option, but here we are referencing, by name, the event handler from the host.
+
+The third option provides a declarative syntax for doing common things done in an event handler, but declaratively.  Things like toggling property values, incrementing counters, etc.
+
+The syntax is borrowed from the [be-noticed](https://github.com/bahrus/be-noticed) decorator / DTR plugin, and much of the code is shared between these two systems (WIP).
+
+
 
 ### Set attributes / classes / parts / [decorator attributes](https://github.com/bahrus/be-decorated).
 
