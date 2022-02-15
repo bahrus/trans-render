@@ -66,7 +66,7 @@ export type PropSettings<T extends Partial<HTMLElement> = HTMLElement> = {
     [P in keyof T]?: any
 };
 
-export type EventSettings = {[key: string] : INotify};
+export type EventSettings = {[key: string] : ((e: Event) => void) | string | INotify};
 
 export interface INotify<TSelf = any, TProps = any, TActions = TProps>{
     /**
