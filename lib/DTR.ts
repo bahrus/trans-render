@@ -78,17 +78,17 @@ export class DTR extends TR{
                     case 1:
                         const {P} = await import('./P.js');
                         const p = new P();
-                        p.do(ctxCopy);
+                        await p.do(ctxCopy);
                         break;
                     case 2:
                         const {PE} = await import('./PE.js');
                         const pe = new PE();
-                        pe.do(ctxCopy);
+                        await pe.do(ctxCopy);
                         break;
                     default:
                         const {PEA} = await import('./PEA.js');
                         const pea = new PEA();
-                        pea.do(ctxCopy);
+                        await pea.do(ctxCopy);
                         break;
                 }
         }
