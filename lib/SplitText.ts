@@ -11,6 +11,7 @@ export class SplitText implements PMDo{
             return;
         }
         if(typeof rhs === 'string'){
+            const {getVal} = await import ('./getVal.js');
             (<any>target!)[toProp] = getVal(host, rhs);
             return;
         }
@@ -38,25 +39,9 @@ export class SplitText implements PMDo{
 export async function interpolate(textNodes: string[], host: any){
     return textNodes.map(async (path, idx) => {
         if(idx % 2 === 0) return path;
-        return getVal(host, path) as string;
+        const {getVal} = await import ('./getVal.js');
+        return await getVal(host, path) as string;
     }).join('');
 }
 
-export function getVal(host:any, path: string): string{
-    if(host === undefined) return path;
-    if(path[0] !== '.') return host[path];
-    path = path.substr(1);
-    const qSplit = path.split('??');
-    let deflt = qSplit[1];
-    const dSplit = qSplit[0].trim().split('.');
-    let val = getProp(host, dSplit);
-    if(val === undefined && deflt){
-        deflt = deflt.trim();
-        if(deflt[0] === "."){
-            return getVal(host, deflt);
-        }else{
-            return deflt;
-        }
-    }
-    return val;
-}
+
