@@ -183,14 +183,16 @@ export interface TRElementActions{
     setValsQuietly(vals: this): void;
 }
 
+
+
 export interface DefineArgs<MixinCompositeProps = any, MixinCompositeActions = MixinCompositeProps, TPropInfo = PropInfo, TAction extends Action = Action<MixinCompositeProps>>{
     superclass?: {new(): any} | string,
     mixins?: any[],
     mainTemplate?: HTMLTemplateElement;
     /** use this only for defaults that can't be JSON serialized in config */
     complexPropDefaults?: Partial<MixinCompositeProps>;
-    /** Config should be 100% JSON serializable */
-    config: WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo, TAction>;
+    /** Config should be 100% JSON serializable, or a JSON import, or an id of an be-exportable script tag */
+    config: WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo, TAction> | (() => Promise<WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo, TAction>>) | string;
     
 }
 
