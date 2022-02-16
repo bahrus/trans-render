@@ -1,11 +1,23 @@
-import { DefineArgs, LogicOp, LogicEvalContext, LogicOpProp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementProps, PropChangeMethod, TRElementActions } from './types.js';
-export { Action, PropInfo, TRElementActions, TRElementProps} from './types.js';
+import { DefineArgs, LogicOp, LogicEvalContext, LogicOpProp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementProps, PropChangeMethod, TRElementActions, WCConfig } from './types.js';
+export { Action, PropInfo, TRElementActions, TRElementProps, WCConfig} from './types.js';
 import { def } from './def.js';
 
 export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction extends Action<MCProps> = Action<MCProps>>{
 
     constructor(public args?: DefineArgs<MCProps, MCActions, TPropInfo, TAction>){
-        if(args !== undefined) this.def(args);
+        if(args !== undefined) {
+            this.#evalConfig(this).then(() => {
+                this.def(args);
+            })
+            
+        }
+    }
+
+    async #evalConfig({args}: this){
+        if(args === undefined) return;
+        const {config} = args;
+        if(typeof config != 'function') return;
+        args.config = await config();
     }
 
     defaultProp: PropInfo = {
@@ -20,7 +32,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         const {doActions, pq, getProps, doPA, act2Props} = this;
         const self = this;
         const proto = newClass.prototype;
-        const config = args.config;
+        const config = args.config as WCConfig;
         //const actions = this.mergedActions;
         for(const key in props){
             const prop = props[key];
@@ -81,16 +93,17 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         return true;
     }
 
-    createPropInfos(args: DefineArgs){
+    #createPropInfos(args: DefineArgs){
         const {defaultProp, setType} = this;
+        const config  = args.config as WCConfig;
         const props: {[key: string]: PropInfo} = {};
-        const defaults = {...args.complexPropDefaults, ...args.config.propDefaults};
+        const defaults = {...args.complexPropDefaults, ...config.propDefaults};
         for(const key in defaults){
             const prop: PropInfo = {...defaultProp};
             setType(prop, defaults[key]);
             props[key] = prop;
         }
-        const specialProps = args.config.propInfo;
+        const specialProps = config.propInfo;
         if(specialProps !== undefined){
             for(const key in specialProps){
                 if(props[key] === undefined){
@@ -101,7 +114,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                 Object.assign(prop, specialProps[key]);
             }
         }
-        const actions = args.config.actions;
+        const actions = config.actions;
         if(actions !== undefined){
             for(const methodName in actions){
                 const action = actions[methodName];
@@ -119,30 +132,14 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
     }
 
     classDef: {new(): MCProps & MCActions & TRElementProps & HTMLElement} | undefined;
-    //mergedActions: Partial<{[key in keyof MCActions]: TAction}> | undefined;
-    def(args: DefineArgs<MCProps, MCActions, TPropInfo, TAction>): {new(): MCProps & MCActions}{
+    async def(args: DefineArgs<MCProps, MCActions, TPropInfo, TAction>): Promise<{new(): MCProps & MCActions}>{
         this.args = args;
+        await this.#evalConfig(this);
         const {getAttrNames: getAttributeNames, doActions, fine, pq, toCamel, toLisp, propUp, getProps} = this;
         const self = this;
         const {config} = args;
-        const {tagName, style, actions} = config;
-        // const inheritedActions = actions ? [actions] : [];
-        // let sc = args.superclass as any;
-        // while(sc && sc.ceDef){
-        //     const inheritedA = sc.ceDef.config.actions;
-        //     if(inheritedA){
-        //         inheritedActions.push(inheritedA);
-        //     }
-        //     sc = sc.superclass;
-        // }
-        // const mergedActions: Partial<{[key in keyof MCActions]: TAction}> = {};
-        // let poppedAction = inheritedActions.pop();
-        // while(poppedAction !== undefined){
-        //     Object.assign(mergedActions, poppedAction);
-        //     poppedAction = inheritedActions.pop();
-        // }
-        // this.mergedActions = mergedActions;
-        const propInfos  = this.createPropInfos(args);
+        const {tagName, style, actions} = config as WCConfig;
+        const propInfos  = this.#createPropInfos(args);
         let ext = (args.superclass || HTMLElement) as {new(): any};
         const proto = ext.prototype;
         const mixins = args.mixins;
@@ -173,7 +170,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             get mergedActions(){
                 if(this.#mergedActions === undefined){
                     this.#mergedActions = super.mergedActions || {};
-                    Object.assign(this.#mergedActions, config.actions);
+                    Object.assign(this.#mergedActions, actions);
                 }
                 return this.#mergedActions!;
             }

@@ -21,7 +21,6 @@
     "./lib/CE.js": "./lib/CE.js",
     "./lib/convert.js": "./lib/convert.js",
     "./lib/def.js": "./lib/def.js",
-    "./lib/define.js": "./lib/define.js",
     "./lib/doAction.js": "./lib/doAction.js",
     "./lib/doInvoke.js": "./lib/doInvoke.js",
     "./lib/doSet.js": "./lib/doSet.js",
