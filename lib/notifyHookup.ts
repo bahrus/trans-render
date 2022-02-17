@@ -1,5 +1,5 @@
 import {INotify} from './types';
-export async function notifyHookUp(host: Element, target: Element, key: string, eventSettings: INotify){
+export async function notifyHookUp(target: Element, key: string, eventSettings: INotify){
     const isPropSet = key.endsWith(':onSet');
     const propName = isPropSet ?  key.substr(0, key.length - 6) : undefined;
     if(eventSettings.doInit){
