@@ -17,7 +17,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         if(args === undefined) return;
         const {config} = args;
         if(typeof config != 'function') return;
-        args.config = await config();
+        args.config = (await config()).default;
     }
 
     defaultProp: PropInfo = {

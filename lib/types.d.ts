@@ -192,7 +192,7 @@ export interface DefineArgs<MixinCompositeProps = any, MixinCompositeActions = M
     /** use this only for defaults that can't be JSON serialized in config */
     complexPropDefaults?: Partial<MixinCompositeProps>;
     /** Config should be 100% JSON serializable, or a JSON import, or an id of an be-exportable script tag */
-    config: WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo, TAction> | (() => Promise<WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo, TAction>>) | string;
+    config: WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo, TAction> | (() => Promise<{default: WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo, TAction>}>) | string;
     
 }
 
