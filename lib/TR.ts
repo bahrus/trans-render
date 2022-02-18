@@ -102,7 +102,7 @@ export class TR{
         if(lhsProp){
             (<any>target)[lhsProp] = rhs;
         }else{
-            this.ctx.match = {...match, ...rhs};
+            this.ctx.match = {...rhs};
             await this.transform(target!);
             this.ctx.match = match;
         }
