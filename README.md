@@ -347,7 +347,7 @@ If the property key starts with a ".", then the property key supports a dot-deli
     }
 ```
 
-will bind to host.place.location.  If that is undefined, then the "world" default will be used.  If the string to the right of ?? starts with a ., the same process is repeated recurively.
+will bind to host.place.location.  If that is undefined, then the "world" default will be used.  If the string to the right of ?? starts with a ., the same process is repeated recursively.
 
 ## P[E[A]] 
 
