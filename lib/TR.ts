@@ -3,7 +3,7 @@ import { getQuery} from './specialKeys.js';
 import { lispToCamel } from './lispToCamel.js';
 
 export class TR{
-    #queryCache = new WeakMap<Element | DocumentFragment, {[key: string]: WeakRef<Element>[]}>();
+    #queryCache = new WeakMap<Element | DocumentFragment | Element[], {[key: string]: WeakRef<Element>[]}>();
     static async transform(sourceOrTemplate: Element | DocumentFragment | Element[],
         ctx: RenderContext,
         target?: Element | DocumentFragment) {
@@ -59,8 +59,8 @@ export class TR{
                 matchMap[key] = fromCache;
             }
             let matches = isArray ? 
-                                    fragment.filter(x => x.matches(queryInfo.query)) 
-                                  : fromCache || (matchMap[key] = Array.from(fragment.querySelectorAll(queryInfo.query)).map(el => new WeakRef(el)));
+                                    (fragment as Element[]).filter(x => x.matches(queryInfo.query)) 
+                                  : fromCache || (matchMap[key] = Array.from((fragment as DocumentFragment).querySelectorAll(queryInfo.query)).map(el => new WeakRef(el)));
             if(rhs === true){
                 (<any>host)[key] = matches;
                 continue;
