@@ -42,6 +42,7 @@ export class TR{
             const verb = 'do_' + typeof(rhs);
             if(key === ':host'){
                 ctx.target = host;
+                delete(ctx.queryInfo);
                 await (<any>this)[verb]();
                 continue;
             }
@@ -97,7 +98,7 @@ export class TR{
     }
     async do_object(){
         const {target, rhs, host, match, queryInfo} = this.ctx;
-        const {lhsProp} = queryInfo!;
+        const lhsProp = queryInfo?.lhsProp;
         if(lhsProp){
             (<any>target)[lhsProp] = rhs;
         }else{
