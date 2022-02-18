@@ -342,7 +342,7 @@ If the property key starts with a ".", then the property key supports a dot-deli
 
 ```JavaScript
     match:{
-        "summary": ["Hello ", "place.location ?? world"],
+        "summary": ["Hello ", ".place.location ?? world"],
         
     }
 ```
