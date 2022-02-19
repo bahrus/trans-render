@@ -28,4 +28,8 @@ export async function notifyHookUp(target: Element, key: string, eventSettings: 
             if(recipientElement !== null) doAction(target, recipientElement, eventSettings, e);
         }, eventSettings.eventListenerOptions);
     }
+    if(eventSettings.nudge){
+        const {nudge} = await import ('./nudge.js');
+        nudge(target);
+    }
 }

@@ -152,6 +152,8 @@ export interface INotify<TSelf = any, TProps = any, TActions = TProps>{
     transform?: any;
 
     eventListenerOptions?: boolean | AddEventListenerOptions | undefined;
+
+    nudge?: boolean;
     
 }
 export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null};
