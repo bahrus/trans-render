@@ -4,8 +4,8 @@ export {TemplMgmtProps, TemplMgmtActions, Action} from '../types.js';
 
 export type TemplMgmtBaseMixin = {new(): TemplMgmtBase};
 
-const compiledTemplateMap = new Map<TemplMgmtBaseMixin, HTMLTemplateElement>();
-const compiledStyleMap = new Map<TemplMgmtBaseMixin, CSSStyleSheet[] | HTMLTemplateElement>();
+const compiledTemplateMap = new Map<string, HTMLTemplateElement>();
+const compiledStyleMap = new Map<string, CSSStyleSheet[] | HTMLTemplateElement>();
 export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends superclass{
     #repeatVisit = false;
     #isDeclarativeShadowDOM = false;
@@ -14,19 +14,20 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         if(styles === undefined) return;
         let styleSheets: CSSStyleSheet[] | HTMLTemplateElement | undefined;
         if(typeof styles === 'string'){
-            if(!compiledStyleMap.has(superclass)){
+            const isReally = (<any>this.constructor).isReally as string;
+            if(!compiledStyleMap.has(isReally)){
                 const sheet = new CSSStyleSheet();
                 if((<any>sheet).replaceSync === undefined){
                     //SafariFox
                     const tm = document.createElement('template');
                     tm.innerHTML = styles;
-                    compiledStyleMap.set(superclass, tm);
+                    compiledStyleMap.set(isReally, tm);
                 }else{
                     (<any>sheet).replaceSync(styles.replace('<style>', '').replace('</style>', '')); //Safari and Firefox do not support replaceSync
-                    compiledStyleMap.set(superclass, [sheet]);
+                    compiledStyleMap.set(isReally, [sheet]);
                 }
             }
-            styleSheets = compiledStyleMap.get(superclass);
+            styleSheets = compiledStyleMap.get(isReally);
         }else{
             styleSheets = styles;
         }
@@ -66,12 +67,13 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         }
         switch(typeof mainTemplate){
             case 'string':
-                if(!compiledTemplateMap.has(superclass)){
+                const isReally = (<any>this.constructor).isReally as string;
+                if(!compiledTemplateMap.has(isReally)){
                     const templ = document.createElement('template');
                     templ.innerHTML = mainTemplate;
-                    compiledTemplateMap.set(superclass, templ);
+                    compiledTemplateMap.set(isReally, templ);
                 }
-                this.clonedTemplate = compiledTemplateMap.get(superclass)!.content.cloneNode(true);
+                this.clonedTemplate = compiledTemplateMap.get(isReally)!.content.cloneNode(true);
                 break;
             default:
                 this.clonedTemplate = mainTemplate!.content.cloneNode(true);
