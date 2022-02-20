@@ -1,4 +1,4 @@
-import { DTR } from '../DTR.js';
+//import { DTR } from '../DTR.js';
 import { RenderContext, TemplMgmtBase, TemplMgmtProps, Action } from '../types.js';
 export {TemplMgmtProps, TemplMgmtActions, Action} from '../types.js';
 
@@ -37,7 +37,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         }
             
     }
-    cloneTemplate({noshadow, shadowRoot, mainTemplate, styles, waitToInit}: TemplMgmtBase){
+    async cloneTemplate({noshadow, shadowRoot, mainTemplate, styles, waitToInit}: TemplMgmtBase){
         if(waitToInit) return;
         let root = this as any;
         if(!noshadow){
@@ -82,21 +82,25 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
 
     async doTemplMount({transform, waitToInit, clonedTemplate, noshadow, transformPlugins}: TemplMgmtBase){
         if(waitToInit) return;
-        const transforms = Array.isArray(transform) ? transform : [transform];
+        
         const fragment = clonedTemplate === undefined ? 
             noshadow ? this : this.shadowRoot!
             : clonedTemplate as DocumentFragment;
-        for(const t of transforms){
-            const ctx: RenderContext = {
-                host: this,
-                match: t,
-                plugins: transformPlugins,
+        if(transform !== undefined){
+            const transforms = Array.isArray(transform) ? transform : [transform];
+            const {DTR} = await import('../DTR.js');
+            for(const t of transforms){
+                const ctx: RenderContext = {
+                    host: this,
+                    match: t,
+                    plugins: transformPlugins,
+                }
+                const dtr = new DTR(ctx);
+                if(!this.hasAttribute('defer-rendering')){
+                    await dtr.transform(fragment);
+                }
+                await dtr.subscribe();
             }
-            const dtr = new DTR(ctx);
-            if(!this.hasAttribute('defer-rendering')){
-                await dtr.transform(fragment);
-            }
-            await dtr.subscribe();
         }
         if(this.#needToAppendClone){
             const root = noshadow ? this : this.shadowRoot!;
@@ -114,8 +118,8 @@ export const beTransformed = {
         ifKeyIn: ['noshadow', 'waitToInit']
     } as Action<TemplMgmtProps>,
     doTemplMount: {
-        ifAllOf: ['clonedTemplate', 'transform'],
-        ifKeyIn: ['waitToInit'],
+        ifAllOf: ['clonedTemplate'],
+        ifKeyIn: ['waitToInit', 'transform'],
         async: true,
     } as Action<TemplMgmtProps>,
 };
