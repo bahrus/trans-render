@@ -66,7 +66,10 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                     if(actions !== undefined){
                         const filteredActions: any = {};
                         for(const methodName in actions){
-                            const action = actions[methodName]!;
+                            let action = actions[methodName]!;
+                            if(typeof(action) === 'string'){
+                                action = {ifAllOf:[action]};
+                            }
                             let props = act2Props[methodName];
                             if(props === undefined){
                                 props = getProps(self, action);
