@@ -1,6 +1,7 @@
 export function getProp(val: any, pathTokens: (string | string[])[]){
     let context = val;
     for(const token of pathTokens){
+      if(token === '') continue;
       switch(typeof token){
         case 'string':
           context = context[token];
