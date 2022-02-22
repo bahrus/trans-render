@@ -280,7 +280,8 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             const method = (<any>target)[methodName];
             if(method === undefined){
                 throw {
-                    message: `Method ${methodName} not found on ${target.constructor.name}`,
+                    message: 404,
+                    methodName,
                     target,
                 }
             }
