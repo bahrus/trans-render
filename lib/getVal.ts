@@ -26,7 +26,13 @@ export async function getVal(host: any, path: string): Promise<any> {
             const condition = await getVal(host, qSplit[0]) as boolean;
             const cSplit = qSplit[1].split(':');
             const idx = condition ? 0 : 1;
-            return await getVal(host, cSplit[idx].trim());
+            const val = cSplit[idx].trim();
+            if (val[0] === ".") {
+                return await getVal(host, val);
+            }else{
+                return val;
+            }
+            
         }
         default:
             return host[path];
