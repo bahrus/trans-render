@@ -24,9 +24,9 @@ export async function getVal(host: any, path: string): Promise<any> {
             path = path.substr(1);
             const qSplit = path.split(' ');
             const condition = await getVal(host, qSplit[0]) as boolean;
-            const cSplit = qSplit[1].split(':');
+            const cSplit = qSplit.slice(1).join('').split(':');
             const idx = condition ? 0 : 1;
-            const val = cSplit[idx].trim();
+            const val = cSplit[idx];
             if (val[0] === ".") {
                 return await getVal(host, val);
             }else{
