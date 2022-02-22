@@ -261,9 +261,6 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                     (<any>this)['_' + key] = vals[key];
                 }
             }
-            // get inAbsorbMode(){
-            //     return this.hasAttribute('defer-hydration');
-            // }
 
         }
 
@@ -280,7 +277,8 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             const action = actions[methodName];
             if(action.debug) debugger;
             //https://lsm.ai/posts/7-ways-to-detect-javascript-async-function/#:~:text=There%205%20ways%20to%20detect%20an%20async%20function,name%20property%20of%20the%20AsyncFunction%20is%20%E2%80%9CAsyncFunction%E2%80%9D.%202.
-            const ret = action.constructor.name === 'AsyncFunction' ? await (<any>target)[methodName](target) : (<any>target)[methodName](target);
+            const isAsync = (<any>target)[methodName].constructor.name === 'AsyncFunction';
+            const ret = isAsync ? await (<any>target)[methodName](target) : (<any>target)[methodName](target);
             if(ret === undefined) continue;
             self.postHoc(self, action, target, ret, proxy);
         }
@@ -303,7 +301,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
     }
 
     getProps(self: this, action: Action): Set<string>{
-        return new Set<string>([...(action.ifAllOf || []) as string[], ...(action.ifKeyIn || []) as string[]]);
+        return typeof(action) === 'string' ? new Set<string>([action]) : new Set<string>([...(action.ifAllOf || []) as string[], ...(action.ifKeyIn || []) as string[]]);
     }
 
     postHoc(self: this, action: Action, target: any, returnVal: any, proxy?: any){
