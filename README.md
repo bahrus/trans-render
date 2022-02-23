@@ -190,7 +190,7 @@ Just as CSS will support nesting (hopefully, eventually), TR supports nesting ou
 
 The lib/DTR.js file extends the class in the file TR, and continues to break things down into multiple methods, again allowing for alternative syntax / implementations.
 
-Many of these methods dynmically load modules, so if extending DTR, and overriding these methods, the implementations in those methods impose no penalty.
+Many of these methods dynamically load modules, so if extending DTR, and overriding these methods, the implementations in those methods impose no penalty.
 
 ## Declarative trans-render syntax via plugins
 
