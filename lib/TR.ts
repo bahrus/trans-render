@@ -49,18 +49,25 @@ export class TR{
             }
             const queryInfo = getQuery(key);
             ctx.queryInfo = queryInfo;
+            const {query} = queryInfo;
             let fromCache = matchMap[key];
             if(fromCache !== undefined){
                 fromCache = fromCache.filter(ref => {
                     const el = ref.deref();
-                    if(el === undefined || !el.matches(queryInfo.query)) return false;
+                    if(el === undefined || !el.matches(query)) return false;
                     return true;
                 });
                 matchMap[key] = fromCache;
             }
-            let matches = isArray ? 
-                                    (fragment as Element[]).filter(x => x.matches(queryInfo.query)) 
-                                  : fromCache || (matchMap[key] = Array.from((fragment as DocumentFragment).querySelectorAll(queryInfo.query)).map(el => new WeakRef(el)));
+            let matches = (isArray ? 
+                                    (fragment as Element[]).filter(x => x.matches(query)) 
+                                  : fromCache || (matchMap[key] = Array.from((fragment as DocumentFragment).querySelectorAll(query)).map(el => new WeakRef(el)))) as (Element | WeakRef<Element>)[];
+            if(fragment instanceof Element){
+                if(fragment.matches(query)) {
+                    matchMap[key].push(new WeakRef(fragment));
+                    matches.push(fragment);
+                }
+            }
             if(rhs === true){
                 (<any>host)[key] = matches;
                 continue;

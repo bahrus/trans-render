@@ -349,7 +349,7 @@ If the property key starts with a ".", then the property key supports a dot-deli
 
 will bind to host.place.location.  If that is undefined, then the "world" default will be used.  If the string to the right of ?? starts with a ., the same process is repeated recursively.
 
-Ternary expressions are supported:
+~~Ternary expressions are supported:~~
 
 ```JavaScript
     match:{
@@ -357,9 +357,9 @@ Ternary expressions are supported:
     }
 ```
 
-Means "if the host.open property is true, then set the button's textContent to "-", else "+".
+~~Means "if the host.open property is true, then set the button's textContent to "-", else "+".~~
 
-If the string to the right of open starts with a "." or a "?", then the same process is repeated recursively.
+~~If the string to the right of open starts with a "." or a "?", then the same process is repeated recursively.~~
 
 ## P[E[A]] 
 
@@ -434,6 +434,30 @@ match:{
 If the RHS is boolean value "false", then the matching elements are removed.
 
 If the RHS is boolean value "true", then the matching elements are placed in the Host element with property key equal to the LHS. This is the "ref" equivalent of other templating libraries.  One difference, perhaps, is the property is set to an array of weak references.
+
+## Inserting Content 
+
+Use be-plugin for be-inclusive.
+
+Set attribute using PEA
+
+[TODO] Show examples
+
+## Conditional RHS [TODO]
+
+If the RHS is an array, but the head element of the array is a boolean, then we switch into "conditional display" logic.
+
+<table>
+    <tr><th>First Element Value</th><th>Second Element Usage</th><th>Third Element Usage</th><th>Fourth Element Usage</tr>
+    <tr>
+        <td>true</td>
+        <td>The second element is evaluated according to all the rules above (recursively), to see if the value is truthy</td>
+        <td>If the second element is truthy, apply the third element according to all the rules above (recursively), assigning values / attaching event handlers on the target element</td>
+        <td>If the second element is falsy, apply the fourth element according to all the rules above (recursively), assigning values / attaching event handlers on the target element</td>
+    </tr>
+</table>
+
+
 
 
 
