@@ -43,6 +43,8 @@ The first value-add proposition lib/TR.js provides, is it can reduce the amount 
 
 The CSS matching that the core TR.js supports simply does multi-matching for all (custom) DOM elements within the scope, and also scoped sub transforms.
 
+Note that TR.js is a class, with key method signatures allow for alternative syntax / extensions.
+
 ### Multi-matching
 
 Multi matching provides support for syntax that is convenient for JS development.  Syntax like this isn't very pleasant:
@@ -183,6 +185,12 @@ The following table lists how the LHS is translated into CSS multi-match queries
 ## Nested Matching
 
 Just as CSS will support nesting (hopefully, eventually), TR supports nesting out-of-the-box.  If the RHS is a non-array object, a sub transform is performed within that scope (Only one exception -- if using lhs that ends with Props for bulk prop setting).
+
+## Extending TR with DTR (Declarative Trans Rendering)
+
+The lib/DTR.js file extends the class in the file TR, and continues to break things down into multiple methods, again allowing for alternative syntax / implementations.
+
+Many of these methods dynmically load modules, so if extending DTR, and overriding these methods, the implementations in those methods impose no penalty.
 
 ## Declarative trans-render syntax via plugins
 
