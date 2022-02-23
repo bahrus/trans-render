@@ -435,11 +435,7 @@ If the RHS is boolean value "false", then the matching elements are removed.
 
 If the RHS is boolean value "true", then the matching elements are placed in the Host element with property key equal to the LHS. This is the "ref" equivalent of other templating libraries.  One difference, perhaps, is the property is set to an array of weak references.
 
-## Inserting Content 
 
-Use be-plugin for be-inclusive.
-
-Set attribute using PEA
 
 [TODO] Show examples
 
@@ -457,15 +453,23 @@ If the RHS is an array, but the head element of the array is a boolean, then we 
     </tr>
     <tr>
         <td>false</td>
-        <td>tbd</td>
-        <td>tbd</td>
+        <td>""</td>
+        <td>If the second elements is satisfied, skip the rest of the transform rules?</td>
         <td>tbd</td>
     </tr>
 </table>
 
+## Inserting Content [TODO]
+
+If the RHS is an array, but the head element of the array is itself an array, then we interpret this to be a template include rule.  Follow be-inclusive syntax.
+
 ## Loops [TODO]
 
 If the RHS is an array, but the head element of the array is the number 0, then the array provides the ability to define a loop
+
+## TBD [TODO]
+
+What if first element is null?
 
 
 
