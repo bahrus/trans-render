@@ -90,7 +90,8 @@ export class TR{
     }
     async do_string(){
         const {target, rhs, host}  = this.ctx;
-        target!.textContent = rhs === '.' ? host : (<any>host)[rhs as string];
+        const {getVal} = await import('./getVal.js');
+        target!.textContent = await getVal(host, rhs);  
     }
     do_number(){}
     do_boolean(){

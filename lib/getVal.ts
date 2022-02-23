@@ -3,6 +3,7 @@ export async function getVal(host: any, path: string): Promise<any> {
         return path;
     switch(path[0]){
         case '.':{
+            if(path.length === 1) return host;
             path = path.substr(1);
             const qSplit = path.split('??');
             let deflt = qSplit[1];
