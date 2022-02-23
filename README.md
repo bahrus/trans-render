@@ -349,6 +349,18 @@ If the property key starts with a ".", then the property key supports a dot-deli
 
 will bind to host.place.location.  If that is undefined, then the "world" default will be used.  If the string to the right of ?? starts with a ., the same process is repeated recursively.
 
+Ternary expressions are supported:
+
+```JavaScript
+    match:{
+        "button": "?open - : +"
+    }
+```
+
+Means "if the host.open property is true, then set the button's textContent to "-", else "+".
+
+If the string to the right of open starts with a "." or a "?", then the same process is repeated recursively.
+
 ## P[E[A]] 
 
 After setting the string value of a node, setting properties, attaching event handlers, and setting attributes (including classes and parts) comes next in things we do over and over again.
