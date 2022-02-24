@@ -440,18 +440,20 @@ If the RHS is boolean value "true", then the matching elements are placed in the
 If the RHS is an array, but the head element of the array is a boolean, then we switch into "conditional display" logic.
 
 <table>
-    <tr><th>First Element Value</th><th>Second Element Usage</th><th>Third Element Usage</th><th>Fourth Element Usage</th></tr>
+    <tr><th>First Element Value</th><th>Second Element Usage</th><th>Third Element Usage</th><th>Fourth Element Usage</th><th>Notes</th></tr>
     <tr>
         <td>true</td>
         <td>The second element is expected to be an object that matches the [BeSwitchedVirtualProps type](https://github.com/bahrus/be-switched/blob/baseline/types.d.ts#L5).  Only the right hand side of many of those field expressions are evaluated recursively from the rules above.</td>
         <td>If the second element is satisfied, apply the third element according to all the rules above (recursively), assigning values / attaching event handlers on the target element</td>
         <td>If the second element is **not** satisfied, apply the third element according to all the rules above (recursively), assigning values / attaching event handlers on the target element</td>
+        <td></td>
     </tr>
     <tr>
         <td>false</td>
         <td>""</td>
         <td>If the second elements is satisfied, skip the rest of the transform rules?</td>
         <td>tbd</td>
+        <td>TODO
     </tr>
 </table>
 
