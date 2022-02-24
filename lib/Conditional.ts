@@ -11,6 +11,11 @@ export class Conditional{
             const verb = 'do_' + typeof(doTrueExpression);
             ctx!.rhs = doTrueExpression;
             await (<any>this.dtr)[verb](ctx!);
+        }else{
+            const doFalseExpression = rhs[3];
+            const verb = 'do_' + typeof(doFalseExpression);
+            ctx!.rhs = doFalseExpression;
+            await (<any>this.dtr)[verb](ctx!);
         }
     }
 }
