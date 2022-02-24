@@ -73,7 +73,7 @@ export class DTR extends TR{
             case 'boolean':
                 if(head){
                     const {Conditional} = await import('./Conditional.js');
-                    const c = new Conditional();
+                    const c = new Conditional(this);
                     await c.do(ctxCopy);
                 }
                 break;
