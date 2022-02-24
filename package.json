@@ -20,6 +20,7 @@
     "./lib/camelToLisp.js": "./lib/camelToLisp.js",
     "./lib/CE.js": "./lib/CE.js",
     "./lib/convert.js": "./lib/convert.js",
+    "./lib/Conditional.js": "./lib/Conditional.js",
     "./lib/def.js": "./lib/def.js",
     "./lib/doAction.js": "./lib/doAction.js",
     "./lib/doInvoke.js": "./lib/doInvoke.js",

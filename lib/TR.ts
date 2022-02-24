@@ -27,7 +27,9 @@ export class TR{
         ctx.ctx = ctx;
         return new TR(ctx);
     }
-    constructor(public ctx: RenderContext){}
+    constructor(public ctx: RenderContext){
+        if(ctx.ctx === undefined) ctx.ctx = ctx;
+    }
     async transform(fragment: Element | DocumentFragment | Element[]) {
         const {ctx} = this;
         const {host, options, match} = ctx;
@@ -44,7 +46,7 @@ export class TR{
                 ctx.target = host;
                 ctx.rhs = rhs;
                 delete(ctx.queryInfo);
-                await (<any>this)[verb]();
+                await (<any>this)[verb](ctx);
                 continue;
             }
             const queryInfo = getQuery(key);
@@ -86,7 +88,7 @@ export class TR{
                         (<any>matchingElement)[lispToCamel(queryInfo.attrib!)] = rhs;
                         continue;
                 }
-                await (<any>this)[verb]();
+                await (<any>this)[verb](ctx);
             }
         }
 
@@ -95,18 +97,20 @@ export class TR{
     flushCache(){
         this.#queryCache = new WeakMap<Element | DocumentFragment, {[key: string]: WeakRef<Element>[]}>();
     }
-    async do_string(){
+    async eval_string(){
         const {target, rhs, host}  = this.ctx;
         const {getVal} = await import('./getVal.js');
-        target!.textContent = await getVal(host, rhs);  
+        return getVal(host, rhs);
+    }
+    async do_string({target}: RenderContext){
+        const val = await this.eval_string();
+        target!.textContent = val;  
     }
     do_number(){}
-    do_boolean(){
-        const {target, rhs} = this.ctx;
+    do_boolean({target, rhs}: RenderContext){
         if(rhs === false) target!.remove();
     }
-    async do_object(){
-        const {target, rhs, host, match, queryInfo} = this.ctx;
+    async do_object({target, rhs, host, match, queryInfo}: RenderContext){
         const lhsProp = queryInfo?.lhsProp;
         if(lhsProp){
             (<any>target)[lhsProp] = rhs;
@@ -123,7 +127,7 @@ export class TR{
         if(rhs === undefined) return;
         ctx.rhs = rhs;
         const verb = 'do_' + typeof(rhs);
-        (<any>this)[verb]();
+        (<any>this)[verb](ctx);
     }
 
     isTemplate(sourceOrTemplate: any){

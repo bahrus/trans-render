@@ -35,7 +35,6 @@ export class DTR extends TR{
                 await this.transform(fragment);
             })
         }
-        //}
     }
     async do_string(): Promise<void> {
         const {ctx} = this;
@@ -45,18 +44,17 @@ export class DTR extends TR{
             if(newRHS !== undefined){
                 const verb = 'do_' + typeof(newRHS);
                 ctx.rhs = newRHS;
-                await (<any>this)[verb]();
+                await (<any>this)[verb](ctx);
             }
         }else{
-            return await super.do_string();
+            return await super.do_string(ctx);
         }
     }
-    async do_object(): Promise<void> {
-        const {rhs} = this.ctx;
+    async do_object({ctx, rhs}: RenderContext): Promise<void> {
         if(Array.isArray(rhs)){
             return await this.do_array();
         }else{
-            return await super.do_object();
+            return await super.do_object(ctx!);
         }
         
     }
@@ -71,6 +69,13 @@ export class DTR extends TR{
                 const {SplitText} = await import('./splitText.js');
                 const st = new SplitText();
                 await st.do(ctxCopy);
+                break;
+            case 'boolean':
+                if(head){
+                    const {Conditional} = await import('./Conditional.js');
+                    const c = new Conditional();
+                    await c.do(ctxCopy);
+                }
                 break;
             default:
                 const len = rhs.length;
