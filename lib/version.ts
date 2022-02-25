@@ -1,4 +1,4 @@
-export const scopedVersions = new WeakMap<ShadowRoot | Document, {[key: string] : string}>();
+export const scopedVersions = new WeakMap<ShadowRoot | Document, WeakMap<{new(): HTMLElement}, string>>();
 export function version(classes: {new():  HTMLElement}[], versionFn: (cls: {new(): HTMLElement}) => [string, string], root: ShadowRoot | Document){
     if(!scopedVersions.has(root)){
         scopedVersions.set(root, {});

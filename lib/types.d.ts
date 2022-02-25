@@ -68,6 +68,8 @@ export type PropSettings<T extends Partial<HTMLElement> = HTMLElement> = {
 
 export type EventSettings = {[key: string] : ((e: Event) => void) | string | INotify};
 
+
+
 export interface INotify<TSelf = any, TProps = any, TActions = TProps>{
     /**
      * path to get value from target

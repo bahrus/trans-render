@@ -2,6 +2,7 @@ import {INotify} from './types';
 export async function notifyHookUp(target: Element, key: string, eventSettings: INotify){
     const isPropSet = key.endsWith(':onSet');
     const propName = isPropSet ?  key.substr(0, key.length - 6) : undefined;
+    let handler:  ((event: Event) => Promise<void>) | undefined = undefined;
     if(eventSettings.doInit){
         const {doAction} = await import ('./doAction.js');
         const {getRecipientElement} = await import ('./getRecipientElement.js');
@@ -21,15 +22,17 @@ export async function notifyHookUp(target: Element, key: string, eventSettings: 
             if(recipientElement !== null) doAction(target, recipientElement, eventSettings);
         });
     }else{
-        target.addEventListener(key, async e => {
+        handler = async e => {
             const {doAction} = await import ('./doAction.js');
             const {getRecipientElement} = await import ('./getRecipientElement.js');
             const recipientElement = await getRecipientElement(target, eventSettings);
             if(recipientElement !== null) doAction(target, recipientElement, eventSettings, e);
-        }, eventSettings.eventListenerOptions);
+        }
+        target.addEventListener(key, handler, eventSettings.eventListenerOptions);
     }
     if(eventSettings.nudge){
         const {nudge} = await import ('./nudge.js');
         nudge(target);
     }
+    return handler;
 }
