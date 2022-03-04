@@ -1,4 +1,4 @@
-export function freeze(content: DocumentFragment, beHive: Element){
+export function freeze(content: DocumentFragment | Element, beHive: Element){
     const decoratorElements = Array.from(beHive.children) as any;
     for(const decorEl of decoratorElements){
         const ifWantsToBe = (decorEl as any as Element).getAttribute('if-wants-to-be');
@@ -12,4 +12,9 @@ export function freeze(content: DocumentFragment, beHive: Element){
             el.setAttribute(beAttr, attr);
         }
     }
+}
+
+export function beFrozen(element: Element){
+    const beHive = (element.getRootNode() as ShadowRoot).querySelector('be-hive') as Element;
+    freeze(element, beHive);
 }
