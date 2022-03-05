@@ -121,13 +121,13 @@ export class TR{
         }
 
     }
-    do_function(){
+    async do_function(){
         const ctx = this.ctx;
         const rhs = ctx.rhs(ctx);
         if(rhs === undefined) return;
         ctx.rhs = rhs;
         const verb = 'do_' + typeof(rhs);
-        (<any>this)[verb](ctx);
+        await (<any>this)[verb](ctx);
     }
 
     isTemplate(sourceOrTemplate: any){
