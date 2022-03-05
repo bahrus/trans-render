@@ -1,13 +1,13 @@
-import {INotify} from './types';
+import {INotify, EventSettings} from './types';
 
 
 //very similar to be-observant.getElementToObserve
-export async function getRecipientElement(self: Element, {toClosest, toNearestUpMatch, toUpShadow: to, toSelf, tocoho}: INotify){
+export async function getRecipientElement(self: Element, {toClosest, toNearestUpMatch, to, toSelf, tocoho}: INotify & EventSettings ){
     let recipientElement: Element | null = null;// (<any>self).recipientElement;
     //if(recipientElement) return recipientElement;
     if(to){
         const {upShadowSearch} = await import('./upShadowSearch.js');
-        recipientElement = upShadowSearch(self, to);
+        recipientElement = upShadowSearch(self, to as string);
     }else if(toClosest !== undefined){
         recipientElement = self.closest(toClosest);
         if(recipientElement !== null && toNearestUpMatch){
