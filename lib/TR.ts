@@ -61,9 +61,20 @@ export class TR{
                 });
                 matchMap[key] = fromCache;
             }
-            let matches = (isArray ? 
-                                    (fragment as Element[]).filter(x => x.matches(query)) 
-                                  : fromCache || (matchMap[key] = Array.from((fragment as DocumentFragment).querySelectorAll(query)).map(el => new WeakRef(el)))) as (Element | WeakRef<Element>)[];
+            let matches: (Element | WeakRef<Element>)[]  = [];
+            if(isArray){
+                for(const el of fragment){
+                    if(el.matches(query)){
+                        matches.push(el);
+                    }
+                    el.querySelectorAll(query).forEach(el => matches.push(el));
+                }
+            }else{
+                matches = fromCache || (matchMap[key] = Array.from((fragment as DocumentFragment).querySelectorAll(query)).map(el => new WeakRef(el))) as (Element | WeakRef<Element>)[];
+            }
+            // let matches = (isArray ? 
+            //                         (fragment as Element[]).filter(x => x.matches(query)) 
+            //                       : fromCache || ;
             if(fragment instanceof Element){
                 if(fragment.matches(query)) {
                     matchMap[key].push(new WeakRef(fragment));
