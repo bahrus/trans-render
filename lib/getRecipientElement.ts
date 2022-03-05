@@ -2,7 +2,7 @@ import {INotify, EventSettings} from './types';
 
 
 //very similar to be-observant.getElementToObserve
-export async function getRecipientElement(self: Element, {toClosest, toNearestUpMatch, to, toSelf, tocoho, toUpShadow}: INotify & EventSettings ){
+export async function getRecipientElement(self: Element, {toClosest, toNearestUpMatch, to, toSelf, tocoho, toUpShadow}: INotify & Partial<EventSettings> ){
     let recipientElement: Element | null = null;// (<any>self).recipientElement;
     //if(recipientElement) return recipientElement;
     if(to || toUpShadow){

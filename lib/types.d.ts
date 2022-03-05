@@ -72,6 +72,10 @@ export type EventSettings = {[key: string] : ((e: Event) => void) | string | INo
 
 export interface INotify<TSelf = any, TProps = any, TActions = TProps>{
     /**
+     * Hardcoded value to set on recipient element.
+     */
+    val?: any
+    /**
      * path to get value from target
      */
     valFromTarget?: keyof TSelf;

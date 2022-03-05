@@ -2,28 +2,33 @@ import {INotify} from './types';
 declare function structuredClone<T>(val: T): T;
 
 export async function doAction(self: Element, recipientElement: Element, {
-    valFromEvent, vfe, valFromTarget, vft, clone, parseValAs, trueVal, falseVal, as, prop, fn, toggleProp, plusEq, withArgs, propName
+    valFromEvent, val, vfe, valFromTarget, vft, clone, parseValAs, trueVal, falseVal, as, prop, fn, toggleProp, plusEq, withArgs, propName
 }: INotify, event?: Event){
-    const valFE = vfe || valFromEvent;
-    const valFT = vft || valFromTarget;
-    if(event === undefined && valFE !== undefined) return;
-    const valPath = (event !== undefined && valFE ? valFE : valFT) || (propName || 'value');
-    const {splitExt} = await import('./splitExt.js');
-    const split = splitExt(valPath as string);
-    let src: any = valFE !== undefined ? ( event ? event : self) : self; 
-    const {getProp} = await import('./getProp.js');
-    let val = getProp(src, split);
-    if(val === undefined) return;
-    if(clone) val = structuredClone(val);
-    if(parseValAs !== undefined){
-        const {convert} = await import('./convert.js');
-        val = convert(val, parseValAs);
+    if(val === undefined){
+        const valFE = vfe || valFromEvent;
+        const valFT = vft || valFromTarget;
+        if(event === undefined && valFE !== undefined) return;
+        const valPath = (event !== undefined && valFE ? valFE : valFT) || (propName || 'value');
+        const {splitExt} = await import('./splitExt.js');
+        const split = splitExt(valPath as string);
+        let src: any = valFE !== undefined ? ( event ? event : self) : self; 
+        const {getProp} = await import('./getProp.js');
+        let dynamicVal = getProp(src, split);
+        if(dynamicVal === undefined) return;
+        if(clone) val = structuredClone(dynamicVal);
+        if(parseValAs !== undefined){
+            const {convert} = await import('./convert.js');
+            dynamicVal = convert(dynamicVal, parseValAs);
+        }
+        if(trueVal && dynamicVal){
+            dynamicVal = trueVal;
+        }else if(falseVal && !dynamicVal){
+            dynamicVal = falseVal;
+        }
+        val = dynamicVal;
     }
-    if(trueVal && val){
-        val = trueVal;
-    }else if(falseVal && !val){
-        val = falseVal;
-    }
+
+
     if(as !== undefined){
         switch(as){
             case 'str-attr':
