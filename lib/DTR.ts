@@ -66,7 +66,7 @@ export class DTR extends TR{
         ctxCopy.match = {...ctx.match};
         switch(typeof head){
             case 'string':
-                const {SplitText} = await import('./splitText.js');
+                const {SplitText} = await import('./SplitText.js');
                 const st = new SplitText();
                 await st.do(ctxCopy);
                 break;

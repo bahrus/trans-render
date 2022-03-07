@@ -6,7 +6,7 @@ export async function notifyHookUp(target: Element, key: string, eventSettings: 
     if(eventSettings.doInit){
         const {doAction} = await import ('./doAction.js');
         const {getRecipientElement} = await import ('./getRecipientElement.js');
-        const recipientElement = await getRecipientElement(target, eventSettings);
+        const recipientElement = await getRecipientElement(target, eventSettings as EventSettings);
         if(recipientElement !== null) doAction(target, recipientElement, eventSettings);
         if(isPropSet &&  target.localName.includes('-')){
             await customElements.whenDefined(target.localName);
@@ -18,7 +18,7 @@ export async function notifyHookUp(target: Element, key: string, eventSettings: 
         subscribe(target, propName, async () => {
             const {doAction} = await import ('./doAction.js');
             const {getRecipientElement} = await import ('./getRecipientElement.js');
-            const recipientElement = await getRecipientElement(target, eventSettings);
+            const recipientElement = await getRecipientElement(target, eventSettings as EventSettings);
             if(recipientElement !== null) doAction(target, recipientElement, eventSettings);
         });
     }else{
