@@ -13,7 +13,10 @@ export async function applyPE<T extends Partial<HTMLElement> = HTMLElement>(host
                     fn = eventSettings;
                     break;
                 case 'string':
-                    fn = (<any>host)[eventSettings];
+                    const isMethod = eventSettings[0] === '.';
+                    const methodName = isMethod ? eventSettings.substring(1) : eventSettings;
+                    fn = (<any>host)[methodName];
+                    if(isMethod) fn = fn!.bind(host); 
                     break;
                 case 'object':
                     const {notifyHookUp} = await import ('./notifyHookup.js');
