@@ -367,9 +367,14 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
     setType(prop: PropInfo, val: any){
         if(val !== undefined){
-            let t: string = typeof(val);
-            t = t[0].toUpperCase() + t.substr(1);
-            prop.type = t as PropInfoTypes;
+            if(val instanceof RegExp){
+                prop.type = 'RegExp';
+            }else{
+                let t: string = typeof(val);
+                t = t[0].toUpperCase() + t.substr(1);
+                prop.type = t as PropInfoTypes;
+            }
+
         }
     }
 
