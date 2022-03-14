@@ -254,7 +254,7 @@ export interface Action<MCProps = any> extends LogicOp<MCProps>{
 
 export type MatchRHS<TMixinComposite = any> = string;
 
-type PropInfoTypes = "String" | "Number" | "Boolean" | "Object";
+type PropInfoTypes = "String" | "Number" | "Boolean" | "Object" | "RegExp";
 export interface PropInfo{
     type?: PropInfoTypes;
     dry?: boolean;

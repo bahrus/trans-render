@@ -212,6 +212,9 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                         case 'Boolean':
                             aThis[propName] = nv !== null;
                             break;
+                        case 'RegExp':
+                            aThis[propName] = new RegExp(nv);
+                            break;
                     }
                 }
             }
