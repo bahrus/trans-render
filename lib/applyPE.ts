@@ -19,8 +19,8 @@ export async function applyPE<T extends Partial<HTMLElement> = HTMLElement>(host
                     if(isMethod) fn = fn!.bind(host); 
                     break;
                 case 'object':
-                    const {notifyHookUp} = await import ('./notifyHookup.js');
-                    await notifyHookUp(target, key, eventSettings);
+                    const {notifyHookup} = await import ('./notifyHookup.js');
+                    await notifyHookup(target, key, eventSettings);
                     break;
                 default:
                     throw 'NI'; 
