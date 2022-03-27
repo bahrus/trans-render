@@ -29,6 +29,15 @@ export async function applyP<T extends Partial<HTMLElement> = HTMLElement>(targe
                 renameProps.push('dataset');
             }
         }
+        const beDecorated = (<any>props).beDecorated;
+        if(beDecorated !== undefined){
+            if((<any>target).beDecorated !== undefined){
+                const {mergeDeep} = await import ('./mergeDeep.js');
+                mergeDeep((<any>target).beDecorated, beDecorated);
+            }else{
+                (<any>target).beDecorated
+            }
+        }
         for(const prop of renameProps){
             const val = safeProps[prop];
             if(val===undefined) continue;
