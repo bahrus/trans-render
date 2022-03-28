@@ -29,13 +29,13 @@ export async function applyP<T extends Partial<HTMLElement> = HTMLElement>(targe
                 renameProps.push('dataset');
             }
         }
-        const beDecorated = (<any>props).beDecorated;
-        if(beDecorated !== undefined){
-            if((<any>target).beDecorated !== undefined){
-                const {mergeDeep} = await import ('./mergeDeep.js');
-                mergeDeep((<any>target).beDecorated, beDecorated);
-            }else{
-                (<any>target).beDecorated
+        const dotKeys = Object.keys(safeProps).filter(key => key[0] === '.');
+        if(dotKeys.length > 0){
+            const {setProp} = await import ('./setProp.js');
+            for(const key of dotKeys){
+                const val = safeProps[key];
+                setProp(target, key, val);
+                delete safeProps[key];
             }
         }
         for(const prop of renameProps){
