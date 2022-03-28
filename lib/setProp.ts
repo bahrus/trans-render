@@ -3,6 +3,7 @@ export function setProp(obj: any, path: string, val: any){
     const last = splitPath.pop()!;
     let context = obj;
     for(const token of splitPath){
+        if(token==='') continue;
         let newContext = context[token];
         if(newContext === undefined){
             context[token] = {};
