@@ -160,6 +160,8 @@ export interface INotify<TSelf = any, TProps = any, TActions = TProps>{
     eventListenerOptions?: boolean | AddEventListenerOptions | undefined;
 
     nudge?: boolean;
+
+    debug?: boolean;
     
 }
 
