@@ -18,7 +18,7 @@ export interface RenderContext<T = Element, TItem = any> {
     abort?: boolean | undefined;
     templateIds?: string[];
     queryInfo?: queryInfo;
-    stack?: RenderContext[];
+    //stack?: RenderContext[];
 }
 
 export interface TransformPluginSettings<T = Element, TItem = any> {
