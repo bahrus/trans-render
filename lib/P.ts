@@ -30,11 +30,11 @@ export async function modifyVal(key: string, rhs: any, ctx: RenderContext){
         if(stack !== undefined){
             for(const item of stack){
                 if(item.host !== undefined){
-                    mergedHost = {...mergedHost, ...item.host};
+                    Object.assign(mergedHost, item.host);
                 }
             }
         }
-        host  = {...mergedHost, ...host};
+        host  = Object.assign(mergedHost, host);
     }
 
     //const host = ctx.host! as any;
