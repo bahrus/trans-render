@@ -23,22 +23,8 @@ export async function modifyPRHS(ctx: RenderContext, idx: number){
 
 export async function modifyVal(key: string, rhs: any, ctx: RenderContext){
     let path = rhs[key];
-    let {host, /*stack*/} = ctx;
+    let {host} = ctx;
     if(host === undefined) return path;
-    // if(!Array.isArray(host) && stack !== undefined){
-    //     let mergedHost = {};
-    //     if(stack !== undefined){
-    //         for(const item of stack){
-    //             if(item.host !== undefined){
-    //                 Object.assign(mergedHost, item.host);
-    //             }
-    //         }
-    //     }
-    //     host  = Object.assign(mergedHost, host);
-    // }
-
-    //const host = ctx.host! as any;
-    
     switch(typeof path){
         case 'string':
             const {getVal} = await import ('./getVal.js');
