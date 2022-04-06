@@ -186,16 +186,25 @@ The following table lists how the LHS is translated into CSS multi-match queries
 
 ## Extending TR, DTR
 
-The lib/DTR.js file extends the class in the file TR, and continues to break things down into multiple methods, again allowing for alternative syntax / implementations.
+The lib/DTR.js file extends the class in the file TR, and continues to break things down into multiple methods, again allowing for alternative syntax / implementations via method overriding.
 
-Many of these methods dynamically load modules, so if extending DTR, and overriding these methods, the implementations in those methods impose no penalty.
+Most all these methods are asynchronous, so they dynamically load modules.  Following this pattern, the implementations in those methods impose no penalty unless they are actually used.
 
-## DTR/TR method extensions
+## DTR/TR method extensions for Non Array Object Types [TODO]
 
-DTR.js and TR.js are classes.  We can define and override methods
+There's one RHS type we have conspicuously avoided discussing so far -- where the RHS expression is a non-array object.  
+
+Here is where we really allow ourselves to make the TR/DTR classes extensible.
+
+If the RHS is a non-array object, the determinant for what to do with such expressions is based on the reserved field with key "$type".
+
+Method with name do_object_[$type] is invoked.
+
 ## Nested Matching [TODO]
 
 Just as CSS will support nesting (hopefully, eventually), TR supports nesting out-of-the-box.  If the RHS is a non-array object, and that object has property a sub transform is performed within that scope (Only one exception -- if using lhs that ends with Props for bulk prop setting).
+
+If the RHS has $type: "nested", then the nested transform is performed.
 
 ## When RHS is a non-array object.
 
