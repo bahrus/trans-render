@@ -182,17 +182,26 @@ The following table lists how the LHS is translated into CSS multi-match queries
     </tr>
 </table>
 
-## Nested Matching
 
-Just as CSS will support nesting (hopefully, eventually), TR supports nesting out-of-the-box.  If the RHS is a non-array object, a sub transform is performed within that scope (Only one exception -- if using lhs that ends with Props for bulk prop setting).
 
-## Extending TR with DTR (Declarative Trans Rendering)
+## Extending TR, DTR
 
 The lib/DTR.js file extends the class in the file TR, and continues to break things down into multiple methods, again allowing for alternative syntax / implementations.
 
 Many of these methods dynamically load modules, so if extending DTR, and overriding these methods, the implementations in those methods impose no penalty.
 
-## Declarative trans-render syntax via plugins
+## DTR/TR method extensions
+
+DTR.js and TR.js are classes.  We can define and override methods
+## Nested Matching [TODO]
+
+Just as CSS will support nesting (hopefully, eventually), TR supports nesting out-of-the-box.  If the RHS is a non-array object, and that object has property a sub transform is performed within that scope (Only one exception -- if using lhs that ends with Props for bulk prop setting).
+
+## When RHS is a non-array object.
+
+## Declarative trans-render syntax via imported, dynamic plugins
+
+Using extend methods as described above is a bit constraining.  An additional mechanism to extend the TR/DTR vocabulary is via dynamic plugins.
 
 Previously, we saw the core value-add that trans-rendering library provides:
 
