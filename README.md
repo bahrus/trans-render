@@ -196,15 +196,15 @@ There's one RHS type we have conspicuously avoided discussing so far -- where th
 
 Here is where we really allow ourselves to make the TR/DTR classes extensible.
 
-If the RHS is a non-array object, the determinant for what to do with such expressions is based on the reserved field with key "$type".
+If the RHS is a non-array object, the determinant for what to do with such expressions is based on the reserved field with key "$action".
 
-Method with name do_object_[$type] is invoked.
+Method with name do_object_[$action] is invoked.
 
 ## Nested Matching [TODO]
 
 Just as CSS will support nesting (hopefully, eventually), TR supports nesting out-of-the-box.  If the RHS is a non-array object, and that object has property a sub transform is performed within that scope (Only one exception -- if using lhs that ends with Props for bulk prop setting).
 
-If the RHS has $type: "nested", then the nested transform is performed.
+If the RHS has $action: "nested_transform", then the nested transform is performed.
 
 ## When RHS is a non-array object.
 
