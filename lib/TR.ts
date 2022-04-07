@@ -121,16 +121,25 @@ export class TR{
     do_boolean({target, rhs}: RenderContext){
         if(rhs === false) target!.remove();
     }
-    async do_object({target, rhs, host, match, queryInfo}: RenderContext){
+    async do_object(ctx: RenderContext){
+        const {target, queryInfo, rhs} = ctx;
         const lhsProp = queryInfo?.lhsProp;
         if(lhsProp){
             (<any>target)[lhsProp] = rhs;
         }else{
-            this.ctx.match = {...rhs};
-            await this.transform(target!);
-            this.ctx.match = match;
+            const action = rhs.$action as string;
+            if(action === undefined) throw 'NI';
+            await (<any>this)['do_object_' + action](ctx);
+            
         }
 
+    }
+
+    async do_object_nested_transform(ctx: RenderContext){
+        const {match, target} = ctx;
+        this.ctx.match = {...ctx.rhs};
+        await this.transform(target!);
+        this.ctx.match = match;
     }
     async do_function(){
         const ctx = this.ctx;
