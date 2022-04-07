@@ -184,7 +184,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
 
 
 
-## Extending TR, DTR
+## Extending TR, DTR "vertically".
 
 The lib/DTR.js file extends the class in the file lib/TR.js, and continues to break things down into multiple methods, again allowing for alternative syntax / implementations via method overriding.
 
@@ -208,7 +208,7 @@ If the RHS has $action: "nested_transform", then the nested transform is perform
 
 ## When RHS is a non-array object.
 
-## Declarative trans-render syntax via imported, dynamic plugins
+## Extending DTR "horizontally"  via dynamically imported plugins
 
 Using extend methods as described above is a bit constraining.  An additional mechanism to extend the TR/DTR vocabulary is via dynamic plugins.
 
@@ -420,7 +420,7 @@ As you can see, TR/DTR supports three ways to hookup an event handler.  The firs
 
 The third option provides a declarative syntax for doing common things done in an event handler, but declaratively.  Things like toggling property values, incrementing counters, etc.
 
-The syntax is borrowed from the [be-noticed](https://github.com/bahrus/be-noticed) decorator / DTR plugin, and much of the code is shared between these two systems (WIP).
+The syntax is borrowed from the [be-noticed](https://github.com/bahrus/be-noticed) decorator / DTR plugin, and much of the code is shared between these two usages.
 
 
 
