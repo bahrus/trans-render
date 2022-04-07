@@ -1,4 +1,4 @@
-import { TR } from "./TR";
+import { DTR } from "./DTR";
 
 export interface RenderContext<T = Element, TItem = any> {
     ctx?: RenderContext | undefined;
@@ -299,7 +299,7 @@ export interface TemplMgmtProps{
     renderOptions?: RenderOptions;
     waitToInit?: boolean;
     transformPlugins?: TransformPlugins;
-    DTRCtor: typeof TR;
+    DTRCtor: typeof DTR;
 }
 
 export interface TemplMgmtActions{

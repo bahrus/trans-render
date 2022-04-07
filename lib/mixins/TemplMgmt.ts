@@ -82,7 +82,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         this.#repeatVisit = true;
     }
 
-    async doTemplMount({transform, waitToInit, clonedTemplate, noshadow, transformPlugins}: TemplMgmtBase){
+    async doTemplMount({transform, waitToInit, clonedTemplate, noshadow, transformPlugins, DTRCtor}: TemplMgmtBase){
         if(waitToInit) return;
         
         const fragment = clonedTemplate === undefined ? 
@@ -97,7 +97,8 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
                     match: t,
                     plugins: transformPlugins,
                 }
-                const dtr = new DTR(ctx);
+                const ctor = DTRCtor === undefined ? DTR : DTRCtor;
+                const dtr = new ctor(ctx);
                 if(!this.hasAttribute('defer-rendering')){
                     await dtr.transform(fragment);
                 }
