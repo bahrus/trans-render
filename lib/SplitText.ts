@@ -1,7 +1,7 @@
-import {PMDo, RenderContext} from './types.js';
+import {RenderContext} from './types.js';
 import {lispToCamel} from './lispToCamel.js';
 
-export class SplitText implements PMDo{
+export class SplitText{
     async do({host, target, rhs, key, ctx}: RenderContext){
         const toProp = this.getToProp(key) || 'textContent';
 

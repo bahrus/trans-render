@@ -8,7 +8,6 @@ export function freeze(content: DocumentFragment | Element, beHive: Element){
         const converted = Array.from(content.querySelectorAll(`[${isAttr}]`));
         for(const el of converted){
             const currVal = decorEl.virtualPropsMap.get(el);
-            //const attr = el.getAttribute(isAttr)!;
             el.removeAttribute(isAttr);
             el.setAttribute(beAttr, JSON.stringify(currVal));
         }

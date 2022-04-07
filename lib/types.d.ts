@@ -1,3 +1,5 @@
+import { TR } from "./TR";
+
 export interface RenderContext<T = Element, TItem = any> {
     ctx?: RenderContext | undefined;
     transform?: (sourceOrTemplate: HTMLElement | DocumentFragment, ctx: RenderContext, target?: HTMLElement | DocumentFragment) => Promise<RenderContext<T>>;
@@ -7,7 +9,6 @@ export interface RenderContext<T = Element, TItem = any> {
     target?: T | null;
     targetProp?: string;
     options?: RenderOptions | undefined;
-    postMatch?: postMatchProcessor[];
     attrib?: string | null;
     val?: string | null;
     rhs?: any;
@@ -52,11 +53,11 @@ export interface RenderOptions{
     updatedCallback?: (ctx: RenderContext, target: Element | DocumentFragment, options?: RenderOptions) => RenderContext | void,
 }
 
-export interface postMatchProcessor {
-    rhsType: Function;
-    rhsHeadType?: Function;
-    ctor: {new(): PMDo} | PMDo;
-}
+// export interface postMatchProcessor {
+//     rhsType: Function;
+//     rhsHeadType?: Function;
+//     ctor: {new(): PMDo} | PMDo;
+// }
 
 export interface PMDo{
     do(ctx: RenderContext): void;
@@ -298,6 +299,7 @@ export interface TemplMgmtProps{
     renderOptions?: RenderOptions;
     waitToInit?: boolean;
     transformPlugins?: TransformPlugins;
+    DTRCtor: typeof TR;
 }
 
 export interface TemplMgmtActions{
