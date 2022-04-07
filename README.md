@@ -186,15 +186,15 @@ The following table lists how the LHS is translated into CSS multi-match queries
 
 ## Extending TR, DTR
 
-The lib/DTR.js file extends the class in the file TR, and continues to break things down into multiple methods, again allowing for alternative syntax / implementations via method overriding.
+The lib/DTR.js file extends the class in the file lib/TR.js, and continues to break things down into multiple methods, again allowing for alternative syntax / implementations via method overriding.
 
-Most all these methods are asynchronous, so they dynamically load modules.  Following this pattern, the implementations in those methods impose no penalty unless they are actually used.
+Most all these methods are asynchronous, so they can dynamically load modules.  Following this pattern, the implementations in those methods impose no penalty unless they are actually used.
 
 ## DTR/TR method extensions for Non Array Object Types [TODO]
 
 There's one RHS type we have conspicuously avoided discussing so far -- where the RHS expression is a non-array object.  
 
-Here is where we really allow ourselves to make the TR/DTR classes extensible.
+Here is where we really enable making the TR/DTR classes extensible.
 
 If the RHS is a non-array object, the determinant for what to do with such expressions is based on the reserved field with key "$action".
 
