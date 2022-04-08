@@ -1,5 +1,5 @@
 export function freeze(content: DocumentFragment | Element, beHive: Element){
-    const decoratorElements = Array.from(beHive.children) as any[];
+    const decoratorElements = Array.from(beHive.children) as any;
     for(const decorEl of decoratorElements){
         const ifWantsToBe = (decorEl as any as Element).getAttribute('if-wants-to-be');
         if(ifWantsToBe === undefined) continue;
@@ -7,16 +7,9 @@ export function freeze(content: DocumentFragment | Element, beHive: Element){
         const beAttr = 'be-' + ifWantsToBe;
         const converted = Array.from(content.querySelectorAll(`[${isAttr}]`));
         for(const el of converted){
+            const attr = el.getAttribute(isAttr)!;
             el.removeAttribute(isAttr);
-            const vpm = decorEl.virtualPropsMap;
-            let attrVal = '';
-            if(vpm !== undefined){
-                const currVal = vpm.get(el);
-                attrVal = JSON.stringify(currVal);
-            }else{
-                console.warn('ploi');//potential loss of information
-            }
-            el.setAttribute(beAttr, attrVal);
+            el.setAttribute(beAttr, attr);
         }
     }
 }
