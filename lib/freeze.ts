@@ -7,7 +7,6 @@ export function freeze(content: DocumentFragment | Element, beHive: Element){
         const beAttr = 'be-' + ifWantsToBe;
         const converted = Array.from(content.querySelectorAll(`[${isAttr}]`));
         for(const el of converted){
-            const currVal = decorEl.virtualPropsMap.get(el);
             el.removeAttribute(isAttr);
             const vpm = decorEl.virtualPropsMap;
             let attrVal = '';
