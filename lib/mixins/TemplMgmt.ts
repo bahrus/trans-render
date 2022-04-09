@@ -13,9 +13,8 @@ try{
 }catch{}
 export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends superclass{
     #repeatVisit = false;
-    //#isDeclarativeShadowDOM = false;
+    #isDeclarativeShadowDOM = false;
     #needToAppendClone = false;
-    #isModernBrowser: boolean | undefined;
     #adopt({styles}: TemplMgmtBase, root: ShadowRoot){
         if(styles === undefined) return;
         let styleSheets: CSSStyleSheet[] | HTMLTemplateElement | undefined;
