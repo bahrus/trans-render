@@ -6,25 +6,30 @@ export type TemplMgmtBaseMixin = {new(): TemplMgmtBase};
 
 const compiledTemplateMap = new Map<string, HTMLTemplateElement>();
 const compiledStyleMap = new Map<string, CSSStyleSheet[] | HTMLTemplateElement>();
+let modernBrowser = false;
+try{
+    const sheet = new CSSStyleSheet();
+    modernBrowser = ((<any>sheet).replaceSync !== undefined);
+}catch{}
 export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends superclass{
     #repeatVisit = false;
-    #isDeclarativeShadowDOM = false;
+    //#isDeclarativeShadowDOM = false;
     #needToAppendClone = false;
+    #isModernBrowser: boolean | undefined;
     #adopt({styles}: TemplMgmtBase, root: ShadowRoot){
         if(styles === undefined) return;
         let styleSheets: CSSStyleSheet[] | HTMLTemplateElement | undefined;
         if(typeof styles === 'string'){
             const isReally = (<any>this.constructor).isReally as string;
             if(!compiledStyleMap.has(isReally)){
-                const sheet = new CSSStyleSheet();
-                if((<any>sheet).replaceSync === undefined){
-                    //SafariFox
+                if(modernBrowser){
+                    const sheet = new CSSStyleSheet();
+                    (<any>sheet).replaceSync(styles.replace('<style>', '').replace('</style>', ''));
+                    compiledStyleMap.set(isReally, [sheet]);
+                }else{
                     const tm = document.createElement('template');
                     tm.innerHTML = styles;
                     compiledStyleMap.set(isReally, tm);
-                }else{
-                    (<any>sheet).replaceSync(styles.replace('<style>', '').replace('</style>', '')); //Safari and Firefox do not support replaceSync
-                    compiledStyleMap.set(isReally, [sheet]);
                 }
             }
             styleSheets = compiledStyleMap.get(isReally);
