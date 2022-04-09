@@ -27,7 +27,9 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
                     compiledStyleMap.set(isReally, [sheet]);
                 }else{
                     const tm = document.createElement('template');
-                    tm.innerHTML = styles;
+                    const st = document.createElement('style');
+                    st.innerHTML = styles;
+                    tm.content.appendChild(st);
                     compiledStyleMap.set(isReally, tm);
                 }
             }
