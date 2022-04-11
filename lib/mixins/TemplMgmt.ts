@@ -21,14 +21,15 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         if(typeof styles === 'string'){
             const isReally = (<any>this.constructor).isReally as string;
             if(!compiledStyleMap.has(isReally)){
+                const strippedStyle = styles.replace('<style>', '').replace('</style>', '');
                 if(modernBrowser){
                     const sheet = new CSSStyleSheet();
-                    (<any>sheet).replaceSync(styles.replace('<style>', '').replace('</style>', ''));
+                    (<any>sheet).replaceSync(strippedStyle);
                     compiledStyleMap.set(isReally, [sheet]);
                 }else{
                     const tm = document.createElement('template');
                     const st = document.createElement('style');
-                    st.innerHTML = styles;
+                    st.innerHTML = strippedStyle;
                     tm.content.appendChild(st);
                     compiledStyleMap.set(isReally, tm);
                 }
