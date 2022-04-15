@@ -9,7 +9,7 @@
 <img src="https://badgen.net/bundlephobia/minzip/trans-render">
 
 
-*trans-rendering* (TR) describes a methodical way of instantiating a template.  It originally drew inspiration from the (least) popular features of XSLT, but has since evolved to resemble standard CSS.  Like XSLT, TR performs transforms on elements by matching tests on those elements.  Whereas XSLT uses XPath for its tests, TR uses css path tests via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
+*trans-rendering* (TR) describes a methodical way of instantiating a template.  It originally drew inspiration from the (least) popular features of XSLT, but has since evolved to more closely resemble standard CSS.  Like XSLT, TR performs transforms on elements by matching tests on those elements.  TR uses css tests elements via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
 
 A subset of TR, also described below, is "declarative trans-render" syntax [DTR], which is pure, 100% declarative syntax.  
 
@@ -184,28 +184,13 @@ The following table lists how the LHS is translated into CSS multi-match queries
 
 
 
-## Extending TR, DTR "vertically
+## Extending TR, DTR "vertically"
 
 The lib/DTR.js file extends the class in the file lib/TR.js, and continues to break things down into multiple methods, again allowing for alternative syntax / implementations via method overriding.
 
 Most all these methods are asynchronous, so they can dynamically load modules.  Following this pattern, the implementations in those methods impose no penalty unless they are actually used.
 
-### DTR/TR method extensions for RHS =  Non Array Object
-
-There's one RHS type we have conspicuously avoided discussing so far -- where the RHS expression is a non-array object.  
-
-Here is where we really enable making the TR/DTR classes extensible.
-
-If the RHS is a non-array object, the determinant for what to do with such expressions is based on the reserved field with reserved key "$action".
-
-Method with name do_object_[$action] is invoked.  A single parameter of the render context is passed in.
-
-### Nested Matching
-
-Just as CSS will support nesting (hopefully, eventually), TR supports nesting out-of-the-box.  If the RHS is a non-array object, and that object has property a sub transform is performed within that scope (Only one exception -- if using lhs that ends with Props for bulk prop setting).
-
-If the RHS has $action: "nested_transform", then the nested transform is performed.
-
+We will discuss this type of extension later.
 
 ## Extending DTR "horizontally"  via dynamically imported plugins
 
@@ -293,7 +278,7 @@ Useful plugins that are available:
 2.  [be-plugin](https://github.com/bahrus/be-repeated/blob/baseline/trPlugin.ts) for [be-repeated](https://github.com/bahrus/be-repeated)
 
 
-## Declarative trans-render syntax via PostMatch Processors 
+## Declarative trans-render syntax via built-in PostMatch Processors with lib/DTR.js 
 
 The examples so far have relied heavily on arrow functions.  (In the case of plugins, we are, behind the scenes, amending the matches to include additional, hidden arrow functions on the RHS.)
 
@@ -421,8 +406,6 @@ The third option provides a declarative syntax for doing common things done in a
 
 The syntax is borrowed from the [be-noticed](https://github.com/bahrus/be-noticed) decorator / DTR plugin, and much of the code is shared between these two usages.
 
-
-
 ### Set attributes / classes / parts / [decorator attributes](https://github.com/bahrus/be-decorated).
 
 Example:
@@ -474,18 +457,23 @@ If the RHS is an array, but the head element of the array is a boolean, then we 
     </tr>
 </table>
 
-## Inserting Content [TODO]
+### DTR/TR method extensions for RHS =  Non Array Object
 
-If the RHS is an array, but the head element of the array is itself an array, then we interpret this to be a template include rule.  Follow be-inclusive syntax.
+Recall how we can extend TR/DTR "vertically" by overriding the built-in methods with subclasses.
 
-## Loops [TODO]
+There's one RHS type we have conspicuously avoided discussing so far -- where the RHS expression is a non-array object.  
 
-If the RHS is an array, but the head element of the array is the number 0, then the array provides the ability to define a loop
+Here is where we really enable making the TR/DTR classes extensible "vertically".
 
-## TBD [TODO]
+If the RHS is a non-array object, the determinant for what to do with such expressions is based on the reserved field with reserved key "$action".
 
-What if first element is null?
+Method with name do_object_[$action] is invoked.  A single parameter of the render context is passed in.
 
+### Nested Matching
+
+Just as CSS will support nesting (hopefully, eventually), TR supports nesting out-of-the-box.  If the RHS is a non-array object, and that object has property a sub transform is performed within that scope (Only one exception -- if using lhs that ends with Props for bulk prop setting).
+
+If the RHS is a non-array object, and that object has field $action: "nested_transform", then the nested transform is performed (via calling do_object_nested_transform) as discussed above.
 
 
 
