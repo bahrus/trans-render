@@ -501,10 +501,22 @@ input: [true | false,
             rhs: "string"
         },
         //then use an input type=text
-        [{type: "text"}]
+        [{type: "text"}],
+        //else
+        [{type: "radiobuton"}]
+    ], [
+        {
+            "if": "myHostPropertyIsTrue"
+        },
+        //then
+        [{"hidden": true}],
     ]
 ]
 ```
+
+## Loop RHS [TODO]
+
+If the rhs is an array, and the first element of the array is an empty array, then we are now specifying a loop (adopt be-repeated syntax).
 
 ### DTR/TR method extensions for RHS =  Non Array Object
 
@@ -523,6 +535,8 @@ Method with name do_object_[$action] is invoked.  A single parameter of the rend
 Just as CSS will support nesting (hopefully, eventually), TR supports nesting out-of-the-box.  If the RHS is a non-array object, and that object has property a sub transform is performed within that scope (Only one exception -- if using lhs that ends with Props for bulk prop setting).
 
 If the RHS is a non-array object, and that object has field $action: "nested_transform", then the nested transform is performed (via calling do_object_nested_transform) as discussed above.
+
+
 
 
 
