@@ -57,6 +57,8 @@ Multi matching provides support for syntax that is convenient for JS development
 
 ... especially when considering how common such queries will be.
 
+In addition, one of the goals of the DTR is that the transform can be embedded as JSON-in-HTML, which becomes quite difficult when there need to be quotes in the string.
+
 So transform.js supports special syntax for css matching that is more convenient for JS developers:
 
 ```JavaScript
@@ -435,7 +437,7 @@ If the RHS is boolean value "true", then the matching elements are placed in the
 
 [TODO] Show examples
 
-## Conditional RHS 
+## Conditional RHS [TODO]
 
 If the RHS is an array, but the head element of the array is a boolean, then we switch into "conditional display" logic.
 
@@ -444,18 +446,65 @@ If the RHS is an array, but the head element of the array is a boolean, then we 
     <tr>
         <td>true</td>
         <td>The second element is expected to be an object that matches the [BeSwitchedVirtualProps type](https://github.com/bahrus/be-switched/blob/baseline/types.d.ts#L5).  Only the right hand side of many of those field expressions are evaluated recursively from the rules above.</td>
-        <td>If the second element is satisfied, apply the third element according to all the rules above (recursively), assigning values / attaching event handlers on the target element</td>
-        <td>If the second element is **not** satisfied, apply the third element according to all the rules above (recursively), assigning values / attaching event handlers on the target element</td>
-        <td></td>
+        <td>
+            If the second element is satisfied, apply the third element according to all the rules above (recursively), assigning values / attaching event handlers on the target element
+            </td>
+        <td>If the second element is **not** satisfied, apply the fourth element according to all the rules above (recursively), assigning values / attaching event handlers on the target element</td>
+        <td>
+        Syntactically, it looks a bit odd to interpret "true" as "you are now looking at a conditional statement".  If editing the transform in js/mjs, it might seem more intuitive reading if using this "true | false".
+
+        Also, the second element can an arrays of conditions.  [TODO]
+        </td>
     </tr>
     <tr>
         <td>false</td>
         <td>""</td>
         <td>If the second elements is satisfied, skip the rest of the transform rules?</td>
         <td>tbd</td>
-        <td>TODO
+        <td>TODO</td>
     </tr>
 </table>
+
+[TODO] Show lots of examples
+
+```JavaScript
+input: [true | false, 
+    [
+        // if property is boolean
+        {
+            lhs: "myHostPropertyType",
+            op: "===",
+            rhs: "boolean"
+        },
+        //then make it an input type=checkbox
+        [{type: "checkbox"}]
+    ], [
+        //if property is numeric
+        {
+            lhs: "myHostPropertyType",
+            op: "===",
+            rhs: "number"
+        },
+        //then use an range
+        [
+            {
+                type: 'range',
+                min: 50,
+                max: 150,
+            }
+        ]
+    ], [
+        //if property is string
+        {
+            lhs: "myHostPropertyType",
+            op: "===",
+            rhs: "string"
+        },
+        //then use an input type=text
+        [{type: "text"}]
+    ]
+]
+```
 
 ### DTR/TR method extensions for RHS =  Non Array Object
 
