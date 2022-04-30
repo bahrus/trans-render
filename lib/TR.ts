@@ -52,7 +52,7 @@ export class TR{
                 await (<any>this)[verb](ctx);
                 continue;
             }
-            const isDitto = key.startsWith("`");
+            const isDitto = key.startsWith("^");
             //const theKey = prevKey !== undefined && isDitto ? prevKey : key;
             
             
