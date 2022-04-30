@@ -6,8 +6,8 @@
   "module": "lib/TR.js",
   "typings": "lib/types.d.ts",
   "scripts": {
-    "test": "node test/tests.js",
     "serve": "node node_modules/may-it-serve/serve.js",
+    "test": "playwright test",
     "doc": "wca analyze trans-render.js --outFile custom-elements.json",
     "package-check": "package-check",
     "compress": "terser lib/CE.js -o dist/CE.min.js -c -m "
@@ -63,6 +63,7 @@
     "lib/*"
   ],
   "devDependencies": {
+    "@playwright/test": "1.21.1",
     "may-it-serve": "0.0.0",
     "xtal-editor": "0.0.167",
     "xtal-shell": "0.0.27"
