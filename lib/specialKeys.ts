@@ -1,12 +1,12 @@
 import { camelToLisp } from "./camelToLisp.js";
-import {queryInfo, matchTypes} from './types';
+import {QueryInfo, matchTypes} from './types';
 
 export const attribs : matchTypes[] = ['parts', 'classes', 'attribs', 'elements', 'props'];
 
 const attribsUC = attribs.map(s => s[0].toUpperCase() + s.substr(1));
 
 
-export function getQuery(key: string): queryInfo{
+export function getQuery(key: string): QueryInfo{
     const lpKey = camelToLisp(key);
     let idx = 0;
     for(const type of attribs){

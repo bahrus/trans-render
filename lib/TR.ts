@@ -1,4 +1,4 @@
-import {RenderContext} from './types';
+import {QueryInfo, RenderContext} from './types';
 import { getQuery} from './specialKeys.js';
 import { lispToCamel } from './lispToCamel.js';
 
@@ -39,6 +39,9 @@ export class TR{
             qc.set(fragment, {});
         }
         const matchMap = isArray ? {} :  qc.get(fragment)!;
+        let prevKey = undefined;
+        let queryInfo : QueryInfo | undefined;
+        let matches: (Element | WeakRef<Element>)[]  = [];
         for(const key in match){
             let rhs = match[key];
             const verb = 'do_' + typeof(rhs);
@@ -49,34 +52,44 @@ export class TR{
                 await (<any>this)[verb](ctx);
                 continue;
             }
-            const queryInfo = getQuery(key);
-            ctx.queryInfo = queryInfo;
-            const {query} = queryInfo;
-            let fromCache = matchMap[key];
-            if(fromCache !== undefined){
-                fromCache = fromCache.filter(ref => {
-                    const el = ref.deref();
-                    if(el === undefined || !el.matches(query)) return false;
-                    return true;
-                });
-                matchMap[key] = fromCache;
-            }
-            let matches: (Element | WeakRef<Element>)[]  = [];
-            if(isArray){
-                for(const el of fragment){
-                    if(el.matches(query)){
-                        matches.push(el);
+            const isDitto = key.startsWith("'") || key.startsWith('"');
+            //const theKey = prevKey !== undefined && isDitto ? prevKey : key;
+            
+            
+            if(!isDitto){
+                prevKey = key;
+                queryInfo = getQuery(key);
+                ctx.queryInfo = queryInfo;
+                const {query} = queryInfo;
+                
+                let fromCache = matchMap[key];
+                if(fromCache !== undefined){
+                    fromCache = fromCache.filter(ref => {
+                        const el = ref.deref();
+                        if(el === undefined || !el.matches(query)) return false;
+                        return true;
+                    });
+                    matchMap[key] = fromCache;
+                }
+               
+                if(isArray){
+                    for(const el of fragment){
+                        if(el.matches(query)){
+                            matches.push(el);
+                        }
+                        el.querySelectorAll(query).forEach(el => matches.push(el));
                     }
-                    el.querySelectorAll(query).forEach(el => matches.push(el));
+                }else{
+                    matches = fromCache || (matchMap[key] = Array.from((fragment as DocumentFragment).querySelectorAll(query)).map(el => new WeakRef(el))) as (Element | WeakRef<Element>)[];
                 }
             }else{
-                matches = fromCache || (matchMap[key] = Array.from((fragment as DocumentFragment).querySelectorAll(query)).map(el => new WeakRef(el))) as (Element | WeakRef<Element>)[];
+
             }
             // let matches = (isArray ? 
             //                         (fragment as Element[]).filter(x => x.matches(query)) 
             //                       : fromCache || ;
             if(fragment instanceof Element){
-                if(fragment.matches(query)) {
+                if(fragment.matches(queryInfo!.query)) {
                     matchMap[key].push(new WeakRef(fragment));
                     matches.push(fragment);
                 }
@@ -90,10 +103,10 @@ export class TR{
             for(const el of matches){
                 const matchingElement = el instanceof Element ? el : el.deref()!;
                 ctx.target = matchingElement;
-                switch(queryInfo.type){
+                switch(queryInfo!.type){
                     case 'attribs':
-                        ctx.attrib = queryInfo.attrib;
-                        ctx.val = matchingElement.getAttribute(queryInfo.attrib!);
+                        ctx.attrib = queryInfo!.attrib;
+                        ctx.val = matchingElement.getAttribute(queryInfo!.attrib!);
                         break;
                     case 'props':
                         (<any>matchingElement)[lispToCamel(queryInfo.attrib!)] = rhs;
