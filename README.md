@@ -434,14 +434,29 @@ If the RHS is boolean value "false", then the matching elements are removed.
 If the RHS is boolean value "true", then the matching elements are placed in the Host element with property key equal to the LHS. This is the "ref" equivalent of other templating libraries.  One difference, perhaps, is the property is set to an array of weak references.
 
 
-
 [TODO] Show examples
 
-## Conditional RHS [TODO]
+## Ditto notation [TODO]
+
+One limitation JS / JSON has, that css doesn't have, is we can't use the same key twice.
+
+To overcome that, we can have multiple rules with the same key, if the subsequent keys start with " or '.
+
+For an example of this, see below.
+
+## Conditional RHS
+
+### Prelude
 
 Much conditional display logic can be accomplished via css -- set various attributes to string values as described above, pulling in values from the host, then allow css to interpret those attributes in such a way as to accomplish the conditional display we are after.
 
-But sometimes this isn't sufficient.  Sometimes the values of the attributes (or properties) themselves need to be conditional.  That is what the declarative expressions below address.
+But sometimes this isn't sufficient.  Sometimes the values of the attributes (or properties) themselves need to be conditional.  
+
+One approach to accomplishing this is by adding a "computed property" to the host element, that calculates what the value of the attribute should be, with the full power of JavaScript at our disposal.  But this solution may not be sufficient when we *have* no host class to begin with (e.g. declarative custom elements).  And it may also be argued that even if we do, these types of computed properties are too tied to the UI.
+
+So, that is what the declarative expressions below address.  As with everything else in this library, the logic for this is only loaded on demand, so use or don't use, the penalty is minimal either way.
+
+### Onto business
 
 If the RHS is an array, but the head element of the array is a boolean, then we switch into "conditional display" logic.
 
@@ -466,7 +481,6 @@ If the RHS is an array, but the head element of the array is a boolean, then we 
         <td>
             Syntactically, it looks a bit odd to interpret "true" as "you are now looking at a conditional statement".  
             If editing the transform in js/mjs, it might seem more intuitive reading if using this "true || false".
-            Also, the second element can be an arrays of conditions.  [TODO]
        </td>
     </tr>
     <tr>
