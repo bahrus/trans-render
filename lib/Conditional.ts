@@ -6,7 +6,7 @@ export class Conditional{
         const exp = rhs[1] as IConditional;
         const {getVal} = await import('./getVal.js');
         if(exp.if !== undefined ){
-            exp.ifVal = await getVal(host, exp.if);
+            exp.ifVal = !!(await getVal(host, exp.if));
         }
         if(exp.ifVal === false){
             await this.doFalse(ctx!);
