@@ -436,7 +436,7 @@ If the RHS is boolean value "true", then the matching elements are placed in the
 
 [TODO] Show examples
 
-## Ditto notation [TODO]
+## Ditto notation
 
 One limitation JS / JSON has, that css doesn't have, is we can't use the same key twice.
 
@@ -557,53 +557,38 @@ results in:
 ```html
 <div id=target>
     <input type=checkbox>
+</div>
 ```
 
-```JavaScript
-input: [true | false, 
-    [
-        // if property is boolean
-        {
-            lhs: "myHostPropertyType",
-            op: "===",
-            rhs: ["boolean"]
-        },
-        //then make it an input type=checkbox
-        [{type: "checkbox"}]
-    ], [
-        //if property is numeric
-        {
-            lhs: "myHostPropertyType",
-            op: "===",
-            rhs: ["number"]
-        },
-        //then use an range
-        [
-            {
-                type: 'range',
-                min: 50,
-                max: 150,
-            }
-        ]
-    ], [
-        //if property is string
-        {
-            lhs: "myHostPropertyType",
-            op: "===",
-            rhs: ["string"]
-        },
-        //then use an input type=text
-        [{type: "text"}],
-        //else
-        [{type: "radiobuton"}]
-    ], [
-        {
-            "if": "myHostPropertyIsTrue"
-        },
-        //then
-        [{"hidden": true}],
-    ]
-]
+
+
+### Example 3 -- Switch
+
+```html
+<template id='templ'>
+    <input>
+</template>
+<div id='target'></div>
+<script type='module'>
+    import {DTR} from '../lib/DTR.js';
+    const iff = true || false;
+    const dtr = DTR.transform(templ, {
+        host: {type: 'boolean'},
+        match:{
+            input: [iff, {lhs: 'type', op: '===', rhsVal: 'number'}, [{type:['range']}]],
+            '"': [iff, {lhs: 'type', op: '===', rhsVal: 'string'}, [{type:['text']}]],
+            '"2': [iff, {lhs: 'type', op: '===', rhsVal: 'boolean'}, [{type:['checkbox']}]],
+        }
+    }, target);
+</script>
+```
+
+results in:
+
+```html
+<div id=target>
+    <input type=checkbox>
+</div>
 ```
 
 ## Loop RHS [TODO]

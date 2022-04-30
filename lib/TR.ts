@@ -82,8 +82,6 @@ export class TR{
                 }else{
                     matches = fromCache || (matchMap[key] = Array.from((fragment as DocumentFragment).querySelectorAll(query)).map(el => new WeakRef(el))) as (Element | WeakRef<Element>)[];
                 }
-            }else{
-
             }
             // let matches = (isArray ? 
             //                         (fragment as Element[]).filter(x => x.matches(query)) 
