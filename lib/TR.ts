@@ -53,8 +53,6 @@ export class TR{
                 continue;
             }
             const isDitto = key.startsWith("^");
-            //const theKey = prevKey !== undefined && isDitto ? prevKey : key;
-            
             
             if(!isDitto){
                 prevKey = key;
@@ -83,9 +81,7 @@ export class TR{
                     matches = fromCache || (matchMap[key] = Array.from((fragment as DocumentFragment).querySelectorAll(query)).map(el => new WeakRef(el))) as (Element | WeakRef<Element>)[];
                 }
             }
-            // let matches = (isArray ? 
-            //                         (fragment as Element[]).filter(x => x.matches(query)) 
-            //                       : fromCache || ;
+
             if(fragment instanceof Element){
                 if(fragment.matches(queryInfo!.query)) {
                     matchMap[key].push(new WeakRef(fragment));
