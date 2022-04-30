@@ -71,7 +71,7 @@ export class TR{
                     });
                     matchMap[key] = fromCache;
                 }
-               
+                matches = [];
                 if(isArray){
                     for(const el of fragment){
                         if(el.matches(query)){
