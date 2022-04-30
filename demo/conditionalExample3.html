@@ -17,7 +17,15 @@
         const dtr = DTR.transform(templ, {
             host: {type: 'boolean'},
             match:{
-                input: [iff, {lhs: 'type', op: '===', rhsVal: 'boolean'},[{type:['checkbox']}]]
+                input: [
+                    iff, 
+                    [
+                        {lhs: 'type', op: '===', rhsVal: 'boolean'}, [{type:['checkbox']}]
+                    ],
+                    [
+                        {lhs: 'type', op: '===', rhsVal: 'number'}, [{type:['range']}]
+                    ]
+                ]
             }
         }, target);
     </script>

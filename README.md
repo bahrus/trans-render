@@ -454,7 +454,7 @@ If the RHS is an array, but the head element of the array is a boolean, then we 
         <th>Notes</th>
     </tr>
     <tr>
-        <td>true</td>
+        <td>true -- strict mode</td>
         <td>The second element is expected to be an object that matches the [BeSwitchedVirtualProps type](https://github.com/bahrus/be-switched/blob/baseline/types.d.ts#L5).  Only the right hand side of many of those field expressions are evaluated recursively from the rules above.
         </td>
         <td>
@@ -466,15 +466,15 @@ If the RHS is an array, but the head element of the array is a boolean, then we 
         <td>
             Syntactically, it looks a bit odd to interpret "true" as "you are now looking at a conditional statement".  
             If editing the transform in js/mjs, it might seem more intuitive reading if using this "true || false".
-            Also, the second element can an arrays of conditions.  [TODO]
+            Also, the second element can be an arrays of conditions.  [TODO]
        </td>
     </tr>
     <tr>
-        <td>false</td>
-        <td>""</td>
-        <td>If the second elements is satisfied, skip the rest of the transform rules?</td>
-        <td>tbd</td>
-        <td>TODO</td>
+        <td>false -- loose mode</td>
+        <td>JavaScript expression that is evaluated against the Shadow Realm</td>
+        <td>"</td>
+        <td>"</td>
+        <td>Big time TODO</td>
     </tr>
 </table>
 
@@ -511,6 +511,10 @@ results in:
 </div>
 ```
 
+So as we can see, the conditional expression incorporates the P[E[A]] logic mentioned above, as far as setting the type attribute.
+
+Remember that within a PEA expressions, to specify a hardcoded string, as opposed to a path coming from the host, strings need to be wrapped inside an array (to allow for interpolation).
+
 ### Example 2 -- Comparison
 
 ```html
@@ -519,22 +523,15 @@ results in:
 </template>
 <div id='target'></div>
 <script type='module'>
-    import {DTR} from '../lib/DTR.js';
-    const iff = true || false;
-    const dtr = DTR.transform(templ, {
-        host: {type: 'boolean'},
-        match:{
-            input: [
-                iff, {
-                    lhs: 'type',
-                    op: '===',
-                    rhsVal: 'boolean'
-                },
-                [{type:['checkbox']}]
-            ]
-        }
-    }, target);
-</script>
+        import {DTR} from '../lib/DTR.js';
+        const iff = true || false;
+        const dtr = DTR.transform(templ, {
+            host: {type: 'boolean'},
+            match:{
+                input: [iff, {lhs: 'type', op: '===', rhsVal: 'boolean'},[{type:['checkbox']}]]
+            }
+        }, target);
+    </script>
 ```
 
 So lhs/rhs is expecting a path to evaluate from the host.
