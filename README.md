@@ -474,7 +474,7 @@ input: [true | false,
         {
             lhs: "myHostPropertyType",
             op: "===",
-            rhs: "boolean"
+            rhs: ["boolean"]
         },
         //then make it an input type=checkbox
         [{type: "checkbox"}]
@@ -483,7 +483,7 @@ input: [true | false,
         {
             lhs: "myHostPropertyType",
             op: "===",
-            rhs: "number"
+            rhs: ["number"]
         },
         //then use an range
         [
@@ -498,7 +498,7 @@ input: [true | false,
         {
             lhs: "myHostPropertyType",
             op: "===",
-            rhs: "string"
+            rhs: ["string"]
         },
         //then use an input type=text
         [{type: "text"}],
