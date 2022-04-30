@@ -361,9 +361,9 @@ If the property key starts with a ".", then the property key supports a dot-deli
 
 will bind to host.place.location.  If that is undefined, then the "world" default will be used.  If the string to the right of ?? starts with a ., the same process is repeated recursively.
 
-## P[E[A]] 
+## P[E[A[T]]] 
 
-After setting the string value of a node, setting properties, attaching event handlers, and setting attributes (including classes and parts) comes next in things we do over and over again.
+After setting the string value of a node, setting properties, attaching event handlers, and setting attributes (including classes and parts), and specififying the light children comes next in things we do over and over again
 
 So we reserve another of our extremely limited RHS types JSON supports to this use case.
 
@@ -392,7 +392,7 @@ The first element of the RHS array is devoted to property setting:
 
 The same limited support for . and ?? described above is supported here.
 
-### Add event listeners
+### Add event listeners (E)
 
 The second element of the array allows us to add event listeners to the element.  For example:
 
@@ -408,7 +408,7 @@ The third option provides a declarative syntax for doing common things done in a
 
 The syntax is borrowed from the [be-noticed](https://github.com/bahrus/be-noticed) decorator / DTR plugin, and much of the code is shared between these two usages.
 
-### Set attributes / classes / parts / [decorator attributes](https://github.com/bahrus/be-decorated).
+### Set attributes / classes / parts / [decorator attributes](https://github.com/bahrus/be-decorated). (A)
 
 Example:
 
@@ -426,6 +426,12 @@ match:{
         }}]
 }
 ```
+
+### Set Light Children (T) [TODO]
+
+The fourth optional element can either be a template, or an HTML string that TR converts into a template.  It is cloned and appended to the element, after deleting the previous content. 
+
+As this is HTML, the developer is responsible for ensuring no XSS attacks are possible via this setting.
 
 ## Boolean RHS -- Remove and Refs
 

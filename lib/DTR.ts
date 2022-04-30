@@ -90,11 +90,19 @@ export class DTR extends TR{
                         const pe = new PE();
                         await pe.do(ctxCopy);
                         break;
-                    default:
+                    case 3:
                         const {PEA} = await import('./PEA.js');
                         const pea = new PEA();
                         await pea.do(ctxCopy);
                         break;
+                    case 4:
+                        if(typeof rhs[3] === 'string'){
+                            const templ = document.createElement('template');
+                            rhs[3] = templ;
+                            const {PEAT} = await import('./PEAT.js');
+                        }
+                    default:
+                        throw 'NI';//Not Implemented
                 }
         }
     }
