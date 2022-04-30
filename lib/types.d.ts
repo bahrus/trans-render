@@ -169,6 +169,11 @@ export interface INotify<TSelf = any, TProps = any, TActions = TProps>{
 
 export interface IConditional{
     if: string;
+    ifVal: boolean;
+    lhs: string;
+    lhsVal: any;
+    rhs: string;
+    rhsVal: any;
 }
 export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null};
 export type PSettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T> | undefined]; 

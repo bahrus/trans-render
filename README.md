@@ -451,7 +451,7 @@ If the RHS is an array, but the head element of the array is a boolean, then we 
             </td>
         <td>If the second element is **not** satisfied, apply the fourth element according to all the rules above (recursively), assigning values / attaching event handlers on the target element</td>
         <td>
-        Syntactically, it looks a bit odd to interpret "true" as "you are now looking at a conditional statement".  If editing the transform in js/mjs, it might seem more intuitive reading if using this "true | false".
+        Syntactically, it looks a bit odd to interpret "true" as "you are now looking at a conditional statement".  If editing the transform in js/mjs, it might seem more intuitive reading if using this "true || false".
 
         Also, the second element can an arrays of conditions.  [TODO]
         </td>

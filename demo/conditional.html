@@ -13,10 +13,18 @@
     <div id='target'></div>
     <script type='module'>
         import {DTR} from '../lib/DTR.js';
+        const iff = true || false;
         const dtr = DTR.transform(templ, {
             host: {type: 'boolean'},
             match:{
-                input: [{value:'type'}]
+                input: [
+                    iff, {
+                        lhs: 'type',
+                        op: '===',
+                        rhsVal: 'boolean'
+                    },
+                    [{type:'checkbox'}]
+                ]
             }
         }, target);
     </script>
