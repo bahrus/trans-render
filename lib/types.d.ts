@@ -174,6 +174,7 @@ export interface IConditional{
     lhsVal: any;
     rhs: string;
     rhsVal: any;
+    op: '==' | '!=' | '>' | '<' | '>=' | '<=' | '===' | '!=='  | undefined;
 }
 export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null};
 export type PSettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T> | undefined]; 

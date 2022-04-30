@@ -439,22 +439,31 @@ If the RHS is boolean value "true", then the matching elements are placed in the
 
 ## Conditional RHS [TODO]
 
+Much conditional display logic can be accomplished via css -- set various attributes to string values as described above, pulling in values from the host, then allow css to interpret those attributes in such a way as to accomplish the conditional display we are after.
+
+But sometimes this isn't sufficient.  Sometimes the values of the attributes (or properties) themselves need to be conditional.  That is what the declarative expressions below address.
+
 If the RHS is an array, but the head element of the array is a boolean, then we switch into "conditional display" logic.
 
 <table>
     <tr><th>First Element Value</th><th>Second Element Usage</th><th>Third Element Usage</th><th>Fourth Element Usage</th><th>Notes</th></tr>
     <tr>
         <td>true</td>
-        <td>The second element is expected to be an object that matches the [BeSwitchedVirtualProps type](https://github.com/bahrus/be-switched/blob/baseline/types.d.ts#L5).  Only the right hand side of many of those field expressions are evaluated recursively from the rules above.</td>
-        <td>
-            If the second element is satisfied, apply the third element according to all the rules above (recursively), assigning values / attaching event handlers on the target element
-            </td>
-        <td>If the second element is **not** satisfied, apply the fourth element according to all the rules above (recursively), assigning values / attaching event handlers on the target element</td>
-        <td>
-        Syntactically, it looks a bit odd to interpret "true" as "you are now looking at a conditional statement".  If editing the transform in js/mjs, it might seem more intuitive reading if using this "true || false".
-
-        Also, the second element can an arrays of conditions.  [TODO]
+        <td>The second element is expected to be an object that matches the [BeSwitchedVirtualProps type](https://github.com/bahrus/be-switched/blob/baseline/types.d.ts#L5).  Only the right hand side of many of those field expressions are evaluated recursively from the rules above.
         </td>
+        <td>
+            If the second element is satisfied, apply the third element according to all the rules above (recursively), assigning values / attaching event handlers on the target element.
+        </td>
+        <td>
+            If the second element is **not** satisfied, apply the fourth element according to all the rules above (recursively), assigning values / attaching event handlers on the target element.
+        </td>
+        <td>
+            Syntactically, it looks a bit odd to interpret "true" as "you are now looking at a conditional statement".  
+        
+            If editing the transform in js/mjs, it might seem more intuitive reading if using this "true || false".
+
+            Also, the second element can an arrays of conditions.  [TODO]
+       </td>
     </tr>
     <tr>
         <td>false</td>
@@ -465,7 +474,75 @@ If the RHS is an array, but the head element of the array is a boolean, then we 
     </tr>
 </table>
 
-[TODO] Show lots of examples
+### Example 1 - Boolean expression
+
+```html
+<template id='templ'>
+    <input>
+</template>
+<div id='target'></div>
+<script type='module'>
+    import {DTR} from '../lib/DTR.js';
+    const iff = true || false;
+    const dtr = DTR.transform(templ, {
+        host: {typeIsBoolean: false},
+        match:{
+            input: [
+                iff, {
+                    if: 'typeIsBoolean', //condition
+                },
+                [{type:['checkbox']}], // if condition is true
+                [{type: ['range']}] // if condition is false
+            ]
+        }
+    }, target);
+</script>
+```
+
+results in:
+
+```html
+<div id='target'>
+    <input type=range>
+</div>
+```
+
+### Example 2 -- Comparison
+
+```html
+<template id='templ'>
+    <input>
+</template>
+<div id='target'></div>
+<script type='module'>
+    import {DTR} from '../lib/DTR.js';
+    const iff = true || false;
+    const dtr = DTR.transform(templ, {
+        host: {type: 'boolean'},
+        match:{
+            input: [
+                iff, {
+                    lhs: 'type',
+                    op: '===',
+                    rhsVal: 'boolean'
+                },
+                [{type:['checkbox']}]
+            ]
+        }
+    }, target);
+</script>
+```
+
+So lhs/rhs is expecting a path to evaluate from the host.
+
+lhsVal/rhsVal is expecting a hard coded value.
+
+results in:
+
+```html
+<div id=target>
+    <input type=checkbox>
+```
 
 ```JavaScript
 input: [true | false, 

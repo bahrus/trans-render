@@ -3,12 +3,29 @@ import {DTR} from './DTR';
 export class Conditional{
     constructor(public dtr: DTR){}
     async do({host, rhs, ctx}: RenderContext): Promise<void> {
-        const conditionalExp = rhs[1] as IConditional;
+        const exp = rhs[1] as IConditional;
         const {getVal} = await import('./getVal.js');
-        let condition = true;//assume innocent until proven guilty
-        if(conditionalExp.if !== undefined){
-            if(!condition){
-                condition = await getVal(host, conditionalExp.if);
+        if(exp.if !== undefined ){
+            exp.ifVal = await getVal(host, exp.if);
+        }
+        if(exp.ifVal === false){
+            await this.doFalse(ctx!);
+            return;
+        }
+        if(exp.lhs !== undefined){
+            exp.lhsVal = await getVal(host, exp.lhs);
+        }
+        if(exp.rhs !== undefined){
+            exp.rhsVal = await getVal(host, exp.rhs);
+        }
+        let condition = true;
+        if(exp.lhsVal !== undefined || exp.rhsVal !== undefined){
+            switch(exp.op){
+                case '===':
+                case undefined:
+                    if(exp.lhsVal !== exp.rhsVal){
+                        condition = false;
+                    }
             }
         }
         if(condition){
@@ -16,6 +33,7 @@ export class Conditional{
         }else{
             await this.doFalse(ctx!);
         }
+
     }
     async doTrue({host, rhs, ctx}: RenderContext){
         const doTrueExpression = rhs[2];
