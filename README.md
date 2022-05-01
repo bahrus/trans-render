@@ -443,9 +443,9 @@ If the RHS is boolean value "true", then the matching elements are placed in the
 
 One limitation JS / JSON has, that css doesn't have, is we can't use the same key twice.
 
-To overcome that, we can have multiple rules with the same key, if the subsequent keys start with " or '.
+To overcome that, we can have multiple rules with the same key, if the subsequent keys start with a ^ character.
 
-For an example of this, see below.
+For an example of this, [see below](#example-3----switch).
 
 ## Conditional RHS
 
@@ -459,7 +459,7 @@ One approach to accomplishing this is by adding a "computed property" to the hos
 
 So, that is what the declarative expressions below address.  As with everything else in this library, the logic for this is only loaded on demand, so use or don't use, the penalty is minimal either way.
 
-### Onto business
+### On to business
 
 If the RHS is an array, but the head element of the array is a boolean, then we switch into "conditional display" logic.
 
@@ -473,7 +473,7 @@ If the RHS is an array, but the head element of the array is a boolean, then we 
     </tr>
     <tr>
         <td>true -- strict mode</td>
-        <td>The second element is expected to be an object that matches the [BeSwitchedVirtualProps type](https://github.com/bahrus/be-switched/blob/baseline/types.d.ts#L5).  Only the right hand side of many of those field expressions are evaluated recursively from the rules above.
+        <td>The second element is expected to be an object that matches the <a href="https://github.com/bahrus/be-switched/blob/baseline/types.d.ts#L5" target=_blank>BeSwitchedVirtualProps type</a>.  Only the right hand side of many of those field expressions are evaluated recursively from the rules above.
         </td>
         <td>
             If the second element is satisfied, apply the third element according to all the rules above (recursively), assigning values / attaching event handlers on the target element.
@@ -579,8 +579,8 @@ results in:
         host: {type: 'boolean'},
         match:{
             input: [iff, {lhs: 'type', op: '===', rhsVal: 'number'}, [{type:['range']}]],
-            '"': [iff, {lhs: 'type', op: '===', rhsVal: 'string'}, [{type:['text']}]],
-            '"2': [iff, {lhs: 'type', op: '===', rhsVal: 'boolean'}, [{type:['checkbox']}]],
+            '^': [iff, {lhs: 'type', op: '===', rhsVal: 'string'}, [{type:['text']}]],
+            '^^': [iff, {lhs: 'type', op: '===', rhsVal: 'boolean'}, [{type:['checkbox']}]],
         }
     }, target);
 </script>
