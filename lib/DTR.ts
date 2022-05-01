@@ -28,7 +28,7 @@ export class DTR extends TR{
     async subscribe(){
         const {host} = this.ctx;
         const { subscribe } = await import( './subscribe.js' );
-        const deps = this.dep;
+        const deps = await this.getDep();
         const fragment = host!.shadowRoot || host!;
         for(const key of deps){
             await subscribe(host!, key, async () => {
@@ -110,7 +110,7 @@ export class DTR extends TR{
     /**
      * Gets the host properties the template depends on.
      */
-    get dep(): Set<string>{
+    async getDep(): Promise<Set<string>>{
         if(this.#dependencies === undefined){
             const returnObj = new Set<string>();
             const {ctx} = this;

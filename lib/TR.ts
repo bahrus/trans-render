@@ -103,7 +103,7 @@ export class TR{
                         ctx.val = matchingElement.getAttribute(queryInfo!.attrib!);
                         break;
                     case 'props':
-                        (<any>matchingElement)[lispToCamel(queryInfo.attrib!)] = rhs;
+                        (<any>matchingElement)[lispToCamel(queryInfo!.attrib!)] = rhs;
                         continue;
                 }
                 await (<any>this)[verb](ctx);
