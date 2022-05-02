@@ -504,12 +504,12 @@ If the RHS is an array, but the head element of the array is a boolean, then we 
 <div id='target'></div>
 <script type='module'>
     import {DTR} from '../lib/DTR.js';
-    const iff = true || false;
+    const conditional = true || false; // call it whatever makes it more readable
     const dtr = DTR.transform(templ, {
         host: {typeIsBoolean: false},
         match:{
-            input: [
-                iff, {
+            input: [conditional, 
+                {
                     if: 'typeIsBoolean', //condition
                 },
                 [{type:['checkbox']}], // if condition is true
