@@ -77,7 +77,6 @@
     <button onclick="runScript()">runScript</button>
     <script>
         function runScript(){
-            return;
             $hell.cd('/xtal-editor/main/header/div/button[0]');
             $hell.$0.click();
             setTimeout(() => {
@@ -92,7 +91,7 @@
                     $hell.cd('/xtal-editor#abc/main/xtal-vlist#vlist/div/div/div[0]/div/div[6]/div[0]/input#object');
                     if($hell.$0.value.indexOf('jethro tull') !== -1){
                         $hell.cd('/xtal-editor');
-                        $hell.$0.setAttribute('mark', '');
+                        $hell.$0.setAttribute('mark', 'approved');
                     }else{
                         console.error('jethro tull not found in higher nodes.');
                     }
