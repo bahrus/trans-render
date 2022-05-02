@@ -44,10 +44,7 @@ export async function applyP<T extends Partial<HTMLElement> = HTMLElement>(targe
             delete safeProps[prop];
             safeProps['_' + prop] = val;
         }
-        //Object.assign(target, safeProps);
-        for(const key in safeProps){
-            const val = safeProps[key];
-            if((<any>target)[key] !== val) (<any>target)[key] = val;
-        }
+        Object.assign(target, safeProps);
+
     }
 }
