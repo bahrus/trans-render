@@ -48,7 +48,7 @@ export class DTR extends TR{
         const {plugins, rhs} = ctx;
         if(plugins !== undefined && plugins[rhs] !== undefined){
             //method.constructor.name === 'AsyncFunction'
-            const processor = plugins[rhs].processor(ctx);
+            const processor = plugins[rhs].processor;
             if(processor.constructor.name === 'AsyncFunction'){
                 const newRHS = await processor(ctx);
                 await this.doNewRHS(newRHS, ctx);
