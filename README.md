@@ -6,7 +6,7 @@
 
 [![Playwright Tests](https://github.com/bahrus/trans-render/actions/workflows/CI.yml/badge.svg?branch=baseline)](https://github.com/bahrus/trans-render/actions/workflows/CI.yml)
 
-*trans-rendering* (TR) describes a methodical way of instantiating a template.  It originally drew inspiration from the (least) popular features of XSLT, but has since evolved to more closely resemble standard CSS.  Like XSLT, TR performs transforms on elements by matching tests on those elements.  TR uses css tests elements via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
+*trans-rendering* (TR) describes a methodical way of instantiating a template.  It originally drew inspiration from the (least) popular features of XSLT, but has since evolved to more closely resemble standard CSS.  Like XSLT, TR performs transforms on elements by matching tests on those elements.  TR uses css tests on elements via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
 
 A subset of TR, also described below, is "declarative trans-render" syntax [DTR], which is pure, 100% declarative syntax.  
 

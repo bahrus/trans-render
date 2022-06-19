@@ -36,16 +36,27 @@ export class DTR extends TR{
             })
         }
     }
+    async doNewRHS(newRHS: any, ctx: RenderContext){
+        if(newRHS !== undefined){
+            const verb = 'do_' + typeof(newRHS);
+            ctx.rhs = newRHS;
+            await (<any>this)[verb](ctx);
+        }
+    }
     async do_string(): Promise<void> {
         const {ctx} = this;
         const {plugins, rhs} = ctx;
         if(plugins !== undefined && plugins[rhs] !== undefined){
-            const newRHS = plugins[rhs].processor(ctx);
-            if(newRHS !== undefined){
-                const verb = 'do_' + typeof(newRHS);
-                ctx.rhs = newRHS;
-                await (<any>this)[verb](ctx);
+            //method.constructor.name === 'AsyncFunction'
+            const processor = plugins[rhs].processor(ctx);
+            if(processor.constructor.name === 'AsyncFunction'){
+                const newRHS = await processor(ctx);
+                await this.doNewRHS(newRHS, ctx);
+            }else{
+                const newRHS = processor(ctx);
+                await this.doNewRHS(newRHS, ctx);
             }
+            
         }else{
             return await super.do_string(ctx);
         }
