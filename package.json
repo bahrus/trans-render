@@ -63,7 +63,7 @@
     "lib/*"
   ],
   "devDependencies": {
-    "@playwright/test": "1.21.1",
+    "@playwright/test": "1.22.2",
     "may-it-serve": "0.0.0",
     "xtal-editor": "0.0.169",
     "xtal-shell": "0.0.27"
