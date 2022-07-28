@@ -12,8 +12,9 @@ export interface RenderContext<T = Element, TItem = any> {
     attrib?: string | null;
     val?: string | null;
     rhs?: any;
+    shadowPeer?: Element | undefined;
     host?: HTMLElement | undefined;
-    plugins?: TransformPlugins<T, TItem>;
+    plugins?: {[key: string]: boolean} | TransformPlugins<T, TItem>;
     key?: string;
     queryCache?: WeakMap<Element | DocumentFragment, {[key: string]: NodeListOf<Element>}>;
     abort?: boolean | undefined;
