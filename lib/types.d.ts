@@ -31,7 +31,7 @@ export interface TransformPluginSettings<T = Element, TItem = any> {
     //TODO:  support for registering instances
 }
 
-export type matchTypes = 'parts'| 'classes' | 'attribs' | 'elements' | 'props' | 'placeholders';
+export type matchTypes = 'parts'| 'part' | 'id' | 'classes' | 'class' | 'attribs' | 'attrib' | 'elements' | 'element' | 'names' | 'name' | 'props' | 'placeholders';
 
 export interface QueryInfo{
     query: string;
