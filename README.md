@@ -168,16 +168,39 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>Ends with "Parts"</td><td>myRegionParts</td><td>.querySelectorAll('[part*="my-region"]')</td><td>May match more than bargained for when working with multiple parts on the same element.</td>
     </tr>
     <tr>
+        <td>Ends with "Part"</td><td>myRegionPart</td><td>.querySelector('[part*="my-region"]')</td><td>May produce inaccurate results when working with multiple parts on the same element.</td>
+    </tr>
+    <tr>
         <td>Ends with "Attribs"</td><td>ariaLabelAttribs</td><td>.querySelectorAll('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
     </tr>
     <tr>
-        <td>Contains Eq, ends with Attribs [TODO]</td><td>ariaLabelEqHelloThereAttribs</td><td>.querySelectorAll('[arial-label="HelloThere"])</td><td>If space needed ("Hello There") then LHS needs to be wrapped in quotes</td>
+        <td>Ends with "Attrib"</td><td>ariaLabelAttrib</td><td>.querySelector('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
+    </tr>
     <tr>
-        <td>Ends with "Elements"</td><td>flagIconElements</td><td>.querySelectorAll('flag-icon')</td><td>&nbsp;</td>
+        <td>Ends with "Classes"</td><td>pinkFlamingoClasses</td><td>.getElementsByClassName('pink-flamingo')</td><td>TODO</td>
+    </tr>
+    <tr>
+        <td>Ends with "Class"</td><td>pinkFlamingoClass</td><td>.getElementsByClassName('pink-flamingo')[0]</td><td>TODO</td>
+    </tr>
+    <tr>
+        <td>Ends with "Id"</td><td>driversLicenseIdId</td><td>.getElementById('drivers-license-id')</td><td>TODO</td>
+    </tr>
+    <tr>
+        <td>Contains Eq, ends with Attribs</td><td>ariaLabelEqHelloThereAttribs</td><td>.querySelectorAll('[arial-label="HelloThere"])</td><td>If space needed ("Hello There") then LHS needs to be wrapped in quotes.   [TODO], waiting for a good use case to see if this is helpful</td>
+    <tr>
+        <td>Ends with "Elements"</td><td>flagIconElements</td><td>.querySelectorAll('flag-icon') [TODO]:  use getElementsByTagName</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td>Ends with "Element"</td><td>flagIconElements</td><td>.querySelector('flag-icon')</td><td>[TODO]</td>
     </tr>
     <tr>
         <td>Ends with "Props"</td><td>textContentProps</td><td>.querySelectorAll('[-text-content]')</td><td>Useful for binding properties in bulk</td>
     </tr>
+    <tr>
+        <td>Ends with "Names"</td><td>firstNameNames</td><td>.getElementsByName('first-name')</td><td>TODO</td>
+    </tr>
+    <tr>
+        <td>Ends with "Names"</td><td>firstNameName</td><td>.getElementsByName('first-name')[0]</td><td>TODO</td>
     <tr>
         <td>Anything else</td><td>'a[href$=".mp3"]'</td><td>.querySelectorAll('a[href$=".mp3"]')</td><td>&nbsp;</td>
     </tr>
