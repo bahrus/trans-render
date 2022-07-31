@@ -140,6 +140,8 @@ fragment.querySelectorAll('[data-count]').forEach(target => {
 })
 ```
 
+[TODO]:  Use the [platform](https://dev.to/wlytle/performance-tradeoffs-of-queryselector-and-queryselectorall-1074#:~:text=querySelector%20and%20querySelectorAll%20are%20both%20slower%20than%20other,in%20how%20live%20and%20non-live%20collections%20are%20stored.)
+
 What we also see in this example, is that the transform function can be used for two scenarios:
 
 1.  Instantiating a template into a target container in the live DOM tree:
