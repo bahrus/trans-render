@@ -5,6 +5,11 @@ export const attribs : matchTypes[] = ['parts', 'part', 'id', 'classes', 'attrib
 
 const attribsUC = attribs.map(s => s[0].toUpperCase() + s.substr(1));
 
+const match = (e: Element, attrib: string) => e.matches(attrib);
+const matchClass = (e: Element, attrib: string) => e.classList.contains(attrib);
+const matchAtr = (e: Element, attrib: string) => e.hasAttribute(attrib);
+const matchEl = (e: Element, attrib: string) => e.localName === attrib;
+const matchId = (e: Element, attrib: string) => e.id === attrib;
 
 export function getQuery(key: string): QueryInfo{
     const lpKey = camelToLisp(key);
@@ -14,8 +19,9 @@ export function getQuery(key: string): QueryInfo{
             const attrib = lpKey.substr(0, lpKey.length - type.length - 1);
             let query: string | undefined;
             let verb: string = 'querySelectorAll';
+            let matchFn: undefined |  ((el: Element, attrib: string) => boolean) ;
             const single = 'querySelector';
-            let getFirstIfNotNull = false;
+            let first = false;
             let lhsProp = '';
             switch(type){
                 case 'parts':
@@ -24,17 +30,21 @@ export function getQuery(key: string): QueryInfo{
                     break;
                 case 'classes':
                 case 'class':
-                    query = attrib;
-                    verb = 'getElementsByClassName';
+                    //query = attrib;
+                    query = `.${attrib}`;
+                    //verb = 'getElementsByClassName';
+                    matchFn = matchClass;
                     break;
                 case 'attribs':
                 case 'attrib':
                     query = `[${attrib}]`;
+                    matchFn = matchAtr;
                     break;
                 case 'elements':
                 case 'element':
                     query = attrib;
-                    verb = 'getElementsByTagName';
+                    //verb = 'getElementsByTagName';
+                    matchFn = matchEl;
                     break;
                 
 
@@ -47,12 +57,13 @@ export function getQuery(key: string): QueryInfo{
                 case 'id': {
                     query = attrib;
                     verb = 'getElementById';
+                    matchFn = matchId;
                     break;
                 }
                 case 'attrib':
                 case 'class':
                 case 'element':
-                    getFirstIfNotNull = true;
+                    first = true;
                     break;
 
                 case 'placeholders':{
@@ -66,12 +77,13 @@ export function getQuery(key: string): QueryInfo{
                 }
             }
             if(query !== undefined){
-                return {query, type, attrib, lhsProp};
+                return {query, type, attrib, lhsProp, verb, first, matchFn};
             }           
         }
         idx++;
     }
     return {
-        query: key
+        query: key,
+        verb: 'querySelectorAll',
     };
 }

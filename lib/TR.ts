@@ -58,8 +58,8 @@ export class TR{
                 prevKey = key;
                 queryInfo = getQuery(key);
                 ctx.queryInfo = queryInfo;
-                const {query} = queryInfo;
-                
+                const {query, first, matchFn, attrib} = queryInfo;
+                const verbx = queryInfo.verb;
                 let fromCache = matchMap[key];
                 if(fromCache !== undefined){
                     fromCache = fromCache.filter(ref => {
@@ -72,10 +72,26 @@ export class TR{
                 matches = [];
                 if(isArray){
                     for(const el of fragment){
-                        if(el.matches(query)){
-                            matches.push(el);
+                        let elMatches = false;
+                        if(matchFn !== undefined){
+                            elMatches = matchFn(el, attrib!);
+                        }else{
+                            elMatches = el.matches(query);
                         }
-                        el.querySelectorAll(query).forEach(el => matches.push(el));
+                        if(elMatches){
+                            matches.push(el);
+                            if(first) break;
+                        }
+                        const elMatches2 = (el as any)[verbx!](query);
+                        switch(verbx){
+                            case 'querySelector':
+                                if(elMatches2 !== null) matches.push(elMatches2 as Element);
+                                break;
+                            default:
+                                const arr = Array.from(elMatches2) as Element[];
+                                arr.forEach((el: Element) => matches.push(el));
+                        }
+                        //el.querySelectorAll(query).forEach(el => matches.push(el));
                     }
                 }else{
                     matches = fromCache || (matchMap[key] = Array.from((fragment as DocumentFragment).querySelectorAll(query)).map(el => new WeakRef(el))) as (Element | WeakRef<Element>)[];
