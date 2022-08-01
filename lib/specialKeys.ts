@@ -43,7 +43,7 @@ export function getQuery(key: string): QueryInfo{
                 case 'elements':
                 case 'element':
                     query = attrib;
-                    //verb = 'getElementsByTagName';
+                    verb = 'getElementsByTagName';
                     matchFn = matchEl;
                     break;
                 
