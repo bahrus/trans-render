@@ -140,8 +140,6 @@ fragment.querySelectorAll('[data-count]').forEach(target => {
 })
 ```
 
-[TODO]:  Use the [platform](https://dev.to/wlytle/performance-tradeoffs-of-queryselector-and-queryselectorall-1074#:~:text=querySelector%20and%20querySelectorAll%20are%20both%20slower%20than%20other,in%20how%20live%20and%20non-live%20collections%20are%20stored.)
-
 What we also see in this example, is that the transform function can be used for two scenarios:
 
 1.  Instantiating a template into a target container in the live DOM tree:
@@ -177,21 +175,21 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>Ends with "Attrib"</td><td>ariaLabelAttrib</td><td>.querySelector('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
     </tr>
     <tr>
-        <td>Ends with "Classes"</td><td>pinkFlamingoClasses</td><td>.getElementsByClassName('pink-flamingo')</td><td>TODO</td>
+        <td>Ends with "Classes"</td><td>pinkFlamingoClasses</td><td>.querySelectorAll('pink-flamingo')</td><td>.getElementsByClassName gives unexpected results</td>
     </tr>
     <tr>
-        <td>Ends with "Class"</td><td>pinkFlamingoClass</td><td>.getElementsByClassName('pink-flamingo')[0]</td><td>TODO</td>
+        <td>Ends with "Class"</td><td>pinkFlamingoClass</td><td>.querySelector('pink-flamingo')[0]</td><td>Untested</td>
     </tr>
     <tr>
-        <td>Ends with "Id"</td><td>driversLicenseIdId</td><td>.getElementById('drivers-license-id')</td><td>TODO</td>
+        <td>Ends with "Id"</td><td>driversLicenseIdId</td><td>.getElementById('drivers-license-id')</td><td>Unteted</td>
     </tr>
     <tr>
         <td>Contains Eq, ends with Attribs</td><td>ariaLabelEqHelloThereAttribs</td><td>.querySelectorAll('[arial-label="HelloThere"])</td><td>If space needed ("Hello There") then LHS needs to be wrapped in quotes.   [TODO], waiting for a good use case to see if this is helpful</td>
     <tr>
-        <td>Ends with "Elements"</td><td>flagIconElements</td><td>.querySelectorAll('flag-icon') [TODO]:  use getElementsByTagName</td><td>&nbsp;</td>
+        <td>Ends with "Elements"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')</td><td>&nbsp;</td>
     </tr>
     <tr>
-        <td>Ends with "Element"</td><td>flagIconElements</td><td>.querySelector('flag-icon')</td><td>[TODO]</td>
+        <td>Ends with "Element"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')[0]</td><td>Untested</td>
     </tr>
     <tr>
         <td>Ends with "Props"</td><td>textContentProps</td><td>.querySelectorAll('[-text-content]')</td><td>Useful for binding properties in bulk</td>

@@ -31,6 +31,7 @@ export function getQuery(key: string): QueryInfo{
                 case 'classes':
                 case 'class':
                     //query = attrib;
+                    //console.log(query);
                     query = `.${attrib}`;
                     //verb = 'getElementsByClassName';
                     matchFn = matchClass;
