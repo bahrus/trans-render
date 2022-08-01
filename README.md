@@ -212,8 +212,6 @@ The lib/DTR.js file extends the class in the file lib/TR.js, and continues to br
 
 Most all these methods are asynchronous, so they can dynamically load modules.  Following this pattern, the implementations in those methods impose no penalty unless they are actually used.
 
-[TODO]  This *may* be a bad idea once the DOM elements are added to the LIVE DOM tree, as it may result in more page reflows, possibly.  Maybe first check if sync method is defined, if so use it, else call async one? 
-
 We will discuss this type of extension later.
 
 ## Extending DTR "horizontally"  via dynamically imported plugins
