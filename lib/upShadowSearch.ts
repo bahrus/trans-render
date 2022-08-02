@@ -14,7 +14,7 @@ export function upShadowSearch(ref: Element, cssSel: string){
                 targetElement = ((<any>shadowRoot).host)[lispToCamel(id)];
                 if(targetElement !== undefined) return targetElement;
             }
-            targetElement = shadowRoot.querySelector('#' + id) as HTMLElement;
+            targetElement = shadowRoot.getElementById(id) as HTMLElement;
         } else {
             throw 'Target Element Not found';
         }
