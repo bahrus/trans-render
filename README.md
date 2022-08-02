@@ -181,24 +181,24 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>Ends with "Class"</td><td>pinkFlamingoClass</td><td>.querySelector('pink-flamingo')[0]</td><td>Untested</td>
     </tr>
     <tr>
-        <td>Ends with "Id"</td><td>driversLicenseIdId</td><td>.getElementById('drivers-license-id')</td><td>Unteted</td>
+        <td>Ends with "Id"</td><td>driversLicenseIdId</td><td>.getElementById('drivers-license-id')</td><td>Untested</td>
     </tr>
     <tr>
         <td>Contains Eq, ends with Attribs</td><td>ariaLabelEqHelloThereAttribs</td><td>.querySelectorAll('[arial-label="HelloThere"])</td><td>If space needed ("Hello There") then LHS needs to be wrapped in quotes.   [TODO], waiting for a good use case to see if this is helpful</td>
     <tr>
-        <td>Ends with "Elements"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')</td><td>&nbsp;</td>
+        <td>Ends with "Elements"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')</td><td>&nbsp;Will use live collections capability so no benefit from caching [TODO]</td>
     </tr>
     <tr>
-        <td>Ends with "Element"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')[0]</td><td>Untested</td>
+        <td>Ends with "Element"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')[0]</td><td>Untested Will use live collections capability so no benefit from caching [TODO]</td>
     </tr>
     <tr>
         <td>Ends with "Props"</td><td>textContentProps</td><td>.querySelectorAll('[-text-content]')</td><td>Useful for binding properties in bulk</td>
     </tr>
     <tr>
-        <td>Ends with "Names"</td><td>firstNameNames</td><td>.getElementsByName('first-name')</td><td>TODO</td>
+        <td>Ends with "Names"</td><td>firstNameNames</td><td>.getElementsByName('first-name')</td><td>TODO -- also use live collections capability so no benefit from caching</td>
     </tr>
     <tr>
-        <td>Ends with "Names"</td><td>firstNameName</td><td>.getElementsByName('first-name')[0]</td><td>TODO</td>
+        <td>Ends with "Names"</td><td>firstNameName</td><td>.getElementsByName('first-name')[0]</td><td>TODO also use live collections capability so no benefit from caching</td>
     <tr>
         <td>Anything else</td><td>'a[href$=".mp3"]'</td><td>.querySelectorAll('a[href$=".mp3"]')</td><td>&nbsp;</td>
     </tr>
@@ -383,7 +383,7 @@ will bind to host.place.location.  If that is undefined, then the "world" defaul
 
 ## P[E[A[T]]] 
 
-After setting the string value of a node, setting properties, attaching event handlers, and setting attributes (including classes and parts), and specififying the light children comes next in things we do over and over again
+After setting the string value of a node, setting properties, attaching event handlers, and setting attributes (including classes and parts), and specifying the light children comes next in things we do over and over again
 
 So we reserve another of our extremely limited RHS types JSON supports to this use case.
 
