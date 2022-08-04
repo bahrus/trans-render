@@ -32,7 +32,17 @@ export class TR{
     }
     async transform(fragment: Element | DocumentFragment | Element[]) {
         const {ctx} = this;
-        const {host, options, match} = ctx;
+        const {host, options, match, lastTimestamp} = ctx;
+        if(host !== undefined && lastTimestamp !== undefined){
+            let foundMismatch = false;
+            for(const key in lastTimestamp){
+                if((host as any)[key] !== lastTimestamp[key]){
+                    foundMismatch = true;
+                    break;
+                }
+            }
+            if(!foundMismatch) return;
+        }
         const qc = this.#queryCache;
         const isArray = Array.isArray(fragment);
         if(!isArray && !qc.has(fragment)){
