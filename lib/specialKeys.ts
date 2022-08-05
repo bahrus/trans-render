@@ -1,7 +1,7 @@
 import { camelToLisp } from "./camelToLisp.js";
 import {QueryInfo, matchTypes} from './types';
 
-export const attribs : matchTypes[] = ['parts', 'part', 'id', 'classes', 'attribs', 'elements', 'props'];
+export const attribs : matchTypes[] = ['parts', 'part', 'id', 'classes', 'attribs', 'elements', 'props', 'names', 'name'];
 
 const attribsUC = attribs.map(s => s[0].toUpperCase() + s.substr(1));
 
@@ -10,6 +10,7 @@ const matchClass = (e: Element, attrib: string) => e.classList.contains(attrib);
 const matchAtr = (e: Element, attrib: string) => e.hasAttribute(attrib);
 const matchEl = (e: Element, attrib: string) => e.localName === attrib;
 const matchId = (e: Element, attrib: string) => e.id === attrib;
+const matchName = (e: Element, attrib: string) => (e as HTMLFormElement).name === attrib;
 
 export function getQuery(key: string): QueryInfo{
     const lpKey = camelToLisp(key);
@@ -18,7 +19,7 @@ export function getQuery(key: string): QueryInfo{
         if(key.endsWith(attribsUC[idx])){
             const attrib = lpKey.substr(0, lpKey.length - type.length - 1);
             let query: string | undefined;
-            let verb: string = 'querySelectorAll';
+            let verb: keyof Document & string = 'querySelectorAll';
             let matchFn: undefined |  ((el: Element, attrib: string) => boolean) ;
             const single = 'querySelector';
             let first = false;
@@ -47,7 +48,12 @@ export function getQuery(key: string): QueryInfo{
                     verb = 'getElementsByTagName';
                     matchFn = matchEl;
                     break;
-                
+                case 'names':
+                case 'name':
+                    query = attrib;
+                    verb = 'getElementsByName';
+                    matchFn = matchName;
+                    break;
 
             }
             switch(type){
@@ -64,6 +70,7 @@ export function getQuery(key: string): QueryInfo{
                 case 'attrib':
                 case 'class':
                 case 'element':
+                case 'name':
                     first = true;
                     break;
 

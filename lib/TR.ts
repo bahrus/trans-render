@@ -132,8 +132,14 @@ export class TR{
                 ctx.target = matchingElement;
                 switch(queryInfo!.type){
                     case 'attribs':
+                    case 'attrib':
                         ctx.attrib = queryInfo!.attrib;
                         ctx.val = matchingElement.getAttribute(queryInfo!.attrib!);
+                        break;
+                    case 'names':
+                    case 'name':
+                        ctx.name = queryInfo!.attrib;
+                        ctx.val = (matchingElement as HTMLFormElement).value;
                         break;
                     case 'props':
                         (<any>matchingElement)[lispToCamel(queryInfo!.attrib!)] = rhs;

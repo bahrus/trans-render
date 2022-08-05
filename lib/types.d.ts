@@ -10,6 +10,7 @@ export interface RenderContext<T = Element, TItem = any> {
     targetProp?: string;
     options?: RenderOptions | undefined;
     attrib?: string | null;
+    name?: string | null;
     val?: string | null;
     rhs?: any;
     shadowPeer?: Element | undefined;

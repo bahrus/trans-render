@@ -186,19 +186,22 @@ The following table lists how the LHS is translated into CSS multi-match queries
     <tr>
         <td>Contains Eq, ends with Attribs</td><td>ariaLabelEqHelloThereAttribs</td><td>.querySelectorAll('[arial-label="HelloThere"])</td><td>If space needed ("Hello There") then LHS needs to be wrapped in quotes.   [TODO], waiting for a good use case to see if this is helpful</td>
     <tr>
-        <td>Ends with "Elements"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')</td><td>&nbsp;Will use live collections capability so no benefit from caching [TODO]</td>
+        <td>Ends with "Elements"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')</td><td>&nbsp;Will use live collections capability so target elements dynamically change as needed.[TODO]</td>
     </tr>
     <tr>
-        <td>Ends with "Element"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')[0]</td><td>Untested Will use live collections capability so no benefit from caching [TODO]</td>
+        <td>Ends with "Element"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')[0]</td><td>Untested. Will use live collections capability so target elements dynamically change as needed.[TODO]</td>
     </tr>
     <tr>
         <td>Ends with "Props"</td><td>textContentProps</td><td>.querySelectorAll('[-text-content]')</td><td>Useful for binding properties in bulk</td>
     </tr>
     <tr>
-        <td>Ends with "Names"</td><td>firstNameNames</td><td>.getElementsByName('first-name')</td><td>TODO -- also use live collections capability so no benefit from caching</td>
+        <td>Ends with "Names"</td><td>firstNameNames</td><td>.getElementsByName('first-name')</td><td>Will use live collections capability so target elements dynamically change as needed.[TODO]</td>
     </tr>
     <tr>
-        <td>Ends with "Names"</td><td>firstNameName</td><td>.getElementsByName('first-name')[0]</td><td>TODO also use live collections capability so no benefit from caching</td>
+        <td>Ends with "Name"</td><td>firstNameName</td><td>.getElementsByName('first-name')[0]</td>
+        <td>
+            Untested.  Puts value of matching element into context. Will use live collections capability so target elements dynamically change as needed.[TODO]
+        </td>
     <tr>
         <td>Anything else</td><td>'a[href$=".mp3"]'</td><td>.querySelectorAll('a[href$=".mp3"]')</td><td>&nbsp;</td>
     </tr>
