@@ -36,10 +36,11 @@ export class TR{
         if(host !== undefined && lastTimestamp !== undefined){
             let foundMismatch = false;
             for(const key in lastTimestamp){
-                const val = lastTimestamp[key];
-                if((host as any)[key] !== val){
+                const lastTimestampVal = lastTimestamp[key];
+                const hostTimestamp = (host as any)[key];
+                if(hostTimestamp !== lastTimestampVal){
                     foundMismatch = true;
-                    lastTimestamp[key] = val;
+                    lastTimestamp[key] = hostTimestamp;
                 }
             }
             if(!foundMismatch) return;
