@@ -36,10 +36,10 @@ export class TR{
         const {host, options, match, lastTimestamp} = ctx;
         if(host !== undefined && lastTimestamp !== undefined){
             let foundMismatch = false;
-            if(!this.#lastTimestampLookup.has(fragment)){
-                this.#lastTimestampLookup.set(fragment, {});
+            if(!this.#lastTimestampLookup.has(host)){
+                this.#lastTimestampLookup.set(host, {});
             }
-            const timeStampMap = this.#lastTimestampLookup.get(fragment)!;
+            const timeStampMap = this.#lastTimestampLookup.get(host)!;
             for(const key in lastTimestamp){
                 const lastTimestampVal = timeStampMap[key];
                 const hostTimestamp = (host as any)[key];
