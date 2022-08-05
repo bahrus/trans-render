@@ -4,6 +4,7 @@ import { lispToCamel } from './lispToCamel.js';
 
 export class TR{
     #queryCache = new WeakMap<Element | DocumentFragment | Element[], {[key: string]: WeakRef<Element>[]}>();
+    #lastTimestampLookup = new WeakMap<Element | DocumentFragment | Element[], {[key: string]: string}>();
     static async transform(sourceOrTemplate: Element | DocumentFragment | Element[],
         ctx: RenderContext,
         target?: Element | DocumentFragment) {
@@ -35,12 +36,16 @@ export class TR{
         const {host, options, match, lastTimestamp} = ctx;
         if(host !== undefined && lastTimestamp !== undefined){
             let foundMismatch = false;
+            if(!this.#lastTimestampLookup.has(fragment)){
+                this.#lastTimestampLookup.set(fragment, {});
+            }
+            const timeStampMap = this.#lastTimestampLookup.get(fragment)!;
             for(const key in lastTimestamp){
-                const lastTimestampVal = lastTimestamp[key];
+                const lastTimestampVal = timeStampMap[key];
                 const hostTimestamp = (host as any)[key];
                 if(hostTimestamp !== lastTimestampVal){
                     foundMismatch = true;
-                    lastTimestamp[key] = hostTimestamp;
+                    timeStampMap[key] = hostTimestamp;
                 }
             }
             if(!foundMismatch) return;
