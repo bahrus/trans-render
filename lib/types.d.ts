@@ -305,8 +305,7 @@ export interface TemplMgmtProps{
     mainTemplate?: HTMLTemplateElement | string;
     styles?: CSSStyleSheet[] | string;
     clonedTemplate?: Node | undefined;
-    // initTransform?: any;
-    // updateTransform?: any;
+    hydratingTransform?: Matches;
     transform?: Matches | Matches[];
     noshadow?: boolean;
     renderOptions?: RenderOptions;
@@ -316,8 +315,6 @@ export interface TemplMgmtProps{
 }
 
 export interface TemplMgmtActions{
-    // doUpdateTransform(self: this): void;
-    // doInitTransform(self: this): void;
     doTransforms(self: this): void;
     cloneTemplate(self: this): void;
 }

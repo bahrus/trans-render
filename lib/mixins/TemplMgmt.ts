@@ -89,12 +89,23 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         this.#repeatVisit = true;
     }
 
-    async doTemplMount({transform, waitToInit, clonedTemplate, noshadow, transformPlugins, DTRCtor}: TemplMgmtBase){
+    async doTemplMount({hydratingTransform, transform, waitToInit, clonedTemplate, noshadow, transformPlugins, DTRCtor}: TemplMgmtBase){
         if(waitToInit) return;
         
         const fragment = clonedTemplate === undefined ? 
             noshadow ? this : this.shadowRoot!
             : clonedTemplate as DocumentFragment;
+        if(hydratingTransform !== undefined){
+            const {DTR} = await import('../DTR.js');
+            const ctx: RenderContext = {
+                host: this,
+                match: hydratingTransform,
+                plugins: transformPlugins,
+            }
+            const ctor = DTRCtor === undefined ? DTR : DTRCtor;
+            const dtr = new ctor(ctx);
+            await dtr.transform(fragment);
+        }
         if(transform !== undefined){
             const transforms = Array.isArray(transform) ? transform : [transform];
             const {DTR} = await import('../DTR.js');
