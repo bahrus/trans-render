@@ -8,13 +8,13 @@ export class TR{
     #tsChecker: TSChecker | undefined;
     static async transform(sourceOrTemplate: Element | DocumentFragment | Element[],
         ctx: RenderContext,
-        target?: Element | DocumentFragment) {
+        target?: Element | DocumentFragment, fragmentManager?: Element) {
         const tr = this.new(ctx);
         const isATemplate = tr.isTemplate(sourceOrTemplate);
         const source = isATemplate
         ? (sourceOrTemplate as HTMLTemplateElement).content.cloneNode(true) as DocumentFragment
         : sourceOrTemplate;
-        await tr.transform(source);
+        await tr.transform(source, fragmentManager);
         let verb = "appendChild";
         const {options} = ctx;
         if (options !== undefined) {
