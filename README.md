@@ -178,7 +178,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>Ends with "Classes"</td><td>pinkFlamingoClasses</td><td>.querySelectorAll('pink-flamingo')</td><td>.getElementsByClassName gives unexpected results</td>
     </tr>
     <tr>
-        <td>Ends with "Class"</td><td>pinkFlamingoClass</td><td>.querySelector('pink-flamingo')[0]</td><td>Untested</td>
+        <td>Ends with "Class"</td><td>pinkFlamingoClass</td><td>.querySelector('pink-flamingo')[0]</td><td></td>
     </tr>
     <tr>
         <td>Ends with "Id"</td><td>driversLicenseIdId</td><td>.getElementById('drivers-license-id')</td><td>Untested</td>
