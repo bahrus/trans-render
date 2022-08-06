@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <div style='height: 200px;'>hello</div> -->
+    <form action="dev.html" method="POST">
+        <xtal-editor style='height:1000px' id=editor be-persistent='{
+            "what":{
+                "textView": true,
+                "treeView": true
+            },
+            "when":{
+                "text-view-changed": true,
+                "tree-view-changed": true
+            },
+            "where": {
+                "idb": true
+            }
+        }'>
+            <textarea name=jsonField slot="init-val">
+                {
+                    "string":"foo",
+                    "number":5,
+                    "boolean":false,
+                    "array":[
+                        1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
+                        1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
+                        1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
+                        1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
+                        1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40
+                    ],
+                    "object":{
+                        "property":"value",
+                        "subobj":{
+                            "arr":["foo","ha"],
+                            "numero":1,
+                            "booleano":true
+                        }
+                    }
+                }
+            </textarea>
+        </xtal-editor>
+        <button type="submit">submit</button>
+    </form>
+
+    <div id=target></div>
+
+    <button onclick=moveTarget()>Move target</button>
+
+    <script>
+        function moveTarget(){
+            target.appendChild(editor);
+        }
+    </script>
+
+    <script async src="https://ga.jspm.io/npm:es-module-shims@1.5.4/dist/es-module-shims.js"></script>
+    <script type=importmap>
+        {
+            "imports": {
+                "xtal-element/": "../node_modules/xtal-element/",
+                "trans-render/": "../",
+                "on-to-me/": "../node_modules/on-to-me/",
+                "tran-sister/": "../node_modules/tran-sister/",
+                "xtal-side-nav/": "../node_modules/xtal-side-nav/",
+                "d-fine/": "../node_modules/d-fine/",
+                "xodus/": "../node_modules/xodus/",
+                "@power-elements/": "../node_modules/@power-elements/",
+                "be-active/": "../node_modules/be-active/",
+                "be-adopted/": "../node_modules/be-adopted/",
+                "be-channeling/": "../node_modules/be-channeling/",
+                "be-decorated/": "../node_modules/be-decorated/",
+                "be-definitive/": "../node_modules/be-definitive/",
+                "be-deslotted/": "../node_modules/be-deslotted/",
+                "be-hive/": "../node_modules/be-hive/",
+                "be-intersectional/": "../node_modules/be-intersectional/",
+                "be-lazy/": "../node_modules/be-lazy/",
+                "be-loaded/": "../node_modules/be-loaded/",
+                "be-noticed/": "../node_modules/be-noticed/",
+                "be-observant/": "../node_modules/be-observant/",
+                "be-persistent/": "../node_modules/be-persistent/",
+                "be-preemptive/": "../node_modules/be-preemptive/",
+                "be-repeated/": "../node_modules/be-repeated/",
+                "be-switched/": "../node_modules/be-switched/",
+                "be-transformative/": "../node_modules/be-transformative/",
+                "xtal-shell/": "../node_modules/xtal-shell/",
+                "idb-keyval/": "../node_modules/idb-keyval/",
+                "safari-14-idb-fix": "../node_modules/safari-14-idb-fix/dist/index.js",
+                "xtal-editor/": "../node_modules/xtal-editor/",
+                "xtal-tree/": "../node_modules/xtal-tree/",
+                "xtal-vlist/": "../node_modules/xtal-vlist/"
+            }
+        }
+    </script>
+    <script type=module>
+        import 'xtal-editor/xtal-editor.js';
+        import 'be-channeling/be-channeling.js';
+        import 'be-loaded/be-loaded.js';
+        import 'be-noticed/be-noticed.js';
+        import 'be-observant/be-observant.js';
+        import 'be-switched/be-switched.js';
+        import 'be-intersectional/be-intersectional.js';
+        import 'xtal-side-nav/xtal-side-nav.js';
+        import 'be-deslotted/be-deslotted.js';
+        import 'xtal-tree/xtal-tree.js';
+        import 'xtal-vlist/xtal-vlist.js';
+        import 'be-transformative/be-transformative.js';
+        
+        //import 'be-persistent/be-persistent.js';
+    </script>
+</body>
+</html>

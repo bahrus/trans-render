@@ -92,16 +92,25 @@ export class TR{
                             matches.push(el);
                             if(first) break;
                         }
-                        const elMatches2 = (el as any)[verbx!](query);
-                        switch(verbx){
-                            case 'querySelector':
-                                if(elMatches2 !== null) matches.push(elMatches2 as Element);
-                                break;
-                            default:
-                                const arr = Array.from(elMatches2) as Element[];
-                                arr.forEach((el: Element) => matches.push(el));
+                        if(isLive){
+                            const elMatches2 = (el as any)[verbx!](attrib);
+                            for(const el of elMatches2){
+                                matches.push(el);
+                            }
+                            //matches = matches.concat(elMatches2);
+                        }else{
+                            const elMatches2 = (el as any)[verbx!](query);
+                            switch(verbx){
+                                case 'querySelector':
+                                    if(elMatches2 !== null) matches.push(elMatches2 as Element);
+                                    break;
+                                default:
+                                    const arr = Array.from(elMatches2) as Element[];
+                                    //matches = matches.concat(arr);
+                                    arr.forEach((el: Element) => matches.push(el));
+                            }
                         }
-                        //el.querySelectorAll(query).forEach(el => matches.push(el));
+                        
                     }
                 }else{
                     
@@ -124,9 +133,9 @@ export class TR{
                                     default:
                                         matches = Array.from((fragment as DocumentFragment).querySelectorAll(query))
                                 }
-                                if(attrib === 'value'){
-                                    console.log({attrib, fragment, isLive, matches});
-                                }
+                                // if(attrib === 'value'){
+                                //     console.log({attrib, fragment, isLive, matches});
+                                // }
                                 
                             }else{
                                 switch(verbx){
