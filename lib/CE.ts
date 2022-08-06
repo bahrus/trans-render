@@ -42,7 +42,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                 get(){
                     return this[privateKey];
                 },
-                set(nv){
+                async set(nv){
                     const ov = this[privateKey];
                     if(prop.dry && this[privateKey] === nv) return;
                     const propChangeMethod = config.propChangeMethod;
@@ -81,7 +81,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                                 filteredActions[methodName] = action;
                             }
                         }
-                        doActions(self, filteredActions, this);
+                        await doActions(self, filteredActions, this);
                     }
                     doPA(self, this, pci, '+a'); //+a = post actions
                 },
@@ -218,19 +218,19 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                     }
                 }
             }
-            connectedCallback(myArgs = undefined){ //TODO:  problematic
+            async connectedCallback(myArgs = undefined){ //TODO:  problematic
                 Object.assign(this.style, style);
                 const args = myArgs || (<any>this.constructor).ceDef;
                 const defaults: any = {...args.config.propDefaults, ...args.complexPropDefaults};
                 propUp(this as any as HTMLElement, Object.keys(propInfos), defaults);
                 if(super.connectedCallback) super.connectedCallback(super.constructor.ceDef);
-                this.detachQR();
+                await this.detachQR();
             }
     
             attachQR(){
                 this.QR = QR;
             }
-            detachQR(){
+            async detachQR(){
                 if(this.hasAttribute('defer-hydration')) return;
                 delete this.QR;
                 const propChangeQueue = this.propChangeQueue as Set<string> | undefined;
@@ -256,7 +256,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                         actionsToDo[doAct] = action;
                     }
                 }
-                doActions(self, actionsToDo, this);
+                await doActions(self, actionsToDo, this);
                 delete this.propChangeQueue;
             }
             setValsQuietly(vals: this){
