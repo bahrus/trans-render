@@ -11,7 +11,7 @@ export class DTR extends TR{
         super(ctx);
     }
     #initialized = false;
-    async transform(fragment: Element | DocumentFragment){
+    async transform(fragment: Element | DocumentFragment, fragmentManager?: Element){
         if(!this.#initialized){
             const {ctx} = this;
             const {match, plugins} = ctx;
@@ -23,7 +23,7 @@ export class DTR extends TR{
             }
             this.#initialized = true;
         }
-        return await super.transform(fragment);
+        return await super.transform(fragment, fragmentManager);
     }
     async subscribe(){
         const {host} = this.ctx;
