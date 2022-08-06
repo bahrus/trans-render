@@ -1,10 +1,11 @@
 import {QueryInfo, RenderContext} from './types';
 import { getQuery} from './specialKeys.js';
 import { lispToCamel } from './lispToCamel.js';
+import { TSChecker } from './tsChecker';
 
 export class TR{
     #queryCache = new WeakMap<Element | DocumentFragment | Element[], {[key: string]: WeakRef<Element>[]}>();
-    #lastTimestampLookup = new WeakMap<Element | DocumentFragment | Element[], {[key: string]: string}>();
+    #tsChecker: TSChecker | undefined;
     static async transform(sourceOrTemplate: Element | DocumentFragment | Element[],
         ctx: RenderContext,
         target?: Element | DocumentFragment) {
@@ -33,22 +34,13 @@ export class TR{
     }
     async transform(fragment: Element | DocumentFragment | Element[]) {
         const {ctx} = this;
-        const {host, options, match, lastTimestamp} = ctx;
-        if(host !== undefined && lastTimestamp !== undefined){
-            let foundMismatch = false;
-            if(!this.#lastTimestampLookup.has(host)){
-                this.#lastTimestampLookup.set(host, {});
+        const {host, options, match, timestampKey} = ctx;
+        if(host !== undefined && timestampKey !== undefined && !Array.isArray(fragment)){
+            if(this.#tsChecker === undefined){
+                const {TSChecker} = await import('./TSChecker.js');
+                this.#tsChecker = new TSChecker(timestampKey);
             }
-            const timeStampMap = this.#lastTimestampLookup.get(host)!;
-            for(const key in lastTimestamp){
-                const lastTimestampVal = timeStampMap[key];
-                const hostTimestamp = (host as any)[key];
-                if(hostTimestamp !== lastTimestampVal){
-                    foundMismatch = true;
-                    timeStampMap[key] = hostTimestamp;
-                }
-            }
-            if(!foundMismatch) return;
+            if(this.#tsChecker.notChanged(host, fragment)) return;
         }
         const qc = this.#queryCache;
         const isArray = Array.isArray(fragment);

@@ -21,7 +21,7 @@ export interface RenderContext<T = Element, TItem = any> {
     abort?: boolean | undefined;
     templateIds?: string[];
     queryInfo?: QueryInfo;
-    lastTimestamp?: {[key: string]: string | null};
+    timestampKey?: string;
     //stack?: RenderContext[];
 }
 
