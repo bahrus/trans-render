@@ -94,10 +94,15 @@ export class TR{
                         }
                         if(isLive){
                             const elMatches2 = (el as any)[verbx!](attrib);
-                            for(const el of elMatches2){
-                                matches.push(el);
+                            if(first){
+                                const firstEl = elMatches2[0];
+                                if(firstEl !== undefined) matches.push(firstEl);
+                            }else{
+                                for(const el of elMatches2){
+                                    matches.push(el);
+                                }
+                                //matches = matches.concat(elMatches2);
                             }
-                            //matches = matches.concat(elMatches2);
                         }else{
                             const elMatches2 = (el as any)[verbx!](query);
                             switch(verbx){
@@ -121,7 +126,12 @@ export class TR{
                             //we're live!
                             console.log("we're live!");
                             matchMap[key] = (fragment as any)[verbx!](attrib);
-                            matches = matchMap[key];
+                            if(first){
+                                matches = [matchMap[key][0]];
+                            }else{
+                                matches = matchMap[key];
+                            }
+                            
                         }else{
                             if(isLive){
                                 //don't cache results until added to live DOM tree

@@ -175,10 +175,10 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>Ends with "Attrib"</td><td>ariaLabelAttrib</td><td>.querySelector('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
     </tr>
     <tr>
-        <td>Ends with "Classes"</td><td>pinkFlamingoClasses</td><td>.querySelectorAll('pink-flamingo')</td><td>.getElementsByClassName gives unexpected results</td>
+        <td>Ends with "Classes"</td><td>pinkFlamingoClasses</td><td>.getElementsByClassName('pink-flamingo')</td><td></td>
     </tr>
     <tr>
-        <td>Ends with "Class"</td><td>pinkFlamingoClass</td><td>.querySelector('pink-flamingo')[0]</td><td></td>
+        <td>Ends with "Class"</td><td>pinkFlamingoClass</td><td>.getElementsByClassName('pink-flamingo')[0]</td><td>Untested</td>
     </tr>
     <tr>
         <td>Ends with "Id"</td><td>driversLicenseIdId</td><td>.querySelector('#drivers-license-id')</td><td>Untested</td>
@@ -186,21 +186,21 @@ The following table lists how the LHS is translated into CSS multi-match queries
     <tr>
         <td>Contains Eq, ends with Attribs</td><td>ariaLabelEqHelloThereAttribs</td><td>.querySelectorAll('[arial-label="HelloThere"])</td><td>If space needed ("Hello There") then LHS needs to be wrapped in quotes.   [TODO], waiting for a good use case to see if this is helpful</td>
     <tr>
-        <td>Ends with "Elements"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')</td><td>&nbsp;Will use live collections capability so target elements dynamically change as needed.[TODO]</td>
+        <td>Ends with "Elements"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')</td><td>&nbsp;Uses live collections capability so target elements dynamically change as needed.</td>
     </tr>
     <tr>
-        <td>Ends with "Element"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')[0]</td><td>Untested. Will use live collections capability so target elements dynamically change as needed.[TODO]</td>
+        <td>Ends with "Element"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')[0]</td><td>Untested.</td>
     </tr>
     <tr>
         <td>Ends with "Props"</td><td>textContentProps</td><td>.querySelectorAll('[-text-content]')</td><td>Useful for binding properties in bulk</td>
     </tr>
     <tr>
-        <td>Ends with "Names"</td><td>firstNameNames</td><td>.getElementsByName('first-name')</td><td>Will use live collections capability so target elements dynamically change as needed.[TODO]</td>
+        <td>Ends with "Names"</td><td>firstNameNames</td><td>.getElementsByName('first-name')</td><td>Untested.  Uses live collections capability so target elements dynamically change as needed.</td>
     </tr>
     <tr>
         <td>Ends with "Name"</td><td>firstNameName</td><td>.getElementsByName('first-name')[0]</td>
         <td>
-            Untested.  Puts value of matching element into context. Will use live collections capability so target elements dynamically change as needed.[TODO]
+            Untested. 
         </td>
     <tr>
         <td>Anything else</td><td>'a[href$=".mp3"]'</td><td>.querySelectorAll('a[href$=".mp3"]')</td><td>&nbsp;</td>
