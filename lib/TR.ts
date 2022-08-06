@@ -68,10 +68,10 @@ export class TR{
                 prevKey = key;
                 queryInfo = getQuery(key);
                 ctx.queryInfo = queryInfo;
-                const {query, first, matchFn, attrib} = queryInfo;
+                const {query, first, matchFn, attrib, isLive} = queryInfo;
                 const verbx = queryInfo.verb;
                 let fromCache = matchMap[key];
-                if(fromCache !== undefined){
+                if(!isLive && fromCache !== undefined){
                     fromCache = fromCache.filter(ref => {
                         const el = ref.deref();
                         if(el === undefined || !el.matches(query)) return false;
@@ -104,7 +104,48 @@ export class TR{
                         //el.querySelectorAll(query).forEach(el => matches.push(el));
                     }
                 }else{
-                    matches = fromCache || (matchMap[key] = Array.from((fragment as DocumentFragment).querySelectorAll(query)).map(el => new WeakRef(el))) as (Element | WeakRef<Element>)[];
+                    
+                    if(fromCache){
+                        matches = fromCache;
+                    }else{
+                        if(isLive && fragment instanceof Element){
+                            //we're live!
+                            console.log("we're live!");
+                            matchMap[key] = (fragment as any)[verbx!](attrib);
+                            matches = matchMap[key];
+                        }else{
+                            if(isLive){
+                                //don't cache results until added to live DOM tree
+                                switch(verbx){
+                                    case 'querySelector':
+                                        const el = (fragment as DocumentFragment).querySelector(query);
+                                        matches = el === null ? [] : [el];
+                                        break;
+                                    default:
+                                        matches = Array.from((fragment as DocumentFragment).querySelectorAll(query))
+                                }
+                                if(attrib === 'value'){
+                                    console.log({attrib, fragment, isLive, matches});
+                                }
+                                
+                            }else{
+                                switch(verbx){
+                                    case 'querySelector':
+                                        const el = (fragment as DocumentFragment).querySelector(query);
+                                        if(el !== null){
+                                            matchMap[key] = [new WeakRef(el)];
+                                        }
+                                        break;
+                                    default:
+                                        matchMap[key] = Array.from((fragment as DocumentFragment).querySelectorAll(query)).map(el => new WeakRef(el));
+                                }
+                                matches = matchMap[key];
+                            }
+
+                            
+                        }
+                       
+                    }
                 }
             }
 

@@ -23,6 +23,7 @@ export function getQuery(key: string): QueryInfo{
             const attrib = lpKey.substr(0, lpKey.length - type.length - 1);
             let query: string | undefined;
             let verb: keyof Document & string = 'querySelectorAll';
+            let isLive = false;
             let matchFn: undefined |  ((el: Element, attrib: string) => boolean) ;
             const single = 'querySelector';
             let first = false;
@@ -34,10 +35,9 @@ export function getQuery(key: string): QueryInfo{
                     break;
                 case 'classes':
                 case 'class':
-                    //query = attrib;
-                    //console.log(query);
                     query = `.${attrib}`;
-                    //verb = 'getElementsByClassName';
+                    verb = 'getElementsByClassName';
+                    isLive = true;
                     matchFn = matchClass;
                     break;
                 case 'attribs':
@@ -49,12 +49,14 @@ export function getQuery(key: string): QueryInfo{
                 case 'element':
                     query = attrib;
                     verb = 'getElementsByTagName';
+                    isLive = true;
                     matchFn = matchEl;
                     break;
                 case 'names':
                 case 'name':
-                    query = attrib;
+                    query = `[name="${attrib}"]`;
                     verb = 'getElementsByName';
+                    isLive = true;
                     matchFn = matchName;
                     break;
 
@@ -65,8 +67,8 @@ export function getQuery(key: string): QueryInfo{
                     break;
                 }
                 case 'id': {
-                    query = attrib;
-                    verb = 'getElementById';
+                    query = '#' + attrib;
+                    verb = single;
                     matchFn = matchId;
                     break;
                 }
@@ -88,7 +90,7 @@ export function getQuery(key: string): QueryInfo{
                 }
             }
             if(query !== undefined){
-                const q = {query, type, attrib, lhsProp, verb, first, matchFn} as QueryInfo;
+                const q = {query, type, attrib, lhsProp, verb, first, matchFn, isLive} as QueryInfo;
                 queryLookup.set(key, q);
                 return q;
             }           

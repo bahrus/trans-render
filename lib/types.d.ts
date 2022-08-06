@@ -43,6 +43,7 @@ export interface QueryInfo{
     first?: boolean;
     verb?: string;
     matchFn?: (el: Element, attrib: string) => boolean;
+    isLive?: boolean;
 }
 
 export interface TransformPluginStates<T extends Element = Element, TItem = any, TState = any>  extends TransformPluginSettings<T, TItem> {
