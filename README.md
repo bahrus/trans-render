@@ -189,7 +189,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>Ends with "Elements"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')</td><td>&nbsp;Uses live collections capability so target elements dynamically change as needed.</td>
     </tr>
     <tr>
-        <td>Ends with "Element"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')[0]</td><td>Untested.</td>
+        <td>Ends with "Element"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')[0]</td><td></td>
     </tr>
     <tr>
         <td>Ends with "Props"</td><td>textContentProps</td><td>.querySelectorAll('[-text-content]')</td><td>Useful for binding properties in bulk</td>
