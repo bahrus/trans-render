@@ -12,7 +12,10 @@ const matchEl = (e: Element, attrib: string) => e.localName === attrib;
 const matchId = (e: Element, attrib: string) => e.id === attrib;
 const matchName = (e: Element, attrib: string) => (e as HTMLFormElement).name === attrib;
 
+const queryLookup = new Map<string, QueryInfo>();
+
 export function getQuery(key: string): QueryInfo{
+    if(queryLookup.has(key)) return queryLookup.get(key)!;
     const lpKey = camelToLisp(key);
     let idx = 0;
     for(const type of attribs){
@@ -85,13 +88,17 @@ export function getQuery(key: string): QueryInfo{
                 }
             }
             if(query !== undefined){
-                return {query, type, attrib, lhsProp, verb, first, matchFn};
+                const q = {query, type, attrib, lhsProp, verb, first, matchFn} as QueryInfo;
+                queryLookup.set(key, q);
+                return q;
             }           
         }
         idx++;
     }
-    return {
+    const q = {
         query: key,
         verb: 'querySelectorAll',
-    };
+    } as QueryInfo;
+    queryLookup.set(key, q);
+    return q;
 }
