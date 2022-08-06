@@ -32,15 +32,15 @@ export class TR{
     constructor(public ctx: RenderContext){
         if(ctx.ctx === undefined) ctx.ctx = ctx;
     }
-    async transform(fragment: Element | DocumentFragment | Element[]) {
+    async transform(fragment: Element | DocumentFragment | Element[], fragmentManager?: Element) {
         const {ctx} = this;
         const {host, options, match, timestampKey} = ctx;
-        if(host !== undefined && timestampKey !== undefined){
+        if(host !== undefined && timestampKey){
             if(this.#tsChecker === undefined){
                 const {TSChecker} = await import('./TSChecker.js');
                 this.#tsChecker = new TSChecker(timestampKey);
             }
-            const elementKey = Array.isArray(fragment) ? fragment[0] : fragment
+            const elementKey = fragmentManager ? fragmentManager : fragment as Element;
             if(this.#tsChecker.notChanged(host, elementKey)) return;
         }
         const qc = this.#queryCache;
