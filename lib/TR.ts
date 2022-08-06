@@ -35,12 +35,13 @@ export class TR{
     async transform(fragment: Element | DocumentFragment | Element[]) {
         const {ctx} = this;
         const {host, options, match, timestampKey} = ctx;
-        if(host !== undefined && timestampKey !== undefined && !Array.isArray(fragment)){
+        if(host !== undefined && timestampKey !== undefined){
             if(this.#tsChecker === undefined){
                 const {TSChecker} = await import('./TSChecker.js');
                 this.#tsChecker = new TSChecker(timestampKey);
             }
-            if(this.#tsChecker.notChanged(host, fragment)) return;
+            const elementKey = Array.isArray(fragment) ? fragment[0] : fragment
+            if(this.#tsChecker.notChanged(host, elementKey)) return;
         }
         const qc = this.#queryCache;
         const isArray = Array.isArray(fragment);
