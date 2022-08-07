@@ -131,7 +131,11 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                 }
             }
         }
+        this.api(args, props);
         return props;
+    }
+    api(args: DefineArgs, props: {[key: string]: PropInfo}){
+        //overridable placeholder for adding additional props
     }
 
     classDef: {new(): MCProps & MCActions & TRElementProps & HTMLElement} | undefined;
