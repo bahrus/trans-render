@@ -96,7 +96,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         return true;
     }
 
-    #createPropInfos(args: DefineArgs){
+    async #createPropInfos(args: DefineArgs){
         const {defaultProp, setType} = this;
         const config  = args.config as WCConfig;
         const props: {[key: string]: PropInfo} = {};
@@ -131,10 +131,10 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                 }
             }
         }
-        this.api(args, props);
+        await this.api(args, props);
         return props;
     }
-    api(args: DefineArgs, props: {[key: string]: PropInfo}){
+    async api(args: DefineArgs, props: {[key: string]: PropInfo}){
         //overridable placeholder for adding additional props
     }
 
@@ -146,7 +146,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         const self = this;
         const {config} = args;
         const {tagName, style, actions} = config as WCConfig;
-        const propInfos  = this.#createPropInfos(args);
+        const propInfos  = await this.#createPropInfos(args);
         let ext = (args.superclass || HTMLElement) as {new(): any};
         const proto = ext.prototype;
         const mixins = args.mixins;
