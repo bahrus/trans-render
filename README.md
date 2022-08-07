@@ -303,7 +303,7 @@ Useful plugins that are available:
 2.  [be-plugin](https://github.com/bahrus/be-repeated/blob/baseline/trPlugin.ts) for [be-repeated](https://github.com/bahrus/be-repeated)
 
 
-## Declarative trans-render syntax via built-in PostMatch Processors with lib/DTR.js 
+## Declarative trans-render syntax via JSON-serializable RHS expressions with lib/DTR.js 
 
 The examples so far have relied heavily on arrow functions.  (In the case of plugins, we are, behind the scenes, amending the matches to include additional, hidden arrow functions on the RHS.)
 
@@ -320,7 +320,7 @@ const matches = { //TODO: check that this works
 }
 ```
 
-These arrow functions can return a value.  DTR.js has some built-in standard  "post match" processors that allow us to "act" based on the data contained on the RHS, including data that might be returned from a arrow function above.  
+These arrow functions can return a value.  DTR.js has some built-in standard  "post match" processors that allow us to "act" based on the data either returned by a function like above, or much more likely, already in JSON-serializable format (i.e. no function, making the transform totally JSON serializable). 
 
 The capabilities of these post-match processors are quite limited in what they can do, due to the small number of expression types JavaScript (and especially JSON) supports.
 
