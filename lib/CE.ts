@@ -49,17 +49,17 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                     const pcm = (propChangeMethod !== undefined ? this[propChangeMethod] : undefined)  as undefined | PropChangeMethod;
                     //const methodIsDefined = pcm !== undefined;
                     const pci: PropChangeInfo = {key, ov, nv, prop, pcm};
-                    if(!doPA(self, this, pci, 'v')) return;
+                    if(!(await doPA(self, this, pci, 'v'))) return;
                     this[privateKey] = nv;
                     if(this.isInQuietMode){
-                        doPA(self, this, pci, '+qm');
+                        await doPA(self, this, pci, '+qm');
                     }
                     if(this.QR){
                         this.QR(key, this);
-                        doPA(self, this, pci, '+qr');
+                        await doPA(self, this, pci, '+qr');
                         return;
                     }else{
-                        if(!doPA(self, this, pci, '-a')) return; //-a = pre actions
+                        if(!(await doPA(self, this, pci, '-a'))) return; //-a = pre actions
                     }
                     
                     const actions = this.mergedActions;
@@ -83,7 +83,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                         }
                         await doActions(self, filteredActions, this);
                     }
-                    doPA(self, this, pci, '+a'); //+a = post actions
+                    await doPA(self, this, pci, '+a'); //+a = post actions
                 },
                 enumerable: true,
                 configurable: true,
@@ -91,7 +91,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         }
     }
 
-    doPA(self: this, src: any, pci: PropChangeInfo, m: PropChangeMoment): boolean{ //[TODO rename]
+    async doPA(self: this, src: any, pci: PropChangeInfo, m: PropChangeMoment): Promise<boolean>{ 
         if(pci.pcm !== undefined) return pci.pcm(src, pci, m) !== false;
         return true;
     }
@@ -173,7 +173,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             get mergedActions(){
                 if(this.#mergedActions === undefined){
                     this.#mergedActions = super.mergedActions || {};
-                    Object.assign(this.#mergedActions, actions);
+                    Object.assign(this.#mergedActions!, actions);
                 }
                 return this.#mergedActions!;
             }
