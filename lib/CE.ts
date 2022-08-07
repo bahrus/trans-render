@@ -315,6 +315,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         return returnArr;
     }
 
+    //better name:  getPropsFromActions
     getProps(self: this, action: Action): Set<string>{
         return typeof(action) === 'string' ? new Set<string>([action]) : new Set<string>([...(action.ifAllOf || []) as string[], ...(action.ifKeyIn || []) as string[]]);
     }

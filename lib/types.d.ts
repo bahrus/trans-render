@@ -276,7 +276,6 @@ export interface PropInfo{
     type?: PropInfoTypes;
     dry?: boolean;
     parse?: boolean;
-    //isRef?: boolean;
 }
 
 
