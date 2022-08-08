@@ -16,7 +16,7 @@ Other uses cases for TR/DTR:
 
 1.  Hydrating / adjusting server-rendered content.
 2.  Hydrating / adjusting (third party) HTML retrieved via fetch.
-3.  Hydrating / adjusting (third part) HTML output from an XSLT transform.
+3.  Hydrating / adjusting (third party) HTML output from an XSLT transform.
 
 XSLT can take pure XML with no formatting instructions as its input.  Generally speaking, the XML that XSLT acts on isn't a bunch of semantically  meaningless div tags, but rather a nice semantic document, whose intrinsic structure is enough to go on, in order to formulate a "transform" that doesn't feel like a hack.
 
