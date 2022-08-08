@@ -49,17 +49,17 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                     const pcm = (propChangeMethod !== undefined ? this[propChangeMethod] : undefined)  as undefined | PropChangeMethod;
                     //const methodIsDefined = pcm !== undefined;
                     const pci: PropChangeInfo = {key, ov, nv, prop, pcm};
-                    if(!(await doPA(self, this, pci, 'v'))) return;
+                    if(!(doPA(self, this, pci, 'v'))) return;
                     this[privateKey] = nv;
                     if(this.isInQuietMode){
-                        await doPA(self, this, pci, '+qm');
+                        doPA(self, this, pci, '+qm');
                     }
                     if(this.QR){
                         this.QR(key, this);
-                        await doPA(self, this, pci, '+qr');
+                        doPA(self, this, pci, '+qr');
                         return;
                     }else{
-                        if(!(await doPA(self, this, pci, '-a'))) return; //-a = pre actions
+                        if(!(doPA(self, this, pci, '-a'))) return; //-a = pre actions
                     }
                     
                     const actions = this.mergedActions;
@@ -83,7 +83,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                         }
                         await doActions(self, filteredActions, this);
                     }
-                    await doPA(self, this, pci, '+a'); //+a = post actions
+                    doPA(self, this, pci, '+a'); //+a = post actions
                 },
                 enumerable: true,
                 configurable: true,
@@ -91,7 +91,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         }
     }
 
-    async doPA(self: this, src: any, pci: PropChangeInfo, m: PropChangeMoment): Promise<boolean>{ 
+    doPA(self: this, src: any, pci: PropChangeInfo, m: PropChangeMoment): Promise<boolean>{ 
         if(pci.pcm !== undefined) return pci.pcm(src, pci, m) !== false;
         return true;
     }
