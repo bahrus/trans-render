@@ -131,9 +131,23 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         this.removeAttribute('defer-rendering');
         this.clonedTemplate = undefined;
     }
+    initUnsafeCnt({}: this){
+        this.unsafeTCount = 0;
+    }
+    async doComplexTr({unsafeTransform, shadowRoot}: this){
+        const ctx: RenderContext = {
+            host: this,
+            match: unsafeTransform,
+        }
+        const fragment = shadowRoot || this;
+        const {TR} = await import('../TR.js');
+        TR.transform(fragment, ctx);
+    }
 }
 
 export const beTransformed = {
+    initUnsafeTCnt: 'unsafeTransform',
+    doComplexTR: 'unsafeTCount',
     cloneTemplate: {
         ifAllOf: ['mainTemplate'],
         ifKeyIn: ['noshadow', 'waitToInit']

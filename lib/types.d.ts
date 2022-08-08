@@ -302,10 +302,12 @@ export type Matches = {[key: string]: RHS};
 
 export interface TemplMgmtProps{
     mainTemplate?: HTMLTemplateElement | string;
+    unsafeTCount: number;
     styles?: CSSStyleSheet[] | string;
     clonedTemplate?: Node | undefined;
     hydratingTransform?: Matches;
     transform?: Matches | Matches[];
+    unsafeTransform?: Matches;
     noshadow?: boolean;
     renderOptions?: RenderOptions;
     waitToInit?: boolean;
