@@ -12,6 +12,12 @@ A subset of TR, also described below, is "declarative trans-render" syntax [DTR]
 
 DTR is designed to provide an alternative to the proposed [Template Instantiation proposal](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), the idea being that DTR could continue to supplement what that proposal includes if/when template instantiation support lands in browsers.
 
+Other uses cases for TR/DTR:
+
+1.  Hydrating / adjusting server-rendered content.
+2.  Hydrating / adjusting (third party) HTML retrieved via fetch.
+3.  Hydrating / adjusting (third part) HTML output from an XSLT transform.
+
 XSLT can take pure XML with no formatting instructions as its input.  Generally speaking, the XML that XSLT acts on isn't a bunch of semantically  meaningless div tags, but rather a nice semantic document, whose intrinsic structure is enough to go on, in order to formulate a "transform" that doesn't feel like a hack.
 
 There is a growing (🎉) list of semantically meaningful native-born DOM Elements which developers can and should utilize, including dialog, datalist, details/summary, popup/tabs (🤞) etc. which can certainly help reduce divitis.
