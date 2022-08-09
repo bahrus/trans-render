@@ -213,6 +213,12 @@ The following table lists how the LHS is translated into CSS multi-match queries
     </tr>
 </table>
 
+<details>
+    <summary>Second guessing [TODO]</summary>
+
+    To my disappointment, fragments don't currently  support "live" collections like what we get from  getElementsByClassName, where those fragments haven't yet been added to the DOM live tree yet.  So the place where live collections can be used is quite limited, and using it made the logic considerably more complex.  Moreover, I failed to read to the end of [this article](https://dev.to/wlytle/performance-tradeoffs-of-queryselector-and-queryselectorall-1074).  I think that's the clincher.  Only use querySelector, querySelectorAll.  This will also guarantee better "isomorphism" between template instantiation and live DOM tree manipulation (subject to change perhaps as the browser evolves).
+</details>
+
 
 
 ## Extending TR, DTR "vertically"
