@@ -42,8 +42,7 @@ export interface QueryInfo{
     lhsProp?: string;
     first?: boolean;
     verb?: string;
-    matchFn?: (el: Element, attrib: string) => boolean;
-    isLive?: boolean;
+    //matchFn?: (el: Element, attrib: string) => boolean;
 }
 
 export interface TransformPluginStates<T extends Element = Element, TItem = any, TState = any>  extends TransformPluginSettings<T, TItem> {
@@ -60,11 +59,6 @@ export interface RenderOptions{
     updatedCallback?: (ctx: RenderContext, target: Element | DocumentFragment, options?: RenderOptions) => RenderContext | void,
 }
 
-// export interface postMatchProcessor {
-//     rhsType: Function;
-//     rhsHeadType?: Function;
-//     ctor: {new(): PMDo} | PMDo;
-// }
 
 export interface PMDo{
     do(ctx: RenderContext): void;
