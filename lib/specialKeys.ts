@@ -9,8 +9,8 @@ const queryLookup = new Map<string, QueryInfo>();
 export function getQuery(key: string): QueryInfo{
     if(queryLookup.has(key)) return queryLookup.get(key)!;
     let idx = 0;
-    const matchIdx = Array.from(key).findIndex(c => picaden.has(c));
-    if(matchIdx === -1){
+    const backwardsIdx = Array.from(key).reverse().findIndex(c => picaden.has(c));
+    if(backwardsIdx === -1){
         const ret = {
             query: key,
             verb: 'querySelectorAll',
@@ -18,6 +18,7 @@ export function getQuery(key: string): QueryInfo{
         queryLookup.set(key, ret);
         return ret;
     }
+    const matchIdx = key.length - 1 - backwardsIdx;
     const match = key[matchIdx]; 
     const attrib = key.substring(0, matchIdx);
     let query: string | undefined;
