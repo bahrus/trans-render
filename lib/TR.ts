@@ -135,18 +135,16 @@ export class TR{
             for(const el of matches){
                 const matchingElement = el instanceof Element ? el : el.deref()!;
                 ctx.target = matchingElement;
-                switch(queryInfo!.type){
-                    case 'attribs':
-                    case 'attrib':
+                switch(queryInfo!.match){
+                    case 'A':
                         ctx.attrib = queryInfo!.attrib;
                         ctx.val = matchingElement.getAttribute(queryInfo!.attrib!);
                         break;
-                    case 'names':
-                    case 'name':
+                    case 'N':
                         ctx.name = queryInfo!.attrib;
                         ctx.val = (matchingElement as HTMLFormElement).value;
                         break;
-                    case 'props':
+                    case 'D':
                         (<any>matchingElement)[lispToCamel(queryInfo!.attrib!)] = rhs;
                         continue;
                 }

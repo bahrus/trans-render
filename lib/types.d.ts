@@ -37,7 +37,8 @@ export type matchTypes = 'parts'| 'part' | 'id' | 'classes' | 'class' | 'attribs
 
 export interface QueryInfo{
     query: string;
-    type?: matchTypes;
+    match: string;
+    //type?: matchTypes;
     attrib?: string;
     lhsProp?: string;
     first?: boolean;

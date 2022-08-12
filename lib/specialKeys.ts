@@ -1,85 +1,66 @@
 import { camelToLisp } from "./camelToLisp.js";
 import {QueryInfo, matchTypes} from './types';
 
-export const attribs : matchTypes[] = ['parts', 'part', 'id', 'classes', 'class', 'attribs', 'attrib', 'elements', 'element', 'props', 'names', 'name'];
 
-const attribsUC = attribs.map(s => s[0].toUpperCase() + s.substr(1));
+const picaden: Set<string> = new Set(['P', 'I', 'C', 'A', 'D', 'E', 'N'])
 
 const queryLookup = new Map<string, QueryInfo>();
 
 export function getQuery(key: string): QueryInfo{
     if(queryLookup.has(key)) return queryLookup.get(key)!;
-    const lpKey = camelToLisp(key);
     let idx = 0;
-    for(const type of attribs){
-        if(key.endsWith(attribsUC[idx])){
-            const attrib = lpKey.substr(0, lpKey.length - type.length - 1);
-            let query: string | undefined;
-            let verb: 'querySelectorAll' | 'querySelector' = 'querySelectorAll';
-            const single = 'querySelector';
-            let first = false;
-            let lhsProp = '';
-            switch(type){
-                case 'parts':
-                case 'part':
-                    query = `[part*="${attrib}"]`;
-                    break;
-                case 'classes':
-                case 'class':
-                    query = `.${attrib}`;
-                    break;
-                case 'attribs':
-                case 'attrib':
-                    query = `[${attrib}]`;
-                    break;
-                case 'elements':
-                case 'element':
-                    query = attrib;
-                    break;
-                case 'names':
-                case 'name':
-                    query = `[name="${attrib}"]`;
-                    break;
-
-            }
-            switch(type){
-                case 'id': {
-                    query = '#' + attrib;
-                    verb = single;
-                    first = true;
-                    break;
-                }
-                case 'part':
-                case 'attrib':
-                case 'class':
-                case 'element':
-                case 'name':
-                    verb = single;
-                    first = true;
-                    break;
-
-                case 'placeholders':{
-                    query = attrib + '-';
-                    break;
-                }
-                case 'props': {
-                    query = `[-${attrib}]`;
-                    lhsProp = key.substr(0, key.length - 5);
-                    break;
-                }
-            }
-            if(query !== undefined){
-                const q = {query, type, attrib, lhsProp, verb} as QueryInfo;
-                queryLookup.set(key, q);
-                return q;
-            }           
-        }
-        idx++;
+    const matchIdx = Array.from(key).findIndex(c => picaden.has(c));
+    if(matchIdx === -1){
+        const ret = {
+            query: key,
+            verb: 'querySelectorAll',
+        } as QueryInfo;
+        queryLookup.set(key, ret);
+        return ret;
     }
-    const q = {
-        query: key,
-        verb: 'querySelectorAll',
-    } as QueryInfo;
+    const match = key[matchIdx]; 
+    const attrib = key.substring(0, matchIdx);
+    let query: string | undefined;
+    let verb: 'querySelectorAll' | 'querySelector' = 'querySelectorAll';
+    const single = 'querySelector';
+    let first = false;
+    let lhsProp = '';
+    switch(match){
+        case 'P':
+            query = `[part*="${attrib}"]`;
+            break;
+        case 'C':
+            query = `.${attrib}`;
+            break;
+        case 'A':
+            query = `[${attrib}]`;
+            break;
+        case 'E':
+        case 'element':
+            query = attrib;
+            break;
+        case 'N':
+            query = `[name="${attrib}"]`;
+            break;
+        case 'I':
+            query = '#' + attrib;
+            verb = single;
+            first = true;
+            break;
+        case "D":
+            query = `[-${attrib}]`;
+            lhsProp = attrib;
+            break;
+
+    }
+    const isPlural = key.at(-1) === 's';
+    if(isPlural){
+        verb = single;
+        first = true;
+    }
+    
+    const q = {query, match, attrib, lhsProp, verb} as QueryInfo;
     queryLookup.set(key, q);
     return q;
+
 }
