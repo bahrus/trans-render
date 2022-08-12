@@ -169,43 +169,43 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <th>Pattern</th><th>Example</th><th>Query that is used</th><th>Notes</th>
     </tr>
     <tr>
-        <td>Contains "P", ends with "s"</td><td>myRegionParts</td><td>.querySelectorAll('[part*="my-region"]')</td><td>May match more than bargained for when working with multiple parts on the same element.</td>
+        <td>The last capital letter in the string is a "P", and ends with "s"</td><td>myRegionParts</td><td>.querySelectorAll('[part*="my-region"]')</td><td>May match more than bargained for when working with multiple parts on the same element.</td>
     </tr>
     <tr>
-        <td>Contains "P", doesn't end with "s"</td><td>myRegionPart</td><td>.querySelector('[part*="my-region"]')</td><td>May produce inaccurate results when working with multiple parts on the same element.</td>
+        <td>The last capital letter in the string is a "P", doesn't end with "s"</td><td>myRegionPart</td><td>.querySelector('[part*="my-region"]')</td><td>May produce inaccurate results when working with multiple parts on the same element.</td>
     </tr>
     <tr>
-        <td>Contains "A", ends with "s"</td><td>ariaLabelAttribs</td><td>.querySelectorAll('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
+        <td>The last capital letter in the string is a "A", ends with "s"</td><td>ariaLabelAttribs</td><td>.querySelectorAll('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
     </tr>
     <tr>
-        <td>Contains "A", doesn't end with "s"</td><td>ariaLabelAttrib</td><td>.querySelector('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
+        <td>The last capital letter in the string is a "A", doesn't end with "s"</td><td>ariaLabelAttrib</td><td>.querySelector('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
     </tr>
     <tr>
-        <td>Contains "C", ends with "s"</td><td>pinkFlamingoClasses</td><td>.getElementsByClassName('pink-flamingo')</td><td></td>
+        <td>The last capital letter in the string is a "C", ends with "s"</td><td>pinkFlamingoClasses</td><td>.getElementsByClassName('pink-flamingo')</td><td></td>
     </tr>
     <tr>
-        <td>Contains "C", doesn't end with "s"</td><td>pinkFlamingoClass</td><td>.getElementsByClassName('pink-flamingo')[0]</td><td>Untested</td>
+        <td>The last capital letter in the string is a "C", doesn't end with "s"</td><td>pinkFlamingoClass</td><td>.getElementsByClassName('pink-flamingo')[0]</td><td>Untested</td>
     </tr>
     <tr>
-        <td>Contains "I"</td><td>driversLicenseIdId</td><td>.querySelector('#drivers-license-id')</td><td>Untested</td>
+        <td>The last capital letter in the string is a "I"</td><td>driversLicenseIdId</td><td>.querySelector('#drivers-license-id')</td><td>Untested</td>
     </tr>
     <!-- <tr>
         <td>Contains Eq, ends with Attribs</td><td>ariaLabelEqHelloThereAttribs</td><td>.querySelectorAll('[arial-label="HelloThere"])</td><td>If space needed ("Hello There") then LHS needs to be wrapped in quotes.   [TODO], waiting for a good use case to see if this is helpful</td>
     </tr> -->
     <tr>
-        <td>Contains "E", ends with "s"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')</td><td>&nbsp;Uses live collections capability so target elements dynamically change as needed.</td>
+        <td>The last capital letter in the string is a "E", ends with "s"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')</td><td>&nbsp;Uses live collections capability so target elements dynamically change as needed.</td>
     </tr>
     <tr>
-        <td>Contains "E", doesn't end with "s"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')[0]</td><td></td>
+        <td>The last capital letter in the string is a "E", doesn't end with "s"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')[0]</td><td></td>
     </tr>
     <tr>
-        <td>Contains "D"</td><td>textContentProps</td><td>.querySelectorAll('[-text-content]')</td><td>Useful for binding properties in bulk</td>
+        <td>The last capital letter in the string is a "D"</td><td>textContentProps</td><td>.querySelectorAll('[-text-content]')</td><td>Useful for binding properties in bulk</td>
     </tr>
     <tr>
-        <td>Contains "N", ends with "s"</td><td>firstNameNames</td><td>.getElementsByName('first-name')</td><td>Untested.  Uses live collections capability so target elements dynamically change as needed.</td>
+        <td>The last capital letter in the string is a "N", ends with "s"</td><td>firstNameNames</td><td>.getElementsByName('first-name')</td><td>Untested.  Uses live collections capability so target elements dynamically change as needed.</td>
     </tr>
     <tr>
-        <td>Ends with "Name"</td><td>firstNameName</td><td>.getElementsByName('first-name')[0]</td>
+        <td>The last capital letter in the string is a "N", doesn't end with "s"</td><td>firstNameName</td><td>.getElementsByName('first-name')[0]</td>
         <td>
             Untested. 
         </td>
