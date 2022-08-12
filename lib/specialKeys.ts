@@ -16,7 +16,6 @@ export function getQuery(key: string): QueryInfo{
             const attrib = lpKey.substr(0, lpKey.length - type.length - 1);
             let query: string | undefined;
             let verb: 'querySelectorAll' | 'querySelector' = 'querySelectorAll';
-            //let isLive = false;
             const single = 'querySelector';
             let first = false;
             let lhsProp = '';
@@ -44,21 +43,18 @@ export function getQuery(key: string): QueryInfo{
 
             }
             switch(type){
-                case 'part': {
-                    verb = single;
-                    break;
-                }
                 case 'id': {
                     query = '#' + attrib;
                     verb = single;
                     first = true;
                     break;
                 }
+                case 'part':
                 case 'attrib':
                 case 'class':
                 case 'element':
                 case 'name':
-                    query = single;
+                    verb = single;
                     first = true;
                     break;
 
