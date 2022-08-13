@@ -231,6 +231,7 @@ export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropIn
      * Used for providing hints to server side processing what css queries should be observed if using HTMLRewriter.
      */
     keyQueries?: string[];
+    formAss?: boolean;
 }
 
 export type ListOfLogicalExpressions<MCProps = any> = (keyof MCProps | LogicOp<MCProps>)[];
@@ -302,7 +303,7 @@ export interface TemplMgmtProps{
     clonedTemplate?: Node | undefined;
     hydratingTransform?: Matches;
     transform?: Matches | Matches[];
-    unsafeTransform?: Matches;
+    unsafeTransform?: {[key: string]: (ctx: RenderContext) => any};
     noshadow?: boolean;
     renderOptions?: RenderOptions;
     waitToInit?: boolean;

@@ -3,7 +3,7 @@ export { Action, PropInfo, TRElementActions, TRElementProps, WCConfig} from './t
 import { def } from './def.js';
 
 export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction extends Action<MCProps> = Action<MCProps>>{
-
+    
     constructor(public args?: DefineArgs<MCProps, MCActions, TPropInfo, TAction>){
         if(args !== undefined) {
             this.#evalConfig(this).then(() => {
@@ -91,7 +91,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         }
     }
 
-    doPA(self: this, src: any, pci: PropChangeInfo, m: PropChangeMoment): Promise<boolean>{ 
+    doPA(self: this, src: any, pci: PropChangeInfo, m: PropChangeMoment): boolean{ 
         if(pci.pcm !== undefined) return pci.pcm(src, pci, m) !== false;
         return true;
     }
@@ -169,8 +169,10 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             static observedAttributes = getAttributeNames(propInfos, toLisp, ext);
             static reactiveProps = propInfos;
             static ceDef = args;
+            static formAssociated = (config as WCConfig).formAss;
             constructor(){
                 super();
+                this.internals_ = this.attachInternals();
                 this.attachQR();
             }
             #mergedActions: Partial<{[key in keyof MCActions]: TAction}> | undefined;

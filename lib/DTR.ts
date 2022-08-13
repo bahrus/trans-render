@@ -1,5 +1,5 @@
 import {TR} from './TR.js';
-import {RenderContext} from 'types';
+import {RenderContext, TransformPlugins} from 'types';
 export {TR} from './TR.js';
 
 
@@ -17,7 +17,7 @@ export class DTR extends TR{
             const {match, plugins} = ctx;
             if(plugins !== undefined){
                 const {awaitTransforms, toTransformMatch} = await import('./pluginMgr.js');
-                const pluggedInPlugins = await awaitTransforms(plugins);
+                const pluggedInPlugins = await awaitTransforms(plugins as TransformPlugins);
                 ctx.plugins = pluggedInPlugins;
                 ctx.match = {...match, ...toTransformMatch(pluggedInPlugins)};
             }
