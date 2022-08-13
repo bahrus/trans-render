@@ -55,12 +55,13 @@ export function getQuery(key: string): QueryInfo{
 
     }
     const isPlural = key.at(-1) === 's';
-    if(isPlural){
+    if(!isPlural){
         verb = single;
         first = true;
     }
     
     const q = {query, match, attrib, lhsProp, verb} as QueryInfo;
+    console.log(key, q);
     queryLookup.set(key, q);
     return q;
 
