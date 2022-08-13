@@ -203,7 +203,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>The last capital letter in the string is a "E", doesn't end with "s"</td><td>flagIconElements</td><td>.querySelector('flag-icon')</td><td></td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "D"</td><td>textContentProps</td><td>.querySelectorAll('[-text-content]')</td><td>Useful for binding properties in bulk</td>
+        <td>The last capital letter in the string is a "D"</td><td>textContentDash</td><td>.querySelectorAll('[-text-content]')</td><td>Useful for binding properties in bulk</td>
     </tr>
     <tr>
         <td>The last capital letter in the string is a "N", ends with "s"</td><td>firstNameNames</td><td>.querySelectorAll('[name="first-name"]')</td><td>Untested.</td>
