@@ -61,7 +61,6 @@ export function getQuery(key: string): QueryInfo{
     }
     
     const q = {query, match, attrib, lhsProp, verb} as QueryInfo;
-    console.log(key, q);
     queryLookup.set(key, q);
     return q;
 
