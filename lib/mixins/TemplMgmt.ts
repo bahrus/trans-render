@@ -131,10 +131,10 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         this.removeAttribute('defer-rendering');
         this.clonedTemplate = undefined;
     }
-    initUnsafeCnt({}: this){
+    initUnsafeTCnt({}: this){
         this.unsafeTCount = 0;
     }
-    async doComplexTr({unsafeTransform, shadowRoot}: this){
+    async doComplexTR({unsafeTransform, shadowRoot}: this){
         const ctx: RenderContext = {
             host: this,
             match: unsafeTransform,
