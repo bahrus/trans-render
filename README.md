@@ -177,16 +177,16 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>The last capital letter in the string is a "P", doesn't end with "s"</td><td>myRegionPart</td><td>.querySelector('[part*="my-region"]')</td><td>May produce inaccurate results when working with multiple parts on the same element.</td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "A", ends with "s"</td><td>ariaLabelAttribs</td><td>.querySelectorAll('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
+        <td>The last capital letter in the string is an "A", ends with "s"</td><td>ariaLabelAttribs</td><td>.querySelectorAll('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "A", doesn't end with "s"</td><td>ariaLabelAttrib</td><td>.querySelector('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
+        <td>The last capital letter in the string is an "A", doesn't end with "s"</td><td>ariaLabelAttrib</td><td>.querySelector('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "C", ends with "s"</td><td>pinkFlamingoClasses</td><td>.getElementsByClassName('pink-flamingo')</td><td></td>
+        <td>The last capital letter in the string is a "C", ends with "s"</td><td>pinkFlamingoClasses</td><td>.querySelectorAll('.pink-flamingo')</td><td></td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "C", doesn't end with "s"</td><td>pinkFlamingoClass</td><td>.getElementsByClassName('pink-flamingo')[0]</td><td>Untested</td>
+        <td>The last capital letter in the string is a "C", doesn't end with "s"</td><td>pinkFlamingoClass</td><td>.querySelector('.pink-flamingo')</td><td></td>
     </tr>
     <tr>
         <td>The last capital letter in the string is a "I"</td><td>driversLicenseIdId</td><td>.querySelector('#drivers-license-id')</td><td>Untested</td>
@@ -195,19 +195,19 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>Contains Eq, ends with Attribs</td><td>ariaLabelEqHelloThereAttribs</td><td>.querySelectorAll('[arial-label="HelloThere"])</td><td>If space needed ("Hello There") then LHS needs to be wrapped in quotes.   [TODO], waiting for a good use case to see if this is helpful</td>
     </tr> -->
     <tr>
-        <td>The last capital letter in the string is a "E", ends with "s"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')</td><td>&nbsp;Uses live collections capability so target elements dynamically change as needed.</td>
+        <td>The last capital letter in the string is an "E", ends with "s"</td><td>flagIconElements</td><td>.querySelectorAll('flag-icon')</td><td></td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "E", doesn't end with "s"</td><td>flagIconElements</td><td>.getElementsByTagName('flag-icon')[0]</td><td></td>
+        <td>The last capital letter in the string is a "E", doesn't end with "s"</td><td>flagIconElements</td><td>.querySelector('flag-icon')</td><td></td>
     </tr>
     <tr>
         <td>The last capital letter in the string is a "D"</td><td>textContentProps</td><td>.querySelectorAll('[-text-content]')</td><td>Useful for binding properties in bulk</td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "N", ends with "s"</td><td>firstNameNames</td><td>.getElementsByName('first-name')</td><td>Untested.  Uses live collections capability so target elements dynamically change as needed.</td>
+        <td>The last capital letter in the string is a "N", ends with "s"</td><td>firstNameNames</td><td>.querySelectorAll('[name="first-name"]')</td><td>Untested.</td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "N", doesn't end with "s"</td><td>firstNameName</td><td>.getElementsByName('first-name')[0]</td>
+        <td>The last capital letter in the string is a "N", doesn't end with "s"</td><td>firstNameName</td><td>.querySelector('[name="first-name"]')</td>
         <td>
             Untested. 
         </td>
