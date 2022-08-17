@@ -11,7 +11,8 @@
 	"include": [
 		"lib/*",
 		"demo/*",
-		"lib/mixins/*"
+		"lib/mixins/*",
+		"lib/xslt/*"
 	],
 	"exclude":[
 		"build",
