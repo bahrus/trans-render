@@ -57,7 +57,8 @@
     "./lib/upShadowSearch.js": "./lib/upShadowSearch.js",
     "./lib/waitForAttributeChange.js": "./lib/waitForAttributeChange.js",
     "./lib/weave.js": "./lib/weave.js",
-    "./lib/xslt/swap.js": "./lib/xslt/swap.js"
+    "./xslt/clone.js": "./xslt/clone.js",
+    "./xslt/swap.js": "./xslt/swap.js"
   },
   "files": [
     "lib/*",
