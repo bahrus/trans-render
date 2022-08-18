@@ -60,7 +60,8 @@
     "./lib/xslt/swap.js": "./lib/xslt/swap.js"
   },
   "files": [
-    "lib/*"
+    "lib/*",
+    "xslt/*"
   ],
   "devDependencies": {
     "@playwright/test": "1.25.0",
