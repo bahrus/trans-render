@@ -12,7 +12,7 @@
 		"lib/*",
 		"demo/*",
 		"lib/mixins/*",
-		"lib/xslt/*"
+		"xslt/*"
 	],
 	"exclude":[
 		"build",

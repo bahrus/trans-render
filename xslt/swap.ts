@@ -1,7 +1,8 @@
-const nogo =  ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'];
+const tagsToSwap =  ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'];
+const tagsToRemove = ['script', 'noscript']; //TODO
 
 export function swap(target: Element, toIsh: boolean){
-    const qry = toIsh ? nogo.join(',') : nogo.join('-ish,');
+    const qry = toIsh ? tagsToSwap.join(',') : tagsToSwap.join('-ish,');
     const problemTags = target.querySelectorAll(qry);
     problemTags.forEach(tag => {
         const newTagName = toIsh ? tag.localName + '-ish' : tag.localName.substring(0, tag.localName.length - 4);
