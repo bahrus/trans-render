@@ -58,6 +58,7 @@
     "./lib/waitForAttributeChange.js": "./lib/waitForAttributeChange.js",
     "./lib/weave.js": "./lib/weave.js",
     "./xslt/clone.js": "./xslt/clone.js",
+    "./xslt/Mgmt.js": "./xslt/Mgmt.js",
     "./xslt/swap.js": "./xslt/swap.js"
   },
   "files": [
