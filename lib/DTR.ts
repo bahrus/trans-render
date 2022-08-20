@@ -1,7 +1,7 @@
 import {TR} from './TR.js';
 import {RenderContext, TransformPlugins} from 'types';
 export {TR} from './TR.js';
-
+declare const Sanitizer: any;
 
 export class DTR extends TR{
     static new(ctx: RenderContext){
@@ -108,9 +108,17 @@ export class DTR extends TR{
                         break;
                     case 4:
                         if(typeof rhs[3] === 'string'){
+                            let str = rhs[3];
+                            if(typeof Sanitizer !== undefined){
+                                const sanitizer = new Sanitizer(); 
+                                str = sanitizer.sanitizeFor("template", str);
+                            }
                             const templ = document.createElement('template');
+                            templ.innerHTML = str;
                             rhs[3] = templ;
                             const {PEAT} = await import('./PEAT.js');
+                            const peat = new PEAT();
+                            await peat.do(ctxCopy);
                         }
                     default:
                         throw 'NI';//Not Implemented
