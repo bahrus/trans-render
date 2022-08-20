@@ -297,7 +297,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             const isAsync = method.constructor.name === 'AsyncFunction';
             const ret = isAsync ? await (<any>target)[methodName](target) : (<any>target)[methodName](target);
             if(ret === undefined) continue;
-            self.postHoc(self, action, target, ret, proxy);
+            await self.postHoc(self, action, target, ret, proxy);
         }
     }
 
@@ -322,7 +322,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         return typeof(action) === 'string' ? new Set<string>([action]) : new Set<string>([...(action.ifAllOf || []) as string[], ...(action.ifKeyIn || []) as string[]]);
     }
 
-    postHoc(self: this, action: Action, target: any, returnVal: any, proxy?: any){
+    async postHoc(self: this, action: Action, target: any, returnVal: any, proxy?: any){
         const dest = proxy !== undefined ? proxy : target;
         Object.assign(dest, returnVal);
         const setFree = action.setFree;
