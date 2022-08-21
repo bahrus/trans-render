@@ -20,7 +20,7 @@ export function getQuery(key: string): QueryInfo{
     }
     const matchIdx = key.length - 1 - backwardsIdx;
     const match = key[matchIdx]; 
-    const attrib = key.substring(0, matchIdx);
+    const attrib = camelToLisp(key.substring(0, matchIdx));
     let query: string | undefined;
     let verb: 'querySelectorAll' | 'querySelector' = 'querySelectorAll';
     const single = 'querySelector';
