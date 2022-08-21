@@ -286,8 +286,8 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
     #actionsInQueue = false;  
     async doActions(self: this, actions: {[methodName: string]: Action}, target: any, proxy?: any){
         if(self.#actionsInProgress){
-            Object.assign(this.#actionQueue, actions);
-            this.#actionsInQueue = true;
+            Object.assign(self.#actionQueue, actions);
+            self.#actionsInQueue = true;
             return;
         }
         self.#actionsInProgress = true;
@@ -311,7 +311,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         self.#actionsInProgress = false;
         if(self.#actionsInQueue){
             self.#actionsInQueue = false;
-            const actionQueue = {...this.#actionQueue};
+            const actionQueue = {...self.#actionQueue};
             self.#actionQueue = {};
             await self.doActions(self, actionQueue, target, proxy);
         }
