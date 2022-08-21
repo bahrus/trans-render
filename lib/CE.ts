@@ -281,16 +281,22 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         return this.classDef;
     }
 
-    #actionQueue: {[methodName: string]: Action} = {};
-    #actionsInProgress = false;
-    #actionsInQueue = false;  
+    // #actionQueue: {[methodName: string]: Action} = {};
+    // #actionsInProgress = false;
+    // #actionsInQueue = false; 
+    
+    #QLookup = new WeakMap<any, Q>();
     async doActions(self: this, actions: {[methodName: string]: Action}, target: any, proxy?: any){
-        if(self.#actionsInProgress){
-            Object.assign(self.#actionQueue, actions);
-            self.#actionsInQueue = true;
+        if(!self.#QLookup.has(target)){
+            self.#QLookup.set(target, new Q());
+        }
+        const q = self.#QLookup.get(target)!;
+        if(q.aip){
+            Object.assign(q.aq, actions);
+            q.aiq = true;
             return;
         }
-        self.#actionsInProgress = true;
+        q.aip = true;
         for(const methodName in actions){
             const action = actions[methodName];
             if(action.debug) debugger;
@@ -308,11 +314,11 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             if(ret === undefined) continue;
             await self.postHoc(self, action, target, ret, proxy);
         }
-        self.#actionsInProgress = false;
-        if(self.#actionsInQueue){
-            self.#actionsInQueue = false;
-            const actionQueue = {...self.#actionQueue};
-            self.#actionQueue = {};
+        q.aip = false;
+        if(q.aip){
+            q.aiq = false;
+            const actionQueue = {...q.aq};
+            q.aq = {};
             await self.doActions(self, actionQueue, target, proxy);
         }
     }
@@ -403,6 +409,12 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
     toLisp(s: string){return s.split(ctlRe).join('-').toLowerCase();}
     toCamel(s: string){return s.replace(stcRe, function(m){return m[1].toUpperCase();});}
+}
+
+class Q{
+    aq: {[methodName: string]: Action} = {}; //actionsQueue
+    aip = false; //actions in progress
+    aiq = false; //actionsInQueue
 }
 
 const QR = (propName: string, self: HasPropChangeQueue) => {
