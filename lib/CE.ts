@@ -290,6 +290,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             this.#actionsInQueue = true;
             return;
         }
+        this.#actionsInProgress = true;
         for(const methodName in actions){
             const action = actions[methodName];
             if(action.debug) debugger;
