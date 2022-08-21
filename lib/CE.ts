@@ -306,7 +306,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             const isAsync = method.constructor.name === 'AsyncFunction';
             const ret = isAsync ? await (<any>target)[methodName](target) : (<any>target)[methodName](target);
             if(ret === undefined) continue;
-            await self.postHoc(self, action, target, ret, proxy);
+            await this.postHoc(self, action, target, ret, proxy);
         }
         self.#actionsInProgress = false;
         if(self.#actionsInQueue){
