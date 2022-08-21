@@ -285,12 +285,12 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
     #actionsInProgress = false;
     #actionsInQueue = false;  
     async doActions(self: this, actions: {[methodName: string]: Action}, target: any, proxy?: any){
-        if(this.#actionsInProgress){
+        if(self.#actionsInProgress){
             Object.assign(this.#actionQueue, actions);
             this.#actionsInQueue = true;
             return;
         }
-        this.#actionsInProgress = true;
+        self.#actionsInProgress = true;
         for(const methodName in actions){
             const action = actions[methodName];
             if(action.debug) debugger;
@@ -308,12 +308,12 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             if(ret === undefined) continue;
             await self.postHoc(self, action, target, ret, proxy);
         }
-        this.#actionsInProgress = false;
-        if(this.#actionsInQueue){
-            this.#actionsInQueue = false;
+        self.#actionsInProgress = false;
+        if(self.#actionsInQueue){
+            self.#actionsInQueue = false;
             const actionQueue = {...this.#actionQueue};
-            this.#actionQueue = {};
-            await this.doActions(self, actionQueue, target, proxy);
+            self.#actionQueue = {};
+            await self.doActions(self, actionQueue, target, proxy);
         }
     }
 
