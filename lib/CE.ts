@@ -315,7 +315,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             await self.postHoc(self, action, target, ret, proxy);
         }
         q.aip = false;
-        if(q.aip){
+        if(q.aiq){
             q.aiq = false;
             const actionQueue = {...q.aq};
             q.aq = {};
