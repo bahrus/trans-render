@@ -1,9 +1,9 @@
-import {QueryInfo, RenderContext} from './types';
+import {QueryInfo, RenderContext, Transformer} from './types';
 import { getQuery} from './specialKeys.js';
 import { lispToCamel } from './lispToCamel.js';
 import { TSChecker } from './tsChecker';
 
-export class TR{
+export class TR implements Transformer{
     #queryCache = new WeakMap<Element | DocumentFragment | Element[], {[key: string]: WeakRef<Element>[]}>();
     #tsChecker: TSChecker | undefined;
     static async transform(sourceOrTemplate: Element | DocumentFragment | Element[],
@@ -41,7 +41,7 @@ export class TR{
                 this.#tsChecker = new TSChecker(timestampKey);
             }
             const elementKey = fragmentManager ? fragmentManager : fragment as Element;
-            if(this.#tsChecker.notChanged(host, elementKey)) return;
+            if(this.#tsChecker.notChanged(host, elementKey)) return ctx;
         }
         const qc = this.#queryCache;
         const isArray = Array.isArray(fragment);
@@ -202,4 +202,5 @@ export class TR{
     isTemplate(sourceOrTemplate: any){
         return sourceOrTemplate.localName === 'template';
     }
+
 }

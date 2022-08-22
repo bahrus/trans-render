@@ -118,7 +118,9 @@ export class DTR extends TR{
                             rhs[3] = templ;
                             const {PEAT} = await import('./PEAT.js');
                             const peat = new PEAT();
+                            this.flushCache();
                             await peat.do(ctxCopy);
+                            this.flushCache();
                         }
                     default:
                         throw 'NI';//Not Implemented

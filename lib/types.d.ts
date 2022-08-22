@@ -317,3 +317,8 @@ export interface TemplMgmtActions{
 }
 
 export interface TemplMgmtBase extends HTMLElement, TemplMgmtProps, TemplMgmtActions{}
+
+export interface Transformer{
+    transform(fragment: Element | DocumentFragment | Element[], fragmentManager?: Element): Promise<RenderContext>;
+    flushCache(): void;
+}
