@@ -37,7 +37,7 @@ export class TR implements Transformer{
         const {host, options, match, timestampKey} = ctx;
         if(host !== undefined && timestampKey){
             if(this.#tsChecker === undefined){
-                const {TSChecker} = await import('./TSChecker.js');
+                const {TSChecker} = await import('./tsChecker.js');
                 this.#tsChecker = new TSChecker(timestampKey);
             }
             const elementKey = fragmentManager ? fragmentManager : fragment as Element;

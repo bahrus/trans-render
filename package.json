@@ -53,6 +53,7 @@
     "./lib/SplitText.js": "./lib/SplitText.js",
     "./lib/structuralClone.js": "./lib/structuralClone.js",
     "./lib/subscribe.js": "./lib/subscribe.js",
+    "./lib/tsChecker.js": "./lib/tsChecker.js",
     "./lib/TR.js": "./lib/TR.js",
     "./lib/upSearch.js": "./lib/upSearch.js",
     "./lib/upShadowSearch.js": "./lib/upShadowSearch.js",
