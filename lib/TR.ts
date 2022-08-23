@@ -1,7 +1,7 @@
 import {QueryInfo, RenderContext, Transformer} from './types';
 import { getQuery} from './specialKeys.js';
 import { lispToCamel } from './lispToCamel.js';
-import { TSChecker } from './tsChecker2';
+import { TSChecker } from './tsChecker';
 
 export class TR implements Transformer{
     #queryCache = new WeakMap<Element | DocumentFragment | Element[], {[key: string]: WeakRef<Element>[]}>();
@@ -37,7 +37,7 @@ export class TR implements Transformer{
         const {host, options, match, timestampKey} = ctx;
         if(host !== undefined && timestampKey){
             if(this.#tsChecker === undefined){
-                const {TSChecker} = await import('./tsChecker2.js');
+                const {TSChecker} = await import('./tsChecker.js');
                 this.#tsChecker = new TSChecker(timestampKey);
             }
             const elementKey = fragmentManager ? fragmentManager : fragment as Element;
