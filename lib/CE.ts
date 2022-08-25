@@ -42,7 +42,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                 get(){
                     return this[privateKey];
                 },
-                async set(nv){
+                set(nv){
                     const ov = this[privateKey];
                     if(prop.dry && this[privateKey] === nv) return;
                     const propChangeMethod = config.propChangeMethod;
@@ -81,9 +81,15 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                                 filteredActions[methodName] = action;
                             }
                         }
-                        await doActions(self, filteredActions, this);
+                        (async () => {
+                            await doActions(self, filteredActions, this);
+                            doPA(self, this, pci, '+a'); //+a = post actions
+                        })()
+                        
+                    }else{
+                        doPA(self, this, pci, '+a'); //+a = post actions
                     }
-                    doPA(self, this, pci, '+a'); //+a = post actions
+                    
                 },
                 enumerable: true,
                 configurable: true,
