@@ -3,6 +3,8 @@ import {RenderContext, TransformPlugins} from 'types';
 export {TR} from './TR.js';
 declare const Sanitizer: any;
 
+const propSplitterRegExp = /[\|\.\s\?]/;
+
 export class DTR extends TR{
     static new(ctx: RenderContext){
         return new DTR(ctx);
@@ -149,9 +151,12 @@ export class DTR extends TR{
         switch(typeof rhs){
             case 'string':
                 if(rhs[0] === '.'){
-                    throw 'NI';//Not Implemented
+                    const split = rhs.substring(1).split(propSplitterRegExp)
+                    returnObj.add(split[0]);
+                }else{
+                    returnObj.add(rhs);
                 }
-                returnObj.add(rhs);
+                
                 break;
             case 'object':
                 if(Array.isArray(rhs)){
