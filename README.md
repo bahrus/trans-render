@@ -407,7 +407,11 @@ match:{
 }
 ```
 
-means "evaluate toLocalString() of the count property."  Since the transform is kept separate from the HTML template, we can still import HTML templates, even from untrusted third-party providers.  The syntax to invoke the method is not in the template, but rather in the separate transform.
+means "evaluate toLocalString() of the count property."  
+
+In many circumstances, the transform is kept separate from the HTML template, so we can still import HTML templates, even from untrusted third-party providers.  The syntax to invoke the method is not in the template, but rather in the separate transform.
+
+However, DTR can also be specified in third party template instantiation behaviors imported via fetch, for example.  A mechanism is provided by be-hive to allow these behaviors to be opted-in, while restraining the list of invocable methods [TODO]. 
 
 ## P[E[A[T]]] 
 
