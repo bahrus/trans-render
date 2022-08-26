@@ -28,7 +28,7 @@ export function getQuery(key: string): QueryInfo{
     let lhsProp = '';
     switch(match){
         case 'P':
-            query = `[part*="${attrib}"]`;
+            query = `[part~="${attrib}"]`;
             break;
         case 'C':
             query = `.${attrib}`;

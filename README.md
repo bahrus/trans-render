@@ -173,7 +173,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <th>Pattern</th><th>Example</th><th>Query that is used</th><th>Notes</th>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "P", and ends with "s"</td><td>myRegionParts</td><td>.querySelectorAll('[part*="my-region"]')</td><td>May match more than bargained for when working with multiple parts on the same element.</td>
+        <td>The last capital letter in the string is a "P", and ends with "s"</td><td>myRegionParts</td><td>.querySelectorAll('[part~="my-region"]')</td><td>Suggested [here](https://github.com/WICG/webcomponents/issues/964#issuecomment-1203296793).  Hopefully this is precise.</td>
     </tr>
     <tr>
         <td>The last capital letter in the string is a "P", doesn't end with "s"</td><td>myRegionPart</td><td>.querySelector('[part*="my-region"]')</td><td>May produce inaccurate results when working with multiple parts on the same element.</td>
