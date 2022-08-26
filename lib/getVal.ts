@@ -4,10 +4,11 @@ export async function getVal(host: any, path: string): Promise<any> {
     switch(path[0]){
         case '.':{
             if(path === '.') return host;
-            path = path.substr(1);
+            //path = path.substr(1);
             const qSplit = path.split('??');
             let deflt = qSplit[1];
-            const dSplit = qSplit[0].trim().split('.');
+            const {splitExt} = await import('trans-render/lib/splitExt.js');
+            const dSplit = splitExt(qSplit[0].trim());
             const { getProp } = await import('./getProp.js');
             let val = getProp(host, dSplit);
             if (val === undefined && deflt) {
