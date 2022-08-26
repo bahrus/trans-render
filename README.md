@@ -395,7 +395,7 @@ match:{
 
 will bind to host.place.location.  If that is undefined, then the "world" default will be used.  If the string to the right of ?? starts with a ., the same process is repeated recursively.
 
-## Invoking (a chain of ) Methods
+## Invoking (a chain of) methods
 
 Limited invoking of methods is supported.
 
