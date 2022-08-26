@@ -33,7 +33,8 @@ export class DTR extends TR{
         const deps = await this.getDep();
         const fragment = host!.shadowRoot || host!;
         for(const key of deps){
-            await subscribe(host!, key, async () => {
+            const firstToken = key[0] === '.' ? this.#getFirstToken(key) : key;
+            await subscribe(host!, firstToken, async () => {
                 await this.transform(fragment);
             })
         }
@@ -147,12 +148,16 @@ export class DTR extends TR{
         return this.#dependencies;
     }
 
+    #getFirstToken(rhs: string){
+        const split = rhs.substring(1).split(propSplitterRegExp);
+        return split[0];
+    }
+
     #getDepRHS(rhs: any, returnObj: Set<string>){
         switch(typeof rhs){
             case 'string':
                 if(rhs[0] === '.'){
-                    const split = rhs.substring(1).split(propSplitterRegExp)
-                    returnObj.add(split[0]);
+                    returnObj.add(this.#getFirstToken(rhs));
                 }else{
                     returnObj.add(rhs);
                 }

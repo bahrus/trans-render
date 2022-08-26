@@ -23,7 +23,7 @@ const ce = new CE<DTRCounterProps & TemplMgmtProps, TemplMgmtActions>({
                 }}]
             },
             transform: {
-                    countPart: '.count.toLocaleString|'
+                countPart: '.count.toLocaleString|'
             },
             mainTemplate: String.raw `<button part=down data-d=-1>-</button><span part=count></span><button part=up data-d=1>+</button>`,
             styles: String.raw `
