@@ -37,7 +37,6 @@ export function getQuery(key: string): QueryInfo{
             query = `[${attrib}]`;
             break;
         case 'E':
-        case 'element':
             query = attrib;
             break;
         case 'N':
