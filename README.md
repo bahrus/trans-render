@@ -395,6 +395,8 @@ match:{
 
 will bind to host.place.location.  If that is undefined, then the "world" default will be used.  If the string to the right of ?? starts with a ., the same process is repeated recursively.
 
+Like most all UI libraries, only changes to the top property is reacted to automatically.
+
 ## Invoking (a chain of) methods
 
 Limited invoking of methods is supported.
@@ -409,7 +411,17 @@ match:{
 
 means "evaluate toLocalString() of the count property."  
 
+The pipe operator allows one hardcoded string argument:
+
+```JavaScript
+match:{
+    countPart: '.count.toLocaleString|en-US.indexOf|,000'
+}
+```
+
 In many circumstances, the transform is kept separate from the HTML template, so we can still import HTML templates, even from untrusted third-party providers.  The syntax to invoke the method is not in the template, but rather in the separate transform.
+
+
 
 However, DTR can also be specified in third party template instantiation behaviors imported via fetch, for example.  A mechanism is provided by be-hive to allow these behaviors to be opted-in, while restraining the list of invocable methods [TODO]. 
 
