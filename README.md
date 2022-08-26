@@ -388,13 +388,26 @@ The binding support for string properties isn't limited to a single property key
 If the property key starts with a ".", then the property key supports a dot-delimited path to a property.  And "??" is supported.  So:
 
 ```JavaScript
-    match:{
-        "summary": ["Hello ", ".place.location ?? world"],
-        
-    }
+match:{
+    summary: ["Hello ", ".place.location ?? world"],  
+}
 ```
 
 will bind to host.place.location.  If that is undefined, then the "world" default will be used.  If the string to the right of ?? starts with a ., the same process is repeated recursively.
+
+## Invoking (a chain of ) Methods
+
+Limited invoking of methods is supported.
+
+For example:
+
+```JavaScript
+match:{
+    countPart: '.count.toLocaleString|'
+}
+```
+
+means "evaluate toLocalString() of the count property."  Since the transform is kept separate from the HTML template, we can still import HTML templates, even from untrusted third-party providers.  The syntax to invoke the method is not in the template, but rather in the separate transform.
 
 ## P[E[A[T]]] 
 
