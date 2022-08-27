@@ -68,9 +68,9 @@
     "xslt/*"
   ],
   "devDependencies": {
-    "@playwright/test": "1.25.0",
+    "@playwright/test": "1.25.1",
     "may-it-serve": "0.0.2",
-    "xtal-editor": "0.0.177",
+    "xtal-editor": "0.0.187",
     "xtal-shell": "0.0.27"
   },
   "repository": {

@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel=preload as=script id="xtal-editor/theme.css" href="../theme.css" crossorigin="anonymous">
 </head>
 <body>
     <xtal-editor id=abc>
@@ -36,7 +35,9 @@
                 "xodus/": "../node_modules/xodus/",
                 "@power-elements/": "../node_modules/@power-elements/",
                 "be-active/": "../node_modules/be-active/",
+                "be-adopted/": "../node_modules/be-adopted/",
                 "be-channeling/": "../node_modules/be-channeling/",
+                "be-composed/": "../node_modules/be-composed/",
                 "be-decorated/": "../node_modules/be-decorated/",
                 "be-definitive/": "../node_modules/be-definitive/",
                 "be-deslotted/": "../node_modules/be-deslotted/",
@@ -78,31 +79,31 @@
     <button onclick="runScript()">runScript</button>
     <script>
         function runScript(){
-            $hell.cd('/xtal-editor/main/header/div/button[0]');
+            $hell.cd('/xtal-editor#abc/main/xtal-vlist#vlist/div/div/div/div/div[3]/div[0]/button');
             $hell.$0.click();
             setTimeout(() => {
-                $hell.cd('/xtal-editor/main/xtal-vlist#vlist/div/div/div[0]/div/div[7]/div[0]/input');
+                $hell.cd('/xtal-editor#abc/main/xtal-vlist#vlist/div/div/div/div/div[4]/div[0]/input');
+                console.log($hell.$0);
                 $hell.$0.value = 'jethro tull';
-                const event = new CustomEvent('input', {
+                const event = new CustomEvent('change', {
                     bubbles: true,
-                    composed: true
                 });
                 $hell.$0.dispatchEvent(event);
                 setTimeout(() => {
-                    $hell.cd('/xtal-editor#abc/main/xtal-vlist#vlist/div/div/div[0]/div/div[6]/div[0]/input#object');
+                    $hell.cd('/xtal-editor#abc/main/xtal-vlist#vlist/div/div/div/div/div[3]/div[0]/input#object');
                     if($hell.$0.value.indexOf('jethro tull') !== -1){
                         $hell.cd('/xtal-editor');
-                        $hell.$0.setAttribute('mark', '');
+                        $hell.$0.setAttribute('mark', 'good');
                     }else{
                         console.error('jethro tull not found in higher nodes.');
                     }
-                }, 500);
-            }, 500);
+                }, 1000);
+            }, 1000);
 
         }
         setTimeout(() => {
             runScript();
-        }, 2000);
+        }, 4000);
     </script>
     <be-hive></be-hive>
 </body>
