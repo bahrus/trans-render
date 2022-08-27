@@ -423,7 +423,7 @@ In many circumstances, the transform is kept separate from the HTML template, so
 
 
 
-However, DTR can also be specified in third party template instantiation behaviors imported via fetch, for example.  A mechanism is provided by be-hive to allow these behaviors to be opted-in, while restraining the list of invocable methods [TODO]. 
+However, DTR can also be specified in third party template instantiation behaviors imported via fetch, for example.  But even here, the use of methods defined above is applied to the host model, not to elements of the imported template, so again, the risks seem low for opening up this ability.  Nevertheless, a mechanism may be provided by be-hive to allow these behaviors to be opted-in, while restraining the list of invocable methods.  There are other scenarios where this customization ability would have more apparent importance [TODO]. 
 
 ## P[E[A[T]]] 
 
