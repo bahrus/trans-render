@@ -57,7 +57,7 @@ Note that TR.js is a class, with key method signatures allow for alternative syn
 Multi matching provides support for syntax that is convenient for JS development.  Syntax like this isn't very pleasant:
 
 ```JavaScript
-"[part*='my-special-section']": {
+"[part~='my-special-section']": {
     ...
 }
 ```
@@ -176,7 +176,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>The last capital letter in the string is a "P", and ends with "s"</td><td>myRegionParts</td><td>.querySelectorAll('[part~="my-region"]')</td><td>Suggested <a href=https://github.com/WICG/webcomponents/issues/964#issuecomment-1203296793>here</a>.  Hopefully this is precise.</td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "P", doesn't end with "s"</td><td>myRegionPart</td><td>.querySelector('[part*="my-region"]')</td><td>May produce inaccurate results when working with multiple parts on the same element.</td>
+        <td>The last capital letter in the string is a "P", doesn't end with "s"</td><td>myRegionPart</td><td>.querySelector('[part~="my-region"]')</td><td>May produce inaccurate results when working with multiple parts on the same element.</td>
     </tr>
     <tr>
         <td>The last capital letter in the string is an "A", ends with "s"</td><td>ariaLabelAttribs</td><td>.querySelectorAll('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
