@@ -23,6 +23,9 @@ export async function getVal({host, ctx}: RenderContext, path: string): Promise<
             }
             return val;
         }
+        case ':':
+            if(path === ':') return ctx;
+            throw 'TRGV.NI'; //Not implemented
         // case '?':{
         //     path = path.substr(1);
         //     const qSplit = path.split(' ');

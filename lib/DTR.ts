@@ -127,7 +127,7 @@ export class DTR extends TR{
                             this.flushCache();
                         }
                     default:
-                        throw 'NI';//Not Implemented
+                        throw 'DTR2.NI';//Not Implemented
                 }
         }
     }
@@ -175,7 +175,7 @@ export class DTR extends TR{
                             }
                             break;
                         case 'boolean':
-                            throw 'NI'; //not implemented
+                            throw 'DTR1.NI'; //not implemented
                         default:
                             this.#getDepPropAttr(rhs[0], returnObj); //Prop
                             this.#getDepPropAttr(rhs[2], returnObj); //Attr
