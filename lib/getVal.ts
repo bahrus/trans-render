@@ -1,4 +1,5 @@
-export async function getVal(host: any, path: string): Promise<any> {
+import {RenderContext} from './types';
+export async function getVal({host, ctx}: RenderContext, path: string): Promise<any> {
     if (host === undefined)
         return path;
     switch(path[0]){
@@ -14,7 +15,7 @@ export async function getVal(host: any, path: string): Promise<any> {
             if (val === undefined && deflt) {
                 deflt = deflt.trim();
                 if (deflt[0] === ".") {
-                    return await getVal(host, deflt);
+                    return await getVal(ctx!, deflt);
                 }
                 else {
                     return deflt;
@@ -37,7 +38,7 @@ export async function getVal(host: any, path: string): Promise<any> {
             
         // }
         default:
-            return host[path];
+            return (<any>host)[path];
     }
         
 

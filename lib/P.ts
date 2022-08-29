@@ -28,7 +28,7 @@ export async function modifyVal(key: string, rhs: any, ctx: RenderContext){
     switch(typeof path){
         case 'string':
             const {getVal} = await import ('./getVal.js');
-            return getVal(host, path);
+            return getVal(ctx, path);
         case 'object':
             if(Array.isArray(path)){
                 const {weave} = await import ('./weave.js');

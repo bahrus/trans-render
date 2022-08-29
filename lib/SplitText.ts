@@ -11,7 +11,7 @@ export class SplitText{
         }
         if(typeof rhs === 'string'){
             const {getVal} = await import ('./getVal.js');
-            (<any>target!)[toProp] = getVal(host, rhs);
+            (<any>target!)[toProp] = getVal(ctx!, rhs);
             return;
         }
         //rhs is an array, with first element a string

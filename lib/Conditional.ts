@@ -6,17 +6,17 @@ export class Conditional{
         const exp = rhs[1] as IConditional;
         const {getVal} = await import('./getVal.js');
         if(exp.if !== undefined ){
-            exp.ifVal = !!(await getVal(host, exp.if));
+            exp.ifVal = !!(await getVal(ctx!, exp.if));
         }
         if(exp.ifVal === false){
             await this.doFalse(ctx!);
             return;
         }
         if(exp.lhs !== undefined){
-            exp.lhsVal = await getVal(host, exp.lhs);
+            exp.lhsVal = await getVal(ctx!, exp.lhs);
         }
         if(exp.rhs !== undefined){
-            exp.rhsVal = await getVal(host, exp.rhs);
+            exp.rhsVal = await getVal(ctx!, exp.rhs);
         }
         let condition = true;
         if(exp.lhsVal !== undefined || exp.rhsVal !== undefined){

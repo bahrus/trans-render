@@ -5,5 +5,5 @@ test('test1', async ({ page }) => {
   // wait for 1 second
   await page.waitForTimeout(10000);
   const editor = page.locator('xtal-editor');
-  await expect(editor).toHaveAttribute('mark', '');
+  await expect(editor).toHaveAttribute('mark', 'good');
 });

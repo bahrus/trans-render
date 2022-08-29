@@ -22,6 +22,7 @@ export interface RenderContext<T = Element, TItem = any> {
     templateIds?: string[];
     queryInfo?: QueryInfo;
     timestampKey?: string;
+    self?: Transformer;
     //stack?: RenderContext[];
 }
 

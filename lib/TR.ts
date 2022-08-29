@@ -31,6 +31,7 @@ export class TR implements Transformer{
     }
     constructor(public ctx: RenderContext){
         if(ctx.ctx === undefined) ctx.ctx = ctx;
+        ctx.self = this;
     }
     async transform(fragment: Element | DocumentFragment | Element[], fragmentManager?: Element) {
         const {ctx} = this;
@@ -160,7 +161,7 @@ export class TR implements Transformer{
     async eval_string(){
         const {target, rhs, host}  = this.ctx;
         const {getVal} = await import('./getVal.js');
-        return await getVal(host, rhs);
+        return await getVal(this.ctx!, rhs);
     }
     async do_string({target}: RenderContext){
         const val = await this.eval_string();
