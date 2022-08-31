@@ -323,3 +323,7 @@ export interface Transformer{
     transform(fragment: Element | DocumentFragment | Element[], fragmentManager?: Element): Promise<RenderContext>;
     flushCache(): void;
 }
+
+export interface ITSChecker{
+    notChanged(host: Element, fragment: Element | DocumentFragment): boolean;
+}

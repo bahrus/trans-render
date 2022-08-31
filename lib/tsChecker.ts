@@ -1,4 +1,5 @@
-export class TSChecker{
+import {ITSChecker} from './types';
+export class TSChecker implements ITSChecker{
     #lastTimestampHostLookup = new WeakMap<Element, number | string>();
     #lastFragmentTimestampLookup = new WeakMap<Element | DocumentFragment, number | string>();
     constructor(public key: string){}

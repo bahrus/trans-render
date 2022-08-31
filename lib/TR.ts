@@ -1,11 +1,11 @@
-import {QueryInfo, RenderContext, Transformer} from './types';
+import {QueryInfo, RenderContext, Transformer, ITSChecker} from './types';
 import { getQuery} from './specialKeys.js';
 import { lispToCamel } from './lispToCamel.js';
-import { TSChecker } from './tsChecker';
+const timeStampCache: Map<string, WeakMap<Element, ITSChecker>> = new Map();
 
 export class TR implements Transformer{
     #queryCache = new WeakMap<Element | DocumentFragment | Element[], {[key: string]: WeakRef<Element>[]}>();
-    #tsChecker: TSChecker | undefined;
+    //#tsChecker: TSChecker | undefined;
     static async transform(sourceOrTemplate: Element | DocumentFragment | Element[],
         ctx: RenderContext,
         target?: Element | DocumentFragment, fragmentManager?: Element) {
@@ -37,12 +37,17 @@ export class TR implements Transformer{
         const {ctx} = this;
         const {host, options, match, timestampKey} = ctx;
         if(host !== undefined && timestampKey){
-            if(this.#tsChecker === undefined){
-                const {TSChecker} = await import('./tsChecker.js');
-                this.#tsChecker = new TSChecker(timestampKey);
+            if(!timeStampCache.has(timestampKey)){
+                timeStampCache.set(timestampKey, new WeakMap<Element, ITSChecker>());
             }
+            const wm = timeStampCache.get(timestampKey);
+            if(!wm!.has(host)){
+                const {TSChecker} = await import('./tsChecker.js');
+                wm!.set(host, new TSChecker(timestampKey));
+            }
+            const tsc = wm!.get(host)!;
             const elementKey = fragmentManager ? fragmentManager : fragment as Element;
-            if(this.#tsChecker.notChanged(host, elementKey)) return ctx;
+            if(tsc.notChanged(host, elementKey)) return ctx;
         }
         const qc = this.#queryCache;
         const isArray = Array.isArray(fragment);
