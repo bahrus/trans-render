@@ -176,10 +176,10 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>The last capital letter in the string is a "P", and ends with "s"</td><td>myRegionParts</td><td>.querySelectorAll('[part~="my-region"]')</td><td>Suggested <a href=https://github.com/WICG/webcomponents/issues/964#issuecomment-1203296793>here</a>.  Hopefully this is precise.</td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "P", doesn't end with "s"</td><td>myRegionPart</td><td>.querySelector('[part~="my-region"]')</td><td>May produce inaccurate results when working with multiple parts on the same element.</td>
+        <td>The last capital letter in the string is a "P", doesn't end with "s"</td><td>myRegionPt</td><td>.querySelector('[part~="my-region"]')</td><td></td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is an "A", ends with "s"</td><td>ariaLabelAttribs</td><td>.querySelectorAll('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
+        <td>The last capital letter in the string is an "A", ends with "s"</td><td>ariaLabelAttrs</td><td>.querySelectorAll('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
     </tr>
     <tr>
         <td>The last capital letter in the string is an "A", doesn't end with "s"</td><td>ariaLabelAttrib</td><td>.querySelector('[aria-label]')</td><td>The value of the attribute is put into context:  ctx.val</td>
@@ -188,7 +188,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>The last capital letter in the string is a "C", ends with "s"</td><td>pinkFlamingoClasses</td><td>.querySelectorAll('.pink-flamingo')</td><td></td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "C", doesn't end with "s"</td><td>pinkFlamingoClass</td><td>.querySelector('.pink-flamingo')</td><td></td>
+        <td>The last capital letter in the string is a "C", doesn't end with "s"</td><td>pinkFlamingoClash</td><td>.querySelector('.pink-flamingo')</td><td></td>
     </tr>
     <tr>
         <td>The last capital letter in the string is a "I"</td><td>driversLicenseIdId</td><td>.querySelector('#drivers-license-id')</td><td>Untested</td>
@@ -197,10 +197,10 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>Contains Eq, ends with Attribs</td><td>ariaLabelEqHelloThereAttribs</td><td>.querySelectorAll('[arial-label="HelloThere"])</td><td>If space needed ("Hello There") then LHS needs to be wrapped in quotes.   [TODO], waiting for a good use case to see if this is helpful</td>
     </tr> -->
     <tr>
-        <td>The last capital letter in the string is an "E", ends with "s"</td><td>flagIconElements</td><td>.querySelectorAll('flag-icon')</td><td></td>
+        <td>The last capital letter in the string is an "E", ends with "s"</td><td>flagIconEls</td><td>.querySelectorAll('flag-icon')</td><td></td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "E", doesn't end with "s"</td><td>flagIconElements</td><td>.querySelector('flag-icon')</td><td></td>
+        <td>The last capital letter in the string is a "E", doesn't end with "s"</td><td>flagIconElement</td><td>.querySelector('flag-icon')</td><td></td>
     </tr>
     <tr>
         <td>The last capital letter in the string is a "D"</td><td>textContentDash</td><td>.querySelectorAll('[-text-content]')</td><td>Useful for binding properties in bulk</td>
@@ -209,7 +209,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>The last capital letter in the string is a "N", ends with "s"</td><td>firstNameNames</td><td>.querySelectorAll('[name="first-name"]')</td><td>Untested.</td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "N", doesn't end with "s"</td><td>firstNameName</td><td>.querySelector('[name="first-name"]')</td>
+        <td>The last capital letter in the string is a "N", doesn't end with "s"</td><td>firstNameN</td><td>.querySelector('[name="first-name"]')</td>
         <td>
             Untested. 
         </td>
@@ -682,7 +682,13 @@ Just as CSS will support nesting (hopefully, eventually), TR supports nesting ou
 If the RHS is a non-array object, and that object has field $action: "nested_transform", then the nested transform is performed (via calling do_object_nested_transform) as discussed above.
 
 
+## Answers to questions no one is asking
 
+<details>
+<summary>API details</summary>
+
+<quote>Does TR/DTR cache anything?</quote>
+</details>
 
 
 

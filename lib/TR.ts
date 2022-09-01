@@ -4,8 +4,8 @@ import { lispToCamel } from './lispToCamel.js';
 const timeStampCache: Map<string, WeakMap<Element, ITSChecker>> = new Map();
 
 export class TR implements Transformer{
-    #queryCache = new WeakMap<Element | DocumentFragment | Element[], {[key: string]: WeakRef<Element>[]}>();
-    //#tsChecker: TSChecker | undefined;
+    //#queryCache = new WeakMap<Element | DocumentFragment | Element[], {[key: string]: WeakRef<Element>[]}>();
+    #queryCache: {[key: string]: WeakRef<Element>[]} = {};
     static async transform(sourceOrTemplate: Element | DocumentFragment | Element[],
         ctx: RenderContext,
         target?: Element | DocumentFragment, fragmentManager?: Element) {
@@ -51,10 +51,7 @@ export class TR implements Transformer{
         }
         const qc = this.#queryCache;
         const isArray = Array.isArray(fragment);
-        if(!isArray && !qc.has(fragment)){
-            qc.set(fragment, {});
-        }
-        const matchMap = isArray ? {} :  qc.get(fragment)!;
+        const matchMap = isArray ? {} :  qc;
         let prevKey = undefined;
         let queryInfo : QueryInfo | undefined;
         let matches: (Element | WeakRef<Element>)[]  = [];
@@ -161,7 +158,7 @@ export class TR implements Transformer{
         return ctx;
     }
     flushCache(){
-        this.#queryCache = new WeakMap<Element | DocumentFragment, {[key: string]: WeakRef<Element>[]}>();
+        this.#queryCache = {};
     }
     async eval_string(){
         const {target, rhs, host}  = this.ctx;
