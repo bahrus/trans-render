@@ -687,7 +687,22 @@ If the RHS is a non-array object, and that object has field $action: "nested_tra
 <details>
 <summary>API details</summary>
 
-<quote>Does TR/DTR cache anything?</quote>
+>Does TR/DTR cache anything?
+
+TR caches the results of querySelector* in weak references, for rapid updates.  
+
+>How do I clear the cache?
+
+ctx.self.flushCache()
+
+>When should I clear the cache?
+
+Any transforms that alter the DOM, like lazy loading or conditional display.
+
+>Should I share instances of TR/DTR across multiple hosts?
+
+No.  The caching is tied to the host.
+
 </details>
 
 
