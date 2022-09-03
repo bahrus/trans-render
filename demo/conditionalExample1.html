@@ -11,10 +11,12 @@
         <input>
     </template>
     <div id='target'></div>
+
+    <button id='second'>Do second time</button>
     <script type='module'>
         import {DTR} from '../lib/DTR.js';
         const iff = true || false;
-        const dtr = DTR.transform(templ, {
+        const dtr = await DTR.transform(templ, {
             host: {typeIsBoolean: false},
             match:{
                 input: [
@@ -26,6 +28,9 @@
                 ]
             }
         }, target);
+        second.addEventListener('click', e => {
+            dtr.transform(target);
+        });
     </script>
 </body>
 </html>
