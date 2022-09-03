@@ -28,6 +28,7 @@ export class Conditional{
                     }
             }
         }
+        //TODO don't do either if expression matches previous value
         if(condition){
             await this.doTrue(ctx!);
         }else{

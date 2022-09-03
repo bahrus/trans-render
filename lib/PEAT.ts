@@ -11,6 +11,7 @@ export class PEAT extends PEA{
             if(prevT.get(target!) === templ) return
         }
         target!.innerHTML = '';
+        prevT.set(target!, templ);
         DTR.transform(templ, ctx, target!);
     }
 }
