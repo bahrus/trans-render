@@ -278,9 +278,9 @@ A special class of plugins can be developed with these characteristics:
 1.  Transform is associated with a [be-decorated](https://github.com/bahrus/be-decorated) custom attribute / decorator/ behavior, where the attribute starts with be- or data-be-.
 2.  Optionally, if the plugin isn't yet loaded before the transform starts, it can be skipped over, and fall back to the decorator being executed after the library has downloaded (and the cloned template has already been added to the DOM live tree).  This allows the user to see the rest of the HTML content without being blocked waiting for the library to download, and apply the plugin once progressively loaded (but DOM manipulation is now a bit costlier, as the browser may need to update the UI that is already visible).
 
-We call such plugins "be-plugins".
+We call such plugins "be-plugged-in's".
 
-To create a be-plugin create a script as follows:
+To create a be-plugged-in create a script as follows:
 
 ```TypeScript
 import {RenderContext, TransformPluginSettings} from 'trans-render/lib/types';
@@ -296,7 +296,7 @@ export const trPlugin: TransformPluginSettings = {
 register(trPlugin);
 ```
 
-We can now reference this be-plugin via a simple string:
+We can now reference this be-plugged-in via a simple string:
 
 ```JavaScript
 transform(Main, {
@@ -309,7 +309,7 @@ transform(Main, {
 })
 ```
 
-Useful plugins that are available:
+Useful be-plugged-in's that are available:
 
 1.  [be-plugin](https://github.com/bahrus/be-observant/blob/baseline/trPlugin.ts) for [be-observant](https://github.com/bahrus/be-observant/)
 2.  [be-plugin](https://github.com/bahrus/be-repeated/blob/baseline/trPlugin.ts) for [be-repeated](https://github.com/bahrus/be-repeated)
