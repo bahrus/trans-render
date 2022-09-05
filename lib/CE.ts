@@ -28,7 +28,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
     act2Props: {[key:string]: Set<string>} = {};
 
-    addProps<T extends HTMLElement = HTMLElement>(newClass: {new(): T}, props: {[key: string]: PropInfo}, args: DefineArgs<MCProps, MCActions, TPropInfo>){
+    async addProps<T extends HTMLElement = HTMLElement>(newClass: {new(): T}, props: {[key: string]: PropInfo}, args: DefineArgs<MCProps, MCActions, TPropInfo>){
         const {doActions, pq, getProps, doPA, act2Props} = this;
         const self = this;
         const proto = newClass.prototype;
@@ -281,7 +281,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
         interface newClass extends TRElementProps{};
 
-        this.addProps(newClass as any as {new(): HTMLElement}, propInfos, args);
+        await this.addProps(newClass as any as {new(): HTMLElement}, propInfos, args);
         fine(tagName!, newClass as any as ({new(): HTMLElement}));
         this.classDef = newClass as any as {new(): MCProps & MCActions & TRElementProps & HTMLElement};
         return this.classDef;
