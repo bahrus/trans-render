@@ -29,9 +29,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
     act2Props: {[key:string]: Set<string>} = {};
 
-    doPA(self: this, src: any, pci: PropChangeInfo, m: PropChangeMoment): boolean{ 
-        return true;
-    }
+    doPA(self: this, src: any, pci: PropChangeInfo, m: PropChangeMoment){}
 
     async #createPropInfos<MCProps, MCActions, TPropInfo>(args: DefineArgs<MCProps, MCActions, TPropInfo>){
         const {defaultProp, setType} = this;
@@ -224,13 +222,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         return this.classDef;
     }
 
-    // #actionQueue: {[methodName: string]: Action} = {};
-    // #actionsInProgress = false;
-    // #actionsInQueue = false; 
-    
-    //#QLookup = new WeakMap<any, Q>();
     async doActions(self: CE, actions: {[methodName: string]: Action}, target: any, proxy?: any){
-        // const {doActions} = await import('./doActions.js');
         await doActions(self, actions, target, proxy);
     }
 
@@ -322,11 +314,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
     toCamel(s: string){return s.replace(stcRe, function(m){return m[1].toUpperCase();});}
 }
 
-// class Q{
-//     aq: {[methodName: string]: Action} = {}; //actionsQueue
-//     aip = false; //actions in progress
-//     aiq = false; //actionsInQueue
-// }
+
 
 const QR = (propName: string, self: HasPropChangeQueue) => {
     if(self.propChangeQueue === undefined) self.propChangeQueue = new Set<string>();
