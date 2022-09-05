@@ -29,7 +29,6 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
     act2Props: {[key:string]: Set<string>} = {};
 
     doPA(self: this, src: any, pci: PropChangeInfo, m: PropChangeMoment): boolean{ 
-        if(pci.pcm !== undefined) return pci.pcm(src, pci, m) !== false;
         return true;
     }
 
