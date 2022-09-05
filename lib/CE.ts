@@ -28,7 +28,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
     act2Props: {[key:string]: Set<string>} = {};
 
-    addProps<T extends HTMLElement = HTMLElement>(newClass: {new(): T}, props: {[key: string]: PropInfo}, args: DefineArgs){
+    addProps<T extends HTMLElement = HTMLElement>(newClass: {new(): T}, props: {[key: string]: PropInfo}, args: DefineArgs<MCProps, MCActions, TPropInfo>){
         const {doActions, pq, getProps, doPA, act2Props} = this;
         const self = this;
         const proto = newClass.prototype;
@@ -102,11 +102,11 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         return true;
     }
 
-    async #createPropInfos(args: DefineArgs){
+    async #createPropInfos<MCProps, MCActions, TPropInfo>(args: DefineArgs<MCProps, MCActions, TPropInfo>){
         const {defaultProp, setType} = this;
         const config  = args.config as WCConfig;
         const props: {[key: string]: PropInfo} = {};
-        const defaults = {...args.complexPropDefaults, ...config.propDefaults};
+        const defaults = {...args.complexPropDefaults, ...config.propDefaults} as any;
         for(const key in defaults){
             const prop: PropInfo = {...defaultProp};
             setType(prop, defaults[key]);
@@ -140,7 +140,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         await this.api(args, props);
         return props;
     }
-    async api(args: DefineArgs, props: {[key: string]: PropInfo}){
+    async api<MCProps, MCActions, TPropInfo>(args: DefineArgs<MCProps, MCActions, TPropInfo>, props: {[key: string]: PropInfo}){
         //overridable placeholder for adding additional props
     }
 
