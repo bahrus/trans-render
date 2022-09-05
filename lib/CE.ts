@@ -28,75 +28,6 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
     act2Props: {[key:string]: Set<string>} = {};
 
-    async addProps<T extends HTMLElement = HTMLElement>(newClass: {new(): T}, props: {[key: string]: PropInfo}, args: DefineArgs<MCProps, MCActions, TPropInfo>){
-        const {doActions, pq, getProps, doPA, act2Props} = this;
-        const self = this;
-        const proto = newClass.prototype;
-        const config = args.config as WCConfig;
-        //const actions = this.mergedActions;
-        for(const key in props){
-            const prop = props[key];
-            const privateKey = '_' + key;
-            if(key in proto) continue;
-            Object.defineProperty(proto, key, {
-                get(){
-                    return this[privateKey];
-                },
-                set(nv){
-                    const ov = this[privateKey];
-                    if(prop.dry && this[privateKey] === nv) return;
-                    const propChangeMethod = config.propChangeMethod;
-                    const pcm = (propChangeMethod !== undefined ? this[propChangeMethod] : undefined)  as undefined | PropChangeMethod;
-                    //const methodIsDefined = pcm !== undefined;
-                    const pci: PropChangeInfo = {key, ov, nv, prop, pcm};
-                    if(!(doPA(self, this, pci, 'v'))) return;
-                    this[privateKey] = nv;
-                    if(this.isInQuietMode){
-                        doPA(self, this, pci, '+qm');
-                    }
-                    if(this.QR){
-                        this.QR(key, this);
-                        doPA(self, this, pci, '+qr');
-                        return;
-                    }else{
-                        if(!(doPA(self, this, pci, '-a'))) return; //-a = pre actions
-                    }
-                    
-                    const actions = this.mergedActions;
-                    if(actions !== undefined){
-                        const filteredActions: any = {};
-                        for(const methodName in actions){
-                            let action = actions[methodName]!;
-                            if(typeof(action) === 'string'){
-                                action = {ifAllOf:[action]};
-                            }
-                            let props = act2Props[methodName];
-                            if(props === undefined){
-                                props = getProps(self, action);
-                                act2Props[methodName] = props;
-                            }
-                            
-                            if(!props.has(key)) continue;
-                            if(pq(self, action, this)){
-                                filteredActions[methodName] = action;
-                            }
-                        }
-                        (async () => {
-                            await doActions(self, filteredActions, this);
-                            doPA(self, this, pci, '+a'); //+a = post actions
-                        })()
-                        
-                    }else{
-                        doPA(self, this, pci, '+a'); //+a = post actions
-                    }
-                    
-                },
-                enumerable: true,
-                configurable: true,
-            });
-        }
-    }
-
     doPA(self: this, src: any, pci: PropChangeInfo, m: PropChangeMoment): boolean{ 
         if(pci.pcm !== undefined) return pci.pcm(src, pci, m) !== false;
         return true;
@@ -280,8 +211,10 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         }
 
         interface newClass extends TRElementProps{};
-
-        await this.addProps(newClass as any as {new(): HTMLElement}, propInfos, args);
+        if(Object.keys(propInfos).length > 0{
+            const {addProps} = await import('./addProps.js');
+            await addProps(this as CE, newClass as any as {new(): HTMLElement}, propInfos, args)
+        }
         fine(tagName!, newClass as any as ({new(): HTMLElement}));
         this.classDef = newClass as any as {new(): MCProps & MCActions & TRElementProps & HTMLElement};
         return this.classDef;
