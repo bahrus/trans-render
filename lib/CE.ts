@@ -215,7 +215,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         }
 
         interface newClass extends TRElementProps{};
-        if(Object.keys(propInfos).length > 0{
+        if(Object.keys(propInfos).length > 0){
             const {addProps} = await import('./addProps.js');
             await addProps(this as CE, newClass as any as {new(): HTMLElement}, propInfos, args)
         }
