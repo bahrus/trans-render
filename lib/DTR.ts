@@ -1,5 +1,5 @@
 import {TR} from './TR.js';
-import {RenderContext, TransformPlugins} from 'types';
+import {RenderContext, TransformPlugins} from './types';
 export {TR} from './TR.js';
 declare const Sanitizer: any;
 

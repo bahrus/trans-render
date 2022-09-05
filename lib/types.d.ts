@@ -1,5 +1,3 @@
-import { DTR } from "./DTR";
-
 export interface RenderContext<T = Element, TItem = any> {
     ctx?: RenderContext | undefined;
     transform?: (sourceOrTemplate: HTMLElement | DocumentFragment, ctx: RenderContext, target?: HTMLElement | DocumentFragment) => Promise<RenderContext<T>>;
@@ -309,7 +307,7 @@ export interface TemplMgmtProps{
     renderOptions?: RenderOptions;
     waitToInit?: boolean;
     transformPlugins?: TransformPlugins;
-    DTRCtor: typeof DTR;
+    DTRCtor: any;
 }
 
 export interface TemplMgmtActions{
