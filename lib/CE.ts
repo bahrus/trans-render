@@ -1,6 +1,7 @@
 import { DefineArgs, LogicOp, LogicEvalContext, LogicOpProp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementProps, PropChangeMethod, TRElementActions, WCConfig } from './types.js';
 export { Action, PropInfo, TRElementActions, TRElementProps, WCConfig} from './types.js';
 import { def } from './def.js';
+import {doActions} from './doActions.js';
 
 export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction extends Action<MCProps> = Action<MCProps>>{
     
@@ -123,7 +124,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             getValues(){
                 return this.#values;
             }
-            async attributeChangedCallback(n: string, ov: string, nv: string){
+            attributeChangedCallback(n: string, ov: string, nv: string){
                 if(super.attributeChangedCallback) super.attributeChangedCallback(n, ov, nv);
                 if(n === 'defer-hydration' && nv === null && ov !== null){
                     this.detachQR();
@@ -202,7 +203,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                         actionsToDo[doAct] = action;
                     }
                 }
-                await doActions(self, actionsToDo, this);
+                await doActions(self as CE, actionsToDo, this);
                 delete this.propChangeQueue;
             }
             setValsQuietly(vals: this){
@@ -227,42 +228,10 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
     // #actionsInProgress = false;
     // #actionsInQueue = false; 
     
-    #QLookup = new WeakMap<any, Q>();
-    async doActions(self: this, actions: {[methodName: string]: Action}, target: any, proxy?: any){
-        if(!self.#QLookup.has(target)){
-            self.#QLookup.set(target, new Q());
-        }
-        const q = self.#QLookup.get(target)!;
-        if(q.aip){
-            Object.assign(q.aq, actions);
-            q.aiq = true;
-            return;
-        }
-        q.aip = true;
-        for(const methodName in actions){
-            const action = actions[methodName];
-            if(action.debug) debugger;
-            //https://lsm.ai/posts/7-ways-to-detect-javascript-async-function/#:~:text=There%205%20ways%20to%20detect%20an%20async%20function,name%20property%20of%20the%20AsyncFunction%20is%20%E2%80%9CAsyncFunction%E2%80%9D.%202.
-            const method = (<any>target)[methodName];
-            if(method === undefined){
-                throw {
-                    message: 404,
-                    methodName,
-                    target,
-                }
-            }
-            const isAsync = method.constructor.name === 'AsyncFunction';
-            const ret = isAsync ? await (<any>target)[methodName](target) : (<any>target)[methodName](target);
-            if(ret === undefined) continue;
-            await self.postHoc(self, action, target, ret, proxy);
-        }
-        q.aip = false;
-        if(q.aiq){
-            q.aiq = false;
-            const actionQueue = {...q.aq};
-            q.aq = {};
-            await self.doActions(self, actionQueue, target, proxy);
-        }
+    //#QLookup = new WeakMap<any, Q>();
+    async doActions(self: CE, actions: {[methodName: string]: Action}, target: any, proxy?: any){
+        // const {doActions} = await import('./doActions.js');
+        await doActions(self, actions, target, proxy);
     }
 
     fine(tagName: string, newClass: {new(): HTMLElement}){
@@ -353,11 +322,11 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
     toCamel(s: string){return s.replace(stcRe, function(m){return m[1].toUpperCase();});}
 }
 
-class Q{
-    aq: {[methodName: string]: Action} = {}; //actionsQueue
-    aip = false; //actions in progress
-    aiq = false; //actionsInQueue
-}
+// class Q{
+//     aq: {[methodName: string]: Action} = {}; //actionsQueue
+//     aip = false; //actions in progress
+//     aiq = false; //actionsInQueue
+// }
 
 const QR = (propName: string, self: HasPropChangeQueue) => {
     if(self.propChangeQueue === undefined) self.propChangeQueue = new Set<string>();
