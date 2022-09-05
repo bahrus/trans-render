@@ -67,6 +67,9 @@
     "lib/*",
     "xslt/*"
   ],
+  "dependencies": {
+    "be-decorated": "0.0.152"
+  },
   "devDependencies": {
     "@playwright/test": "1.25.1",
     "may-it-serve": "0.0.2",

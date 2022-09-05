@@ -223,6 +223,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
     }
 
     async doActions(self: CE, actions: {[methodName: string]: Action}, target: any, proxy?: any){
+        //const {doActions} = await  import('./doActions.js');
         await doActions(self, actions, target, proxy);
     }
 
