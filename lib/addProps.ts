@@ -12,7 +12,6 @@ export function addProps<T extends HTMLElement = HTMLElement, MCProps = any, MCA
         if(key in proto) continue;
         Object.defineProperty(proto, key, {
             get(){
-                //return this[privateKey];
                 return this.getValues()[key];
             },
             set(nv){
@@ -21,19 +20,12 @@ export function addProps<T extends HTMLElement = HTMLElement, MCProps = any, MCA
                 if(prop.dry && ov === nv) return;
                 const propChangeMethod = config.propChangeMethod;
                 const pcm = (propChangeMethod !== undefined ? this[propChangeMethod] : undefined)  as undefined | PropChangeMethod;
-                //const methodIsDefined = pcm !== undefined;
                 const pci: PropChangeInfo = {key, ov, nv, prop, pcm};
-                //if(!(doPA(ce, this, pci, 'v'))) return;
                 vals[key] = nv;
-                // if(this.isInQuietMode){
-                //     doPA(ce, this, pci, '+qm');
-                // }
                 if(this.QR){
                     this.QR(key, this);
                     doPA(ce, this, pci, '+qr');
                     return;
-                }else{
-                    //if(!(doPA(ce, this, pci, '-a'))) return; //-a = pre actions
                 }
                 
                 const actions = this.mergedActions;
