@@ -17,13 +17,13 @@ export async function applyP<T extends Partial<HTMLElement> = HTMLElement>(targe
         }
         const styles = props.style;
         if(styles !== undefined){
-            Object.assign(target.style, styles);
+            Object.assign(target.style!, styles);
             delete safeProps.style;
         }
         const dataset = props.dataset;
         if(dataset !== undefined){
             if(typeof dataset === 'object'){
-                Object.assign(target.dataset, dataset);
+                Object.assign(target.dataset!, dataset as DOMStringMap);
                 delete safeProps.dataset;
             }else{
                 renameProps.push('dataset');
