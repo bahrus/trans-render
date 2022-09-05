@@ -120,6 +120,10 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                 }
                 return this.#mergedActions!;
             }
+            #values: {[key: string]: any} = {};
+            getValues(){
+                return this.#values;
+            }
             attributeChangedCallback(n: string, ov: string, nv: string){
                 if(super.attributeChangedCallback) super.attributeChangedCallback(n, ov, nv);
                 if(n === 'defer-hydration' && nv === null && ov !== null){
@@ -128,10 +132,10 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
                 let propName = toCamel(n);
                 const prop = propInfos[propName];
-                if(this.inReflectMode) propName = '_' + propName;
+                //if(this.inReflectMode) propName = '_' + propName;
                 if(prop !== undefined){
                     if(prop.dry && ov === nv) return;
-                    const aThis = this as any;
+                    const aThis: any = this.inReflectMode ? this.#values :  this as any;
                     switch(prop.type){
                         case 'String':
                             aThis[propName] = nv;

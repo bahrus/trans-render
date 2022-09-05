@@ -8,21 +8,23 @@ export function addProps<T extends HTMLElement = HTMLElement, MCProps = any, MCA
     //const actions = this.mergedActions;
     for(const key in props){
         const prop = props[key];
-        const privateKey = '_' + key;
+        //const privateKey = '_' + key;
         if(key in proto) continue;
         Object.defineProperty(proto, key, {
             get(){
-                return this[privateKey];
+                //return this[privateKey];
+                return this.getValues()[key];
             },
             set(nv){
-                const ov = this[privateKey];
-                if(prop.dry && this[privateKey] === nv) return;
+                const vals = this.getValues();
+                const ov = vals[key];
+                if(prop.dry && ov === nv) return;
                 const propChangeMethod = config.propChangeMethod;
                 const pcm = (propChangeMethod !== undefined ? this[propChangeMethod] : undefined)  as undefined | PropChangeMethod;
                 //const methodIsDefined = pcm !== undefined;
                 const pci: PropChangeInfo = {key, ov, nv, prop, pcm};
                 if(!(doPA(ce, this, pci, 'v'))) return;
-                this[privateKey] = nv;
+                vals[key] = nv;
                 if(this.isInQuietMode){
                     doPA(ce, this, pci, '+qm');
                 }
