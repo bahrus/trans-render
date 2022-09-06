@@ -1,6 +1,7 @@
 import {CE} from './CE.js';
 import {Action} from './types';
 const QLookup = new WeakMap<any, Q>();
+
 export async function doActions(self: CE, actions: {[methodName: string]: Action}, target: any, proxy?: any){
     if(!QLookup.has(target)){
         QLookup.set(target, new Q());

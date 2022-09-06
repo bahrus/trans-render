@@ -1,7 +1,7 @@
 import { DefineArgs, LogicOp, LogicEvalContext, LogicOpProp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementProps, PropChangeMethod, TRElementActions, WCConfig } from './types.js';
 export { Action, PropInfo, TRElementActions, TRElementProps, WCConfig} from './types.js';
 import { def } from './def.js';
-import {doActions} from './doActions.js';
+//import { doActions } from './doActions.js';
 
 export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction extends Action<MCProps> = Action<MCProps>>{
     
@@ -223,7 +223,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
     }
 
     async doActions(self: CE, actions: {[methodName: string]: Action}, target: any, proxy?: any){
-        //const {doActions} = await  import('./doActions.js');
+        const {doActions} = await  import('./doActions.js');
         await doActions(self, actions, target, proxy);
     }
 

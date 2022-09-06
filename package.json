@@ -24,6 +24,7 @@
     "./lib/Conditional.js": "./lib/Conditional.js",
     "./lib/def.js": "./lib/def.js",
     "./lib/doAction.js": "./lib/doAction.js",
+    "./lib/doActions.js": "./lib/doActions.js",
     "./lib/doInvoke.js": "./lib/doInvoke.js",
     "./lib/doSet.js": "./lib/doSet.js",
     "./lib/DTR.js": "./lib/DTR.js",
@@ -67,9 +68,6 @@
     "lib/*",
     "xslt/*"
   ],
-  "dependencies": {
-    "be-decorated": "0.0.152"
-  },
   "devDependencies": {
     "@playwright/test": "1.25.1",
     "may-it-serve": "0.0.2",
