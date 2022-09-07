@@ -263,7 +263,9 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         const {ifAllOf} = expr;
         const {pqs} = self;
         if(ifAllOf !== undefined){
-            if(!await pqs(self, ifAllOf as ListOfLogicalExpressions, src, ctx)) return false;
+            const {all} = await import('./all.js');
+            if(!await all(ifAllOf as ListOfLogicalExpressions, src, ctx)) return false;
+            //if(!await pqs(self, ifAllOf as ListOfLogicalExpressions, src, ctx)) return false;
         }
         return true;
     }
