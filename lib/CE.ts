@@ -261,7 +261,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
     async pq(self: this, expr: LogicOp<any>, src: MCProps, ctx: LogicEvalContext = {op:'and'}): Promise<boolean>{
         const {ifAllOf} = expr;
-        const {pqs} = self;
+        //const {pqs} = self;
         if(ifAllOf !== undefined){
             const {all} = await import('./all.js');
             if(!await all(ifAllOf as ListOfLogicalExpressions, src, ctx)) return false;
@@ -270,15 +270,15 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         return true;
     }
     
-    async pqsv(self: this, src: any, subExpr: string | number | symbol | LogicOp<any>, ctx: LogicEvalContext): Promise<boolean>{
-        return !!src[subExpr as any as string];
-    }
-    async pqs(self: this, expr: ListOfLogicalExpressions,  src: MCProps, ctx: LogicEvalContext): Promise<boolean>{
-        for(const subExpr of expr){
-            if(!await self.pqsv(self, src, subExpr, ctx)) return false;
-        }
-        return true;
-    }
+    // async pqsv(self: this, src: any, subExpr: string | number | symbol | LogicOp<any>, ctx: LogicEvalContext): Promise<boolean>{
+    //     return !!src[subExpr as any as string];
+    // }
+    // async pqs(self: this, expr: ListOfLogicalExpressions,  src: MCProps, ctx: LogicEvalContext): Promise<boolean>{
+    //     for(const subExpr of expr){
+    //         if(!await self.pqsv(self, src, subExpr, ctx)) return false;
+    //     }
+    //     return true;
+    // }
 
     /**
      * Needed for asynchronous loading
