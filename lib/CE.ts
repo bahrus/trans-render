@@ -191,7 +191,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                         let actionIsApplicable = false;
                         for(const prop of props){
                             if(propChangeQueue.has(prop)){
-                                actionIsApplicable = pq(self, action, this as any as MCProps);
+                                actionIsApplicable = await pq(self, action, this as any as MCProps);
                                 if(actionIsApplicable){
                                     break;
                                 }
@@ -259,7 +259,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         }
     }
 
-    pq(self: this, expr: LogicOp<any>, src: MCProps, ctx: LogicEvalContext = {op:'and'}): boolean{
+    async pq(self: this, expr: LogicOp<any>, src: MCProps, ctx: LogicEvalContext = {op:'and'}): Promise<boolean>{
         const {ifAllOf} = expr;
         const {pqs} = self;
         if(ifAllOf !== undefined){
