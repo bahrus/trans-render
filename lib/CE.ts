@@ -261,6 +261,9 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
     async pq(self: this, expr: LogicOp<any>, src: MCProps, ctx: LogicEvalContext = {op:'and'}): Promise<boolean>{
         const {ifAllOf} = expr;
+        // if(ifAllOf){
+        //     const {} = import
+        // }
         const {pqs} = self;
         if(ifAllOf !== undefined){
             if(!pqs(self, ifAllOf as ListOfLogicalExpressions, src, ctx)) return false;
