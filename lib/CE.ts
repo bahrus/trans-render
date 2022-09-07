@@ -261,22 +261,19 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
     async pq(self: this, expr: LogicOp<any>, src: MCProps, ctx: LogicEvalContext = {op:'and'}): Promise<boolean>{
         const {ifAllOf} = expr;
-        if(ifAllOf){
-            const {} = import('./ifAllOf.js');
-        }
         const {pqs} = self;
         if(ifAllOf !== undefined){
-            if(!pqs(self, ifAllOf as ListOfLogicalExpressions, src, ctx)) return false;
+            if(!await pqs(self, ifAllOf as ListOfLogicalExpressions, src, ctx)) return false;
         }
         return true;
     }
     
-    pqsv(self: this, src: any, subExpr: string | number | symbol | LogicOp<any>, ctx: LogicEvalContext): boolean{
+    async pqsv(self: this, src: any, subExpr: string | number | symbol | LogicOp<any>, ctx: LogicEvalContext): Promise<boolean>{
         return !!src[subExpr as any as string];
     }
-    pqs(self: this, expr: ListOfLogicalExpressions,  src: MCProps, ctx: LogicEvalContext): boolean{
+    async pqs(self: this, expr: ListOfLogicalExpressions,  src: MCProps, ctx: LogicEvalContext): Promise<boolean>{
         for(const subExpr of expr){
-            if(!self.pqsv(self, src, subExpr, ctx)) return false;
+            if(!await self.pqsv(self, src, subExpr, ctx)) return false;
         }
         return true;
     }

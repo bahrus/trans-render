@@ -31,6 +31,7 @@ export function addProps<T extends HTMLElement = HTMLElement, MCProps = any, MCA
                 const actions = this.mergedActions;
                 if(actions !== undefined){
                     const filteredActions: any = {};
+                    (async () => {
                     for(const methodName in actions){
                         let action = actions[methodName]!;
                         if(typeof(action) === 'string'){
@@ -43,11 +44,11 @@ export function addProps<T extends HTMLElement = HTMLElement, MCProps = any, MCA
                         }
                         
                         if(!props.has(key)) continue;
-                        if(pq(ce, action, this)){
+                        if(await pq(ce, action, this)){
                             filteredActions[methodName] = action;
                         }
                     }
-                    (async () => {
+                    
                         await doActions(ce, filteredActions, this);
                         doPA(ce, this, pci, '+a'); //+a = post actions
                     })()
