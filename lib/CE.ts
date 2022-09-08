@@ -260,12 +260,22 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
     }
 
     async pq(self: this, expr: LogicOp<any>, src: MCProps, ctx: LogicEvalContext = {op:'and'}): Promise<boolean>{
-        const {ifAllOf} = expr;
-        //const {pqs} = self;
+        const {ifAllOf, ifNoneOf, ifEquals, ifAtLeastOneOf} = expr;
         if(ifAllOf !== undefined){
             const {all} = await import('./all.js');
-            if(!await all(ifAllOf as ListOfLogicalExpressions, src, ctx)) return false;
-            //if(!await pqs(self, ifAllOf as ListOfLogicalExpressions, src, ctx)) return false;
+            if(!await all(ifAllOf as ListOfLogicalExpressions, src)) return false;
+        }
+        if(ifNoneOf !== undefined){
+            const {none} = await import('./none.js');
+            if(!await none(ifNoneOf as ListOfLogicalExpressions, src)) return false;
+        }
+        if(ifEquals !== undefined){
+            const {eq} = await import('./eq.js');
+            if(!await eq(ifEquals as ListOfLogicalExpressions, src)) return false;
+        }
+        if(ifAtLeastOneOf !== undefined){
+            const {oneOf} = await import('./oneOf.js');
+            if(!await oneOf(ifEquals as ListOfLogicalExpressions, src)) return false;
         }
         return true;
     }

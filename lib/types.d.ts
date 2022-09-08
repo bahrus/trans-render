@@ -245,9 +245,15 @@ export interface LogicOp<MCProps = any>{
     //ifKeyIn?: (keyof MCProps & string)[],
     ifKeyIn?: (keyof MCProps & string)[],  
 
+    ifNoneOf?: LogicOpProp<MCProps>,
+
+    ifEquals?: LogicOpProp<MCProps>,
+
+    ifAtLeastOneOf?: LogicOpProp<MCProps>
+
 }
 
-export type OpOptions = 'and' | 'or' | 'nand' | 'nor' | 'eq' | 'na';
+//export type OpOptions = 'and' | 'or' | 'nand' | 'nor' | 'eq' | 'na';
 
 export interface LogicEvalContext{
     op: OpOptions
