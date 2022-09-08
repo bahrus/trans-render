@@ -255,9 +255,9 @@ export interface LogicOp<MCProps = any>{
 
 //export type OpOptions = 'and' | 'or' | 'nand' | 'nor' | 'eq' | 'na';
 
-export interface LogicEvalContext{
-    op: OpOptions
-}
+// export interface LogicEvalContext{
+//     op: OpOptions
+// }
 
 
 export interface Transform<TMixinComposite = any> extends LogicOp<TMixinComposite>{

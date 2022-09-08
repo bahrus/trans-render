@@ -1,4 +1,4 @@
-import { DefineArgs, LogicOp, LogicEvalContext, LogicOpProp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementProps, PropChangeMethod, TRElementActions, WCConfig } from './types.js';
+import { DefineArgs, LogicOp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementProps, PropChangeMethod, TRElementActions, WCConfig } from './types.js';
 export { Action, PropInfo, TRElementActions, TRElementProps, WCConfig} from './types.js';
 import { def } from './def.js';
 //import { doActions } from './doActions.js';
@@ -245,7 +245,13 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
 
     //better name:  getPropsFromActions
     getProps(self: this, action: Action): Set<string>{
-        return typeof(action) === 'string' ? new Set<string>([action]) : new Set<string>([...(action.ifAllOf || []) as string[], ...(action.ifKeyIn || []) as string[]]);
+        return typeof(action) === 'string' ? new Set<string>([action]) : new Set<string>([
+            ...(action.ifAllOf || []) as string[], 
+            ...(action.ifKeyIn || []) as string[], 
+            ...(action.ifNoneOf || []) as string[],
+            ...(action.ifEquals || []) as string[],
+            ...(action.ifAtLeastOneOf || []) as string[]
+        ]);
     }
 
     async postHoc(self: this, action: Action, target: any, returnVal: any, proxy?: any){
@@ -259,7 +265,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         }
     }
 
-    async pq(self: this, expr: LogicOp<any>, src: MCProps, ctx: LogicEvalContext = {op:'and'}): Promise<boolean>{
+    async pq(self: this, expr: LogicOp<any>, src: MCProps): Promise<boolean>{
         const {ifAllOf, ifNoneOf, ifEquals, ifAtLeastOneOf} = expr;
         if(ifAllOf !== undefined){
             const {all} = await import('./all.js');
