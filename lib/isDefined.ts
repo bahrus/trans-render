@@ -4,10 +4,3 @@ export async function isDefined(el: Element){
     return true;
 }
 
-export async function isResolved(host: EventTarget): Promise<void>{
-    return new Promise(resolved => {
-        host.addEventListener('resolved', e => {
-            resolved();
-        }, {once: true});
-    });
-}
