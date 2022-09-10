@@ -1,9 +1,11 @@
-import {INotify, EventSettings} from './types';
-export async function notifyHookup(target: Element, key: string, eventSettings: INotify){
+import {INotify, EventSettings, INotifyHookupInfo} from './types';
+export async function notifyHookup(target: Element, key: string, eventSettings: INotify): Promise<INotifyHookupInfo>{
     const isPropSet = key.endsWith(':onSet');
     const propName = isPropSet ?  key.substr(0, key.length - 6) : undefined;
-    let handler:  ((event: Event) => Promise<void>) | undefined = undefined;
-    if(eventSettings.doInit){
+    //let handler:  ((event: Event) => Promise<void>) | undefined = undefined;
+    let controller = new AbortController();
+    const {doInit, eventListenerOptions} = eventSettings;
+    if(doInit){
         const {doAction} = await import ('./doAction.js');
         const {getRecipientElement} = await import ('./getRecipientElement.js');
         const recipientElement = await getRecipientElement(target, eventSettings as EventSettings);
@@ -14,25 +16,46 @@ export async function notifyHookup(target: Element, key: string, eventSettings: 
         
     }
     if(propName !== undefined){
-        const {subscribe} = await import ('./subscribe.js');
-        subscribe(target, propName, async () => {
+        // const {subscribe} = await import ('./subscribe.js');
+        // subscribe(target, propName, async () => {
+        //     const {doAction} = await import ('./doAction.js');
+        //     const {getRecipientElement} = await import ('./getRecipientElement.js');
+        //     const recipientElement = await getRecipientElement(target, eventSettings as EventSettings);
+        //     if(recipientElement !== null) doAction(target, recipientElement, eventSettings);
+        // });
+        const {bePropagating} = await import('./bePropagating.js');
+        const et = await bePropagating(target, propName);
+        et.addEventListener(propName, async () => {
             const {doAction} = await import ('./doAction.js');
             const {getRecipientElement} = await import ('./getRecipientElement.js');
             const recipientElement = await getRecipientElement(target, eventSettings as EventSettings);
             if(recipientElement !== null) doAction(target, recipientElement, eventSettings);
-        });
+        }, {signal: controller.signal});
     }else{
-        handler = async e => {
+        let options;
+        switch (typeof eventListenerOptions) {
+            case 'boolean':
+                options = { capture: eventListenerOptions };
+                break;
+            case 'object':
+                options = eventListenerOptions;
+                break;
+            default:
+                options = {};
+        }
+        options.signal = controller.signal;
+        target.addEventListener(key, async e => {
             const {doAction} = await import ('./doAction.js');
             const {getRecipientElement} = await import ('./getRecipientElement.js');
             const recipientElement = await getRecipientElement(target, eventSettings as INotify & EventSettings);
             if(recipientElement !== null) doAction(target, recipientElement, eventSettings, e);
-        }
-        target.addEventListener(key, handler, eventSettings.eventListenerOptions);
+        }, options);
     }
     if(eventSettings.nudge){
         const {nudge} = await import ('./nudge.js');
         nudge(target);
     }
-    return handler;
+    return {
+        controller,
+    };
 }

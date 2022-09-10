@@ -169,6 +169,10 @@ export interface INotify<TSelf = any, TProps = any, TActions = TProps>{
     
 }
 
+export interface INotifyHookupInfo{
+    controller: AbortController;
+}
+
 export interface IConditional{
     if: string;
     ifVal: boolean;
