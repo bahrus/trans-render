@@ -16,13 +16,6 @@ export async function notifyHookup(target: Element, key: string, eventSettings: 
         
     }
     if(propName !== undefined){
-        // const {subscribe} = await import ('./subscribe.js');
-        // subscribe(target, propName, async () => {
-        //     const {doAction} = await import ('./doAction.js');
-        //     const {getRecipientElement} = await import ('./getRecipientElement.js');
-        //     const recipientElement = await getRecipientElement(target, eventSettings as EventSettings);
-        //     if(recipientElement !== null) doAction(target, recipientElement, eventSettings);
-        // });
         const {bePropagating} = await import('./bePropagating.js');
         const et = await bePropagating(target, propName);
         et.addEventListener(propName, async () => {
