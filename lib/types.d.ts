@@ -21,6 +21,7 @@ export interface RenderContext<T = Element, TItem = any> {
     queryInfo?: QueryInfo;
     timestampKey?: string;
     self?: Transformer;
+    initiator?: Element;
     //stack?: RenderContext[];
 }
 
@@ -242,7 +243,7 @@ export interface LogicOp<MCProps = any>{
      * Supported by trans-render
      */
     ifAllOf?: LogicOpProp<MCProps>,
-    //ifKeyIn?: (keyof MCProps & string)[],
+
     ifKeyIn?: (keyof MCProps & string)[],  
 
     ifNoneOf?: LogicOpProp<MCProps>,
@@ -253,11 +254,7 @@ export interface LogicOp<MCProps = any>{
 
 }
 
-//export type OpOptions = 'and' | 'or' | 'nand' | 'nor' | 'eq' | 'na';
 
-// export interface LogicEvalContext{
-//     op: OpOptions
-// }
 
 
 export interface Transform<TMixinComposite = any> extends LogicOp<TMixinComposite>{

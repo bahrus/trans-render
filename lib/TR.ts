@@ -58,15 +58,16 @@ export class TR implements Transformer{
         for(const key in match){
             let rhs = match[key];
             const verb = 'do_' + typeof(rhs);
-            if(key === ':host'){
-                ctx.target = host;
-                ctx.rhs = rhs;
-                delete(ctx.queryInfo);
-                await (<any>this)[verb](ctx);
-                continue;
+            switch(key){
+                case ':host':
+                case ':initator':
+                    ctx.target = (<any>ctx)[key.substring(1)] as Element;
+                    ctx.rhs = rhs;
+                    delete(ctx.queryInfo);
+                    await (<any>this)[verb](ctx);
+                    continue;
             }
             const isDitto = key.startsWith("^");
-            
             if(!isDitto){
                 prevKey = key;
                 queryInfo = getQuery(key);
