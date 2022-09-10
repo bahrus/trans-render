@@ -5,5 +5,5 @@ export function beBeckoned(el: Element, once: boolean, callBack: () => void){
     }
     el.addEventListener('i-am-here', e => {
         callBack();
-    }, {capture: true, once});
+    }, {once});
 }

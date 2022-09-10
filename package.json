@@ -18,6 +18,7 @@
     "./lib/applyPE.js": "./lib/applyPE.js",
     "./lib/applyPEA.js": "./lib/applyPEA.js",
     "./lib/beBeckoned.js": "./lib/beBeckoned.js",
+    "./lib/bePropagating.ts": "./lib/bePropagating.js",
     "./lib/camelToLisp.js": "./lib/camelToLisp.js",
     "./lib/CE.js": "./lib/CE.js",
     "./lib/convert.js": "./lib/convert.js",
