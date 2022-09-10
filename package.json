@@ -58,6 +58,7 @@
     "./lib/subscribe.js": "./lib/subscribe.js",
     "./lib/tsChecker.js": "./lib/tsChecker.js",
     "./lib/TR.js": "./lib/TR.js",
+    "./lib/Tx.js": "./lib/Tx.js",
     "./lib/upSearch.js": "./lib/upSearch.js",
     "./lib/upShadowSearch.js": "./lib/upShadowSearch.js",
     "./lib/waitForAttributeChange.js": "./lib/waitForAttributeChange.js",
