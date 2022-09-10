@@ -60,7 +60,7 @@ export class TR implements Transformer{
             const verb = 'do_' + typeof(rhs);
             switch(key){
                 case ':host':
-                case ':initator':
+                case ':initiator':
                     ctx.target = (<any>ctx)[key.substring(1)] as Element;
                     ctx.rhs = rhs;
                     delete(ctx.queryInfo);
