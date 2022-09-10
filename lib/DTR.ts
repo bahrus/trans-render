@@ -29,14 +29,15 @@ export class DTR extends TR{
     }
     async subscribe(){
         const {host} = this.ctx;
-        const { subscribe } = await import( './subscribe.js' );
+        const {bePropagating} = await import('./bePropagating.js');
         const deps = await this.getDep();
         const fragment = host!.shadowRoot || host!;
         for(const key of deps){
             const firstToken = key[0] === '.' ? this.#getFirstToken(key) : key;
-            await subscribe(host!, firstToken, async () => {
+            const et = await bePropagating(host, firstToken);
+            et.addEventListener(firstToken, async () => {
                 await this.transform(fragment);
-            })
+            });
         }
     }
     async doNewRHS(newRHS: any, ctx: RenderContext){
