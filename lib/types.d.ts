@@ -72,8 +72,7 @@ export type PropSettings<T extends Partial<HTMLElement> = HTMLElement> = {
 
 export type EventSettings = {[key: string] : ((e: Event) => void) | string | INotify};
 
-export interface IMinimalNotify<TSelf = any, TProps = any, TActions = TProps>{
-    action?: (e?: Event) => void;
+export interface IMinimalNotify{
 
     nudge?: boolean;
 
@@ -84,7 +83,12 @@ export interface IMinimalNotify<TSelf = any, TProps = any, TActions = TProps>{
     doInit?: boolean;
 }
 
-export interface INotify<TSelf = any, TProps = any, TActions = TProps> extends IMinimalNotify<TSelf, TProps, TActions>{
+export interface IDIYNotify extends IMinimalNotify{
+    doOnly?: (e?: Event) => void;
+}
+
+
+export interface INotify<TSelf = any, TProps = any, TActions = TProps> extends  IMinimalNotify{
     /**
      * Hardcoded value to set on recipient element.
      */
@@ -117,6 +121,11 @@ export interface INotify<TSelf = any, TProps = any, TActions = TProps> extends I
      * @attr
      */
     toUpShadow?: string;
+
+    /**
+     * abbrev of toUpShadow
+     */
+    to?: string
 
     /**
      * Pass property or invoke fn onto itself
@@ -167,7 +176,8 @@ export interface INotify<TSelf = any, TProps = any, TActions = TProps> extends I
 
     propName?: string;
 
-    transform?: any;
+
+    thenDo?: (e?: Event) => void;
 
     
 
@@ -335,4 +345,8 @@ export interface Transformer{
 
 export interface ITSChecker{
     notChanged(host: Element, fragment: Element | DocumentFragment): boolean;
+}
+
+export interface ITx{
+    transform(): Promise<void>
 }

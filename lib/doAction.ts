@@ -2,7 +2,7 @@ import {INotify} from './types';
 declare function structuredClone<T>(val: T): T;
 
 export async function doAction(self: Element, recipientElement: Element, {
-    valFromEvent, val, vfe, valFromTarget, vft, clone, parseValAs, trueVal, falseVal, as, prop, fn, toggleProp, plusEq, withArgs, propName
+    valFromEvent, val, vfe, valFromTarget, vft, clone, parseValAs, trueVal, falseVal, as, prop, fn, toggleProp, plusEq, withArgs, propName, 
 }: INotify, event?: Event){
     if(val === undefined){
         const valFE = vfe || valFromEvent;
@@ -15,7 +15,7 @@ export async function doAction(self: Element, recipientElement: Element, {
         const {getProp} = await import('./getProp.js');
         let dynamicVal = getProp(src, split);
         if(dynamicVal === undefined) return;
-        if(clone) val = structuredClone(dynamicVal);
+        if(clone) dynamicVal = structuredClone(dynamicVal);
         if(parseValAs !== undefined){
             const {convert} = await import('./convert.js');
             dynamicVal = convert(dynamicVal, parseValAs);
