@@ -72,9 +72,19 @@ export type PropSettings<T extends Partial<HTMLElement> = HTMLElement> = {
 
 export type EventSettings = {[key: string] : ((e: Event) => void) | string | INotify};
 
+export interface IMinimalNotify<TSelf = any, TProps = any, TActions = TProps>{
+    action?: (e?: Event) => void;
 
+    nudge?: boolean;
 
-export interface INotify<TSelf = any, TProps = any, TActions = TProps>{
+    debug?: boolean;
+
+    eventListenerOptions?: boolean | AddEventListenerOptions | undefined;
+
+    doInit?: boolean;
+}
+
+export interface INotify<TSelf = any, TProps = any, TActions = TProps> extends IMinimalNotify<TSelf, TProps, TActions>{
     /**
      * Hardcoded value to set on recipient element.
      */
@@ -139,8 +149,6 @@ export interface INotify<TSelf = any, TProps = any, TActions = TProps>{
 
     withArgs?: ('self' | 'val' | 'event')[];
 
-    doInit?: boolean;
-
     clone?: boolean;
 
     parseValAs?: 'int' | 'float' | 'bool' | 'date' | 'truthy' | 'falsy' | undefined | 'string' | 'object';
@@ -161,12 +169,8 @@ export interface INotify<TSelf = any, TProps = any, TActions = TProps>{
 
     transform?: any;
 
-    eventListenerOptions?: boolean | AddEventListenerOptions | undefined;
-
-    nudge?: boolean;
-
-    debug?: boolean;
     
+
 }
 
 export interface INotifyHookupInfo{

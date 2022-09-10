@@ -1,29 +1,34 @@
-import {INotify, EventSettings, INotifyHookupInfo} from './types';
-export async function notifyHookup(target: Element, key: string, eventSettings: INotify): Promise<INotifyHookupInfo>{
+import {INotify, IMinimalNotify, EventSettings, INotifyHookupInfo} from './types';
+export async function notifyHookup(target: Element, key: string, minSettings: IMinimalNotify): Promise<INotifyHookupInfo>{
     const isPropSet = key.endsWith(':onSet');
     const propName = isPropSet ?  key.substr(0, key.length - 6) : undefined;
     //let handler:  ((event: Event) => Promise<void>) | undefined = undefined;
     let controller = new AbortController();
-    const {doInit, eventListenerOptions} = eventSettings;
+    const {doInit, eventListenerOptions, action} = minSettings;
+    const minimal = action !== undefined;
     if(doInit){
         const {doAction} = await import ('./doAction.js');
-        const {getRecipientElement} = await import ('./getRecipientElement.js');
-        const recipientElement = await getRecipientElement(target, eventSettings as EventSettings);
-        if(recipientElement !== null) doAction(target, recipientElement, eventSettings);
-        if(isPropSet &&  target.localName.includes('-')){
-            await customElements.whenDefined(target.localName);
-        }
-        
-    }
-    if(propName !== undefined){
-        const {bePropagating} = await import('./bePropagating.js');
-        const et = await bePropagating(target, propName);
-        et.addEventListener(propName, async () => {
-            const {doAction} = await import ('./doAction.js');
+        if(minimal){
+            action();
+        }else{
             const {getRecipientElement} = await import ('./getRecipientElement.js');
-            const recipientElement = await getRecipientElement(target, eventSettings as EventSettings);
-            if(recipientElement !== null) doAction(target, recipientElement, eventSettings);
-        }, {signal: controller.signal});
+            const recipientElement = await getRecipientElement(target,  minSettings as EventSettings);
+            if(recipientElement !== null) doAction(target, recipientElement,  minSettings as EventSettings);
+            if(isPropSet &&  target.localName.includes('-')){
+                await customElements.whenDefined(target.localName);
+            }
+        }
+    }
+    const handler = async (e?: Event) => {
+        const {doAction} = await import ('./doAction.js');
+        const {getRecipientElement} = await import ('./getRecipientElement.js');
+        const recipientElement = await getRecipientElement(target, minSettings as EventSettings);
+        if(recipientElement !== null) doAction(target, recipientElement, minSettings as EventSettings);
+    }
+    if(isPropSet){
+        const {bePropagating} = await import('./bePropagating.js');
+        const et = await bePropagating(target, propName!);
+        et.addEventListener(propName!, action || handler, {signal: controller.signal});
     }else{
         let options;
         switch (typeof eventListenerOptions) {
@@ -37,14 +42,9 @@ export async function notifyHookup(target: Element, key: string, eventSettings: 
                 options = {};
         }
         options.signal = controller.signal;
-        target.addEventListener(key, async e => {
-            const {doAction} = await import ('./doAction.js');
-            const {getRecipientElement} = await import ('./getRecipientElement.js');
-            const recipientElement = await getRecipientElement(target, eventSettings as INotify & EventSettings);
-            if(recipientElement !== null) doAction(target, recipientElement, eventSettings, e);
-        }, options);
+        target.addEventListener(key, action || handler, options);
     }
-    if(eventSettings.nudge){
+    if(minSettings.nudge){
         const {nudge} = await import ('./nudge.js');
         nudge(target);
     }
