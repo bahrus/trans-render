@@ -15,7 +15,7 @@ export class Hashit{
                 return newHash;
             }
         }
-        return hash + this.open + idEncoded + json + close;
+        return hash + this.open + idEncoded + json + this.close;
     }
     
     parse(id: string){
