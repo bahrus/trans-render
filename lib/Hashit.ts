@@ -1,9 +1,7 @@
 export class Hashit{
-    constructor(public open: string, public close: string){
+    constructor(public open: string, public close: string){}
 
-    }
-
-    setItem(id: string, obj: any){
+    stringify(id: string, obj: any): string{
         const {hash} = location;
         const json = btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
         const idEncoded = btoa(id);
@@ -14,14 +12,13 @@ export class Hashit{
                 let newHash = hash.substring(0, iPosOfStart + this.open.length + idEncoded.length);
                 newHash += json;
                 newHash += hash.substring(iPosOfEnd);
-                location.hash = newHash;
-                return;
+                return newHash;
             }
         }
-        location.hash += this.open + idEncoded + json + close;
+        return hash + this.open + idEncoded + json + close;
     }
     
-    getItem(id: string){
+    parse(id: string){
         const {hash} = location;
         const idEncoded = btoa(id);
         const iPosOfStart  = hash.indexOf(this.open + idEncoded);
