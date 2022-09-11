@@ -1,7 +1,7 @@
 import { splitExt } from './splitExt.js';
 import { getProp } from './getProp.js';
 import { IValFromEventInstructions } from './types';
-export async function getValFromEvent({vfe, valFromEvent, vft, valFromTarget, propName, clone, parseValAs, trueVal, falseVal}: IValFromEventInstructions, event?: Event){
+export async function getValFromEvent(self: Element, {vfe, valFromEvent, vft, valFromTarget, propName, clone, parseValAs, trueVal, falseVal}: IValFromEventInstructions, event?: Event){
     const valFE = vfe || valFromEvent;
     const valFT = vft || valFromTarget;
     if(event === undefined && valFE !== undefined) return;

@@ -5,7 +5,7 @@ export async function doAction(self: Element, recipientElement: Element, notify:
     let {val} = notify;
     if(val === undefined){
         const {getValFromEvent} = await import('./getValFromEvent.js');
-        val = await getValFromEvent(notify as IValFromEventInstructions, event);
+        val = await getValFromEvent(self, notify as IValFromEventInstructions, event);
     }
     if(as !== undefined){
         switch(as){
