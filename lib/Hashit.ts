@@ -2,7 +2,8 @@ export class Hashit{
     constructor(public open: string, public close: string){}
 
     stringify(id: string, obj: any): string{
-        const {hash} = location;
+        let {hash} = location;
+        if(hash.length > 0 && hash[0] === '#') hash = hash.substr(1);
         const json = btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
         const idEncoded = btoa(id);
         const iPosOfStart = hash.indexOf(this.open + idEncoded );
