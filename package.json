@@ -37,6 +37,7 @@
     "./lib/homeInOn.js": "./lib/homeInOn.js",
     "./lib/html.js": "./lib/html.js",
     "./lib/interpolate.js": "./lib/interpolate.js",
+    "./lib/isContainedIn.js": "./lib/isContainedIn.js",
     "./lib/insertAdjacentTemplate.js": "./lib/insertAdjacentTemplate.js",
     "./lib/linkTemplates.js": "./lib/linkTemplates.js",
     "./lib/lispToCamel.js": "./lib/lispToCamel.js",

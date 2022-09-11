@@ -1,5 +1,5 @@
 export const PropTargets = new WeakMap<EventTarget, Map<string, EventTarget>>();
-
+//
 export async function bePropagating(target: EventTarget, prop: string): Promise<EventTarget>{
     if(!PropTargets.has(target)){
         PropTargets.set(target, new Map<string, EventTarget>());
