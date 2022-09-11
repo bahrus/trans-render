@@ -84,7 +84,7 @@ export interface IMinimalNotify{
 }
 
 export interface IDIYNotify extends IMinimalNotify{
-    doOnly?: (e?: Event) => void;
+    doOnly?: (target: Element, key: string, mn: IMinimalNotify, e?: Event) => void;
 }
 
 export interface IValFromEventInstructions<TSelf = any, TProps = any, TActions = TProps> {
@@ -188,7 +188,7 @@ export interface INotify<TSelf = any, TProps = any, TActions = TProps> extends  
     
 
 
-    thenDo?: (e?: Event) => void;
+    thenDo?: (target: Element, key: string, n: INotify, e?: Event) => void;
 
     
 
