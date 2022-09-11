@@ -1,18 +1,18 @@
 //https://stackoverflow.com/questions/23045652/object-comparing-check-if-an-object-contains-the-whole-other-object
-export function isContainedIn(a: any, b: any) {
-    if (typeof a != typeof b)
+export function isContainedIn(smaller: any, larger: any) {
+    if (typeof smaller != typeof larger)
         return false;
-    if (Array.isArray(a) && Array.isArray(b)) {
+    if (Array.isArray(smaller) && Array.isArray(larger)) {
         // assuming same order at least
-        for (var i=0, j=0, la=a.length, lb=b.length; i<la && j<lb;j++)
-            if (isContainedIn(a[i], b[j]))
+        for (var i=0, j=0, la=smaller.length, lb=larger.length; i<la && j<lb;j++)
+            if (isContainedIn(smaller[i], larger[j]))
                 i++;
         return i==la;
-    } else if (Object(a) === a) {
-        for (var p in a)
-            if (!(p in b && isContainedIn(a[p], b[p])))
+    } else if (Object(smaller) === smaller) {
+        for (var p in smaller)
+            if (!(p in larger && isContainedIn(smaller[p], larger[p])))
                 return false;
         return true;
     } else
-        return a === b;
+        return smaller === larger;
 }
