@@ -33,6 +33,7 @@
     "./lib/getProp.js": "./lib/getProp.js",
     "./lib/getRecipientElement": "./lib/getRecipientElement.js",
     "./lib/getVal.js": "./lib/getVal.js",
+    "./lib/getValFromEvent.js": "./lib/getValFromEvent.js",
     "./lib/homeInOn.js": "./lib/homeInOn.js",
     "./lib/html.js": "./lib/html.js",
     "./lib/interpolate.js": "./lib/interpolate.js",

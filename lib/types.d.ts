@@ -87,12 +87,11 @@ export interface IDIYNotify extends IMinimalNotify{
     doOnly?: (e?: Event) => void;
 }
 
-
-export interface INotify<TSelf = any, TProps = any, TActions = TProps> extends  IMinimalNotify{
+export interface IValFromEventInstructions<TSelf = any, TProps = any, TActions = TProps> {
     /**
      * Hardcoded value to set on recipient element.
      */
-    val?: any
+     val?: any
     /**
      * path to get value from target
      */
@@ -109,6 +108,22 @@ export interface INotify<TSelf = any, TProps = any, TActions = TProps> extends  
      * path to get value from event
      */
     vfe?: string;
+
+    propName?: string;
+
+    clone?: boolean;
+
+    parseValAs?: 'int' | 'float' | 'bool' | 'date' | 'truthy' | 'falsy' | undefined | 'string' | 'object';
+
+    trueVal?: any;
+
+    falseVal?: any;
+}
+
+
+export interface INotify<TSelf = any, TProps = any, TActions = TProps> extends  IMinimalNotify, IValFromEventInstructions<TSelf, TProps, TActions>{
+
+
     /**
      * Pass property or invoke fn onto custom or built-in element hosting the contents of p-u element.
      */
@@ -158,9 +173,7 @@ export interface INotify<TSelf = any, TProps = any, TActions = TProps> extends  
 
     withArgs?: ('self' | 'val' | 'event')[];
 
-    clone?: boolean;
-
-    parseValAs?: 'int' | 'float' | 'bool' | 'date' | 'truthy' | 'falsy' | undefined | 'string' | 'object';
+    
 
     plusEq?: boolean;
 
@@ -168,13 +181,11 @@ export interface INotify<TSelf = any, TProps = any, TActions = TProps> extends  
 
     toggleProp?: boolean;
 
-    trueVal?: any;
 
-    falseVal?: any;
 
     as?: 'str-attr' | 'bool-attr' | 'obj-attr',
 
-    propName?: string;
+    
 
 
     thenDo?: (e?: Event) => void;

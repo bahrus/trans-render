@@ -1,34 +1,12 @@
-import {INotify} from './types';
-declare function structuredClone<T>(val: T): T;
+import {INotify, IValFromEventInstructions} from './types';
 
-export async function doAction(self: Element, recipientElement: Element, {
-    valFromEvent, val, vfe, valFromTarget, vft, clone, parseValAs, trueVal, falseVal, as, prop, fn, toggleProp, plusEq, withArgs, propName, 
-}: INotify, event?: Event){
+export async function doAction(self: Element, recipientElement: Element, notify: INotify, event?: Event){
+    const { as, prop, fn, toggleProp, plusEq, withArgs} = notify;
+    let {val} = notify;
     if(val === undefined){
-        const valFE = vfe || valFromEvent;
-        const valFT = vft || valFromTarget;
-        if(event === undefined && valFE !== undefined) return;
-        const valPath = (event !== undefined && valFE ? valFE : valFT) || (propName || 'value');
-        const {splitExt} = await import('./splitExt.js');
-        const split = splitExt(valPath as string);
-        let src: any = valFE !== undefined ? ( event ? event : self) : self; 
-        const {getProp} = await import('./getProp.js');
-        let dynamicVal = getProp(src, split);
-        if(dynamicVal === undefined) return;
-        if(clone) dynamicVal = structuredClone(dynamicVal);
-        if(parseValAs !== undefined){
-            const {convert} = await import('./convert.js');
-            dynamicVal = convert(dynamicVal, parseValAs);
-        }
-        if(trueVal && dynamicVal){
-            dynamicVal = trueVal;
-        }else if(falseVal && !dynamicVal){
-            dynamicVal = falseVal;
-        }
-        val = dynamicVal;
+        const {getValFromEvent} = await import('./getValFromEvent.js');
+        val = await getValFromEvent(notify as IValFromEventInstructions, event);
     }
-
-
     if(as !== undefined){
         switch(as){
             case 'str-attr':
