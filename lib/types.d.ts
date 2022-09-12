@@ -22,8 +22,16 @@ export interface RenderContext<T = Element, TItem = any> {
     timestampKey?: string;
     self?: Transformer;
     initiator?: Element;
-    proxyHost?: ProxyHandler<Element>;
+    //proxyHost?: ProxyHost; //TODO
     //stack?: RenderContext[];
+}
+
+// https://infrequently.org/2021/03/reactive-data-modern-js/
+export interface ProxyHost extends EventTarget{
+    proxy: any,
+    virtualProps: string[],
+    self: any,
+    deepMerge(obj: any): void;
 }
 
 export interface TransformPluginSettings<T = Element, TItem = any> {
