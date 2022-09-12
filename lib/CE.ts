@@ -140,15 +140,16 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                             break;
                         case 'Object':
                             if(prop.parse){
-                                let val = nv.trim();
-                                if(val!==null){
+                                if(nv!==null){
+                                    let val = nv.trim();
                                     try{
                                         val = JSON.parse(val);
                                     }catch(e){
                                         console.error({val, e});
                                     }
+                                    aThis[propName] = val; 
                                 }
-                                aThis[propName] = val;  
+                                 
                             }
                             break;
                         case 'Number':
@@ -203,11 +204,6 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
                 }
                 await doActions(self as CE, actionsToDo, this);
                 delete this.propChangeQueue;
-            }
-            setValsQuietly(vals: this){
-                for(const key in vals){
-                    (<any>this)['_' + key] = vals[key];
-                }
             }
 
         }
@@ -286,15 +282,6 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         return true;
     }
     
-    // async pqsv(self: this, src: any, subExpr: string | number | symbol | LogicOp<any>, ctx: LogicEvalContext): Promise<boolean>{
-    //     return !!src[subExpr as any as string];
-    // }
-    // async pqs(self: this, expr: ListOfLogicalExpressions,  src: MCProps, ctx: LogicEvalContext): Promise<boolean>{
-    //     for(const subExpr of expr){
-    //         if(!await self.pqsv(self, src, subExpr, ctx)) return false;
-    //     }
-    //     return true;
-    // }
 
     /**
      * Needed for asynchronous loading

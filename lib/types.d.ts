@@ -233,7 +233,6 @@ export interface TRElementActions{
     attachQR(): void;
     detachQR(): void;
     attributeChangedCallback?(n: string, ov: string, nv: string): void;
-    setValsQuietly(vals: this): void;
 }
 
 
