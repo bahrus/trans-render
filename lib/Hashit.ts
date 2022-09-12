@@ -16,7 +16,8 @@ export class Hashit{
                 return newHash;
             }
         }
-        return hash + this.open + idEncoded + json + this.close;
+        const amp = hash.length === 0 ? '&' : '';
+        return hash + amp + this.open + idEncoded + json + this.close;
     }
     
     parse(id: string){
