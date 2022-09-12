@@ -22,6 +22,7 @@ export interface RenderContext<T = Element, TItem = any> {
     timestampKey?: string;
     self?: Transformer;
     initiator?: Element;
+    proxyHost?: ProxyHandler<Element>;
     //stack?: RenderContext[];
 }
 
