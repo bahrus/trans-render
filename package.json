@@ -48,6 +48,7 @@
     "./lib/NestedTransform.js": "./lib/NestedTransform.js",
     "./lib/notifyHookup.js": "./lib/notifyHookup.js",
     "./lib/nudge.js": "./lib/nudge.js",
+    "./lib/PropertyBag.js": "./lib/PropertyBag.js",
     "./lib/onRemove.js": "./lib/onRemove.js",
     "./lib/P.js": "./lib/P.js",
     "./lib/PE.js": "./lib/PE.js",

@@ -11,12 +11,17 @@ export class PropertyBag extends EventTarget{
         const self = this;
         this.proxy = new Proxy(self, {
             get(obj: any, prop){
-                //https://stackoverflow.com/questions/59109571/addeventlistener-on-proxied-event-target
+                
                 const value = Reflect.get(obj, prop);
-                if(typeof(value) == "function"){
+                const type = typeof value;
+                //https://infrequently.org/2021/03/reactive-data-modern-js/
+                //https://stackoverflow.com/questions/59109571/addeventlistener-on-proxied-event-target
+                // Avoid `this` confusion for functions
+                if ((type === "function") &&
+                    (prop in EventTarget.prototype)) {
                     return value.bind(obj);
                 }
-                return obj[prop];
+                return value;
             },
             set(obj: any, prop: string, val){
                 obj[prop] = val;
