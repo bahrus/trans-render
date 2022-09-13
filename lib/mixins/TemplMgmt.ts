@@ -52,13 +52,13 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
             if(shadowRoot === null){
                 root = this.attachShadow({mode: 'open'});
                 this.#needToAppendClone = true;
-                this.#adopt(this, root);
+                await this.#adopt(this, root);
                
             }else{
                 root = shadowRoot;
                 if(!this.#repeatVisit){
                     //assume the shadow root came from declarative shadow dom, so no need to clone template
-                    this.#adopt(this, root);
+                    await this.#adopt(this, root);
                     this.#isDeclarativeShadowDOM = true;                    
                     this.clonedTemplate = root;
                     this.#repeatVisit = true;
@@ -142,6 +142,10 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         const fragment = shadowRoot || this;
         const {TR} = await import('../TR.js');
         TR.transform(fragment, ctx);
+    }
+
+    async doHomeInOn({homeInOn}: this){
+
     }
 }
 

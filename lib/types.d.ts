@@ -335,19 +335,23 @@ export type RHS = string | boolean | PSettings | PESettings | PEASettings | {[ke
 
 export type Matches = {[key: string]: RHS};
 
-export interface TemplMgmtProps{
+export interface TransformPacket {
+    hydratingTransform?: Matches;
+    transform?: Matches | Matches[];
+    unsafeTransform?: {[key: string]: (ctx: RenderContext) => any};
+}
+
+export interface TemplMgmtProps<MCProps = any> extends TransformPacket{
     mainTemplate?: HTMLTemplateElement | string;
     unsafeTCount: number;
     styles?: CSSStyleSheet[] | string;
     clonedTemplate?: Node | undefined;
-    hydratingTransform?: Matches;
-    transform?: Matches | Matches[];
-    unsafeTransform?: {[key: string]: (ctx: RenderContext) => any};
     noshadow?: boolean;
     renderOptions?: RenderOptions;
     waitToInit?: boolean;
     transformPlugins?: TransformPlugins;
     DTRCtor: any;
+    homeInOn?: Partial<{[key in keyof MCProps]: TransformPacket}>;
 }
 
 export interface TemplMgmtActions{
