@@ -4,7 +4,6 @@ export class MyCustomElement{
 
     proxy: EventTarget | undefined;
 
-    pb: PropertyBag | undefined;
     constructor(){
         const pb = new PropertyBag();
         this.proxy = new Proxy(pb.proxy, {
@@ -28,7 +27,6 @@ export class MyCustomElement{
                 }
             }
         });
-        this.pb = pb;
     }
 }
 

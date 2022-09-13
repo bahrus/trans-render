@@ -1,7 +1,6 @@
 export class MyCustomElement {
     #myPrivateProp = '12345';
     proxy;
-    pb;
     constructor() {
         const pb = new PropertyBag();
         this.proxy = new Proxy(pb.proxy, {
@@ -24,7 +23,6 @@ export class MyCustomElement {
                 }
             }
         });
-        this.pb = pb;
     }
 }
 export class PropertyBag extends EventTarget {
