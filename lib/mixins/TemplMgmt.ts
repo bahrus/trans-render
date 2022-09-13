@@ -89,12 +89,17 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         this.#repeatVisit = true;
     }
 
-    async doTemplMount({hydratingTransform, transform, waitToInit, clonedTemplate, noshadow, transformPlugins, DTRCtor}: TemplMgmtBase){
+    async doTemplMount(base: TemplMgmtBase){
+        const {hydratingTransform, transform, waitToInit, clonedTemplate, noshadow, transformPlugins, DTRCtor} = base;
         if(waitToInit) return;
         
         const fragment = clonedTemplate === undefined ? 
             noshadow ? this : this.shadowRoot!
             : clonedTemplate as DocumentFragment;
+        if(hydratingTransform || transform){
+            const {MainTransforms} = await import('./MainTransforms.js');
+            await MainTransforms(this as any as TemplMgmtBaseMixin & HTMLElement, base, fragment as DocumentFragment);
+        }
         if(hydratingTransform !== undefined){
             const {DTR} = await import('../DTR.js');
             const ctx: RenderContext = {
