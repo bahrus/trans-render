@@ -2,11 +2,11 @@
 export class MyCustomElement{
     #myPrivateProp = '12345';
 
-    proxy: EventTarget | undefined;
+    propertyBag: EventTarget | undefined;
 
     constructor(){
         //const pb = new PropertyBag();
-        this.proxy = PropertyBag.new();
+        this.propertyBag = PropertyBag.new();
         // this.proxy = new Proxy(pb.proxy, {
         //     get: (obj: any, prop: string, handler) => 
         //     {

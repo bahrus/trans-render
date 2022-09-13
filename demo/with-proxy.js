@@ -1,9 +1,9 @@
 export class MyCustomElement {
     #myPrivateProp = '12345';
-    proxy;
+    propertyBag;
     constructor() {
         //const pb = new PropertyBag();
-        this.proxy = PropertyBag.new();
+        this.propertyBag = PropertyBag.new();
         // this.proxy = new Proxy(pb.proxy, {
         //     get: (obj: any, prop: string, handler) => 
         //     {

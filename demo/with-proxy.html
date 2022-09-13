@@ -10,11 +10,10 @@
     <script type=module>
         import {MyCustomElement} from './with-proxy.js';
         const mce = new MyCustomElement();
-        console.log(mce.proxy.p1);
-        mce.proxy.addEventListener("foo", e => {
+        mce.propertyBag.addEventListener("foo", e => {
             console.log(e);
         });
-        mce.proxy.foo = 'bar';
+        mce.propertyBag.foo = 'bar';
         
     </script>
 </body>
