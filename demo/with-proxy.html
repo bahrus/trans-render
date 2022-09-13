@@ -11,10 +11,11 @@
         import {MyCustomElement} from './with-proxy.js';
         const mce = new MyCustomElement();
         console.log(mce.proxy.p1);
-        mce.pb.addEventListener("foo", e => {
+        mce.proxy.addEventListener("foo", e => {
             console.log(e);
         });
         mce.proxy.foo = 'bar';
+        
     </script>
 </body>
 </html>
