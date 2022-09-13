@@ -5,32 +5,38 @@ export class MyCustomElement{
     proxy: EventTarget | undefined;
 
     constructor(){
-        const pb = new PropertyBag();
-        this.proxy = new Proxy(pb.proxy, {
-            get: (obj: any, prop: string, handler) => 
-            {
-                switch(prop){
-                    case 'p1':
-                        return this.#myPrivateProp;
-                    default:
-                        return (<any>pb.proxy)[prop]
-                }
-            },
-            set: (obj: any, prop: string, val) => {
-                switch(prop){
-                    case 'p1':
-                        this.#myPrivateProp = val;
-                        return true;
-                    default:
-                        (<any>pb.proxy)[prop] = val;
-                        return true;
-                }
-            }
-        });
+        //const pb = new PropertyBag();
+        this.proxy = PropertyBag.new();
+        // this.proxy = new Proxy(pb.proxy, {
+        //     get: (obj: any, prop: string, handler) => 
+        //     {
+        //         switch(prop){
+        //             case 'p1':
+        //                 return this.#myPrivateProp;
+        //             default:
+        //                 return (<any>pb.proxy)[prop]
+        //         }
+        //     },
+        //     set: (obj: any, prop: string, val) => {
+        //         switch(prop){
+        //             case 'p1':
+        //                 this.#myPrivateProp = val;
+        //                 return true;
+        //             default:
+        //                 (<any>pb.proxy)[prop] = val;
+        //                 return true;
+        //         }
+        //     }
+        // });
     }
 }
 
 export class PropertyBag extends EventTarget{
+
+    static new(){
+        const pb = new PropertyBag();
+        return pb.proxy;
+    }
 
     proxy: EventTarget;
     constructor(){
