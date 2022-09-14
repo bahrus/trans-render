@@ -1,9 +1,9 @@
 import {TemplMgmtBase} from '../types';
 export class DoStyles{
-    constructor({styles}: TemplMgmtBase, root: ShadowRoot, compiledStyleMap: Map<string, CSSStyleSheet[] | HTMLTemplateElement>, modernBrowser: boolean){
+    constructor(self: any, {styles}: TemplMgmtBase, root: ShadowRoot, compiledStyleMap: Map<string, CSSStyleSheet[] | HTMLTemplateElement>, modernBrowser: boolean){
         let styleSheets: CSSStyleSheet[] | HTMLTemplateElement | undefined;
         if(typeof styles === 'string'){
-            const isReally = (<any>this.constructor).isReally as string;
+            const isReally = (<any>self.constructor).isReally as string;
             if(!compiledStyleMap.has(isReally)){
                 const strippedStyle = styles.replace('<style>', '').replace('</style>', '');
                 if(modernBrowser){

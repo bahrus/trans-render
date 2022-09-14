@@ -15,34 +15,10 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
     #repeatVisit = false;
     #isDeclarativeShadowDOM = false;
     #needToAppendClone = false;
-    async #adopt({styles}: TemplMgmtBase, root: ShadowRoot){
-        if(styles === undefined) return;
-        let styleSheets: CSSStyleSheet[] | HTMLTemplateElement | undefined;
-        if(typeof styles === 'string'){
-            const isReally = (<any>this.constructor).isReally as string;
-            if(!compiledStyleMap.has(isReally)){
-                const strippedStyle = styles.replace('<style>', '').replace('</style>', '');
-                if(modernBrowser){
-                    const sheet = new CSSStyleSheet();
-                    (<any>sheet).replaceSync(strippedStyle);
-                    compiledStyleMap.set(isReally, [sheet]);
-                }else{
-                    const tm = document.createElement('template');
-                    const st = document.createElement('style');
-                    st.innerHTML = strippedStyle;
-                    tm.content.appendChild(st);
-                    compiledStyleMap.set(isReally, tm);
-                }
-            }
-            styleSheets = compiledStyleMap.get(isReally);
-        }else{
-            styleSheets = styles;
-        }
-        if(styleSheets instanceof HTMLTemplateElement){
-            root.appendChild(styleSheets.content.cloneNode(true));
-        }else if(Array.isArray(styleSheets)){
-            (<any>root).adoptedStyleSheets = [...(<any>root).adoptedStyleSheets, ...styleSheets];
-        }
+    async #adopt(base: TemplMgmtBase, root: ShadowRoot){
+        if(base.styles === undefined) return;
+        const {DoStyles} = await import('./DoStyles.js');
+        new DoStyles(this, base, root, compiledStyleMap, modernBrowser);
             
     }
     async cloneTemplate({noshadow, shadowRoot, mainTemplate, styles, waitToInit}: TemplMgmtBase){
