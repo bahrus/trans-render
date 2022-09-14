@@ -28,7 +28,8 @@ export class PropertyBag extends EventTarget{
                 self.dispatchEvent(new Event(prop));
                 return true;
             }
-        })
+        });
+        (<any>this.proxy)._isPropagating = true;
     }
 }
 //https://infrequently.org/2021/03/reactive-data-modern-js/

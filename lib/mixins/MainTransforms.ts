@@ -29,7 +29,7 @@ export async function MainTransforms(
                 if(!self.hasAttribute('defer-rendering')){
                     await dtr.transform(fragment);
                 }
-                await dtr.subscribe();
+                await dtr.subscribe(!!self._isPropagating);
             }
         }
     }
