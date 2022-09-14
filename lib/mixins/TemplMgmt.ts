@@ -15,7 +15,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
     #repeatVisit = false;
     #isDeclarativeShadowDOM = false;
     #needToAppendClone = false;
-    #adopt({styles}: TemplMgmtBase, root: ShadowRoot){
+    async #adopt({styles}: TemplMgmtBase, root: ShadowRoot){
         if(styles === undefined) return;
         let styleSheets: CSSStyleSheet[] | HTMLTemplateElement | undefined;
         if(typeof styles === 'string'){
