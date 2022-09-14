@@ -26,13 +26,6 @@ export interface RenderContext<T = Element, TItem = any> {
     //stack?: RenderContext[];
 }
 
-// https://infrequently.org/2021/03/reactive-data-modern-js/
-export interface ProxyHost extends EventTarget{
-    proxy: any,
-    virtualProps: string[],
-    self: any,
-    deepMerge(obj: any): void;
-}
 
 export interface TransformPluginSettings<T = Element, TItem = any> {
     processor: (ctx: RenderContext<T, TItem>) => any;
@@ -339,6 +332,8 @@ export interface TransformPacket {
     hydratingTransform?: Matches;
     transform?: Matches | Matches[];
     unsafeTransform?: {[key: string]: (ctx: RenderContext) => any};
+    transformPlugins?: TransformPlugins;
+    DTRCtor?: any;
 }
 
 export interface TemplMgmtProps<MCProps = any> extends TransformPacket{
@@ -349,8 +344,7 @@ export interface TemplMgmtProps<MCProps = any> extends TransformPacket{
     noshadow?: boolean;
     renderOptions?: RenderOptions;
     waitToInit?: boolean;
-    transformPlugins?: TransformPlugins;
-    DTRCtor: any;
+    
     homeInOn?: Partial<{[key in keyof MCProps]: TransformPacket}>;
 }
 

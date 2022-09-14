@@ -66,7 +66,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
     }
 
     async doTemplMount(base: TemplMgmtBase){
-        const {hydratingTransform, transform, waitToInit, clonedTemplate, noshadow, transformPlugins, DTRCtor} = base;
+        const {hydratingTransform, transform, waitToInit, clonedTemplate, noshadow, transformPlugins, DTRCtor, homeInOn} = base;
         if(waitToInit) return;
         
         const fragment = clonedTemplate === undefined ? 
@@ -76,7 +76,9 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
             const {MainTransforms} = await import('./MainTransforms.js');
             await MainTransforms(this as any as TemplMgmtBaseMixin & HTMLElement, base, fragment as DocumentFragment);
         }
-
+        if(homeInOn){
+            const {HomeIn} = await import('./HomeIn.js');
+        }
         if(this.#needToAppendClone){
             const root = noshadow ? this : this.shadowRoot!;
             root.appendChild(fragment);
@@ -98,9 +100,6 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         TR.transform(fragment, ctx);
     }
 
-    async doHomeInOn({homeInOn}: this){
-
-    }
 }
 
 export const beTransformed = {

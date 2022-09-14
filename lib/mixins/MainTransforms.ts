@@ -1,9 +1,9 @@
-import {TemplMgmtBase, RenderContext} from '../types';
+import {TransformPacket, RenderContext} from '../types';
 import {TemplMgmtBaseMixin} from './TemplMgmt.js';
 import {DTR} from '../DTR.js';
 export async function MainTransforms(
-        self:  TemplMgmtBaseMixin & HTMLElement, 
-        {hydratingTransform, transform, waitToInit, clonedTemplate, noshadow, transformPlugins, DTRCtor, homeInOn}: TemplMgmtBase,
+        self:  any, 
+        {hydratingTransform, transform, transformPlugins, DTRCtor}: TransformPacket,
         fragment: DocumentFragment
     ){
         if(hydratingTransform !== undefined){
