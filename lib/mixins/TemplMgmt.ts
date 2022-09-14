@@ -76,34 +76,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
             const {MainTransforms} = await import('./MainTransforms.js');
             await MainTransforms(this as any as TemplMgmtBaseMixin & HTMLElement, base, fragment as DocumentFragment);
         }
-        // if(hydratingTransform !== undefined){
-        //     const {DTR} = await import('../DTR.js');
-        //     const ctx: RenderContext = {
-        //         host: this,
-        //         match: hydratingTransform,
-        //         plugins: transformPlugins,
-        //     }
-        //     const ctor = DTRCtor === undefined ? DTR : DTRCtor;
-        //     const dtr = new ctor(ctx);
-        //     await dtr.transform(fragment);
-        // }
-        // if(transform !== undefined){
-        //     const transforms = Array.isArray(transform) ? transform : [transform];
-        //     const {DTR} = await import('../DTR.js');
-        //     for(const t of transforms){
-        //         const ctx: RenderContext = {
-        //             host: this,
-        //             match: t,
-        //             plugins: transformPlugins,
-        //         }
-        //         const ctor = DTRCtor === undefined ? DTR : DTRCtor;
-        //         const dtr = new ctor(ctx);
-        //         if(!this.hasAttribute('defer-rendering')){
-        //             await dtr.transform(fragment);
-        //         }
-        //         await dtr.subscribe();
-        //     }
-        // }
+
         if(this.#needToAppendClone){
             const root = noshadow ? this : this.shadowRoot!;
             root.appendChild(fragment);
