@@ -277,7 +277,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
         }
         if(ifAtLeastOneOf !== undefined){
             const {oneOf} = await import('./oneOf.js');
-            if(!await oneOf(ifEquals as ListOfLogicalExpressions, src)) return false;
+            if(!await oneOf(ifAtLeastOneOf as ListOfLogicalExpressions, src)) return false;
         }
         return true;
     }
