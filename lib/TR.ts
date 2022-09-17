@@ -176,16 +176,9 @@ export class TR implements Transformer{
     }
     async do_object(ctx: RenderContext){
         const {target, queryInfo, rhs} = ctx;
-        const lhsProp = queryInfo?.lhsProp;
-        if(lhsProp){
-            (<any>target)[lhsProp] = rhs;
-        }else{
-            const action = rhs.$action as string;
-            if(action === undefined) throw 'NI';
-            await (<any>this)['do_object_' + action](ctx);
-            
-        }
-
+        const action = rhs.$action as string;
+        if(action === undefined) throw 'NI';
+        await (<any>this)['do_object_' + action](ctx);
     }
 
     async do_object_nested_transform(ctx: RenderContext){

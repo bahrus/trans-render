@@ -65,11 +65,26 @@ export class DTR extends TR{
             return await super.do_string(ctx);
         }
     }
-    async do_object({ctx, rhs}: RenderContext): Promise<void> {
+    async do_object(rc: RenderContext): Promise<void> {
+        const {rhs} = rc;
         if(Array.isArray(rhs)){
             return await this.do_array();
         }else{
-            return await super.do_object(ctx!);
+            const {rhs, ctx} = rc;
+            if(rhs.$action === undefined){
+                const {queryInfo} = rc;
+                const lhsProp = queryInfo?.lhsProp;
+                 if(lhsProp){
+                    const {target} = rc;
+                    (<any>target)[lhsProp] = rhs;
+                 }else{
+                    ctx!.rhs = [rhs];
+                    return await this.do_object(rc);
+                 }
+            }else{
+                return await super.do_object(ctx!);
+            }
+            
         }
         
     }
