@@ -681,6 +681,9 @@ Just as CSS will support nesting (hopefully, eventually), TR supports nesting ou
 
 If the RHS is a non-array object, and that object has field $action: "nested_transform", then the nested transform is performed (via calling do_object_nested_transform) as discussed above.
 
+## Setting Props the easy way
+
+If the RHS expression is a non array object without an $action property, then the RHS is used to set properties on the element.
 
 ## Answers to questions no one is asking
 
