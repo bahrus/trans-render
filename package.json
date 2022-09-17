@@ -76,8 +76,8 @@
     "xslt/*"
   ],
   "dependencies": {
-    "xtal-element": "0.0.522",
-    "be-decorated": "0.0.156"
+    "xtal-element": "0.0.523",
+    "be-decorated": "0.0.158"
   },
   "devDependencies": {
     "@playwright/test": "1.25.2",
