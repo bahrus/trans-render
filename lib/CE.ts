@@ -122,7 +122,7 @@ export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TActio
             getValues(){
                 return this.#values;
             }
-            attributeChangedCallback(n: string, ov: string, nv: string){
+            async attributeChangedCallback(n: string, ov: string, nv: string){
                 if(super.attributeChangedCallback) super.attributeChangedCallback(n, ov, nv);
                 if(n === 'defer-hydration' && nv === null && ov !== null){
                     this.detachQR();

@@ -76,7 +76,7 @@
     "xslt/*"
   ],
   "dependencies": {
-    "xtal-element": "0.0.523",
+    "xtal-element": "0.0.524",
     "be-decorated": "0.0.158"
   },
   "devDependencies": {
