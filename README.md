@@ -52,9 +52,9 @@ The CSS matching that the core TR.js supports simply does multi-matching for all
 
 Note that TR.js is a class, with key method signatures allow for alternative syntax / extensions.
 
-### Multi-matching
+### Selecting/Matching
 
-Multi matching provides support for syntax that is convenient for JS development.  Syntax like this isn't very pleasant:
+Although the way we match elements is almost identical to standard CSS, trans-render provides support for syntax that is more convenient for JS development.  Syntax like this isn't very pleasant:
 
 ```JavaScript
 "[part~='my-special-section']": {
@@ -64,7 +64,7 @@ Multi matching provides support for syntax that is convenient for JS development
 
 ... especially when considering how common such queries will be.
 
-In addition, one of the goals of the DTR is that the transform can be embedded as JSON-in-HTML, which becomes quite difficult when there need to be quotes in the string.
+In addition, one of the goals of the DTR is that the transform can be embedded as JSON-in-HTML, which becomes annoying when there need to be quotes in the string (have to use &apos).
 
 So transform.js supports special syntax for css matching that is more convenient for JS developers:
 
@@ -313,6 +313,34 @@ Useful be-plugged-in's that are available:
 
 1.  [be-plugin](https://github.com/bahrus/be-observant/blob/baseline/trPlugin.ts) for [be-observant](https://github.com/bahrus/be-observant/)
 2.  [be-plugin](https://github.com/bahrus/be-repeated/blob/baseline/trPlugin.ts) for [be-repeated](https://github.com/bahrus/be-repeated)
+
+The table below outlines the differences between horizontal extensions via plug-ins and vertical extension via overriding methods, implementing more functionality into TR/DTR
+
+<table>
+    <caption>Differences between horizontal extensions vs vertical extensions</caption>
+    <thead>
+        <tr>
+            <th>Aspect</th>
+            <th>With vertical extensions</th>
+            <th>With horizontal extensions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>How to implement</td>
+            <td>Add / override additional methods to (forked) version of TR.js/DTR.js.  Methods are called based on a combination of typing inference of the RHS, as well as reserved key values in the RHS expressions.</td>
+            <td>Create an independent (npm) package that is imported (dynamically), and registered as a plugin.</td>
+        </tr>
+        <tr>
+            <td>Where the binding instructions are located</td>
+            <td>Mostly separate from the markup (like separate css files)</td>
+            <td>Via inline binding in the markup (like inline styling).  This is much more like traditional templating found with Vue, Angular, etc.</td>
+        <tr>
+            <td>Render blocking?</td>
+            <td>If syntax is encountered that means routing to a method, then that method will likely load the needed code asynchronously.  However, this means the user won't see any results until all the dependencies of the method implementations are downloaded.</td>
+            <td>If the library isn't loaded yet, the plugin is ignored, but picked up by an element behavior / decorator on the live DOM tree.</td?>
+    </tbody>
+</table>
 
 
 ## Declarative trans-render syntax via JSON-serializable RHS expressions with lib/DTR.js 
