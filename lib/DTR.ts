@@ -162,7 +162,7 @@ export class DTR extends TR{
             const {match} = ctx;
             for(const key in match){
                 const rhs = match[key];
-                this.#getDepRHS(rhs, returnObj)
+                await this.#getDepRHS(rhs, returnObj)
             }
             this.#dependencies = returnObj;
         }
@@ -174,7 +174,9 @@ export class DTR extends TR{
         return split[0];
     }
 
-    #getDepRHS(rhs: any, returnObj: Set<string>){
+    //TODO:  separate these two functions in separate file.
+    async #getDepRHS(rhs: any, returnObj: Set<string>){
+        
         switch(typeof rhs){
             case 'string':
                 if(rhs[0] === '.'){
@@ -197,8 +199,8 @@ export class DTR extends TR{
                         case 'boolean':
                             throw 'DTR1.NI'; //not implemented
                         default:
-                            this.#getDepPropAttr(rhs[0], returnObj); //Prop
-                            this.#getDepPropAttr(rhs[2], returnObj); //Attr
+                            await this.#getDepPropAttr(rhs[0], returnObj); //Prop
+                            await this.#getDepPropAttr(rhs[2], returnObj); //Attr
                     }
                 }else{
                     const props = rhs.$props as string[];
@@ -212,7 +214,7 @@ export class DTR extends TR{
         }
     }
 
-    #getDepPropAttr(rhs: {[key: string]: any}, returnObj: Set<string>){
+    async #getDepPropAttr(rhs: {[key: string]: any}, returnObj: Set<string>){
         if(rhs === undefined) return;
         for(const key in rhs){
             const item = rhs[key];
@@ -221,7 +223,7 @@ export class DTR extends TR{
                     returnObj.add(item);
                     break;
                 case 'object':
-                    this.#getDepRHS(item, returnObj);
+                    await this.#getDepRHS(item, returnObj);
                     break;
             }
         }
