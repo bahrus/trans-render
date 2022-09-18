@@ -2,8 +2,7 @@ import {RenderContext} from './types';
 export async function propSum({
     rhs, target, host
 }: RenderContext){
-    console.log({rhs});
-    const sum = (rhs.sum as number[]).reduce((total, prop) => {
+    const sum = (rhs.$props as string[]).reduce((total, prop) => {
         total += host[prop];
         return total;
     }, 0);

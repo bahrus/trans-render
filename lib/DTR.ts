@@ -200,6 +200,13 @@ export class DTR extends TR{
                             this.#getDepPropAttr(rhs[0], returnObj); //Prop
                             this.#getDepPropAttr(rhs[2], returnObj); //Attr
                     }
+                }else{
+                    const props = rhs.$props as string[];
+                    if(props !== undefined){
+                        //action object.
+                        //convention is to specify props needed in a $props string array
+                        props.forEach(s => returnObj.add(this.#getFirstToken(s)));
+                    }
                 }
                 break;
         }
