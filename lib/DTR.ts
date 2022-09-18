@@ -88,6 +88,10 @@ export class DTR extends TR{
         }
         
     }
+    async do_object_propSum(rc: RenderContext){
+        const {propSum} = await import('./propSum.js');
+        await propSum(rc);
+    }
     async do_array(): Promise<void> {
         const {ctx} = this;
         const {rhs}  = ctx;

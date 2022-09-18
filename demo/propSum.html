@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <template id='templ'>
+        <input>
+    </template>
+    <div id='target'></div>
+
+    
+    <script type='module'>
+        import {DTR} from '../lib/DTR.js';
+        const iff = true || false;
+        const dtr = await DTR.transform(templ, {
+            host: {
+                prop1: 2,
+                prop2: 3
+            },
+            match:{
+                input: {
+                    $action: 'propSum',
+                    sum: ['prop1', 'prop2'],
+                    to: 'value'
+                }
+            }
+        }, target);
+        
+    </script>
+</body>
+</html>
