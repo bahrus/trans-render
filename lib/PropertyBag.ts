@@ -23,9 +23,17 @@ export class PropertyBag extends EventTarget{
                 }
                 return value;
             },
-            set(obj: any, prop: string, val){
-                obj[prop] = val;
+            set(obj: any, prop: string, newVal: any){
+                const oldValue = obj[prop];
+                obj[prop] = newVal;
                 self.dispatchEvent(new Event(prop));
+                self.dispatchEvent(new CustomEvent('prop-changed', {
+                    detail:{
+                        oldValue,
+                        newVal,
+                        prop
+                    }
+                }));
                 return true;
             }
         });
