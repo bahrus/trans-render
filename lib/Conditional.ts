@@ -51,4 +51,16 @@ export class Conditional{
             await (<any>this.dtr)[verb](ctx!);
         }
     }
+
+    deps(rhs: any[]){
+        const exp = rhs[1] as IConditional;
+        const returnObj: string[] = [];
+        [exp.if, exp.lhs, exp.rhs].forEach(a => this.addDep(a, returnObj));
+        return returnObj;
+    }
+
+    addDep(prop: any, acc: string[]){
+        if(typeof prop !== 'string') return;
+        acc.push(this.dtr.getFirstToken(prop));
+    }
 }

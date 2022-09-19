@@ -43,7 +43,14 @@ export class GetDep{
                             }
                             break;
                         case 'boolean':
-                            throw 'DTR1.NI'; //not implemented
+                           if(rhs[0]){
+                            const {Conditional} = await import('./Conditional.js');
+                            const c = new Conditional(this.dtr);
+                            const props = c.deps(rhs);
+                            props.forEach(d => returnObj.add(d));
+                           }else{
+                            throw 'tr.GP.NI';//not implemented
+                           }
                         default:
                             await this.#getDepPropAttr(rhs[0], returnObj); //Prop
                             await this.#getDepPropAttr(rhs[2], returnObj); //Attr
