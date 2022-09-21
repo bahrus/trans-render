@@ -366,7 +366,7 @@ The capabilities of these post-match processors are quite limited in what they c
 
 So we reserve the limited declarative syntax JSON provides for the most common use cases.
 
-The first common use case is setting the textContent of an element, which we lead up to below.
+The first common use case is setting the textContent of an element (or value of input element), which we lead up to below.
 
 ## Declarative, dynamic content based on presence of ctx.host
 

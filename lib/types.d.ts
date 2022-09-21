@@ -320,6 +320,12 @@ export interface PropChangeInfo<TPropInfo = PropInfo> {
     pcm: PropChangeMethod | undefined;
 }
 
+export interface ProxyPropChangeInfo{
+    oldValue: any,
+    newVal: any,
+    prop: string
+}
+
 export type PropChangeMoment = 'v' | '-a' | '+a' | '+qr' | '+qm';
 
 export type PropChangeMethod = (self: EventTarget, pci: PropChangeInfo, moment: PropChangeMoment) => boolean;

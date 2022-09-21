@@ -1,3 +1,5 @@
+import { ProxyPropChangeInfo } from "./types";
+
 export class PropertyBag extends EventTarget{
 
     static new(){
@@ -32,7 +34,7 @@ export class PropertyBag extends EventTarget{
                         oldValue,
                         newVal,
                         prop
-                    }
+                    } as ProxyPropChangeInfo
                 }));
                 return true;
             }

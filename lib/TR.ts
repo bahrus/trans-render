@@ -168,7 +168,12 @@ export class TR implements Transformer{
     }
     async do_string({target}: RenderContext){
         const val = await this.eval_string();
-        target!.textContent = val;  
+        if(target!.localName==='input'){
+            (target as HTMLInputElement).value = val;
+        }else{
+            target!.textContent = val; 
+        }
+         
     }
     do_number(){}
     do_boolean({target, rhs}: RenderContext){
