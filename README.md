@@ -191,7 +191,13 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>The last capital letter in the string is a "C", doesn't end with "s"</td><td>pinkFlamingoClash</td><td>.querySelector('.pink-flamingo')</td><td></td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "I"</td><td>driversLicenseIdId</td><td>.querySelector('#drivers-license-id')</td><td>Untested</td>
+        <td>The last capital letter in the string is an "I", ends with "d"</td><td>driversLicenseIdId</td><td>.querySelector('#drivers-license-id')</td><td>Untested</td>
+    </tr>
+    <tr>
+        <td>The last capital letter in the string is an "I", doesn't end with "d", doesn't end with "s"</td><td>nameI</td><td>.querySelector('[itemprop="name"]')</td><td>TODO</td>
+    </tr>
+    <tr>
+        <td>The last capital letter in the string is an "I", ends with "s"</td><td>nameIs</td><td>.querySelectorAll('[itemprop="name"]')</td><td>TODO</td>
     </tr>
     <!-- <tr>
         <td>Contains Eq, ends with Attribs</td><td>ariaLabelEqHelloThereAttribs</td><td>.querySelectorAll('[arial-label="HelloThere"])</td><td>If space needed ("Hello There") then LHS needs to be wrapped in quotes.   [TODO], waiting for a good use case to see if this is helpful</td>
@@ -366,7 +372,7 @@ The capabilities of these post-match processors are quite limited in what they c
 
 So we reserve the limited declarative syntax JSON provides for the most common use cases.
 
-The first common use case is setting the textContent of an element (or value of input element), which we lead up to below.
+The first common use case is setting the href, or the value, or the textContent of an element, which we lead up to below.
 
 ## Declarative, dynamic content based on presence of ctx.host
 
@@ -378,12 +384,16 @@ But having standardized on a place where the dynamic data we need can be derived
 
 ```JavaScript
     match:{
-        "summary": ["hello",  "place"]
+        "summary": ["hello",  "place"],
+        "a": ["hello",  "place"],
+        "input": ["hello",  "place"]
     }
 ```
 
 
-... means "set the textContent of the summary element to "hello [the value of the "place" property of the host element or object]".
+... means "set the textContent of the summary element to "hello [the value of the "place" property of the host element or object]".  In the case of an anchor element, the href will be set.  And in the case of the input, the value will be set. [TODO]
+
+
 
 Let's look at an example in more detail:
 
