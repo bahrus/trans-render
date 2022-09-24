@@ -1,7 +1,6 @@
 import { DefineArgs, LogicOp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementProps, PropChangeMethod, TRElementActions, WCConfig } from './types.js';
 export { Action, PropInfo, TRElementActions, TRElementProps, WCConfig} from './types.js';
 import { def } from './def.js';
-//import { doActions } from './doActions.js';
 
 export class CE<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction extends Action<MCProps> = Action<MCProps>>{
     
