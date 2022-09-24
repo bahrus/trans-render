@@ -194,10 +194,10 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>The last capital letter in the string is an "I", ends with "d"</td><td>driversLicenseIdId</td><td>.querySelector('#drivers-license-id')</td><td>Untested</td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is an "I", doesn't end with "d", doesn't end with "s"</td><td>nameI</td><td>.querySelector('[itemprop="name"]')</td><td>Untested</td>
+        <td>The last capital letter in the string is an "I", doesn't end with "d", doesn't end with "s"</td><td>nameI</td><td>.querySelector('[itemprop="name"]')</td><td></td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is an "I", ends with "s"</td><td>nameItems</td><td>.querySelectorAll('[itemprop="name"]')</td><td>Untested</td>
+        <td>The last capital letter in the string is an "I", ends with "s"</td><td>nameItems</td><td>.querySelectorAll('[itemprop="name"]')</td><td></td>
     </tr>
     <!-- <tr>
         <td>Contains Eq, ends with Attribs</td><td>ariaLabelEqHelloThereAttribs</td><td>.querySelectorAll('[arial-label="HelloThere"])</td><td>If space needed ("Hello There") then LHS needs to be wrapped in quotes.   [TODO], waiting for a good use case to see if this is helpful</td>
