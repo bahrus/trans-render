@@ -391,7 +391,7 @@ But having standardized on a place where the dynamic data we need can be derived
 ```
 
 
-... means "set the textContent of the summary element to "hello [the value of the "place" property of the host element or object]".  In the case of an anchor element, the href will be set.  And in the case of the input, the value will be set. [TODO]
+... means "set the textContent of the summary element to "hello [the value of the "place" property of the host element or object]".  In the case of an anchor element, the href will be set.  And in the case of the input, the value will be set.
 
 
 
