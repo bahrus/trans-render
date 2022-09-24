@@ -26,6 +26,8 @@ export function getQuery(key: string): QueryInfo{
     const single = 'querySelector';
     let first = false;
     let lhsProp = '';
+    const lastLetter = key.at(-1);
+    const isPlural = lastLetter === 's';
     switch(match){
         case 'P':
             query = `[part~="${attrib}"]`;
@@ -43,9 +45,13 @@ export function getQuery(key: string): QueryInfo{
             query = `[name="${attrib}"]`;
             break;
         case 'I':
-            query = '#' + attrib;
-            verb = single;
-            first = true;
+            if(isPlural || lastLetter !== 'd'){
+                query = `[itemprop="${attrib}"]`;
+            }else{
+                query = '#' + attrib;
+                verb = single;
+                first = true;
+            }
             break;
         case "D":
             query = `[-${attrib}]`;
@@ -53,7 +59,7 @@ export function getQuery(key: string): QueryInfo{
             break;
 
     }
-    const isPlural = key.at(-1) === 's';
+    
     if(!isPlural){
         verb = single;
         first = true;
