@@ -39,6 +39,13 @@ export function convert(val: any, parseValAs: string | null){
                     ret = val;
                     break;
             }
+            break;
+        case 'regExp':
+            ret = new RegExp(val);
+            break;
+        case 'number':
+            ret = Number(val);
+            break;
     }
     return ret;
 }
