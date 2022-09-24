@@ -166,14 +166,15 @@ export class TR implements Transformer{
         const {getVal} = await import('./getVal.js');
         return await getVal(this.ctx!, rhs);
     }
+    getDefaultProp(target: any){
+        if('href' in target) return 'href';
+        if('value' in target) return 'value';
+        return 'textContent'
+    }
     async do_string({target}: RenderContext){
         const val = await this.eval_string();
-        if(target!.localName==='input'){
-            (target as HTMLInputElement).value = val;
-        }else{
-            target!.textContent = val; 
-        }
-         
+        const prop = this.getDefaultProp(target);
+        (target as any)[prop] = val;
     }
     do_number(){}
     do_boolean({target, rhs}: RenderContext){

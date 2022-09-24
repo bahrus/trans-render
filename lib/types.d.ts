@@ -364,6 +364,7 @@ export interface TemplMgmtBase extends HTMLElement, TemplMgmtProps, TemplMgmtAct
 export interface Transformer{
     transform(fragment: Element | DocumentFragment | Element[], fragmentManager?: Element): Promise<RenderContext>;
     flushCache(): void;
+    getDefaultProp(target: any): string;
 }
 
 export interface ITSChecker{

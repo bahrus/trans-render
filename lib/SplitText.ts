@@ -2,8 +2,8 @@ import {RenderContext} from './types.js';
 import {lispToCamel} from './lispToCamel.js';
 
 export class SplitText{
-    async do({host, target, rhs, key, ctx}: RenderContext){
-        const toProp = this.getToProp(key) || 'textContent';
+    async do({host, target, rhs, key, ctx, self}: RenderContext){
+        const toProp = this.getToProp(key) || self!.getDefaultProp(target);
 
         if(rhs === '.') {
             (<any>target!)[toProp] = host as any as string;
