@@ -80,7 +80,7 @@
     "be-decorated": "0.0.163"
   },
   "devDependencies": {
-    "@playwright/test": "1.25.2",
+    "@playwright/test": "1.26.0",
     "may-it-serve": "0.0.2",
     "xtal-editor": "0.0.196",
     "xtal-shell": "0.0.27"
