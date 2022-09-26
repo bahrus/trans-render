@@ -5,11 +5,6 @@ export class Tx implements ITx{
     #ctx: RenderContext
     #realm: WeakRef<Element | ShadowRoot | DocumentFragment> | undefined;
     constructor(host: any, public realmCitizen: Element, match: {[key: string]: MatchRHS}, public transformScope: TransformScope){
-        // const target = pram.transformFromClosest !== undefined ?
-        //     proxy.closest(pram.transformFromClosest)
-        //     : host.shadowRoot || host!;
-        const rn = (getHost(realmCitizen, true) || document) as HTMLElement;
-        //this.#realm = rn!.shadowRoot || rn!;
         this.#ctx = {
             match,
             host,
