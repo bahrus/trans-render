@@ -38,7 +38,7 @@ export class Tx implements ITx{
 
     async transform(): Promise<void> {
         const {DTR} = await import('trans-render/lib/DTR.js');
-        await DTR.transform(this.#getRealm() as any as DocumentFragment, this.#ctx);
+        await DTR.transform(await this.#getRealm() as any as DocumentFragment, this.#ctx);
     }
 
 }
