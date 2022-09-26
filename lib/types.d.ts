@@ -374,3 +374,19 @@ export interface ITSChecker{
 export interface ITx{
     transform(): Promise<void>
 }
+
+export interface TransformScope{
+     /**
+     * use native function getRootNode() to set the boundary
+     *
+     */ 
+    rootNode?: boolean;
+    /**
+     * Use the parent element as the boundary
+     */
+    parent?: boolean;
+    /**
+     * Use the native "closest()" function to set the boundary
+     */
+    closest?: string;
+}
