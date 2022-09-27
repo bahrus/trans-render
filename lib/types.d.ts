@@ -389,4 +389,8 @@ export interface TransformScope{
      * Use the native "closest()" function to set the boundary
      */
     closest?: string;
+    /**
+     * Find nearest previous sibling, parent, previous sibling of parent, etc that matches this string.
+     */
+    upSearch?: string,
 }
