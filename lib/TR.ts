@@ -127,7 +127,8 @@ export class TR implements Transformer{
             if(fragment instanceof Element){
                 if(fragment.matches(queryInfo!.query)) {
                     matchMap[key].push(new WeakRef(fragment));
-                    matches.push(fragment);
+                    //if(matches !== matchMap[key]) matches.push(fragment);
+                    //matches.push(fragment);
                 }
             }
             if(rhs === true){
