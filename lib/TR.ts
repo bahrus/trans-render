@@ -127,7 +127,7 @@ export class TR implements Transformer{
             if(fragment instanceof Element){
                 if(fragment.matches(queryInfo!.query)) {
                     matchMap[key].push(new WeakRef(fragment));
-                    //if(matches !== matchMap[key]) matches.push(fragment);
+                    //if(matches !== matchMap[key]) matches.push(fragment); //was breaking be-calculating/example1
                     //matches.push(fragment);
                 }
             }
@@ -169,7 +169,7 @@ export class TR implements Transformer{
     }
     getDefaultProp(target: any){
         if('href' in target) return 'href';
-        if('value' in target) return 'value';
+        if('value' in target && target.localName !== 'button') return 'value';
         return 'textContent'
     }
     async do_string({target}: RenderContext){
