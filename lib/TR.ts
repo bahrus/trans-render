@@ -4,7 +4,6 @@ import { lispToCamel } from './lispToCamel.js';
 const timeStampCache: Map<string, WeakMap<Element, ITSChecker>> = new Map();
 
 export class TR implements Transformer{
-    //#queryCache = new WeakMap<Element | DocumentFragment | Element[], {[key: string]: WeakRef<Element>[]}>();
     #queryCache: {[key: string]: WeakRef<Element>[]} = {};
     static async transform(sourceOrTemplate: Element | DocumentFragment | Element[],
         ctx: RenderContext,
@@ -99,8 +98,8 @@ export class TR implements Transformer{
                                 break;
                             default:
                                 const arr = Array.from(elMatches2) as Element[];
-                                //matches = matches.concat(arr);
-                                arr.forEach((el: Element) => matches.push(el));
+                                matches = matches.concat(arr);
+                                //arr.forEach((el: Element) => matches.push(el));
                         }
                         
                     }
@@ -169,8 +168,8 @@ export class TR implements Transformer{
     }
     getDefaultProp(target: any){
         if('href' in target) return 'href';
-        if('value' in target && target.localName !== 'button') return 'value';
-        return 'textContent'
+        if('value' in target && !('button-li'.includes(target.localName))) return 'value';
+        return 'textContent';
     }
     async do_string({target}: RenderContext){
         const val = await this.eval_string();
