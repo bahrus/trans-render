@@ -375,6 +375,9 @@ export interface ITx{
     transform(): Promise<void>
 }
 
+/**
+ * Outer boundary that transform should act on.
+ */
 export interface TransformScope{
      /**
      * use native function getRootNode() to set the boundary
