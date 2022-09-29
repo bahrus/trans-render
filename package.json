@@ -29,6 +29,7 @@
     "./lib/doInvoke.js": "./lib/doInvoke.js",
     "./lib/doSet.js": "./lib/doSet.js",
     "./lib/DTR.js": "./lib/DTR.js",
+    "./lib/findRealm.js": "./lib/findRealm.js",
     "./lib/getHost.js": "./lib/getHost.js",
     "./lib/getProp.js": "./lib/getProp.js",
     "./lib/getRecipientElement": "./lib/getRecipientElement.js",
