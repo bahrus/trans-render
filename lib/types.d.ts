@@ -419,7 +419,13 @@ export type Scope =
     /**
      * Find nearest previous sibling, parent, previous sibling of parent, etc that matches this string.
      */
-    ['us', string]
+    ['us', string] |
+
+    ['closestOrHost', boolean | string] |
+
+    ['coh', true | string]
+
+
 ;
 
 

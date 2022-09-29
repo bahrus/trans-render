@@ -15,15 +15,24 @@ export async function findRealm(self: Element, scope: Scope){
         }
     }else{
         const scopeHead = scope[0];
-        const arg = scope[1];
         switch(scopeHead){
             case 'c':
-            case 'closest':
+            case 'closest':{
+                const arg = scope[1];
                 return self.closest(arg);
+            }
             case 'us':
-            case 'upSearch':
+            case 'upSearch':{
+                const arg = scope[1];
                 const {upSearch} = await import('./upSearch.js');
-                return upSearch(self, arg);
+                return upSearch(self, arg as string);
+            }
+            case 'coh':
+            case 'closestOrHost':{
+                const arg = scope[1];
+                const closest = arg === true ? '[itemscope]' : arg;
+            }
+
         }
     }
 }
