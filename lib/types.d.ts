@@ -380,62 +380,64 @@ export interface ITx{
 }
 
 
+export type Target = 
+/**
+* Use the parent element as the target
+*/ 
+'parent' | 
+/**
+* abbrev for parent
+*/
+'p' |
+/**
+ * Use the element itself as the target
+ */ 
+'self' | 
+/**
+ * abbrev fir sekf
+ */ 
+'s' |
+/**
+ * Use the native .closest() function to get the target
+ */
+['closest', string] |
+/**
+ * abbrev for closet
+ */
+['c', string] | 
+/**
+ * Find nearest previous sibling, parent, previous sibling of parent, etc that matches this string.
+ */
+['upSearch', string] |
+/**
+ * abbrev for upSearch
+ */
+['us', string] |
+/**
+ * If second element is true, then tries .closest('itemscope').  If string, tries .closest([string value])
+ * If that comes out to null, do .getRootNode
+ */
+['closestOrHost', boolean | string] |
+/**
+ * abbrev for closestOrHost
+ */
+['coh', true | string]
+;
 
 
-
-export type Scope = 
+/**
+ * Target selector in upward direction.
+ */
+export type Scope = Target |
     /**
-    * use native function getRootNode() to set the boundary
+    * use native function getRootNode() to set the target
     *
     */ 
     'rootNode' | 
     /**
-    * use native function getRootNode() to set the boundary
-    *
+    * abbrev for rootNode
     */ 
-    'rn' |
-    /**
-    * Use the parent element as the boundary
-    */ 
-    'parent' | 
-    /**
-    * Use the parent element as the boundary
-    */
-    'p' | 
-    'self' | 
-    's' |
-    /**
-     * Use the native "closest()" function to set the boundary
-     */
-    ['closest', string] |
-    /**
-     * Use the native "closest()" function to set the boundary
-     */
-    ['c', string] | 
-    /**
-     * Find nearest previous sibling, parent, previous sibling of parent, etc that matches this string.
-     */
-    ['upSearch', string] |
-    /**
-     * Find nearest previous sibling, parent, previous sibling of parent, etc that matches this string.
-     */
-    ['us', string] |
-
-    ['closestOrHost', boolean | string] |
-
-    ['coh', true | string]
-
+    'rn' 
 
 ;
 
-
-
-
-/**
- * Outer boundary that transform should act on.
- */
-export interface TransformScope{
-
-    scope: Scope;
-
-}
