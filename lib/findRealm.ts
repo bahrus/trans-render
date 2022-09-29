@@ -12,6 +12,10 @@ export async function findRealm(self: Element, scope: Scope){
             case 'rn':
             case 'rootNode':
                 return self.getRootNode() as Document | ShadowRoot;
+            case 'h':
+            case 'host':
+                const {getHost} = await import('./getHost.js');
+                return getHost(self);
         }
     }else{
         const scopeHead = scope[0];

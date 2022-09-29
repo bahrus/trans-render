@@ -396,7 +396,7 @@ export type Target =
  */ 
 'self' | 
 /**
- * abbrev fir sekf
+ * abbrev for self
  */ 
 's' |
 /**
@@ -423,7 +423,15 @@ export type Target =
 /**
  * abbrev for closestOrHost
  */
-['coh', true | string]
+['coh', true | string] |
+/**
+ * get host
+ */
+'host' |
+/**
+ * abbrev for host
+ */
+'h'
 ;
 
 
