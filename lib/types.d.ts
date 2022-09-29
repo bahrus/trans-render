@@ -1,7 +1,7 @@
 export interface RenderContextEndUserProps<T = Element, TItem = any>{
     shadowPeer?: Element | undefined;
     host?: any | undefined;
-    match?: {[key: string]: MatchRHS};
+    match?: Matches;
 }
 
 export interface RenderContext<T = Element, TItem = any> extends RenderContextEndUserProps<T, TItem> {
