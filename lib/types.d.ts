@@ -1,9 +1,14 @@
-export interface RenderContext<T = Element, TItem = any> {
+export interface RenderContextEndUserProps<T = Element, TItem = any>{
+    shadowPeer?: Element | undefined;
+    host?: any | undefined;
+    match?: {[key: string]: MatchRHS};
+}
+
+export interface RenderContext<T = Element, TItem = any> extends RenderContextEndUserProps<T, TItem> {
     ctx?: RenderContext | undefined;
     transform?: (sourceOrTemplate: HTMLElement | DocumentFragment, ctx: RenderContext, target?: HTMLElement | DocumentFragment) => Promise<RenderContext<T>>;
     idx?: number;
-    match?: any;
-    mode?: 'init' | 'update';
+    //mode?: 'init' | 'update';
     target?: T | null;
     targetProp?: string;
     options?: RenderOptions | undefined;
@@ -11,8 +16,7 @@ export interface RenderContext<T = Element, TItem = any> {
     name?: string | null;
     val?: string | null;
     rhs?: any;
-    shadowPeer?: Element | undefined;
-    host?: any | undefined;
+    
     plugins?: {[key: string]: boolean} | TransformPlugins<T, TItem>;
     key?: string;
     queryCache?: WeakMap<Element | DocumentFragment, {[key: string]: NodeListOf<Element>}>;
@@ -375,25 +379,57 @@ export interface ITx{
     transform(): Promise<void>
 }
 
+
+
+
+
+export type Scope = 
+    /**
+    * use native function getRootNode() to set the boundary
+    *
+    */ 
+    'rootNode' | 
+    /**
+    * use native function getRootNode() to set the boundary
+    *
+    */ 
+    'rn' |
+    /**
+    * Use the parent element as the boundary
+    */ 
+    'parent' | 
+    /**
+    * Use the parent element as the boundary
+    */
+    'p' | 
+    'self' | 
+    's' |
+    /**
+     * Use the native "closest()" function to set the boundary
+     */
+    ['closest', string] |
+    /**
+     * Use the native "closest()" function to set the boundary
+     */
+    ['c', string] | 
+    /**
+     * Find nearest previous sibling, parent, previous sibling of parent, etc that matches this string.
+     */
+    ['upSearch', string] |
+    /**
+     * Find nearest previous sibling, parent, previous sibling of parent, etc that matches this string.
+     */
+    ['us', string]
+;
+
+
+
+
 /**
  * Outer boundary that transform should act on.
  */
 export interface TransformScope{
-     /**
-     * use native function getRootNode() to set the boundary
-     *
-     */ 
-    rootNode?: boolean;
-    /**
-     * Use the parent element as the boundary
-     */
-    parent?: boolean;
-    /**
-     * Use the native "closest()" function to set the boundary
-     */
-    closest?: string;
-    /**
-     * Find nearest previous sibling, parent, previous sibling of parent, etc that matches this string.
-     */
-    upSearch?: string,
+
+    scope: Scope;
+
 }
