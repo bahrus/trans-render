@@ -379,7 +379,9 @@ export interface ITx{
     transform(): Promise<void>
 }
 
-
+/**
+ * Target selector in upward direction.
+ */
 export type Target = 
 /**
 * Use the parent element as the target
@@ -426,7 +428,7 @@ export type Target =
 
 
 /**
- * Target selector in upward direction.
+ * Outer boundary for transformation
  */
 export type Scope = Target |
     /**
