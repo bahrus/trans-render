@@ -1,5 +1,7 @@
-import {RenderContext} from './types';
-export async function getVal({host, ctx}: RenderContext, path: string): Promise<any> {
+import {getValArg} from './types';
+
+export async function getVal(ctx: getValArg, path: string): Promise<any> {
+    const {host} = ctx;
     if (host === undefined)
         return path;
     switch(path[0]){

@@ -1,10 +1,10 @@
-import { RenderContext, MatchRHS, TransformScope} from 'trans-render/lib/types';
+import { RenderContext, MatchRHS, Scope} from 'trans-render/lib/types';
 import {ITx} from './types';
 
 export class Tx implements ITx{
     #ctx: RenderContext
     #realm: WeakRef<Element | ShadowRoot | DocumentFragment> | undefined;
-    constructor(host: any, public realmCitizen: Element, match: {[key: string]: MatchRHS}, public transformScope: TransformScope){
+    constructor(host: any, public realmCitizen: Element, match: {[key: string]: MatchRHS}, public transformScope: Scope){
         this.#ctx = {
             match,
             host,

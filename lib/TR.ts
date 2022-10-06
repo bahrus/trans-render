@@ -1,4 +1,4 @@
-import {QueryInfo, RenderContext, Transformer, ITSChecker} from './types';
+import {QueryInfo, RenderContext, Transformer, ITSChecker, getValArg} from './types';
 import { getQuery} from './specialKeys.js';
 import { lispToCamel } from './lispToCamel.js';
 const timeStampCache: Map<string, WeakMap<Element, ITSChecker>> = new Map();
@@ -164,7 +164,7 @@ export class TR implements Transformer{
     async eval_string(){
         const {target, rhs, host}  = this.ctx;
         const {getVal} = await import('./getVal.js');
-        return await getVal(this.ctx!, rhs);
+        return await getVal(this.ctx! as getValArg, rhs);
     }
     getDefaultProp(target: any){
         if('href' in target) return 'href';

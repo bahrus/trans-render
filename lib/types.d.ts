@@ -4,7 +4,7 @@ export interface RenderContextEndUserProps<T = Element, TItem = any>{
     match?: Matches;
 }
 
-export interface RenderContext<T = Element, TItem = any> extends RenderContextEndUserProps<T, TItem> {
+export interface RenderContext<T = Element, TItem = any> extends RenderContextEndUserProps<T, TItem>, getValArg {
     ctx?: RenderContext | undefined;
     transform?: (sourceOrTemplate: HTMLElement | DocumentFragment, ctx: RenderContext, target?: HTMLElement | DocumentFragment) => Promise<RenderContext<T>>;
     idx?: number;
@@ -450,4 +450,8 @@ export type Scope = Target |
     'rn' 
 
 ;
+
+export interface getValArg {
+    host?: any;
+}
 
