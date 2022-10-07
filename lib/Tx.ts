@@ -2,14 +2,16 @@ import { RenderContext, MatchRHS, Scope} from 'trans-render/lib/types';
 import {ITx} from './types';
 
 export class Tx implements ITx{
-    #ctx: RenderContext
-    #realm: WeakRef<Element | ShadowRoot | DocumentFragment> | undefined;
-    constructor(host: any, public realmCitizen: Element, match: {[key: string]: MatchRHS}, public transformScope: Scope){
+    #ctx: RenderContext;
+    #realm: WeakRef<Element | ShadowRoot | DocumentFragment | Document> | undefined;
+    #scope: Scope;
+    constructor(host: any, realmCitizen: Element, match: {[key: string]: MatchRHS}, scope: Scope){
         this.#ctx = {
             match,
             host,
             initiator: realmCitizen
         };
+        this.#scope = scope;
     }
 
     async #getRealm(){
@@ -17,21 +19,9 @@ export class Tx implements ITx{
             const deref = this.#realm.deref();
             if(deref !== undefined) return deref;
         }
-        const {transformScope, realmCitizen} = this;
-        if(transformScope.parent){
-            const parent = realmCitizen.parentElement;
-            if(parent !== null){
-                this.#realm = new WeakRef(parent);
-                return parent;
-            }
-        }
-        const {closest} = transformScope;
-        if(closest !== undefined){
-            const nearest = realmCitizen.closest(closest);
-            return realmCitizen.closest(closest);
-        }
-        const {getHost} = await import('trans-render/lib/getHost.js');
-        const rn = (getHost(realmCitizen, true) || document) as Element | DocumentFragment;
+        const {findRealm} = await import('./findRealm.js');
+        const rn = await findRealm(this.#ctx.initiator!, this.#scope);
+        if(!rn) throw '404';
         this.#realm = new WeakRef(rn);
         return rn;
     }

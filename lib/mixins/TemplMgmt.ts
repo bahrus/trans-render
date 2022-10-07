@@ -1,5 +1,5 @@
 //import { DTR } from '../DTR.js';
-import { RenderContext, TemplMgmtBase, TemplMgmtProps, Action } from '../types.js';
+import { RenderContext, TemplMgmtBase, TemplMgmtProps, Action, Matches } from '../types.js';
 export {TemplMgmtProps, TemplMgmtActions, Action} from '../types.js';
 
 export type TemplMgmtBaseMixin = {new(): TemplMgmtBase};
@@ -93,7 +93,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
     async doComplexTR({unsafeTransform, shadowRoot}: this){
         const ctx: RenderContext = {
             host: this,
-            match: unsafeTransform,
+            match: unsafeTransform as any as Matches,
         }
         const fragment = shadowRoot || this;
         const {TR} = await import('../TR.js');
