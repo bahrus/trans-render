@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <template id=no-matter>
+        No matter what we <slot name=verb1></slot> (no matter what we <slot name=verb2></slot>)
+    </template>
+    <template id=main>
+        <no-matter>
+            <span slot=verb1>do</span>
+            <span slot=verb2>do</span>
+        </no-matter> 
+    </template>
+
+    <script type=module>
+        import {expImp} from '../lib/expImp.js';
+        expImp(main, self);
+    </script>
+</body>
+</html>
