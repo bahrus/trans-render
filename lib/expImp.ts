@@ -34,6 +34,7 @@ export async function expImp(templ: HTMLTemplateElement, templRefs: {[key: strin
                 if(slotTarget === null) continue;
                 slotTarget.innerHTML = ''; // fallback
                 for(const matchingChild of slotLookup.get(slot)!){
+                    matchingChild.removeAttribute('slot');
                     slotTarget.appendChild(matchingChild)
                 }
             }
