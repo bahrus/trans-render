@@ -8,10 +8,36 @@ export async function expImp(templ: HTMLTemplateElement, templRefs: {[key: strin
     const {content} = templ;
     const bis = Array.from(content.querySelectorAll('[bi]'));
     for(const bi of bis){
-        const localName = bi.localName;
+        const {localName, children} = bi;
+        
+        const hasChildren = children.length > 0;
+        const slotLookup = new Map<string, Element[]>();
+        if(hasChildren){
+            const childrenArr = Array.from(children);
+            for(const child of childrenArr){
+                const slot = child.getAttribute('slot');
+                if(slot === null) continue; //TODO:  slots with no names
+                if(!slotLookup.has(slot)){
+                    slotLookup.set(slot, []);
+                }
+                const arr = slotLookup.get(slot);
+                arr?.push(child);
+            }
+        }
         const templ = templRefs[localName];
         if(templ === undefined) continue;
         const clone = document.importNode(templ.content, true);
+        if(hasChildren){
+            const slots = slotLookup.keys();
+            for(const slot of slots){
+                const slotTarget = clone.querySelector(slot);
+                if(slotTarget === null) continue;
+                slotTarget.innerHTML = ''; // fallback
+                for(const matchingChild of slotLookup.get(slot)!){
+                    slotTarget.appendChild(matchingChild)
+                }
+            }
+        }
         const parentElement = bi.parentElement;
         const hintTempl = document.createElement('template');
         hintTempl.dataset.ref = localName;

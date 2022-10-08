@@ -8,10 +8,12 @@
 </head>
 <body>
     <template id=no-matter>
-        No matter what we <slot name=verb1></slot> (no matter what we <slot name=verb2></slot>)
+        <div> <!-- TODO:  drop requirement for div wrapper -->
+            No matter what we <slot name=verb1></slot> (no matter what we <slot name=verb2></slot>)
+        </div>
     </template>
     <template id=main>
-        <no-matter>
+        <no-matter bi>
             <span slot=verb1>do</span>
             <span slot=verb2>do</span>
         </no-matter> 
