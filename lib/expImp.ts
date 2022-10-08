@@ -17,12 +17,13 @@ export async function expImp(templ: HTMLTemplateElement, templRefs: {[key: strin
         hintTempl.dataset.ref = localName;
         hintTempl.dataset.cnt = (clone.children.length + 1).toString(); // only elements, to match what insertAdjacentClone does for now
         const hasSibling = bi.nextElementSibling !== null;
-        templ.insertAdjacentElement('afterend', hintTempl);
+        bi.insertAdjacentElement('afterend', hintTempl);
         if(parentElement !== null && !hasSibling){
             parentElement.append(clone);
         }else{
             const {insertAdjacentClone} = await import('./insertAdjacentClone.js');
             insertAdjacentClone(clone, hintTempl, 'afterend');
         }
+        bi.remove();
     };
 }
