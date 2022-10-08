@@ -4,16 +4,25 @@
  * @param templ 
  * @param templRefs 
  */
-export function expImp(templ: HTMLTemplateElement, templRefs: {[key: string]: HTMLTemplateElement}){
+export async function expImp(templ: HTMLTemplateElement, templRefs: {[key: string]: HTMLTemplateElement}){
     const {content} = templ;
-    content.querySelectorAll('[bi]').forEach(bi => {
+    const bis = Array.from(content.querySelectorAll('[bi]'));
+    for(const bi of bis){
         const localName = bi.localName;
         const templ = templRefs[localName];
-        if(templ === undefined) return;
-        const clone = templ.content.cloneNode(true);
+        if(templ === undefined) continue;
+        const clone = document.importNode(templ.content, true);
         const parentElement = bi.parentElement;
-        if(parentElement !== null && bi.nextElementSibling === null){
+        const hintTempl = document.createElement('template');
+        hintTempl.dataset.ref = localName;
+        hintTempl.dataset.cnt = (clone.children.length + 1).toString(); // only elements, to match what insertAdjacentClone does for now
+        const hasSibling = bi.nextElementSibling !== null;
+        templ.insertAdjacentElement('afterend', hintTempl);
+        if(parentElement !== null && !hasSibling){
             parentElement.append(clone);
+        }else{
+            const {insertAdjacentClone} = await import('./insertAdjacentClone.js');
+            insertAdjacentClone(clone, hintTempl, 'afterend');
         }
-    });
+    };
 }
