@@ -2,9 +2,9 @@
 /**
  * "Expand" HTMLTemplateElement by replacing special tags with referenced templates
  * @param templ 
- * @param templRefs 
+ * @param templLookup 
  */
-export async function expImp(templ: HTMLTemplateElement, templRefs: {[key: string]: HTMLTemplateElement}){
+export async function expImp(templ: HTMLTemplateElement, templRefs: {[key: string]: HTMLTemplateElement}, templLookup: (key: string) => HTMLTemplateElement){
     const {content} = templ;
     const bis = Array.from(content.querySelectorAll('[bi]'));
     for(const bi of bis){
@@ -24,9 +24,15 @@ export async function expImp(templ: HTMLTemplateElement, templRefs: {[key: strin
                 arr?.push(child);
             }
         }
-        const templ = templRefs[localName];
-        if(templ === undefined) continue;
-        await expImp(templ, templRefs);
+        let templ = templRefs[localName];
+        if(templ === undefined){
+            const templ = templLookup(localName);
+            if(templ === undefined) continue;
+            templRefs[localName] = templ;
+        }
+        
+        
+        await expImp(templ, templRefs, templLookup);
         const clone = document.importNode(templ.content, true);
         if(hasChildren){
             const slots = slotLookup.keys();

@@ -16,7 +16,7 @@
     </template>
     <script type=module>
         import {expImp} from '../lib/expImp.js';
-        expImp(main, self);
+        expImp(main, id => self[id]);
     </script>
 </body>
 </html>
