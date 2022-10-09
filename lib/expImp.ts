@@ -26,6 +26,7 @@ export async function expImp(templ: HTMLTemplateElement, templRefs: {[key: strin
         }
         const templ = templRefs[localName];
         if(templ === undefined) continue;
+        await expImp(templ, templRefs);
         const clone = document.importNode(templ.content, true);
         if(hasChildren){
             const slots = slotLookup.keys();
@@ -39,6 +40,7 @@ export async function expImp(templ: HTMLTemplateElement, templRefs: {[key: strin
                 }
             }
         }
+        
         const parentElement = bi.parentElement;
         const hintTempl = document.createElement('template');
         hintTempl.dataset.ref = localName;
