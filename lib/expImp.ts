@@ -42,7 +42,7 @@ export async function expImp(templ: HTMLTemplateElement, templRefs: {[key: strin
         const parentElement = bi.parentElement;
         const hintTempl = document.createElement('template');
         hintTempl.dataset.ref = localName;
-        hintTempl.dataset.cnt = (clone.children.length + 1).toString(); // only elements, to match what insertAdjacentClone does for now
+        hintTempl.dataset.cnt = (clone.childNodes.length + 1).toString(); // includes text nodes, to match what insertAdjacentClone does now
         const hasSibling = bi.nextElementSibling !== null;
         bi.insertAdjacentElement('afterend', hintTempl);
         if(parentElement !== null && !hasSibling){
