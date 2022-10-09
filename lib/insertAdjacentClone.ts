@@ -21,5 +21,8 @@ export function insertAdjacentClone(clone: DocumentFragment, target: Element, po
          lastTextNode = child;
       }
     }
+    if(lastTextNode !== undefined){
+      prevAppendTarget.insertAdjacentText('afterend', lastTextNode.textContent!);
+    }
     
 }
