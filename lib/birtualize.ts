@@ -24,16 +24,16 @@ export async function birtualize(templ: HTMLTemplateElement, templRefs: {[key: s
                 arr?.push(child);
             }
         }
-        let templ: HTMLTemplateElement | undefined = templRefs[localName];
-        if(templ === undefined){
-            templ = templLookup(localName);
-            if(templ === undefined) continue;
-            templRefs[localName] = templ;
+        let referencedTempl: HTMLTemplateElement | undefined = templRefs[localName];
+        if(referencedTempl === undefined){
+            referencedTempl = templLookup(localName);
+            if(referencedTempl === undefined) continue;
+            templRefs[localName] = referencedTempl;
         }
         
         
-        await birtualize(templ!, templRefs, templLookup);
-        const clone = document.importNode(templ!.content, true);
+        await birtualize(referencedTempl!, templRefs, templLookup);
+        const clone = document.importNode(referencedTempl!.content, true);
         if(hasChildren){
             const slots = slotLookup.keys();
             for(const slot of slots){
