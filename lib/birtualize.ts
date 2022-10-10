@@ -4,7 +4,7 @@
  * @param templ 
  * @param templLookup 
  */
-export async function expImp(templ: HTMLTemplateElement, templRefs: {[key: string]: HTMLTemplateElement}, templLookup: (key: string) => HTMLTemplateElement){
+export async function expImp(templ: HTMLTemplateElement, templRefs: {[key: string]: HTMLTemplateElement}, templLookup: (key: string) => HTMLTemplateElement | undefined){
     const {content} = templ;
     const bis = Array.from(content.querySelectorAll('[bi]'));
     for(const bi of bis){
@@ -32,8 +32,8 @@ export async function expImp(templ: HTMLTemplateElement, templRefs: {[key: strin
         }
         
         
-        await expImp(templ, templRefs, templLookup);
-        const clone = document.importNode(templ.content, true);
+        await expImp(templ!, templRefs, templLookup);
+        const clone = document.importNode(templ!.content, true);
         if(hasChildren){
             const slots = slotLookup.keys();
             for(const slot of slots){
