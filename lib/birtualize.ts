@@ -4,12 +4,12 @@
  * @param templ 
  * @param templLookup 
  */
-export async function expImp(templ: HTMLTemplateElement, templRefs: {[key: string]: HTMLTemplateElement}, templLookup: (key: string) => HTMLTemplateElement | undefined){
+export async function birtualize(templ: HTMLTemplateElement, templRefs: {[key: string]: HTMLTemplateElement}, templLookup: (key: string) => HTMLTemplateElement | undefined){
+    if(templ.dataset.birtualized) return;
     const {content} = templ;
     const bis = Array.from(content.querySelectorAll('[bi]'));
     for(const bi of bis){
         const {localName, children} = bi;
-        
         const hasChildren = children.length > 0;
         const slotLookup = new Map<string, Element[]>();
         if(hasChildren){
@@ -24,15 +24,15 @@ export async function expImp(templ: HTMLTemplateElement, templRefs: {[key: strin
                 arr?.push(child);
             }
         }
-        let templ = templRefs[localName];
+        let templ: HTMLTemplateElement | undefined = templRefs[localName];
         if(templ === undefined){
-            const templ = templLookup(localName);
+            templ = templLookup(localName);
             if(templ === undefined) continue;
             templRefs[localName] = templ;
         }
         
         
-        await expImp(templ!, templRefs, templLookup);
+        await birtualize(templ!, templRefs, templLookup);
         const clone = document.importNode(templ!.content, true);
         if(hasChildren){
             const slots = slotLookup.keys();
@@ -61,4 +61,5 @@ export async function expImp(templ: HTMLTemplateElement, templRefs: {[key: strin
         }
         bi.remove();
     };
+    templ.dataset.birtualized = ''
 }
