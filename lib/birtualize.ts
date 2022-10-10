@@ -51,6 +51,11 @@ export async function birtualize(templ: HTMLTemplateElement, templRefs: {[key: s
         const hintTempl = document.createElement('template');
         hintTempl.dataset.ref = localName;
         hintTempl.dataset.cnt = (clone.childNodes.length + 1).toString(); // includes text nodes, to match what insertAdjacentClone does now
+        const names = bi.getAttributeNames();
+        for(const name of names){
+            if(name === 'bi') continue;
+            hintTempl.setAttribute(name, bi.getAttribute(name)!)
+        }
         const hasSibling = bi.nextElementSibling !== null;
         bi.insertAdjacentElement('afterend', hintTempl);
         if(parentElement !== null && !hasSibling){
