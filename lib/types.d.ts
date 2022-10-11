@@ -455,3 +455,8 @@ export interface getValArg {
     host?: any;
 }
 
+export interface IActionProcessor{
+    doActions(self: IActionProcessor, actions: {[methodName: string]: Action}, target: any, proxy?: any): void;
+    postHoc(self: this, action: Action, target: any, returnVal: any, proxy?: any): void;
+}
+
