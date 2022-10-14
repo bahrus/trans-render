@@ -81,13 +81,9 @@
     "lib/*",
     "xslt/*"
   ],
-  "dependencies": {
-    "xtal-element": "0.0.529",
-    "be-decorated": "0.0.165"
-  },
   "devDependencies": {
-    "@playwright/test": "1.26.1",
-    "may-it-serve": "0.0.2",
+    "@playwright/test": "1.27.1",
+    "may-it-serve": "0.0.3",
     "xtal-editor": "0.0.196",
     "xtal-shell": "0.0.27"
   },
