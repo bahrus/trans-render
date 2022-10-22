@@ -23,6 +23,15 @@
             }
         }, target);
     </script>
-
+        <script>
+            function runTest(){
+                if(document.querySelector('input[type=checkbox]')){
+                    target.setAttribute('mark', 'good');
+                }
+            }
+            setTimeout(() => {
+                runTest();
+            }, 2000);
+        </script>
 </body>
 </html>
