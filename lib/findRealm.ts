@@ -1,7 +1,7 @@
 import {Scope} from './types';
 
 export async function findRealm(self: Element, scope: Scope){
-    if(typeof scope === 'string'){
+    if(typeof scope === 'string'){ //TODO:  do dynamic import for each condition
         switch(scope){
             case 's':
             case 'self':
@@ -35,7 +35,22 @@ export async function findRealm(self: Element, scope: Scope){
             case 'closestOrHost':{
                 const arg = scope[1];
                 const closest = arg === true ? '[itemscope]' : arg;
+                if(closest === null){
+                    const {getHost} = await import('./getHost.js');
+                    return getHost(self);
+                }else{
+                    return closest;
+                }
             }
+            case 'corn':
+            case 'closestOrRootNode':
+                const arg = scope[1];
+                const closest = arg === true ? '[itemscope]' : arg;
+                if(closest === null){
+                    return self.getRootNode();
+                }else{
+                    return closest;
+                }
 
         }
     }

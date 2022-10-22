@@ -447,7 +447,16 @@ export type Scope = Target |
     /**
     * abbrev for rootNode
     */ 
-    'rn' 
+    'rn' |
+    /**
+     * Similar to closestOrHost, but just get the root fragment via getRootNode()
+     */
+    ['closestOrRootNode', boolean | string] | 
+    /**
+     * abbrev for closestOrRootNode
+     */
+    ['corn', boolean | string];
+
 
 ;
 
