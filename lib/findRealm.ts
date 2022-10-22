@@ -34,7 +34,8 @@ export async function findRealm(self: Element, scope: Scope){
             case 'coh':
             case 'closestOrHost':{
                 const arg = scope[1];
-                const closest = arg === true ? '[itemscope]' : arg;
+                const closestQ = arg === true ? '[itemscope]' : arg as string;
+                const closest = self.closest(closestQ);
                 if(closest === null){
                     const {getHost} = await import('./getHost.js');
                     return getHost(self);
@@ -45,9 +46,10 @@ export async function findRealm(self: Element, scope: Scope){
             case 'corn':
             case 'closestOrRootNode':
                 const arg = scope[1];
-                const closest = arg === true ? '[itemscope]' : arg;
+                const closestQ = arg === true ? '[itemscope]' : arg as string;
+                const closest = self.querySelector(closestQ);
                 if(closest === null){
-                    return self.getRootNode();
+                    return self.getRootNode() as Document | ShadowRoot;
                 }else{
                     return closest;
                 }

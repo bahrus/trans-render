@@ -455,7 +455,7 @@ export type Scope = Target |
     /**
      * abbrev for closestOrRootNode
      */
-    ['corn', boolean | string];
+    ['corn', boolean | string]
 
 
 ;
