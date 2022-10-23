@@ -5606,10 +5606,15 @@
   </div>
 </footer>
 <script>
+    const ubound = 1000;
     function test1(){
         const t0 = performance.now();
-        for(let i = 0; i < 1000; i++){
-            const test = document.querySelectorAll('div');
+        let count = 0;
+        for(let i = 0; i < ubound; i++){
+            const test = Array.from(document.querySelectorAll('div'));
+            for(const d of test){
+                count+= d.classList.length;
+            }
         }
         const t1 = performance.now();
         console.log(`Call to doSomething took ${t1 - t0} milliseconds.`);
@@ -5619,11 +5624,14 @@
     function test2(){
         const t0 = performance.now();
         let cache;
-        for(let i = 0; i < 1000; i++){
+        let count = 0;
+        for(let i = 0; i < ubound; i++){
             if(cache === undefined){
                 cache = Array.from(document.querySelectorAll('div')).map(d => new WeakRef(d));
             }
-            
+            for(const d of cache){
+                count += d.deref().classList.length;
+            }
         }
         const t1 = performance.now();
         console.log(`Call to doSomething2 took ${t1 - t0} milliseconds.`);
