@@ -11,11 +11,13 @@ export async function findRealm(self: Element, scope: Scope){
                 return self.parentElement;
             case 'rn':
             case 'rootNode':
+                const {onConnected} = await import('./onConnected');
+                await onConnected(self);
                 return self.getRootNode() as Document | ShadowRoot;
             case 'h':
             case 'host':
                 const {getHost} = await import('./getHost.js');
-                return getHost(self);
+                return await getHost(self);
         }
     }else{
         const scopeHead = scope[0];
@@ -38,7 +40,7 @@ export async function findRealm(self: Element, scope: Scope){
                 const closest = self.closest(closestQ);
                 if(closest === null){
                     const {getHost} = await import('./getHost.js');
-                    return getHost(self);
+                    return await getHost(self);
                 }else{
                     return closest;
                 }
@@ -49,6 +51,8 @@ export async function findRealm(self: Element, scope: Scope){
                 const closestQ = arg === true ? '[itemscope]' : arg as string;
                 const closest = self.querySelector(closestQ);
                 if(closest === null){
+                    const {onConnected} = await import('./onConnected');
+                    await onConnected(self);
                     return self.getRootNode() as Document | ShadowRoot;
                 }else{
                     return closest;
