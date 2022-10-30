@@ -17,12 +17,14 @@ export function addProps(newClass: {new(): EventTarget}, props: {[key: string]: 
     }
 }
 
+export const trpb = 'trans-render-prop-bag';
+
 function propBag(instance: EventTarget){
-    let returnObj = (<any>instance)[propBagKey] as PropBag;
+    let returnObj = (<any>instance)[pbk] as PropBag;
     if(returnObj === undefined){
         returnObj = new PropBag();
-        (<any>instance)[propBagKey] = returnObj;
-        instance.dispatchEvent(new CustomEvent('trans-render-prop-bag', {
+        (<any>instance)[pbk] = returnObj;
+        instance.dispatchEvent(new CustomEvent(trpb, {
             detail:{
                 value: returnObj
             }
@@ -30,6 +32,11 @@ function propBag(instance: EventTarget){
     }
     return returnObj;
 }
+
+/**
+ * abrev for prop-change
+ */
+export const pc = 'prop-change';
 
 export class PropBag extends EventTarget{
     #propVals: {[key: string]: any} = {};
@@ -45,8 +52,15 @@ export class PropBag extends EventTarget{
             }
         }
         this.dispatchEvent(new CustomEvent(key, init));
-        this.dispatchEvent(new CustomEvent('prop-change', init));
+        this.dispatchEvent(new CustomEvent(pc, init));
     }
+    /**
+     * delta keys
+     */
+    dk = new Set<string>(); 
 }
 
-export const propBagKey = Symbol();
+/**
+ * PropBagKey
+ */
+export const pbk = Symbol();
