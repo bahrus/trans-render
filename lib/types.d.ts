@@ -26,6 +26,7 @@ export interface RenderContext<T = Element, TItem = any> extends RenderContextEn
     timestampKey?: string;
     self?: Transformer;
     initiator?: Element;
+    trace?: boolean;
     //proxyHost?: ProxyHost; //TODO
     //stack?: RenderContext[];
 }

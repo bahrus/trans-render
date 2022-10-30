@@ -49,12 +49,13 @@ export class TR implements Transformer{
             const elementKey = fragmentManager ? fragmentManager : fragment as Element;
             if(tsc.notChanged(host, elementKey)) return ctx;
         }
-        let originalHost = (<any>fragment).host; 
-        if(fragment instanceof DocumentFragment){
+        let clearHost = false;
+        if((<any>fragment).host === undefined && fragment instanceof DocumentFragment){
             //by some (accidental / preplanned?) miracle, fragment.getRootNode() returns the root of the template fragment.
 
             //this solves(?) the conundrum of how to achieve isomorphism between template instantiation and element behaviors.
             (<any>fragment).host = host;
+            clearHost = true;
         }
         const qc = this.#queryCache;
         const isArray = Array.isArray(fragment);
@@ -163,7 +164,9 @@ export class TR implements Transformer{
                 await (<any>this)[verb](ctx);
             }
         }
-        originalHost = (<any>fragment).host;
+        if(clearHost){
+            (<any>fragment).host = undefined;
+        }
         return ctx;
     }
     flushCache(){
