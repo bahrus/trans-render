@@ -470,3 +470,11 @@ export interface IActionProcessor{
     postHoc(self: this, action: Action, target: any, returnVal: any, proxy?: any): void;
 }
 
+export interface IEventConfig<MCProps = any, MCActions = MCProps, TAction = Action>{
+    on: string,
+    of: EventTarget,
+    doInit?: boolean,
+}
+
+export type ActionOnEventConfigs<MCProps = any, MCActions = MCProps, TAction = Action> = Partial<{[key in keyof MCActions]: IEventConfig<MCProps, MCActions, TAction>}>
+

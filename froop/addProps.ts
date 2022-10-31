@@ -1,4 +1,5 @@
-import { PropInfo } from "./types";
+import { PropInfo } from "../lib/types";
+import {pbk, pc, trpb} from './const.js';
 
 export function addProps(newClass: {new(): EventTarget}, props: {[key: string]: PropInfo}){
     const proto = newClass.prototype;
@@ -17,7 +18,7 @@ export function addProps(newClass: {new(): EventTarget}, props: {[key: string]: 
     }
 }
 
-export const trpb = 'trans-render-prop-bag';
+
 
 function propBag(instance: EventTarget){
     let returnObj = (<any>instance)[pbk] as PropBag;
@@ -33,10 +34,7 @@ function propBag(instance: EventTarget){
     return returnObj;
 }
 
-/**
- * abrev for prop-change
- */
-export const pc = 'prop-change';
+
 
 export class PropBag extends EventTarget{
     #propVals: {[key: string]: any} = {};
@@ -59,8 +57,3 @@ export class PropBag extends EventTarget{
      */
     dk = new Set<string>(); 
 }
-
-/**
- * PropBagKey
- */
-export const pbk = Symbol();
