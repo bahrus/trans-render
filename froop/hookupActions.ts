@@ -1,5 +1,6 @@
-import {Action, IActionProcessor} from './types';
-import {PropBag, pc, pbk, trpb} from '../froop/addProps.js';
+import {Action, IActionProcessor} from '../lib/types';
+import {pc, pbk, trpb} from './const.js';
+import {PropBag} from './AddProps.js';
 export function hookupActions(instance: EventTarget, actions: {[methodName: string]: Action}, dryProps: Set<string>){
     const propBag = (<any>instance)[pbk] as PropBag;
     if(propBag !== undefined){
@@ -21,8 +22,8 @@ function doHookup(instance: EventTarget, propBag: PropBag, actions: {[methodName
         propBag.dk.add(key);
         (async () => {
             const filteredActions: any = {};
-            const {pq} = await import('./pq.js');
-            const {intersection} = await import('./intersection.js');
+            const {pq} = await import('../lib/pq.js');
+            const {intersection} = await import('../lib/intersection.js');
             const changedKeys = propBag.dk;
             propBag.dk = new Set<string>();
             let foundAction = false;
@@ -38,20 +39,12 @@ function doHookup(instance: EventTarget, propBag: PropBag, actions: {[methodName
                 }
             }
             if(foundAction){
-                const {} = await import('../froop/doActions.js')
+                const {} = await import('./doActions.js')
             }
         })();
     });
 }
 
-function getPropsFromAction(action: Action): Set<string>{
-    return typeof(action) === 'string' ? new Set<string>([action]) : new Set<string>([
-        ...(action.ifAllOf || []) as string[], 
-        ...(action.ifKeyIn || []) as string[], 
-        ...(action.ifNoneOf || []) as string[],
-        ...(action.ifEquals || []) as string[],
-        ...(action.ifAtLeastOneOf || []) as string[]
-    ]);    
-}
+
 
 

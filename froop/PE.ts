@@ -1,4 +1,4 @@
-import {ActionOnEventConfigs} from '../lib/types';
+import {ActionOnEventConfigs} from './types';
 
 export class PE{
     #abortControllers = new Map<string, AbortController[]>();

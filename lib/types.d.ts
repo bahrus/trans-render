@@ -245,14 +245,14 @@ export interface TRElementActions{
 
 
 export interface DefineArgs<MixinCompositeProps = any, MixinCompositeActions = MixinCompositeProps, TPropInfo = PropInfo, TAction extends Action = Action<MixinCompositeProps>>{
-    superclass?: {new(): any} | string,
+    superclass?: {new(): HTMLElement} | string,
     mixins?: any[],
     mainTemplate?: HTMLTemplateElement;
     /** use this only for defaults that can't be JSON serialized in config */
     complexPropDefaults?: Partial<MixinCompositeProps>;
     /** Config should be 100% JSON serializable, or a JSON import, or an id of an be-exportable script tag */
     config: WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo, TAction> | (() => Promise<{default: WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo, TAction>}>) | string;
-    
+     
 }
 
 export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction = Action>{
@@ -470,11 +470,5 @@ export interface IActionProcessor{
     postHoc(self: this, action: Action, target: any, returnVal: any, proxy?: any): void;
 }
 
-export interface IEventConfig<MCProps = any, MCActions = MCProps, TAction = Action>{
-    on: string,
-    of: EventTarget,
-    doInit?: boolean,
-}
 
-export type ActionOnEventConfigs<MCProps = any, MCActions = MCProps, TAction = Action> = Partial<{[key in keyof MCActions]: IEventConfig<MCProps, MCActions, TAction>}>
 

@@ -1,4 +1,5 @@
-import {Action, ActionOnEventConfigs} from '../lib/types';
+import {ActionOnEventConfigs} from './types';
+import {Action} from  '../lib/types';
 export async function doActions(instance: EventTarget, actions: {[methodName: string]: Action}){
     for(const methodName in actions){
         const action = actions[methodName];

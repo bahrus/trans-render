@@ -1,5 +1,18 @@
-import { PropInfo } from "../lib/types";
-import {pbk, pc, trpb} from './const.js';
+import { PropInfo, DefineArgs } from "../lib/types";
+import {pbk, pc, trpb, cpi} from './const.js';
+import { ResolvableService } from "./ResolvableService.js";
+import { IPropBag, IAddProps, DefineArgsWithServices } from './types';
+
+export class AddProps extends ResolvableService implements IAddProps{
+    constructor(public args: DefineArgsWithServices){
+        super();
+        this.do();
+    }
+
+    async do(){
+
+    }
+}
 
 export function addProps(newClass: {new(): EventTarget}, props: {[key: string]: PropInfo}){
     const proto = newClass.prototype;
@@ -36,7 +49,7 @@ function propBag(instance: EventTarget){
 
 
 
-export class PropBag extends EventTarget{
+export class PropBag extends EventTarget implements IPropBag{
     #propVals: {[key: string]: any} = {};
     get(key: string){
         return this.#propVals[key];

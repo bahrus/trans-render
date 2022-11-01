@@ -10,3 +10,9 @@ export const pbk = '+3mn7EVmt0+NAUzZjcsGEA';
  export const pc = 'prop-change';
 
  export const trpb = 'trans-render-prop-bag';
+
+ export const r = 'resolved';
+
+ export const am = 'AddMixins';
+
+ export const cpi = 'CreatePropInfos';
