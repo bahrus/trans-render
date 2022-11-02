@@ -1,16 +1,20 @@
 import { PropInfo, DefineArgs } from "../lib/types";
-import {pbk, pc, trpb, cpi} from './const.js';
+import {pbk, pc, trpb, cpi, acb} from './const.js';
 import { ResolvableService } from "./ResolvableService.js";
-import { IPropBag, IAddProps, DefineArgsWithServices } from './types';
+import { IPropBag, IAddProps, DefineArgsWithServices, IAttrChgCB } from './types';
 
 export class AddProps extends ResolvableService implements IAddProps{
     constructor(public args: DefineArgsWithServices){
         super();
-        this.do();
+        this.#do(args);
     }
 
-    async do(){
-
+    async #do(args: DefineArgsWithServices){
+        const {services} = args;
+        const {createCustomEl, createPropInfos} = services;
+        await createCustomEl.resolve();
+        await createPropInfos.resolve();
+        addProps(createCustomEl.ext, createPropInfos.propInfos);        
     }
 }
 

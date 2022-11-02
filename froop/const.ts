@@ -3,6 +3,10 @@
  */
 export const pbk = '+3mn7EVmt0+NAUzZjcsGEA';
 
+/**
+ * In Reflection Mode
+ */
+export const irm = '/CzEIO/1vEuJ9EQATok2Kg';
 
 /**
  * abrev for prop-change event
@@ -16,3 +20,5 @@ export const pbk = '+3mn7EVmt0+NAUzZjcsGEA';
  export const am = 'AddMixins';
 
  export const cpi = 'CreatePropInfos';
+
+ export const acb = 'attr-chg-cb';

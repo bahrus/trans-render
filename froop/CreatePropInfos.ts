@@ -1,17 +1,15 @@
-import {PropInfo, DefineArgs, WCConfig, Action, PropInfoTypes} from '../lib/types';
-import {DefineArgsWithServices, ICreatePropInfos} from './types';
-import {r} from './const.js';
+import {PropInfo, WCConfig, Action, PropInfoTypes} from '../lib/types';
+import {DefineArgsWithServices, ICreatePropInfos, IAttrChgCB} from './types';
+import {acb} from './const.js';
 import { ResolvableService } from './ResolvableService.js';
 
-export class CreatePropInfos extends ResolvableService implements ICreatePropInfos{
+export class CreatePropInfos extends ResolvableService{
     constructor(public args: DefineArgsWithServices){
         super();
-        this.do();
+        this.#do(args);
 
     }
-    propInfos?: {[key: string]: PropInfo};
-    async do(){
-        const {args} = this;
+    async #do(args: DefineArgsWithServices){
         const config  = args.config as WCConfig;
         const props: {[key: string]: PropInfo} = {};
         const defaults = {...args.complexPropDefaults, ...config.propDefaults} as any;
@@ -48,7 +46,17 @@ export class CreatePropInfos extends ResolvableService implements ICreatePropInf
         }
         //await this.api(args, props);
         this.propInfos = props;
+        
+        const {services} = args;
+        const {createCustomEl} = services;
+        createCustomEl.addEventListener(acb, async e => {
+            const acbE = (e as CustomEvent).detail as IAttrChgCB;
+            const {instance, name, newVal, oldVal} = acbE;
+            const {doAttr} = await import('./doAttr.js');
+            await doAttr(acbE, props);
+        })
         this.resolved = true;
+        
     }
 
     setType(prop: PropInfo, val: any){
@@ -63,7 +71,23 @@ export class CreatePropInfos extends ResolvableService implements ICreatePropInf
 
         }
     }
+
+    async getAttrNames(ext: any){
+        const returnArr: string[] = ext.observedAttributes || [];
+        const {propInfos} = this;
+        const {camelToLisp} = await import('../lib/camelToLisp.js');
+        for(const key in propInfos){
+            const prop = propInfos[key];
+            if(prop.parse){
+                returnArr.push(camelToLisp((key)));
+            }
+        }
+        returnArr.push('defer-hydration');
+        return returnArr;
+    }
 }
+
+export interface CreatePropInfos extends ICreatePropInfos{}
 
 
 const defaultProp: PropInfo = {

@@ -12,8 +12,9 @@
 		"lib/*",
 		"demo/*",
 		"lib/mixins/*",
-		"xslt/*"
-, "froop/doActions.ts", "froop/AddProps.ts", "froop/hookupActions.ts"	],
+		"xslt/*",
+		"froop/*"
+	],
 	"exclude":[
 		"build",
 		"bower_components",

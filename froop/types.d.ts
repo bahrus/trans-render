@@ -13,7 +13,7 @@ export interface IPropBag{
     set(key: string, val: any): void;
 }
 
-export interface IResolvable{
+export interface IResolvable extends EventTarget{
     resolved: boolean;
     resolve(): Promise<void>;
 }
@@ -23,21 +23,41 @@ export interface IAddMixins extends IResolvable{
 }
 
 export interface ICreatePropInfos extends IResolvable{
-    propInfos?: {[key: string]: PropInfo}
+    propInfos: {[key: string]: PropInfo},
+    getAttrNames(ext: any): Promise<string[]>,
 }
 
 export interface ICreateCustomElement extends IResolvable{
-
+    ext: {new(): HTMLElement};
 }
 
 export interface IAddProps extends IResolvable{
 
 }
 
+export interface IConnectActions extends IResolvable{
+
+}
+
+export interface IAttrChgCB{
+    instance: HTMLElement,
+    name: string,
+    oldVal: string,
+    newVal: string,
+}
+
 export interface DefineArgsWithServices extends DefineArgs{
+    serviceClasses: {
+        addMixins?: {new(args: DefineArgsWithServices): IAddMixins},
+        createPropInfos?: {new(args: DefineArgsWithServices): ICreatePropInfos},
+        addProps?: {new(args: DefineArgsWithServices): IAddProps},
+        connectActions?: {new(args: DefineArgsWithServices): IConnectActions},
+    };
     services: {
-        addMixins?: {new(args: DefineArgsWithServices): IAddMixins} | IAddMixins,
-        createPropInfos?: {new(args: DefineArgsWithServices): ICreatePropInfos} | ICreatePropInfos,
-        addProps?: {new(args: DefineArgsWithServices): IAddProps} | IAddProps,
+        addMixins?: IAddMixins,
+        createPropInfos: ICreatePropInfos,
+        addProps: IAddProps,
+        createCustomEl: ICreateCustomElement,
+        connectActions?: IConnectActions,
     }
 }
