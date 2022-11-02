@@ -1,3 +1,4 @@
+import { def } from '../lib/def.js';
 import { acb, ccb, dcb } from './const.js';
 import { ResolvableService } from './ResolvableService.js';
 export class CE extends ResolvableService {
@@ -16,7 +17,7 @@ export class CE extends ResolvableService {
                 const { AddMixins } = await import('./AddMixins.js');
                 serviceClasses.addMixins = AddMixins;
             }
-            const { CreatePropInfos } = await import('./CreatePropInfos');
+            const { CreatePropInfos } = await import('./CreatePropInfos.js');
             serviceClasses.createPropInfos = CreatePropInfos;
             const { AddProps } = await import('./AddProps.js');
             serviceClasses.addProps = AddProps;
@@ -84,6 +85,7 @@ export class CE extends ResolvableService {
             }
         }
         this.custElClass = newClass;
+        def(newClass);
         this.resolved = true;
     }
     async #evalConfig({ args }) {

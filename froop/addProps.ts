@@ -11,7 +11,7 @@ export class AddProps extends ResolvableService implements IAddProps{
 
     async #do(args: DefineArgsWithServices){
         const {services} = args;
-        const {createCustomEl, createPropInfos} = services;
+        const {createCustomEl, createPropInfos} = services!;
         await createCustomEl.resolve();
         createCustomEl.addEventListener(ccb, e => {
             const connection = (e as CustomEvent).detail as IConnectedCB;

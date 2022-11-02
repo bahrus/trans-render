@@ -1,5 +1,5 @@
 import {WCConfig} from '../lib/types';
-import { ResolvableService } from "./ResolvableService";
+import { ResolvableService } from "./ResolvableService.js";
 import {npb} from './const.js';
 import { DefineArgsWithServices, IConnectActions, INewPropBag } from './types';
 import { hookupActions } from './hookupActions.js';
@@ -15,7 +15,7 @@ export class ConnectActions extends ResolvableService {
         const config  = args.config as WCConfig;
         
         const {services} = args;
-        const {addProps} = services;
+        const {addProps} = services!;
         await addProps.resolve();
         addProps.addEventListener(npb, async e => {
             const propBagEvent = (e as CustomEvent).detail as INewPropBag;

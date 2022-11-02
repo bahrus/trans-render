@@ -66,14 +66,14 @@ export interface INewPropBag {
     propBag: IPropBag,
 }
 
-export interface DefineArgsWithServices extends DefineArgs{
-    serviceClasses: {
+export interface DefineArgsWithServices<TProps = any, TActions = TProps> extends DefineArgs<TProps, TActions>{
+    serviceClasses?: {
         addMixins?: {new(args: DefineArgsWithServices): IAddMixins},
         createPropInfos?: {new(args: DefineArgsWithServices): ICreatePropInfos},
         addProps?: {new(args: DefineArgsWithServices): IAddProps},
         connectActions?: {new(args: DefineArgsWithServices): IConnectActions},
     };
-    services: {
+    services?: {
         addMixins?: IAddMixins,
         createPropInfos: ICreatePropInfos,
         addProps: IAddProps,

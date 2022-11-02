@@ -6,8 +6,8 @@ import {acb, ccb, dcb} from './const.js';
 import { ResolvableService } from './ResolvableService.js';
 
 
-export class CE extends ResolvableService{
-    constructor(public args: DefineArgsWithServices){
+export class CE<TProps = any, TActions = TProps> extends ResolvableService{
+    constructor(public args: DefineArgsWithServices<TProps, TActions>){
         super();
         this.#evalConfig(this);
         this.#do(args);
@@ -21,7 +21,7 @@ export class CE extends ResolvableService{
                 const {AddMixins} = await import('./AddMixins.js');
                 serviceClasses.addMixins = AddMixins;
             }
-            const {CreatePropInfos} = await import('./CreatePropInfos');
+            const {CreatePropInfos} = await import('./CreatePropInfos.js');
             serviceClasses.createPropInfos  = CreatePropInfos;
             const {AddProps} = await import('./AddProps.js');
             serviceClasses.addProps = AddProps;
@@ -38,7 +38,7 @@ export class CE extends ResolvableService{
 
     async #createServices(args: DefineArgsWithServices){
         const {serviceClasses} = args;
-        const {addMixins, addProps, createPropInfos, connectActions} = serviceClasses;
+        const {addMixins, addProps, createPropInfos, connectActions} = serviceClasses!;
         args.services = {
             addMixins: addMixins ? new addMixins(args) : undefined,
             addProps: new addProps!(args),
@@ -51,7 +51,7 @@ export class CE extends ResolvableService{
 
     async #createClass(args: DefineArgsWithServices){
         const {services} = args;
-        const {createPropInfos, addMixins} = services;
+        const {createPropInfos, addMixins} = services!;
         await createPropInfos.resolve();
         const ext = addMixins?.ext || HTMLElement;
         const config = args.config as WCConfig;
@@ -63,7 +63,7 @@ export class CE extends ResolvableService{
             static formAssociated = formAss;
             attributeChangedCallback(name: string, oldVal: string, newVal: string){
                 if(super.attributeChangedCallback) super.attributeChangedCallback(name, oldVal, newVal);
-                services.createCustomEl.dispatchEvent(new CustomEvent(acb, {
+                services!.createCustomEl.dispatchEvent(new CustomEvent(acb, {
                     detail: {
                         instance: this as any as HTMLElement,
                         name,
@@ -76,7 +76,7 @@ export class CE extends ResolvableService{
 
             connectedCallback(){
                 if(super.connectedCallback) super.connectedCallback();
-                services.createCustomEl.dispatchEvent(new CustomEvent(ccb, {
+                services!.createCustomEl.dispatchEvent(new CustomEvent(ccb, {
                     detail: {
                         instance: this as any as HTMLElement,
                     } as IConnectedCB
@@ -85,7 +85,7 @@ export class CE extends ResolvableService{
 
             disconnectedCallback(){
                 if(super.disconnectedCallback) super.disconnectedCallback();
-                services.createCustomEl.dispatchEvent(new CustomEvent(dcb, {
+                services!.createCustomEl.dispatchEvent(new CustomEvent(dcb, {
                     detail: {
                         instance: this as any as HTMLElement
                     } as IDisconnectedCB
@@ -93,6 +93,7 @@ export class CE extends ResolvableService{
             }
         }
         this.custElClass = newClass as any as {new(): HTMLElement}
+        def(newClass);
         this.resolved = true;
     }
 

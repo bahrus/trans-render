@@ -1,4 +1,4 @@
-export async function def(MyElementClass: any){
+export function def(MyElementClass: any){
     let tagName = MyElementClass.is as string;
     let n = 0;
     let name = tagName;

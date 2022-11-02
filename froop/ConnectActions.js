@@ -1,4 +1,4 @@
-import { ResolvableService } from "./ResolvableService";
+import { ResolvableService } from "./ResolvableService.js";
 import { npb } from './const.js';
 import { hookupActions } from './hookupActions.js';
 export class ConnectActions extends ResolvableService {

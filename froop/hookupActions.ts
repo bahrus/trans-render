@@ -8,7 +8,7 @@ export function hookupActions(instance: EventTarget, propBag: IPropBag, args: De
         const chg = (e as CustomEvent).detail;
         const {key, oldVal, newVal} = chg;
         const {services} = args;
-        const {createPropInfos} = services;
+        const {createPropInfos} = services!;
         await createPropInfos.resolve();
         const {nonDryProps} = createPropInfos;
         if(!nonDryProps.has(key)){

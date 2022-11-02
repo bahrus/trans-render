@@ -52,7 +52,7 @@ export class CreatePropInfos extends ResolvableService{
         this.allPropNames = Object.keys(props);
         
         const {services} = args;
-        const {createCustomEl, addProps} = services;
+        const {createCustomEl, addProps} = services!;
         createCustomEl.addEventListener(acb, async e => {
             const acbE = (e as CustomEvent).detail as IAttrChgCB;
             const {instance, name, newVal, oldVal} = acbE;
