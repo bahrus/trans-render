@@ -1,26 +1,22 @@
-import {WCConfig} from '../lib/types';
-import { ResolvableService } from "./ResolvableService";
-import {npb} from './const.js';
-import { DefineArgsWithServices, IConnectActions, INewPropBag } from './types';
-
-
-export class ConnectActions extends ResolvableService {
-    constructor(public args: DefineArgsWithServices){
-        super();
-        this.#do(args);
-
-    }
-    async #do(args: DefineArgsWithServices){
-        const config  = args.config as WCConfig;
-        
-        const {services} = args;
-        const {addProps} = services;
-        await addProps.resolve();
-        addProps.addEventListener(npb, e => {
-            const propBagEvent = (e as CustomEvent).detail as INewPropBag;
-            
-        });
+import {ActionOnEventConfigs} from './types';
+import {Action} from  '../lib/types';
+export async function doActions(instance: EventTarget, actions: {[methodName: string]: Action}){
+    for(const methodName in actions){
+        const action = actions[methodName];
+        if(action.debug) debugger;
+        const method = (<any>instance)[methodName];
+        if(method === undefined) throw {
+            msg: 404, methodName, instance
+        }
+        const isAsync = method.constructor.name === 'AsyncFunction';
+        const ret = isAsync ? await (<any>instance)[methodName](instance) : (<any>instance)[methodName](instance);
+        if(ret === undefined) continue;
+        if(Array.isArray(ret)){
+            const {PE} = await import('./PE.js');
+            const pe = new PE();
+            pe.do(instance, method, ret as [any, ActionOnEventConfigs]);
+        }else{
+            Object.assign(instance, ret);
+        }
     }
 }
-
-export interface ConnectActions extends IConnectActions{}

@@ -27,7 +27,7 @@ export class CE extends ResolvableService{
             serviceClasses.addProps = AddProps;
             const config = args.config as WCConfig;
             if(config.actions !== undefined){
-                const {ConnectActions} = await import('./DoActions.js');
+                const {ConnectActions} = await import('./ConnectActions.js');
                 serviceClasses.connectActions = ConnectActions;
             }
         }

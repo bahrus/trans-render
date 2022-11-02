@@ -1,18 +1,10 @@
 import {Action, IActionProcessor} from '../lib/types';
-import {pc, pbk, trpb} from './const.js';
+import {pc} from './const.js';
 import {PropBag} from './AddProps.js';
-export function hookupActions(instance: EventTarget, actions: {[methodName: string]: Action}, dryProps: Set<string>){
-    const propBag = (<any>instance)[pbk] as PropBag;
-    if(propBag !== undefined){
-        doHookup(instance, propBag, actions, dryProps);
-    }else{
-        instance.addEventListener(trpb, e => {
-            doHookup(instance, (<any>instance)[pbk] as PropBag, actions, dryProps);
-        }, {once: true});
-    }
-}
+import {DefineArgsWithServices} from './types';
 
-function doHookup(instance: EventTarget, propBag: PropBag, actions: {[methodName: string]: Action}, nonDryProps: Set<string>){
+
+export function hookupActions(instance: EventTarget, propBag: PropBag, args: DefineArgsWithServices){
     propBag.addEventListener(pc, e => {
         const chg = (e as CustomEvent).detail;
         const {key, oldVal, newVal} = chg;
@@ -39,7 +31,7 @@ function doHookup(instance: EventTarget, propBag: PropBag, actions: {[methodName
                 }
             }
             if(foundAction){
-                const {} = await import('./doActions.void')
+                const {} = await import('./doActions.js')
             }
         })();
     });

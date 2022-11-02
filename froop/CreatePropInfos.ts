@@ -31,11 +31,11 @@ export class CreatePropInfos extends ResolvableService{
         }
         const actions = config.actions;
         if(actions !== undefined){
-            const {getProps} = await import('../froop/getProps.js')
+            //const {getProps} = await import('../froop/getProps.js')
             for(const methodName in actions){
                 const action = actions[methodName];
                 const typedAction = (typeof action === 'string') ? {ifAllOf:[action]} as Action : action! as Action;
-                const upon = getProps(typedAction);
+                const upon = await this.getPropsFromAction(typedAction);
                 for(const dependency of upon){
                     if(props[dependency] === undefined){
                         const prop: PropInfo = {...defaultProp};
@@ -110,6 +110,21 @@ export class CreatePropInfos extends ResolvableService{
         }
         returnArr.push('defer-hydration');
         return returnArr;
+    }
+
+    #actionToPropMap = new Map<string | Action, Set<string>>();
+    async getPropsFromAction(action: string | Action){
+        const test = this.#actionToPropMap.get(action);
+        if(test !== undefined) return test;
+        const returnObj = typeof(action) === 'string' ? new Set<string>([action]) : new Set<string>([
+            ...(action.ifAllOf || []) as string[], 
+            ...(action.ifKeyIn || []) as string[], 
+            ...(action.ifNoneOf || []) as string[],
+            ...(action.ifEquals || []) as string[],
+            ...(action.ifAtLeastOneOf || []) as string[]
+        ]);
+        this.#actionToPropMap.set(action, returnObj);
+        return returnObj;
     }
 }
 
