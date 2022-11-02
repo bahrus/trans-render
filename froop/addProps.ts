@@ -1,7 +1,7 @@
 import { PropInfo, DefineArgs } from "../lib/types";
-import {pbk, pc, trpb, cpi, acb} from './const.js';
+import { pc, npb, ccb, dcb} from './const.js';
 import { ResolvableService } from "./ResolvableService.js";
-import { IPropBag, IAddProps, DefineArgsWithServices, IAttrChgCB } from './types';
+import { IPropBag, IAddProps, DefineArgsWithServices, INewPropBag, IConnectedCB, IDisconnectedCB } from './types';
 
 export class AddProps extends ResolvableService implements IAddProps{
     constructor(public args: DefineArgsWithServices){
@@ -13,44 +13,61 @@ export class AddProps extends ResolvableService implements IAddProps{
         const {services} = args;
         const {createCustomEl, createPropInfos} = services;
         await createCustomEl.resolve();
+        createCustomEl.addEventListener(ccb, e => {
+            const connection = (e as CustomEvent).detail as IConnectedCB;
+            const {instance} = connection;
+            const propBag = this.#getPropBag(instance);
+            this.dispatchEvent(new CustomEvent(npb, {
+                detail: {
+                    instance,
+                    propBag
+                } as INewPropBag,
+            }))
+        });
+        createCustomEl.addEventListener(dcb, e => {
+            const disconnection = (e as CustomEvent).detail as IDisconnectedCB;
+            this.#propBagLookup.delete(disconnection.instance);
+        });
         await createPropInfos.resolve();
-        addProps(createCustomEl.ext, createPropInfos.propInfos);        
+        this.#addProps(createCustomEl.custElClass, createPropInfos.propInfos);        
+    }
+
+    #propBagLookup = new WeakMap<HTMLElement, PropBag>
+
+    #getPropBag(instance: HTMLElement){
+        let propBag = this.#propBagLookup.get(instance);
+        if(propBag === undefined){
+            propBag = new PropBag();
+            this.#propBagLookup.set(instance, propBag);
+            this.dispatchEvent(new CustomEvent(npb, {
+                detail: {
+                    instance,
+                    propBag
+                } as INewPropBag
+                
+            }));
+        }
+        return propBag;
+    }
+
+    #addProps(newClass: {new(): HTMLElement}, props: {[key: string]: PropInfo}){
+        const proto = newClass.prototype;
+        const getPropBag = this.#getPropBag.bind(this);
+        for(const key in props){
+            if(key in proto) continue;
+            Object.defineProperty(proto, key, {
+                get(){
+                    return getPropBag(this).get(key);
+                },
+                set(nv: any){
+                    getPropBag(this).set(key, nv);
+                },
+                enumerable: true,
+                configurable: true,
+            });
+        }
     }
 }
-
-export function addProps(newClass: {new(): EventTarget}, props: {[key: string]: PropInfo}){
-    const proto = newClass.prototype;
-    for(const key in props){
-        if(key in proto) continue;
-        Object.defineProperty(proto, key, {
-            get(){
-                return propBag(this).get(key);
-            },
-            set(nv: any){
-
-            },
-            enumerable: true,
-            configurable: true,
-        })
-    }
-}
-
-
-
-function propBag(instance: EventTarget){
-    let returnObj = (<any>instance)[pbk] as PropBag;
-    if(returnObj === undefined){
-        returnObj = new PropBag();
-        (<any>instance)[pbk] = returnObj;
-        instance.dispatchEvent(new CustomEvent(trpb, {
-            detail:{
-                value: returnObj
-            }
-        }));
-    }
-    return returnObj;
-}
-
 
 
 export class PropBag extends EventTarget implements IPropBag{

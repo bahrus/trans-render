@@ -39,7 +39,7 @@ function doHookup(instance: EventTarget, propBag: PropBag, actions: {[methodName
                 }
             }
             if(foundAction){
-                const {} = await import('./doActions.js')
+                const {} = await import('./doActions.void')
             }
         })();
     });

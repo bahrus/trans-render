@@ -24,11 +24,12 @@ export interface IAddMixins extends IResolvable{
 
 export interface ICreatePropInfos extends IResolvable{
     propInfos: {[key: string]: PropInfo},
+    allPropNames: string[],
     getAttrNames(ext: any): Promise<string[]>,
 }
 
 export interface ICreateCustomElement extends IResolvable{
-    ext: {new(): HTMLElement};
+    custElClass: {new(): HTMLElement};
 }
 
 export interface IAddProps extends IResolvable{
@@ -44,6 +45,19 @@ export interface IAttrChgCB{
     name: string,
     oldVal: string,
     newVal: string,
+}
+
+export interface IConnectedCB{
+    instance: HTMLElement,
+}
+
+export interface IDisconnectedCB {
+    instance: HTMLElement
+}
+
+export interface INewPropBag {
+    instance: HTMLElement,
+    propBag: IPropBag,
 }
 
 export interface DefineArgsWithServices extends DefineArgs{

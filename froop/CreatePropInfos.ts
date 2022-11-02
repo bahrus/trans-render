@@ -1,6 +1,6 @@
 import {PropInfo, WCConfig, Action, PropInfoTypes} from '../lib/types';
-import {DefineArgsWithServices, ICreatePropInfos, IAttrChgCB} from './types';
-import {acb} from './const.js';
+import {DefineArgsWithServices, ICreatePropInfos, IAttrChgCB, INewPropBag} from './types';
+import {acb, npb} from './const.js';
 import { ResolvableService } from './ResolvableService.js';
 
 export class CreatePropInfos extends ResolvableService{
@@ -15,7 +15,7 @@ export class CreatePropInfos extends ResolvableService{
         const defaults = {...args.complexPropDefaults, ...config.propDefaults} as any;
         for(const key in defaults){
             const prop: PropInfo = {...defaultProp};
-            this.setType(prop, defaults[key]);
+            this.#setType(prop, defaults[key]);
             props[key] = prop;
         }
         const specialProps = config.propInfo;
@@ -46,20 +46,26 @@ export class CreatePropInfos extends ResolvableService{
         }
         //await this.api(args, props);
         this.propInfos = props;
+        this.allPropNames = Object.keys(props);
         
         const {services} = args;
-        const {createCustomEl} = services;
+        const {createCustomEl, addProps} = services;
         createCustomEl.addEventListener(acb, async e => {
             const acbE = (e as CustomEvent).detail as IAttrChgCB;
             const {instance, name, newVal, oldVal} = acbE;
             const {doAttr} = await import('./doAttr.js');
-            await doAttr(acbE, props);
-        })
+            await doAttr(acbE, props, defaults);
+        });
+        addProps.addEventListener(npb, e => {
+            const inpb = (e as CustomEvent).detail as INewPropBag;
+            const {instance} = inpb;
+            this.#propUp(instance, this.allPropNames, defaults);
+        });
         this.resolved = true;
         
     }
 
-    setType(prop: PropInfo, val: any){
+    #setType(prop: PropInfo, val: any){
         if(val !== undefined){
             if(val instanceof RegExp){
                 prop.type = 'RegExp';
@@ -69,6 +75,26 @@ export class CreatePropInfos extends ResolvableService{
                 prop.type = t as PropInfoTypes;
             }
 
+        }
+    }
+
+    /**
+     * Needed for asynchronous loading
+     * @param props Array of property names to "upgrade", without losing value set while element was Unknown
+     * @param defaultValues:   If property value not set, set it from the defaultValues lookup
+     * @private
+     */
+    #propUp<T>(instance: HTMLElement, props: string[], defaultValues?: T){
+        for(const prop of props){
+            let value = (<any>instance)[prop];
+            if(value === undefined && defaultValues !== undefined){
+                value = (<any>defaultValues)[prop];
+            }
+            if (instance.hasOwnProperty(prop)) {
+                delete (<any>instance)[prop];
+            }
+            //some properties are read only.
+            try{(<any>instance)[prop] = value;}catch{}
         }
     }
 

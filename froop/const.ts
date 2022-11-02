@@ -13,12 +13,21 @@ export const irm = '/CzEIO/1vEuJ9EQATok2Kg';
  */
  export const pc = 'prop-change';
 
- export const trpb = 'trans-render-prop-bag';
+ export const npb = 'new-prop-bag';
 
  export const r = 'resolved';
 
- export const am = 'AddMixins';
-
- export const cpi = 'CreatePropInfos';
-
+ /**
+  * attribute changed callback event
+  */
  export const acb = 'attr-chg-cb';
+
+ /**
+  * connected callback event
+  */
+ export const ccb = 'conn-cb';
+
+ /**
+  * disconnected callback event
+  */
+ export const dcb = 'dis-conn-cb';

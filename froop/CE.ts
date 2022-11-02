@@ -1,8 +1,8 @@
 import { DefineArgs, LogicOp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementProps, PropChangeMethod, TRElementActions, WCConfig, IActionProcessor } from '../lib/types.js';
 export { Action, PropInfo, TRElementActions, TRElementProps, WCConfig, IActionProcessor as IHasPostHoc} from '../lib/types.js';
 import { def } from '../lib/def.js';
-import {IAddMixins, DefineArgsWithServices, ICreateCustomElement, IAttrChgCB} from './types';
-import {am, acb} from './const.js';
+import {IAddMixins, DefineArgsWithServices, ICreateCustomElement, IAttrChgCB, IConnectedCB, IDisconnectedCB} from './types';
+import {acb, ccb, dcb} from './const.js';
 import { ResolvableService } from './ResolvableService.js';
 
 
@@ -27,7 +27,7 @@ export class CE extends ResolvableService{
             serviceClasses.addProps = AddProps;
             const config = args.config as WCConfig;
             if(config.actions !== undefined){
-                const {ConnectActions} = await import('./ConnectActions.js');
+                const {ConnectActions} = await import('./DoActions.js');
                 serviceClasses.connectActions = ConnectActions;
             }
         }
@@ -73,7 +73,26 @@ export class CE extends ResolvableService{
                     
                 }))
             }
+
+            connectedCallback(){
+                if(super.connectedCallback) super.connectedCallback();
+                services.createCustomEl.dispatchEvent(new CustomEvent(ccb, {
+                    detail: {
+                        instance: this as any as HTMLElement,
+                    } as IConnectedCB
+                }));
+            }
+
+            disconnectedCallback(){
+                if(super.disconnectedCallback) super.disconnectedCallback();
+                services.createCustomEl.dispatchEvent(new CustomEvent(dcb, {
+                    detail: {
+                        instance: this as any as HTMLElement
+                    } as IDisconnectedCB
+                }));
+            }
         }
+        this.custElClass = newClass as any as {new(): HTMLElement}
         this.resolved = true;
     }
 
