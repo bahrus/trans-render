@@ -13,29 +13,31 @@ export class CreatePropInfos extends ResolvableService{
         const config  = args.config as WCConfig;
         const props: {[key: string]: PropInfo} = {};
         const defaults = {...args.complexPropDefaults, ...config.propDefaults} as any;
+        const nonDryProps = new Set<string>();
         for(const key in defaults){
             const prop: PropInfo = {...defaultProp};
             this.#setType(prop, defaults[key]);
             props[key] = prop;
         }
-        const specialProps = config.propInfo;
-        if(specialProps !== undefined){
-            for(const key in specialProps){
+        const explicitProps = config.propInfo;
+        if(explicitProps !== undefined){
+            for(const key in explicitProps){
                 if(props[key] === undefined){
                     const prop: PropInfo = {...defaultProp};
                     props[key] = prop;
                 }
                 const prop = props[key];
-                Object.assign(prop, specialProps[key]);
+                Object.assign(prop, explicitProps[key]);
+                if(!prop.dry) nonDryProps.add(key);
             }
         }
         const actions = config.actions;
         if(actions !== undefined){
             //const {getProps} = await import('../froop/getProps.js')
             for(const methodName in actions){
-                const action = actions[methodName];
-                const typedAction = (typeof action === 'string') ? {ifAllOf:[action]} as Action : action! as Action;
-                const upon = await this.getPropsFromAction(typedAction);
+                const action = actions[methodName] as string | Action;
+                //const typedAction = (typeof action === 'string') ? {ifAllOf:[action]} as Action : action! as Action;
+                const upon = this.getPropsFromAction(action);
                 for(const dependency of upon){
                     if(props[dependency] === undefined){
                         const prop: PropInfo = {...defaultProp};
@@ -45,6 +47,7 @@ export class CreatePropInfos extends ResolvableService{
             }
         }
         //await this.api(args, props);
+        this.nonDryProps = nonDryProps;
         this.propInfos = props;
         this.allPropNames = Object.keys(props);
         
@@ -113,7 +116,7 @@ export class CreatePropInfos extends ResolvableService{
     }
 
     #actionToPropMap = new Map<string | Action, Set<string>>();
-    async getPropsFromAction(action: string | Action){
+    getPropsFromAction(action: string | Action){
         const test = this.#actionToPropMap.get(action);
         if(test !== undefined) return test;
         const returnObj = typeof(action) === 'string' ? new Set<string>([action]) : new Set<string>([
