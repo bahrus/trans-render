@@ -1,5 +1,5 @@
 import { def } from '../lib/def.js';
-import { acb, ccb, dcb } from './const.js';
+import { acb, ccb, dcb, mse } from './const.js';
 import { ResolvableService } from './ResolvableService.js';
 export class CE extends ResolvableService {
     args;
@@ -40,7 +40,7 @@ export class CE extends ResolvableService {
             createPropInfos: new createPropInfos(args),
             connectActions: connectActions ? new connectActions(args) : undefined,
         };
-        this.resolved = true;
+        this.dispatchEvent(new Event(mse));
         await this.#createClass(args);
     }
     async #createClass(args) {
@@ -89,6 +89,7 @@ export class CE extends ResolvableService {
         }
         this.custElClass = newClass;
         def(newClass);
+        this.resolved = true;
     }
     async #evalConfig({ args }) {
         if (args === undefined)

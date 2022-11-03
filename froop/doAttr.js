@@ -1,3 +1,4 @@
+//import {irm} from './const.js';
 export async function doAttr(accb, propInfos, defaults) {
     //only set prop from attr if prop value is undefined or prop value === default val and prop value !== attr val
     const { name, oldVal, newVal, instance } = accb;

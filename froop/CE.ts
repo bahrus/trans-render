@@ -2,7 +2,7 @@ import { DefineArgs, LogicOp, PropInfo, HasPropChangeQueue, Action, PropInfoType
 export { Action, PropInfo, TRElementActions, TRElementProps, WCConfig, IActionProcessor as IHasPostHoc} from '../lib/types.js';
 import { def } from '../lib/def.js';
 import {IAddMixins, DefineArgsWithServices, ICreateCustomElement, IAttrChgCB, IConnectedCB, IDisconnectedCB} from './types';
-import {acb, ccb, dcb} from './const.js';
+import {acb, ccb, dcb, mse} from './const.js';
 import { ResolvableService } from './ResolvableService.js';
 
 
@@ -47,7 +47,7 @@ export class CE<TProps = any, TActions = TProps> extends ResolvableService{
             createPropInfos: new createPropInfos!(args),
             connectActions: connectActions ? new connectActions(args) : undefined,
         };
-        this.resolved = true;
+        this.dispatchEvent(new Event(mse))
         await this.#createClass(args);
     }
 
@@ -97,7 +97,7 @@ export class CE<TProps = any, TActions = TProps> extends ResolvableService{
         }
         this.custElClass = newClass as any as {new(): HTMLElement}
         def(newClass);
-        
+        this.resolved = true;
     }
 
     async #evalConfig({args}: this){

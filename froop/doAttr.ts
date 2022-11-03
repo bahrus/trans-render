@@ -1,6 +1,6 @@
 import {IPropBag, IAttrChgCB} from './types';
 import {PropInfo} from '../lib/types';
-import {irm} from './const.js';
+//import {irm} from './const.js';
 
 export async function doAttr(accb: IAttrChgCB, propInfos: {[key: string]: PropInfo}, defaults: {[key: string]: any}){
     //only set prop from attr if prop value is undefined or prop value === default val and prop value !== attr val

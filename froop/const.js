@@ -1,11 +1,11 @@
+// /**
+//  * In Reflection Mode
+//  */
+// export const irm = '/CzEIO/1vEuJ9EQATok2Kg';
 /**
- * PropBagKey
+ * main services established
  */
-export const pbk = '+3mn7EVmt0+NAUzZjcsGEA';
-/**
- * In Reflection Mode
- */
-export const irm = '/CzEIO/1vEuJ9EQATok2Kg';
+export const mse = 'main-svc-est';
 /**
  * abrev for prop-change event
  */

@@ -1,12 +1,12 @@
 import { ResolvableService } from "./ResolvableService.js";
-import { npb, r } from './const.js';
+import { npb, mse } from './const.js';
 import { hookupActions } from './hookupActions.js';
 export class ConnectActions extends ResolvableService {
     args;
     constructor(args) {
         super();
         this.args = args;
-        args.main.addEventListener(r, () => {
+        args.main.addEventListener(mse, () => {
             this.#do(args);
         }, { once: true });
     }

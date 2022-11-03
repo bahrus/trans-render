@@ -1,6 +1,6 @@
 import {WCConfig} from '../lib/types';
 import { ResolvableService } from "./ResolvableService.js";
-import {npb, r} from './const.js';
+import {npb, r, mse} from './const.js';
 import { DefineArgsWithServices, IConnectActions, INewPropBag } from './types';
 import { hookupActions } from './hookupActions.js';
 
@@ -8,7 +8,7 @@ import { hookupActions } from './hookupActions.js';
 export class ConnectActions extends ResolvableService {
     constructor(public args: DefineArgsWithServices){
         super();
-        args.main!.addEventListener(r, () => {
+        args.main!.addEventListener(mse, () => {
             this.#do(args);
         }, {once: true});
 
