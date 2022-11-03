@@ -13,7 +13,8 @@
     "compress": "terser lib/CE.js -o dist/CE.min.js -c -m "
   },
   "exports": {
-    ".": "./lib/CE.js",
+    ".": "./froop/CE.js",
+    "./froop/CE.js": "./froop/CE.js",
     "./lib/applyP.js": "./lib/applyP.js",
     "./lib/applyPE.js": "./lib/applyPE.js",
     "./lib/applyPEA.js": "./lib/applyPEA.js",
@@ -80,7 +81,8 @@
   },
   "files": [
     "lib/*",
-    "xslt/*"
+    "xslt/*",
+    "froop/*"
   ],
   "devDependencies": {
     "@playwright/test": "1.27.1",
