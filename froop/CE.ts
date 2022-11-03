@@ -47,6 +47,7 @@ export class CE<TProps = any, TActions = TProps> extends ResolvableService{
             createPropInfos: new createPropInfos!(args),
             connectActions: connectActions ? new connectActions(args) : undefined,
         };
+        this.resolved = true;
         await this.#createClass(args);
     }
 
@@ -57,9 +58,10 @@ export class CE<TProps = any, TActions = TProps> extends ResolvableService{
         const ext = addMixins?.ext || HTMLElement;
         const config = args.config as WCConfig;
         const {tagName, formAss} = config;
+        const observedAttributes = await createPropInfos.getAttrNames(ext);
         class newClass extends (<any>ext){
             static is = tagName; 
-            static observedAttributes = createPropInfos.getAttrNames(ext);
+            static observedAttributes = observedAttributes;
             static ceDef = args;
             static formAssociated = formAss;
             attributeChangedCallback(name: string, oldVal: string, newVal: string){
@@ -95,7 +97,7 @@ export class CE<TProps = any, TActions = TProps> extends ResolvableService{
         }
         this.custElClass = newClass as any as {new(): HTMLElement}
         def(newClass);
-        this.resolved = true;
+        
     }
 
     async #evalConfig({args}: this){

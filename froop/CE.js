@@ -40,6 +40,7 @@ export class CE extends ResolvableService {
             createPropInfos: new createPropInfos(args),
             connectActions: connectActions ? new connectActions(args) : undefined,
         };
+        this.resolved = true;
         await this.#createClass(args);
     }
     async #createClass(args) {
@@ -49,9 +50,10 @@ export class CE extends ResolvableService {
         const ext = addMixins?.ext || HTMLElement;
         const config = args.config;
         const { tagName, formAss } = config;
+        const observedAttributes = await createPropInfos.getAttrNames(ext);
         class newClass extends ext {
             static is = tagName;
-            static observedAttributes = createPropInfos.getAttrNames(ext);
+            static observedAttributes = observedAttributes;
             static ceDef = args;
             static formAssociated = formAss;
             attributeChangedCallback(name, oldVal, newVal) {
@@ -87,7 +89,6 @@ export class CE extends ResolvableService {
         }
         this.custElClass = newClass;
         def(newClass);
-        this.resolved = true;
     }
     async #evalConfig({ args }) {
         if (args === undefined)
