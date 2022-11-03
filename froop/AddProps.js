@@ -18,12 +18,6 @@ export class AddProps extends ResolvableService {
             const connection = e.detail;
             const { instance } = connection;
             const propBag = this.#getPropBag(instance);
-            // this.dispatchEvent(new CustomEvent(npb, {
-            //     detail: {
-            //         instance,
-            //         propBag
-            //     } as INewPropBag,
-            // }))
         });
         createCustomEl.addEventListener(dcb, e => {
             const disconnection = e.detail;

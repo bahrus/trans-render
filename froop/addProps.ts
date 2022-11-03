@@ -21,12 +21,6 @@ export class AddProps extends ResolvableService implements IAddProps{
             const connection = (e as CustomEvent).detail as IConnectedCB;
             const {instance} = connection;
             const propBag = this.#getPropBag(instance);
-            // this.dispatchEvent(new CustomEvent(npb, {
-            //     detail: {
-            //         instance,
-            //         propBag
-            //     } as INewPropBag,
-            // }))
         });
         createCustomEl.addEventListener(dcb, e => {
             const disconnection = (e as CustomEvent).detail as IDisconnectedCB;

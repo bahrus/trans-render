@@ -69,7 +69,7 @@ export class CE extends ResolvableService {
                 }));
             }
             connectedCallback() {
-                console.log('connectedCallback');
+                //console.log('connectedCallback');
                 if (super.connectedCallback)
                     super.connectedCallback();
                 services.createCustomEl.dispatchEvent(new CustomEvent(ccb, {

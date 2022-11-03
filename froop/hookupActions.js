@@ -1,6 +1,6 @@
 import { pc } from './const.js';
 export function hookupActions(instance, propBag, args) {
-    console.log('addPropBagListener');
+    //console.log('addPropBagListener');
     propBag.addEventListener(pc, async (e) => {
         const chg = e.detail;
         const { key, oldVal, newVal } = chg;

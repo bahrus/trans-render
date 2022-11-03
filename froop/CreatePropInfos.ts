@@ -67,7 +67,7 @@ export class CreatePropInfos extends ResolvableService{
             if(connectActions){
                 await connectActions.instanceResolve(instance);
             }
-            console.log('doPropUp');
+            //console.log('doPropUp');
             this.#propUp(instance, this.allPropNames, defaults);
         });
         this.resolved = true;

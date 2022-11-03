@@ -18,7 +18,7 @@ export class ConnectActions extends ResolvableService {
             const propBagEvent = e.detail;
             const { instance, propBag } = propBagEvent;
             const { hookupActions } = await import('./hookupActions.js');
-            console.log({ instance, propBag });
+            //console.log({instance, propBag});
             await hookupActions(instance, propBag, args);
             this.instanceResolved = instance;
         });

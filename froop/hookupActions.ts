@@ -4,7 +4,7 @@ import {DefineArgsWithServices, IPropBag, IPropChg} from './types';
 
 
 export function hookupActions(instance: EventTarget, propBag: IPropBag, args: DefineArgsWithServices){
-    console.log('addPropBagListener');
+    //console.log('addPropBagListener');
     propBag.addEventListener(pc, async e => {
         
         const chg = (e as CustomEvent).detail as IPropChg;
