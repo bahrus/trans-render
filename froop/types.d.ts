@@ -17,9 +17,10 @@ export interface IPropBag extends EventTarget{
     dk: Set<string>;
 }
 
-export interface IResolvable extends EventTarget{
+export interface IResolvable<T extends object = object> extends EventTarget{
     resolved: boolean;
     resolve(): Promise<void>;
+    instanceResolve(instance: T): Promise<void>
 }
 
 export interface IAddMixins extends IResolvable{

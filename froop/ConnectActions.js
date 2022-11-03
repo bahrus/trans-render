@@ -20,7 +20,8 @@ export class ConnectActions extends ResolvableService {
             const { hookupActions } = await import('./hookupActions.js');
             console.log({ instance, propBag });
             await hookupActions(instance, propBag, args);
-            this.resolved = true;
+            this.instanceResolved = instance;
         });
+        this.resolved = true;
     }
 }

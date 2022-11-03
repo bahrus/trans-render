@@ -12,6 +12,7 @@ export const mse = 'main-svc-est';
 export const pc = 'prop-change';
 export const npb = 'new-prop-bag';
 export const r = 'resolved';
+export const ir = 'instance-resolved';
 /**
  * attribute changed callback event
  */

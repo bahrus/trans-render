@@ -19,6 +19,8 @@ export const mse = 'main-svc-est';
 
  export const r = 'resolved';
 
+ export const ir = 'instance-resolved';
+
  /**
   * attribute changed callback event
   */
