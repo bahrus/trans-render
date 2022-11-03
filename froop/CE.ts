@@ -78,6 +78,7 @@ export class CE<TProps = any, TActions = TProps> extends ResolvableService{
             }
 
             connectedCallback(){
+                console.log('connectedCallback');
                 if(super.connectedCallback) super.connectedCallback();
                 services!.createCustomEl.dispatchEvent(new CustomEvent(ccb, {
                     detail: {
@@ -96,8 +97,16 @@ export class CE<TProps = any, TActions = TProps> extends ResolvableService{
             }
         }
         this.custElClass = newClass as any as {new(): HTMLElement}
-        def(newClass);
         this.resolved = true;
+        const {addProps, connectActions} = services!;
+        console.log('await addProps');
+        await addProps.resolve();
+        console.log('await connectActions');
+        await connectActions?.resolve();
+        console.log('def');
+        
+        def(newClass);
+        
     }
 
     async #evalConfig({args}: this){

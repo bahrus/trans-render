@@ -69,6 +69,7 @@ export class CE extends ResolvableService {
                 }));
             }
             connectedCallback() {
+                console.log('connectedCallback');
                 if (super.connectedCallback)
                     super.connectedCallback();
                 services.createCustomEl.dispatchEvent(new CustomEvent(ccb, {
@@ -88,8 +89,14 @@ export class CE extends ResolvableService {
             }
         }
         this.custElClass = newClass;
-        def(newClass);
         this.resolved = true;
+        const { addProps, connectActions } = services;
+        console.log('await addProps');
+        await addProps.resolve();
+        console.log('await connectActions');
+        await connectActions?.resolve();
+        console.log('def');
+        def(newClass);
     }
     async #evalConfig({ args }) {
         if (args === undefined)
