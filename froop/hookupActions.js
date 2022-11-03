@@ -4,7 +4,7 @@ export function hookupActions(instance, propBag, args) {
     propBag.addEventListener(pc, async (e) => {
         const chg = e.detail;
         const { key, oldVal, newVal } = chg;
-        console.log({ key, oldVal, newVal });
+        //console.log({key, oldVal, newVal});
         const { services } = args;
         const { createPropInfos } = services;
         await createPropInfos.resolve();
@@ -21,7 +21,7 @@ export function hookupActions(instance, propBag, args) {
             const config = args.config;
             const { actions } = config;
             const changedKeys = propBag.dk;
-            console.log({ changedKeys, actions });
+            //console.log({changedKeys, actions});
             propBag.dk = new Set();
             let foundAction = false;
             for (const methodName in actions) {
@@ -38,7 +38,7 @@ export function hookupActions(instance, propBag, args) {
             }
             if (foundAction) {
                 const { doActions } = await import('./doActions.js');
-                console.log({ instance, filteredActions });
+                //console.log({instance, filteredActions});
                 doActions(instance, filteredActions);
             }
         })();

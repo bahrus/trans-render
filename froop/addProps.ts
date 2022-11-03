@@ -17,7 +17,7 @@ export class AddProps extends ResolvableService implements IAddProps{
         const {createCustomEl, createPropInfos} = services!;
         await createCustomEl.resolve();
         createCustomEl.addEventListener(ccb, e => {
-            console.log('connectedCallback');
+            //console.log('connectedCallback');
             const connection = (e as CustomEvent).detail as IConnectedCB;
             const {instance} = connection;
             const propBag = this.#getPropBag(instance);
@@ -65,7 +65,7 @@ export class AddProps extends ResolvableService implements IAddProps{
                     return getPropBag(this).get(key);
                 },
                 set(nv: any){
-                    console.log('set', {key, nv});
+                    //console.log('set', {key, nv});
                     getPropBag(this).set(key, nv);
                 },
                 enumerable: true,

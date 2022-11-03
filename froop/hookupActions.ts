@@ -9,7 +9,7 @@ export function hookupActions(instance: EventTarget, propBag: IPropBag, args: De
         
         const chg = (e as CustomEvent).detail as IPropChg;
         const {key, oldVal, newVal} = chg;
-        console.log({key, oldVal, newVal});
+        //console.log({key, oldVal, newVal});
         const {services} = args;
         const {createPropInfos} = services!;
         await createPropInfos.resolve();
@@ -25,7 +25,7 @@ export function hookupActions(instance: EventTarget, propBag: IPropBag, args: De
             const config = args.config as WCConfig;
             const {actions} = config;
             const changedKeys = propBag.dk;
-            console.log({changedKeys, actions});
+            //console.log({changedKeys, actions});
             propBag.dk = new Set<string>();
             let foundAction = false;
             for(const methodName in actions){
@@ -41,7 +41,7 @@ export function hookupActions(instance: EventTarget, propBag: IPropBag, args: De
             }
             if(foundAction){
                 const {doActions} = await import('./doActions.js');
-                console.log({instance, filteredActions});
+                //console.log({instance, filteredActions});
                 doActions(instance, filteredActions);
             }
         })();
