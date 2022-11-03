@@ -32,7 +32,8 @@ export class AddProps extends ResolvableService implements IAddProps{
             this.#propBagLookup.delete(disconnection.instance);
         });
         await createPropInfos.resolve();
-        this.#addProps(createCustomEl.custElClass, createPropInfos.propInfos);        
+        this.#addProps(createCustomEl.custElClass, createPropInfos.propInfos);  
+        this.resolved = true;      
     }
 
     #propBagLookup = new WeakMap<HTMLElement, PropBag>

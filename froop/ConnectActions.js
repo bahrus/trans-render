@@ -1,6 +1,5 @@
 import { ResolvableService } from "./ResolvableService.js";
 import { npb, mse } from './const.js';
-import { hookupActions } from './hookupActions.js';
 export class ConnectActions extends ResolvableService {
     args;
     constructor(args) {
@@ -18,8 +17,9 @@ export class ConnectActions extends ResolvableService {
         addProps.addEventListener(npb, async (e) => {
             const propBagEvent = e.detail;
             const { instance, propBag } = propBagEvent;
-            const { hookupActions: doHookup } = await import('./hookupActions.js');
+            const { hookupActions } = await import('./hookupActions.js');
             await hookupActions(instance, propBag, args);
         });
+        this.resolved = true;
     }
 }

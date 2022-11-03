@@ -30,6 +30,7 @@ export class AddProps extends ResolvableService {
         });
         await createPropInfos.resolve();
         this.#addProps(createCustomEl.custElClass, createPropInfos.propInfos);
+        this.resolved = true;
     }
     #propBagLookup = new WeakMap;
     #getPropBag(instance) {
