@@ -17,17 +17,21 @@ export interface IPropBag extends EventTarget{
     dk: Set<string>;
 }
 
-export interface IResolvable<T extends object = object> extends EventTarget{
+export interface IResolvableService extends EventTarget{
     resolved: boolean;
     resolve(): Promise<void>;
-    instanceResolve(instance: T): Promise<void>
+    
 }
 
-export interface IAddMixins extends IResolvable{
+export interface IInstanceResolvableService<T extends object = object> extends IResolvableService{
+    instanceResolve(instance: T): Promise<void>;
+}
+
+export interface IAddMixins extends IResolvableService{
     ext: {new(): HTMLElement}
 }
 
-export interface ICreatePropInfos extends IResolvable{
+export interface ICreatePropInfos extends IResolvableService{
     propInfos: {[key: string]: PropInfo},
     allPropNames: string[],
     getAttrNames(ext: any): Promise<string[]>,
@@ -35,15 +39,15 @@ export interface ICreatePropInfos extends IResolvable{
     nonDryProps: Set<string>,
 }
 
-export interface ICreateCustomElement extends IResolvable{
+export interface ICreateCustomElement extends IResolvableService{
     custElClass: {new(): HTMLElement};
 }
 
-export interface IAddProps extends IResolvable{
+export interface IAddProps extends IResolvableService{
 
 }
 
-export interface IConnectActions extends IResolvable{
+export interface IConnectActions extends IInstanceResolvableService{
 
 }
 

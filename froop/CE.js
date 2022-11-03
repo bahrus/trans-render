@@ -1,7 +1,7 @@
 import { def } from '../lib/def.js';
 import { acb, ccb, dcb, mse } from './const.js';
-import { ResolvableService } from './ResolvableService.js';
-export class CE extends ResolvableService {
+import { ReSvc } from './ReSvc.js';
+export class CE extends ReSvc {
     args;
     constructor(args) {
         super();

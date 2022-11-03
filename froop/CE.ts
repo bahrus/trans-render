@@ -3,10 +3,10 @@ export { Action, PropInfo, TRElementActions, TRElementProps, WCConfig, IActionPr
 import { def } from '../lib/def.js';
 import {IAddMixins, DefineArgsWithServices, ICreateCustomElement, IAttrChgCB, IConnectedCB, IDisconnectedCB} from './types';
 import {acb, ccb, dcb, mse} from './const.js';
-import { ResolvableService } from './ResolvableService.js';
+import { ReSvc } from './ReSvc.js';
 
 
-export class CE<TProps = any, TActions = TProps> extends ResolvableService{
+export class CE<TProps = any, TActions = TProps> extends ReSvc{
     constructor(public args: DefineArgsWithServices<TProps, TActions>){
         super();
         this.#evalConfig(this);

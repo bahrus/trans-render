@@ -1,26 +1,11 @@
-import {r, ir} from './const.js';
-export class ResolvableService<T extends object = object> extends EventTarget{
-    #resolved = false;
-    get resolved(){
-        return this.#resolved;
-    }
-    set resolved(newVal){
-        this.#resolved = newVal;
-        if(newVal){
-            this.dispatchEvent(new Event(r));
-        }
-    }
-    resolve(): Promise<void> {
-        return new Promise((resolve) => {
-            if(this.#resolved) {
-                resolve();
-                return;
-            }
-            this.addEventListener(r, e => {
-                resolve();
-            }, {once: true});
-        })
-    }
+import {ReSvc} from './ReSvc.js';
+import {ir} from './const.js';
+import {IInstanceResolvableService} from './types';
+/**
+ * Instance Resolvable Service
+ */
+export class InstResSvc<T extends object = object> extends ReSvc implements IInstanceResolvableService{
+
     #instanceResolved = new WeakMap<T, boolean>();
     set instanceResolved(instance: T){
         this.#instanceResolved.set(instance, true);
@@ -42,4 +27,5 @@ export class ResolvableService<T extends object = object> extends EventTarget{
             }, {signal: ac.signal});
         })
     }
+
 }

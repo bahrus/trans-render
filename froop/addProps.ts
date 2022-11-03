@@ -1,9 +1,9 @@
 import { PropInfo, DefineArgs } from "../lib/types";
 import { pc, npb, ccb, dcb, r, mse} from './const.js';
-import { ResolvableService } from "./ResolvableService.js";
+import { ReSvc } from "./ReSvc.js";
 import { IPropBag, IAddProps, DefineArgsWithServices, INewPropBag, IConnectedCB, IDisconnectedCB, IPropChg } from './types';
 
-export class AddProps extends ResolvableService implements IAddProps{
+export class AddProps extends ReSvc implements IAddProps{
     constructor(public args: DefineArgsWithServices){
         super();
         args.main!.addEventListener(mse, () => {

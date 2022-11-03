@@ -1,6 +1,6 @@
 import { acb, npb, mse } from './const.js';
-import { ResolvableService } from './ResolvableService.js';
-export class CreatePropInfos extends ResolvableService {
+import { ReSvc } from './ReSvc.js';
+export class CreatePropInfos extends ReSvc {
     args;
     constructor(args) {
         super();

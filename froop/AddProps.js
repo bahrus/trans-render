@@ -1,6 +1,6 @@
 import { pc, npb, ccb, dcb, mse } from './const.js';
-import { ResolvableService } from "./ResolvableService.js";
-export class AddProps extends ResolvableService {
+import { ReSvc } from "./ReSvc.js";
+export class AddProps extends ReSvc {
     args;
     constructor(args) {
         super();

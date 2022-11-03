@@ -1,10 +1,10 @@
 import {WCConfig} from '../lib/types';
-import { ResolvableService } from "./ResolvableService.js";
+import { InstResSvc } from "./InstResSvc.js";
 import {npb, r, mse} from './const.js';
 import { DefineArgsWithServices, IConnectActions, INewPropBag } from './types';
 
 
-export class ConnectActions extends ResolvableService {
+export class ConnectActions extends InstResSvc {
     constructor(public args: DefineArgsWithServices){
         super();
         args.main!.addEventListener(mse, () => {
@@ -13,7 +13,6 @@ export class ConnectActions extends ResolvableService {
 
     }
     async #do(args: DefineArgsWithServices){
-        const config  = args.config as WCConfig;
         
         const {services} = args;
         const {addProps} = services!;

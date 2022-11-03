@@ -1,6 +1,6 @@
-import { ResolvableService } from "./ResolvableService.js";
+import { InstResSvc } from "./InstResSvc.js";
 import { npb, mse } from './const.js';
-export class ConnectActions extends ResolvableService {
+export class ConnectActions extends InstResSvc {
     args;
     constructor(args) {
         super();
@@ -10,7 +10,6 @@ export class ConnectActions extends ResolvableService {
         }, { once: true });
     }
     async #do(args) {
-        const config = args.config;
         const { services } = args;
         const { addProps } = services;
         await addProps.resolve();

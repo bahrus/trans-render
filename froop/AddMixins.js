@@ -1,5 +1,5 @@
-import { ResolvableService } from './ResolvableService.js';
-export class AddMixins extends ResolvableService {
+import { ReSvc } from './ReSvc.js';
+export class AddMixins extends ReSvc {
     args;
     ext;
     constructor(args) {
