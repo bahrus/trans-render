@@ -1,24 +1,27 @@
-import { r } from './const.js';
-export class ReSvc extends EventTarget {
+import {r} from './const.js';
+import {IResolvableService} from './types';
+
+export class ReslvSvc extends EventTarget implements IResolvableService{
     #resolved = false;
-    get resolved() {
+    get resolved(){
         return this.#resolved;
     }
-    set resolved(newVal) {
+    set resolved(newVal){
         this.#resolved = newVal;
-        if (newVal) {
+        if(newVal){
             this.dispatchEvent(new Event(r));
         }
     }
-    resolve() {
+    resolve(): Promise<void> {
         return new Promise((resolve) => {
-            if (this.#resolved) {
+            if(this.#resolved) {
                 resolve();
                 return;
             }
             this.addEventListener(r, e => {
                 resolve();
-            }, { once: true });
-        });
+            }, {once: true});
+        })
     }
+
 }

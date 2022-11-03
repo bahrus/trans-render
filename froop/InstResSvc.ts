@@ -1,10 +1,10 @@
-import {ReSvc} from './ReSvc.js';
+import {ReslvSvc} from './ReslvSvc.js';
 import {ir} from './const.js';
 import {IInstanceResolvableService} from './types';
 /**
  * Instance Resolvable Service
  */
-export class InstResSvc<T extends object = object> extends ReSvc implements IInstanceResolvableService{
+export class InstResSvc<T extends object = object> extends ReslvSvc implements IInstanceResolvableService{
 
     #instanceResolved = new WeakMap<T, boolean>();
     set instanceResolved(instance: T){

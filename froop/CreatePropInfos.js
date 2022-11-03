@@ -1,6 +1,6 @@
 import { acb, npb, mse } from './const.js';
-import { ReSvc } from './ReSvc.js';
-export class CreatePropInfos extends ReSvc {
+import { ReslvSvc } from './ReslvSvc.js';
+export class CreatePropInfos extends ReslvSvc {
     args;
     constructor(args) {
         super();

@@ -3,7 +3,9 @@ import { InstResSvc } from "./InstResSvc.js";
 import {npb, r, mse} from './const.js';
 import { DefineArgsWithServices, IConnectActions, INewPropBag } from './types';
 
-
+/**
+ * Connects the prop change subscription via PropBag observer to the corresponding actions
+ */
 export class ConnectActions extends InstResSvc {
     constructor(public args: DefineArgsWithServices){
         super();

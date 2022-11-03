@@ -1,5 +1,8 @@
 import { InstResSvc } from "./InstResSvc.js";
 import { npb, mse } from './const.js';
+/**
+ * Connects the prop change subscription via PropBag observer to the corresponding actions
+ */
 export class ConnectActions extends InstResSvc {
     args;
     constructor(args) {

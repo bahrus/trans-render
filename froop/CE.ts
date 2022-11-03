@@ -3,10 +3,10 @@ export { Action, PropInfo, TRElementActions, TRElementProps, WCConfig, IActionPr
 import { def } from '../lib/def.js';
 import {IAddMixins, DefineArgsWithServices, ICreateCustomElement, IAttrChgCB, IConnectedCB, IDisconnectedCB} from './types';
 import {acb, ccb, dcb, mse} from './const.js';
-import { ReSvc } from './ReSvc.js';
+import { ReslvSvc } from './ReslvSvc.js';
 
 
-export class CE<TProps = any, TActions = TProps> extends ReSvc{
+export class CE<TProps = any, TActions = TProps> extends ReslvSvc{
     constructor(public args: DefineArgsWithServices<TProps, TActions>){
         super();
         this.#evalConfig(this);
@@ -15,31 +15,49 @@ export class CE<TProps = any, TActions = TProps> extends ReSvc{
 
     async #do(args: DefineArgsWithServices){
         if(args.serviceClasses === undefined){
-            args.serviceClasses = {};
-            const {serviceClasses} = args;
-            if(args.mixins || args.superclass){
-                const {AddMixins} = await import('./AddMixins.js');
-                serviceClasses.addMixins = AddMixins;
-            }
-            const {CreatePropInfos} = await import('./CreatePropInfos.js');
-            serviceClasses.createPropInfos  = CreatePropInfos;
-            const {AddProps} = await import('./AddProps.js');
-            serviceClasses.addProps = AddProps;
-            const config = args.config as WCConfig;
-            if(config.actions !== undefined){
-                const {ConnectActions} = await import('./ConnectActions.js');
-                serviceClasses.connectActions = ConnectActions;
-            }
+            await this.addSvcClasses(args);
         }
         await this.#createServices(args);
 
+    }
 
+    /**
+     * 
+     * @param args 
+     * @overridable
+     */
+    async addSvcClasses(args: DefineArgsWithServices){
+        args.serviceClasses = {};
+        const {serviceClasses} = args;
+        if(args.mixins || args.superclass){
+            const {AddMixins} = await import('./AddMixins.js');
+            serviceClasses.addMixins = AddMixins;
+        }
+        const {CreatePropInfos} = await import('./CreatePropInfos.js');
+        serviceClasses.createPropInfos  = CreatePropInfos;
+        const {AddProps} = await import('./AddProps.js');
+        serviceClasses.addProps = AddProps;
+        const config = args.config as WCConfig;
+        if(config.actions !== undefined){
+            const {ConnectActions} = await import('./ConnectActions.js');
+            serviceClasses.connectActions = ConnectActions;
+        }
     }
 
     async #createServices(args: DefineArgsWithServices){
+        args.main = this;
+        this.addSvcs(args);
+        this.dispatchEvent(new Event(mse))
+        await this.#createClass(args);
+    }
+    /**
+     * 
+     * @param args 
+     * @overridable
+     */
+    async addSvcs(args: DefineArgsWithServices){
         const {serviceClasses} = args;
         const {addMixins, addProps, createPropInfos, connectActions} = serviceClasses!;
-        args.main = this;
         args.services = {
             createCustomEl: this,
             addMixins: addMixins ? new addMixins(args) : undefined,
@@ -47,8 +65,6 @@ export class CE<TProps = any, TActions = TProps> extends ReSvc{
             createPropInfos: new createPropInfos!(args),
             connectActions: connectActions ? new connectActions(args) : undefined,
         };
-        this.dispatchEvent(new Event(mse))
-        await this.#createClass(args);
     }
 
     async #createClass(args: DefineArgsWithServices){

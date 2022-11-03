@@ -1,9 +1,9 @@
-import { ReSvc } from './ReSvc.js';
+import { ReslvSvc } from './ReslvSvc.js';
 import { ir } from './const.js';
 /**
  * Instance Resolvable Service
  */
-export class InstResSvc extends ReSvc {
+export class InstResSvc extends ReslvSvc {
     #instanceResolved = new WeakMap();
     set instanceResolved(instance) {
         this.#instanceResolved.set(instance, true);

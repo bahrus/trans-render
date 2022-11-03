@@ -1,7 +1,7 @@
 import { def } from '../lib/def.js';
 import { acb, ccb, dcb, mse } from './const.js';
-import { ReSvc } from './ReSvc.js';
-export class CE extends ReSvc {
+import { ReslvSvc } from './ReslvSvc.js';
+export class CE extends ReslvSvc {
     args;
     constructor(args) {
         super();
@@ -11,28 +11,46 @@ export class CE extends ReSvc {
     }
     async #do(args) {
         if (args.serviceClasses === undefined) {
-            args.serviceClasses = {};
-            const { serviceClasses } = args;
-            if (args.mixins || args.superclass) {
-                const { AddMixins } = await import('./AddMixins.js');
-                serviceClasses.addMixins = AddMixins;
-            }
-            const { CreatePropInfos } = await import('./CreatePropInfos.js');
-            serviceClasses.createPropInfos = CreatePropInfos;
-            const { AddProps } = await import('./AddProps.js');
-            serviceClasses.addProps = AddProps;
-            const config = args.config;
-            if (config.actions !== undefined) {
-                const { ConnectActions } = await import('./ConnectActions.js');
-                serviceClasses.connectActions = ConnectActions;
-            }
+            await this.addSvcClasses(args);
         }
         await this.#createServices(args);
     }
+    /**
+     *
+     * @param args
+     * @overridable
+     */
+    async addSvcClasses(args) {
+        args.serviceClasses = {};
+        const { serviceClasses } = args;
+        if (args.mixins || args.superclass) {
+            const { AddMixins } = await import('./AddMixins.js');
+            serviceClasses.addMixins = AddMixins;
+        }
+        const { CreatePropInfos } = await import('./CreatePropInfos.js');
+        serviceClasses.createPropInfos = CreatePropInfos;
+        const { AddProps } = await import('./AddProps.js');
+        serviceClasses.addProps = AddProps;
+        const config = args.config;
+        if (config.actions !== undefined) {
+            const { ConnectActions } = await import('./ConnectActions.js');
+            serviceClasses.connectActions = ConnectActions;
+        }
+    }
     async #createServices(args) {
+        args.main = this;
+        this.addSvcs(args);
+        this.dispatchEvent(new Event(mse));
+        await this.#createClass(args);
+    }
+    /**
+     *
+     * @param args
+     * @overridable
+     */
+    async addSvcs(args) {
         const { serviceClasses } = args;
         const { addMixins, addProps, createPropInfos, connectActions } = serviceClasses;
-        args.main = this;
         args.services = {
             createCustomEl: this,
             addMixins: addMixins ? new addMixins(args) : undefined,
@@ -40,8 +58,6 @@ export class CE extends ReSvc {
             createPropInfos: new createPropInfos(args),
             connectActions: connectActions ? new connectActions(args) : undefined,
         };
-        this.dispatchEvent(new Event(mse));
-        await this.#createClass(args);
     }
     async #createClass(args) {
         const { services } = args;
