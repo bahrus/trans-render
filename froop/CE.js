@@ -91,11 +91,8 @@ export class CE extends ResolvableService {
         this.custElClass = newClass;
         this.resolved = true;
         const { addProps, connectActions } = services;
-        console.log('await addProps');
         await addProps.resolve();
-        console.log('await connectActions');
-        await connectActions?.resolve();
-        console.log('def');
+        //await connectActions?.resolve();
         def(newClass);
     }
     async #evalConfig({ args }) {

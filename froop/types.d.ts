@@ -57,6 +57,13 @@ export interface IConnectedCB{
     instance: HTMLElement,
 }
 
+export interface IPropChg{
+    key: string,
+    oldVal: any,
+    newVal: any,
+    
+}
+
 export interface IDisconnectedCB {
     instance: HTMLElement
 }

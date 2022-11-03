@@ -22,9 +22,11 @@ export class ConnectActions extends ResolvableService {
             const propBagEvent = (e as CustomEvent).detail as INewPropBag;
             const {instance, propBag} = propBagEvent;
             const {hookupActions} = await import('./hookupActions.js');
+            console.log({instance, propBag});
             await hookupActions(instance, propBag, args);
+            this.resolved = true;
         });
-        this.resolved = true;
+        
     }
 }
 

@@ -12,9 +12,7 @@ export class AddProps extends ResolvableService {
     async #do(args) {
         const { services } = args;
         const { createCustomEl, createPropInfos } = services;
-        console.log('await createCustomEl');
         await createCustomEl.resolve();
-        console.log('addEventListener');
         createCustomEl.addEventListener(ccb, e => {
             console.log('connectedCallback');
             const connection = e.detail;
@@ -61,6 +59,7 @@ export class AddProps extends ResolvableService {
                     return getPropBag(this).get(key);
                 },
                 set(nv) {
+                    console.log('set', { key, nv });
                     getPropBag(this).set(key, nv);
                 },
                 enumerable: true,

@@ -99,11 +99,8 @@ export class CE<TProps = any, TActions = TProps> extends ResolvableService{
         this.custElClass = newClass as any as {new(): HTMLElement}
         this.resolved = true;
         const {addProps, connectActions} = services!;
-        console.log('await addProps');
         await addProps.resolve();
-        console.log('await connectActions');
-        await connectActions?.resolve();
-        console.log('def');
+        //await connectActions?.resolve();
         
         def(newClass);
         

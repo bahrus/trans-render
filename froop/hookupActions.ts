@@ -1,12 +1,15 @@
 import {Action, IActionProcessor, WCConfig} from '../lib/types';
 import {pc} from './const.js';
-import {DefineArgsWithServices, IPropBag} from './types';
+import {DefineArgsWithServices, IPropBag, IPropChg} from './types';
 
 
 export function hookupActions(instance: EventTarget, propBag: IPropBag, args: DefineArgsWithServices){
+    console.log('addPropBagListener');
     propBag.addEventListener(pc, async e => {
-        const chg = (e as CustomEvent).detail;
+        
+        const chg = (e as CustomEvent).detail as IPropChg;
         const {key, oldVal, newVal} = chg;
+        console.log({key, oldVal, newVal});
         const {services} = args;
         const {createPropInfos} = services!;
         await createPropInfos.resolve();
@@ -22,6 +25,7 @@ export function hookupActions(instance: EventTarget, propBag: IPropBag, args: De
             const config = args.config as WCConfig;
             const {actions} = config;
             const changedKeys = propBag.dk;
+            console.log({changedKeys, actions});
             propBag.dk = new Set<string>();
             let foundAction = false;
             for(const methodName in actions){
@@ -36,7 +40,9 @@ export function hookupActions(instance: EventTarget, propBag: IPropBag, args: De
                 }
             }
             if(foundAction){
-                const {} = await import('./doActions.js')
+                const {doActions} = await import('./doActions.js');
+                console.log({instance, filteredActions});
+                doActions(instance, filteredActions);
             }
         })();
     });

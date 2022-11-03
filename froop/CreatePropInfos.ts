@@ -54,16 +54,20 @@ export class CreatePropInfos extends ResolvableService{
         this.allPropNames = Object.keys(props);
         
         const {services} = args;
-        const {createCustomEl, addProps} = services!;
+        const {createCustomEl, addProps, connectActions} = services!;
         createCustomEl.addEventListener(acb, async e => {
             const acbE = (e as CustomEvent).detail as IAttrChgCB;
             const {instance, name, newVal, oldVal} = acbE;
             const {doAttr} = await import('./doAttr.js');
             await doAttr(acbE, props, defaults);
         });
-        addProps.addEventListener(npb, e => {
+        addProps.addEventListener(npb, async e => {
             const inpb = (e as CustomEvent).detail as INewPropBag;
             const {instance} = inpb;
+            if(connectActions){
+                await connectActions.resolve();
+            }
+            console.log('doPropUp');
             this.#propUp(instance, this.allPropNames, defaults);
         });
         this.resolved = true;

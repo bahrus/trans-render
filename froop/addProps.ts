@@ -1,7 +1,7 @@
 import { PropInfo, DefineArgs } from "../lib/types";
 import { pc, npb, ccb, dcb, r, mse} from './const.js';
 import { ResolvableService } from "./ResolvableService.js";
-import { IPropBag, IAddProps, DefineArgsWithServices, INewPropBag, IConnectedCB, IDisconnectedCB } from './types';
+import { IPropBag, IAddProps, DefineArgsWithServices, INewPropBag, IConnectedCB, IDisconnectedCB, IPropChg } from './types';
 
 export class AddProps extends ResolvableService implements IAddProps{
     constructor(public args: DefineArgsWithServices){
@@ -15,9 +15,7 @@ export class AddProps extends ResolvableService implements IAddProps{
     async #do(args: DefineArgsWithServices){
         const {services} = args;
         const {createCustomEl, createPropInfos} = services!;
-        console.log('await createCustomEl')
         await createCustomEl.resolve();
-        console.log('addEventListener');
         createCustomEl.addEventListener(ccb, e => {
             console.log('connectedCallback');
             const connection = (e as CustomEvent).detail as IConnectedCB;
@@ -67,6 +65,7 @@ export class AddProps extends ResolvableService implements IAddProps{
                     return getPropBag(this).get(key);
                 },
                 set(nv: any){
+                    console.log('set', {key, nv});
                     getPropBag(this).set(key, nv);
                 },
                 enumerable: true,
@@ -88,7 +87,7 @@ export class PropBag extends EventTarget implements IPropBag{
         const init: CustomEventInit = {
             detail:{
                 key, oldVal, newVal
-            }
+            } as IPropChg
         }
         this.dispatchEvent(new CustomEvent(key, init));
         this.dispatchEvent(new CustomEvent(pc, init));

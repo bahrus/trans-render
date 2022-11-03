@@ -10,7 +10,7 @@ export async function getVal(ctx: getValArg, path: string): Promise<any> {
             //path = path.substr(1);
             const qSplit = path.split('??');
             let deflt = qSplit[1];
-            const {splitExt} = await import('trans-render/lib/splitExt.js');
+            const {splitExt} = await import('./splitExt.js');
             const dSplit = splitExt(qSplit[0].trim());
             const { getProp } = await import('./getProp.js');
             let val = getProp(host, dSplit);
