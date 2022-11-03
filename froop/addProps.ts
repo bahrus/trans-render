@@ -1,12 +1,15 @@
 import { PropInfo, DefineArgs } from "../lib/types";
-import { pc, npb, ccb, dcb} from './const.js';
+import { pc, npb, ccb, dcb, r} from './const.js';
 import { ResolvableService } from "./ResolvableService.js";
 import { IPropBag, IAddProps, DefineArgsWithServices, INewPropBag, IConnectedCB, IDisconnectedCB } from './types';
 
 export class AddProps extends ResolvableService implements IAddProps{
     constructor(public args: DefineArgsWithServices){
         super();
-        this.#do(args);
+        args.main!.addEventListener(r, () => {
+            this.#do(args);
+        }, {once: true});
+        
     }
 
     async #do(args: DefineArgsWithServices){

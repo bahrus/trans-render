@@ -32,11 +32,12 @@ export class CE extends ResolvableService {
     async #createServices(args) {
         const { serviceClasses } = args;
         const { addMixins, addProps, createPropInfos, connectActions } = serviceClasses;
+        args.main = this;
         args.services = {
+            createCustomEl: this,
             addMixins: addMixins ? new addMixins(args) : undefined,
             addProps: new addProps(args),
             createPropInfos: new createPropInfos(args),
-            createCustomEl: this,
             connectActions: connectActions ? new connectActions(args) : undefined,
         };
         await this.#createClass(args);

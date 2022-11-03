@@ -1,11 +1,13 @@
-import { pc, npb, ccb, dcb } from './const.js';
+import { pc, npb, ccb, dcb, r } from './const.js';
 import { ResolvableService } from "./ResolvableService.js";
 export class AddProps extends ResolvableService {
     args;
     constructor(args) {
         super();
         this.args = args;
-        this.#do(args);
+        args.main.addEventListener(r, () => {
+            this.#do(args);
+        }, { once: true });
     }
     async #do(args) {
         const { services } = args;

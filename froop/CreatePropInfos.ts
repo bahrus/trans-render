@@ -1,12 +1,14 @@
 import {PropInfo, WCConfig, Action, PropInfoTypes} from '../lib/types';
 import {DefineArgsWithServices, ICreatePropInfos, IAttrChgCB, INewPropBag} from './types';
-import {acb, npb} from './const.js';
+import {acb, npb, r} from './const.js';
 import { ResolvableService } from './ResolvableService.js';
 
 export class CreatePropInfos extends ResolvableService{
     constructor(public args: DefineArgsWithServices){
         super();
-        this.#do(args);
+        args.main!.addEventListener(r, () => {
+            this.#do(args);
+        }, {once: true});
 
     }
     async #do(args: DefineArgsWithServices){

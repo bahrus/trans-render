@@ -67,6 +67,7 @@ export interface INewPropBag {
 }
 
 export interface DefineArgsWithServices<TProps = any, TActions = TProps> extends DefineArgs<TProps, TActions>{
+    main?: ICreateCustomElement,
     serviceClasses?: {
         addMixins?: {new(args: DefineArgsWithServices): IAddMixins},
         createPropInfos?: {new(args: DefineArgsWithServices): ICreatePropInfos},

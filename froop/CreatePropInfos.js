@@ -1,11 +1,13 @@
-import { acb, npb } from './const.js';
+import { acb, npb, r } from './const.js';
 import { ResolvableService } from './ResolvableService.js';
 export class CreatePropInfos extends ResolvableService {
     args;
     constructor(args) {
         super();
         this.args = args;
-        this.#do(args);
+        args.main.addEventListener(r, () => {
+            this.#do(args);
+        }, { once: true });
     }
     async #do(args) {
         const config = args.config;
