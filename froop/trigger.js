@@ -1,12 +1,12 @@
 import { pc } from './const.js';
-export function hookupActions(instance, propBag, args) {
+export function trigger(instance, propBag, args) {
     //console.log('addPropBagListener');
     propBag.addEventListener(pc, async (e) => {
         const chg = e.detail;
         const { key, oldVal, newVal } = chg;
         //console.log({key, oldVal, newVal});
         const { services } = args;
-        const { createPropInfos } = services;
+        const { propRegistry: createPropInfos } = services;
         await createPropInfos.resolve();
         const { nonDryProps } = createPropInfos;
         if (!nonDryProps.has(key)) {
@@ -37,7 +37,7 @@ export function hookupActions(instance, propBag, args) {
                 }
             }
             if (foundAction) {
-                const { doActions } = await import('./doActions.js');
+                const { act: doActions } = await import('./act.js');
                 //console.log({instance, filteredActions});
                 doActions(instance, filteredActions);
             }

@@ -1,7 +1,7 @@
 import { InstResSvc } from "./InstResSvc.js";
 import { npb, mse } from './const.js';
 /**
- * Connects the prop change subscription via PropBag observer to the corresponding actions
+ * Connects the prop change subscription via Propagate observer to the corresponding actions
  */
 export class ConnectActions extends InstResSvc {
     args;
@@ -14,14 +14,14 @@ export class ConnectActions extends InstResSvc {
     }
     async #do(args) {
         const { services } = args;
-        const { addProps } = services;
-        await addProps.resolve();
-        addProps.addEventListener(npb, async (e) => {
+        const { propify } = services;
+        await propify.resolve();
+        propify.addEventListener(npb, async (e) => {
             const propBagEvent = e.detail;
             const { instance, propBag } = propBagEvent;
-            const { hookupActions } = await import('./hookupActions.js');
+            const { trigger } = await import('./trigger.js');
             //console.log({instance, propBag});
-            await hookupActions(instance, propBag, args);
+            trigger(instance, propBag, args);
             this.instanceResolved = instance;
         });
         this.resolved = true;

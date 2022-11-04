@@ -1,5 +1,5 @@
 import { ReslvSvc } from './ReslvSvc.js';
-export class AddMixins extends ReslvSvc {
+export class Mix extends ReslvSvc {
     args;
     ext;
     constructor(args) {

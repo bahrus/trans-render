@@ -24,13 +24,13 @@ export class CE extends ReslvSvc {
         args.serviceClasses = {};
         const { serviceClasses } = args;
         if (args.mixins || args.superclass) {
-            const { AddMixins } = await import('./AddMixins.js');
-            serviceClasses.addMixins = AddMixins;
+            const { Mix } = await import('./Mix.js');
+            serviceClasses.mix = Mix;
         }
-        const { CreatePropInfos } = await import('./CreatePropInfos.js');
-        serviceClasses.createPropInfos = CreatePropInfos;
-        const { AddProps } = await import('./AddProps.js');
-        serviceClasses.addProps = AddProps;
+        const { PropRegistry } = await import('./PropRegistry.js');
+        serviceClasses.propRegistry = PropRegistry;
+        const { Propify } = await import('./Propify.js');
+        serviceClasses.propify = Propify;
         const config = args.config;
         if (config.actions !== undefined) {
             const { ConnectActions } = await import('./ConnectActions.js');
@@ -50,18 +50,18 @@ export class CE extends ReslvSvc {
      */
     async addSvcs(args) {
         const { serviceClasses } = args;
-        const { addMixins, addProps, createPropInfos, connectActions } = serviceClasses;
+        const { mix, propify, propRegistry, connectActions } = serviceClasses;
         args.services = {
-            createCustomEl: this,
-            addMixins: addMixins ? new addMixins(args) : undefined,
-            addProps: new addProps(args),
-            createPropInfos: new createPropInfos(args),
+            define: this,
+            mix: mix ? new mix(args) : undefined,
+            propify: new propify(args),
+            propRegistry: new propRegistry(args),
             connectActions: connectActions ? new connectActions(args) : undefined,
         };
     }
     async #createClass(args) {
         const { services } = args;
-        const { createPropInfos, addMixins } = services;
+        const { propRegistry: createPropInfos, mix: addMixins } = services;
         await createPropInfos.resolve();
         const ext = addMixins?.ext || HTMLElement;
         const config = args.config;
@@ -75,7 +75,7 @@ export class CE extends ReslvSvc {
             attributeChangedCallback(name, oldVal, newVal) {
                 if (super.attributeChangedCallback)
                     super.attributeChangedCallback(name, oldVal, newVal);
-                services.createCustomEl.dispatchEvent(new CustomEvent(acb, {
+                services.define.dispatchEvent(new CustomEvent(acb, {
                     detail: {
                         instance: this,
                         name,
@@ -88,7 +88,7 @@ export class CE extends ReslvSvc {
                 //console.log('connectedCallback');
                 if (super.connectedCallback)
                     super.connectedCallback();
-                services.createCustomEl.dispatchEvent(new CustomEvent(ccb, {
+                services.define.dispatchEvent(new CustomEvent(ccb, {
                     detail: {
                         instance: this,
                     }
@@ -97,7 +97,7 @@ export class CE extends ReslvSvc {
             disconnectedCallback() {
                 if (super.disconnectedCallback)
                     super.disconnectedCallback();
-                services.createCustomEl.dispatchEvent(new CustomEvent(dcb, {
+                services.define.dispatchEvent(new CustomEvent(dcb, {
                     detail: {
                         instance: this
                     }
@@ -106,7 +106,7 @@ export class CE extends ReslvSvc {
         }
         this.custElClass = newClass;
         this.resolved = true;
-        const { addProps, connectActions } = services;
+        const { propify: addProps, connectActions } = services;
         await addProps.resolve();
         //await connectActions?.resolve();
         def(newClass);

@@ -1,6 +1,6 @@
 import { acb, npb, mse } from './const.js';
 import { ReslvSvc } from './ReslvSvc.js';
-export class CreatePropInfos extends ReslvSvc {
+export class PropRegistry extends ReslvSvc {
     args;
     constructor(args) {
         super();
@@ -52,11 +52,11 @@ export class CreatePropInfos extends ReslvSvc {
         this.propInfos = props;
         this.allPropNames = Object.keys(props);
         const { services } = args;
-        const { createCustomEl, addProps, connectActions } = services;
+        const { define: createCustomEl, propify: addProps, connectActions } = services;
         createCustomEl.addEventListener(acb, async (e) => {
             const acbE = e.detail;
             const { instance, name, newVal, oldVal } = acbE;
-            const { doAttr } = await import('./doAttr.js');
+            const { parse: doAttr } = await import('./parse.js');
             await doAttr(acbE, props, defaults);
         });
         addProps.addEventListener(npb, async (e) => {

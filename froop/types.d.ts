@@ -15,6 +15,18 @@ export interface IPropBag extends EventTarget{
      * Delta Keys
      */
     dk: Set<string>;
+
+    /**
+     * timeout handles - key is name of prop
+     * used for simple debouncing of echo notifications in XtalElement
+     */
+    eth: Map<string, string | number | NodeJS.Timeout> | undefined; 
+
+    /**
+     * timeout handles - key is name of prop
+     * used for simple debouncing of toggle echo notifications in XtalElement
+     */
+    tth:  Map<string, string | number | NodeJS.Timeout> | undefined;
 }
 
 export interface IResolvableService extends EventTarget{
@@ -27,11 +39,11 @@ export interface IInstanceResolvableService<T extends object = object> extends I
     instanceResolve(instance: T): Promise<void>;
 }
 
-export interface IAddMixins extends IResolvableService{
+export interface IMix extends IResolvableService{
     ext: {new(): HTMLElement}
 }
 
-export interface ICreatePropInfos extends IResolvableService{
+export interface IPropRegistry extends IResolvableService{
     propInfos: {[key: string]: PropInfo},
     allPropNames: string[],
     getAttrNames(ext: any): Promise<string[]>,
@@ -80,21 +92,21 @@ export interface INewPropBag {
 }
 
 export interface CEServiceClasses {
-    addMixins?: {new(args: CEArgs): IAddMixins},
-    createPropInfos?: {new(args: CEArgs): ICreatePropInfos},
-    addProps?: {new(args: CEArgs): IAddProps},
+    mix?: {new(args: CEArgs): IMix},
+    propRegistry?: {new(args: CEArgs): IPropRegistry},
+    propify?: {new(args: CEArgs): IAddProps},
     connectActions?: {new(args: CEArgs): IConnectActions},
 }
 
 export interface CEServices {
-    addMixins?: IAddMixins,
-    createPropInfos: ICreatePropInfos,
-    addProps: IAddProps,
-    createCustomEl: ICreateCustomElement,
+    mix?: IMix,
+    propRegistry: IPropRegistry,
+    propify: IAddProps,
+    define: ICreateCustomElement,
     connectActions?: IConnectActions,
 }
 
-export interface CEArgs<TProps = any, TActions = TProps> extends DefineArgs<TProps, TActions>{
+export interface CEArgs<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction extends Action<TProps> = Action<TProps>> extends DefineArgs<TProps, TActions, TPropInfo, TAction>{
     main?: ICreateCustomElement,
     serviceClasses?: CEServiceClasses
     services?: CEServices,

@@ -1,6 +1,6 @@
 import { pc, npb, ccb, dcb, mse } from './const.js';
 import { ReslvSvc } from "./ReslvSvc.js";
-export class AddProps extends ReslvSvc {
+export class Propify extends ReslvSvc {
     args;
     constructor(args) {
         super();
@@ -11,28 +11,30 @@ export class AddProps extends ReslvSvc {
     }
     async #do(args) {
         const { services } = args;
-        const { createCustomEl, createPropInfos } = services;
+        const { define: createCustomEl, propRegistry: createPropInfos } = services;
         await createCustomEl.resolve();
         createCustomEl.addEventListener(ccb, e => {
             //console.log('connectedCallback');
             const connection = e.detail;
             const { instance } = connection;
-            const propBag = this.#getPropBag(instance);
+            const propBag = this.#getStore(instance);
         });
         createCustomEl.addEventListener(dcb, e => {
             const disconnection = e.detail;
-            this.#propBagLookup.delete(disconnection.instance);
+            this.stores.delete(disconnection.instance);
         });
         await createPropInfos.resolve();
+        if (Object.keys(createPropInfos.propInfos).length > 0) {
+        }
         this.#addProps(createCustomEl.custElClass, createPropInfos.propInfos);
         this.resolved = true;
     }
-    #propBagLookup = new WeakMap;
-    #getPropBag(instance) {
-        let propBag = this.#propBagLookup.get(instance);
+    stores = new WeakMap;
+    #getStore(instance) {
+        let propBag = this.stores.get(instance);
         if (propBag === undefined) {
-            propBag = new PropBag();
-            this.#propBagLookup.set(instance, propBag);
+            propBag = new Propagate();
+            this.stores.set(instance, propBag);
             this.dispatchEvent(new CustomEvent(npb, {
                 detail: {
                     instance,
@@ -44,7 +46,7 @@ export class AddProps extends ReslvSvc {
     }
     #addProps(newClass, props) {
         const proto = newClass.prototype;
-        const getPropBag = this.#getPropBag.bind(this);
+        const getPropBag = this.#getStore.bind(this);
         for (const key in props) {
             if (key in proto)
                 continue;
@@ -62,7 +64,7 @@ export class AddProps extends ReslvSvc {
         }
     }
 }
-export class PropBag extends EventTarget {
+export class Propagate extends EventTarget {
     #propVals = {};
     get(key) {
         return this.#propVals[key];

@@ -1,16 +1,16 @@
 import { DefineArgs, LogicOp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementProps, PropChangeMethod, TRElementActions, WCConfig, IActionProcessor } from '../lib/types.js';
 export { Action, PropInfo, TRElementActions, TRElementProps, WCConfig, IActionProcessor as IHasPostHoc} from '../lib/types.js';
 import { def } from '../lib/def.js';
-import {IAddMixins, CEArgs, ICreateCustomElement, IAttrChgCB, IConnectedCB, IDisconnectedCB} from './types';
+import {IMix, CEArgs, ICreateCustomElement, IAttrChgCB, IConnectedCB, IDisconnectedCB} from './types';
 import {acb, ccb, dcb, mse} from './const.js';
 import { ReslvSvc } from './ReslvSvc.js';
 
 
-export class CE<TProps = any, TActions = TProps> extends ReslvSvc{
-    constructor(public args: CEArgs<TProps, TActions>){
+export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction extends Action<TProps> = Action<TProps>> extends ReslvSvc{
+    constructor(public args: CEArgs<TProps, TActions, TPropInfo, TAction>){
         super();
-        this.#evalConfig(args);
-        this.#do(args);
+        this.#evalConfig(args as CEArgs);
+        this.#do(args as CEArgs);
     }
 
     async #do(args: CEArgs){
@@ -30,13 +30,13 @@ export class CE<TProps = any, TActions = TProps> extends ReslvSvc{
         args.serviceClasses = {};
         const {serviceClasses} = args;
         if(args.mixins || args.superclass){
-            const {AddMixins} = await import('./AddMixins.js');
-            serviceClasses.addMixins = AddMixins;
+            const {Mix} = await import('./Mix.js');
+            serviceClasses.mix = Mix;
         }
-        const {CreatePropInfos} = await import('./CreatePropInfos.js');
-        serviceClasses.createPropInfos  = CreatePropInfos;
-        const {AddProps} = await import('./AddProps.js');
-        serviceClasses.addProps = AddProps;
+        const {PropRegistry} = await import('./PropRegistry.js');
+        serviceClasses.propRegistry  = PropRegistry;
+        const {Propify} = await import('./Propify.js');
+        serviceClasses.propify = Propify;
         const config = args.config as WCConfig;
         if(config.actions !== undefined){
             const {ConnectActions} = await import('./ConnectActions.js');
@@ -57,19 +57,19 @@ export class CE<TProps = any, TActions = TProps> extends ReslvSvc{
      */
     async addSvcs(args: CEArgs){
         const {serviceClasses} = args;
-        const {addMixins, addProps, createPropInfos, connectActions} = serviceClasses!;
+        const {mix, propify, propRegistry, connectActions} = serviceClasses!;
         args.services = {
-            createCustomEl: this,
-            addMixins: addMixins ? new addMixins(args) : undefined,
-            addProps: new addProps!(args),
-            createPropInfos: new createPropInfos!(args),
+            define: this,
+            mix: mix ? new mix(args) : undefined,
+            propify: new propify!(args),
+            propRegistry: new propRegistry!(args),
             connectActions: connectActions ? new connectActions(args) : undefined,
         };
     }
 
     async #createClass(args: CEArgs){
         const {services} = args;
-        const {createPropInfos, addMixins} = services!;
+        const {propRegistry: createPropInfos, mix: addMixins} = services!;
         await createPropInfos.resolve();
         const ext = addMixins?.ext || HTMLElement;
         const config = args.config as WCConfig;
@@ -82,7 +82,7 @@ export class CE<TProps = any, TActions = TProps> extends ReslvSvc{
             static formAssociated = formAss;
             attributeChangedCallback(name: string, oldVal: string, newVal: string){
                 if(super.attributeChangedCallback) super.attributeChangedCallback(name, oldVal, newVal);
-                services!.createCustomEl.dispatchEvent(new CustomEvent(acb, {
+                services!.define.dispatchEvent(new CustomEvent(acb, {
                     detail: {
                         instance: this as any as HTMLElement,
                         name,
@@ -96,7 +96,7 @@ export class CE<TProps = any, TActions = TProps> extends ReslvSvc{
             connectedCallback(){
                 //console.log('connectedCallback');
                 if(super.connectedCallback) super.connectedCallback();
-                services!.createCustomEl.dispatchEvent(new CustomEvent(ccb, {
+                services!.define.dispatchEvent(new CustomEvent(ccb, {
                     detail: {
                         instance: this as any as HTMLElement,
                     } as IConnectedCB
@@ -105,7 +105,7 @@ export class CE<TProps = any, TActions = TProps> extends ReslvSvc{
 
             disconnectedCallback(){
                 if(super.disconnectedCallback) super.disconnectedCallback();
-                services!.createCustomEl.dispatchEvent(new CustomEvent(dcb, {
+                services!.define.dispatchEvent(new CustomEvent(dcb, {
                     detail: {
                         instance: this as any as HTMLElement
                     } as IDisconnectedCB
@@ -114,7 +114,7 @@ export class CE<TProps = any, TActions = TProps> extends ReslvSvc{
         }
         this.custElClass = newClass as any as {new(): HTMLElement}
         this.resolved = true;
-        const {addProps, connectActions} = services!;
+        const {propify: addProps, connectActions} = services!;
         await addProps.resolve();
         //await connectActions?.resolve();
         

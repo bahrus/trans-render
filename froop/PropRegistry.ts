@@ -1,9 +1,9 @@
 import {PropInfo, WCConfig, Action, PropInfoTypes} from '../lib/types';
-import {CEArgs, ICreatePropInfos, IAttrChgCB, INewPropBag} from './types';
+import {CEArgs, IPropRegistry as IPropRegistry, IAttrChgCB, INewPropBag} from './types';
 import {acb, npb, r, mse} from './const.js';
 import { ReslvSvc } from './ReslvSvc.js';
 
-export class CreatePropInfos extends ReslvSvc{
+export class PropRegistry extends ReslvSvc{
     constructor(public args: CEArgs){
         super();
         args.main!.addEventListener(mse, () => {
@@ -54,11 +54,11 @@ export class CreatePropInfos extends ReslvSvc{
         this.allPropNames = Object.keys(props);
         
         const {services} = args;
-        const {createCustomEl, addProps, connectActions} = services!;
+        const {define: createCustomEl, propify: addProps, connectActions} = services!;
         createCustomEl.addEventListener(acb, async e => {
             const acbE = (e as CustomEvent).detail as IAttrChgCB;
             const {instance, name, newVal, oldVal} = acbE;
-            const {doAttr} = await import('./doAttr.js');
+            const {parse: doAttr} = await import('./parse.js');
             await doAttr(acbE, props, defaults);
         });
         addProps.addEventListener(npb, async e => {
@@ -138,7 +138,7 @@ export class CreatePropInfos extends ReslvSvc{
     }
 }
 
-export interface CreatePropInfos extends ICreatePropInfos{}
+export interface PropRegistry extends IPropRegistry{}
 
 
 const defaultProp: PropInfo = {

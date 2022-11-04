@@ -3,7 +3,7 @@ import {pc} from './const.js';
 import {CEArgs, IPropBag, IPropChg} from './types';
 
 
-export function hookupActions(instance: EventTarget, propBag: IPropBag, args: CEArgs){
+export function trigger(instance: EventTarget, propBag: IPropBag, args: CEArgs){
     //console.log('addPropBagListener');
     propBag.addEventListener(pc, async e => {
         
@@ -11,7 +11,7 @@ export function hookupActions(instance: EventTarget, propBag: IPropBag, args: CE
         const {key, oldVal, newVal} = chg;
         //console.log({key, oldVal, newVal});
         const {services} = args;
-        const {createPropInfos} = services!;
+        const {propRegistry: createPropInfos} = services!;
         await createPropInfos.resolve();
         const {nonDryProps} = createPropInfos;
         if(!nonDryProps.has(key)){
@@ -40,7 +40,7 @@ export function hookupActions(instance: EventTarget, propBag: IPropBag, args: CE
                 }
             }
             if(foundAction){
-                const {doActions} = await import('./doActions.js');
+                const {act: doActions} = await import('./act.js');
                 //console.log({instance, filteredActions});
                 doActions(instance, filteredActions);
             }

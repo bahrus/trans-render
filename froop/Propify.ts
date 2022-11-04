@@ -1,9 +1,9 @@
 import { PropInfo, DefineArgs } from "../lib/types";
 import { pc, npb, ccb, dcb, r, mse} from './const.js';
 import { ReslvSvc } from "./ReslvSvc.js";
-import { IPropBag, IAddProps, CEArgs, INewPropBag, IConnectedCB, IDisconnectedCB, IPropChg } from './types';
+import { IPropBag as IPropagate, IAddProps as IPropify, CEArgs, INewPropBag, IConnectedCB, IDisconnectedCB, IPropChg } from './types';
 
-export class AddProps extends ReslvSvc implements IAddProps{
+export class Propify extends ReslvSvc implements IPropify{
     constructor(public args: CEArgs){
         super();
         args.main!.addEventListener(mse, () => {
@@ -14,30 +14,33 @@ export class AddProps extends ReslvSvc implements IAddProps{
 
     async #do(args: CEArgs){
         const {services} = args;
-        const {createCustomEl, createPropInfos} = services!;
+        const {define: createCustomEl, propRegistry: createPropInfos} = services!;
         await createCustomEl.resolve();
         createCustomEl.addEventListener(ccb, e => {
             //console.log('connectedCallback');
             const connection = (e as CustomEvent).detail as IConnectedCB;
             const {instance} = connection;
-            const propBag = this.#getPropBag(instance);
+            const propBag = this.#getStore(instance);
         });
         createCustomEl.addEventListener(dcb, e => {
             const disconnection = (e as CustomEvent).detail as IDisconnectedCB;
-            this.#propBagLookup.delete(disconnection.instance);
+            this.stores.delete(disconnection.instance);
         });
         await createPropInfos.resolve();
+        if(Object.keys(createPropInfos.propInfos).length > 0){
+
+        }
         this.#addProps(createCustomEl.custElClass, createPropInfos.propInfos);  
         this.resolved = true;      
     }
 
-    #propBagLookup = new WeakMap<HTMLElement, PropBag>
+    stores = new WeakMap<HTMLElement, Propagate>
 
-    #getPropBag(instance: HTMLElement){
-        let propBag = this.#propBagLookup.get(instance);
+    #getStore(instance: HTMLElement){
+        let propBag = this.stores.get(instance);
         if(propBag === undefined){
-            propBag = new PropBag();
-            this.#propBagLookup.set(instance, propBag);
+            propBag = new Propagate();
+            this.stores.set(instance, propBag);
             this.dispatchEvent(new CustomEvent(npb, {
                 detail: {
                     instance,
@@ -51,7 +54,7 @@ export class AddProps extends ReslvSvc implements IAddProps{
 
     #addProps(newClass: {new(): HTMLElement}, props: {[key: string]: PropInfo}){
         const proto = newClass.prototype;
-        const getPropBag = this.#getPropBag.bind(this);
+        const getPropBag = this.#getStore.bind(this);
         for(const key in props){
             if(key in proto) continue;
             Object.defineProperty(proto, key, {
@@ -70,7 +73,7 @@ export class AddProps extends ReslvSvc implements IAddProps{
 }
 
 
-export class PropBag extends EventTarget implements IPropBag{
+export class Propagate extends EventTarget{
     #propVals: {[key: string]: any} = {};
     get(key: string){
         return this.#propVals[key];
@@ -89,5 +92,9 @@ export class PropBag extends EventTarget implements IPropBag{
     /**
      * delta keys
      */
-    dk = new Set<string>(); 
+    dk = new Set<string>();
+    
+
 }
+
+export interface Propagate extends IPropagate{}

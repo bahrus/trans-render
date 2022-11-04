@@ -1,9 +1,9 @@
 import {r} from './const.js';
 import {DefineArgs} from '../lib/types';
-import {IAddMixins} from './types';
+import { IMix} from './types';
 import { ReslvSvc } from './ReslvSvc.js';
 
-export class AddMixins extends ReslvSvc implements IAddMixins {
+export class Mix extends ReslvSvc implements IMix {
     ext: {new(): HTMLElement};
     constructor(public args: DefineArgs){
         super();

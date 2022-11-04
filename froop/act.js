@@ -1,4 +1,4 @@
-export async function doActions(instance, actions) {
+export async function act(instance, actions) {
     for (const methodName in actions) {
         const action = actions[methodName];
         if (action.debug)
