@@ -1,12 +1,12 @@
 import { PropInfo, DefineArgs } from "../lib/types";
 import { pc, npb, ccb, dcb, r, mse} from './const.js';
 import { ReslvSvc } from "./ReslvSvc.js";
-import { IPropBag as IPropagate, IAddProps as IPropify, CEArgs, INewPropBag, IConnectedCB, IDisconnectedCB, IPropChg } from './types';
+import { IPropBag as IPropagate, IPropSvc, CEArgs, INewPropBag, IConnectedCB, IDisconnectedCB, IPropChg } from './types';
 
-export class Propify extends ReslvSvc implements IPropify{
+export class PropSvc extends ReslvSvc implements IPropSvc{
     constructor(public args: CEArgs){
         super();
-        args.main!.addEventListener(mse, () => {
+        args.definer!.addEventListener(mse, () => {
             this.#do(args);
         }, {once: true});
         
@@ -14,7 +14,7 @@ export class Propify extends ReslvSvc implements IPropify{
 
     async #do(args: CEArgs){
         const {services} = args;
-        const {define: createCustomEl, propRegistry: createPropInfos} = services!;
+        const {definer: createCustomEl, propRegistry: createPropInfos} = services!;
         await createCustomEl.resolve();
         createCustomEl.addEventListener(ccb, e => {
             //console.log('connectedCallback');

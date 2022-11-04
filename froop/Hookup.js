@@ -3,27 +3,27 @@ import { npb, mse } from './const.js';
 /**
  * Connects the prop change subscription via Propagate observer to the corresponding actions
  */
-export class ConnectActions extends InstResSvc {
+export class Hookup extends InstResSvc {
     args;
     constructor(args) {
         super();
         this.args = args;
-        args.main.addEventListener(mse, () => {
+        args.definer.addEventListener(mse, () => {
             this.#do(args);
         }, { once: true });
     }
     async #do(args) {
         const { services } = args;
         const { propify } = services;
-        await propify.resolve();
         propify.addEventListener(npb, async (e) => {
-            const propBagEvent = e.detail;
-            const { instance, propBag } = propBagEvent;
+            const propagatorEvent = e.detail;
+            const { instance, propBag } = propagatorEvent;
             const { trigger } = await import('./trigger.js');
             //console.log({instance, propBag});
             trigger(instance, propBag, args);
             this.instanceResolved = instance;
         });
+        await propify.resolve();
         this.resolved = true;
     }
 }

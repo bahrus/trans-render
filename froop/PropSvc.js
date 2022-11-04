@@ -1,17 +1,17 @@
 import { pc, npb, ccb, dcb, mse } from './const.js';
 import { ReslvSvc } from "./ReslvSvc.js";
-export class Propify extends ReslvSvc {
+export class PropSvc extends ReslvSvc {
     args;
     constructor(args) {
         super();
         this.args = args;
-        args.main.addEventListener(mse, () => {
+        args.definer.addEventListener(mse, () => {
             this.#do(args);
         }, { once: true });
     }
     async #do(args) {
         const { services } = args;
-        const { define: createCustomEl, propRegistry: createPropInfos } = services;
+        const { definer: createCustomEl, propRegistry: createPropInfos } = services;
         await createCustomEl.resolve();
         createCustomEl.addEventListener(ccb, e => {
             //console.log('connectedCallback');

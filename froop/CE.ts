@@ -1,7 +1,7 @@
 import { DefineArgs, LogicOp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementProps, PropChangeMethod, TRElementActions, WCConfig, IActionProcessor } from '../lib/types.js';
 export { Action, PropInfo, TRElementActions, TRElementProps, WCConfig, IActionProcessor as IHasPostHoc} from '../lib/types.js';
 import { def } from '../lib/def.js';
-import {IMix, CEArgs, ICreateCustomElement, IAttrChgCB, IConnectedCB, IDisconnectedCB} from './types';
+import {IMix, CEArgs, IDefine, IAttrChgCB, IConnectedCB, IDisconnectedCB} from './types';
 import {acb, ccb, dcb, mse} from './const.js';
 import { ReslvSvc } from './ReslvSvc.js';
 
@@ -31,21 +31,21 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
         const {serviceClasses} = args;
         if(args.mixins || args.superclass){
             const {Mix} = await import('./Mix.js');
-            serviceClasses.mix = Mix;
+            serviceClasses.mixer = Mix;
         }
         const {PropRegistry} = await import('./PropRegistry.js');
         serviceClasses.propRegistry  = PropRegistry;
-        const {Propify} = await import('./Propify.js');
-        serviceClasses.propify = Propify;
+        const {PropSvc} = await import('./PropSvc.js');
+        serviceClasses.propper = PropSvc;
         const config = args.config as WCConfig;
         if(config.actions !== undefined){
-            const {ConnectActions} = await import('./ConnectActions.js');
-            serviceClasses.connectActions = ConnectActions;
+            const {Hookup} = await import('./Hookup.js');
+            serviceClasses.hooker = Hookup;
         }
     }
 
     async #createServices(args: CEArgs){
-        args.main = this;
+        args.definer = this;
         this.addSvcs(args);
         this.dispatchEvent(new Event(mse))
         await this.#createClass(args);
@@ -57,19 +57,19 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
      */
     async addSvcs(args: CEArgs){
         const {serviceClasses} = args;
-        const {mix, propify, propRegistry, connectActions} = serviceClasses!;
+        const {mixer: mix, propper: propify, propRegistry, hooker: connectActions} = serviceClasses!;
         args.services = {
-            define: this,
-            mix: mix ? new mix(args) : undefined,
+            definer: this,
+            mixer: mix ? new mix(args) : undefined,
             propify: new propify!(args),
             propRegistry: new propRegistry!(args),
-            connectActions: connectActions ? new connectActions(args) : undefined,
+            hooker: connectActions ? new connectActions(args) : undefined,
         };
     }
 
     async #createClass(args: CEArgs){
         const {services} = args;
-        const {propRegistry: createPropInfos, mix: addMixins} = services!;
+        const {propRegistry: createPropInfos, mixer: addMixins} = services!;
         await createPropInfos.resolve();
         const ext = addMixins?.ext || HTMLElement;
         const config = args.config as WCConfig;
@@ -82,7 +82,7 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
             static formAssociated = formAss;
             attributeChangedCallback(name: string, oldVal: string, newVal: string){
                 if(super.attributeChangedCallback) super.attributeChangedCallback(name, oldVal, newVal);
-                services!.define.dispatchEvent(new CustomEvent(acb, {
+                services!.definer.dispatchEvent(new CustomEvent(acb, {
                     detail: {
                         instance: this as any as HTMLElement,
                         name,
@@ -96,7 +96,7 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
             connectedCallback(){
                 //console.log('connectedCallback');
                 if(super.connectedCallback) super.connectedCallback();
-                services!.define.dispatchEvent(new CustomEvent(ccb, {
+                services!.definer.dispatchEvent(new CustomEvent(ccb, {
                     detail: {
                         instance: this as any as HTMLElement,
                     } as IConnectedCB
@@ -105,7 +105,7 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
 
             disconnectedCallback(){
                 if(super.disconnectedCallback) super.disconnectedCallback();
-                services!.define.dispatchEvent(new CustomEvent(dcb, {
+                services!.definer.dispatchEvent(new CustomEvent(dcb, {
                     detail: {
                         instance: this as any as HTMLElement
                     } as IDisconnectedCB
@@ -114,7 +114,7 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
         }
         this.custElClass = newClass as any as {new(): HTMLElement}
         this.resolved = true;
-        const {propify: addProps, connectActions} = services!;
+        const {propify: addProps, hooker: connectActions} = services!;
         await addProps.resolve();
         //await connectActions?.resolve();
         
@@ -142,4 +142,4 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
 
 }
 
-export interface CE extends ICreateCustomElement{}
+export interface CE extends IDefine{}

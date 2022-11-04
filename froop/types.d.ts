@@ -51,16 +51,16 @@ export interface IPropRegistry extends IResolvableService{
     nonDryProps: Set<string>,
 }
 
-export interface ICreateCustomElement extends IResolvableService{
+export interface IDefine extends IResolvableService{
     custElClass: {new(): HTMLElement};
     resolveInstanceSvcs(args: CEArgs, instance: any): Promise<void>;
 }
 
-export interface IAddProps extends IResolvableService{
+export interface IPropSvc extends IResolvableService{
 
 }
 
-export interface IConnectActions extends IInstanceResolvableService{
+export interface IHookup extends IInstanceResolvableService{
 
 }
 
@@ -92,22 +92,22 @@ export interface INewPropBag {
 }
 
 export interface CEServiceClasses {
-    mix?: {new(args: CEArgs): IMix},
+    mixer?: {new(args: CEArgs): IMix},
     propRegistry?: {new(args: CEArgs): IPropRegistry},
-    propify?: {new(args: CEArgs): IAddProps},
-    connectActions?: {new(args: CEArgs): IConnectActions},
+    propper?: {new(args: CEArgs): IPropSvc},
+    hooker?: {new(args: CEArgs): IHookup},
 }
 
 export interface CEServices {
-    mix?: IMix,
+    mixer?: IMix,
     propRegistry: IPropRegistry,
-    propify: IAddProps,
-    define: ICreateCustomElement,
-    connectActions?: IConnectActions,
+    propify: IPropSvc,
+    definer: IDefine,
+    hooker?: IHookup,
 }
 
 export interface CEArgs<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction extends Action<TProps> = Action<TProps>> extends DefineArgs<TProps, TActions, TPropInfo, TAction>{
-    main?: ICreateCustomElement,
+    definer?: IDefine,
     serviceClasses?: CEServiceClasses
     services?: CEServices,
 }

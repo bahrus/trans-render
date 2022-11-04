@@ -5,7 +5,7 @@ export class PropRegistry extends ReslvSvc {
     constructor(args) {
         super();
         this.args = args;
-        args.main.addEventListener(mse, () => {
+        args.definer.addEventListener(mse, () => {
             this.#do(args);
         }, { once: true });
     }
@@ -52,7 +52,7 @@ export class PropRegistry extends ReslvSvc {
         this.propInfos = props;
         this.allPropNames = Object.keys(props);
         const { services } = args;
-        const { define: createCustomEl, propify: addProps, connectActions } = services;
+        const { definer: createCustomEl, propify: addProps, hooker: connectActions } = services;
         createCustomEl.addEventListener(acb, async (e) => {
             const acbE = e.detail;
             const { instance, name, newVal, oldVal } = acbE;
@@ -66,7 +66,7 @@ export class PropRegistry extends ReslvSvc {
             //     await connectActions.instanceResolve(instance);
             // }
             //console.log('doPropUp');
-            await args.main.resolveInstanceSvcs(args, instance);
+            await args.definer.resolveInstanceSvcs(args, instance);
             this.#propUp(instance, this.allPropNames, defaults);
         });
         this.resolved = true;

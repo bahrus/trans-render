@@ -1,15 +1,15 @@
 import {WCConfig} from '../lib/types';
 import { InstResSvc } from "./InstResSvc.js";
 import {npb, r, mse} from './const.js';
-import { CEArgs, IConnectActions, INewPropBag as INewPropagator } from './types';
+import { CEArgs, IHookup, INewPropBag as INewPropagator } from './types';
 
 /**
  * Connects the prop change subscription via Propagate observer to the corresponding actions
  */
-export class ConnectActions extends InstResSvc {
+export class Hookup extends InstResSvc {
     constructor(public args: CEArgs){
         super();
-        args.main!.addEventListener(mse, () => {
+        args.definer!.addEventListener(mse, () => {
             this.#do(args);
         }, {once: true});
 
@@ -18,17 +18,18 @@ export class ConnectActions extends InstResSvc {
         
         const {services} = args;
         const {propify} = services!;
-        await propify.resolve();
+        
         propify.addEventListener(npb, async e => {
-            const propBagEvent = (e as CustomEvent).detail as INewPropagator;
-            const {instance, propBag} = propBagEvent;
+            const propagatorEvent = (e as CustomEvent).detail as INewPropagator;
+            const {instance, propBag} = propagatorEvent;
             const {trigger} = await import('./trigger.js');
             //console.log({instance, propBag});
             trigger(instance, propBag, args);
             this.instanceResolved = instance;
         });
+        await propify.resolve();
         this.resolved = true;
     }
 }
 
-export interface ConnectActions extends IConnectActions{}
+export interface Hookup extends IHookup{}
