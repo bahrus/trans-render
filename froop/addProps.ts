@@ -1,10 +1,10 @@
 import { PropInfo, DefineArgs } from "../lib/types";
 import { pc, npb, ccb, dcb, r, mse} from './const.js';
 import { ReslvSvc } from "./ReslvSvc.js";
-import { IPropBag, IAddProps, DefineArgsWithServices, INewPropBag, IConnectedCB, IDisconnectedCB, IPropChg } from './types';
+import { IPropBag, IAddProps, CEArgs, INewPropBag, IConnectedCB, IDisconnectedCB, IPropChg } from './types';
 
 export class AddProps extends ReslvSvc implements IAddProps{
-    constructor(public args: DefineArgsWithServices){
+    constructor(public args: CEArgs){
         super();
         args.main!.addEventListener(mse, () => {
             this.#do(args);
@@ -12,7 +12,7 @@ export class AddProps extends ReslvSvc implements IAddProps{
         
     }
 
-    async #do(args: DefineArgsWithServices){
+    async #do(args: CEArgs){
         const {services} = args;
         const {createCustomEl, createPropInfos} = services!;
         await createCustomEl.resolve();

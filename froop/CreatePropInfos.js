@@ -62,10 +62,11 @@ export class CreatePropInfos extends ReslvSvc {
         addProps.addEventListener(npb, async (e) => {
             const inpb = e.detail;
             const { instance } = inpb;
-            if (connectActions) {
-                await connectActions.instanceResolve(instance);
-            }
+            // if(connectActions){
+            //     await connectActions.instanceResolve(instance);
+            // }
             //console.log('doPropUp');
+            await args.main.resolveInstanceSvcs(args, instance);
             this.#propUp(instance, this.allPropNames, defaults);
         });
         this.resolved = true;

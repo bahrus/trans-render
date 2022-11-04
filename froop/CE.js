@@ -6,7 +6,7 @@ export class CE extends ReslvSvc {
     constructor(args) {
         super();
         this.args = args;
-        this.#evalConfig(this);
+        this.#evalConfig(args);
         this.#do(args);
     }
     async #do(args) {
@@ -111,12 +111,21 @@ export class CE extends ReslvSvc {
         //await connectActions?.resolve();
         def(newClass);
     }
-    async #evalConfig({ args }) {
+    async #evalConfig(args) {
         if (args === undefined)
             return;
         const { config } = args;
         if (typeof config != 'function')
             return;
         args.config = (await config()).default;
+    }
+    async resolveInstanceSvcs(args, instance) {
+        const { services } = args;
+        const { InstResSvc } = await import('./InstResSvc.js');
+        for (const svc of Object.values(services)) {
+            if (svc instanceof InstResSvc) {
+                await svc.instanceResolve(instance);
+            }
+        }
     }
 }

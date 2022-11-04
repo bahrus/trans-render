@@ -1,19 +1,19 @@
 import { DefineArgs, LogicOp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementProps, PropChangeMethod, TRElementActions, WCConfig, IActionProcessor } from '../lib/types.js';
 export { Action, PropInfo, TRElementActions, TRElementProps, WCConfig, IActionProcessor as IHasPostHoc} from '../lib/types.js';
 import { def } from '../lib/def.js';
-import {IAddMixins, DefineArgsWithServices, ICreateCustomElement, IAttrChgCB, IConnectedCB, IDisconnectedCB} from './types';
+import {IAddMixins, CEArgs, ICreateCustomElement, IAttrChgCB, IConnectedCB, IDisconnectedCB} from './types';
 import {acb, ccb, dcb, mse} from './const.js';
 import { ReslvSvc } from './ReslvSvc.js';
 
 
 export class CE<TProps = any, TActions = TProps> extends ReslvSvc{
-    constructor(public args: DefineArgsWithServices<TProps, TActions>){
+    constructor(public args: CEArgs<TProps, TActions>){
         super();
-        this.#evalConfig(this);
+        this.#evalConfig(args);
         this.#do(args);
     }
 
-    async #do(args: DefineArgsWithServices){
+    async #do(args: CEArgs){
         if(args.serviceClasses === undefined){
             await this.addSvcClasses(args);
         }
@@ -26,7 +26,7 @@ export class CE<TProps = any, TActions = TProps> extends ReslvSvc{
      * @param args 
      * @overridable
      */
-    async addSvcClasses(args: DefineArgsWithServices){
+    async addSvcClasses(args: CEArgs){
         args.serviceClasses = {};
         const {serviceClasses} = args;
         if(args.mixins || args.superclass){
@@ -44,7 +44,7 @@ export class CE<TProps = any, TActions = TProps> extends ReslvSvc{
         }
     }
 
-    async #createServices(args: DefineArgsWithServices){
+    async #createServices(args: CEArgs){
         args.main = this;
         this.addSvcs(args);
         this.dispatchEvent(new Event(mse))
@@ -55,7 +55,7 @@ export class CE<TProps = any, TActions = TProps> extends ReslvSvc{
      * @param args 
      * @overridable
      */
-    async addSvcs(args: DefineArgsWithServices){
+    async addSvcs(args: CEArgs){
         const {serviceClasses} = args;
         const {addMixins, addProps, createPropInfos, connectActions} = serviceClasses!;
         args.services = {
@@ -67,7 +67,7 @@ export class CE<TProps = any, TActions = TProps> extends ReslvSvc{
         };
     }
 
-    async #createClass(args: DefineArgsWithServices){
+    async #createClass(args: CEArgs){
         const {services} = args;
         const {createPropInfos, addMixins} = services!;
         await createPropInfos.resolve();
@@ -122,14 +122,23 @@ export class CE<TProps = any, TActions = TProps> extends ReslvSvc{
         
     }
 
-    async #evalConfig({args}: this){
+    async #evalConfig(args: CEArgs){
         if(args === undefined) return;
         const {config} = args;
         if(typeof config != 'function') return;
         args.config = (await config()).default;
     }
 
+    async resolveInstanceSvcs(args: CEArgs, instance: any){
+        const {services} = args;
+        const {InstResSvc} = await import('./InstResSvc.js');
+        for(const svc of Object.values(services!)){
+            if(svc instanceof InstResSvc){
+                await svc.instanceResolve(instance);
+            }
+        }
 
+    }
 
 }
 

@@ -41,6 +41,7 @@ export interface ICreatePropInfos extends IResolvableService{
 
 export interface ICreateCustomElement extends IResolvableService{
     custElClass: {new(): HTMLElement};
+    resolveInstanceSvcs(args: CEArgs, instance: any): Promise<void>;
 }
 
 export interface IAddProps extends IResolvableService{
@@ -78,19 +79,23 @@ export interface INewPropBag {
     propBag: IPropBag,
 }
 
-export interface DefineArgsWithServices<TProps = any, TActions = TProps> extends DefineArgs<TProps, TActions>{
+export interface CEServiceClasses {
+    addMixins?: {new(args: CEArgs): IAddMixins},
+    createPropInfos?: {new(args: CEArgs): ICreatePropInfos},
+    addProps?: {new(args: CEArgs): IAddProps},
+    connectActions?: {new(args: CEArgs): IConnectActions},
+}
+
+export interface CEServices {
+    addMixins?: IAddMixins,
+    createPropInfos: ICreatePropInfos,
+    addProps: IAddProps,
+    createCustomEl: ICreateCustomElement,
+    connectActions?: IConnectActions,
+}
+
+export interface CEArgs<TProps = any, TActions = TProps> extends DefineArgs<TProps, TActions>{
     main?: ICreateCustomElement,
-    serviceClasses?: {
-        addMixins?: {new(args: DefineArgsWithServices): IAddMixins},
-        createPropInfos?: {new(args: DefineArgsWithServices): ICreatePropInfos},
-        addProps?: {new(args: DefineArgsWithServices): IAddProps},
-        connectActions?: {new(args: DefineArgsWithServices): IConnectActions},
-    };
-    services?: {
-        addMixins?: IAddMixins,
-        createPropInfos: ICreatePropInfos,
-        addProps: IAddProps,
-        createCustomEl: ICreateCustomElement,
-        connectActions?: IConnectActions,
-    }
+    serviceClasses?: CEServiceClasses
+    services?: CEServices,
 }

@@ -1,9 +1,9 @@
 import {Action, IActionProcessor, WCConfig} from '../lib/types';
 import {pc} from './const.js';
-import {DefineArgsWithServices, IPropBag, IPropChg} from './types';
+import {CEArgs, IPropBag, IPropChg} from './types';
 
 
-export function hookupActions(instance: EventTarget, propBag: IPropBag, args: DefineArgsWithServices){
+export function hookupActions(instance: EventTarget, propBag: IPropBag, args: CEArgs){
     //console.log('addPropBagListener');
     propBag.addEventListener(pc, async e => {
         

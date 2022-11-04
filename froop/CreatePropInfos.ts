@@ -1,17 +1,17 @@
 import {PropInfo, WCConfig, Action, PropInfoTypes} from '../lib/types';
-import {DefineArgsWithServices, ICreatePropInfos, IAttrChgCB, INewPropBag} from './types';
+import {CEArgs, ICreatePropInfos, IAttrChgCB, INewPropBag} from './types';
 import {acb, npb, r, mse} from './const.js';
 import { ReslvSvc } from './ReslvSvc.js';
 
 export class CreatePropInfos extends ReslvSvc{
-    constructor(public args: DefineArgsWithServices){
+    constructor(public args: CEArgs){
         super();
         args.main!.addEventListener(mse, () => {
             this.#do(args);
         }, {once: true});
 
     }
-    async #do(args: DefineArgsWithServices){
+    async #do(args: CEArgs){
         const config  = args.config as WCConfig;
         const props: {[key: string]: PropInfo} = {};
         const defaults = {...args.complexPropDefaults, ...config.propDefaults} as any;
@@ -64,10 +64,11 @@ export class CreatePropInfos extends ReslvSvc{
         addProps.addEventListener(npb, async e => {
             const inpb = (e as CustomEvent).detail as INewPropBag;
             const {instance} = inpb;
-            if(connectActions){
-                await connectActions.instanceResolve(instance);
-            }
+            // if(connectActions){
+            //     await connectActions.instanceResolve(instance);
+            // }
             //console.log('doPropUp');
+            await args.main!.resolveInstanceSvcs(args, instance);
             this.#propUp(instance, this.allPropNames, defaults);
         });
         this.resolved = true;
