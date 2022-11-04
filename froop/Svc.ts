@@ -1,7 +1,7 @@
 import {r} from './const.js';
 import {IResolvableService} from './types';
 
-export class ReslvSvc extends EventTarget implements IResolvableService{
+export class Svc extends EventTarget implements IResolvableService{
     #resolved = false;
     get resolved(){
         return this.#resolved;

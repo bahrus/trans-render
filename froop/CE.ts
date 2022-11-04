@@ -3,10 +3,10 @@ export { Action, PropInfo, TRElementActions, TRElementProps, WCConfig, IActionPr
 import { def } from '../lib/def.js';
 import {IMix, CEArgs, IDefine, IAttrChgCB, IConnectedCB, IDisconnectedCB} from './types';
 import {acb, ccb, dcb, mse} from './const.js';
-import { ReslvSvc } from './ReslvSvc.js';
+import { Svc } from './Svc.js';
 
 
-export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction extends Action<TProps> = Action<TProps>> extends ReslvSvc{
+export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction extends Action<TProps> = Action<TProps>> extends Svc{
     constructor(public args: CEArgs<TProps, TActions, TPropInfo, TAction>){
         super();
         this.#evalConfig(args as CEArgs);

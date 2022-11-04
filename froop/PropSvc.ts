@@ -1,9 +1,9 @@
 import { PropInfo, DefineArgs } from "../lib/types";
 import { pc, npb, ccb, dcb, r, mse} from './const.js';
-import { ReslvSvc } from "./ReslvSvc.js";
+import { Svc } from "./Svc.js";
 import { IPropBag as IPropagate, IPropSvc, CEArgs, INewPropBag, IConnectedCB, IDisconnectedCB, IPropChg } from './types';
 
-export class PropSvc extends ReslvSvc implements IPropSvc{
+export class PropSvc extends Svc implements IPropSvc{
     constructor(public args: CEArgs){
         super();
         args.definer!.addEventListener(mse, () => {

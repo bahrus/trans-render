@@ -1,6 +1,6 @@
 import { pc, npb, ccb, dcb, mse } from './const.js';
-import { ReslvSvc } from "./ReslvSvc.js";
-export class PropSvc extends ReslvSvc {
+import { Svc } from "./Svc.js";
+export class PropSvc extends Svc {
     args;
     constructor(args) {
         super();

@@ -1,5 +1,5 @@
 import { r } from './const.js';
-export class ReslvSvc extends EventTarget {
+export class Svc extends EventTarget {
     #resolved = false;
     get resolved() {
         return this.#resolved;

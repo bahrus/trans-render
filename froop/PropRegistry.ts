@@ -1,9 +1,9 @@
 import {PropInfo, WCConfig, Action, PropInfoTypes} from '../lib/types';
 import {CEArgs, IPropRegistry as IPropRegistry, IAttrChgCB, INewPropBag} from './types';
 import {acb, npb, r, mse} from './const.js';
-import { ReslvSvc } from './ReslvSvc.js';
+import { Svc } from './Svc.js';
 
-export class PropRegistry extends ReslvSvc{
+export class PropRegistry extends Svc{
     constructor(public args: CEArgs){
         super();
         args.definer!.addEventListener(mse, () => {
