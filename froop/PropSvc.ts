@@ -1,7 +1,7 @@
 import { PropInfo, DefineArgs } from "../lib/types";
 import { pc, npb, ccb, dcb, r, mse} from './const.js';
 import { Svc } from "./Svc.js";
-import { IPropBag as IPropagate, IPropSvc, CEArgs, INewPropagator, IConnectedCB, IDisconnectedCB, IPropChg } from './types';
+import { IPropagator, IPropSvc, CEArgs, INewPropagator, IConnectedCB, IDisconnectedCB, IPropChg } from './types';
 
 export class PropSvc extends Svc implements IPropSvc{
     constructor(public args: CEArgs){
@@ -34,22 +34,22 @@ export class PropSvc extends Svc implements IPropSvc{
         this.resolved = true;      
     }
 
-    stores = new WeakMap<HTMLElement, Propagate>
+    stores = new WeakMap<HTMLElement, Propagator>
 
     #getStore(instance: HTMLElement){
-        let propBag = this.stores.get(instance);
-        if(propBag === undefined){
-            propBag = new Propagate();
-            this.stores.set(instance, propBag);
+        let propagator = this.stores.get(instance);
+        if(propagator === undefined){
+            propagator = new Propagator();
+            this.stores.set(instance, propagator);
             this.dispatchEvent(new CustomEvent(npb, {
                 detail: {
                     instance,
-                    propagator: propBag
+                    propagator
                 } as INewPropagator
                 
             }));
         }
-        return propBag;
+        return propagator;
     }
 
     #addProps(newClass: {new(): HTMLElement}, props: {[key: string]: PropInfo}){
@@ -73,7 +73,7 @@ export class PropSvc extends Svc implements IPropSvc{
 }
 
 
-export class Propagate extends EventTarget{
+export class Propagator extends EventTarget{
     #propVals: {[key: string]: any} = {};
     get(key: string){
         return this.#propVals[key];
@@ -97,4 +97,4 @@ export class Propagate extends EventTarget{
 
 }
 
-export interface Propagate extends IPropagate{}
+export interface Propagator extends IPropagator{}

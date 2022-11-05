@@ -1,4 +1,4 @@
-import {IPropBag, IAttrChgCB} from './types';
+import {IAttrChgCB} from './types';
 import {PropInfo} from '../lib/types';
 //import {irm} from './const.js';
 

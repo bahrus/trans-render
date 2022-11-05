@@ -1,11 +1,11 @@
 import {Action, IActionProcessor, WCConfig} from '../lib/types';
 import {pc} from './const.js';
-import {CEArgs, IPropBag, IPropChg} from './types';
+import {CEArgs, IPropagator, IPropChg} from './types';
 
 
-export function trigger(instance: EventTarget, propBag: IPropBag, args: CEArgs){
+export function trigger(instance: EventTarget, propagator: IPropagator, args: CEArgs){
     //console.log('addPropBagListener');
-    propBag.addEventListener(pc, async e => {
+    propagator.addEventListener(pc, async e => {
         
         const chg = (e as CustomEvent).detail as IPropChg;
         const {key, oldVal, newVal} = chg;
@@ -17,16 +17,16 @@ export function trigger(instance: EventTarget, propBag: IPropBag, args: CEArgs){
         if(!nonDryProps.has(key)){
             if(oldVal === newVal) return;
         }
-        propBag.dk.add(key);
+        propagator.dk.add(key);
         (async () => {
             const filteredActions: any = {};
             const {pq} = await import('../lib/pq.js');
             const {intersection} = await import('../lib/intersection.js');
             const config = args.config as WCConfig;
             const {actions} = config;
-            const changedKeys = propBag.dk;
+            const changedKeys = propagator.dk;
             //console.log({changedKeys, actions});
-            propBag.dk = new Set<string>();
+            propagator.dk = new Set<string>();
             let foundAction = false;
             for(const methodName in actions){
                 const action = actions[methodName] as string | Action;

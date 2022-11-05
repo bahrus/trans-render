@@ -1,7 +1,7 @@
 import { pc } from './const.js';
-export function trigger(instance, propBag, args) {
+export function trigger(instance, propagator, args) {
     //console.log('addPropBagListener');
-    propBag.addEventListener(pc, async (e) => {
+    propagator.addEventListener(pc, async (e) => {
         const chg = e.detail;
         const { key, oldVal, newVal } = chg;
         //console.log({key, oldVal, newVal});
@@ -13,16 +13,16 @@ export function trigger(instance, propBag, args) {
             if (oldVal === newVal)
                 return;
         }
-        propBag.dk.add(key);
+        propagator.dk.add(key);
         (async () => {
             const filteredActions = {};
             const { pq } = await import('../lib/pq.js');
             const { intersection } = await import('../lib/intersection.js');
             const config = args.config;
             const { actions } = config;
-            const changedKeys = propBag.dk;
+            const changedKeys = propagator.dk;
             //console.log({changedKeys, actions});
-            propBag.dk = new Set();
+            propagator.dk = new Set();
             let foundAction = false;
             for (const methodName in actions) {
                 const action = actions[methodName];

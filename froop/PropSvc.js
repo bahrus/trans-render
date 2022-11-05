@@ -31,18 +31,18 @@ export class PropSvc extends Svc {
     }
     stores = new WeakMap;
     #getStore(instance) {
-        let propBag = this.stores.get(instance);
-        if (propBag === undefined) {
-            propBag = new Propagate();
-            this.stores.set(instance, propBag);
+        let propagator = this.stores.get(instance);
+        if (propagator === undefined) {
+            propagator = new Propagator();
+            this.stores.set(instance, propagator);
             this.dispatchEvent(new CustomEvent(npb, {
                 detail: {
                     instance,
-                    propagator: propBag
+                    propagator
                 }
             }));
         }
-        return propBag;
+        return propagator;
     }
     #addProps(newClass, props) {
         const proto = newClass.prototype;
@@ -64,7 +64,7 @@ export class PropSvc extends Svc {
         }
     }
 }
-export class Propagate extends EventTarget {
+export class Propagator extends EventTarget {
     #propVals = {};
     get(key) {
         return this.#propVals[key];
