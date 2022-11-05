@@ -46,26 +46,9 @@ export class CE extends Svc {
         for (const key in servers) {
             args.services[key] = new servers[key](args);
         }
-        //await this.addSvcs(args);
         this.dispatchEvent(new Event(mse));
         await this.#createClass(args);
     }
-    // /**
-    //  * 
-    //  * @param args 
-    //  * @overridable
-    //  */
-    // async addSvcs(args: CEArgs){
-    //     const {servers: serviceClasses} = args;
-    //     const {mixer: mix, propper: propify, itemizer: propRegistry, hooker: connectActions} = serviceClasses!;
-    //     args.services = {
-    //         definer: this,
-    //         mixer: mix ? new mix(args) : undefined,
-    //         propper: new propify!(args),
-    //         itemizer: new propRegistry!(args),
-    //         hooker: connectActions ? new connectActions(args) : undefined,
-    //     };
-    // }
     async #createClass(args) {
         const { services } = args;
         const { itemizer: createPropInfos, mixer: addMixins } = services;

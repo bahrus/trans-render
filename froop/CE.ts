@@ -53,26 +53,10 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
         for(const key in servers){
             (<any>args.services)[key] = new (<any>servers)[key](args);
         }
-        //await this.addSvcs(args);
         this.dispatchEvent(new Event(mse))
         await this.#createClass(args);
     }
-    // /**
-    //  * 
-    //  * @param args 
-    //  * @overridable
-    //  */
-    // async addSvcs(args: CEArgs){
-    //     const {servers: serviceClasses} = args;
-    //     const {mixer: mix, propper: propify, itemizer: propRegistry, hooker: connectActions} = serviceClasses!;
-    //     args.services = {
-    //         definer: this,
-    //         mixer: mix ? new mix(args) : undefined,
-    //         propper: new propify!(args),
-    //         itemizer: new propRegistry!(args),
-    //         hooker: connectActions ? new connectActions(args) : undefined,
-    //     };
-    // }
+
 
     async #createClass(args: CEArgs){
         const {services} = args;
