@@ -1,7 +1,7 @@
 import { DefineArgs, LogicOp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementProps, PropChangeMethod, TRElementActions, WCConfig, IActionProcessor } from '../lib/types.js';
 export { Action, PropInfo, TRElementActions, TRElementProps, WCConfig, IActionProcessor as IHasPostHoc} from '../lib/types.js';
 import { def } from '../lib/def.js';
-import {IMix, CEArgs, IDefine, IAttrChgCB, IConnectedCB, IDisconnectedCB} from './types';
+import {IMix, CEArgs, IDefine, IAttrChgCB, IConnectedCB, IDisconnectedCB, CEServices} from './types';
 import {acb, ccb, dcb, mse} from './const.js';
 import { Svc } from './Svc.js';
 
@@ -46,26 +46,33 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
 
     async #createServices(args: CEArgs){
         args.definer = this;
-        await this.addSvcs(args);
+        const {servers} = args;
+        args.services = {
+            definer: this
+        } as any as CEServices;
+        for(const key in servers){
+            (<any>args.services)[key] = new (<any>servers)[key](args);
+        }
+        //await this.addSvcs(args);
         this.dispatchEvent(new Event(mse))
         await this.#createClass(args);
     }
-    /**
-     * 
-     * @param args 
-     * @overridable
-     */
-    async addSvcs(args: CEArgs){
-        const {servers: serviceClasses} = args;
-        const {mixer: mix, propper: propify, itemizer: propRegistry, hooker: connectActions} = serviceClasses!;
-        args.services = {
-            definer: this,
-            mixer: mix ? new mix(args) : undefined,
-            propper: new propify!(args),
-            itemizer: new propRegistry!(args),
-            hooker: connectActions ? new connectActions(args) : undefined,
-        };
-    }
+    // /**
+    //  * 
+    //  * @param args 
+    //  * @overridable
+    //  */
+    // async addSvcs(args: CEArgs){
+    //     const {servers: serviceClasses} = args;
+    //     const {mixer: mix, propper: propify, itemizer: propRegistry, hooker: connectActions} = serviceClasses!;
+    //     args.services = {
+    //         definer: this,
+    //         mixer: mix ? new mix(args) : undefined,
+    //         propper: new propify!(args),
+    //         itemizer: new propRegistry!(args),
+    //         hooker: connectActions ? new connectActions(args) : undefined,
+    //     };
+    // }
 
     async #createClass(args: CEArgs){
         const {services} = args;
