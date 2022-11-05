@@ -39,7 +39,7 @@ export class CE extends Svc {
     }
     async #createServices(args) {
         args.definer = this;
-        this.addSvcs(args);
+        await this.addSvcs(args);
         this.dispatchEvent(new Event(mse));
         await this.#createClass(args);
     }

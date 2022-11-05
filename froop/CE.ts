@@ -46,7 +46,7 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
 
     async #createServices(args: CEArgs){
         args.definer = this;
-        this.addSvcs(args);
+        await this.addSvcs(args);
         this.dispatchEvent(new Event(mse))
         await this.#createClass(args);
     }
