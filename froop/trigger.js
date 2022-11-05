@@ -6,7 +6,7 @@ export function trigger(instance, propBag, args) {
         const { key, oldVal, newVal } = chg;
         //console.log({key, oldVal, newVal});
         const { services } = args;
-        const { propRegistry: createPropInfos } = services;
+        const { itemizer: createPropInfos } = services;
         await createPropInfos.resolve();
         const { nonDryProps } = createPropInfos;
         if (!nonDryProps.has(key)) {

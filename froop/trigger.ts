@@ -11,7 +11,7 @@ export function trigger(instance: EventTarget, propBag: IPropBag, args: CEArgs){
         const {key, oldVal, newVal} = chg;
         //console.log({key, oldVal, newVal});
         const {services} = args;
-        const {propRegistry: createPropInfos} = services!;
+        const {itemizer: createPropInfos} = services!;
         await createPropInfos.resolve();
         const {nonDryProps} = createPropInfos;
         if(!nonDryProps.has(key)){

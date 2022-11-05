@@ -28,7 +28,7 @@ export class CE extends Svc {
             serviceClasses.mixer = Mix;
         }
         const { PropRegistry } = await import('./PropRegistry.js');
-        serviceClasses.propRegistry = PropRegistry;
+        serviceClasses.itemizer = PropRegistry;
         const { PropSvc } = await import('./PropSvc.js');
         serviceClasses.propper = PropSvc;
         const config = args.config;
@@ -50,18 +50,18 @@ export class CE extends Svc {
      */
     async addSvcs(args) {
         const { serviceClasses } = args;
-        const { mixer: mix, propper: propify, propRegistry, hooker: connectActions } = serviceClasses;
+        const { mixer: mix, propper: propify, itemizer: propRegistry, hooker: connectActions } = serviceClasses;
         args.services = {
             definer: this,
             mixer: mix ? new mix(args) : undefined,
-            propify: new propify(args),
-            propRegistry: new propRegistry(args),
+            propper: new propify(args),
+            itemizer: new propRegistry(args),
             hooker: connectActions ? new connectActions(args) : undefined,
         };
     }
     async #createClass(args) {
         const { services } = args;
-        const { propRegistry: createPropInfos, mixer: addMixins } = services;
+        const { itemizer: createPropInfos, mixer: addMixins } = services;
         await createPropInfos.resolve();
         const ext = addMixins?.ext || HTMLElement;
         const config = args.config;
@@ -106,7 +106,7 @@ export class CE extends Svc {
         }
         this.custElClass = newClass;
         this.resolved = true;
-        const { propify: addProps, hooker: connectActions } = services;
+        const { propper: addProps, hooker: connectActions } = services;
         await addProps.resolve();
         //await connectActions?.resolve();
         def(newClass);

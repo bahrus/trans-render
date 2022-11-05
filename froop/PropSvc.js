@@ -11,7 +11,7 @@ export class PropSvc extends Svc {
     }
     async #do(args) {
         const { services } = args;
-        const { definer: createCustomEl, propRegistry: createPropInfos } = services;
+        const { definer: createCustomEl, itemizer: createPropInfos } = services;
         await createCustomEl.resolve();
         createCustomEl.addEventListener(ccb, e => {
             //console.log('connectedCallback');

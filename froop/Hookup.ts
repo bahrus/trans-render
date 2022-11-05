@@ -17,7 +17,7 @@ export class Hookup extends InstSvc {
     async #do(args: CEArgs){
         
         const {services} = args;
-        const {propify} = services!;
+        const {propper: propify} = services!;
         
         propify.addEventListener(npb, async e => {
             const propagatorEvent = (e as CustomEvent).detail as INewPropagator;

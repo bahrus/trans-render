@@ -14,7 +14,7 @@ export class Hookup extends InstSvc {
     }
     async #do(args) {
         const { services } = args;
-        const { propify } = services;
+        const { propper: propify } = services;
         propify.addEventListener(npb, async (e) => {
             const propagatorEvent = e.detail;
             const { instance, propBag } = propagatorEvent;

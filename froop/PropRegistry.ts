@@ -54,7 +54,7 @@ export class PropRegistry extends Svc{
         this.allPropNames = Object.keys(props);
         
         const {services} = args;
-        const {definer: createCustomEl, propify: addProps, hooker: connectActions} = services!;
+        const {definer: createCustomEl, propper: addProps, hooker: connectActions} = services!;
         createCustomEl.addEventListener(acb, async e => {
             const acbE = (e as CustomEvent).detail as IAttrChgCB;
             const {instance, name, newVal, oldVal} = acbE;

@@ -93,15 +93,15 @@ export interface INewPropBag {
 
 export interface CEServiceClasses {
     mixer?: {new(args: CEArgs): IMix},
-    propRegistry?: {new(args: CEArgs): IPropRegistry},
+    itemizer?: {new(args: CEArgs): IPropRegistry},
     propper?: {new(args: CEArgs): IPropSvc},
     hooker?: {new(args: CEArgs): IHookup},
 }
 
 export interface CEServices {
     mixer?: IMix,
-    propRegistry: IPropRegistry,
-    propify: IPropSvc,
+    itemizer: IPropRegistry,
+    propper: IPropSvc,
     definer: IDefine,
     hooker?: IHookup,
 }

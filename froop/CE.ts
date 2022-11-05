@@ -34,7 +34,7 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
             serviceClasses.mixer = Mix;
         }
         const {PropRegistry} = await import('./PropRegistry.js');
-        serviceClasses.propRegistry  = PropRegistry;
+        serviceClasses.itemizer  = PropRegistry;
         const {PropSvc} = await import('./PropSvc.js');
         serviceClasses.propper = PropSvc;
         const config = args.config as WCConfig;
@@ -57,19 +57,19 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
      */
     async addSvcs(args: CEArgs){
         const {serviceClasses} = args;
-        const {mixer: mix, propper: propify, propRegistry, hooker: connectActions} = serviceClasses!;
+        const {mixer: mix, propper: propify, itemizer: propRegistry, hooker: connectActions} = serviceClasses!;
         args.services = {
             definer: this,
             mixer: mix ? new mix(args) : undefined,
-            propify: new propify!(args),
-            propRegistry: new propRegistry!(args),
+            propper: new propify!(args),
+            itemizer: new propRegistry!(args),
             hooker: connectActions ? new connectActions(args) : undefined,
         };
     }
 
     async #createClass(args: CEArgs){
         const {services} = args;
-        const {propRegistry: createPropInfos, mixer: addMixins} = services!;
+        const {itemizer: createPropInfos, mixer: addMixins} = services!;
         await createPropInfos.resolve();
         const ext = addMixins?.ext || HTMLElement;
         const config = args.config as WCConfig;
@@ -114,7 +114,7 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
         }
         this.custElClass = newClass as any as {new(): HTMLElement}
         this.resolved = true;
-        const {propify: addProps, hooker: connectActions} = services!;
+        const {propper: addProps, hooker: connectActions} = services!;
         await addProps.resolve();
         //await connectActions?.resolve();
         
