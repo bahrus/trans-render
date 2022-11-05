@@ -8,7 +8,7 @@ export interface IEventConfig<MCProps = any, MCActions = MCProps, TAction = Acti
 
 export type ActionOnEventConfigs<MCProps = any, MCActions = MCProps, TAction = Action> = Partial<{[key in keyof MCActions]: IEventConfig<MCProps, MCActions, TAction>}>
 
-export interface IPropBag extends EventTarget{
+export interface IPropagator extends EventTarget{
     get(key: string): any;
     set(key: string, val: any): void;
     /**
@@ -86,9 +86,9 @@ export interface IDisconnectedCB {
     instance: HTMLElement
 }
 
-export interface INewPropBag {
+export interface INewPropagator {
     instance: HTMLElement,
-    propBag: IPropBag,
+    propagator: IPropagator,
 }
 
 export interface CEServiceClasses {

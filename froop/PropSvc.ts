@@ -1,7 +1,7 @@
 import { PropInfo, DefineArgs } from "../lib/types";
 import { pc, npb, ccb, dcb, r, mse} from './const.js';
 import { Svc } from "./Svc.js";
-import { IPropBag as IPropagate, IPropSvc, CEArgs, INewPropBag, IConnectedCB, IDisconnectedCB, IPropChg } from './types';
+import { IPropBag as IPropagate, IPropSvc, CEArgs, INewPropagator, IConnectedCB, IDisconnectedCB, IPropChg } from './types';
 
 export class PropSvc extends Svc implements IPropSvc{
     constructor(public args: CEArgs){
@@ -44,8 +44,8 @@ export class PropSvc extends Svc implements IPropSvc{
             this.dispatchEvent(new CustomEvent(npb, {
                 detail: {
                     instance,
-                    propBag
-                } as INewPropBag
+                    propagator: propBag
+                } as INewPropagator
                 
             }));
         }

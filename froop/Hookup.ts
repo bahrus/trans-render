@@ -1,7 +1,7 @@
 import {WCConfig} from '../lib/types';
 import { InstSvc } from "./InstSvc.js";
 import {npb, r, mse} from './const.js';
-import { CEArgs, IHookup, INewPropBag as INewPropagator } from './types';
+import { CEArgs, IHookup, INewPropagator as INewPropagator } from './types';
 
 /**
  * Connects the prop change subscription via Propagate observer to the corresponding actions
@@ -21,7 +21,7 @@ export class Hookup extends InstSvc {
         
         propify.addEventListener(npb, async e => {
             const propagatorEvent = (e as CustomEvent).detail as INewPropagator;
-            const {instance, propBag} = propagatorEvent;
+            const {instance, propagator: propBag} = propagatorEvent;
             const {trigger} = await import('./trigger.js');
             //console.log({instance, propBag});
             trigger(instance, propBag, args);

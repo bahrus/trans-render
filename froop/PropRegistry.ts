@@ -1,5 +1,5 @@
 import {PropInfo, WCConfig, Action, PropInfoTypes} from '../lib/types';
-import {CEArgs, IPropRegistry as IPropRegistry, IAttrChgCB, INewPropBag} from './types';
+import {CEArgs, IPropRegistry as IPropRegistry, IAttrChgCB, INewPropagator} from './types';
 import {acb, npb, r, mse} from './const.js';
 import { Svc } from './Svc.js';
 
@@ -62,7 +62,7 @@ export class PropRegistry extends Svc{
             await doAttr(acbE, props, defaults);
         });
         addProps.addEventListener(npb, async e => {
-            const inpb = (e as CustomEvent).detail as INewPropBag;
+            const inpb = (e as CustomEvent).detail as INewPropagator;
             const {instance} = inpb;
             // if(connectActions){
             //     await connectActions.instanceResolve(instance);

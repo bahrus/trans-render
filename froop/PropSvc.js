@@ -38,7 +38,7 @@ export class PropSvc extends Svc {
             this.dispatchEvent(new CustomEvent(npb, {
                 detail: {
                     instance,
-                    propBag
+                    propagator: propBag
                 }
             }));
         }
