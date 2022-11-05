@@ -1,5 +1,6 @@
 import { DefineArgs, LogicOp, PropInfo, HasPropChangeQueue, Action, PropInfoTypes, PropChangeInfo, PropChangeMoment, ListOfLogicalExpressions, TRElementProps, PropChangeMethod, TRElementActions, WCConfig, IActionProcessor } from '../lib/types.js';
 export { Action, PropInfo, TRElementActions, TRElementProps, WCConfig, IActionProcessor as IHasPostHoc} from '../lib/types.js';
+export {ActionOnEventConfigs} from '../froop/types';
 import { def } from '../lib/def.js';
 import {IMix, CEArgs, IDefine, IAttrChgCB, IConnectedCB, IDisconnectedCB, CEServices} from './types';
 import {acb, ccb, dcb, mse} from './const.js';

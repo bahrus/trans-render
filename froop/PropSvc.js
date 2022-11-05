@@ -29,7 +29,7 @@ export class PropSvc extends Svc {
         this.#addProps(createCustomEl.custElClass, createPropInfos.propInfos);
         this.resolved = true;
     }
-    stores = new WeakMap;
+    stores = new WeakMap();
     #getStore(instance) {
         let propagator = this.stores.get(instance);
         if (propagator === undefined) {

@@ -38,11 +38,11 @@ The first, lib/TR.js, is a tiny, 'non-committal' library that simply allows us t
 
 The second, lib/DTR.js, extends TR.js but provides robust declarative syntax support.  With the help of "hook like" web component decorators / trans-render plugins, we rarely if ever need to define user-defined functions, and can accomplish full, turing complete (?) rendering support while sticking to 100% declarative JSON.
 
-In addition, this package contains a fairly primitive library for defining custom elements, lib/CE.js, which can be combined with lib/DTR.js via lib/mixins/TemplMgmt.js.
+In addition, this package contains a fairly primitive library for defining custom elements, froop/CE.js, which can be combined with lib/DTR.js via lib/mixins/TemplMgmt.js.
 
 The package [xtal-element](https://github.com/bahrus/xtal-element) builds on this package, and the documentation on defining custom elements, with trans-rendering in mind, is documented there [WIP].
 
-So the rest of this document will focus on the trans-rendering aspect, leaving the documentation for xtal-element to fill in the missing details regarding how lib/CE.js works.
+So the rest of this document will focus on the trans-rendering aspect, leaving the documentation for xtal-element to fill in the missing details regarding how froop/CE.js works.
 
 ## value-add by trans-rendering (TR.js)
 

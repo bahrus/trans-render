@@ -34,7 +34,7 @@ export class PropSvc extends Svc implements IPropSvc{
         this.resolved = true;      
     }
 
-    stores = new WeakMap<HTMLElement, Propagator>
+    stores = new WeakMap<HTMLElement, Propagator>();
 
     #getStore(instance: HTMLElement){
         let propagator = this.stores.get(instance);
