@@ -10,7 +10,7 @@ export class CE extends Svc {
         this.#do(args);
     }
     async #do(args) {
-        if (args.serviceClasses === undefined) {
+        if (args.servers === undefined) {
             await this.addSvcClasses(args);
         }
         await this.#createServices(args);
@@ -21,8 +21,8 @@ export class CE extends Svc {
      * @overridable
      */
     async addSvcClasses(args) {
-        args.serviceClasses = {};
-        const { serviceClasses } = args;
+        args.servers = {};
+        const { servers: serviceClasses } = args;
         if (args.mixins || args.superclass) {
             const { Mix } = await import('./Mix.js');
             serviceClasses.mixer = Mix;
@@ -49,7 +49,7 @@ export class CE extends Svc {
      * @overridable
      */
     async addSvcs(args) {
-        const { serviceClasses } = args;
+        const { servers: serviceClasses } = args;
         const { mixer: mix, propper: propify, itemizer: propRegistry, hooker: connectActions } = serviceClasses;
         args.services = {
             definer: this,

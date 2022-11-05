@@ -14,7 +14,7 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
     }
 
     async #do(args: CEArgs){
-        if(args.serviceClasses === undefined){
+        if(args.servers === undefined){
             await this.addSvcClasses(args);
         }
         await this.#createServices(args);
@@ -27,8 +27,8 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
      * @overridable
      */
     async addSvcClasses(args: CEArgs){
-        args.serviceClasses = {};
-        const {serviceClasses} = args;
+        args.servers = {};
+        const {servers: serviceClasses} = args;
         if(args.mixins || args.superclass){
             const {Mix} = await import('./Mix.js');
             serviceClasses.mixer = Mix;
@@ -56,7 +56,7 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
      * @overridable
      */
     async addSvcs(args: CEArgs){
-        const {serviceClasses} = args;
+        const {servers: serviceClasses} = args;
         const {mixer: mix, propper: propify, itemizer: propRegistry, hooker: connectActions} = serviceClasses!;
         args.services = {
             definer: this,

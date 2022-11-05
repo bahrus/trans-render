@@ -108,6 +108,6 @@ export interface CEServices {
 
 export interface CEArgs<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction extends Action<TProps> = Action<TProps>> extends DefineArgs<TProps, TActions, TPropInfo, TAction>{
     definer?: IDefine,
-    serviceClasses?: CEServiceClasses
+    servers?: CEServiceClasses
     services?: CEServices,
 }
