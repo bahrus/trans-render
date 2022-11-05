@@ -1,12 +1,12 @@
 import {WCConfig} from '../lib/types';
-import { InstResSvc } from "./InstResSvc.js";
+import { InstSvc } from "./InstSvc.js";
 import {npb, r, mse} from './const.js';
 import { CEArgs, IHookup, INewPropBag as INewPropagator } from './types';
 
 /**
  * Connects the prop change subscription via Propagate observer to the corresponding actions
  */
-export class Hookup extends InstResSvc {
+export class Hookup extends InstSvc {
     constructor(public args: CEArgs){
         super();
         args.definer!.addEventListener(mse, () => {

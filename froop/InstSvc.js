@@ -3,7 +3,7 @@ import { ir } from './const.js';
 /**
  * Instance Resolvable Service
  */
-export class InstResSvc extends Svc {
+export class InstSvc extends Svc {
     #instanceResolved = new WeakMap();
     set instanceResolved(instance) {
         this.#instanceResolved.set(instance, true);

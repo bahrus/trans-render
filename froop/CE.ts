@@ -131,9 +131,9 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
 
     async resolveInstanceSvcs(args: CEArgs, instance: any){
         const {services} = args;
-        const {InstResSvc} = await import('./InstResSvc.js');
+        const {InstSvc} = await import('./InstSvc.js');
         for(const svc of Object.values(services!)){
-            if(svc instanceof InstResSvc){
+            if(svc instanceof InstSvc){
                 await svc.instanceResolve(instance);
             }
         }

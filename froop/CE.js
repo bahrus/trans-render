@@ -121,9 +121,9 @@ export class CE extends Svc {
     }
     async resolveInstanceSvcs(args, instance) {
         const { services } = args;
-        const { InstResSvc } = await import('./InstResSvc.js');
+        const { InstSvc } = await import('./InstSvc.js');
         for (const svc of Object.values(services)) {
-            if (svc instanceof InstResSvc) {
+            if (svc instanceof InstSvc) {
                 await svc.instanceResolve(instance);
             }
         }

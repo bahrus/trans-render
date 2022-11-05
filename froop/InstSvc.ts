@@ -4,7 +4,7 @@ import {IInstanceResolvableService} from './types';
 /**
  * Instance Resolvable Service
  */
-export class InstResSvc<T extends object = object> extends Svc implements IInstanceResolvableService{
+export class InstSvc<T extends object = object> extends Svc implements IInstanceResolvableService{
 
     #instanceResolved = new WeakMap<T, boolean>();
     set instanceResolved(instance: T){

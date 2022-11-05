@@ -1,9 +1,9 @@
-import { InstResSvc } from "./InstResSvc.js";
+import { InstSvc } from "./InstSvc.js";
 import { npb, mse } from './const.js';
 /**
  * Connects the prop change subscription via Propagate observer to the corresponding actions
  */
-export class Hookup extends InstResSvc {
+export class Hookup extends InstSvc {
     args;
     constructor(args) {
         super();
