@@ -70,6 +70,7 @@ export class Propagator extends EventTarget {
         return this.#propVals[key];
     }
     set(key, newVal) {
+        //console.log({key, newVal});
         const oldVal = this.#propVals[key];
         this.#propVals[key] = newVal;
         const init = {

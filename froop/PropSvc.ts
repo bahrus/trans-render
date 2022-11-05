@@ -79,6 +79,7 @@ export class Propagator extends EventTarget{
         return this.#propVals[key];
     }
     set(key: string, newVal: any){
+        //console.log({key, newVal});
         const oldVal = this.#propVals[key];
         this.#propVals[key] = newVal;
         const init: CustomEventInit = {
