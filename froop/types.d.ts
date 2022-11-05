@@ -43,7 +43,7 @@ export interface IMix extends IResolvableService{
     ext: {new(): HTMLElement}
 }
 
-export interface IPropRegistry extends IResolvableService{
+export interface IPropRegistrar extends IResolvableService{
     propInfos: {[key: string]: PropInfo},
     allPropNames: string[],
     getAttrNames(ext: any): Promise<string[]>,
@@ -93,14 +93,14 @@ export interface INewPropagator {
 
 export interface CEServiceClasses {
     mixer?: {new(args: CEArgs): IMix},
-    itemizer?: {new(args: CEArgs): IPropRegistry},
+    itemizer?: {new(args: CEArgs): IPropRegistrar},
     propper?: {new(args: CEArgs): IPropSvc},
     hooker?: {new(args: CEArgs): IHookup},
 }
 
 export interface CEServices {
     mixer?: IMix,
-    itemizer: IPropRegistry,
+    itemizer: IPropRegistrar,
     propper: IPropSvc,
     definer: IDefine,
     hooker?: IHookup,
