@@ -20,7 +20,7 @@ export class PropSvc extends Svc implements IPropSvc{
             //console.log('connectedCallback');
             const connection = (e as CustomEvent).detail as IConnectedCB;
             const {instance} = connection;
-            const propBag = this.#getStore(instance);
+            const propBag = this.#getStore(instance); //causes propagator to be created
         });
         createCustomEl.addEventListener(dcb, e => {
             const disconnection = (e as CustomEvent).detail as IDisconnectedCB;

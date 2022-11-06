@@ -14,16 +14,16 @@ export class Hookup extends InstSvc {
     }
     async #do(args) {
         const { services } = args;
-        const { propper: propify } = services;
-        propify.addEventListener(npb, async (e) => {
+        const { propper } = services;
+        propper.addEventListener(npb, async (e) => {
             const propagatorEvent = e.detail;
-            const { instance, propagator: propBag } = propagatorEvent;
+            const { instance, propagator } = propagatorEvent;
             const { trigger } = await import('./trigger.js');
             //console.log({instance, propBag});
-            trigger(instance, propBag, args);
+            trigger(instance, propagator, args);
             this.instanceResolved = instance;
         });
-        await propify.resolve();
+        await propper.resolve();
         this.resolved = true;
     }
 }
