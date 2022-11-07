@@ -16,6 +16,9 @@ export async function findRealm(self: Element, scope: Scope){
             case 'host':
                 const {getHost} = await import('./getHost.js');
                 return await getHost(self);
+            case 'sd':
+            case 'shadowDOM':
+                return self.shadowRoot;
         }
     }else{
         const scopeHead = scope[0];

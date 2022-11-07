@@ -456,8 +456,13 @@ export type Scope = Target |
     /**
      * abbrev for closestOrRootNode
      */
-    ['corn', boolean | string]
+    ['corn', boolean | string] |
 
+    'shadowDOM' | 
+    /** 
+     * abbrev for shadow DOM
+     */
+    'sd'
 
 ;
 
