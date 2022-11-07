@@ -1,6 +1,6 @@
-import {ActionOnEventConfigs} from './types';
+import {ActionOnEventConfigs, IPE} from './types';
 
-export class PE{
+export class PE implements IPE{
     #abortControllers = new Map<string, AbortController[]>();
 
     async do(instance: EventTarget, originMethodName: string, vals: [any, ActionOnEventConfigs] ){

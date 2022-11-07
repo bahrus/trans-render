@@ -115,5 +115,12 @@ export interface CEArgs<TProps = any, TActions = TProps, TPropInfo = PropInfo, T
 export interface DynamicTransform {
     scope: Scope,
     match: Matches,
-    
+}
+
+export interface IPE {
+    do(instance: EventTarget, originMethodName: string, vals: [any, ActionOnEventConfigs] ): Promise<void>,
+}
+
+export interface IPET extends IPE{
+    re(instance: EventTarget, originMethodName: string, vals: [any, ActionOnEventConfigs, DynamicTransform] ): Promise<void>,
 }

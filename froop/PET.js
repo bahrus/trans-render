@@ -1,5 +1,6 @@
 import { PE } from "./PE.js";
 export class PET extends PE {
+    #transformers = new Map();
     async re(instance, originMethodName, vals) {
         await super.do(instance, originMethodName, [vals[0], vals[1]]);
         const dt = vals[2];
