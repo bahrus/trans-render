@@ -1,5 +1,5 @@
 import { RenderContext, MatchRHS, Scope} from 'trans-render/lib/types';
-import {ITx} from './types';
+import {ITx, Matches} from './types';
 
 /**
  * Purpose:  Manage repeated transforms for scenario where transform is externally triggered as opposed to being auto triggered via subscribe.
@@ -8,7 +8,7 @@ export class Tx implements ITx{
     #ctx: RenderContext;
     #realm: WeakRef<Element | ShadowRoot | DocumentFragment | Document> | undefined;
     #scope: Scope;
-    constructor(host: any, realmCitizen: Element, match: {[key: string]: MatchRHS}, scope: Scope){
+    constructor(host: any, realmCitizen: Element, match: Matches, scope: Scope){
         this.#ctx = {
             match,
             host,

@@ -1,4 +1,4 @@
-import {ActionOnEventConfigs} from './types';
+import {ActionOnEventConfigs, DynamicTransform} from './types';
 import {Action} from  '../lib/types';
 export async function act(instance: EventTarget, actions: {[methodName: string]: Action}){
     for(const methodName in actions){
@@ -12,9 +12,18 @@ export async function act(instance: EventTarget, actions: {[methodName: string]:
         const ret = isAsync ? await (<any>instance)[methodName](instance) : (<any>instance)[methodName](instance);
         if(ret === undefined) continue;
         if(Array.isArray(ret)){
-            const {PE} = await import('./PE.js');
-            const pe = new PE();
-            pe.do(instance, method, ret as [any, ActionOnEventConfigs]);
+            switch(ret.length){
+                case 2:
+                    const {PE} = await import('./PE.js');
+                    const pe = new PE();
+                    await pe.do(instance, methodName, ret as [any, ActionOnEventConfigs]);
+                    break;
+                case 3:
+                    const {PET} = await import('./PET.js');
+                    const pet = new PET();
+                    await pet.re(instance, methodName, ret as [any, ActionOnEventConfigs, DynamicTransform])
+            }
+
         }else{
             Object.assign(instance, ret);
         }

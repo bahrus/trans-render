@@ -13,9 +13,17 @@ export async function act(instance, actions) {
         if (ret === undefined)
             continue;
         if (Array.isArray(ret)) {
-            const { PE } = await import('./PE.js');
-            const pe = new PE();
-            pe.do(instance, method, ret);
+            switch (ret.length) {
+                case 2:
+                    const { PE } = await import('./PE.js');
+                    const pe = new PE();
+                    await pe.do(instance, methodName, ret);
+                    break;
+                case 3:
+                    const { PET } = await import('./PET.js');
+                    const pet = new PET();
+                    await pet.re(instance, methodName, ret);
+            }
         }
         else {
             Object.assign(instance, ret);

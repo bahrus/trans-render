@@ -1,4 +1,4 @@
-import {PropInfo, Action, DefineArgs,} from '../lib/types';
+import {PropInfo, Action, DefineArgs, Scope, Matches} from '../lib/types';
 
 export interface IEventConfig<MCProps = any, MCActions = MCProps, TAction = Action>{
     on: string,
@@ -110,4 +110,10 @@ export interface CEArgs<TProps = any, TActions = TProps, TPropInfo = PropInfo, T
     definer?: IDefine,
     servers?: CEServiceClasses
     services?: CEServices,
+}
+
+export interface DynamicTransform {
+    scope: Scope,
+    match: Matches,
+    
 }
