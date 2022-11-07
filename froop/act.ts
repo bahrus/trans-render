@@ -21,7 +21,8 @@ export async function act(instance: EventTarget, actions: {[methodName: string]:
                 case 3:
                     const {PET} = await import('./PET.js');
                     const pet = new PET();
-                    await pet.re(instance, methodName, ret as [any, ActionOnEventConfigs, DynamicTransform])
+                    await pet.re(instance, methodName, ret as [any, ActionOnEventConfigs, DynamicTransform]);
+
             }
 
         }else{
