@@ -22,7 +22,6 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
             
     }
     async cloneTemplate({noshadow, shadowRoot, mainTemplate, styles, waitToInit}: TemplMgmtBase){
-        if(waitToInit) return;
         let root = this as any;
         if(!noshadow){
             if(shadowRoot === null){
@@ -111,7 +110,8 @@ export const beTransformed = {
     } as Action<TemplMgmtProps>,
     doTemplMount: {
         ifAllOf: ['clonedTemplate'],
-        ifKeyIn: ['waitToInit', 'transform'],
+        ifNoneOf: ['waitToInit'],
+        ifKeyIn: ['transform'],
         async: true,
     } as Action<TemplMgmtProps>,
 };
