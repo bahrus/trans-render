@@ -11,13 +11,13 @@ export class PET extends PE implements IPET{
             let tx = this.#transformers.get(originMethodName);
             if(tx === undefined){
                 const {Tx} = await import('../lib/Tx.js');
-                tx = new Tx(instance, instance as Element, dt.match, dt.scope || "sd");
+                tx = new Tx(instance, instance as Element, dt.transform, dt.scope || 'sd');
                 if(!dt.noCache){
                     this.#transformers.set(originMethodName, tx);
                 }
             }else{
-                tx.match = dt.match;
-                tx.scope = dt.scope;
+                tx.match = dt.transform;
+                tx.scope = dt.scope || 'sd';
             }
             await tx.transform();
             
