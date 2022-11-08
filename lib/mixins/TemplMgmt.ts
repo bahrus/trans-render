@@ -101,17 +101,25 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
 
 }
 
-export const beTransformed = {
-    initUnsafeTCnt: 'unsafeTransform',
-    doComplexTR: 'unsafeTCount',
+export const beCloned = {
     cloneTemplate: {
         ifAllOf: ['mainTemplate'],
         ifKeyIn: ['noshadow', 'waitToInit']
     } as Action<TemplMgmtProps>,
+}
+
+export const beMounted = {
     doTemplMount: {
         ifAllOf: ['clonedTemplate'],
         ifNoneOf: ['waitToInit'],
         ifKeyIn: ['transform'],
         async: true,
     } as Action<TemplMgmtProps>,
+}
+
+export const beTransformed = {
+    initUnsafeTCnt: 'unsafeTransform',
+    doComplexTR: 'unsafeTCount',
+    ...beCloned,
+    ...beMounted
 };
