@@ -377,7 +377,9 @@ export interface ITSChecker{
 }
 
 export interface ITx{
-    transform(): Promise<void>
+    transform(): Promise<void>;
+    match: Matches;
+    scope: Scope;
 }
 
 /**

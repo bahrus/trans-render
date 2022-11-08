@@ -17,6 +17,17 @@ export class Tx implements ITx{
         this.#scope = scope;
     }
 
+    set match(nv: Matches){
+        this.#ctx.match = nv;
+    }
+
+    set scope(nv: Scope){
+        if(this.#scope !== nv){
+            this.#realm = undefined;
+        }
+        this.#scope = nv;
+    }
+
     async #getRealm(){
         if(this.#realm !== undefined){
             const deref = this.#realm.deref();

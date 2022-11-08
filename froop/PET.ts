@@ -8,9 +8,19 @@ export class PET extends PE implements IPET{
         await super.do(instance, originMethodName, [vals[0], vals[1]]);
         const dt = vals[2];
         if(dt !== undefined){
-            const {Tx} = await import('../lib/Tx.js');
-            const tx = new Tx(instance, instance as Element, dt.match, dt.scope || "sd");
+            let tx = this.#transformers.get(originMethodName);
+            if(tx === undefined){
+                const {Tx} = await import('../lib/Tx.js');
+                tx = new Tx(instance, instance as Element, dt.match, dt.scope || "sd");
+                if(!dt.noCache){
+                    this.#transformers.set(originMethodName, tx);
+                }
+            }else{
+                tx.match = dt.match;
+                tx.scope = dt.scope;
+            }
             await tx.transform();
+            
         }
         
 

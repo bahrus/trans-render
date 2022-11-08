@@ -115,6 +115,7 @@ export interface CEArgs<TProps = any, TActions = TProps, TPropInfo = PropInfo, T
 export interface DynamicTransform {
     scope: Scope,
     match: Matches,
+    noCache: boolean,
 }
 
 export interface IPE {
