@@ -1,4 +1,4 @@
-import {Scope} from './types';
+import {Scope, TemplMgmtProps} from './types';
 
 export async function findRealm(self: Element, scope: Scope){
     if(typeof scope === 'string'){ //TODO:  do dynamic import for each condition
@@ -18,7 +18,8 @@ export async function findRealm(self: Element, scope: Scope){
                 return await getHost(self);
             case 'sd':
             case 'shadowDOM':
-                return self.shadowRoot;
+                return self.shadowRoot || (self as any as TemplMgmtProps).clonedTemplate; //a little bit of playing favorites with TemplMgmt mixin -- this allows performing transforms prior to appending
+                //into the shadow dom. 
         }
     }else{
         const scopeHead = scope[0];
