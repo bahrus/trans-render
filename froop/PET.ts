@@ -20,7 +20,9 @@ export class PET extends PE implements IPET{
                 tx.scope = dt.scope || 'sd';
             }
             await tx.transform();
-            
+            if((<any>instance).mntCnt > 0){
+                (<any>instance).mntCnt--;
+            }
         }
         
 

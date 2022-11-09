@@ -21,7 +21,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         new DoStyles(this, base, root, compiledStyleMap, modernBrowser);
             
     }
-    async cloneTemplate({noshadow, shadowRoot, mainTemplate, styles, waitToInit}: TemplMgmtBase){
+    async cloneTemplate({noshadow, shadowRoot, mainTemplate, styles, mntCnt: waitToInit}: TemplMgmtBase){
         let root = this as any;
         if(!noshadow){
             if(shadowRoot === null){
@@ -65,9 +65,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
     }
 
     async doTemplMount(base: TemplMgmtBase){
-        const {hydratingTransform, transform, waitToInit, clonedTemplate, noshadow, transformPlugins, DTRCtor, homeInOn} = base;
-        if(waitToInit) return;
-        
+        const {hydratingTransform, transform, mntCnt, clonedTemplate, noshadow, transformPlugins, DTRCtor, homeInOn} = base;
         const fragment = clonedTemplate === undefined ? 
             noshadow ? this : this.shadowRoot!
             : clonedTemplate as DocumentFragment;
@@ -111,7 +109,7 @@ export const beCloned = {
 export const beMounted = {
     doTemplMount: {
         ifAllOf: ['clonedTemplate'],
-        ifNoneOf: ['waitToInit'],
+        ifNoneOf: ['mntCnt'],
         ifKeyIn: ['transform'],
         async: true,
     } as Action<TemplMgmtProps>,

@@ -18,6 +18,9 @@ export class PET extends PE {
                 tx.scope = dt.scope || 'sd';
             }
             await tx.transform();
+            if (instance.mntCnt > 0) {
+                instance.mntCnt--;
+            }
         }
     }
 }

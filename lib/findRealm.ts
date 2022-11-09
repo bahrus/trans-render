@@ -18,8 +18,10 @@ export async function findRealm(self: Element, scope: Scope){
                 return await getHost(self);
             case 'sd':
             case 'shadowDOM':
-                return self.shadowRoot || (self as any as TemplMgmtProps).clonedTemplate; //a little bit of playing favorites with TemplMgmt mixin -- this allows performing transforms prior to appending
-                //into the shadow dom. 
+                //a little bit of playing favorites with TemplMgmt mixin -- this allows performing transforms prior to appending
+                //into the shadow dom.
+                return (self as any as TemplMgmtProps).clonedTemplate || self.shadowRoot; 
+                 
         }
     }else{
         const scopeHead = scope[0];

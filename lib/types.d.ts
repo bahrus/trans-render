@@ -354,7 +354,7 @@ export interface TemplMgmtProps<MCProps = any> extends TransformPacket{
     clonedTemplate?: Node | undefined;
     noshadow?: boolean;
     renderOptions?: RenderOptions;
-    waitToInit?: boolean;
+    mntCnt?: number;
     
     homeInOn?: Partial<{[key in keyof MCProps]: TransformPacket}>;
 }
