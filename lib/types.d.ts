@@ -214,7 +214,7 @@ export interface IConditional{
     rhsVal: any;
     op: '==' | '!=' | '>' | '<' | '>=' | '<=' | '===' | '!=='  | undefined;
 }
-export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null};
+export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null | string[]};
 export type PSettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T> | undefined]; 
 export type PESettings<T extends Partial<HTMLElement> = HTMLElement> = [props: PropSettings<T> | undefined, on: EventSettings | undefined];
 export type PEUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PSettings<T> | PESettings<T>;
