@@ -715,13 +715,31 @@ Method with name do_object_[$action] is invoked.  A single parameter of the rend
 
 ### Nested Matching
 
-Just as CSS will support nesting (hopefully, eventually), TR supports nesting out-of-the-box.  If the RHS is a non-array object, and that object has property a sub transform is performed within that scope (Only one exception -- if using lhs that ends with Props for bulk prop setting).
+Just as CSS will support nesting (hopefully, eventually), TR supports nesting out-of-the-box.  
 
-If the RHS is a non-array object, and that object has field $action: "nested_transform", then the nested transform is performed (via calling do_object_nested_transform) as discussed above.
+If the RHS is a non-array object, and that object has field $action:"nested_transform", then the nested transform is performed (via calling do_object_nested_transform) as discussed above.
+
+### Deep Merging [TODO]
+
+Normally, the "P" expressions, where we set prop values, is done via "shallow merge" - Object.assign type expressions.
+
+An exception to this rule is that if prop keys start with a ".", then we can actually do some deep binding, which is quite useful:
+
+```JavaScript
+transform: {
+':host': [{
+    ".style.width": ['', 'width', 'px'], ".style.height": ['', 'height', 'px']
+}],
+```
+But sometimes the desire is to do a deep merge of a fairly large object -- a style object is a perfect example, and don't need live "binding" because the merge is done as part of a "dynamic transform" -- where the transform itself contains dynamic values.
+
+To meet this scenario, if an object has $action:'deep_merge' then it will be deep merged into the host.
 
 ## Setting Props the easy way
 
 If the RHS expression is a non array object without an $action property, then the RHS is used to set properties on the element.
+
+
 
 ## Answers to questions no one is asking
 
