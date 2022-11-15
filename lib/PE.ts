@@ -2,7 +2,7 @@ import {PMDo, RenderContext, PEUnionSettings, PSettings} from './types.js';
 
 export class PE implements PMDo{
     async do(ctx: RenderContext){
-        const {host} = ctx;
+        const {host, hostController} = ctx;
         if(host=== undefined) throw 'Unknown host.';
         const {rhs} = ctx;
         const e = rhs![1];
@@ -14,7 +14,7 @@ export class PE implements PMDo{
         if(typeof e === 'string'){
             const eventName = target!.localName === 'input' ? 'input' :  'click';
             target!.addEventListener(eventName, ev => {
-                (<any>target)[e](host, ev);
+                (<any> hostController || host)[e](host, ev);
             });
             const {applyP} = await import('./applyP.js');
             await applyP(target!, [modifiedProps] as PSettings);

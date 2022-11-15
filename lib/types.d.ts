@@ -1,6 +1,7 @@
 export interface RenderContextEndUserProps<T = Element, TItem = any>{
     shadowPeer?: Element | undefined;
     host?: any | undefined;
+    hostController?: any;
     match?: Matches;
 }
 
