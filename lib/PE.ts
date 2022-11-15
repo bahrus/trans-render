@@ -14,7 +14,7 @@ export class PE implements PMDo{
         if(typeof e === 'string'){
             const eventName = target!.localName === 'input' ? 'input' :  'click';
             target!.addEventListener(eventName, ev => {
-                (<any>target)[e](target, ev);
+                (<any>target)[e](host, ev);
             });
             const {applyP} = await import('./applyP.js');
             await applyP(target!, [modifiedProps] as PSettings);
