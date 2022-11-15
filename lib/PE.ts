@@ -1,14 +1,29 @@
-import {PMDo, RenderContext, PEUnionSettings} from './types.js';
+import {PMDo, RenderContext, PEUnionSettings, PSettings} from './types.js';
 
 export class PE implements PMDo{
     async do(ctx: RenderContext){
-        if(ctx.host=== undefined) throw 'Unknown host.';
+        const {host} = ctx;
+        if(host=== undefined) throw 'Unknown host.';
+        const {rhs} = ctx;
+        const e = rhs![1];
+
         const prevRHS = {...ctx.rhs};
         const {modifyPRHS} = await import('./P.js');
         const modifiedProps = await modifyPRHS(ctx, 0);
-        const modifiedEvents = await modifyERHS(ctx, 1);
-        const {applyPE} = await import('./applyPE.js');
-        await applyPE(ctx.host, ctx.target as HTMLElement, [modifiedProps, modifiedEvents] as PEUnionSettings);
+        const {target} = ctx;
+        if(typeof e === 'string'){
+            const eventName = target!.localName === 'input' ? 'input' :  'click';
+            target!.addEventListener(eventName, ev => {
+                (<any>target)[e](target, ev);
+            });
+            const {applyP} = await import('./applyP.js');
+            await applyP(target!, [modifiedProps] as PSettings);
+        }else{
+            const modifiedEvents = await modifyERHS(ctx, 1);
+            const {applyPE} = await import('./applyPE.js');
+            await applyPE(host, target as HTMLElement, [modifiedProps, modifiedEvents] as PEUnionSettings);
+        }
+        
         ctx.rhs = prevRHS;
     }
 }
