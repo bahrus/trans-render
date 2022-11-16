@@ -494,21 +494,33 @@ The first element of the RHS array is devoted to property setting:
 
 The same limited support for . and ?? described above is supported here.
 
-### Add event listeners (E)
+### All About E
 
-The second element of the array allows us to add event listeners to the element.  For example:
+The second optional element of the array allows us to add event listeners to the element.  For example:
 
 ```JS
 match:{
-    myCustomElementElements: [{}, {click: myEventHandlerFn, mouseover: 'myHostMouseOverFn', 'myProp:onSet': {...}}]
+    myButtonEs: [{}, 'myClickHandler'],
+    myCustomElements: [{}, {click: myEventHandlerFn, mouseover: 'myHostMouseOverFn', 'myProp:onSet': {...}}]
+    
 }
 ```
 
-As you can see, TR/DTR supports three ways to hookup an event handler.  The first one is not JSON serializable, so it doesn't qualify as "declarative".  It works best with arrow function properties of the host (no binding attempt is made).  Likewise with the second option, but here we are referencing, by name, the event handler from the host.
+As we can see, TR/DTR supports fours ways to hookup an event handler.  
 
-The third option provides a declarative syntax for doing common things done in an event handler, but declaratively.  Things like toggling property values, incrementing counters, etc.
+If the second element of the array is a string, then the host method 'myClickHandler' is called.  On what event type, you may be asking?
 
-The syntax is borrowed from the [be-noticed](https://github.com/bahrus/be-noticed) decorator / DTR plugin, and much of the code is shared between these two usages.
+If the matching element is an input element, then event type "input" is used.  Otherwise, "click" is used.  So that's our big-time shortcut.
+
+For more nuanced scenarios, we need to specify an object for the second element of the array.  Let's look closely at the three examples shown above for the 'myCustomElementEs' matches:
+
+The first one (myEventHandlerFn) is not JSON serializable, so it doesn't qualify as "declarative".  It works best with arrow function properties of the host (no binding attempt is made).  Likewise with the second option, but here we are referencing, by name, the event handler from the host.
+
+The third example, we can see that the RHS of the expression can be an object.  This provides a declarative syntax for doing common things done in an event handler, but declaratively.  Things like toggling property values, incrementing counters, etc.
+
+The syntax for what can go inside this object is borrowed from the [be-noticed](https://github.com/bahrus/be-noticed) decorator / DTR plugin, and much of the code is shared between these two usages.
+
+Note also in the third example we are not subscribing to a loosely coupled event name, but rather, we are injecting a handler inside the myProp setter, which is a bit intrusive, but is quite powerful, and doesn't require emitting events for everything.
 
 ### Set attributes / classes / parts / [decorator attributes](https://github.com/bahrus/be-decorated). (A)
 
