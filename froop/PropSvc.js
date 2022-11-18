@@ -17,7 +17,7 @@ export class PropSvc extends Svc {
             //console.log('connectedCallback');
             const connection = e.detail;
             const { instance } = connection;
-            const propBag = this.#getStore(instance); //causes propagator to be created
+            const propBag = this.#getStore(instance, true); //causes propagator to be created
         });
         createCustomEl.addEventListener(dcb, e => {
             const disconnection = e.detail;
@@ -30,9 +30,9 @@ export class PropSvc extends Svc {
         this.resolved = true;
     }
     stores = new WeakMap();
-    #getStore(instance) {
+    #getStore(instance, forceNew) {
         let propagator = this.stores.get(instance);
-        if (propagator === undefined) {
+        if (propagator === undefined && forceNew) {
             propagator = new Propagator();
             this.stores.set(instance, propagator);
             this.dispatchEvent(new CustomEvent(npb, {
@@ -44,19 +44,49 @@ export class PropSvc extends Svc {
         }
         return propagator;
     }
+    #syncUp(instance, propagator) {
+        const unhydrated = this.#unhydratedStores.get(instance);
+        if (unhydrated !== undefined) {
+            for (const key of unhydrated.keys()) {
+                const val = unhydrated.get(key);
+                propagator.set(key, val);
+            }
+            this.#unhydratedStores.delete(instance);
+        }
+    }
+    #unhydratedStores = new WeakMap();
     #addProps(newClass, props) {
         const proto = newClass.prototype;
         const getPropBag = this.#getStore.bind(this);
+        const unhydrated = this.#unhydratedStores;
+        const syncUp = this.#syncUp.bind(this);
         for (const key in props) {
             if (key in proto)
                 continue;
             Object.defineProperty(proto, key, {
                 get() {
-                    return getPropBag(this).get(key);
+                    const propagator = getPropBag(this, false);
+                    if (propagator !== undefined) {
+                        if (unhydrated.has(this)) {
+                            syncUp(this, propagator);
+                        }
+                        return propagator.get(key);
+                    }
+                    else {
+                        return unhydrated.get(this)?.get(key);
+                    }
                 },
                 set(nv) {
-                    //console.log('set', {key, nv});
-                    getPropBag(this).set(key, nv);
+                    const propagator = getPropBag(this, false);
+                    if (propagator !== undefined) {
+                        propagator.set(key, nv);
+                    }
+                    else {
+                        if (!unhydrated.has(this)) {
+                            unhydrated.set(this, new Map());
+                        }
+                        unhydrated.get(this)?.set(key, nv);
+                    }
                 },
                 enumerable: true,
                 configurable: true,
