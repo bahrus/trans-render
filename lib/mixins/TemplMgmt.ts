@@ -49,13 +49,15 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         }
         switch(typeof mainTemplate){
             case 'string':
-                const isReally = (<any>this.constructor).isReally as string;
-                if(!compiledTemplateMap.has(isReally)){
-                    const templ = document.createElement('template');
+                //const isReally = (<any>this.constructor).isReally as string;
+                let templ: HTMLTemplateElement | undefined = compiledTemplateMap.get(mainTemplate)!
+                if(templ === undefined){
+                    console.log('parsing');
+                    templ = document.createElement('template');
                     templ.innerHTML = mainTemplate;
-                    compiledTemplateMap.set(isReally, templ);
+                    compiledTemplateMap.set(mainTemplate, templ);
                 }
-                this.clonedTemplate = compiledTemplateMap.get(isReally)!.content.cloneNode(true);
+                this.clonedTemplate = templ.content.cloneNode(true);
                 break;
             default:
                 this.clonedTemplate = mainTemplate!.content.cloneNode(true);
