@@ -179,7 +179,7 @@ export interface INotify<TSelf = any, TProps = any, TActions = TProps> extends  
      */
     fn?: keyof TActions & string;
 
-    dispatch?: string | boolean;
+    dispatch?: string;
 
     withArgs?: ('self' | 'val' | 'event')[];
 

@@ -1,7 +1,7 @@
 import {INotify, IValFromEventInstructions} from './types';
 
 export async function doAction(self: Element, recipientElement: Element, notify: INotify, event?: Event){
-    const { as, prop, fn, toggleProp, plusEq, withArgs} = notify;
+    const { as, prop, fn, toggleProp, plusEq, withArgs, dispatch} = notify;
     let {val} = notify;
     if(val === undefined){
         const {getValFromEvent} = await import('./getValFromEvent.js');
@@ -27,11 +27,17 @@ export async function doAction(self: Element, recipientElement: Element, notify:
         if(prop !== undefined){
             const {doSet} = await import ('./doSet.js');
             doSet(recipientElement, prop, val, plusEq, toggleProp)
-        }else if(fn !== undefined){
+        }
+        if(fn !== undefined){
             const {doInvoke} = await import ('./doInvoke.js');
             doInvoke(recipientElement, fn, val, withArgs, event);
-        }else{
-            throw 'NI'; //Not Implemented
+        }
+        if(dispatch !== undefined){
+            recipientElement.dispatchEvent(new CustomEvent(dispatch, {
+                detail:{
+                    val,
+                }
+            }));
         }
         
     }
