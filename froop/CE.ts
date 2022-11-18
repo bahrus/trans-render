@@ -85,9 +85,14 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
                 }))
             }
 
-            connectedCallback(){
+            async connectedCallback(){
                 //console.log('connectedCallback');
                 if(super.connectedCallback) super.connectedCallback();
+                const dh = 'defer-hydration';
+                if((this as any as HTMLElement).hasAttribute(dh)){
+                    const {waitForAttributeChange} = await import('../lib/waitForAttributeChange.js');
+                    await waitForAttributeChange(this as any as HTMLElement, dh, (s: string | null) => s === null);
+                }
                 services!.definer.dispatchEvent(new CustomEvent(ccb, {
                     detail: {
                         instance: this as any as HTMLElement,

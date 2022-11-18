@@ -74,10 +74,15 @@ export class CE extends Svc {
                     }
                 }));
             }
-            connectedCallback() {
+            async connectedCallback() {
                 //console.log('connectedCallback');
                 if (super.connectedCallback)
                     super.connectedCallback();
+                const dh = 'defer-hydration';
+                if (this.hasAttribute(dh)) {
+                    const { waitForAttributeChange } = await import('../lib/waitForAttributeChange.js');
+                    await waitForAttributeChange(this, dh, (s) => s === null);
+                }
                 services.definer.dispatchEvent(new CustomEvent(ccb, {
                     detail: {
                         instance: this,

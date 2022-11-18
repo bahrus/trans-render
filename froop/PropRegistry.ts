@@ -58,9 +58,9 @@ export class PropRegistry extends Svc{
         createCustomEl.addEventListener(acb, async e => {
             const acbE = (e as CustomEvent).detail as IAttrChgCB;
             const {instance, name, newVal, oldVal} = acbE;
-            const {parse: doAttr} = await import('./parse.js');
+            const {parse} = await import('./parse.js');
             await args.definer!.resolveInstanceSvcs(args, instance);
-            await doAttr(acbE, props, defaults);
+            await parse(acbE, props, defaults);
         });
         addProps.addEventListener(npb, async e => {
             const inpb = (e as CustomEvent).detail as INewPropagator;
