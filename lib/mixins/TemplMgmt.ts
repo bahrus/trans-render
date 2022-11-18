@@ -52,7 +52,6 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
                 //const isReally = (<any>this.constructor).isReally as string;
                 let templ: HTMLTemplateElement | undefined = compiledTemplateMap.get(mainTemplate)!
                 if(templ === undefined){
-                    console.log('parsing');
                     templ = document.createElement('template');
                     templ.innerHTML = mainTemplate;
                     compiledTemplateMap.set(mainTemplate, templ);

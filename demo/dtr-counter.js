@@ -22,6 +22,9 @@ const ce = new CE({
             mainTemplate: String.raw `<button part=down data-d=-1>-</button><span part=count></span><button part=up data-d=1>+</button>`,
             styles: String.raw `
 <style>
+    :host{
+        display: block;
+    }
     * {
       font-size: 200%;
     }

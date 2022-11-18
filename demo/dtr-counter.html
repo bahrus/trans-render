@@ -9,7 +9,8 @@
 <body>
     <dtr-counter count="3000"></dtr-counter>
     <dtr-counter count="2000"></dtr-counter>
-    <dtr-counter count="1000"></dtr-counter>
+    <dtr-counter id='test' count="1000"></dtr-counter>
+    <button onclick='changeTemplate()'>change template</button>
     <script type=importmap>{
         "imports":{
             "xtal-element/": "../node_modules/xtal-element/",
@@ -18,6 +19,13 @@
     }</script>
     <script type=module>
         import './dtr-counter.js';
+    </script>
+    <script>
+        function changeTemplate(){
+            test.mainTemplate = String.raw `
+<div>I am here</div>           
+            `;
+        }
     </script>
 </body>
 </html>

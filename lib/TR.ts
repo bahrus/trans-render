@@ -120,13 +120,12 @@ export class TR implements Transformer{
                             case 'querySelector':
                                 const el = (fragment as DocumentFragment).querySelector(query);
                                 if(el !== null){
-                                    matchMap[key] = [new WeakRef(el)];
+                                    matches = matchMap[key] = [new WeakRef(el)];
                                 }
                                 break;
                             default:
-                                matchMap[key] = Array.from((fragment as DocumentFragment).querySelectorAll(query)).map(el => new WeakRef(el));
+                                matches = matchMap[key] = Array.from((fragment as DocumentFragment).querySelectorAll(query)).map(el => new WeakRef(el));
                         }
-                        matches = matchMap[key];
                        
                     }
                 }
