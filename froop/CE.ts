@@ -72,6 +72,10 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
             static observedAttributes = observedAttributes;
             static ceDef = args;
             static formAssociated = formAss;
+            constructor(){
+                super();
+                this._internals_ = this.attachInternals();
+            }
             attributeChangedCallback(name: string, oldVal: string, newVal: string){
                 if(super.attributeChangedCallback) super.attributeChangedCallback(name, oldVal, newVal);
                 services!.definer.dispatchEvent(new CustomEvent(acb, {

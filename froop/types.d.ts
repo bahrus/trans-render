@@ -1,8 +1,8 @@
 import {PropInfo, Action, DefineArgs, Scope, Matches} from '../lib/types';
 
 export interface IEventConfig<MCProps = any, MCActions = MCProps, TAction = Action>{
-    on: string,
-    of: EventTarget,
+    on?: string,
+    of?: 'tbd' | EventTarget,
     doInit?: boolean,
 }
 

@@ -299,10 +299,10 @@ export interface Transform<TMixinComposite = any> extends LogicOp<TMixinComposit
     match: {[key: string]: MatchRHS<TMixinComposite>}
 }
 
-export interface Action<MCProps = any> extends LogicOp<MCProps>{
+export interface Action<MCProps = any, MCActions = MCProps> extends LogicOp<MCProps>{
     target?: keyof MCProps; 
     debug?: boolean;
-    setFree?: (keyof MCProps & string)[],
+    //setFree?: (keyof MCProps & string)[],
 }
 
 export type MatchRHS<TMixinComposite = any> = string;

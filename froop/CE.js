@@ -62,6 +62,10 @@ export class CE extends Svc {
             static observedAttributes = observedAttributes;
             static ceDef = args;
             static formAssociated = formAss;
+            constructor() {
+                super();
+                this._internals_ = this.attachInternals();
+            }
             attributeChangedCallback(name, oldVal, newVal) {
                 if (super.attributeChangedCallback)
                     super.attributeChangedCallback(name, oldVal, newVal);

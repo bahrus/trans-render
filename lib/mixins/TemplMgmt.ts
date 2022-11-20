@@ -83,6 +83,8 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
             this.#needToAppendClone = false;
         }
         this.removeAttribute('defer-rendering');
+        const internals = (<any>base)._internals_;
+        internals.states.add('--mounted');
         this.clonedTemplate = undefined;
     }
     initUnsafeTCnt({}: this){
