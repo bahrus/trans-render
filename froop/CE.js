@@ -84,8 +84,8 @@ export class CE extends Svc {
                     super.connectedCallback();
                 const dh = 'defer-hydration';
                 if (this.hasAttribute(dh)) {
-                    const { waitForAttributeChange } = await import('../lib/waitForAttributeChange.js');
-                    await waitForAttributeChange(this, dh, (s) => s === null);
+                    const { wfac } = await import('../lib/wfac.js');
+                    await wfac(this, dh, (s) => s === null);
                 }
                 services.definer.dispatchEvent(new CustomEvent(ccb, {
                     detail: {

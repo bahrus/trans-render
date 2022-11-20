@@ -11,17 +11,20 @@ export class PE {
         if (vals[1] !== undefined) {
             for (const methodName in vals[1]) {
                 const ec = vals[1][methodName];
+                const { of, doInit, on } = ec;
+                if (!(of instanceof EventTarget))
+                    throw { ec };
                 const ac = new AbortController();
                 const method = instance[methodName];
                 const isAsync = method.constructor.name === 'AsyncFunction';
                 //console.log({method, isAsync, key, ec});
-                ec.of.addEventListener(ec.on, async (e) => {
+                of.addEventListener(on, async (e) => {
                     const ret = isAsync ? await instance[methodName](instance, e) : instance[methodName](instance, e);
                     //console.log({ret});
                     await this.recurse(instance, methodName, ret);
                 }, { signal: ac.signal });
                 this.#abortControllers.get(originMethodName).push(ac);
-                if (ec.doInit) {
+                if (doInit) {
                     const ret = isAsync ? await instance[methodName](instance) : instance[methodName](instance);
                     await this.recurse(instance, methodName, ret);
                 }

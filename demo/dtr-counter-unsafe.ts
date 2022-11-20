@@ -1,5 +1,5 @@
 import {TemplMgmt, TemplMgmtProps, TemplMgmtActions, beTransformed} from '../lib/mixins/TemplMgmt.js';
-import {CE} from '../lib/CE.js';
+import {CE} from '../froop/CE.js';
 import { RenderContext } from '../lib/types.js';
 
 export interface DTRCounterProps {
