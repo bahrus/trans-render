@@ -83,7 +83,7 @@ export class DTR extends TR{
                     (<any>target)[lhsProp] = rhs;
                  }else{
                     ctx!.rhs = [rhs];
-                    return await this.do_object(rc);
+                    return await this.do_array();
                  }
             }else{
                 return await super.do_object(ctx!);
