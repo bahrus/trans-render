@@ -79,7 +79,7 @@ export class CE extends Svc {
                 }));
             }
             async connectedCallback() {
-                //console.log('connectedCallback');
+                console.debug('connectedCallback');
                 if (super.connectedCallback)
                     super.connectedCallback();
                 const dh = 'defer-hydration';

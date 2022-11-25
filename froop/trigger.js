@@ -1,10 +1,10 @@
 import { pc } from './const.js';
 export function trigger(instance, propagator, args) {
-    //console.log('addPropBagListener');
+    console.debug('addPropBagListener');
     propagator.addEventListener(pc, async (e) => {
         const chg = e.detail;
         const { key, oldVal, newVal } = chg;
-        //console.log({key, oldVal, newVal});
+        console.debug({ key, oldVal, newVal });
         const { services } = args;
         const { itemizer: createPropInfos } = services;
         await createPropInfos.resolve();
@@ -21,7 +21,7 @@ export function trigger(instance, propagator, args) {
             const config = args.config;
             const { actions } = config;
             const changedKeys = propagator.dk;
-            //console.log({changedKeys, actions});
+            console.debug({ changedKeys, actions });
             propagator.dk = new Set();
             let foundAction = false;
             for (const methodName in actions) {
@@ -38,7 +38,7 @@ export function trigger(instance, propagator, args) {
             }
             if (foundAction) {
                 const { act: doActions } = await import('./act.js');
-                //console.log({instance, filteredActions});
+                console.debug({ instance, filteredActions });
                 doActions(instance, filteredActions);
             }
         })();

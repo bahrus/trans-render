@@ -66,7 +66,7 @@ export class PropRegistry extends Svc {
             // if(connectActions){
             //     await connectActions.instanceResolve(instance);
             // }
-            //console.log('doPropUp');
+            console.debug('doPropUp');
             await args.definer.resolveInstanceSvcs(args, instance);
             this.#propUp(instance, this.allPropNames, defaults);
         });

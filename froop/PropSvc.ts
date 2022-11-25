@@ -17,7 +17,7 @@ export class PropSvc extends Svc implements IPropSvc{
         const {definer: createCustomEl, itemizer: createPropInfos} = services!;
         await createCustomEl.resolve();
         createCustomEl.addEventListener(ccb, e => {
-            //console.log('connectedCallback');
+            console.debug('connectedCallback');
             const connection = (e as CustomEvent).detail as IConnectedCB;
             const {instance} = connection;
             const propBag = this.#getStore(instance, true); //causes propagator to be created
@@ -27,9 +27,6 @@ export class PropSvc extends Svc implements IPropSvc{
             this.stores.delete(disconnection.instance);
         });
         await createPropInfos.resolve();
-        if(Object.keys(createPropInfos.propInfos).length > 0){
-
-        }
         this.#addProps(createCustomEl.custElClass, createPropInfos.propInfos);  
         this.resolved = true;      
     }
