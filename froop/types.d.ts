@@ -17,6 +17,11 @@ export interface IPropagator extends EventTarget{
     dk: Set<string>;
 
     /**
+     * Mature keys
+     */
+    mk: Set<string>;
+
+    /**
      * timeout handles - key is name of prop
      * used for simple debouncing of echo notifications in XtalElement
      */

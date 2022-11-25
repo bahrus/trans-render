@@ -10,10 +10,12 @@ export function trigger(instance, propagator, args) {
         await createPropInfos.resolve();
         const { nonDryProps } = createPropInfos;
         if (!nonDryProps.has(key)) {
-            if (oldVal === newVal)
+            if (oldVal === newVal && propagator.mk.has(key))
                 return;
         }
         propagator.dk.add(key);
+        propagator.mk.add(key);
+        console.debug({ key, oldVal, newVal });
         (async () => {
             const filteredActions = {};
             const { pq } = await import('../lib/pq.js');

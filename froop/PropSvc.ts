@@ -123,6 +123,10 @@ export class Propagator extends EventTarget{
      */
     dk = new Set<string>();
     
+    /**
+     * mature keys
+     */
+    mk = new Set<string>();
 
 }
 
