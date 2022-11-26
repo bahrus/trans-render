@@ -115,8 +115,8 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
         }
         this.custElClass = newClass as any as {new(): HTMLElement}
         this.resolved = true;
-        const {propper: addProps, hooker: connectActions} = services!;
-        await addProps.resolve();
+        const {propper, /*hooker: connectActions*/} = services!;
+        await propper.resolve();
         //await connectActions?.resolve();
         
         def(newClass);

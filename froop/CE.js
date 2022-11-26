@@ -105,8 +105,8 @@ export class CE extends Svc {
         }
         this.custElClass = newClass;
         this.resolved = true;
-        const { propper: addProps, hooker: connectActions } = services;
-        await addProps.resolve();
+        const { propper, /*hooker: connectActions*/ } = services;
+        await propper.resolve();
         //await connectActions?.resolve();
         def(newClass);
     }

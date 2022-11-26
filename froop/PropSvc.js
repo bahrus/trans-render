@@ -18,6 +18,7 @@ export class PropSvc extends Svc {
             const connection = e.detail;
             const { instance } = connection;
             const propBag = this.#getStore(instance, true); //causes propagator to be created
+            //ideally this is where we call propup
         });
         createCustomEl.addEventListener(dcb, e => {
             const disconnection = e.detail;

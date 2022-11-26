@@ -21,6 +21,7 @@ export class PropSvc extends Svc implements IPropSvc{
             const connection = (e as CustomEvent).detail as IConnectedCB;
             const {instance} = connection;
             const propBag = this.#getStore(instance, true); //causes propagator to be created
+            //ideally this is where we call propup
         });
         createCustomEl.addEventListener(dcb, e => {
             const disconnection = (e as CustomEvent).detail as IDisconnectedCB;
@@ -48,6 +49,8 @@ export class PropSvc extends Svc implements IPropSvc{
         }
         return propagator;
     }
+
+
 
     #syncUp(instance: HTMLElement, propagator: Propagator){
         const unhydrated = this.#unhydratedStores.get(instance);

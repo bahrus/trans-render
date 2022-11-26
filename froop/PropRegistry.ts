@@ -1,6 +1,6 @@
 import {PropInfo, WCConfig, Action, PropInfoTypes} from '../lib/types';
 import {CEArgs, IPropRegistrar as IPropRegistrar, IAttrChgCB, INewPropagator} from './types';
-import {acb, npb, r, mse} from './const.js';
+import { npb, r, mse} from './const.js';
 import { Svc } from './Svc.js';
 
 export class PropRegistry extends Svc{
@@ -35,10 +35,8 @@ export class PropRegistry extends Svc{
         }
         const actions = config.actions;
         if(actions !== undefined){
-            //const {getProps} = await import('../froop/getProps.js')
             for(const methodName in actions){
                 const action = actions[methodName] as string | Action;
-                //const typedAction = (typeof action === 'string') ? {ifAllOf:[action]} as Action : action! as Action;
                 const upon = this.getPropsFromAction(action);
                 for(const dependency of upon){
                     if(props[dependency] === undefined){
@@ -48,30 +46,19 @@ export class PropRegistry extends Svc{
                 }
             }
         }
-        //await this.api(args, props);
         this.nonDryProps = nonDryProps;
         this.propInfos = props;
         this.allPropNames = Object.keys(props);
         
-        const {services} = args;
-        const {definer: createCustomEl, propper: addProps, hooker: connectActions} = services!;
-        createCustomEl.addEventListener(acb, async e => {
-            const acbE = (e as CustomEvent).detail as IAttrChgCB;
-            const {instance, name, newVal, oldVal} = acbE;
-            const {parse} = await import('./parse.js');
-            await args.definer!.resolveInstanceSvcs(args, instance);
-            await parse(acbE, props, defaults);
-        });
-        addProps.addEventListener(npb, async e => {
-            const inpb = (e as CustomEvent).detail as INewPropagator;
-            const {instance} = inpb;
-            // if(connectActions){
-            //     await connectActions.instanceResolve(instance);
-            // }
-            console.debug('doPropUp');
-            await args.definer!.resolveInstanceSvcs(args, instance);
-            this.#propUp(instance, this.allPropNames, defaults);
-        });
+        // const {services} = args;
+        // const {definer} = services!;
+        // definer.addEventListener(acb, async e => {
+        //     const acbE = (e as CustomEvent).detail as IAttrChgCB;
+        //     const {instance, name, newVal, oldVal} = acbE;
+        //     const {parse} = await import('./parse.js');
+        //     await args.definer!.resolveInstanceSvcs(args, instance);
+        //     await parse(acbE, props, defaults);
+        // });
         this.resolved = true;
         
     }
@@ -86,26 +73,6 @@ export class PropRegistry extends Svc{
                 prop.type = t as PropInfoTypes;
             }
 
-        }
-    }
-
-    /**
-     * Needed for asynchronous loading
-     * @param props Array of property names to "upgrade", without losing value set while element was Unknown
-     * @param defaultValues:   If property value not set, set it from the defaultValues lookup
-     * @private
-     */
-    #propUp<T>(instance: HTMLElement, props: string[], defaultValues?: T){
-        for(const prop of props){
-            let value = (<any>instance)[prop];
-            if(value === undefined && defaultValues !== undefined){
-                value = (<any>defaultValues)[prop];
-            }
-            if (instance.hasOwnProperty(prop)) {
-                delete (<any>instance)[prop];
-            }
-            //some properties are read only.
-            try{(<any>instance)[prop] = value;}catch{}
         }
     }
 
