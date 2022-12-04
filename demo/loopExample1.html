@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <template id='templ'>
+        <ul>
+            <li>
+                <span></span>
+            </li>
+        </ul>
+    </template>
+    <div id='target'></div>
+
+    <button id='second'>Do second time</button>
+    <script type='module'>
+        import {DTR} from '../lib/DTR.js';
+        const iff = true || false;
+        const dtr = await DTR.transform(templ, {
+            host: {list: ['a', 'b', 'c']},
+            match:{
+                li: [[], {
+                        list: 'list',
+                    },
+                    
+                ]
+            }
+        }, target);
+        second.addEventListener('click', e => {
+            dtr.transform(target);
+        });
+    </script>
+</body>
+</html>
