@@ -3,7 +3,15 @@ export interface RenderContextEndUserProps<T = Element, TItem = any>{
     host?: any | undefined;
     hostController?: any;
     match?: Matches;
+    make?: CSSSelectorBeHavingMap
 }
+
+export interface BeHaving<TEndUserProps = any> {
+    be: string,
+    having: TEndUserProps
+}
+
+export type CSSSelectorBeHavingMap = {[key: string]: BeHaving | BeHaving[]}
 
 export interface RenderContext<T = Element, TItem = any> extends RenderContextEndUserProps<T, TItem>, getValArg {
     ctx?: RenderContext | undefined;
@@ -30,6 +38,11 @@ export interface RenderContext<T = Element, TItem = any> extends RenderContextEn
     trace?: boolean;
     //proxyHost?: ProxyHost; //TODO
     //stack?: RenderContext[];
+}
+
+export interface BeHaving<TEndUserProps = any> {
+    be: string,
+    having: TEndUserProps
 }
 
 

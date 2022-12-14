@@ -116,43 +116,49 @@ export class DTR extends TR{
                 }
                 break;
             default:
-                const len = rhs.length;
-                switch(len){
-                    case 1:
-                        const {P} = await import('./P.js');
-                        const p = new P();
-                        await p.do(ctxCopy);
-                        break;
-                    case 2:
-                        const {PE} = await import('./PE.js');
-                        const pe = new PE();
-                        await pe.do(ctxCopy);
-                        break;
-                    case 3:
-                        const {PEA} = await import('./PEA.js');
-                        const pea = new PEA();
-                        await pea.do(ctxCopy);
-                        this.flushCache();
-                        break;
-                    case 4:
-                        if(typeof rhs[3] === 'string'){
-                            let str = rhs[3];
-                            if(typeof Sanitizer !== undefined){
-                                const sanitizer = new Sanitizer(); 
-                                str = sanitizer.sanitizeFor("template", str);
+                if(Array.isArray(head)){
+                    throw 'DTR.NI';
+                }else{
+                    const len = rhs.length;
+                    switch(len){
+                        case 1:
+                            const {P} = await import('./P.js');
+                            const p = new P();
+                            await p.do(ctxCopy);
+                            break;
+                        case 2:
+                            const {PE} = await import('./PE.js');
+                            const pe = new PE();
+                            await pe.do(ctxCopy);
+                            break;
+                        case 3:
+                            const {PEA} = await import('./PEA.js');
+                            const pea = new PEA();
+                            await pea.do(ctxCopy);
+                            this.flushCache();
+                            break;
+                        case 4:
+                            if(typeof rhs[3] === 'string'){
+                                let str = rhs[3];
+                                if(typeof Sanitizer !== undefined){
+                                    const sanitizer = new Sanitizer(); 
+                                    str = sanitizer.sanitizeFor("template", str);
+                                }
+                                const templ = document.createElement('template');
+                                templ.innerHTML = str;
+                                rhs[3] = templ;
+                                const {PEAT} = await import('./PEAT.js');
+                                const peat = new PEAT();
+                                this.flushCache();
+                                await peat.do(ctxCopy);
+                                this.flushCache();
                             }
-                            const templ = document.createElement('template');
-                            templ.innerHTML = str;
-                            rhs[3] = templ;
-                            const {PEAT} = await import('./PEAT.js');
-                            const peat = new PEAT();
-                            this.flushCache();
-                            await peat.do(ctxCopy);
-                            this.flushCache();
-                        }
-                    default:
-                        throw 'DTR2.NI';//Not Implemented
+    
+                        default:
+                            throw 'DTR2.NI';//Not Implemented
+                    }
                 }
+
         }
     }
     #dependencies: Set<string> | undefined;
