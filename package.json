@@ -48,6 +48,7 @@
     "./lib/intersection.js": "./lib/intersection.js",
     "./lib/linkTemplates.js": "./lib/linkTemplates.js",
     "./lib/lispToCamel.js": "./lib/lispToCamel.js",
+    "./lib/makeBe.js": "./lib/makeBe.js",
     "./lib/mergeDeep.js": "./lib/mergeDeep.js",
     "./lib/mixins/TemplMgmt.js": "./lib/mixins/TemplMgmt.js",
     "./lib/mixins/notify.js": "./lib/mixins/notify.js",

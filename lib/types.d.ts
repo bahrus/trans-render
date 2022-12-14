@@ -13,6 +13,10 @@ export interface BeHaving<TEndUserProps = any> {
 
 export type CSSSelectorBeHavingMap = {[key: string]: BeHaving | BeHaving[]}
 
+export interface Attachable{
+    attach(target: Element): Promise<void>;
+}
+
 export interface RenderContext<T = Element, TItem = any> extends RenderContextEndUserProps<T, TItem>, getValArg {
     ctx?: RenderContext | undefined;
     transform?: (sourceOrTemplate: HTMLElement | DocumentFragment, ctx: RenderContext, target?: HTMLElement | DocumentFragment) => Promise<RenderContext<T>>;
