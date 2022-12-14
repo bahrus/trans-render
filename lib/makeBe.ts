@@ -8,7 +8,13 @@ export function makeBe(instance: Element, cssSelector: string, make: CSSSelector
         const wcName = 'be-' + be;
         const aInstance = instance as any;
         if(aInstance.beDecorated === undefined) aInstance.beDecorated = {};
-        aInstance.beDecorated[be] = having;
+        const attrib = instance.getAttribute(wcName);
+        const having2  = {...having} || {};
+        if(attrib && attrib.startsWith('{')){
+            const val = JSON.parse(attrib);
+            Object.assign(having2, val);
+        }
+        aInstance.beDecorated[be] = having2;
         if(customElements.get(wcName)){
             const dem = document.createElement(wcName) as any as Attachable;
             dem.attach.bind(instance);

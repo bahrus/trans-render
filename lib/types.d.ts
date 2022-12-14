@@ -8,7 +8,8 @@ export interface RenderContextEndUserProps<T = Element, TItem = any>{
 
 export interface BeHaving<TEndUserProps = any> {
     be: string,
-    having: TEndUserProps
+    having: TEndUserProps,
+    
 }
 
 export type CSSSelectorBeHavingMap = {[key: string]: BeHaving | BeHaving[]}
