@@ -10,7 +10,6 @@ export async function MainTransforms(
             const ctx: RenderContext = {
                 host: self,
                 match: hydratingTransform,
-                plugins: transformPlugins,
             }
             const ctor = DTRCtor === undefined ? DTR : DTRCtor;
             const dtr = new ctor(ctx);
@@ -22,7 +21,6 @@ export async function MainTransforms(
                 const ctx: RenderContext = {
                     host: self,
                     match: t,
-                    plugins: transformPlugins,
                 }
                 const ctor = DTRCtor === undefined ? DTR : DTRCtor;
                 const dtr = new ctor(ctx);

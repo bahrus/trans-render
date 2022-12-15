@@ -9,7 +9,7 @@ export interface RenderContextEndUserProps<T = Element, TItem = any>{
 export interface BeHaving<TEndUserProps = any> {
     be: string,
     having: TEndUserProps,
-    
+
 }
 
 export type CSSSelectorBeHavingMap = {[key: string]: BeHaving | BeHaving[]}
@@ -31,7 +31,7 @@ export interface RenderContext<T = Element, TItem = any> extends RenderContextEn
     val?: string | null;
     rhs?: any;
     
-    plugins?: {[key: string]: boolean} | TransformPlugins<T, TItem>;
+    //plugins?: {[key: string]: boolean} | TransformPlugins<T, TItem>;
     key?: string;
     queryCache?: WeakMap<Element | DocumentFragment, {[key: string]: NodeListOf<Element>}>;
     abort?: boolean | undefined;
