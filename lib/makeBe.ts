@@ -1,15 +1,23 @@
 import {CSSSelectorBeHavingMap, Attachable} from './types';
+import {getQuery} from './specialKeys.js';
 
 export function makeBe(fragment: Element | DocumentFragment, make: CSSSelectorBeHavingMap){
     for(const key in make){
-        fragment.querySelectorAll(key).forEach(instance => {
+        let cssSelector = key;
+        if(hasCapitalLetterRegExp.test(key)){
+            const q = getQuery(key);
+            cssSelector = q.query;
+        }
+        fragment.querySelectorAll(cssSelector).forEach(instance => {
             makeItBe(instance, key, make);
         });
     }
 }
 
-export function makeItBe(instance: Element, cssSelector: string, make: CSSSelectorBeHavingMap){
-    const beHavingOrBeHavings = make[cssSelector];
+const hasCapitalLetterRegExp = /[A-Z]/;
+
+export function makeItBe(instance: Element, key: string, make: CSSSelectorBeHavingMap){
+    const beHavingOrBeHavings = make[key];
     const beHavings = Array.isArray(beHavingOrBeHavings) ? beHavingOrBeHavings : [beHavingOrBeHavings];
     for(const beHaving of beHavings){
         const {be, having} = beHaving;

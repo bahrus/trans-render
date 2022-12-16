@@ -8,8 +8,7 @@ export interface RenderContextEndUserProps<T = Element, TItem = any>{
 
 export interface BeHaving<TEndUserProps = any> {
     be: string,
-    having: TEndUserProps,
-
+    having: TEndUserProps | undefined,
 }
 
 export type CSSSelectorBeHavingMap = {[key: string]: BeHaving | BeHaving[]}
@@ -45,10 +44,6 @@ export interface RenderContext<T = Element, TItem = any> extends RenderContextEn
     //stack?: RenderContext[];
 }
 
-export interface BeHaving<TEndUserProps = any> {
-    be: string,
-    having: TEndUserProps
-}
 
 
 export interface TransformPluginSettings<T = Element, TItem = any> {
