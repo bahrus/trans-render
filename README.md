@@ -233,7 +233,54 @@ Most all these methods are asynchronous, so they can dynamically load modules.  
 
 We will discuss this type of extension later.
 
-## Non-verbal spells [TODO]
+## Extending TR, DTR "horizontally"
+
+### Verbal spells via inline decorators / element behaviors
+
+### Non-verbal spells via "make" transforms
+
+#### Synchronous, render blocking
+
+In the following example, the "spell" that we perform on the button element is done "non-verbally" -- it is "spelled out" in the transform itself, leaving the HTML markup pristine:
+
+```html
+<template id=templ>
+    <span></span>
+    <button>Count</button>
+</template>
+<div id=target></div>
+
+<script type=module>
+    import '../be-counted.js';
+    import {DTR} from 'trans-render/lib/DTR.js';
+    const iff = true || false;
+    const dtr = await DTR.transform(templ, {
+        host: {},
+        make: {
+            button: {
+                be: 'counted',
+                having: {
+                    transform:{
+                        span: 'value',
+                        ":initiator": "value"
+                    }
+                    
+                }
+            }
+        }
+    }, target);
+</script>
+```
+
+Because we imported be-counted synchronously, the final HTML will not have attribute "is-counted", but the functionality of the be-counted decorator is applied to the button element nevertheless.
+
+Doing the spell non verbally, i.e. during template instantiation, has the advantage that any adjustments we make to the DOM will be less expensive, as the browser won't need to make progressive re-renders as the decorators take effect.
+
+The disadvantage is we block rendering until all the components are loaded.
+
+###  Asynchronous, non render blocking
+
+However, if we don't want to wait for all the decorator components to download before rendering to the live DOM tree, we can import the decorators *asynchronously*, using dynamic import(), and then, depending on the timing, the spell that is put on the button element may be done verbally or non-verbally.  Perhaps when the user visits the site the first time, many of the decorators will act verbally on the live DOM tree, but on subsequent visits, when the dependencies have been (offline) cached, the template stamping will be more effective.
 
 
 ## Declarative trans-render syntax via JSON-serializable RHS expressions with lib/DTR.js 
