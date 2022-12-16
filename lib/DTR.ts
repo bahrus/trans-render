@@ -12,23 +12,12 @@ export class DTR extends TR{
     constructor(public ctx: RenderContext){
         super(ctx);
     }
-    //#initialized = false;
     getFirstToken(rhs: string){
         const split = rhs.substring(1).split(propSplitterRegExp);
         return split[0];
     }
     async transform(fragment: Element | DocumentFragment, fragmentManager?: Element){
-        // if(!this.#initialized){
-        //     const {ctx} = this;
-        //     //const {match, plugins} = ctx;
-        //     // if(plugins !== undefined){
-        //     //     const {awaitTransforms, toTransformMatch} = await import('./pluginMgr.js');
-        //     //     const pluggedInPlugins = await awaitTransforms(plugins as TransformPlugins);
-        //     //     ctx.plugins = pluggedInPlugins;
-        //     //     ctx.match = {...match, ...toTransformMatch(pluggedInPlugins)};
-        //     // }
-        //     this.#initialized = true;
-        // }
+
         const {ctx} = this;
         const {make} = ctx;
         if(make !== undefined){
@@ -57,24 +46,7 @@ export class DTR extends TR{
             await (<any>this)[verb](ctx);
         }
     }
-    // async do_string(): Promise<void> {
-    //     const {ctx} = this;
-    //     const {rhs} = ctx;
-    //     if(plugins !== undefined && plugins[rhs] !== undefined){
-    //         //method.constructor.name === 'AsyncFunction'
-    //         const processor = (plugins[rhs] as any).processor;
-    //         if(processor.constructor.name === 'AsyncFunction'){
-    //             const newRHS = await processor(ctx);
-    //             await this.doNewRHS(newRHS, ctx);
-    //         }else{
-    //             const newRHS = processor(ctx);
-    //             await this.doNewRHS(newRHS, ctx);
-    //         }
-            
-    //     }else{
-    //         return await super.do_string(ctx);
-    //     }
-    // }
+
     async do_object(rc: RenderContext): Promise<void> {
         const {rhs} = rc;
         if(Array.isArray(rhs)){
@@ -176,14 +148,6 @@ export class DTR extends TR{
             const {GetDep} = await import('./GetDep.js');
             const gd = new GetDep(this);
             this.#dependencies = await  gd.getAll();
-            // const returnObj = new Set<string>();
-            // const {ctx} = this;
-            // const {match} = ctx;
-            // for(const key in match){
-            //     const rhs = match[key];
-            //     await this.#getDepRHS(rhs, returnObj)
-            // }
-            // this.#dependencies = returnObj;
         }
         return this.#dependencies!;
     }

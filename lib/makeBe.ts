@@ -25,7 +25,6 @@ export function makeItBe(instance: Element, cssSelector: string, make: CSSSelect
         aInstance.beDecorated[be] = having2;
         if(customElements.get(wcName)){
             const dem = document.createElement(wcName) as any as Attachable;
-            //dem.attach.bind(dem);
             dem.attach(instance);
         }else{
             instance.setAttribute(wcName, '');
