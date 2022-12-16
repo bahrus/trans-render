@@ -282,6 +282,19 @@ The disadvantage is we block rendering until all the components are loaded.
 
 However, if we don't want to wait for all the decorator components to download before rendering to the live DOM tree, we can import the decorators *asynchronously*, using dynamic import(), and then, depending on the timing, the spell that is put on the button element may be done verbally or non-verbally.  Perhaps when the user visits the site the first time, many of the decorators will act verbally on the live DOM tree, but on subsequent visits, when the dependencies have been (offline) cached, the template stamping will be more effective.
 
+```html
+<template id=templ>
+    <span></span>
+    <button>Count</button>
+</template>
+<div id=target></div>
+
+<script type=module>
+    import('../be-counted.js');
+    ...
+</script>
+```
+
 
 ## Declarative trans-render syntax via JSON-serializable RHS expressions with lib/DTR.js 
 
