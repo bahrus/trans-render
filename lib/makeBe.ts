@@ -1,6 +1,14 @@
 import {CSSSelectorBeHavingMap, Attachable} from './types';
 
-export function makeBe(instance: Element, cssSelector: string, make: CSSSelectorBeHavingMap){
+export function makeBe(fragment: Element | DocumentFragment, make: CSSSelectorBeHavingMap){
+    for(const key in make){
+        fragment.querySelectorAll(key).forEach(instance => {
+            makeItBe(instance, key, make);
+        });
+    }
+}
+
+export function makeItBe(instance: Element, cssSelector: string, make: CSSSelectorBeHavingMap){
     const beHavingOrBeHavings = make[cssSelector];
     const beHavings = Array.isArray(beHavingOrBeHavings) ? beHavingOrBeHavings : [beHavingOrBeHavings];
     for(const beHaving of beHavings){
@@ -25,10 +33,3 @@ export function makeBe(instance: Element, cssSelector: string, make: CSSSelector
     }
 }
 
-export function makeItBe(fragment: Element | DocumentFragment, make: CSSSelectorBeHavingMap){
-    for(const key in make){
-        fragment.querySelectorAll(key).forEach(instance => {
-            makeBe(instance, key, make);
-        });
-    }
-}
