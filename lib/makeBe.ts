@@ -24,3 +24,11 @@ export function makeBe(instance: Element, cssSelector: string, make: CSSSelector
 
     }
 }
+
+export function makeItBe(fragment: Element | DocumentFragment, make: CSSSelectorBeHavingMap){
+    for(const key in make){
+        fragment.querySelectorAll(key).forEach(instance => {
+            makeBe(instance, key, make);
+        });
+    }
+}
