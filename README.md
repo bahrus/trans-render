@@ -235,7 +235,7 @@ We will discuss this type of extension later.
 
 ## Extending TR, DTR "horizontally"
 
-### Verbal spells via inline decorators / element behaviors
+### Verbal "spells" via inline decorators / element behaviors
 
 ### Non-verbal spells via "make" transforms
 
@@ -251,7 +251,7 @@ In the following example, the "spell" that we perform on the button element is d
 <div id=target></div>
 
 <script type=module>
-    import '../be-counted.js';
+    import 'be-counted/be-counted.js';
     import {DTR} from 'trans-render/lib/DTR.js';
     const iff = true || false;
     const dtr = await DTR.transform(templ, {
@@ -290,7 +290,7 @@ However, if we don't want to wait for all the decorator components to download b
 <div id=target></div>
 
 <script type=module>
-    import('../be-counted.js');
+    import('be-counted/be-counted.js');
     ...
 </script>
 ```
