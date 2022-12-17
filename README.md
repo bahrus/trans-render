@@ -248,11 +248,13 @@ For example:
 }'>Count</button>
 ```
 
-adds dynamic behavior to the button element, similar to how a custom element adds dynamic behavior to an unrecognized tag.
+That that within the options spelled out in the be-counted attribute, we see the DTR syntax this package provides, being applied, indicating in a consise, declarative way that the value of the count should be applied to the textContent property of the span element.
 
-So unlike the trans-render syntax, here we are intermingling inline binding right in the HTML itself, which hydrates as the JS dependencies download.  We are using these decorates to "cast spells" on the HTML markup -- "Be Counted!" in this example. 
+But in general, the element decorators/behaviors add dynamic behavior to the button element, similar to how a custom element adds dynamic behavior to an unrecognized tag.
 
-With SSR / SSG this is often the best we can do -- let the browser do what it does best, render HTML, then, as soon as possible, enhance the HTML.  But it comes at some cost, which might not be ideal for components that repeated all through the page.  That's precisely what templates give us.  
+So unlike the trans-render syntax, here we are intermingling inline binding right in the HTML itself, which hydrates as the JS dependencies download.  We are using these decorators to "cast spells" on the HTML markup -- "Be Counted!" in this example. 
+
+With SSR / SSG this is often the best we can do -- let the browser do what it does best, render HTML, then, as soon as possible, enhance the HTML with element decorators/behaviors.  But it comes at some cost, which might not be ideal for components that repeat all through the page.  That's precisely what templates give us.  
 
 So what follows are two fundamental ways we can carry over this way of casting spells inline, but instead keeping to the spirit of the trans-render approach -- casting the spells from a distance.
 
@@ -293,7 +295,9 @@ In the following example, the "spell" that we perform on the button element is d
 </script>
 ```
 
-Because we imported be-counted synchronously, the final HTML will not have attribute "is-counted", as it would for server-render element decorators, but the identical logic/functionality of the be-counted decorator is applied to the button element nevertheless.
+So essentially the "verbal" attribute got removed from the button element, and has moved over into the settings of the transform, which quietly applies the identical logic, without the need for attributes being added on the button element.
+
+To repeat for emphasis:  Because we imported be-counted synchronously, the final HTML will not have attribute "is-counted", as it would for server-render element decorators, but the identical logic/functionality of the be-counted decorator is applied to the button element nevertheless.
 
 Doing the spell non verbally, i.e. during template instantiation, has the advantage that any adjustments we make to the DOM will be less expensive, as the browser won't need to make progressive re-renders as the decorators take effect.
 
