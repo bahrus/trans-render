@@ -248,15 +248,15 @@ For example:
 }'>Count</button>
 ```
 
-Note that within the options spelled out in the be-counted attribute, we see the DTR syntax this package provides, being applied, indicating in a consise, declarative way that the value of the count should be applied to the textContent property of the span element.
+Note that within the options spelled out in the be-counted attribute, we see the DTR syntax this package provides, being applied, indicating in a concise, declarative way that the value of the count should be applied to the textContent property of the span element.
 
-But in general, the element decorators/behaviors add dynamic behavior to the button element, similar to how a custom element adds dynamic behavior to an unrecognized tag.
+But more generally, from a 30,000 above the ground vantage point, the element decorators/behaviors add dynamic behavior to the button element, similar to how a custom element adds dynamic behavior to an unrecognized tag.  In no way are be-decorated element behaviors expected to use trans-render syntax.  Some do, many don't.
 
-So unlike the trans-render syntax, here we are intermingling inline binding right in the HTML itself, which hydrates as the JS dependencies download.  We are using these decorators to "cast spells" on the HTML markup -- "Be Counted!" in this example. 
+Looked at that vantage point, custom-attribute based element decorators/behaviors are a way of intermingling inline binding right in the HTML itself, which hydrates as the JS dependencies download.  We are using these decorators to "cast spells" on the HTML markup -- "Be Counted!" in this example. 
 
-With SSR / SSG this is often the best we can do -- let the browser do what it does best, render HTML, then, as soon as possible, enhance the HTML with element decorators/behaviors.  But it comes at some cost, which might not be ideal for components that repeat all through the page.  Progressively enhancing HTML isn't optimal when working with templates, which are optimized for repeated HTML, which is the specialty of Web components.  So inline element behavior/decorators would be somewhat limited in usefulness, if we can't apply the same logic to the Web Component / repeating HTML scenario.    
+With SSR / SSG this is often the best we can do -- let the browser do what it does best, render HTML, then, as soon as possible, enhance the HTML with dynamic behavior as defined by the element decorators/behaviors.  But it comes at some cost, which might not be ideal for components that repeat all through the page.  Progressively enhancing HTML isn't optimal when working with templates, which are optimized for repeated HTML, which is the specialty of Web components.  So inline element behavior/decorators would be somewhat limited in usefulness, if we can't apply the same logic to the Web Component / repeating HTML scenario.    
 
-What follows, then, is a way we can have our cake and eat it to.  We provide two fundamental ways we can carry over this way of casting spells inline, but instead keeping to the spirit of the trans-render approach -- casting the spells from a distance, during template instantiation.
+What follows, then, is a way we can have our cake and eat it to.  We provide two fundamental ways we can carry over this way of casting spells, but instead of doing so inline, rahter by keeping to the spirit of the trans-render approach -- casting the spells from a distance, during template instantiation.
 
  A nice analogy might be the Harry Potter series (for example), where the students first learn to cast spells verbally.  As they become more advanced, they learn that there are advantages to being able to cast the spells quietly.  So we will use that analogy in what follows -- casting "non verbal spells".  The spells don't necessarily add / require any inline attributes, depending on the timing.
 
