@@ -307,6 +307,8 @@ What this package does is see if the decorator is already defined in memory.  If
 
 So typically when the user visits the site the first time, many of the decorators will act "verbally" on the live DOM tree, progressively enhancing the server rendered HTML  but on subsequent visits, when the dependencies have been (offline) cached, the template stamping will be apply more and more of the logic preemptively, so that it hydrates more quickly, with less strain on the browser.
 
+And as we can see with the example above, we can seamlessly, recursively switch modes between the transform (match) expressions and the make expressions.
+
 We can do this by simply taking advantage of the dynamic import:
 
 ```html
