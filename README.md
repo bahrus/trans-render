@@ -322,8 +322,17 @@ We can do this by simply taking advantage of the dynamic import:
 </script>
 ```
 
+## Match vs Make
+
+So now we have no less than two ways of "binding from a distance" -- via the transform/match expressions, and via the transform/make expressions.
+
+One significant difference between them is that the transform/match expressions are capable of being re-applied as the host model / property values change.  
+
+The transform/make expressions provide no such support.  However, the decorators themselves can choose to hook up with the host and essentially accomplish the same thing, but that is internal to each decorator.  From the point of view of this package, those decorators are black boxes, so no assistance with binding is provided.  What this package does provide is to optionally apply mutation observers on the rendered content, after appending the cloned template into the live DOM tree, so that if new elements matching the make expressions appear, it automatically gets the same behaviors attached.
 
 ## Declarative trans-render syntax via JSON-serializable RHS expressions with lib/DTR.js 
+
+
 
 The examples so far have relied heavily on arrow functions.  (In the case of plugins, we are, behind the scenes, amending the matches to include additional, hidden arrow functions on the RHS.)
 
