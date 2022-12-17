@@ -3,7 +3,7 @@ import {TemplMgmtBaseMixin} from './TemplMgmt.js';
 import {DTR} from '../DTR.js';
 export async function MainTransforms(
         self:  any, 
-        {hydratingTransform, transform, transformPlugins, DTRCtor}: TransformPacket,
+        {hydratingTransform, transform, DTRCtor}: TransformPacket,
         fragment: DocumentFragment
     ){
         if(hydratingTransform !== undefined){

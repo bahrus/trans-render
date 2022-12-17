@@ -3,7 +3,7 @@ import {TemplMgmtBaseMixin} from './TemplMgmt.js';
 import {MainTransforms} from './MainTransforms.js';
 export function HomeIn(
     self:  TemplMgmtBaseMixin & HTMLElement, 
-    {hydratingTransform, transformPlugins, DTRCtor, homeInOn}: TemplMgmtBase,
+    {hydratingTransform, DTRCtor, homeInOn}: TemplMgmtBase,
     fragment: DocumentFragment
 ){
     for(const key in homeInOn){
@@ -13,7 +13,6 @@ export function HomeIn(
         }
         const transformPacket = homeInOn[key];
         const base: TransformPacket = {
-            transformPlugins,
             DTRCtor,
             ...transformPacket,
         }

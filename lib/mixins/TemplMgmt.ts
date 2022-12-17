@@ -66,7 +66,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
     }
 
     async doTemplMount(base: TemplMgmtBase){
-        const {hydratingTransform, transform, mntCnt, clonedTemplate, noshadow, transformPlugins, DTRCtor, homeInOn} = base;
+        const {hydratingTransform, transform, mntCnt, clonedTemplate, noshadow, DTRCtor, homeInOn} = base;
         const fragment = clonedTemplate === undefined ? 
             noshadow ? this : this.shadowRoot!
             : clonedTemplate as DocumentFragment;

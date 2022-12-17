@@ -4,7 +4,7 @@ export interface RenderContextEndUserProps<T = Element, TItem = any>{
     hostController?: any;
     match?: Matches;
     make?: CSSSelectorBeHavingMap;
-    
+
 }
 
 export interface BeHaving<TEndUserProps = any> {
@@ -22,7 +22,6 @@ export interface RenderContext<T = Element, TItem = any> extends RenderContextEn
     ctx?: RenderContext | undefined;
     transform?: (sourceOrTemplate: HTMLElement | DocumentFragment, ctx: RenderContext, target?: HTMLElement | DocumentFragment) => Promise<RenderContext<T>>;
     idx?: number;
-    //mode?: 'init' | 'update';
     target?: T | null;
     targetProp?: string;
     options?: RenderOptions | undefined;
@@ -44,32 +43,30 @@ export interface RenderContext<T = Element, TItem = any> extends RenderContextEn
 
 
 
-export interface TransformPluginSettings<T = Element, TItem = any> {
-    processor: (ctx: RenderContext<T, TItem>) => any;
-    selector?: string;
-    blockWhileWaiting?: boolean;
-    ready?: boolean;
-    //TODO:  support for registering instances
-}
+// export interface TransformPluginSettings<T = Element, TItem = any> {
+//     processor: (ctx: RenderContext<T, TItem>) => any;
+//     selector?: string;
+//     blockWhileWaiting?: boolean;
+//     ready?: boolean;
+//     //TODO:  support for registering instances
+// }
 
 export type matchTypes = 'parts'| 'part' | 'id' | 'classes' | 'class' | 'attribs' | 'attrib' | 'elements' | 'element' | 'names' | 'name' | 'props' | 'placeholders';
 
 export interface QueryInfo{
     query: string;
     match: string;
-    //type?: matchTypes;
     attrib?: string;
     lhsProp?: string;
     first?: boolean;
     verb?: string;
-    //matchFn?: (el: Element, attrib: string) => boolean;
 }
 
-export interface TransformPluginStates<T extends Element = Element, TItem = any, TState = any>  extends TransformPluginSettings<T, TItem> {
-    states: WeakMap<T, TState>
-}
+// export interface TransformPluginStates<T extends Element = Element, TItem = any, TState = any>  extends TransformPluginSettings<T, TItem> {
+//     states: WeakMap<T, TState>
+// }
 
-export type TransformPlugins<T = Element, TItem = any> = {[key: string]: TransformPluginSettings<T, TItem>};
+// export type TransformPlugins<T = Element, TItem = any> = {[key: string]: TransformPluginSettings<T, TItem>};
 
 export interface RenderOptions{
     prepend?: boolean;
@@ -354,7 +351,6 @@ export interface TransformPacket {
     hydratingTransform?: Matches;
     transform?: Matches | Matches[];
     unsafeTransform?: {[key: string]: (ctx: RenderContext) => any};
-    transformPlugins?: TransformPlugins;
     DTRCtor?: any;
 }
 
