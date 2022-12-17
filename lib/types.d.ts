@@ -3,7 +3,8 @@ export interface RenderContextEndUserProps<T = Element, TItem = any>{
     host?: any | undefined;
     hostController?: any;
     match?: Matches;
-    make?: CSSSelectorBeHavingMap
+    make?: CSSSelectorBeHavingMap;
+    
 }
 
 export interface BeHaving<TEndUserProps = any> {
@@ -29,19 +30,16 @@ export interface RenderContext<T = Element, TItem = any> extends RenderContextEn
     name?: string | null;
     val?: string | null;
     rhs?: any;
-    
-    //plugins?: {[key: string]: boolean} | TransformPlugins<T, TItem>;
     key?: string;
     queryCache?: WeakMap<Element | DocumentFragment, {[key: string]: NodeListOf<Element>}>;
     abort?: boolean | undefined;
-    templateIds?: string[];
+    // templateIds?: string[];
     queryInfo?: QueryInfo;
     timestampKey?: string;
     self?: Transformer;
     initiator?: Element;
     trace?: boolean;
-    //proxyHost?: ProxyHost; //TODO
-    //stack?: RenderContext[];
+
 }
 
 
