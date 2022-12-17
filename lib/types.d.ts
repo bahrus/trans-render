@@ -74,11 +74,8 @@ export interface TransformPluginStates<T extends Element = Element, TItem = any,
 export type TransformPlugins<T = Element, TItem = any> = {[key: string]: TransformPluginSettings<T, TItem>};
 
 export interface RenderOptions{
-    useShadow?: boolean;
-    cacheQueries?: boolean | undefined;
-    prepend?: boolean | undefined;
-    initializedCallback?: (ctx: RenderContext, target: Element | DocumentFragment, options?: RenderOptions) => RenderContext | void,
-    updatedCallback?: (ctx: RenderContext, target: Element | DocumentFragment, options?: RenderOptions) => RenderContext | void,
+    prepend?: boolean;
+    
 }
 
 
