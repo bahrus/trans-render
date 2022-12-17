@@ -276,8 +276,7 @@ In the following example, the "spell" that we perform on the button element is d
 <script type=module>
     import 'be-counted/be-counted.js';
     import {DTR} from 'trans-render/lib/DTR.js';
-    const iff = true || false;
-    const dtr = await DTR.transform(templ, {
+    DTR.transform(templ, {
         host: {},
         make: {
             button: {
@@ -309,9 +308,7 @@ However, if we don't want to wait for all the decorator components to download b
 
 What this package does is see if the decorator is already defined in memory.  If it is, great, apply the logic during template instantiating.  If not, no worries, just adorn the element with the custom attribute, which will be picked up via CSS matching on the live DOM tree, similar to custom elements registering.
 
-So typically when the user visits the site the first time, many of the decorators will act "verbally" on the live DOM tree, progressively enhancing the server rendered HTML  but on subsequent visits, when the dependencies have been (offline) cached, the template stamping will be apply more and more of the logic preemptively, so that it hydrates more quickly, with less strain on the browser.
-
-And as we can see with the example above, we can seamlessly, recursively switch modes between the transform (match) expressions and the make expressions.
+So typically when the user visits the site the first time, many of the decorators will act "verbally" on the live DOM tree, progressively enhancing the server rendered HTML  but on subsequent visits, when the dependencies have been (offline) cached, the template stamping will apply more and more of the logic preemptively, so that it hydrates more quickly, with less strain on the browser.
 
 We can do this by simply taking advantage of the dynamic import:
 
