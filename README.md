@@ -213,10 +213,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>The last capital letter in the string is a "N", ends with "s"</td><td>firstNameNames</td><td>.querySelectorAll('[name="first-name"]')</td><td></td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "N", doesn't end with "s"</td><td>firstNameN</td><td>.querySelector('[name="first-name"]')</td>
-        <td>
-           
-        </td>
+        <td>The last capital letter in the string is a "N", doesn't end with "s"</td><td>firstNameN</td><td>.querySelector('[name="first-name"]')</td><td></td>
     <tr>
         <td>Anything else</td><td>'a[href$=".mp3"]'</td><td>.querySelectorAll('a[href$=".mp3"]')</td><td>&nbsp;</td>
     </tr>
@@ -236,6 +233,30 @@ We will discuss this type of extension later.
 ## Extending TR, DTR "horizontally"
 
 ### Verbal "spells" via inline decorators / element behaviors
+
+The [be-decorated](https://github.com/bahrus/be-decorated) library provides the base class for element behaviors / decorators that can be used to enhance server-side generated HTML.
+
+For example:
+
+
+```html
+<span></span>
+<button be-counted='{
+    "transform": {
+        "span": "value"
+    }
+}'>Count</button>
+```
+
+adds dynamic behavior to the button element, similar to how a custom element adds dynamic behavior to an unrecognized tag.
+
+So unlike the trans-render syntax, here we are intermingling inline binding right in the HTML itself, which hydrates as the JS dependencies download.  We are using these decorates to "cast spells" on the HTML markup -- "Be Counted!" in this example. 
+
+With SSR / SSG this is often the best we can do -- let the browser do what it does best, render HTML, then, as soon as possible, enhance the HTML.  But it comes at some cost, which might not be ideal for components that repeated all through the page.  That's precisely what templates give us.  
+
+So what follows are two fundamental ways we can carry over this way of casting spells inline, but instead keeping to the spirit of the trans-render approach -- casting the spells from a distance.
+
+ A nice analogy might be the Harry Potter series (for example), where the students first learn to cast spells verbally.  As they become more advanced, they learn that there are advantages to being able to cast the spells quietly.  So we will use that analogy in what follows -- casting non verbal spells.  The spells don't necessarily add / require any inline attributes, depending on the timing.
 
 ### Non-verbal spells via "make" transforms
 
@@ -272,7 +293,7 @@ In the following example, the "spell" that we perform on the button element is d
 </script>
 ```
 
-Because we imported be-counted synchronously, the final HTML will not have attribute "is-counted", but the functionality of the be-counted decorator is applied to the button element nevertheless.
+Because we imported be-counted synchronously, the final HTML will not have attribute "is-counted", as it would for server-render element decorators, but the identical logic/functionality of the be-counted decorator is applied to the button element nevertheless.
 
 Doing the spell non verbally, i.e. during template instantiation, has the advantage that any adjustments we make to the DOM will be less expensive, as the browser won't need to make progressive re-renders as the decorators take effect.
 
@@ -280,7 +301,13 @@ The disadvantage is we block rendering until all the components are loaded.
 
 ###  Asynchronous, non render blocking
 
-However, if we don't want to wait for all the decorator components to download before rendering to the live DOM tree, we can import the decorators *asynchronously*, using dynamic import(), and then, depending on the timing, the spell that is put on the button element may be done verbally or non-verbally.  Perhaps when the user visits the site the first time, many of the decorators will act verbally on the live DOM tree, but on subsequent visits, when the dependencies have been (offline) cached, the template stamping will be more effective.
+However, if we don't want to wait for all the decorator components to download before rendering to the live DOM tree, we can import the decorators *asynchronously*, using dynamic import(), and then, depending on the timing, the "spell" that is cast on the button element may be done verbally or non-verbally.  
+
+What this package does is see if the decorator is already defined in memory.  If it is, great, apply the logic during template instantiating.  If not, no worries, just adorn the element with the custom attribute, which will be picked up via CSS matching on the live DOM tree, similar to custom elements registering.
+
+So typically when the user visits the site the first time, many of the decorators will act "verbally" on the live DOM tree, progressively enhancing the server rendered HTML  but on subsequent visits, when the dependencies have been (offline) cached, the template stamping will be apply more and more of the logic preemptively, so that it hydrates more quickly, with less strain on the browser.
+
+We can do this by simply taking advantage of the dynamic import:
 
 ```html
 <template id=templ>
