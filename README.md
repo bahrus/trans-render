@@ -438,10 +438,6 @@ match:{
 
 In many circumstances, the transform is kept separate from the HTML template, so we can still import HTML templates, even from untrusted third-party providers.  The syntax to invoke the method is not in the template, but rather in the separate transform.
 
-
-
-However, DTR can also be specified in third party template instantiation behaviors imported via fetch, for example.  But even here, the use of methods defined above is applied to the host model, not to elements of the imported template, so again, the risks seem low for opening up this ability.  Nevertheless, a mechanism may be provided by be-hive to allow these behaviors to be opted-in, while restraining the list of invocable methods.  There are other scenarios where this customization ability would have more apparent importance [TODO]. 
-
 ## P[E[A[T]]] 
 
 After setting the string value of a node, setting properties, attaching event handlers, and setting attributes (including classes and parts), and specifying the light children comes next in things we do over and over again
@@ -493,9 +489,11 @@ If the matching element is an input element, then event type "input" is used.  O
 
 For more nuanced scenarios, we need to specify an object for the second element of the array.  Let's look closely at the three examples shown above for the 'myCustomElementEs' matches:
 
-The first one (myEventHandlerFn) is not JSON serializable, so it doesn't qualify as "declarative".  It works best with arrow function properties of the host (no binding attempt is made).  Likewise with the second option, but here we are referencing, by name, the event handler from the host.
+The first one (myEventHandlerFn) is not JSON serializable, so it doesn't qualify as "declarative".  It works best with arrow function properties of the host (no binding attempt is made).  
 
-The third example, we can see that the RHS of the expression can be an object.  This provides a declarative syntax for doing common things done in an event handler, but declaratively.  Things like toggling property values, incrementing counters, etc.
+To be declarative, use the name of the public method of the host, as demonstrated by the second example.  Again, no binding attempt is made.
+
+In the third example, we can see that the RHS of the expression can be an object.  This provides a declarative syntax for doing common things done in an event handler, but declaratively.  Things like toggling property values, incrementing counters, etc.
 
 The syntax for what can go inside this object is borrowed from the [be-noticed](https://github.com/bahrus/be-noticed) decorator, and much of the code is shared between these two usages.
 
