@@ -188,9 +188,7 @@ export interface INotify<TSelf = any, TProps = any, TActions = TProps> extends  
 
     withArgs?: ('self' | 'val' | 'event')[];
 
-    
-
-    plusEq?: boolean;
+    plusEq?: boolean | string | number;
 
     eqConst?: any;
 
