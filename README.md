@@ -418,7 +418,7 @@ match:{
 
 will bind to host.place.location.  If that is undefined, then the "world" default will be used.  If the string to the right of ?? starts with a ., the same process is repeated recursively.
 
-Like most all UI libraries, only changes to the top property is reacted to automatically.
+Like most all UI libraries, only changes to top-level properties of the host are reacted to automatically.
 
 ## Invoking (a chain of) methods
 
@@ -432,7 +432,7 @@ match:{
 }
 ```
 
-means "evaluate toLocalString() of the count property."  
+means "evaluate toLocaleString() of the count property."  
 
 The pipe operator allows one hardcoded string argument:
 
@@ -454,7 +454,7 @@ After setting the string value of a node, setting properties, attaching event ha
 
 So we reserve another of our extremely limited RHS types JSON supports to this use case.
 
-We do that via using an Array for the rhs of a match expression.  We interpret that array as a tuple to represent these settings.  P stands for Properties, E for events, A for attributes. 
+We do that via using an Array for the rhs of a match expression.  We interpret that array as a tuple to represent these settings.  P stands for Properties, E for events, A for attributes, T for a template the clone into the light children. 
 
 ### Property setting (P)
 
@@ -503,7 +503,7 @@ The first one (myEventHandlerFn) is not JSON serializable, so it doesn't qualify
 
 The third example, we can see that the RHS of the expression can be an object.  This provides a declarative syntax for doing common things done in an event handler, but declaratively.  Things like toggling property values, incrementing counters, etc.
 
-The syntax for what can go inside this object is borrowed from the [be-noticed](https://github.com/bahrus/be-noticed) decorator / DTR plugin, and much of the code is shared between these two usages.
+The syntax for what can go inside this object is borrowed from the [be-noticed](https://github.com/bahrus/be-noticed) decorator, and much of the code is shared between these two usages.
 
 Note also in the third example we are not subscribing to a loosely coupled event name, but rather, we are injecting a handler inside the myProp setter, which is a bit intrusive, but is quite powerful, and doesn't require emitting events for everything.
 
@@ -555,7 +555,7 @@ Much conditional display logic can be accomplished via css -- set various attrib
 
 But sometimes this isn't sufficient.  Sometimes the values of the attributes (or properties) themselves need to be conditional.  
 
-One approach to accomplishing this is by adding a "computed property" to the host element, that calculates what the value of the attribute should be, with the full power of JavaScript at our disposal.  But this solution may not be sufficient when we *have* no host class to begin with (e.g. declarative custom elements).  And it may also be argued that even if we do, these types of computed properties are too tied to the UI.
+One approach to accomplishing this is by adding a "computed property" to the host element that calculates what the value of the attribute should be, with the full power of JavaScript at our disposal.  But this solution may not be sufficient when we *have* no host class to begin with (e.g. declarative custom elements).  And it may also be argued that even if we do, these types of computed properties are too tied to the UI.
 
 So, that is what the declarative expressions below address.  As with everything else in this library, the logic for this is only loaded on demand, so use or don't use, the penalty is minimal either way.
 
@@ -628,9 +628,9 @@ results in:
 </div>
 ```
 
-So as we can see, the conditional expression incorporates the P[E[A]] logic mentioned above, as far as setting the type attribute.
+So as we can see, the conditional expression incorporates the P[E[A[T]]] logic mentioned above, as far as setting the type attribute.
 
-Remember that within a PEA expressions, to specify a hardcoded string, as opposed to a path coming from the host, strings need to be wrapped inside an array (to allow for interpolation).
+Remember that within PEAT expressions, to specify a hardcoded string, as opposed to a path coming from the host, strings need to be wrapped inside an array (to allow for interpolation).
 
 ### Example 2 -- Comparison
 
@@ -651,11 +651,11 @@ Remember that within a PEA expressions, to specify a hardcoded string, as oppose
     </script>
 ```
 
-So lhs/rhs is expecting a path to evaluate from the host.
+So "lhs"/"rhs" keys are expecting a path to evaluate from the host.
 
-lhsVal/rhsVal is expecting a hard coded value.
+"lhsVal"/"rhsVal" keys allow us to hardcode a value.
 
-results in:
+The example above results in:
 
 ```html
 <div id=target>
@@ -663,6 +663,9 @@ results in:
 </div>
 ```
 
+Note that op: '===' is optional, and is currently the only operator supported. More will be added [TODO].
+
+But even though it is optional, spelling it out may make the syntax more readable.
 
 
 ### Example 3 -- Switch
@@ -694,9 +697,11 @@ results in:
 </div>
 ```
 
-## Loop RHS [TODO]
+## Loop RHS [TODO, maybe]
 
 If the rhs is an array, and the first element of the array is an empty array, then we are now specifying a loop (adopt be-repeated syntax).
+
+Since this is not (yet?) supported, use an element decorator (via "non verbal spells") such as [be-repeated](https://github.com/bahrus/be-repeated).
 
 ### DTR/TR method extensions for RHS =  Non Array Object
 
