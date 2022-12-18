@@ -258,7 +258,7 @@ With SSR / SSG this is often the best we can do -- let the browser do what it do
 
 What follows, then, is a way we can have our cake and eat it too.  We provide two fundamental ways we can carry over this way of casting spells, but instead of doing so inline, now we do so by adhering to the spirit of the trans-render approach -- casting the spells from a distance, during template instantiation.
 
-A nice analogy might be the Harry Potter series (for example), where the students first learn to cast spells verbally.  As they become more advanced, they learn that there are advantages to being able to cast the spells quietly.  So we will use that analogy in what follows -- casting "non verbal spells".  The spells don't necessarily add / require any inline attributes, depending on the timing.
+A nice analogy might be the Harry Potter series (for example), where the students first learn to cast spells verbally.  As they become more advanced, they learn that there are advantages to being able to cast the spells quietly.  So we will use that analogy in what follows -- casting "non verbal spells".  These non verbal spells don't add any inline attributes.
 
 ### Non-verbal spells via "make" transforms
 
