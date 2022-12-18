@@ -31,13 +31,10 @@ export function makeItBe(instance: Element, key: string, make: CSSSelectorBeHavi
             Object.assign(having2, val);
         }
         aInstance.beDecorated[be] = having2;
-        if(customElements.get(wcName)){
-            const dem = document.createElement(wcName) as any as Attachable;
-            dem.attach(instance);
-        }else{
-            instance.setAttribute(wcName, '');
-        }
-
+        customElements.whenDefined(wcName).then(() => {
+            const decorator = document.createElement(wcName) as any as Attachable;
+            decorator.attach(instance);
+        });
     }
 }
 
