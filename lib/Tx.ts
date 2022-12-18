@@ -1,4 +1,4 @@
-import { RenderContext, MatchRHS, Scope} from 'trans-render/lib/types';
+import { RenderContext, MatchRHS, Scope, CSSSelectorBeHavingMap} from 'trans-render/lib/types';
 import {ITx, Matches} from './types';
 
 /**
@@ -19,6 +19,10 @@ export class Tx implements ITx{
 
     set match(nv: Matches){
         this.#ctx.match = nv;
+    }
+
+    set make(nv: CSSSelectorBeHavingMap){
+        this.#ctx.make = nv;
     }
 
     set scope(nv: Scope){

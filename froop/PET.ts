@@ -19,6 +19,7 @@ export class PET extends PE implements IPET{
                 tx.match = dt.transform;
                 tx.scope = dt.scope || 'sd';
             }
+            tx.make = dt.make;
             await tx.transform();
             if((<any>instance).mntCnt > 0){
                 (<any>instance).mntCnt--;

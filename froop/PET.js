@@ -17,6 +17,7 @@ export class PET extends PE {
                 tx.match = dt.transform;
                 tx.scope = dt.scope || 'sd';
             }
+            tx.make = dt.make;
             await tx.transform();
             if (instance.mntCnt > 0) {
                 instance.mntCnt--;
