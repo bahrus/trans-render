@@ -741,8 +741,6 @@ To meet this scenario, if an object has $action:'deep_merge' then it will be dee
 
 If the RHS expression is a non array object without an $action property, then the RHS is used to set properties on the element.
 
-
-
 ## Answers to questions no one is asking
 
 <details>
