@@ -330,7 +330,9 @@ So now we have no less than two ways of "binding from a distance" -- via the tra
 
 One significant difference between them is that the transform/match expressions are capable of being re-applied as the host model / property values change.  
 
-The transform/make expressions provide no such support.  However, the decorators themselves can choose to hook up with the host and essentially accomplish the same thing, but that is internal to each decorator.  From the point of view of this package, those decorators are black boxes, so no assistance with binding is provided.  ~~What this package does provide is to optionally apply mutation observers on the rendered content, after appending the cloned template into the live DOM tree, so that if new elements matching the make expressions appear, it automatically gets the same behaviors attached.~~
+The transform/make expressions provide no such support.  However, the decorators themselves can choose to hook up with the host and essentially accomplish the same thing, but that is internal to each decorator.  From the point of view of this package, those decorators are black boxes, so no assistance with binding is provided.  
+
+The rest of this document will primarily focus on the "Match" expressions.
 
 ## Declarative trans-render syntax via JSON-serializable RHS expressions with lib/DTR.js 
 
