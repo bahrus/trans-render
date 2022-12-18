@@ -303,7 +303,7 @@ The disadvantage is we block rendering until all the components are loaded.
 
 However, if we don't want to wait for all the decorator components to download before rendering to the live DOM tree, we can import the decorators *asynchronously*, using dynamic import(), and then, depending on the timing, the "spell" that is cast on the button element may be done during template instantiation, or after getting applied to the live DOM tree.  
 
-We can do this by simply taking advantage of the dynamic import:
+We can do this by simply taking advantage of the dynamic import function:
 
 ```html
 <template id=templ>
@@ -324,7 +324,9 @@ So now we have no less than two ways of "binding from a distance" -- via the tra
 
 One significant difference between them is that the transform/match expressions are capable of being re-applied as the host model / property values change.  
 
-The transform/make expressions provide no such support.  However, the decorators themselves can choose to hook up with the host and essentially accomplish the same thing, but that is internal to each decorator.  From the point of view of this package, those decorators are black boxes, so no assistance with binding is provided.  
+The transform/make expressions provide no such support.  However, the decorators themselves can choose to hook up with the host and essentially accomplish the same thing, but that is internal to each decorator.  From the point of view of this package, those decorators are black boxes, so no assistance with binding is provided.
+
+(At the risk of overwhelming the dear reader with if's, and's and but's, the trans-render package does support something called ["dynamic transforms"](https://github.com/bahrus/xtal-element#part-iii-dynamic-transforms), allowing even the make transforms to pass in dynamic data, but that is a more advanced topic, so we are getting way ahead of ourselves).
 
 The rest of this document will primarily focus on the "Match" expressions.
 
