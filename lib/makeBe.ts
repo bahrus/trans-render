@@ -30,11 +30,22 @@ export function makeItBe(instance: Element, key: string, make: CSSSelectorBeHavi
             const val = JSON.parse(attrib);
             Object.assign(having2, val);
         }
-        aInstance.beDecorated[be] = having2;
-        customElements.whenDefined(wcName).then(() => {
-            const decorator = document.createElement(wcName) as any as Attachable;
-            decorator.attach(instance);
-        });
+        const existingSettings = aInstance.beDecorated[be];
+        let alreadyAttached = false;
+        if(existingSettings !== undefined){
+            alreadyAttached = existingSettings.controller !== undefined;
+            Object.assign(existingSettings, having2);
+        }else{
+            aInstance.beDecorated[be] = having2;
+        }
+        
+        if(!alreadyAttached){
+            customElements.whenDefined(wcName).then(() => {
+                const decorator = document.createElement(wcName) as any as Attachable;
+                decorator.attach(instance);
+            });
+        }
+
     }
 }
 
