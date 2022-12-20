@@ -348,6 +348,7 @@ export type Matches = {[key: string]: RHS};
 export interface TransformPacket {
     hydratingTransform?: Matches;
     transform?: Matches | Matches[];
+    make?: CSSSelectorBeHavingMap;
     unsafeTransform?: {[key: string]: (ctx: RenderContext) => any};
     DTRCtor?: any;
 }

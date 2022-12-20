@@ -3,14 +3,15 @@ import {TemplMgmtBaseMixin} from './TemplMgmt.js';
 import {DTR} from '../DTR.js';
 export async function MainTransforms(
         self:  any, 
-        {hydratingTransform, transform, DTRCtor}: TransformPacket,
+        {hydratingTransform, transform, DTRCtor, make}: TransformPacket,
         fragment: DocumentFragment
     ){
         if(hydratingTransform !== undefined){
             const ctx: RenderContext = {
                 host: self,
                 match: hydratingTransform,
-            }
+                make
+            };
             const ctor = DTRCtor === undefined ? DTR : DTRCtor;
             const dtr = new ctor(ctx);
             await dtr.transform(fragment);
