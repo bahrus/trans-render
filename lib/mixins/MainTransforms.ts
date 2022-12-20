@@ -6,7 +6,7 @@ export async function MainTransforms(
         {hydratingTransform, transform, DTRCtor, make}: TransformPacket,
         fragment: DocumentFragment
     ){
-        if(hydratingTransform !== undefined){
+        if(hydratingTransform !== undefined || make !== undefined){
             const ctx: RenderContext = {
                 host: self,
                 match: hydratingTransform,
