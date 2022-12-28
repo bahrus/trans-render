@@ -4,6 +4,7 @@ export interface IEventConfig<MCProps = any, MCActions = MCProps, TAction = Acti
     on?: string,
     of?: 'tbd' | EventTarget,
     doInit?: boolean,
+    options?: AddEventListenerOptions,
 }
 
 export type ActionOnEventConfigs<MCProps = any, MCActions = MCProps, TAction = Action> = Partial<{[key in keyof MCActions]: IEventConfig<MCProps, MCActions, TAction>}>
