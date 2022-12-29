@@ -64,7 +64,9 @@ export class CE extends Svc {
             static formAssociated = formAss;
             constructor() {
                 super();
-                this._internals_ = this.attachInternals();
+                if (this.attachInternals !== undefined) {
+                    this._internals_ = this.attachInternals(); //Safari 16.4 doesn't yet support
+                }
             }
             attributeChangedCallback(name, oldVal, newVal) {
                 if (super.attributeChangedCallback)

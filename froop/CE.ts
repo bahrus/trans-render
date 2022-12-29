@@ -74,7 +74,10 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
             static formAssociated = formAss;
             constructor(){
                 super();
-                this._internals_ = this.attachInternals();
+                if(this.attachInternals !== undefined){
+                    this._internals_ = this.attachInternals(); //Safari 16.4 doesn't yet support
+                }
+                
             }
             attributeChangedCallback(name: string, oldVal: string, newVal: string){
                 if(super.attributeChangedCallback) super.attributeChangedCallback(name, oldVal, newVal);

@@ -84,7 +84,10 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         }
         this.removeAttribute('defer-rendering');
         const internals = (<any>base)._internals_;
-        internals.states.add('--mounted');
+        if(internals !== undefined){ //Safari <= 16.4
+            internals.states.add('--mounted');
+        }
+        
         this.clonedTemplate = undefined;
     }
     initUnsafeTCnt({}: this){
