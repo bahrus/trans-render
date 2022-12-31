@@ -34,7 +34,7 @@ export class Hookup extends InstSvc {
             const propagatorEvent = (e as CustomEvent).detail as INewPropagator;
             const {instance, propagator} = propagatorEvent;
             const {trigger} = await import('./trigger.js');
-            console.debug({instance, propagator});
+            //console.debug({instance, propagator});
             trigger(instance, propagator, args);
             this.instanceResolved = instance;
             

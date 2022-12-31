@@ -17,7 +17,7 @@ export class PropSvc extends Svc implements IPropSvc{
         const {definer: createCustomEl, itemizer: createPropInfos} = services!;
         await createCustomEl.resolve();
         createCustomEl.addEventListener(ccb, e => {
-            console.debug('connectedCallback');
+            //console.debug('connectedCallback');
             const connection = (e as CustomEvent).detail as IConnectedCB;
             const {instance} = connection;
             const propBag = this.#getStore(instance, true); //causes propagator to be created

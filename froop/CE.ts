@@ -93,7 +93,7 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
             }
 
             async connectedCallback(){
-                console.debug('connectedCallback');
+                //console.debug('connectedCallback');
                 if(super.connectedCallback) super.connectedCallback();
                 const dh = 'defer-hydration';
                 if((this as any as HTMLElement).hasAttribute(dh)){

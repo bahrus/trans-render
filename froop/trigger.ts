@@ -4,12 +4,12 @@ import {CEArgs, IPropagator, IPropChg} from './types';
 
 
 export function trigger(instance: EventTarget, propagator: IPropagator, args: CEArgs){
-    console.debug('addPropBagListener');
+    //console.debug('addPropBagListener');
     propagator.addEventListener(pc, async e => {
         
         const chg = (e as CustomEvent).detail as IPropChg;
         const {key, oldVal, newVal} = chg;
-        console.debug({key, oldVal, newVal});
+        //console.debug({key, oldVal, newVal});
         const {services} = args;
         const {itemizer: createPropInfos} = services!;
         await createPropInfos.resolve();
@@ -19,7 +19,7 @@ export function trigger(instance: EventTarget, propagator: IPropagator, args: CE
         }
         propagator.dk.add(key);
         propagator.mk.add(key);
-        console.debug({key, oldVal, newVal});
+        //console.debug({key, oldVal, newVal});
         (async () => {
             const filteredActions: any = {};
             const {pq} = await import('../lib/pq.js');
@@ -27,7 +27,7 @@ export function trigger(instance: EventTarget, propagator: IPropagator, args: CE
             const config = args.config as WCConfig;
             const {actions} = config;
             const changedKeys = propagator.dk;
-            console.debug({changedKeys, actions});
+            //console.debug({changedKeys, actions});
             propagator.dk = new Set<string>();
             let foundAction = false;
             for(const methodName in actions){
@@ -43,7 +43,7 @@ export function trigger(instance: EventTarget, propagator: IPropagator, args: CE
             }
             if(foundAction){
                 const {act: doActions} = await import('./act.js');
-                console.debug({instance, filteredActions});
+                //console.debug({instance, filteredActions});
                 doActions(instance, filteredActions);
             }
         })();

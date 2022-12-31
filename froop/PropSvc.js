@@ -14,7 +14,7 @@ export class PropSvc extends Svc {
         const { definer: createCustomEl, itemizer: createPropInfos } = services;
         await createCustomEl.resolve();
         createCustomEl.addEventListener(ccb, e => {
-            console.debug('connectedCallback');
+            //console.debug('connectedCallback');
             const connection = e.detail;
             const { instance } = connection;
             const propBag = this.#getStore(instance, true); //causes propagator to be created
