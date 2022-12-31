@@ -1,5 +1,6 @@
 import {CSSSelectorBeHavingMap, Attachable} from './types';
 import {getQuery} from './specialKeys.js';
+import { lispToCamel } from './lispToCamel.js';
 
 export function makeBe(fragment: Element | DocumentFragment, make: CSSSelectorBeHavingMap){
     for(const key in make){
@@ -30,13 +31,14 @@ export function makeItBe(instance: Element, key: string, make: CSSSelectorBeHavi
             const val = JSON.parse(attrib);
             Object.assign(having2, val);
         }
-        const existingSettings = aInstance.beDecorated[be];
+        const camelBe = lispToCamel(be);
+        const existingSettings = aInstance.beDecorated[camelBe];
         let alreadyAttached = false;
         if(existingSettings !== undefined){
             alreadyAttached = existingSettings.controller !== undefined;
             Object.assign(existingSettings, having2);
         }else{
-            aInstance.beDecorated[be] = having2;
+            aInstance.beDecorated[camelBe] = having2;
         }
         
         if(!alreadyAttached){
