@@ -120,8 +120,8 @@ export interface CEArgs<TProps = any, TActions = TProps, TPropInfo = PropInfo, T
 
 export interface DynamicTransform {
     scope?: Scope,
-    transform: Matches,
-    make: CSSSelectorBeHavingMap,
+    transform?: Matches,
+    make?: CSSSelectorBeHavingMap,
     noCache?: boolean,
 }
 
