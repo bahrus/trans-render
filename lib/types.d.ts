@@ -384,8 +384,8 @@ export interface ITSChecker{
 
 export interface ITx{
     transform(): Promise<void>;
-    match: Matches;
-    make: CSSSelectorBeHavingMap;
+    match?: Matches;
+    make?: CSSSelectorBeHavingMap;
     scope: Scope;
 }
 
