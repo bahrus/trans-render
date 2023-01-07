@@ -21,7 +21,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         new DoStyles(this, base, root, compiledStyleMap, modernBrowser);
             
     }
-    async cloneTemplate({noshadow, shadowRoot, mainTemplate, styles, mntCnt}: TemplMgmtBase){
+    async cloneTemplate({noshadow, shadowRoot, mainTemplate, mntCnt}: TemplMgmtBase){
         if(mntCnt === undefined){
             this.mntCnt = 1;
         }
