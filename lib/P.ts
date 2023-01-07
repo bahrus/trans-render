@@ -21,18 +21,18 @@ export async function modifyPRHS(ctx: RenderContext, idx: number){
     return modifiedRHS;
 }
 
-export async function modifyVal(key: string, rhs: any, ctx: RenderContext){
+export async function modifyVal(key: string, rhs: any, ctx: RenderContext): Promise<string>{
     let path = rhs[key];
     let {host} = ctx;
     if(host === undefined) return path;
     switch(typeof path){
         case 'string':
             const {getVal} = await import ('./getVal.js');
-            return getVal(ctx, path);
+            return await getVal(ctx, path);
         case 'object':
             if(Array.isArray(path)){
                 const {weave} = await import ('./weave.js');
-                return weave(path, host);
+                return await weave(path, host);
             }else{
                 return path; //Not implemented
             }
