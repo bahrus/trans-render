@@ -527,7 +527,24 @@ The properties of the action object can be broken down into two categories:
             ../my-id searches for #my-id one ShadowDOM level up.
             /my-id searches from outside any ShadowDOM.
         </td>
-        <td>Searching for a DOM element outside the ShadowDOM seems like it could produce some complex tight coupling, and should probably be used sparingly.</td>
+        <td>Searching for a DOM element outside the ShadowDOM realm to which the triggering element belongs seems like it could produce some complex tight coupling, and should probably be used sparingly.</td>
+    </tr>
+    <tr>
+        <td>to</td>
+        <td>Abbrev of toUpShadow</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td>toSelf</td>
+        <td>Perform action onto itself (the triggering element)</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td>toNearestUpMatch</td>
+        <td>Perform action on the nearest previous sibling / ancestor element matching this css pattern, using .previousElement(s)/.parentElement.matches method.</td>
+        <td>
+            Does not pass outside ShadowDOM realm.
+        </td>
     </tr>
 </tbody>
 </table>
