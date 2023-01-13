@@ -504,7 +504,7 @@ The properties of the action object can be broken down into two categories:
 1.  Selecting which element and property to modify.
 2.  Specifying how to modify the element/property. 
 
-#### Selecting which element and property to modify:
+#### Selecting which element modify:
 
 <table>
 <thead>
@@ -546,9 +546,42 @@ The properties of the action object can be broken down into two categories:
             Does not pass outside ShadowDOM realm.
         </td>
     </tr>
+    <tr>
+        <td>toClosest</td>
+        <td>Use the closest method to search for the element based on the value of this property.</td>
+        <td>&nbsp;<td>
+    </tr>
+    <tr>
+        <td>tocoho<td>
+        <td>To closest or host -- search for containing element with attri bute "itemscope", or the host for the shadowDOM boundary, which ever is closest</td>
+        <td>&nbsp;<td>
+    </tr>
 </tbody>
 </table>
 
+### Specify the action on the element being modified
+
+<table>
+    <thead>
+        <tr>
+            <th>Action Object Property</th>
+            <th>Meaning</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>prop</td>
+            <td>Modify this property name of the element being modified</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>fn</td>
+            <td>Name of method or property arrow function to invoke on element being modified</td>
+            <td>&nbsp;</td>
+        </tr>
+    </tbody>
+</table>
 Action:
 
 plusEq, toggleProp, fn, prop, dispatch, eqConst
