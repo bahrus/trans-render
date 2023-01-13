@@ -499,6 +499,18 @@ In the third example, we can see that the RHS of the expression can be an object
 
 The syntax for what can go inside this object is borrowed from the [be-noticed](https://github.com/bahrus/be-noticed) decorator, and much of the code is shared between these two usages.
 
+Element to modify [TODO]:
+
+<table>
+<thead>
+
+</thead>
+</table>
+
+Action:
+
+plusEq, toggleProp, fn, prop, dispatch, eqConst
+
 Note also in the third example we are not subscribing to a loosely coupled event name, but rather, we are injecting a handler inside the myProp setter, which is a bit intrusive, but is quite powerful, and doesn't require emitting events for everything.
 
 ### Set attributes / classes / parts / [decorator attributes](https://github.com/bahrus/be-decorated). (A)
