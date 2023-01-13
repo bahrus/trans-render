@@ -553,7 +553,7 @@ Action:
 
 plusEq, toggleProp, fn, prop, dispatch, eqConst
 
-Note also in the third example we are not subscribing to a loosely coupled event name, but rather, we are injecting a handler inside the myProp setter, which is a bit intrusive, but is quite powerful, and doesn't require emitting events for everything.
+Note also in the third example, with LHS: "myProp:onSet", we are not subscribing to a loosely coupled event name, but rather, we are injecting a handler inside the myProp setter, which is a bit intrusive, but is quite powerful, and doesn't require emitting events for everything.
 
 ### Set attributes / classes / parts / [decorator attributes](https://github.com/bahrus/be-decorated). (A)
 
