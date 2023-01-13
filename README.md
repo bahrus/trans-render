@@ -493,18 +493,43 @@ For more nuanced scenarios, we need to specify an object for the second element 
 
 The first one (myEventHandlerFn) is not JSON serializable, so it doesn't qualify as "declarative".  It works best with arrow function properties of the host (no binding attempt is made).  
 
-To be declarative, use the name of the public method of the host, as demonstrated by the second example.  Again, no binding attempt is made.
+To be declarative, use the name of the public method of the host, as demonstrated by the second example.  Again, no binding attempt is made (revisit?  Could cause memory leaks according to Lit team).
 
-In the third example, we can see that the RHS of the expression can be an object.  This provides a declarative syntax for doing common things done in an event handler, but declaratively.  Things like toggling property values, incrementing counters, etc.
+In the third example, we can see that the RHS of the expression can be an object.  We'll call it the "action object".  This action object provides a declarative syntax for doing common things done in an event handler, but declaratively.  Things like toggling property values, incrementing counters, etc.
 
-The syntax for what can go inside this object is borrowed from the [be-noticed](https://github.com/bahrus/be-noticed) decorator, and much of the code is shared between these two usages.
+The syntax for what can go inside this action object is borrowed from the [be-noticed](https://github.com/bahrus/be-noticed) decorator, and much of the code is shared between these two usages.
 
-Element to modify [TODO]:
+The properties of the action object can be broken down into two categories:
+
+1.  Selecting which element and property to modify.
+2.  Specifying how to modify the element/property. 
+
+Selecting which element and property to modify:
 
 <table>
 <thead>
-
+    <tr>
+        <th>Action Object Property</th>
+        <th>Meaning</th>
+        <th>Notes</th>
+    </tr>
 </thead>
+<tbody>
+    <tr>
+        <td><i>Unspecified</i></td>
+        <td>Select the host of the triggering element.</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td>toUpShadow</td>
+        <td>Id of Dom Element.  Uses import-like syntax:
+            ./my-id searches for #my-id within ShadowDOM realm of  instance.
+            ../my-id searches for #my-id one ShadowDOM level up.
+            /my-id searches from outside any ShadowDOM.
+        </td>
+        <td>Searching for a DOM element outside the ShadowDOM seems like it could produce some complex tight coupling, and should probably be used sparingly.</td>
+    </tr>
+</tbody>
 </table>
 
 Action:
