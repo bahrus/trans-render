@@ -504,7 +504,7 @@ The properties of the action object can be broken down into two categories:
 1.  Selecting which element and property to modify.
 2.  Specifying how to modify the element/property. 
 
-Selecting which element and property to modify:
+#### Selecting which element and property to modify:
 
 <table>
 <thead>
