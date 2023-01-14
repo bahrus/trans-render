@@ -1,3 +1,4 @@
+import {IPropChg} from '../froop/types';
 export type Callback = (element: Element, propName: string, newValue: any) => void;
 
 const propSubscribers = new WeakMap<Element, {[key: string]: Callback[]}>();
@@ -9,6 +10,14 @@ export function tooSoon(element: Element){
 export async function subscribe(element: Element, propName: string, callback: Callback) {
     if(tooSoon(element)){
         await customElements.whenDefined(element.localName);
+    }
+    const propagator = (<any>element.constructor)?.ceDef?.services?.propper?.stores?.get(element) as EventTarget;
+    if(propagator !== undefined){
+        propagator.addEventListener(propName, e => {
+            const pc = (e as CustomEvent).detail as IPropChg;
+            callback(element, propName, pc.newVal);
+        });
+        return;
     }
     if(!propSubscribers.has(element)){
         propSubscribers.set(element, {});
