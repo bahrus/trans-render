@@ -196,11 +196,11 @@ export interface INotifyHookupInfo{
     controller: AbortController;
 }
 
-export interface IConditional{
+export interface IConditional<MCProps extends Partial<HTMLElement> = HTMLElement>{
     /**
      * Name of property to check if truthy
      */
-    if?: string;
+    if?:  keyof MCProps;
     /**
      * If condition value
      */
@@ -225,7 +225,7 @@ export type PEAUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PEU
 // export type PEATUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = 
 //     PSettings<T> | PESettings<T> | PEASettings<T> | PEATSettings<T> | PEAT$ettings<T>;
 export type ConditionalSettings<T extends Partial<HTMLElement> = HTMLElement> = 
-    [boolean, IConditional, ...any]
+    [boolean, IConditional<T>, ...any]
 
 
 export interface TRElementProps {
@@ -340,17 +340,17 @@ export type RHS<MCProps extends Partial<HTMLElement> = HTMLElement> =
     | {[key: string]: Matches}
 ;
 
-export type Matches = {[key: string]: RHS};
+export type Matches<MCProps extends Partial<HTMLElement> = HTMLElement> = {[key: string]: RHS<MCProps>};
 
-export interface TransformPacket {
+export interface TransformPacket<MCProps extends Partial<HTMLElement> = HTMLElement> {
     hydratingTransform?: Matches;
-    transform?: Matches | Matches[];
+    transform?: Matches<MCProps> | Matches<MCProps>[];
     make?: CSSSelectorBeHavingMap;
     unsafeTransform?: {[key: string]: (ctx: RenderContext) => any};
     DTRCtor?: any;
 }
 
-export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLElement> extends TransformPacket{
+export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLElement> extends TransformPacket<MCProps>{
     mainTemplate?: HTMLTemplateElement | string;
     unsafeTCount: number;
     styles?: CSSStyleSheet[] | string;
