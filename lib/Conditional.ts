@@ -61,6 +61,6 @@ export class Conditional{
 
     addDep(prop: any, acc: string[]){
         if(typeof prop !== 'string') return;
-        acc.push(this.dtr.getFirstToken(prop));
+        acc.push(prop[0] === '.' ? this.dtr.getFirstToken(prop): prop);
     }
 }
