@@ -42,15 +42,6 @@ export interface RenderContext<T = Element, TItem = any> extends RenderContextEn
 }
 
 
-
-// export interface TransformPluginSettings<T = Element, TItem = any> {
-//     processor: (ctx: RenderContext<T, TItem>) => any;
-//     selector?: string;
-//     blockWhileWaiting?: boolean;
-//     ready?: boolean;
-//     //TODO:  support for registering instances
-// }
-
 export type matchTypes = 'parts'| 'part' | 'id' | 'classes' | 'class' | 'attribs' | 'attrib' | 'elements' | 'element' | 'names' | 'name' | 'props' | 'placeholders';
 
 export interface QueryInfo{
@@ -61,12 +52,6 @@ export interface QueryInfo{
     first?: boolean;
     verb?: string;
 }
-
-// export interface TransformPluginStates<T extends Element = Element, TItem = any, TState = any>  extends TransformPluginSettings<T, TItem> {
-//     states: WeakMap<T, TState>
-// }
-
-// export type TransformPlugins<T = Element, TItem = any> = {[key: string]: TransformPluginSettings<T, TItem>};
 
 export interface RenderOptions{
     prepend?: boolean;
@@ -233,7 +218,8 @@ export type PEAUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PEU
 //     [PropSettings<T> | undefined, EventSettings | undefined, AttribsSettings | undefined, TransformValueOptions<T> | undefined, symbol]
 // export type PEATUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = 
 //     PSettings<T> | PESettings<T> | PEASettings<T> | PEATSettings<T> | PEAT$ettings<T>;
-
+export type ConditionalSettings<T extends Partial<HTMLElement> = HTMLElement> = 
+    [boolean, ...any]
 
 
 export interface TRElementProps {
@@ -341,7 +327,12 @@ export type PropChangeMoment = 'v' | '-a' | '+a' | '+qr' | '+qm';
 
 export type PropChangeMethod = (self: EventTarget, pci: PropChangeInfo, moment: PropChangeMoment) => boolean;
 
-export type RHS = string | boolean | PSettings | PESettings | PEASettings | {[key: string]: Matches};
+export type RHS<MCProps extends Partial<HTMLElement> = HTMLElement> = 
+    string | boolean 
+    | PSettings<MCProps> | PESettings<MCProps> | PEASettings<MCProps> 
+    | ConditionalSettings<MCProps>
+    | {[key: string]: Matches}
+;
 
 export type Matches = {[key: string]: RHS};
 
@@ -353,7 +344,7 @@ export interface TransformPacket {
     DTRCtor?: any;
 }
 
-export interface TemplMgmtProps<MCProps = any> extends TransformPacket{
+export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLElement> extends TransformPacket{
     mainTemplate?: HTMLTemplateElement | string;
     unsafeTCount: number;
     styles?: CSSStyleSheet[] | string;
