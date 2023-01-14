@@ -197,13 +197,19 @@ export interface INotifyHookupInfo{
 }
 
 export interface IConditional{
-    if: string;
-    ifVal: boolean;
-    lhs: string;
-    lhsVal: any;
-    rhs: string;
-    rhsVal: any;
-    op: '==' | '!=' | '>' | '<' | '>=' | '<=' | '===' | '!=='  | undefined;
+    /**
+     * Name of property to check if truthy
+     */
+    if?: string;
+    /**
+     * If condition value
+     */
+    ifVal?: boolean;
+    lhs?: string;
+    lhsVal?: any;
+    rhs?: string;
+    rhsVal?: any;
+    op?: '==' | '!=' | '>' | '<' | '>=' | '<=' | '===' | '!=='  | undefined;
 }
 export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null | string[]};
 export type PSettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T> | undefined]; 
@@ -219,7 +225,7 @@ export type PEAUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PEU
 // export type PEATUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = 
 //     PSettings<T> | PESettings<T> | PEASettings<T> | PEATSettings<T> | PEAT$ettings<T>;
 export type ConditionalSettings<T extends Partial<HTMLElement> = HTMLElement> = 
-    [boolean, ...any]
+    [boolean, IConditional, ...any]
 
 
 export interface TRElementProps {
