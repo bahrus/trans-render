@@ -13,6 +13,7 @@ export class PropRegistry extends Svc{
     }
     async #do(args: CEArgs){
         const config  = args.config as WCConfig;
+        const {propInfo, actions, derivedProps} = config;
         const props: {[key: string]: PropInfo} = {};
         const defaults = {...args.complexPropDefaults, ...config.propDefaults} as any;
         const nonDryProps = new Set<string>();
@@ -21,19 +22,18 @@ export class PropRegistry extends Svc{
             this.#setType(prop, defaults[key]);
             props[key] = prop;
         }
-        const explicitProps = config.propInfo;
-        if(explicitProps !== undefined){
-            for(const key in explicitProps){
+        //const explicitProps = config.propInfo;
+        if(propInfo !== undefined){
+            for(const key in propInfo){
                 if(props[key] === undefined){
                     const prop: PropInfo = {...defaultProp};
                     props[key] = prop;
                 }
                 const prop = props[key];
-                Object.assign(prop, explicitProps[key]);
+                Object.assign(prop, propInfo[key]);
                 if(!prop.dry) nonDryProps.add(key);
             }
         }
-        const actions = config.actions;
         if(actions !== undefined){
             for(const methodName in actions){
                 const action = actions[methodName] as string | Action;
@@ -46,19 +46,18 @@ export class PropRegistry extends Svc{
                 }
             }
         }
+        if(derivedProps !== undefined){
+            for(const derivedProp of derivedProps){
+                if(props[derivedProp] === undefined){
+                    const prop: PropInfo = {...defaultDerivedProp};
+                    props[derivedProp] = prop;
+                }
+            }
+        }
         this.nonDryProps = nonDryProps;
         this.propInfos = props;
         this.allPropNames = Object.keys(props);
-        
-        // const {services} = args;
-        // const {definer} = services!;
-        // definer.addEventListener(acb, async e => {
-        //     const acbE = (e as CustomEvent).detail as IAttrChgCB;
-        //     const {instance, name, newVal, oldVal} = acbE;
-        //     const {parse} = await import('./parse.js');
-        //     await args.definer!.resolveInstanceSvcs(args, instance);
-        //     await parse(acbE, props, defaults);
-        // });
+
         this.resolved = true;
         
     }
@@ -114,3 +113,9 @@ const defaultProp: PropInfo = {
     dry: true,
     parse: true,
 };
+
+const defaultDerivedProp: PropInfo = {
+    parse: false,
+    dry: true,
+    type: 'String'
+}
