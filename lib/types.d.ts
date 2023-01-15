@@ -64,8 +64,8 @@ export interface PMDo{
 }
 
 
-export type PropSettings<T extends Partial<HTMLElement> = HTMLElement> = {
-    [P in keyof T]?: any
+export type PropSettings<T extends Partial<HTMLElement> = HTMLElement, HostProps = any> = {
+    [P in keyof T]?: keyof HostProps;
 };
 
 export type EventSettings = {[key: string] : ((e: Event) => void) | string | INotify};
@@ -212,7 +212,7 @@ export interface IConditional<MCProps extends Partial<HTMLElement> = HTMLElement
     op?: '==' | '!=' | '>' | '<' | '>=' | '<=' | '===' | '!=='  | undefined;
 }
 export type AttribsSettings = { [key: string]: string | boolean | number | undefined | null | string[]};
-export type PSettings<T extends Partial<HTMLElement> = HTMLElement> = [PropSettings<T> | undefined]; 
+export type PSettings<T extends Partial<HTMLElement> = HTMLElement, HostProps = any> = [PropSettings<T, HostProps> | undefined]; 
 export type PESettings<T extends Partial<HTMLElement> = HTMLElement> = [props: PropSettings<T> | undefined, on: EventSettings | undefined];
 export type PEUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PSettings<T> | PESettings<T>;
 export type PEASettings<T extends Partial<HTMLElement> = HTMLElement> = 
