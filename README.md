@@ -463,7 +463,12 @@ The first element of the RHS array is devoted to property setting:
     import { DTR } from 'trans-render/lib/DTR.js';
     DTR.transform(template, {
         match:{
-            myCustomElementElements: [{myProp0: ["Some Hardcoded String"], myProp1: "hostPropName", myProp2: ["Some interpolated ", "hostPropNameForText"]}]
+            myCustomElementElements: [{
+                myProp0: ["Some Hardcoded String"], 
+                myProp1: "hostPropName", 
+                myProp2: ["Some interpolated ", "hostPropNameForText",
+                ".mySubProp1.mySubProp2": "otherProp",
+            ]}]
         },
     });
 </script>
