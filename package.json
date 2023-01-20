@@ -33,6 +33,7 @@
     "./lib/DTR.js": "./lib/DTR.js",
     "./lib/expImp.js": "./lib/expImp.js",
     "./lib/findRealm.js": "./lib/findRealm.js",
+    "./lib/getAdjacentChildren.js": "./lib/getAdjacentChildren.js",
     "./lib/getHost.js": "./lib/getHost.js",
     "./lib/getProp.js": "./lib/getProp.js",
     "./lib/getRecipientElement": "./lib/getRecipientElement.js",
