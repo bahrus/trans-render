@@ -2,16 +2,28 @@ import {CSSSelectorBeHavingMap, Attachable} from './types';
 import {getQuery} from './specialKeys.js';
 import { lispToCamel } from './lispToCamel.js';
 
-export function makeBe(fragment: Element | DocumentFragment, make: CSSSelectorBeHavingMap){
+export function makeBe(fragment: Element | DocumentFragment | Element[], make: CSSSelectorBeHavingMap){
     for(const key in make){
         let cssSelector = key;
         if(hasCapitalLetterRegExp.test(key)){
             const q = getQuery(key);
             cssSelector = q.query;
         }
-        fragment.querySelectorAll(cssSelector).forEach(instance => {
-            makeItBe(instance, key, make);
-        });
+        if(Array.isArray(fragment)){
+            for(const el of fragment){
+                if(el.matches(cssSelector)){
+                    makeItBe(el, key, make);
+                }
+                el.querySelectorAll(cssSelector).forEach(instance => {
+                    makeItBe(instance, key, make);
+                });                
+            }
+        }else{
+            fragment.querySelectorAll(cssSelector).forEach(instance => {
+                makeItBe(instance, key, make);
+            });
+        }
+
     }
 }
 

@@ -16,7 +16,7 @@ export class DTR extends TR{
         const split = rhs.substring(1).split(propSplitterRegExp);
         return split[0];
     }
-    async transform(fragment: Element | DocumentFragment, fragmentManager?: Element){
+    async transform(fragment: Element | DocumentFragment | Element[], fragmentManager?: Element){
 
         const {ctx} = this;
         const {make} = ctx;
