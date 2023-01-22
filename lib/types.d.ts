@@ -482,5 +482,10 @@ export interface IActionProcessor{
     postHoc(self: this, action: Action, target: any, returnVal: any, proxy?: any): void;
 }
 
+export interface TransformIslet {
+    transform: any,
+    islet: (inp: any) => any,
+}
+
 
 
