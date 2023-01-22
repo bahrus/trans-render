@@ -485,6 +485,9 @@ export interface IActionProcessor{
 export interface TransformIslet {
     transform: any,
     islet: (inp: any) => any,
+    isletDependencies?: string[],
+    transformDependencies?: Set<string>,
+    transformer: Transformer
 }
 
 
