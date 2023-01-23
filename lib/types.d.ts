@@ -374,6 +374,7 @@ export interface Transformer{
     transform(fragment: Element | DocumentFragment | Element[], fragmentManager?: Element): Promise<RenderContext>;
     flushCache(): void;
     getDefaultProp(target: any): string;
+    ctx: RenderContext;
 }
 
 export interface ITSChecker{
@@ -488,6 +489,10 @@ export interface TransformIslet {
     isletDependencies?: string[],
     transformDependencies?: Set<string>,
     transformer?: Transformer
+}
+
+export interface TransformJoinEvent {
+    match?: Matches,
 }
 
 
