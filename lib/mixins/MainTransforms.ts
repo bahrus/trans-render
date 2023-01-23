@@ -29,6 +29,8 @@ export async function MainTransforms(
                     await dtr.transform(fragment);
                 }
                 await dtr.subscribe(!!self._isPropagating);
+                const {Join} = await import('./Join.js');
+                const transJoin = new Join(dtr, fragment);
             }
         }
     }

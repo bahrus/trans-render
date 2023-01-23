@@ -487,7 +487,7 @@ export interface TransformIslet {
     islet: (inp: any) => any,
     isletDependencies?: string[],
     transformDependencies?: Set<string>,
-    transformer: Transformer
+    transformer?: Transformer
 }
 
 
