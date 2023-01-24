@@ -1,16 +1,33 @@
 import {Matches, MatchRHS, RHS, Transformer, TransformJoinEvent} from '../types';
+export const transformJoin = 'transform-join';
 export class Join{
     constructor(public transformer: Transformer, fragment: DocumentFragment){
         const childElements = Array.from(fragment.children);
+        let foundMatch = false;
+        fragment.querySelectorAll(`${transformJoin},data-${transformJoin}`).forEach(match => {
+            foundMatch = true;
+            const joinAttr = match.getAttribute(transformJoin) || match.getAttribute(`data-${transformJoin}`)!;
+            const transformMatch = JSON.parse(joinAttr);
+            const newMatch = join(transformer.ctx.match!, transformMatch);
+            transformer.ctx.match! = newMatch;
+            match.removeAttribute(transformJoin);
+            match.removeAttribute(`data-${transformJoin}`);
+        });
+        if(foundMatch){
+            transformer.flushCache();
+            transformer.transform(fragment)
+        }
         for(const el of childElements){
             el.addEventListener('transform-join', async e => {
                 const {detail} = (e as CustomEvent);// as TransformJoinEvent;
                 if(detail !== undefined){
-                    const {match} = detail as TransformJoinEvent;
+                    const joinEvent = detail as TransformJoinEvent;
+                    const {match} = joinEvent;
                     if(match !== undefined){
                         const newMatch = join(transformer.ctx.match!, match);
                         transformer.ctx.match! = newMatch;
                     }
+                    joinEvent.acknowledged = true;
                 }
                 const {target} = e;
                 await transformer.transform([target as Element]);

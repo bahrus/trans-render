@@ -494,6 +494,7 @@ export interface TransformIslet {
 
 export interface TransformJoinEvent {
     match?: Matches,
+    acknowledged?: boolean,
 }
 
 
