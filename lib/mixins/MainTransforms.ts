@@ -3,7 +3,7 @@ import {TemplMgmtBaseMixin} from './TemplMgmt.js';
 import {DTR} from '../DTR.js';
 export async function MainTransforms(
         self:  any, 
-        {hydratingTransform, transform, DTRCtor, make}: TransformPacket,
+        {hydratingTransform, transform, DTRCtor, make, beJoinable}: TransformPacket,
         fragment: DocumentFragment
     ){
         if(hydratingTransform !== undefined || make !== undefined){
@@ -29,8 +29,11 @@ export async function MainTransforms(
                     await dtr.transform(fragment);
                 }
                 await dtr.subscribe(!!self._isPropagating);
-                const {Join} = await import('./Join.js');
-                const transJoin = new Join(dtr, fragment);
+                if(beJoinable){
+                    const {Join} = await import('./Join.js');
+                    const transJoin = new Join(dtr, fragment);
+                }
+
             }
         }
     }

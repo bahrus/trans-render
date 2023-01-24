@@ -349,6 +349,7 @@ export interface TransformPacket<MCProps extends Partial<HTMLElement> = HTMLElem
     make?: CSSSelectorBeHavingMap;
     unsafeTransform?: {[key: string]: (ctx: RenderContext) => any};
     DTRCtor?: any;
+    beJoinable?: boolean;
 }
 
 export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLElement> extends TransformPacket<MCProps>{
