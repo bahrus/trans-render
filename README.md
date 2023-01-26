@@ -431,6 +431,12 @@ class MyClass{
 
     }
 }
+
+
+...
+match: {
+    countPart: '>myCustomProcessor'
+}
 ```
 
 ## Invoking (a chain of) methods
