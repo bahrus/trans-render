@@ -1,7 +1,7 @@
 import {TR} from './TR.js';
 import {RenderContext} from './types';
 export {TR} from './TR.js';
-declare const Sanitizer: any;
+//declare const Sanitizer: any;
 
 const propSplitterRegExp = /[\|\.\s\?]/;
 
@@ -118,10 +118,10 @@ export class DTR extends TR{
                         case 4:
                             if(typeof rhs[3] === 'string'){
                                 let str = rhs[3];
-                                if(typeof Sanitizer !== undefined){
-                                    const sanitizer = new Sanitizer(); 
-                                    str = sanitizer.sanitizeFor("template", str);
-                                }
+                                // if(typeof Sanitizer !== undefined){
+                                //     const sanitizer = new Sanitizer(); 
+                                //     str = sanitizer.sanitizeFor("template", str);
+                                // }
                                 const templ = document.createElement('template');
                                 templ.innerHTML = str;
                                 rhs[3] = templ;

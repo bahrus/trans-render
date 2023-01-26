@@ -614,7 +614,7 @@ match:{
 
 ### Set Light Children (T)
 
-The fourth optional element can either be a template, or an HTML string that DTR converts into a template, after sanitizing the string (if the browser supports sanitizing).  It is cloned, transformed based on the inherited transform rules, and appended to the element, after deleting the previous content.
+The fourth optional element can either be a template, or an HTML string that DTR converts into a template.  It is cloned, transformed based on the inherited transform rules, and appended to the element, after deleting the previous content.
 
 ## Boolean RHS -- Remove and Refs
 
