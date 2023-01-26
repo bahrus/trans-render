@@ -423,7 +423,7 @@ If the RHS is a string that can be xml parsed as a single tag and if the host ha
 ```TypeScript
 import {RenderContext} from 'trans-render/lib/types';
 const html = String.raw;
-class MyClass{
+class MyClass extends HTMLElement{
     [html `<my-custom-processor/>`](ctx: RenderContext){
         //knock yourself out
         const {target, parsedRHS} = ctx;
