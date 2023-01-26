@@ -187,7 +187,7 @@ export class TR implements Transformer{
             const {host} = ctx;
             const method = host[rhs];
             if(typeof method === 'function'){
-                const val = method(ctx);
+                await method(ctx);
                 return;
             }
         }
