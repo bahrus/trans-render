@@ -181,7 +181,17 @@ export class TR implements Transformer{
         if('value' in target && !('button-li'.includes(target.localName))) return 'value';
         return 'textContent';
     }
-    async do_string({target}: RenderContext){
+    async do_string(ctx: RenderContext){
+        const {rhs} = ctx;
+        if(rhs[0] === '>'){
+            const {host} = ctx;
+            const method = host[rhs];
+            if(typeof method === 'function'){
+                const val = method(ctx);
+                return;
+            }
+        }
+        const {target} = ctx;
         const val = await this.eval_string();
         const prop = this.getDefaultProp(target);
         (target as any)[prop] = val;

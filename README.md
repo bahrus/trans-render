@@ -416,6 +416,23 @@ will bind to host.place.location.  If that is undefined, then the "world" defaul
 
 Like most all UI libraries, only changes to top-level properties of the host are reacted to automatically.
 
+## Invoking a method from the host
+
+If the RHS is a string that starts with a ">" character, and if the host has a method that matches the RHS string exactly, that host method will be invoked, passing in the rendering context:
+
+```TypeScript
+import {RenderContext} from 'trans-render/lib/types';
+
+class MyClass{
+    [">myCustomProcessor"](ctx: RenderContext){
+        //knock yourself out
+        const {target} = ctx;
+        target.appendChild(document.body);
+
+    }
+}
+```
+
 ## Invoking (a chain of) methods
 
 Limited invoking of methods is supported.
@@ -797,7 +814,7 @@ The second element provides the tag name to repeat.
 
 ```JavaScript
 match: {
-    menuOptionE: [["options"]]]
+    menuOptionE: [["options"]]
 }
 ```
 
