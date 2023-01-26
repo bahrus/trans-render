@@ -416,17 +416,17 @@ will bind to host.place.location.  If that is undefined, then the "world" defaul
 
 Like most all UI libraries, only changes to top-level properties of the host are reacted to automatically.
 
-## Invoking a method from the host
+## Invoking a method from the host [WIP]
 
-If the RHS is a string that starts with a "<" character, and if the host has a method that matches the RHS string exactly, that host method will be invoked, passing in the rendering context:
+If the RHS is a string that can be xml parsed as a single tag and if the host has a method that matches the tag after stripping attributes and children, then that method can be invoked:
 
 ```TypeScript
 import {RenderContext} from 'trans-render/lib/types';
-const ['<myCustomProcessor/>'] = '<myCustomProcessor/>'
+const html = String.raw;
 class MyClass{
-    ["<myCustomProcessor/>"](ctx: RenderContext){
+    [html `<myCustomProcessor/>`](ctx: RenderContext){
         //knock yourself out
-        const {target} = ctx;
+        const {target, parsedRHS} = ctx;
         target.appendChild(document.body);
 
     }
@@ -435,7 +435,7 @@ class MyClass{
 
 ...
 match: {
-    countPart: <myCustomProcessor/>
+    countPart: html `<myCustomProcessor/>`
 }
 ```
 
