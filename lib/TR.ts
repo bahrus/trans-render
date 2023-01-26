@@ -183,7 +183,7 @@ export class TR implements Transformer{
     }
     async do_string(ctx: RenderContext){
         const {rhs} = ctx;
-        if(rhs[0] === '>'){
+        if(rhs[0] === '<'){
             const {host} = ctx;
             const method = host[rhs];
             if(typeof method === 'function'){

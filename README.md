@@ -418,13 +418,13 @@ Like most all UI libraries, only changes to top-level properties of the host are
 
 ## Invoking a method from the host
 
-If the RHS is a string that starts with a ">" character, and if the host has a method that matches the RHS string exactly, that host method will be invoked, passing in the rendering context:
+If the RHS is a string that starts with a "<" character, and if the host has a method that matches the RHS string exactly, that host method will be invoked, passing in the rendering context:
 
 ```TypeScript
 import {RenderContext} from 'trans-render/lib/types';
 
 class MyClass{
-    [">myCustomProcessor"](ctx: RenderContext){
+    ["<myCustomProcessor/>"](ctx: RenderContext){
         //knock yourself out
         const {target} = ctx;
         target.appendChild(document.body);
@@ -435,7 +435,7 @@ class MyClass{
 
 ...
 match: {
-    countPart: '>myCustomProcessor'
+    countPart: <myCustomProcessor/>'
 }
 ```
 
