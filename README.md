@@ -424,7 +424,7 @@ If the RHS is a string that can be xml parsed as a single tag and if the host ha
 import {RenderContext} from 'trans-render/lib/types';
 const html = String.raw;
 class MyClass{
-    [html `<myCustomProcessor/>`](ctx: RenderContext){
+    [html `<my-custom-processor/>`](ctx: RenderContext){
         //knock yourself out
         const {target, parsedRHS} = ctx;
         target.appendChild(document.body);
@@ -435,7 +435,7 @@ class MyClass{
 
 ...
 match: {
-    countPart: html `<myCustomProcessor/>`
+    countPart: html `<my-custom-processor/>`
 }
 ```
 
