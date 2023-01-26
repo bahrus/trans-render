@@ -422,7 +422,7 @@ If the RHS is a string that starts with a "<" character, and if the host has a m
 
 ```TypeScript
 import {RenderContext} from 'trans-render/lib/types';
-
+const ['<myCustomProcessor/>'] = '<myCustomProcessor/>'
 class MyClass{
     ["<myCustomProcessor/>"](ctx: RenderContext){
         //knock yourself out
@@ -435,7 +435,7 @@ class MyClass{
 
 ...
 match: {
-    countPart: <myCustomProcessor/>'
+    countPart: <myCustomProcessor/>
 }
 ```
 
