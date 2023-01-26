@@ -1,4 +1,3 @@
-//import {irm} from './const.js';
 export async function parse(accb, propInfos, defaults) {
     //only set prop from attr if prop value is undefined or prop value === default val and prop value !== attr val
     const { name, oldVal, newVal, instance } = accb;
@@ -23,6 +22,10 @@ export async function parse(accb, propInfos, defaults) {
                 if (prop.parse) {
                     if (newVal !== null) {
                         let val = newVal.trim();
+                        if (typeof Sanitizer !== undefined) {
+                            const sanitizer = new Sanitizer();
+                            val = sanitizer.sanitizeFor('template', val);
+                        }
                         try {
                             val = JSON.parse(val);
                         }

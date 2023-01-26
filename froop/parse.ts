@@ -1,6 +1,7 @@
 import {IAttrChgCB} from './types';
 import {PropInfo} from '../lib/types';
-//import {irm} from './const.js';
+declare const Sanitizer: any;
+
 
 export async function parse(accb: IAttrChgCB, propInfos: {[key: string]: PropInfo}, defaults: {[key: string]: any}){
     //only set prop from attr if prop value is undefined or prop value === default val and prop value !== attr val
@@ -25,6 +26,11 @@ export async function parse(accb: IAttrChgCB, propInfos: {[key: string]: PropInf
                 if(prop.parse){
                     if(newVal!==null){
                         let val = newVal.trim();
+                        if(typeof Sanitizer !== undefined){
+                            const sanitizer = new Sanitizer();
+                            val = sanitizer.sanitizeFor('template', val);
+                        }
+                        
                         try{
                             val = JSON.parse(val);
                         }catch(e){

@@ -785,7 +785,33 @@ results in:
 
 ## Loop RHS [TODO, maybe]
 
-If the rhs is an array, and the first element of the array is an empty array, then we are now specifying a loop (adopt be-repeated syntax).
+If the lhs resolved to a template element, and the rhs is an array, and the first element of the array is also an array, then we are now specifying a rudimentary loop.
+
+I'm not being modest when I say "rudimentary".  It can only repeat multiple instances of a single tag.
+
+The second element provides the tag name to repeat.
+
+```html
+<menu-option -index -label type-e=type icon-e=options{index}.icon></menu-option>
+```
+
+```JavaScript
+match: {
+    menuOptionE: [["options"]]]
+}
+```
+
+becomes:
+
+<template>
+    <template name=definitive>
+        <menu-option -index-n -label-s type-e=type icon-e=options{index}.icon></menu-option>
+    </template>
+    <template name=expanded>
+        <menu-option index=7 label=hello></menu-option>
+        <menu-option index=11 label=goodbye></menu-option>
+    </template>
+</template>
 
 Since this is not (yet?) supported, use an element decorator (via "non verbal spells") such as [be-repeated](https://github.com/bahrus/be-repeated).
 
