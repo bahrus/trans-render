@@ -9,8 +9,8 @@
 <body>
     <div id=target></div>
     <script>
-        const unsanitized_string = String.raw `{"a": "b"}abc<div a=b>test</div> <my-custom-element> test</my-custom-element><script>alert(1)<` + `/script>`;  // Unsanitized string of HTML
-        const sanitizer1 = new Sanitizer({allowCustomElements: true, allowElements: ['div', 'my-custom-element'] });  // Default sanitizer;
+        const unsanitized_string = String.raw `{"a": "b"}abc<link rel=preload as=fetch href=https://example.com><div data-a=b a=b>test</div> <my-custom-element> test</my-custom-element><script>alert(1)<` + `/script>`;  // Unsanitized string of HTML
+        const sanitizer1 = new Sanitizer({allowCustomElementsxxx: true, allowElementsxxx: ['div', 'my-custom-element'] });  // Default sanitizer;
 
         // Get the Element with id "target" and set it with the sanitized string.
         document.getElementById("target").setHTML(unsanitized_string, {sanitizer: sanitizer1});

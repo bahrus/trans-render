@@ -31,6 +31,8 @@ export class TR implements Transformer{
     constructor(public ctx: RenderContext){
         if(ctx.ctx === undefined) ctx.ctx = ctx;
         ctx.self = this;
+        ctx.depDeclarations = new Set<string>();
+        
     }
     async transform(fragment: Element | DocumentFragment | Element[], fragmentManager?: Element) {
         const {ctx} = this;

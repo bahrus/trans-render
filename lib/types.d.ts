@@ -29,6 +29,7 @@ export interface RenderContext<T = Element, TItem = any> extends RenderContextEn
     name?: string | null;
     val?: string | null;
     rhs?: any;
+    depDeclarations?: Set<string>;
     key?: string;
     queryCache?: WeakMap<Element | DocumentFragment, {[key: string]: NodeListOf<Element>}>;
     abort?: boolean | undefined;
@@ -375,6 +376,7 @@ export interface Transformer{
     transform(fragment: Element | DocumentFragment | Element[], fragmentManager?: Element): Promise<RenderContext>;
     flushCache(): void;
     getDefaultProp(target: any): string;
+    do_angle_bracket(ctx: RenderContext): void;
     ctx: RenderContext;
 }
 
