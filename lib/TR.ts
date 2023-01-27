@@ -184,17 +184,23 @@ export class TR implements Transformer{
     async do_string(ctx: RenderContext){
         const {rhs} = ctx;
         if(rhs[0] === '<' && rhs.at(-1) === '>'){
-            const {host} = ctx;
-            const method = host[rhs];
-            if(typeof method === 'function'){
-                await method(ctx);
-                return;
-            }
+            await this.do_angle_bracket(ctx);
+            return;
+
         }
         const {target} = ctx;
         const val = await this.eval_string();
         const prop = this.getDefaultProp(target);
         (target as any)[prop] = val;
+    }
+    async do_angle_bracket(ctx: RenderContext){
+        const {target, rhs} = ctx;
+        const aT = target as any;
+        if(aT.setHTML){
+            aT.setHTML(rhs);
+        }else{
+            aT.innerHTML = rhs;
+        }
     }
     do_number(){}
     do_boolean({target, rhs}: RenderContext){

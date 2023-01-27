@@ -47,6 +47,17 @@ export class DTR extends TR{
         }
     }
 
+
+    override async do_angle_bracket(ctx: RenderContext){
+        const {target, host, rhs} = ctx;
+        const method = host[rhs];
+        if(typeof method === 'function'){
+            await method(ctx);
+        }else{
+            super.do_angle_bracket(ctx);
+        }
+    }
+
     async do_object(rc: RenderContext): Promise<void> {
         const {rhs} = rc;
         if(Array.isArray(rhs)){

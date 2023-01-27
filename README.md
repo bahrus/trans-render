@@ -418,13 +418,13 @@ Like most all UI libraries, only changes to top-level properties of the host are
 
 ## Invoking a method from the host [WIP]
 
-If the RHS is a string that can be xml parsed as a single tag and if the host has a method that matches the tag after stripping attributes and children, then that method can be invoked:
+If the RHS is a string that can be html parsed as a single tag and if the host has a method that matches the tag after stripping attributes and children, then that method can be invoked:
 
 ```TypeScript
 import {RenderContext} from 'trans-render/lib/types';
 const html = String.raw;
 class MyClass extends HTMLElement{
-    [html `<my-custom-processor/>`](ctx: RenderContext){
+    [html `<my-custom-processor/>`](ctx: RenderContext, transform){
         //knock yourself out
         const {target, parsedRHS} = ctx;
         target.appendChild(document.body);
@@ -435,9 +435,29 @@ class MyClass extends HTMLElement{
 
 ...
 match: {
-    countPart: html `<my-custom-processor/>`
+    countPart: html `<my-custom-processor dtr='{
+        "host": "options",
+        "match": {
+
+        }
+    }'/>`
 }
 ```
+
+## Method matching:
+
+
+```JavaScript
+match: {
+    'my-inner-tag,my-outer-tag": '<>'
+}
+```
+
+What this does:
+
+In order of the selectors, searches for all my-inner-tag's, passes matches to method "<my-inner-tag/>", then searches for all my-outer-tag's, passes matches to method "<my-outer-tag/>"
+
+Also searches for "[data-spawn-of='my-inner-tag']", "[data-spawn-of='my-outer-tag]"
 
 ## Invoking (a chain of) methods
 
