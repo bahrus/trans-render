@@ -27,6 +27,8 @@ export class GetDep{
             case 'string':
                 if(rhs[0] === '.'){
                     returnObj.add(this.dtr.getFirstToken(rhs));
+                }else if(rhs[0] ==='<' && rhs.at(-1) === '>'){
+                    console.debug('[TODO]: provide way to indicate dependencies');
                 }else{
                     returnObj.add(rhs);
                 }
