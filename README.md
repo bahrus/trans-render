@@ -424,7 +424,7 @@ If the RHS is a string that can be html parsed as a single tag and if the host h
 import {RenderContext} from 'trans-render/lib/types';
 const html = String.raw;
 class MyClass extends HTMLElement{
-    [`<my-custom-processor/>`](ctx: RenderContext, transform, parsed: Document, args: Map<string, any>){
+    [`<my-custom-processor/>`](ctx: RenderContext, parsed: Document, args: Map<string, any>){
         //knock yourself out
         const {target, parsedRHS} = ctx;
         target.appendChild(document.body);
@@ -459,7 +459,7 @@ The trans-render package provides a mixin class, trans-render/lib/mixins/Joins.j
 const html = String.raw;
 match: {
     'div#menu-quick-options': html`
-        <inner-join with option, index of host.options>
+        <inner-join with option, index, of host.options>
             <menu-option 
                 with key, icon, label, url, in option;
                 with index;
@@ -470,13 +470,17 @@ match: {
 }
 ```
 
+words "with", "in" are optional.  They are there for readability
+
 If we need to rename values:
 
 ```TypeScript
 const html = String.raw;
 match: {
     'div#menu-quick-options': html`
-        <inner-join with option, index of host.options>
+        <inner-join 
+            with option, index, of host.options;
+        >
             <menu-option 
                 with myKey=key, myIcon=icon, myLabel=label, myURL=url, in option;
                 with idx=index;
@@ -495,21 +499,21 @@ match: {
     'div#menu-quick-options': html`
         <inner-join with option, index of host.options>
             <menu-option 
-                with myKey=hello icon="https:..." label=someLabelHardcodedVal url="https://..." idx=7 type=22;
+                myKey=hello icon="https:..." label=someLabelHardcodedVal url="https://..." idx=7 type=22
             /> 
         </inner-join>
     `
 }
 ```
 
-words "with", "in", "for" are optional.  They are there for readability
+
 
 
 inner-join means treat the calling div element -- in this case: \<div id=menu-quick-options></div>)' -- treat its inner content as fully determined by the list of menu-options specified within, i.e. no support for skirting around content that may have already been inside the div element, before or after.
 
 Other methods:
 
-after-join -- carefully append content after the calling element -- typically the caller will be an empty template element, and we need adjacent content to be compatible with finicky native-HTML, like table or list elements.
+join-after -- carefully append content after the calling element -- typically the caller will be an empty template element, and we need adjacent content to be compatible with finicky native-HTML, like table or list elements.
 
 ## Method matching:
 
