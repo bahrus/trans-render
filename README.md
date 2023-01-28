@@ -461,7 +461,7 @@ match: {
     'div#menu-quick-options': html`
         <inner-join with option, index of host.options>
             <menu-option 
-                with key, icon, label, url in options,
+                with key, icon, label, url in option,
                 with idx for index,
                 with type in host
             /> 
