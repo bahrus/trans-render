@@ -461,14 +461,49 @@ match: {
     'div#menu-quick-options': html`
         <inner-join with option, index of host.options>
             <menu-option 
-                with key, icon, label, url in option,
-                with idx for index,
-                with type in host
+                with key, icon, label, url, in option;
+                with index;
+                with type in host;
             /> 
         </inner-join>
     `
 }
 ```
+
+If we need to rename values:
+
+```TypeScript
+const html = String.raw;
+match: {
+    'div#menu-quick-options': html`
+        <inner-join with option, index of host.options>
+            <menu-option 
+                with myKey=key, myIcon=icon, myLabel=label, myURL=url, in option;
+                with idx=index;
+                with myType in host;
+            /> 
+        </inner-join>
+    `
+}
+```
+
+To hardcode values:
+
+```TypeScript
+const html = String.raw;
+match: {
+    'div#menu-quick-options': html`
+        <inner-join with option, index of host.options>
+            <menu-option 
+                with myKey=hello icon="https:..." label=someLabelHardcodedVal url="https://..." idx=7 type=22;
+            /> 
+        </inner-join>
+    `
+}
+```
+
+words "with", "in", "for" are optional.  They are there for readability
+
 
 inner-join means treat the calling div element -- in this case: \<div id=menu-quick-options></div>)' -- treat its inner content as fully determined by the list of menu-options specified within, i.e. no support for skirting around content that may have already been inside the div element, before or after.
 
