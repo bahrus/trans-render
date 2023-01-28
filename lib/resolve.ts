@@ -4,7 +4,7 @@ let imports: any;
 export function resolve(href: string){
     let finalURL = href!;
     const linkTest = (<any>globalThis)[finalURL];
-    if(linkTest instanceof HTMLLinkElement && (linkTest.hasAttribute('be-written') || linkTest.hasAttribute('data-be-written')) ){
+    if(linkTest instanceof HTMLLinkElement && linkTest.hasAttribute('onerror') ){
         return linkTest.href;
         return finalURL;
     }

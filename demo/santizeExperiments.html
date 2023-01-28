@@ -16,7 +16,7 @@
             
 
                 <IMG SRC="jav&#x09;ascript:alert('XSS');">
-                    <link rel=modulepreload onblur=x href=https://esm.run/be-decorated/be-decorated.js >
+                    <link rel=modulepreload  onerror=console.debug href=https://esm.run/be-decorated/be-decorated.js >
             `;  // Unsanitized string of HTML
         const sanitizer1 = new Sanitizer({allowCustomElementsxxx: true, allowElementsxxx: ['div', 'my-custom-element'] });  // Default sanitizer;
 
@@ -25,6 +25,6 @@
 
         // Result (as a string): "abc  def"
     </script>
-    <link rel=modulepreload onblur=x href=https://esm.run/be-decorated/be-decorated.js >
+    <link rel=modulepreload onerror="console.error(href)" href=https://esm.run/be-decorated/be-decorated.js >
 </body>
 </html>

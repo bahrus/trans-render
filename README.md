@@ -444,6 +444,32 @@ match: {
 }
 ```
 
+What this does:
+
+1.  If method found, calls that method, passing in the render context and the parsed html
+2.  If method not found, searches for template element with id specified by tag name, and instantiates it
+
+Note that we can even "override" built in element names like table, ul, etc.
+
+## Loop Mixin [TODO]
+
+The trans-render package provides a mixin class, trans-render/lib/mixins/Joins.js, that has some methods specifically for joining tags together:
+
+```TypeScript
+const html = String.raw;
+match: {
+    menuQuickOptionsId: html`
+        <inner-join from option index of host.options>
+            <menu-option 
+                with key icon label url in options
+                with idx for index
+                with type in host
+            /> 
+        </inner-join>
+    `
+}
+```
+
 ## Method matching:
 
 
