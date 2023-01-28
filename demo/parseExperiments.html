@@ -9,7 +9,7 @@
 <body>
     <script>
         const str = `
-            <inner-join with option, index from host.options>
+            <inner-join with option, index of host.options>
                 <menu-option 
                     with key, icon, label, url in options,
                     with idx for index,
@@ -20,7 +20,6 @@
         const dp = new DOMParser();
         const parsed = dp.parseFromString(str, 'text/html');
         console.log(parsed.body.querySelector('menu-option').attributes)
-        debugger;
     </script>
 </body>
 </html>

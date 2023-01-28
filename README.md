@@ -416,7 +416,7 @@ will bind to host.place.location.  If that is undefined, then the "world" defaul
 
 Like most all UI libraries, only changes to top-level properties of the host are reacted to automatically.
 
-## Invoking a method from the host [WIP]
+## Invoking a method from the host via "Virtual Tags" [WIP]
 
 If the RHS is a string that can be html parsed as a single tag and if the host has a method that matches the tag after stripping attributes and children, then that method can be invoked:
 
@@ -424,7 +424,7 @@ If the RHS is a string that can be html parsed as a single tag and if the host h
 import {RenderContext} from 'trans-render/lib/types';
 const html = String.raw;
 class MyClass extends HTMLElement{
-    [html `<my-custom-processor/>`](ctx: RenderContext, transform){
+    [`<my-custom-processor/>`](ctx: RenderContext, transform, parsed: Document, args: Map<string, any>){
         //knock yourself out
         const {target, parsedRHS} = ctx;
         target.appendChild(document.body);
@@ -453,16 +453,16 @@ Note that we can even "override" built in element names like table, ul, etc.
 
 ## Loop Mixin [TODO]
 
-The trans-render package provides a mixin class, trans-render/lib/mixins/Joins.js, that has some methods specifically for joining tags together:
+The trans-render package provides a mixin class, trans-render/lib/mixins/Joins.js, that has some methods specifically for joining "virtual" tags together:
 
 ```TypeScript
 const html = String.raw;
 match: {
     menuQuickOptionsId: html`
-        <inner-join with option index of host.options>
+        <inner-join with option, index of host.options>
             <menu-option 
-                with key icon label url in options
-                with idx for index
+                with key, icon, label, url in options,
+                with idx for index,
                 with type in host
             /> 
         </inner-join>
