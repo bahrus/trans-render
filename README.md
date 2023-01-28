@@ -470,7 +470,7 @@ match: {
 }
 ```
 
-inner-join means treat the div element (in this case: \<div id=menu-quick-options></div>)'s inner content as fully determined by the list of menu-options specified within, i.e. no support for skirting around content that may have already been inside the div element, before or after.
+inner-join means treat the calling div element -- in this case: \<div id=menu-quick-options></div>)' -- treat its inner content as fully determined by the list of menu-options specified within, i.e. no support for skirting around content that may have already been inside the div element, before or after.
 
 Other methods:
 
