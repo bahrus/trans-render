@@ -9,10 +9,10 @@
 <body>
     <script>
         const str = `
-            <inner-join each=option from=host.options index-by=index>
+            <inner-join with option, index from host.options>
                 <menu-option 
-                    with key icon label url in options
-                    with idx for index
+                    with key, icon, label, url in options,
+                    with idx for index,
                     with type in host
                 /> 
             </inner-join>

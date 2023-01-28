@@ -459,7 +459,7 @@ The trans-render package provides a mixin class, trans-render/lib/mixins/Joins.j
 const html = String.raw;
 match: {
     menuQuickOptionsId: html`
-        <inner-join from option index of host.options>
+        <inner-join with option index of host.options>
             <menu-option 
                 with key icon label url in options
                 with idx for index
