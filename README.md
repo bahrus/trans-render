@@ -458,7 +458,7 @@ The trans-render package provides a mixin class, trans-render/lib/mixins/Joins.j
 ```TypeScript
 const html = String.raw;
 match: {
-    menuQuickOptionsId: html`
+    'div#menu-quick-options': html`
         <inner-join with option, index of host.options>
             <menu-option 
                 with key, icon, label, url in options,
@@ -469,6 +469,12 @@ match: {
     `
 }
 ```
+
+inner-join means treat the div element (in this case: \<div id=menu-quick-options></div>)'s inner content as fully determined by the list of menu-options specified within, i.e. no support for skirting around content that may have already been inside the div element, before or after.
+
+Other methods:
+
+after-join -- carefully append content after the calling element -- typically the caller will be an empty template element, and we need adjacent content to be compatible with finicky native-HTML, like table or list elements.
 
 ## Method matching:
 
