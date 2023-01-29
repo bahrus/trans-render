@@ -457,7 +457,7 @@ Note that we can even "override" built in element names like table, ul, etc.
 
 ## Loop Mixin [TODO]
 
-The trans-render package provides a mixin class, trans-render/lib/mixins/Joins.js, that has some methods specifically for joining "virtual" tags together, also know as for-each / loop / repeate, etc:
+The trans-render package provides a mixin class, trans-render/lib/mixins/Joins.js, that has some methods specifically for joining "virtual" tags together, also know as for-each / loop / repeat, etc:  Final name subject to change.
 
 ```TypeScript
 const html = String.raw;
