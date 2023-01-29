@@ -416,7 +416,11 @@ will bind to host.place.location.  If that is undefined, then the "world" defaul
 
 Like most all UI libraries, only changes to top-level properties of the host are reacted to automatically.
 
-## Invoking a method from the host via "Virtual Tags" [WIP]
+## Extending trans-render virtually
+
+There's yet a third dimension to how we can extend trans-rendering - via "virtual tags/attributs".
+
+### Invoking a method from the host via "Virtual Tags" in RHS expressions [WIP]
 
 If the RHS is a string that can be html parsed as a single tag and if the host has a method that matches the tag after stripping attributes and children, then that method can be invoked:
 
@@ -453,24 +457,24 @@ Note that we can even "override" built in element names like table, ul, etc.
 
 ## Loop Mixin [TODO]
 
-The trans-render package provides a mixin class, trans-render/lib/mixins/Joins.js, that has some methods specifically for joining "virtual" tags together:
+The trans-render package provides a mixin class, trans-render/lib/mixins/Joins.js, that has some methods specifically for joining "virtual" tags together, also know as for-each / loop / repeate, etc:
 
 ```TypeScript
 const html = String.raw;
 match: {
     'div#menu-quick-options': html`
-        <inner-join with option, index, of host.options>
+        <inner-join each option, index of host.options;>
             <menu-option 
-                with key, icon, label, url, in option;
-                with index;
-                with type in host;
+                pass key, icon, label, url in option;
+                pass index;
+                pass type in host;
             /> 
         </inner-join>
     `
 }
 ```
 
-words "with", "in" are optional.  They are there for readability
+words "each", "pass", and "in" are optional.  They are there for readability.
 
 If we need to rename values:
 
@@ -479,12 +483,12 @@ const html = String.raw;
 match: {
     'div#menu-quick-options': html`
         <inner-join 
-            with option, index, of host.options;
+            each option, index of host.options;
         >
             <menu-option 
-                with myKey=key, myIcon=icon, myLabel=label, myURL=url, in option;
-                with idx=index;
-                with myType in host;
+                pass myKey=key, myIcon=icon, myLabel=label, myURL=url in option;
+                pass idx=index;
+                pass myType=type in host;
             /> 
         </inner-join>
     `
@@ -499,7 +503,7 @@ match: {
     'div#menu-quick-options': html`
         <inner-join with option, index of host.options>
             <menu-option 
-                myKey=hello icon="https:..." label=someLabelHardcodedVal url="https://..." idx=7 type=22
+                myKey=hello icon="https:..." label=someLabelHardcodedVal url="https://..." idx-n=7 type=22
             /> 
         </inner-join>
     `
@@ -515,20 +519,25 @@ Other methods:
 
 join-after -- carefully append content after the calling element -- typically the caller will be an empty template element, and we need adjacent content to be compatible with finicky native-HTML, like table or list elements.
 
-## Method matching:
+### Global Auto Method matching: [TODO]
+
+A trans-render option, "autoMatchMethods" does the following:
+
+1.  The host object which the transform is being bound to is scanned for methods matching one of these two patterns:
+
 
 
 ```JavaScript
-match: {
-    'my-inner-tag,my-outer-tag": '<>'
+class MyClass extends HTMLElement{
+    async [`<my-custom-processor/>`](ctx: RenderContext, parsed: Element, args: Map<string, any>): Promise<TBD>{}
+
+    async ['[my-custom-attribute]'](ctx: RenderContext, parsed: Element, args: Map<string, any>): Promise<TBD>{}
 }
 ```
 
-What this does:
+Any such methods will cause trans-render to always be on the look-out for elements matching (in this case): 'my-custom-processor' and '[my-custom-attribute]', respectively.  When encountered, the rendering context is passed in (and awaited) before proceeding.
 
-In order of the selectors, searches for all my-inner-tag's, passes matches to method "<my-inner-tag/>", then searches for all my-outer-tag's, passes matches to method "<my-outer-tag/>"
-
-Also searches for "[data-spawn-of='my-inner-tag']", "[data-spawn-of='my-outer-tag]"
+The method can return a TBD object structure, which TR can use, for example to decide whether some DocumentFragment should fully replace the target tag, or be carefully appended adjacently.
 
 ## Invoking (a chain of) methods
 

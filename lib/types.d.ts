@@ -4,6 +4,7 @@ export interface RenderContextEndUserProps<T = Element, TItem = any>{
     hostController?: any;
     match?: Matches;
     make?: CSSSelectorBeHavingMap;
+    autoMatchMethods?: boolean; //TODO
 
 }
 

@@ -10,7 +10,8 @@
     "test": "playwright test",
     "doc": "wca analyze trans-render.js --outFile custom-elements.json",
     "package-check": "package-check",
-    "compress": "terser lib/CE.js -o dist/CE.min.js -c -m "
+    "compress": "terser lib/CE.js -o dist/CE.min.js -c -m ",
+    "safari": "npx playwright wk http://localhost:3030"
   },
   "exports": {
     ".": "./froop/CE.js",
