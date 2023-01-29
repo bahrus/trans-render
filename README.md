@@ -418,11 +418,11 @@ Like most all UI libraries, only changes to top-level properties of the host are
 
 ## Extending trans-render virtually
 
-There's yet a third dimension to how we can extend trans-rendering - via "virtual tags/attributs".
+There's yet a third dimension to how we can extend trans-rendering - via "virtual tags/attributes".
 
-### Invoking a method from the host via "Virtual Tags" in RHS expressions [WIP]
+### Virtual Tags from a distance -- Invoking a method from the host via "Virtual Tags" in RHS expressions [WIP]
 
-If the RHS is a string that can be html parsed as a single tag and if the host has a method that matches the tag after stripping attributes and children, then that method can be invoked:
+If the RHS is a string that can be html parsed as a single tag, and if the host has a method that matches the tag after stripping attributes and children, then that method can be invoked:
 
 ```TypeScript
 import {RenderContext} from 'trans-render/lib/types';
@@ -519,7 +519,7 @@ Other methods:
 
 join-after -- carefully append content after the calling element -- typically the caller will be an empty template element, and we need adjacent content to be compatible with finicky native-HTML, like table or list elements.
 
-### Global Auto Method matching: [TODO]
+### Inline Virtual Tags - Global Auto Method matching: [TODO]
 
 A trans-render option, "autoMatchMethods" does the following:
 
