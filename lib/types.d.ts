@@ -489,7 +489,9 @@ export interface IActionProcessor{
 }
 
 export interface TransformIslet {
-    transform: any,
+    transform?: Matches,
+    hydratingTransform?: Matches,
+    scopesUp?: number, //-1 = root
     islet: (inp: any) => any,
     isletDependencies?: string[],
     transformDependencies?: Set<string>,
