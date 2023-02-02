@@ -28,13 +28,16 @@ export class PropertyBag extends EventTarget{
             set(obj: any, prop: string, newVal: any){
                 const oldValue = obj[prop];
                 obj[prop] = newVal;
-                self.dispatchEvent(new Event(prop));
+                const detail = {
+                    oldValue,
+                    newVal,
+                    prop
+                } as ProxyPropChangeInfo;
+                self.dispatchEvent(new CustomEvent(prop, {
+                    detail
+                }));
                 self.dispatchEvent(new CustomEvent('prop-changed', {
-                    detail:{
-                        oldValue,
-                        newVal,
-                        prop
-                    } as ProxyPropChangeInfo
+                    detail
                 }));
                 return true;
             }
