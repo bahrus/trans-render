@@ -67,6 +67,7 @@
     "./lib/pluginMgr.js": "./lib/pluginMgr.js",
     "./lib/pq.js": "./lib/pq.js",
     "./lib/resolve.js": "./lib/resolve.js",
+    "./lib/ScopeNavigator.js": "./lib/ScopeNavigator.js",
     "./lib/setProp.js": "./lib/setProp.js",
     "./lib/specialKeys.js": "./lib/specialKeys.js",
     "./lib/SplitText.js": "./lib/SplitText.js",
