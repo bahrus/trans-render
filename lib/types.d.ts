@@ -492,7 +492,7 @@ export interface TransformIslet {
     transform?: Matches,
     hydratingTransform?: Matches,
     scopesUp?: number, //-1 = root
-    islet: (inp: any) => any,
+    islet: (inp: any, scopeNavigator: IScopeNavigator) => any,
     isletDependencies?: string[],
     transformDependencies?: Set<string>,
     transformer?: Transformer
@@ -501,6 +501,14 @@ export interface TransformIslet {
 export interface TransformJoinEvent {
     match?: Matches,
     acknowledged?: boolean,
+}
+
+export interface IScopeNavigator<T = any> {
+    scope?: EventTarget;
+    self?: Element;
+    ancestor?: T;
+    elder?: T;
+    host?: T;
 }
 
 

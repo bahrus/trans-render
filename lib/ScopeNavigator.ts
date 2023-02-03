@@ -1,8 +1,9 @@
 import {PropertyBag} from './PropertyBag.js';
 import {getQuery} from './specialKeys.js';
 import { upSearch } from './upSearch.js';
+import {IScopeNavigator} from './types';
 
-export class ScopeNavigator{
+export class ScopeNavigator<T = any> implements IScopeNavigator{
 
     #ref: WeakRef<Element>
     constructor(self: Element){
@@ -30,7 +31,7 @@ export class ScopeNavigator{
         return this.#ref.deref();
     }
 
-    get ancestor(): any{
+    get ancestor(): T{
         const ref = this.#ref;
         return new Proxy({}, {
             get(obj: any, prop: string){
@@ -40,10 +41,10 @@ export class ScopeNavigator{
                     return new ScopeNavigator(closest);
                 }
             }
-        });
+        }) as T;
     }
 
-    get elder(): any{
+    get elder(): T{
         const ref = this.#ref;
         return new Proxy({}, {
             get(obj: any, prop: string){
@@ -55,6 +56,14 @@ export class ScopeNavigator{
                     return new ScopeNavigator(closest);
                 }
             }
-        });
+        }) as T;
+    }
+
+    get host(): T | undefined{
+        const ref = this.#ref.deref();
+        if(ref === undefined) return undefined;
+        const host = (<any>ref.getRootNode()).host;
+        if(host === undefined) return undefined;
+        return new ScopeNavigator(host) as T;
     }
 }
