@@ -13,17 +13,19 @@ export class ScopeNavigator<T = any> implements IScopeNavigator{
     get scope(): EventTarget | undefined{
         let returnObj = (<any>this.#ref.deref()).beDecorated?.scoped?.scope;
         if(returnObj !== undefined) return returnObj;
-        const ref = <any>this.#ref.deref();
+        const ref = this.#ref.deref();
         if(ref === undefined) return undefined;
-        if(ref.beDecorated === undefined){
-            ref.beDecorated = {};
+        if((<any>ref).beDecorated === undefined){
+            (<any>ref).beDecorated = {};
         }
-        const bd = ref.beDecorated;
+        const bd = (<any>ref).beDecorated;
         if(bd.scoped === undefined){
             bd.scoped = {};
         }
         const pg = new PropertyBag();
         bd.scoped.scope = pg.proxy;
+        bd.scoped.nav = this;
+        ref.setAttribute('itemscope', '');
         return pg.proxy;
     }
 
