@@ -104,7 +104,7 @@ export class Propagator extends EventTarget {
         this.#propVals[key] = newVal;
         const init = {
             detail: {
-                key, oldVal, newVal
+                key, prop: key, oldVal, newVal
             }
         };
         this.dispatchEvent(new CustomEvent(key, init));

@@ -115,7 +115,7 @@ export class Propagator extends EventTarget{
         this.#propVals[key] = newVal;
         const init: CustomEventInit = {
             detail:{
-                key, oldVal, newVal
+                key, prop:key, oldVal, newVal
             } as IPropChg
         }
         this.dispatchEvent(new CustomEvent(key, init));

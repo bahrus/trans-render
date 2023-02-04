@@ -29,7 +29,7 @@ export class ScopeNavigator<T = any> implements IScopeNavigator{
         return pg.proxy;
     }
 
-    get self(){
+    get ref(){
         return this.#ref.deref();
     }
 
@@ -65,7 +65,11 @@ export class ScopeNavigator<T = any> implements IScopeNavigator{
         const ref = this.#ref.deref();
         if(ref === undefined) return undefined;
         const host = (<any>ref.getRootNode()).host;
-        if(host === undefined) return undefined;
         return new ScopeNavigator(host) as T;
+    }
+
+    async nav(to: string){
+        const {getVal} = await import('./getVal.js');
+        return await getVal({host: this}, to);
     }
 }

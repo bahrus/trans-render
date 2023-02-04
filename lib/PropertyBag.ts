@@ -26,10 +26,10 @@ export class PropertyBag extends EventTarget{
                 return value;
             },
             set(obj: any, prop: string, newVal: any){
-                const oldValue = obj[prop];
+                const oldVal = obj[prop];
                 obj[prop] = newVal;
                 const detail = {
-                    oldValue,
+                    oldVal,
                     newVal,
                     prop
                 } as ProxyPropChangeInfo;

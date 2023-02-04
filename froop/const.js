@@ -9,7 +9,7 @@ export const mse = 'main-svc-est';
 /**
  * abrev for prop-change event
  */
-export const pc = 'prop-change';
+export const pc = 'prop-changed';
 export const npb = 'new-prop-bag';
 export const r = 'resolved';
 export const ir = 'instance-resolved';

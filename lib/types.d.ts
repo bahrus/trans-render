@@ -328,7 +328,7 @@ export interface PropChangeInfo<TPropInfo = PropInfo> {
 }
 
 export interface ProxyPropChangeInfo{
-    oldValue: any,
+    oldVal: any,
     newVal: any,
     prop: string
 }
@@ -491,7 +491,7 @@ export interface IActionProcessor{
 export interface TransformIslet {
     transform?: Matches,
     hydratingTransform?: Matches,
-    scopesUp?: number, //-1 = root
+    scopeNav?: string,
     islet: (inp: any, scopeNavigator: IScopeNavigator) => any,
     isletDependencies?: string[],
     transformDependencies?: Set<string>,
