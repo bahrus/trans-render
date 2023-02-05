@@ -27,6 +27,7 @@ export class GetDep{
             case 'string':
                 if(rhs[0] === '.'){
                     returnObj.add(this.dtr.getFirstToken(rhs));
+                    //console.log({returnObj});
                 }else if(rhs[0] ==='<' && rhs.at(-1) === '>'){
                     console.debug('[TODO]: provide way to indicate dependencies');
                 }else{
@@ -76,7 +77,11 @@ export class GetDep{
             const item = rhs[key];
             switch(typeof item){
                 case 'string':
-                    returnObj.add(item);
+                    if(item[0] === '.'){
+                        returnObj.add(this.dtr.getFirstToken(item));
+                    }else{
+                        returnObj.add(item);
+                    }
                     break;
                 case 'object':
                     await this.#getDepRHS(item, returnObj);

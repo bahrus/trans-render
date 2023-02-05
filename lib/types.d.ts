@@ -489,6 +489,7 @@ export interface IActionProcessor{
 }
 
 export interface TransformIslet {
+    debug?: boolean,
     transform?: Matches,
     hydratingTransform?: Matches,
     scopeNav?: string,

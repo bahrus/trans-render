@@ -34,7 +34,7 @@ export async function applyP<T extends Partial<HTMLElement> = HTMLElement>(targe
             const {setProp} = await import ('./setProp.js');
             for(const key of dotKeys){
                 const val = safeProps[key];
-                setProp(target, key, val);
+                await setProp(target, key, val);
                 delete safeProps[key];
             }
         }

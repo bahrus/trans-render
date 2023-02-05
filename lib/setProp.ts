@@ -1,15 +1,34 @@
-export function setProp(obj: any, path: string, val: any){
+export async function setProp(obj: any, path: string, val: any){
+    console.log({obj, path, val});
     const splitPath = path.split('.');
     const last = splitPath.pop()!;
     let context = obj;
     for(const token of splitPath){
-        if(token==='') continue;
-        let newContext = context[token];
-        if(newContext === undefined){
-            context[token] = {};
-            newContext = context[token];
+        switch(token){
+            case '':
+                continue;
+            case '$':
+                {
+                    const {ScopeNavigator} = await import('./ScopeNavigator.js');
+                    context = new ScopeNavigator(context).scope;
+                }
+                break;
+            case '$$':
+                {
+                    const {ScopeNavigator} = await import('./ScopeNavigator.js');
+                    context = new ScopeNavigator(context);
+                }
+                break;
+            default:
+                let newContext = context[token];
+                if(newContext === undefined){
+                    context[token] = {};
+                    newContext = context[token];
+                }
+                context = newContext;
+
         }
-        context = newContext;
+
     }
     context[last] = val;
 }
