@@ -10,6 +10,14 @@ export class ScopeNavigator<T = any> implements IScopeNavigator{
         this.#ref = new WeakRef(self);
     }
 
+    get scopeContainer(): ScopeNavigator<T> | undefined{
+        const ref = this.#ref.deref();
+        if(ref === undefined) return undefined;
+        const c = ref.closest('[itemscope]');
+        if(c === null) return undefined;
+        return new ScopeNavigator(c);
+    }
+
     get scope(): EventTarget | undefined{
         let returnObj = (<any>this.#ref.deref()).beDecorated?.scoped?.scope;
         if(returnObj !== undefined) return returnObj;
@@ -40,7 +48,7 @@ export class ScopeNavigator<T = any> implements IScopeNavigator{
                 const qry = getQuery(prop);
                 const closest = ref.deref()?.closest(qry.query);
                 if(closest){
-                    return new ScopeNavigator(closest);
+                    return new ScopeNavigator(closest) as ScopeNavigator<T>;
                 }
             }
         }) as T;
@@ -61,11 +69,11 @@ export class ScopeNavigator<T = any> implements IScopeNavigator{
         }) as T;
     }
 
-    get host(): T | undefined{
+    get host(): ScopeNavigator<T> | undefined{
         const ref = this.#ref.deref();
         if(ref === undefined) return undefined;
         const host = (<any>ref.getRootNode()).host;
-        return new ScopeNavigator(host) as T;
+        return new ScopeNavigator(host) as ScopeNavigator<T>;
     }
 
     async nav(to: string){

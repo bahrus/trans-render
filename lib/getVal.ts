@@ -13,7 +13,7 @@ export async function getVal(ctx: getValArg, path: string): Promise<any> {
             const {splitExt} = await import('./splitExt.js');
             const dSplit = splitExt(qSplit[0].trim());
             const { getProp } = await import('./getProp.js');
-            let val = getProp(host, dSplit);
+            let val = await getProp(host, dSplit);
             if (val === undefined && deflt) {
                 deflt = deflt.trim();
                 if (deflt[0] === ".") {

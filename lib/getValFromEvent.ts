@@ -8,7 +8,7 @@ export async function getValFromEvent(self: Element, {vfe, valFromEvent, vft, va
     const valPath = (event !== undefined && valFE ? valFE : valFT) || (propName || 'value');
     const split = splitExt(valPath as string);
     let src: any = valFE !== undefined ? ( event ? event : self) : self; 
-    let dynamicVal = getProp(src, split);
+    let dynamicVal = await getProp(src, split);
     if(dynamicVal === undefined) return;
     if(clone) dynamicVal = structuredClone(dynamicVal);
     if(parseValAs !== undefined){
