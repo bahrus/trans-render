@@ -10,12 +10,12 @@ export class ScopeNavigator<T = any> implements IScopeNavigator{
         this.#ref = new WeakRef(self);
     }
 
-    get scopeContainer(): ScopeNavigator<T> | undefined{
+    get itemscope(): EventTarget | undefined{
         const ref = this.#ref.deref();
         if(ref === undefined) return undefined;
         const c = ref.closest('[itemscope]');
         if(c === null) return undefined;
-        return new ScopeNavigator(c);
+        return new ScopeNavigator(c).scope;
     }
 
     get scope(): EventTarget | undefined{
