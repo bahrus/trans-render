@@ -18,6 +18,10 @@ export class ScopeNavigator<T = any> implements IScopeNavigator{
         return new ScopeNavigator(c).scope;
     }
 
+    get $(){
+        return this.itemscope;
+    }
+
     get scope(): EventTarget | undefined{
         let returnObj = (<any>this.#ref.deref()).beDecorated?.scoped?.scope;
         if(returnObj !== undefined) return returnObj;

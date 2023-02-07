@@ -124,6 +124,7 @@ export interface IValFromEventInstructions<TSelf = any, TProps = any, TActions =
 
 export interface INotify<TSelf = any, TProps = any, TActions = TProps> extends  IMinimalNotify, IValFromEventInstructions<TSelf, TProps, TActions>{
 
+    navTo?: string;
 
     /**
      * Pass property or invoke fn onto custom or built-in element hosting the contents of p-u element.
