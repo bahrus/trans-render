@@ -6,8 +6,8 @@ export async function getRecipientElement(self: Element, {toClosest, toNearestUp
     let recipientElement: EventTarget | null = null;// (<any>self).recipientElement;
     //if(recipientElement) return recipientElement;
     if(navTo){
-        const {ScopeNavigator} = await import('./ScopeNavigator.js');
-        const sn = new ScopeNavigator(self);
+        const {CtxNav} = await import('./CtxNav.js');
+        const sn = new CtxNav(self);
         return await sn.nav(navTo);
     }
     if(to || toUpShadow){

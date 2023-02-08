@@ -1,29 +1,27 @@
 import {PropertyBag} from './PropertyBag.js';
 import {getQuery} from './specialKeys.js';
 import { upSearch } from './upSearch.js';
-import {IScopeNavigator} from './types';
+import {ICtxNav as ICtxNav} from './types';
 
-export class ScopeNavigator<T = any> implements IScopeNavigator{
+export class CtxNav<T = any> implements ICtxNav{
 
     #ref: WeakRef<Element>
     constructor(self: Element){
         this.#ref = new WeakRef(self);
     }
 
-    get itemscope(): EventTarget | undefined{
-        const ref = this.#ref.deref();
-        if(ref === undefined) return undefined;
-        const c = ref.closest('[itemscope]');
-        if(c === null) return undefined;
-        return new ScopeNavigator(c).scope;
+    get itemscope(): CtxNav<T> | undefined{
+        return this.$;
     }
 
-    get $(){
-        return this.itemscope;
+    get $(): CtxNav<T> | undefined{
+        const ref = this.ref?.closest('[itemscope]');
+        if(ref) return new CtxNav(ref);
+        
     }
 
-    get scope(): EventTarget | undefined{
-        let returnObj = (<any>this.#ref.deref()).beDecorated?.scoped?.scope;
+    get beScoped(): EventTarget | undefined{
+        let returnObj = (<any>this.ref).beDecorated?.scoped?.scope;
         if(returnObj !== undefined) return returnObj;
         const ref = this.#ref.deref();
         if(ref === undefined) return undefined;
@@ -41,6 +39,15 @@ export class ScopeNavigator<T = any> implements IScopeNavigator{
         return pg.proxy;
     }
 
+    async xtalState(): Promise<EventTarget | undefined>{
+        const ref = this.ref;
+        const ln = ref?.localName;
+        if(ln === undefined) return;
+        await customElements.whenDefined(ln);
+        return (<any>ref?.constructor)?.ceDef?.services?.propper?.stores?.get(ref) as EventTarget;
+    }
+    
+
     get ref(){
         return this.#ref.deref();
     }
@@ -52,7 +59,7 @@ export class ScopeNavigator<T = any> implements IScopeNavigator{
                 const qry = getQuery(prop);
                 const closest = ref.deref()?.closest(qry.query);
                 if(closest){
-                    return new ScopeNavigator(closest) as ScopeNavigator<T>;
+                    return new CtxNav(closest) as CtxNav<T>;
                 }
             }
         }) as T;
@@ -67,17 +74,21 @@ export class ScopeNavigator<T = any> implements IScopeNavigator{
                 if(realRef === undefined) return undefined;
                 const closest = upSearch(realRef, qry.query);
                 if(closest){
-                    return new ScopeNavigator(closest);
+                    return new CtxNav(closest);
                 }
             }
         }) as T;
     }
 
-    get host(): ScopeNavigator<T> | undefined{
+    get hostCtx(): CtxNav<T> | undefined{
+        const host = this.host;
+        return host === undefined ? undefined : new CtxNav(host) as CtxNav<T>;
+    }
+
+    get host(){
         const ref = this.#ref.deref();
         if(ref === undefined) return undefined;
         const host = (<any>ref.getRootNode()).host;
-        return new ScopeNavigator(host) as ScopeNavigator<T>;
     }
 
     async nav(to: string){

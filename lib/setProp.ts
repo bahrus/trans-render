@@ -8,14 +8,14 @@ export async function setProp(obj: any, path: string, val: any){
                 continue;
             case '$':
                 {
-                    const {ScopeNavigator} = await import('./ScopeNavigator.js');
-                    context = new ScopeNavigator(context).scope;
+                    const {CtxNav} = await import('./CtxNav.js');
+                    context = new CtxNav(context).beScoped;
                 }
                 break;
             case '$$':
                 {
-                    const {ScopeNavigator} = await import('./ScopeNavigator.js');
-                    context = new ScopeNavigator(context);
+                    const {CtxNav} = await import('./CtxNav.js');
+                    context = new CtxNav(context);
                 }
                 break;
             default:

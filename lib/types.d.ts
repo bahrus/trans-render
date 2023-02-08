@@ -494,7 +494,7 @@ export interface TransformIslet {
     transform?: Matches,
     hydratingTransform?: Matches,
     scopeNav?: string,
-    islet: (inp: any, scopeNavigator: IScopeNavigator) => any,
+    islet: (inp: any, scopeNavigator: ICtxNav) => any,
     isletDependencies?: string[],
     transformDependencies?: Set<string>,
     transformer?: Transformer
@@ -505,12 +505,13 @@ export interface TransformJoinEvent {
     acknowledged?: boolean,
 }
 
-export interface IScopeNavigator<T = any> {
-    scope?: EventTarget;
+export interface ICtxNav<T = any> {
+    beScoped?: EventTarget;
     self?: Element;
     ancestor?: T;
     elder?: T;
-    host?: T;
+    hostCtx?: T;
+    xtalState(): Promise<EventTarget | undefined>;
 }
 
 
