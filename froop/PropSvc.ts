@@ -17,28 +17,28 @@ export class PropSvc extends Svc implements IPropSvc{
         const {definer: createCustomEl, itemizer: createPropInfos} = services!;
         await createCustomEl.resolve();
         createCustomEl.addEventListener(ccb, e => {
-            //console.debug('connectedCallback');
             const connection = (e as CustomEvent).detail as IConnectedCB;
             const {instance} = connection;
             const propBag = this.#getStore(instance, true); //causes propagator to be created
+            propBag['#resolved'] = true;
             //ideally this is where we call propup
         });
-        createCustomEl.addEventListener(dcb, e => {
-            const disconnection = (e as CustomEvent).detail as IDisconnectedCB;
-            this.stores.delete(disconnection.instance);
-        });
+        // createCustomEl.addEventListener(dcb, e => {
+        //     const disconnection = (e as CustomEvent).detail as IDisconnectedCB;
+        //     this.stores.delete(disconnection.instance);
+        // });
         await createPropInfos.resolve();
         this.#addProps(createCustomEl.custElClass, createPropInfos.propInfos);  
         this.resolved = true;      
     }
 
-    stores = new WeakMap<HTMLElement, Propagator>();
 
     #getStore(instance: HTMLElement, forceNew: boolean){
-        let propagator = this.stores.get(instance);
+        let propagator = (<any>instance).xtalState
+        //let propagator = this.stores.get(instance);
         if(propagator === undefined && forceNew){
             propagator = new Propagator();
-            this.stores.set(instance, propagator);
+            (<any>instance).xtalState = propagator;
             this.dispatchEvent(new CustomEvent(npb, {
                 detail: {
                     instance,

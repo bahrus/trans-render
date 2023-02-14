@@ -1,4 +1,4 @@
-import { pc, npb, ccb, dcb, mse } from './const.js';
+import { pc, npb, ccb, mse } from './const.js';
 import { Svc } from "./Svc.js";
 export class PropSvc extends Svc {
     args;
@@ -14,26 +14,26 @@ export class PropSvc extends Svc {
         const { definer: createCustomEl, itemizer: createPropInfos } = services;
         await createCustomEl.resolve();
         createCustomEl.addEventListener(ccb, e => {
-            //console.debug('connectedCallback');
             const connection = e.detail;
             const { instance } = connection;
             const propBag = this.#getStore(instance, true); //causes propagator to be created
+            propBag['#resolved'] = true;
             //ideally this is where we call propup
         });
-        createCustomEl.addEventListener(dcb, e => {
-            const disconnection = e.detail;
-            this.stores.delete(disconnection.instance);
-        });
+        // createCustomEl.addEventListener(dcb, e => {
+        //     const disconnection = (e as CustomEvent).detail as IDisconnectedCB;
+        //     this.stores.delete(disconnection.instance);
+        // });
         await createPropInfos.resolve();
         this.#addProps(createCustomEl.custElClass, createPropInfos.propInfos);
         this.resolved = true;
     }
-    stores = new WeakMap();
     #getStore(instance, forceNew) {
-        let propagator = this.stores.get(instance);
+        let propagator = instance.xtalState;
+        //let propagator = this.stores.get(instance);
         if (propagator === undefined && forceNew) {
             propagator = new Propagator();
-            this.stores.set(instance, propagator);
+            instance.xtalState = propagator;
             this.dispatchEvent(new CustomEvent(npb, {
                 detail: {
                     instance,

@@ -1,7 +1,7 @@
 import {PropertyBag} from './PropertyBag.js';
 import {getQuery} from './specialKeys.js';
 import { upSearch } from './upSearch.js';
-import {ICtxNav as ICtxNav} from './types';
+import {ICtxNav, Islet, freeText} from './types';
 
 export class CtxNav<T = any> implements ICtxNav{
 
@@ -17,7 +17,7 @@ export class CtxNav<T = any> implements ICtxNav{
     get $(): CtxNav<T> | undefined{
         const ref = this.ref?.closest('[itemscope]');
         if(ref) return new CtxNav(ref);
-        
+
     }
 
     get beScoped(): EventTarget | undefined{
@@ -41,10 +41,12 @@ export class CtxNav<T = any> implements ICtxNav{
 
     async xtalState(): Promise<EventTarget | undefined>{
         const ref = this.ref;
-        const ln = ref?.localName;
-        if(ln === undefined) return;
-        await customElements.whenDefined(ln);
-        return (<any>ref?.constructor)?.ceDef?.services?.propper?.stores?.get(ref) as EventTarget;
+        if(ref === undefined) return;
+        let {xtalState} = ref as any;
+        if(xtalState !== undefined) return xtalState;
+        ref.addEventListener('#resolved', e => {
+            return (ref as any).xtalState;
+        }, {once: true});
     }
     
 

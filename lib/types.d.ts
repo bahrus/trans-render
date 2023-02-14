@@ -1,3 +1,5 @@
+import { doInvoke } from "./doInvoke";
+
 export interface RenderContextEndUserProps<T = Element, TItem = any>{
     shadowPeer?: Element | undefined;
     host?: any | undefined;
@@ -489,12 +491,64 @@ export interface IActionProcessor{
     postHoc(self: this, action: Action, target: any, returnVal: any, proxy?: any): void;
 }
 
-export interface TransformIslet {
+export type freeText = 'any.CtxNav.query as freeText';
+export type AffectOptions = 'host' | 'beScoped' | freeText;
+
+export interface HydrateAction{
+    set: string,
+    inc: string,
+    by: string,
+    toggle: string,
+    to: string,
+    toVal: any,
+    invoke: string,
+
+}
+
+type EventName = 'click'
+
+export interface Hydrate<Str extends string> {
+    onSet?: string,
+    /**
+     * CSS Query to select element to observe
+     * 
+     * */
+    [key: `on${string}Of`]: string,
+    //onInputOf?: string,
+    // onValueChangeOf?: string,
+    /**
+     * Select the target to affect
+     */
+    affect?: AffectOptions,
+    //onPropChangeOf: string,
+    do: HydrateAction[]
+}
+
+export interface IsletEndUserProps {
     debug?: boolean,
     transform?: Matches,
+    hydrate : string | Hydrate | Hydrate[],
     hydratingTransform?: Matches,
-    scopeNav?: string,
-    islet: (inp: any, scopeNavigator: ICtxNav) => any,
+    /**
+     * If not specified, will default to .
+     * 
+     */
+    observe?: 'beScoped' | 'xtalState' | '.' | freeText,
+    /**
+     * Defaults to beScoped
+     */
+    of?: '.' | 'host' | 'beScoped' | freeText,
+    /**
+     * CtxNav query to specify the **default** target which will be affected during event handling.
+     * There are many opportunities to override this default.
+     * If not specified, will default to host.
+     * 
+    **/
+    affect?: AffectOptions,
+}
+export interface Islet extends IsletEndUserProps {
+    
+    islet: (inp: any, ctxNav: ICtxNav) => any,
     isletDependencies?: string[],
     transformDependencies?: Set<string>,
     transformer?: Transformer
