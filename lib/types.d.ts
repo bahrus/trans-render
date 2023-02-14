@@ -505,29 +505,25 @@ export interface HydrateAction{
 
 }
 
-type EventName = 'click'
 
-export interface Hydrate<Str extends string> {
+export interface HydratingOptions {
     onSet?: string,
     /**
      * CSS Query to select element to observe
      * 
      * */
     [key: `on${string}Of`]: string,
-    //onInputOf?: string,
-    // onValueChangeOf?: string,
     /**
      * Select the target to affect
      */
     affect?: AffectOptions,
-    //onPropChangeOf: string,
     do: HydrateAction[]
 }
 
 export interface IsletEndUserProps {
     debug?: boolean,
     transform?: Matches,
-    hydrate : string | Hydrate | Hydrate[],
+    hydrate : string | HydratingOptions | HydratingOptions[],
     hydratingTransform?: Matches,
     /**
      * If not specified, will default to .
