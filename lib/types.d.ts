@@ -482,6 +482,20 @@ export type Scope = Target |
 
 ;
 
+//https://stackoverflow.com/questions/38123222/proper-way-to-declare-json-object-in-typescript
+type JSONValue = 
+ | string
+ | number
+ | boolean
+ | null
+ | JSONValue[]
+ | {[key: string]: JSONValue}
+
+interface JSONObject {
+  [k: string]: JSONValue
+}
+interface JSONArray extends Array<JSONValue> {}
+
 export interface getValArg {
     host?: any;
 }
@@ -494,15 +508,20 @@ export interface IActionProcessor{
 export type freeText = 'any.CtxNav.query as freeText';
 export type AffectOptions = 'host' | 'beScoped' | freeText;
 
-export interface HydrateAction{
+export interface HookUpAction{
+    affect?: AffectOptions
     set: string,
     inc: string,
     by: string,
     toggle: string,
-    to: string,
-    toVal: any,
+    eq: string,
+    eqTo: any,
     invoke: string,
 
+}
+
+export type EqTransform {
+    eq: [lhs: string, rhs: string | string [] | JSONObject]
 }
 
 
@@ -517,7 +536,7 @@ export interface HydratingOptions {
      * Select the target to affect
      */
     affect?: AffectOptions,
-    do: HydrateAction[]
+    do: HookUpAction[]
 }
 
 export interface IsletEndUserProps {

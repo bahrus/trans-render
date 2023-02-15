@@ -1,9 +1,9 @@
-import {HydratingOptions} from './types';
+import {HydratingOptions, ICtxNav} from './types';
 import {camelToLisp} from './camelToLisp.js';
 import {getQuery} from './specialKeys.js';
 
-export class Hydrator{
-    constructor(fragment: DocumentFragment, options: HydratingOptions){
+export class Hydrator<THomeObj = any>{
+    constructor(fragment: DocumentFragment, options: HydratingOptions, homeObj: THomeObj){
         for(const key in options){
             if(key.startsWith('on') && key.endsWith('Of')){
                 const strInside = key.substring(2, key.length - 2);
@@ -18,17 +18,23 @@ export class Hydrator{
                 }else{
                     elementsToObserve = Array.from(fragment.querySelectorAll(query))
                 }
-                if(elementsToObserve === undefined) continue;
+                if(elementsToObserve === undefined || elementsToObserve.length === 0) continue;
                 const {do: doeth, affect} = options;
-
+                let affectPath = affect || 'host';
                 for(const elementToObserve of elementsToObserve){
                     elementToObserve.addEventListener(eventName, async e => {
-                        const {CtxNav} = await import('./CtxNav.js');
-                        const ctxNav = new CtxNav(elementToObserve);
-                        ctxNav.nav(affect || 'host');
                         for(const action of doeth){
-                            const {invoke, by, inc, set, to, toVal, toggle} = action;
+                            const {invoke, by, inc, set, eq, eqTo, toggle, affect} = action;
+                            affectPath = affect || affectPath;
+                            const {CtxNav} = await import('./CtxNav.js');
+                            const ctxNav = new CtxNav(elementToObserve);
+                            const target = await ctxNav.nav(affectPath);
+                            if(inc){
 
+                            }
+                            if(invoke){
+                                target[invoke](target, homeCtx, e);
+                            }
                         }
                     });
                 }
