@@ -509,19 +509,24 @@ export type freeText = 'any.CtxNav.query as freeText';
 export type AffectOptions = 'host' | 'beScoped' | freeText;
 
 export interface HookUpAction{
-    affect?: AffectOptions
-    set: string,
-    inc: string,
-    by: string,
+    affect?: AffectOptions,
+    set?: SetTransform,
+    inc?: string | IncTransform,
     toggle: string,
-    eq: string,
-    eqTo: any,
     invoke: string,
 
 }
 
-export type EqTransform {
+export interface SetTransform {
     eq: [lhs: string, rhs: string | string [] | JSONObject]
+}
+
+export interface IncTransform {
+    inc: [lhs: string, rhs: string | number]
+}
+
+export interface ToggleTransform {
+
 }
 
 
