@@ -506,18 +506,28 @@ export interface IActionProcessor{
 }
 
 
-export type AffectOptions = 'host' | 'beScoped' | '$' | '$.beScoped' | `.${string}`;
+//export type AffectOptions = 'host' | 'beScoped' | '$' | '$.beScoped' | `.${string}`;
 
 
 
-export type keyOfCtxNav = keyof ICtxNav & string;
+export type keyOfCtxNavElement = keyof ICTXNavElement & string;
 
-export type AffectOptions2 = 
-    keyOfCtxNav 
-    | `${keyOfCtxNav}.${keyOfCtxNav}`
+export type keyofICTXCamelQryPrompt = `${keyof ICTXCamelQryPrompt & string}.${camelQry}`;
+
+export type keyofCTXNavRecursive = (keyof ICTXNavRecursive & string) |  keyofICTXCamelQryPrompt;
+
+
+
+export type AffectOptions = 
+      `${keyOfCtxNavElement}`
+    | `${keyofCTXNavRecursive}`
+    | `${keyofCTXNavRecursive}.${keyofCTXNavRecursive}`
+    | `${keyofCTXNavRecursive}.${keyofCTXNavRecursive}.${keyofCTXNavRecursive}`
+    |  `${keyofCTXNavRecursive}.${keyofCTXNavRecursive}.${keyofCTXNavRecursive}.${keyofCTXNavRecursive}`
+
 ;
 
-export interface HookUpAction{
+export interface HookUpAction {
     affect?: AffectOptions,
     set?: SetTransform,
     inc?: string | IncTransform,
@@ -573,11 +583,11 @@ export interface IsletEndUserProps {
      * If not specified, will default to .
      * 
      */
-    observe?: 'beScoped' | 'xtalState' | '.' | freeText,
+    observe?: 'beScoped' | 'xtalState' | '.',
     /**
      * Defaults to beScoped
      */
-    of?: '.' | 'host' | 'beScoped' | freeText,
+    of?: '.' | 'host' | 'beScoped',
     /**
      * CtxNav query to specify the **default** target which will be affected during event handling.
      * There are many opportunities to override this default.
@@ -615,10 +625,14 @@ export interface ICTXNavElement{
     host?: Element;
 }
 
-export interface ICtxNav<T = any> extends ICTXNavRecursive<T>, ICTXNavElement {
-    beScoped?: EventTarget;
+export interface ICTXCamelQryPrompt<T = any>{
     ancestor?: ExpectedCamelQry<T>;
     elder?: ExpectedCamelQry<T>;
+}
+
+export interface ICtxNav<T = any> extends ICTXNavRecursive<T>, ICTXNavElement, ICTXCamelQryPrompt<T> {
+    beScoped?: EventTarget;
+
     xtalState(): Promise<EventTarget | undefined>;
 }
 
