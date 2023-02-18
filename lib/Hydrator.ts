@@ -1,9 +1,9 @@
-import {HydratingOptions, ICtxNav} from './types';
+import {HydrateOptions, ICtxNav} from './types';
 import {camelToLisp} from './camelToLisp.js';
 import {getQuery} from './specialKeys.js';
 
 export class Hydrator<THomeObj = any>{
-    constructor(fragment: DocumentFragment, options: HydratingOptions, homeObj: THomeObj){
+    constructor(fragment: DocumentFragment, options: HydrateOptions, homeObj: THomeObj){
         for(const key in options){
             if(key.startsWith('on') && key.endsWith('Of')){
                 const strInside = key.substring(2, key.length - 2);

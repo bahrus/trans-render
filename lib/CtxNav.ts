@@ -21,10 +21,10 @@ export class CtxNav<T = any> implements ICtxNav{
     }
 
     get beScoped(): EventTarget | undefined{
-        let returnObj = (<any>this.ref).beDecorated?.scoped?.scope;
-        if(returnObj !== undefined) return returnObj;
-        const ref = this.#ref.deref();
+        const ref = this.ref;
         if(ref === undefined) return undefined;
+        let returnObj = (<any>ref).beDecorated?.scoped?.scope;
+        if(returnObj !== undefined) return returnObj;
         if((<any>ref).beDecorated === undefined){
             (<any>ref).beDecorated = {};
         }
@@ -39,14 +39,24 @@ export class CtxNav<T = any> implements ICtxNav{
         return pg.proxy;
     }
 
-    async xtalState(): Promise<EventTarget | undefined>{
-        const ref = this.ref;
-        if(ref === undefined) return;
-        let {xtalState} = ref as any;
-        if(xtalState !== undefined) return xtalState;
-        ref.addEventListener('#resolved', e => {
-            return (ref as any).xtalState;
-        }, {once: true});
+    xtalState(): Promise<EventTarget | undefined>{
+        return new Promise<EventTarget|undefined>(resolve => {
+            const ref = this.ref;
+            if(ref === undefined) {
+                resolve(undefined);
+                return;
+            }
+            let {xtalState} = ref as any;
+            if(xtalState !== undefined) {
+                resolve(xtalState);
+                return;
+            }
+            ref.addEventListener('#resolved', e => {
+                resolve((ref as any).xtalState);
+                return; 
+            }, {once: true});
+        })
+
     }
     
 

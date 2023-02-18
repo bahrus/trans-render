@@ -505,35 +505,55 @@ export interface IActionProcessor{
     postHoc(self: this, action: Action, target: any, returnVal: any, proxy?: any): void;
 }
 
-export type freeText = 'any.CtxNav.query as freeText';
-export type AffectOptions = 'host' | 'beScoped' | freeText;
+
+export type AffectOptions = 'host' | 'beScoped' | '$' | '$.beScoped' | `.${string}`;
+
+
+
+export type keyOfCtxNav = keyof ICtxNav & string;
+
+export type AffectOptions2 = 
+    keyOfCtxNav 
+    | `${keyOfCtxNav}.${keyOfCtxNav}`
+;
 
 export interface HookUpAction{
     affect?: AffectOptions,
     set?: SetTransform,
     inc?: string | IncTransform,
-    toggle: string,
+    toggle: string | ToggleTransform,
     invoke: string,
 
 }
 
+export type MethodParam = 'event' | 'invokee' | 'invoker' 
+
 export interface SetTransform {
-    eq: [lhs: string, rhs: string | string [] | JSONObject]
+    eq: [lhs: string, rhs: string | string [] | JSONObject],
+    affect?: AffectOptions,
 }
 
 export interface IncTransform {
-    inc: [lhs: string, rhs: string | number]
+    inc: [lhs: string, rhs: string | number],
+    affect?: AffectOptions,
 }
 
 export interface ToggleTransform {
+    prop: string,
+    affect?: AffectOptions,
+}
 
+export interface InvokeTransform {
+    method: string,
+    params?: MethodParam[],
+    affect?: AffectOptions,
 }
 
 
-export interface HydratingOptions {
+export interface HydrateOptions {
     onSet?: string,
     /**
-     * CSS Query to select element to observe
+     * EventName to CSS Query to select event to listen for and  element to observe 
      * 
      * */
     [key: `on${string}Of`]: string,
@@ -547,7 +567,7 @@ export interface HydratingOptions {
 export interface IsletEndUserProps {
     debug?: boolean,
     transform?: Matches,
-    hydrate : string | HydratingOptions | HydratingOptions[],
+    hydrate : string | HydrateOptions | HydrateOptions[],
     hydratingTransform?: Matches,
     /**
      * If not specified, will default to .
@@ -579,12 +599,22 @@ export interface TransformJoinEvent {
     acknowledged?: boolean,
 }
 
-export interface ICtxNav<T = any> {
-    beScoped?: EventTarget;
+export interface ICTXNavRecursive<T = any>{
+    $?: T;
+    hostCtx?: T;
+}
+
+export type camelQry = `${string}E` | `${string}P` | `${string}C` | `${string}Id` | `${string}I` | `${string}A` | `${string}N`
+
+export interface ICTXNavElement{
     self?: Element;
+    host?: Element;
+}
+
+export interface ICtxNav<T = any> extends ICTXNavRecursive<T>, ICTXNavElement {
+    beScoped?: EventTarget;
     ancestor?: T;
     elder?: T;
-    hostCtx?: T;
     xtalState(): Promise<EventTarget | undefined>;
 }
 
