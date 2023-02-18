@@ -604,7 +604,11 @@ export interface ICTXNavRecursive<T = any>{
     hostCtx?: T;
 }
 
-export type camelQry = `${string}E` | `${string}P` | `${string}C` | `${string}Id` | `${string}I` | `${string}A` | `${string}N`
+export type camelQry = `${string}E` | `${string}P` | `${string}C` | `${string}Id` | `${string}I` | `${string}A` | `${string}N`;
+
+export interface ExpectedCamelQry<T = any>{
+    [key: camelQry] : ICtxNav<T>
+}
 
 export interface ICTXNavElement{
     self?: Element;
@@ -613,8 +617,8 @@ export interface ICTXNavElement{
 
 export interface ICtxNav<T = any> extends ICTXNavRecursive<T>, ICTXNavElement {
     beScoped?: EventTarget;
-    ancestor?: T;
-    elder?: T;
+    ancestor?: ExpectedCamelQry<T>;
+    elder?: ExpectedCamelQry<T>;
     xtalState(): Promise<EventTarget | undefined>;
 }
 

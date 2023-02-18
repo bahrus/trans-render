@@ -1,7 +1,7 @@
 import {PropertyBag} from './PropertyBag.js';
 import {getQuery} from './specialKeys.js';
 import { upSearch } from './upSearch.js';
-import {ICtxNav, Islet, freeText} from './types';
+import {ICtxNav, Islet, freeText, ExpectedCamelQry} from './types';
 
 export class CtxNav<T = any> implements ICtxNav{
 
@@ -64,7 +64,7 @@ export class CtxNav<T = any> implements ICtxNav{
         return this.#ref.deref();
     }
 
-    get ancestor(): T{
+    get ancestor(): ExpectedCamelQry<T>{
         const ref = this.#ref;
         return new Proxy({}, {
             get(obj: any, prop: string){
@@ -74,10 +74,10 @@ export class CtxNav<T = any> implements ICtxNav{
                     return new CtxNav(closest) as CtxNav<T>;
                 }
             }
-        }) as T;
+        }) as ExpectedCamelQry<T>;
     }
 
-    get elder(): T{
+    get elder(): ExpectedCamelQry<T>{
         const ref = this.#ref;
         return new Proxy({}, {
             get(obj: any, prop: string){
@@ -89,7 +89,7 @@ export class CtxNav<T = any> implements ICtxNav{
                     return new CtxNav(closest);
                 }
             }
-        }) as T;
+        }) as ExpectedCamelQry<T>;
     }
 
     get hostCtx(): CtxNav<T> | undefined{
