@@ -523,17 +523,25 @@ export type AffectOptions =
     | `${keyofCTXNavRecursive}`
     | `${keyofCTXNavRecursive}.${keyofCTXNavRecursive}`
     | `${keyofCTXNavRecursive}.${keyofCTXNavRecursive}.${keyofCTXNavRecursive}`
-    |  `${keyofCTXNavRecursive}.${keyofCTXNavRecursive}.${keyofCTXNavRecursive}.${keyofCTXNavRecursive}`
+    // |  `${keyofCTXNavRecursive}.${keyofCTXNavRecursive}.${keyofCTXNavRecursive}.${keyofCTXNavRecursive}`
 
 ;
 
-export interface HookUpAction {
+export interface HydrateAction {
     affect?: AffectOptions,
     set?: SetTransform,
     inc?: string | IncTransform,
     toggle: string | ToggleTransform,
+    /**
+     * method on affected entity
+     * pass in affected entity, event object
+     */
     invoke: string,
-
+    /**
+     * export function defined from script tag
+     * pass in affected entity, event object
+     */
+    handler: string,
 }
 
 export type MethodParam = 'event' | 'invokee' | 'invoker' 
@@ -571,7 +579,7 @@ export interface HydrateOptions {
      * Select the target to affect
      */
     affect?: AffectOptions,
-    do: HookUpAction[]
+    do: HydrateAction[]
 }
 
 export interface IsletEndUserProps {

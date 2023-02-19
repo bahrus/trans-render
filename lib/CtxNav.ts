@@ -94,6 +94,7 @@ export class CtxNav<T = any> implements ICtxNav{
 
     get hostCtx(): CtxNav<T> | undefined{
         const host = this.host;
+        console.log({host});
         return host === undefined ? undefined : new CtxNav(host) as CtxNav<T>;
     }
 
@@ -107,4 +108,8 @@ export class CtxNav<T = any> implements ICtxNav{
         const {getVal} = await import('./getVal.js');
         return await getVal({host: this}, to);
     }
+
+    // clone(){
+
+    // }
 }
