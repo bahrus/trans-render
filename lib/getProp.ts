@@ -4,18 +4,6 @@ export async function getProp(val: any, pathTokens: (string | string[])[]) {
     switch (token) {
       case '':
         continue;
-      // case '$':
-      //   {
-      //     const { CtxNav } = await import('./CtxNav.js');
-      //     context = new CtxNav(context).beScoped;
-      //   }
-      //   break;
-      // case '$$':
-      //   {
-      //     const { CtxNav } = await import('./CtxNav.js');
-      //     context = new CtxNav(context);
-      //   }
-      //   break;
       default:
         switch (typeof token) {
           case 'string':

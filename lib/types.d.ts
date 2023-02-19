@@ -527,60 +527,60 @@ export type AffectOptions =
 
 ;
 
-export interface HydrateAction {
-    affect?: AffectOptions,
-    set?: SetTransform,
-    inc?: string | IncTransform,
-    toggle: string | ToggleTransform,
-    /**
-     * method on affected entity
-     * pass in affected entity, event object
-     */
-    invoke: string,
-    /**
-     * export function defined from script tag
-     * pass in affected entity, event object
-     */
-    handler: string,
-}
+// export interface HydrateAction {
+//     affect?: AffectOptions,
+//     set?: SetTransform,
+//     inc?: string | IncTransform,
+//     toggle: string | ToggleTransform,
+//     /**
+//      * method on affected entity
+//      * pass in affected entity, event object
+//      */
+//     invoke: string,
+//     /**
+//      * export function defined from script tag
+//      * pass in affected entity, event object
+//      */
+//     handler: string,
+// }
 
-export type MethodParam = 'event' | 'invokee' | 'invoker' 
+// export type MethodParam = 'event' | 'invokee' | 'invoker' 
 
-export interface SetTransform {
-    eq: [lhs: string, rhs: string | string [] | JSONObject],
-    affect?: AffectOptions,
-}
+// export interface SetTransform {
+//     eq: [lhs: string, rhs: string | string [] | JSONObject],
+//     affect?: AffectOptions,
+// }
 
-export interface IncTransform {
-    inc: [lhs: string, rhs: string | number],
-    affect?: AffectOptions,
-}
+// export interface IncTransform {
+//     inc: [lhs: string, rhs: string | number],
+//     affect?: AffectOptions,
+// }
 
-export interface ToggleTransform {
-    prop: string,
-    affect?: AffectOptions,
-}
+// export interface ToggleTransform {
+//     prop: string,
+//     affect?: AffectOptions,
+// }
 
-export interface InvokeTransform {
-    method: string,
-    params?: MethodParam[],
-    affect?: AffectOptions,
-}
+// export interface InvokeTransform {
+//     method: string,
+//     params?: MethodParam[],
+//     affect?: AffectOptions,
+// }
 
 
-export interface HydrateOptions {
-    onSet?: string,
-    /**
-     * EventName to CSS Query to select event to listen for and  element to observe 
-     * 
-     * */
-    [key: `on${string}Of`]: string,
-    /**
-     * Select the target to affect
-     */
-    affect?: AffectOptions,
-    do: HydrateAction[]
-}
+// export interface HydrateOptions {
+//     onSet?: string,
+//     /**
+//      * EventName to CSS Query to select event to listen for and  element to observe 
+//      * 
+//      * */
+//     [key: `on${string}Of`]: string,
+//     /**
+//      * Select the target to affect
+//      */
+//     affect?: AffectOptions,
+//     do: HydrateAction[]
+// }
 
 export interface IsletEndUserProps {
     debug?: boolean,
