@@ -4,7 +4,7 @@ export async function applyP<T extends Partial<HTMLElement> = HTMLElement>(targe
     if (props !== undefined) {
         const safeProps = {...props} as any;
         const renameProps = ['localName', 'tagName'];
-        const attributes = props.attributes
+        const attributes = props.attributes as any;
         if(attributes !== undefined){
             if(attributes instanceof NamedNodeMap){
                 for(const attrib of attributes){
