@@ -6,7 +6,7 @@ import {ITx, Matches} from './types';
  */
 export class Tx implements ITx{
     #ctx: RenderContext;
-    #realm: WeakRef<Element | ShadowRoot | DocumentFragment | Document | Node> | undefined;
+    #realm: WeakRef<Element | ShadowRoot | DocumentFragment | Document | Node | EventTarget> | undefined;
     #scope: Scope;
     constructor(host: any, realmCitizen: Element, match: Matches | undefined, scope: Scope){
         this.#ctx = {
