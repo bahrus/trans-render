@@ -11,7 +11,7 @@ export function HomeIn(
         if(!(host instanceof EventTarget)){
             throw `Property ${key} not of type EventTarget`;
         }
-        const transformPacket = homeInOn[key];
+        const transformPacket = (<any>homeInOn)[key];
         const base: TransformPacket = {
             DTRCtor,
             ...transformPacket,
