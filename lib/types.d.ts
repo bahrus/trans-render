@@ -585,7 +585,7 @@ export type AffectOptions =
 export interface IsletEndUserProps {
     debug?: boolean,
     transform?: Matches,
-    hydrate : string | HydrateOptions | HydrateOptions[],
+    //hydrate : string | HydrateOptions | HydrateOptions[],
     hydratingTransform?: Matches,
     /**
      * If not specified, will default to .
