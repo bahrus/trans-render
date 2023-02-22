@@ -1,7 +1,7 @@
 import {Scope, TemplMgmtProps} from './types';
 
 export async function findRealm(self: Element, scope: Scope){
-    if(typeof scope === 'string'){ //TODO:  do dynamic import for each condition
+    if(typeof scope === 'string'){ 
         switch(scope){
             case 's':
             case 'self':
@@ -9,6 +9,9 @@ export async function findRealm(self: Element, scope: Scope){
             case 'p':
             case 'parent':
                 return self.parentElement;
+            case 'porn':
+            case 'parentOrRootNode':
+                return self.parentElement || self.getRootNode();
             case 'rn':
             case 'rootNode':
                 return self.getRootNode() as Document | ShadowRoot;
