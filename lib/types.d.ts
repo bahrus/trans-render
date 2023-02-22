@@ -409,6 +409,14 @@ export type Target =
 */
 'p' |
 /**
+ * Use the parent.  If no parent, use root node
+ */
+'parentOrRootNode' |
+/**
+ * abbrev for parent or root node
+ */
+'porn' |
+/**
  * Use the element itself as the target
  */ 
 'self' | 
@@ -522,7 +530,7 @@ export type AffectOptions =
       `${keyOfCtxNavElement}`
     | `${keyofCTXNavRecursive}`
     | `${keyofCTXNavRecursive}.${keyofCTXNavRecursive}`
-    | `${keyofCTXNavRecursive}.${keyofCTXNavRecursive}.${keyofCTXNavRecursive}`
+    //| `${keyofCTXNavRecursive}.${keyofCTXNavRecursive}.${keyofCTXNavRecursive}`
     // |  `${keyofCTXNavRecursive}.${keyofCTXNavRecursive}.${keyofCTXNavRecursive}.${keyofCTXNavRecursive}`
 
 ;
