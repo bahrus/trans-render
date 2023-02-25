@@ -1,6 +1,6 @@
 import {PropInfo, WCConfig, Action, PropInfoTypes} from '../lib/types';
 import {CEArgs, IPropRegistrar as IPropRegistrar, IAttrChgCB, INewPropagator} from './types';
-import { npb, r, mse} from './const.js';
+import { xsr, r, mse} from './const.js';
 import { Svc } from './Svc.js';
 
 export class PropRegistry extends Svc{

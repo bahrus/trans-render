@@ -1,5 +1,5 @@
 import { PropInfo, DefineArgs } from "../lib/types";
-import { pc, npb, ccb, dcb, r, mse} from './const.js';
+import { pc, xsr, ccb, dcb, r, mse} from './const.js';
 import { Svc } from "./Svc.js";
 import { IPropagator, IPropSvc, CEArgs, INewPropagator, IConnectedCB, IDisconnectedCB, IPropChg } from './types';
 
@@ -39,7 +39,7 @@ export class PropSvc extends Svc implements IPropSvc{
         if(propagator === undefined && forceNew){
             propagator = new Propagator();
             (<any>instance).xtalState = propagator;
-            this.dispatchEvent(new CustomEvent(npb, {
+            this.dispatchEvent(new CustomEvent(xsr, {
                 detail: {
                     instance,
                     propagator

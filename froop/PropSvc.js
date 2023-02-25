@@ -1,4 +1,4 @@
-import { pc, npb, ccb, mse } from './const.js';
+import { pc, xsr, ccb, mse } from './const.js';
 import { Svc } from "./Svc.js";
 export class PropSvc extends Svc {
     args;
@@ -34,7 +34,7 @@ export class PropSvc extends Svc {
         if (propagator === undefined && forceNew) {
             propagator = new Propagator();
             instance.xtalState = propagator;
-            this.dispatchEvent(new CustomEvent(npb, {
+            this.dispatchEvent(new CustomEvent(xsr, {
                 detail: {
                     instance,
                     propagator
