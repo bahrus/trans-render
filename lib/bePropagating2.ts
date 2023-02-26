@@ -1,13 +1,13 @@
 
 interface PropertySubscriber{
-    ref: WeakRef<Element>;
+    ref: WeakRef<any>;
     subscribedProps: Set<string>;
 }
 export class BePropagating extends EventTarget{
 
     #innerET: EventTarget | undefined;
     #subscriptions: PropertySubscriber | undefined;
-    constructor(target: Element){
+    constructor(target: any){
         super();
         this.#createOrReuseEventTarget(target);
     }
@@ -51,7 +51,7 @@ export class BePropagating extends EventTarget{
         this.#innerET!.addEventListener(propName, callback, options);
     }
 
-    async #createOrReuseEventTarget(target: Element){
+    async #createOrReuseEventTarget(target: any){
         const {isDefined} = await import('./isDefined.js');
         await isDefined(target);
         const xtalState = (<any>target).xtalState as EventTarget;
