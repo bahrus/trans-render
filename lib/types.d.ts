@@ -1,5 +1,3 @@
-import { doInvoke } from "./doInvoke";
-
 export interface RenderContextEndUserProps<T = Element, TItem = any>{
     shadowPeer?: Element | undefined;
     host?: any | undefined;
@@ -424,6 +422,7 @@ export type Target =
  * abbrev for self
  */ 
 's' |
+`closest${camelQry}` |
 /**
  * Use the native .closest() function to get the target
  */
@@ -435,20 +434,31 @@ export type Target =
 /**
  * Find nearest previous sibling, parent, previous sibling of parent, etc that matches this string.
  */
+`upSearchFor${camelQry}` |
+/**
+ * Find nearest previous sibling, parent, previous sibling of parent, etc that matches this string.
+ */
 ['upSearch', string] |
 /**
  * abbrev for upSearch
  */
 ['us', string] |
+
 /**
- * If second element is true, then tries .closest('itemscope').  If string, tries .closest([string value])
- * If that comes out to null, do .getRootNode
+ * Tries .closest matching string.  If that's null, does .getRootNode().host
  */
-['closestOrHost', boolean | string] |
+`closest${camelQry}OrHost` |
+
+//'closestOrHost' |
+/**
+ * Tries .closest([string value]).
+ * If that comes out to null, do .getRootNode().host
+ */
+['closestOrHost', string] |
 /**
  * abbrev for closestOrHost
  */
-['coh', true | string] |
+['coh', string] |
 /**
  * get host
  */
@@ -473,14 +483,15 @@ export type Scope = Target |
     * abbrev for rootNode
     */ 
     'rn' |
+    `closest${camelQry}OrRootNode` | 
     /**
      * Similar to closestOrHost, but just get the root fragment via getRootNode()
      */
-    ['closestOrRootNode', boolean | string] | 
+    ['closestOrRootNode', string] | 
     /**
      * abbrev for closestOrRootNode
      */
-    ['corn', boolean | string] |
+    ['corn', string] |
 
     'shadowDOM' | 
     /** 
