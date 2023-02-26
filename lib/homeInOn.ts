@@ -1,21 +1,22 @@
 import {isDefined} from './isDefined.js';
-export async function homeInOn(host: Element, path: string){
+import {getVal} from './getVal.js';
+import { resolve } from './resolve.js';
+export async function homeInOn(host: Element, path: string, resolvedEventPath?: string){
     await isDefined(host);
+    let returnObj = getVal({host}, path);
+    if(returnObj !== undefined) return returnObj;
+    if(resolvedEventPath !== undefined){
+        host.addEventListener(resolvedEventPath, e => {
+            returnObj = getVal({host}, path);
+            return returnObj;
+        },  {once: true});
+    }else{
+        returnObj = getVal({host}, path, 50);
+        return returnObj;
+    }
     const split = path.split('.');
     let idx = 1;
-    let returnObj = host as any;
-    for(const token of split){
-        const test = returnObj[token];
-        if(test === undefined){
-            const {isResolved} = await import('./isResolved');
-            await isResolved(host, split, idx);
-            returnObj = returnObj[token];
-        }else{
-            returnObj = test;
-        }
-        if(returnObj === undefined) return undefined;
-        idx++;
-    }
-    return returnObj;
 }
+
+
 

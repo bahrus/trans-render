@@ -641,6 +641,14 @@ export interface ICTXNavRecursive<T = any>{
     hostCtx?: T;
 }
 
+/**
+ * E = element
+ * P = part
+ * C = class
+ * I = itemscope
+ * A = attribute
+ * N = name
+ */
 export type camelQry = `${string}E` | `${string}P` | `${string}C` | `${string}Id` | `${string}I` | `${string}A` | `${string}N`;
 
 export interface ExpectedCamelQry<T = any>{

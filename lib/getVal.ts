@@ -1,6 +1,6 @@
 import {getValArg} from './types';
 
-export async function getVal(ctx: getValArg, path: string): Promise<any> {
+export async function getVal(ctx: getValArg, path: string, delay?: number): Promise<any> {
     const {host} = ctx;
     if (host === undefined)
         return path;
@@ -13,6 +13,7 @@ export async function getVal(ctx: getValArg, path: string): Promise<any> {
             const {splitExt} = await import('./splitExt.js');
             const dSplit = splitExt(qSplit[0].trim());
             const { getProp } = await import('./getProp.js');
+            if(delay !== undefined) await sleep(delay);
             let val = await getProp(host, dSplit);
             if (val === undefined && deflt) {
                 deflt = deflt.trim();
@@ -47,4 +48,12 @@ export async function getVal(ctx: getValArg, path: string): Promise<any> {
     }
         
 
+}
+
+function sleep(delay: number) : Promise<void>{
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, delay);
+    })
 }
