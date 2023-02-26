@@ -34,12 +34,18 @@ export async function findRealm(self: Element, scope: Scope){
                     if(test !== null){
                         scope = ['coh', getQuery((<any>test).groups.camelQry).query];
                     }else{
-                        test = reClosest.exec(scope);
+                        test = reClosestOrRootNode.exec(scope);
                         if(test !== null){
-                            scope = ['c', getQuery((<any>test).groups.camelQry).query];
+                            scope = ['corn', getQuery((<any>test).groups.camelQry).query];
                         }else{
-                            throw 'fR.NI'
+                            test = reClosest.exec(scope);
+                            if(test !== null){
+                                scope = ['c', getQuery((<any>test).groups.camelQry).query];
+                            }else{
+                                throw 'fR.NI';
+                            }
                         }
+
                     }
                 }
         }
@@ -82,4 +88,5 @@ export async function findRealm(self: Element, scope: Scope){
 
 const reUpSearch = /^upSearchFor(?<camelQry>w+)/;
 const reClosestOrHost = /^closest(?<camelQry>w+)OrHost/;
+const reClosestOrRootNode = /^closest(?<camelQry>w+)OrRootNode/;
 const reClosest = /^closest(?<camelQry>w+)/;
