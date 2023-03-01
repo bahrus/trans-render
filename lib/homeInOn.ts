@@ -1,21 +1,17 @@
 import {isDefined} from './isDefined.js';
 import {getVal} from './getVal.js';
-import { resolve } from './resolve.js';
 export async function homeInOn(host: Element, path: string, resolvedEventPath?: string){
     await isDefined(host);
-    let returnObj = getVal({host}, path);
+    let returnObj = await getVal({host}, path);
     if(returnObj !== undefined) return returnObj;
     if(resolvedEventPath !== undefined){
-        host.addEventListener(resolvedEventPath, e => {
-            returnObj = getVal({host}, path);
-            return returnObj;
-        },  {once: true});
+        const {waitForEvent} = await import('./isResolved.js');
+        await waitForEvent(host, resolvedEventPath);
+        return await getVal({host}, path);
     }else{
         returnObj = getVal({host}, path, 50);
         return returnObj;
     }
-    const split = path.split('.');
-    let idx = 1;
 }
 
 
