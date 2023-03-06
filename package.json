@@ -92,8 +92,8 @@
     "froop/*"
   ],
   "devDependencies": {
-    "@playwright/test": "1.31.1",
-    "may-it-serve": "0.0.4",
+    "@playwright/test": "1.31.2",
+    "may-it-serve": "0.0.5",
     "xtal-shell": "0.0.27"
   },
   "repository": {

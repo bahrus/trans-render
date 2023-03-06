@@ -406,6 +406,8 @@ export type Target =
 * abbrev for parent
 */
 'p' |
+'pes' | 
+'previousElementSibling' | 
 /**
  * Use the parent.  If no parent, use root node
  */

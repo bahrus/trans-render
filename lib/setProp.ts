@@ -6,18 +6,6 @@ export async function setProp(obj: any, path: string, val: any){
         switch(token){
             case '':
                 continue;
-            case '$':
-                {
-                    const {CtxNav} = await import('./CtxNav.js');
-                    context = new CtxNav(context).beScoped;
-                }
-                break;
-            case '$$':
-                {
-                    const {CtxNav} = await import('./CtxNav.js');
-                    context = new CtxNav(context);
-                }
-                break;
             default:
                 let newContext = context[token];
                 if(newContext === undefined){
