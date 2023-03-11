@@ -423,29 +423,33 @@ export type TargetTuple =
      /**
       * Find nearest previous element sibling that matches this string
       */
-    | ['prev', string]
+    | ['previous', string]
 ;
 /**
  * Target selector in upward direction.
  */
-export type Target = TargetTuple | 
-/**
-* Use the parent element as the target
-*/ 
-'parent' | 
-/**
-* abbrev for parent
-*/
-'p' |
-/**
- * Use the previous element sibling as the target.
- */
-'previousElementSibling' | 
-/**
- * abbrev for previous element sibling.
- */
-'pes' |
-`prev${camelQry}` |
+export type Target = 
+| TargetTuple 
+  /**
+  * Use the parent element as the target
+  */ 
+| 'parent'
+  /**
+  * abbrev for parent
+  */
+| 'p' 
+  /**
+  * Use the previous element sibling as the target.
+  */
+| 'previousElementSibling' 
+  /**
+  * abbrev for previous element sibling.
+  */
+| 'pes' 
+  /** 
+   * Search previous element siblings for target that matches the query.
+   */
+| `previous${camelQry}` |
 
 /**
  * Use the parent as the target.  If no parent, use root node.

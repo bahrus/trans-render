@@ -38,7 +38,7 @@ export async function findRealm(self: Element, scope: Scope){
             const arg = scope[1];
             return self.closest(arg);
         }
-        case 'prev':{
+        case 'previous':{
             const css = scope[1];
             const {prevSearch} = await import('./prevSearch.js');
             return prevSearch(self, css);
@@ -80,7 +80,7 @@ async function getSecondArg(test: RegExpExecArray){
 async function sift(scopeString: Scope & string) : Promise<ScopeTuple> {
     
     let test = rePrev.exec(scopeString);
-    if(test !== null) return ['prev', await getSecondArg(test)];
+    if(test !== null) return ['previous', await getSecondArg(test)];
     test = reUpSearch.exec(scopeString);
     if(test !== null) return ['us', await getSecondArg(test)];
     test = reClosestOrHost.exec(scopeString);
@@ -92,7 +92,7 @@ async function sift(scopeString: Scope & string) : Promise<ScopeTuple> {
     throw 'sift.NI';
 }
 
-const rePrev = /^prev(?<camelQry>w+)/;
+const rePrev = /^previous(?<camelQry>w+)/;
 const reUpSearch = /^upSearchFor(?<camelQry>w+)/;
 const reClosestOrHost = /^closest(?<camelQry>w+)OrHost/;
 const reClosestOrRootNode = /^closest(?<camelQry>w+)OrRootNode/;
