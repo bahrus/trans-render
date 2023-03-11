@@ -1,4 +1,4 @@
-import {Scope, TemplMgmtProps} from './types';
+import {Scope, ScopeTuple, TemplMgmtProps} from './types';
 
 export async function findRealm(self: Element, scope: Scope){
     if(typeof scope === 'string'){ 
@@ -28,29 +28,7 @@ export async function findRealm(self: Element, scope: Scope){
                 //into the shadow dom.
                 return (self as any as TemplMgmtProps).clonedTemplate || self.shadowRoot; 
             default:
-                const {getQuery} = await import('./specialKeys.js');
-                let test = reUpSearch.exec(scope);
-                if(test !== null){
-                    scope = ['us', getQuery((<any>test).groups.camelQry).query];
-                }else{
-                    test = reClosestOrHost.exec(scope);
-                    if(test !== null){
-                        scope = ['coh', getQuery((<any>test).groups.camelQry).query];
-                    }else{
-                        test = reClosestOrRootNode.exec(scope);
-                        if(test !== null){
-                            scope = ['corn', getQuery((<any>test).groups.camelQry).query];
-                        }else{
-                            test = reClosest.exec(scope);
-                            if(test !== null){
-                                scope = ['c', getQuery((<any>test).groups.camelQry).query];
-                            }else{
-                                throw 'fR.NI';
-                            }
-                        }
-
-                    }
-                }
+                scope = await sift(scope);
         }
     }
     const scopeHead = scope[0];
@@ -60,11 +38,16 @@ export async function findRealm(self: Element, scope: Scope){
             const arg = scope[1];
             return self.closest(arg);
         }
+        case 'prev':{
+            const css = scope[1];
+            const {prevSearch} = await import('./prevSearch.js');
+            return prevSearch(self, css);
+        }
         case 'us':
         case 'upSearch':{
-            const arg = scope[1];
+            const css = scope[1];
             const {upSearch} = await import('./upSearch.js');
-            return upSearch(self, arg as string);
+            return upSearch(self, css);
         }
         case 'coh':
         case 'closestOrHost':{
@@ -89,6 +72,27 @@ export async function findRealm(self: Element, scope: Scope){
     
 }
 
+async function getSecondArg(test: RegExpExecArray){
+    const {getQuery} = await import('./specialKeys.js');
+    return getQuery(test.groups!.camelQry).query;
+}
+
+async function sift(scopeString: Scope & string) : Promise<ScopeTuple> {
+    
+    let test = rePrev.exec(scopeString);
+    if(test !== null) return ['prev', await getSecondArg(test)];
+    test = reUpSearch.exec(scopeString);
+    if(test !== null) return ['us', await getSecondArg(test)];
+    test = reClosestOrHost.exec(scopeString);
+    if(test !== null) return ['coh', await getSecondArg(test)];
+    test = reClosestOrRootNode.exec(scopeString);
+    if(test !== null) return ['corn', await getSecondArg(test)];
+    test = reClosest.exec(scopeString);
+    if(test !== null) return ['c', await getSecondArg(test)];
+    throw 'sift.NI';
+}
+
+const rePrev = /^prev(?<camelQry>w+)/;
 const reUpSearch = /^upSearchFor(?<camelQry>w+)/;
 const reClosestOrHost = /^closest(?<camelQry>w+)OrHost/;
 const reClosestOrRootNode = /^closest(?<camelQry>w+)OrRootNode/;

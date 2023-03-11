@@ -394,10 +394,41 @@ export interface ITx{
     scope: Scope;
 }
 
+export type TargetTuple = 
+      /**
+      * Use the native .closest() function to get the target
+      */
+    | ['closest', string] 
+     /**
+     * abbrev for closet
+     */
+    | ['c', string] 
+     /**
+     * Find nearest previous sibling, parent, previous sibling of parent, etc that matches this string.
+     */
+    | ['upSearch', string] 
+     /**
+     * abbrev for upSearch
+     */
+    | ['us', string] 
+     /**
+     * Tries .closest([string value]).
+     * If that comes out to null, do .getRootNode().host
+     */
+    | ['closestOrHost', string]
+     /**
+     * abbrev for closestOrHost
+     */
+    | ['coh', string]
+     /**
+      * Find nearest previous element sibling that matches this string
+      */
+    | ['prev', string]
+;
 /**
  * Target selector in upward direction.
  */
-export type Target = 
+export type Target = TargetTuple | 
 /**
 * Use the parent element as the target
 */ 
@@ -406,10 +437,18 @@ export type Target =
 * abbrev for parent
 */
 'p' |
-'pes' | 
+/**
+ * Use the previous element sibling as the target.
+ */
 'previousElementSibling' | 
 /**
- * Use the parent.  If no parent, use root node
+ * abbrev for previous element sibling.
+ */
+'pes' |
+`prev${camelQry}` |
+
+/**
+ * Use the parent as the target.  If no parent, use root node.
  */
 'parentOrRootNode' |
 /**
@@ -425,26 +464,14 @@ export type Target =
  */ 
 's' |
 `closest${camelQry}` |
-/**
- * Use the native .closest() function to get the target
- */
-['closest', string] |
-/**
- * abbrev for closet
- */
-['c', string] | 
+
+ 
 /**
  * Find nearest previous sibling, parent, previous sibling of parent, etc that matches this string.
  */
 `upSearchFor${camelQry}` |
-/**
- * Find nearest previous sibling, parent, previous sibling of parent, etc that matches this string.
- */
-['upSearch', string] |
-/**
- * abbrev for upSearch
- */
-['us', string] |
+
+
 
 /**
  * Tries .closest matching string.  If that's null, does .getRootNode().host
@@ -452,15 +479,8 @@ export type Target =
 `closest${camelQry}OrHost` |
 
 //'closestOrHost' |
-/**
- * Tries .closest([string value]).
- * If that comes out to null, do .getRootNode().host
- */
-['closestOrHost', string] |
-/**
- * abbrev for closestOrHost
- */
-['coh', string] |
+
+
 /**
  * get host
  */
@@ -471,11 +491,20 @@ export type Target =
 'h'
 ;
 
-
+export type ScopeTuple = TargetTuple
+      /**
+      * Similar to closestOrHost, but just get the root fragment via getRootNode()
+      */
+    | ['closestOrRootNode', string] 
+      /**
+      * abbrev for closestOrRootNode
+      */
+    | ['corn', string]
+;
 /**
  * Outer boundary for transformation
  */
-export type Scope = Target |
+export type Scope = Target | ScopeTuple |
     /**
     * use native function getRootNode() to set the target
     *
@@ -486,14 +515,7 @@ export type Scope = Target |
     */ 
     'rn' |
     `closest${camelQry}OrRootNode` | 
-    /**
-     * Similar to closestOrHost, but just get the root fragment via getRootNode()
-     */
-    ['closestOrRootNode', string] | 
-    /**
-     * abbrev for closestOrRootNode
-     */
-    ['corn', string] |
+
 
     'shadowDOM' | 
     /** 
