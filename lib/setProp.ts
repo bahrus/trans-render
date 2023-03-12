@@ -17,5 +17,10 @@ export async function setProp(obj: any, path: string, val: any){
         }
 
     }
-    context[last] = val;
+    if(typeof(context[last]) === 'object' && typeof(val) === 'object'){
+        Object.assign(context[last], val);
+    }else{
+        context[last] = val;
+    }
+    
 }
