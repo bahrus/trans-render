@@ -19,6 +19,14 @@ export function getQuery(key: string): QueryInfo{
         return left;
 
     }
+    //also
+    const split = key.split('HavingAlso');
+    if(split.length > 1){
+        const subs = split.map(s => getQuery(s));
+        const [head, ...tail] = subs;
+        const ret = head;
+        ret.havingAlso = tail;
+    }
     let idx = 0;
     const backwardsIdx = Array.from(key).reverse().findIndex(c => picaden.has(c));
     if(backwardsIdx === -1 || key.indexOf('-') !== -1){
@@ -82,6 +90,17 @@ export function getQuery(key: string): QueryInfo{
 
 }
 
-export function match(el: Element, queryInfo: QueryInfo){
-
+export function match(el: Element, queryInfo: QueryInfo): boolean{
+    if(!el.matches(queryInfo.query)) return false;
+    const {havingAlso} = queryInfo;
+    if(havingAlso !== undefined){
+        for(const ha of havingAlso){
+            if(!match(el, ha)) return false;
+        }
+    }
+    const {havingInner} = queryInfo;
+    if(havingInner !== undefined){
+        if(el.querySelector(havingInner.query) === null) return false;
+    }
+    return true;
 }
