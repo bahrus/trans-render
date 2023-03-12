@@ -54,6 +54,8 @@ export interface QueryInfo{
     lhsProp?: string;
     first?: boolean;
     verb?: string;
+    havingAlso?: QueryInfo[];
+    havingInner?: QueryInfo;
 }
 
 export interface RenderOptions{

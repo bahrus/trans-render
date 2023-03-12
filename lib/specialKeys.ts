@@ -8,6 +8,17 @@ const queryLookup = new Map<string, QueryInfo>();
 
 export function getQuery(key: string): QueryInfo{
     if(queryLookup.has(key)) return queryLookup.get(key)!;
+    //divide and conquer
+    const idxLastHavingInner = key.lastIndexOf('HavingInner');
+    if(idxLastHavingInner > -1){
+        const before = key.substring(0, idxLastHavingInner);
+        const after = key.substring(idxLastHavingInner + 11);
+        const left = getQuery(before);
+        const right = getQuery(after);
+        left.havingInner = right;
+        return left;
+
+    }
     let idx = 0;
     const backwardsIdx = Array.from(key).reverse().findIndex(c => picaden.has(c));
     if(backwardsIdx === -1 || key.indexOf('-') !== -1){
@@ -68,5 +79,9 @@ export function getQuery(key: string): QueryInfo{
     const q = {query, match, attrib, lhsProp, verb} as QueryInfo;
     queryLookup.set(key, q);
     return q;
+
+}
+
+export function match(el: Element, queryInfo: QueryInfo){
 
 }
