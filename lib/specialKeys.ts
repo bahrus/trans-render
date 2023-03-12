@@ -100,7 +100,13 @@ export function match(el: Element, queryInfo: QueryInfo): boolean{
     }
     const {havingInner} = queryInfo;
     if(havingInner !== undefined){
-        if(el.querySelector(havingInner.query) === null) return false;
+        const all = querySelectorAll(el, havingInner);
+        return all.length > 0;
     }
     return true;
+}
+
+export function querySelectorAll(el: Element, queryInfo: QueryInfo): Element[]{
+    const firstPass = Array.from(el.querySelectorAll(queryInfo.query));
+    return firstPass.filter(x => match(x, queryInfo));
 }
