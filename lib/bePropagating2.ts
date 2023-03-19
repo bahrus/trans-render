@@ -5,18 +5,24 @@ interface PropertySubscriber{
 }
 export class BePropagating extends EventTarget{
 
-    #innerET: EventTarget | undefined;
+    _innerET: EventTarget | undefined;
     #subscriptions: PropertySubscriber | undefined;
     constructor(target: any){
         super();
         this.#createOrReuseEventTarget(target);
     }
     async addEventListener(propName: string, callback: EventListenerOrEventListenerObject | null, options?: boolean | AddEventListenerOptions | undefined) {
-        if(this.#innerET === undefined){
+        if(propName === 'super.resolved') {
+            super.addEventListener(propName, callback, options);
+            return;
+        };
+        if(this._innerET === undefined){
             const {waitForEvent} = await import('./isResolved.js');
-            await waitForEvent(this, 'resolved');
+            if(this._innerET === undefined){
+                await waitForEvent(this, 'super.resolved');
+            }
+            
         }
-        
         if(this.#subscriptions !== undefined){
             const {ref, subscribedProps} = this.#subscriptions;
             if(!subscribedProps.has(propName)){
@@ -34,13 +40,14 @@ export class BePropagating extends EventTarget{
                 }
                 const setter = prop.set!.bind(target);
                 const getter = prop.get!.bind(target);
+                const self = this;// as BePropagating;
                 Object.defineProperty(target, propName, {
                     get(){
                         return getter();
                     },
                     set(nv){
                         setter(nv);
-                        this.#innerET.dispatchEvent(new Event(propName));
+                        self._innerET!.dispatchEvent(new Event(propName));
                     },
                     enumerable: true,
                     configurable: true,
@@ -48,7 +55,7 @@ export class BePropagating extends EventTarget{
             }
         }
 
-        this.#innerET!.addEventListener(propName, callback, options);
+        this._innerET!.addEventListener(propName, callback, options);
     }
 
     async #createOrReuseEventTarget(target: any){
@@ -56,15 +63,15 @@ export class BePropagating extends EventTarget{
         await isDefined(target);
         const xtalState = (<any>target).xtalState as EventTarget;
         if(xtalState !== undefined) {
-            this.#innerET = xtalState;
+            this._innerET = xtalState;
         }else{
             this.#subscriptions = {
                 ref: new WeakRef(target),
                 subscribedProps: new Set(),
             };
-            this.#innerET = new EventTarget();
+            this._innerET = new EventTarget();
         }
-        this.dispatchEvent(new Event('resolved'));
+        this.dispatchEvent(new CustomEvent('super.resolved', {}));
         
         
     }
