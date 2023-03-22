@@ -92,8 +92,8 @@ async function sift(scopeString: Scope & string) : Promise<ScopeTuple> {
     throw 'sift.NI';
 }
 
-const rePrev = /^previous(?<camelQry>w+)/;
-const reUpSearch = /^upSearchFor(?<camelQry>w+)/;
-const reClosestOrHost = /^closest(?<camelQry>w+)OrHost/;
-const reClosestOrRootNode = /^closest(?<camelQry>w+)OrRootNode/;
-const reClosest = /^closest(?<camelQry>w+)/;
+const rePrev = /^previous(?<camelQry>\w+)/;
+const reUpSearch = /^upSearchFor(?<camelQry>\w+)/;
+const reClosestOrHost = /^closest(?<camelQry>\w+)OrHost/;
+const reClosestOrRootNode = /^closest(?<camelQry>\w+)OrRootNode/;
+const reClosest = /^closest(?<camelQry>\w+)/;
