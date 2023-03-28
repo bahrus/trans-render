@@ -430,6 +430,10 @@ export type TargetTuple =
      * Find first element matching string within root node.
      */
     | ['withinRootNode', string]
+    /**
+     * abbrev for withinRootNode
+     */
+    | ['wrn', string]
 
 
 ;

@@ -67,7 +67,9 @@ export async function findRealm(self: Element, scope: Scope){
             }else{
                 return closest;
             }
-
+        case 'wrn':
+        case 'withinRootNode':
+            return (self.getRootNode() as DocumentFragment).querySelector(scope[1]);
     }
     
 }
@@ -89,6 +91,8 @@ async function sift(scopeString: Scope & string) : Promise<ScopeTuple> {
     if(test !== null) return ['corn', await getSecondArg(test)];
     test = reClosest.exec(scopeString);
     if(test !== null) return ['c', await getSecondArg(test)];
+    test = reWithinRootNode.exec(scopeString);
+    if(test !== null) return ['wrn', await getSecondArg(test)];
     throw 'sift.NI';
 }
 
@@ -97,3 +101,4 @@ const reUpSearch = /^upSearchFor(?<camelQry>\w+)/;
 const reClosestOrHost = /^closest(?<camelQry>\w+)OrHost/;
 const reClosestOrRootNode = /^closest(?<camelQry>\w+)OrRootNode/;
 const reClosest = /^closest(?<camelQry>\w+)/;
+const reWithinRootNode = /(?<camelQry>\w+)WithinRootNode/;
