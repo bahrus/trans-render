@@ -426,6 +426,12 @@ export type TargetTuple =
       * Find nearest previous element sibling that matches this string
       */
     | ['previous', string]
+    /**
+     * Find first element matching string within root node.
+     */
+    | ['withinRootNode', string]
+
+
 ;
 /**
  * Target selector in upward direction.
@@ -484,7 +490,10 @@ export type Target =
  */
 `closest${camelQry}OrHost` |
 
-`${camelQry}WithinThisRealm` |
+/**
+ * Searches for first element within the rootNode that matches the camelQry.
+ */
+`${camelQry}WithinRootNode` |
 
 
 /**
