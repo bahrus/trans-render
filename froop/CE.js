@@ -51,12 +51,12 @@ export class CE extends Svc {
     }
     async #createClass(args) {
         const { services } = args;
-        const { itemizer: createPropInfos, mixer: addMixins } = services;
-        await createPropInfos.resolve();
-        const ext = addMixins?.ext || HTMLElement;
+        const { itemizer, mixer } = services;
+        await itemizer.resolve();
+        const ext = mixer?.ext || HTMLElement;
         const config = args.config;
         const { tagName, formAss } = config;
-        const observedAttributes = await createPropInfos.getAttrNames(ext);
+        const observedAttributes = await itemizer.getAttrNames(ext);
         class newClass extends ext {
             static is = tagName;
             static observedAttributes = observedAttributes;

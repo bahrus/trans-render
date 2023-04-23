@@ -61,12 +61,12 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
 
     async #createClass(args: CEArgs){
         const {services} = args;
-        const {itemizer: createPropInfos, mixer: addMixins} = services!;
-        await createPropInfos.resolve();
-        const ext = addMixins?.ext || HTMLElement;
+        const {itemizer, mixer} = services!;
+        await itemizer.resolve();
+        const ext = mixer?.ext || HTMLElement;
         const config = args.config as WCConfig;
         const {tagName, formAss} = config;
-        const observedAttributes = await createPropInfos.getAttrNames(ext);
+        const observedAttributes = await itemizer.getAttrNames(ext);
         class newClass extends (<any>ext){
             static is = tagName; 
             static observedAttributes = observedAttributes;
