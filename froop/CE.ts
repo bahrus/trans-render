@@ -38,8 +38,10 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
         serviceClasses.itemizer  = PropRegistry;
         const {PropSvc} = await import('./PropSvc.js');
         serviceClasses.propper = PropSvc;
-        const config = args.config as WCConfig;
-        if(config.actions !== undefined){
+        const {config} = args;
+        const {actions, propDefaults} = config as WCConfig;
+        //const config = args.config as WCConfig;
+        if(actions || propDefaults){
             const {Hookup} = await import('./Hookup.js');
             serviceClasses.hooker = Hookup;
         }

@@ -31,8 +31,10 @@ export class CE extends Svc {
         serviceClasses.itemizer = PropRegistry;
         const { PropSvc } = await import('./PropSvc.js');
         serviceClasses.propper = PropSvc;
-        const config = args.config;
-        if (config.actions !== undefined) {
+        const { config } = args;
+        const { actions, propDefaults } = config;
+        //const config = args.config as WCConfig;
+        if (actions || propDefaults) {
             const { Hookup } = await import('./Hookup.js');
             serviceClasses.hooker = Hookup;
         }
