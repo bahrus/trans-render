@@ -21,7 +21,8 @@ export class CE extends Svc {
      * @overridable
      */
     async addSvcClasses(args) {
-        args.servers = {};
+        if (args.servers === undefined)
+            args.servers = {};
         const { servers: serviceClasses } = args;
         if (args.mixins || args.superclass) {
             const { Mix } = await import('./Mix.js');

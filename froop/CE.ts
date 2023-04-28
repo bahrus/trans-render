@@ -28,7 +28,7 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
      * @overridable
      */
     async addSvcClasses(args: CEArgs){
-        args.servers = {};
+        if(args.servers === undefined) args.servers = {};
         const {servers: serviceClasses} = args;
         if(args.mixins || args.superclass){
             const {Mix} = await import('./Mix.js');
