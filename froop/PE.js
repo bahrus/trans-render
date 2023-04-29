@@ -18,12 +18,12 @@ export class PE {
                     const { of, origMethName, on } = abort;
                     if (!(of instanceof EventTarget))
                         throw { abort };
-                    const acs = this.#abortControllers.get(originMethodName);
+                    const acs = this.#abortControllers.get(origMethName);
                     if (acs !== undefined) {
                         for (const ac of acs) {
                             ac.abort();
                         }
-                        this.#abortControllers.delete(originMethodName);
+                        this.#abortControllers.delete(origMethName);
                     }
                     return;
                 }
