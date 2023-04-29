@@ -5,6 +5,14 @@ export interface IEventConfig<MCProps = any, MCActions = MCProps, TAction = Acti
     of?: 'tbd' | EventTarget,
     doInit?: boolean,
     options?: AddEventListenerOptions,
+    abort?: {
+        origMethName: string & keyof MCActions,
+        //destMethName: string & keyof MCActions,
+        of: 'tbd' | EventTarget,
+        on: string, 
+        
+    },
+    composedPathMatches?: string,
 }
 
 export type ActionOnEventConfigs<MCProps = any, MCActions = MCProps, TAction = Action> = Partial<{[key in keyof MCActions]: IEventConfig<MCProps, MCActions, TAction>}>

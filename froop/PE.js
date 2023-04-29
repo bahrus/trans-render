@@ -9,24 +9,41 @@ export class PE {
             Object.assign(instance, vals[0]);
         }
         if (vals[1] !== undefined) {
+            //TODO map abort controllers first off of "of"
+            //similar to be-decorated/PE.ts
             for (const methodName in vals[1]) {
                 const ec = vals[1][methodName];
-                const { of, doInit, on } = ec;
+                const { of, doInit, on, abort } = ec;
                 if (!(of instanceof EventTarget))
                     throw { ec };
-                const ac = new AbortController();
-                const method = instance[methodName];
-                const isAsync = method.constructor.name === 'AsyncFunction';
-                //console.log({method, isAsync, key, ec});
-                of.addEventListener(on, async (e) => {
-                    const ret = isAsync ? await instance[methodName](instance, e) : instance[methodName](instance, e);
-                    //console.log({ret});
-                    await this.recurse(instance, methodName, ret);
-                }, { signal: ac.signal });
-                this.#abortControllers.get(originMethodName).push(ac);
-                if (doInit) {
-                    const ret = isAsync ? await instance[methodName](instance) : instance[methodName](instance);
-                    await this.recurse(instance, methodName, ret);
+                if (abort !== undefined) {
+                    const { of, origMethName, on } = abort;
+                    if (!(of instanceof EventTarget))
+                        throw { abort };
+                    const acs = this.#abortControllers.get(originMethodName);
+                    if (acs !== undefined) {
+                        for (const ac of acs) {
+                            ac.abort();
+                        }
+                        this.#abortControllers.delete(originMethodName);
+                    }
+                    return;
+                }
+                if (on !== undefined) {
+                    const ac = new AbortController();
+                    const method = instance[methodName];
+                    const isAsync = method.constructor.name === 'AsyncFunction';
+                    //console.log({method, isAsync, key, ec});
+                    of.addEventListener(on, async (e) => {
+                        const ret = isAsync ? await instance[methodName](instance, e) : instance[methodName](instance, e);
+                        //console.log({ret});
+                        await this.recurse(instance, methodName, ret);
+                    }, { signal: ac.signal });
+                    this.#abortControllers.get(originMethodName).push(ac);
+                    if (doInit) {
+                        const ret = isAsync ? await instance[methodName](instance) : instance[methodName](instance);
+                        await this.recurse(instance, methodName, ret);
+                    }
                 }
             }
         }

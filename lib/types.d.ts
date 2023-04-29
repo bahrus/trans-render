@@ -290,7 +290,9 @@ export interface LogicOp<MCProps = any>{
 
     ifEquals?: LogicOpProp<MCProps>,
 
-    ifAtLeastOneOf?: LogicOpProp<MCProps>
+    ifAtLeastOneOf?: LogicOpProp<MCProps>,
+
+
 
 }
 
@@ -304,6 +306,7 @@ export interface Transform<TMixinComposite = any> extends LogicOp<TMixinComposit
 export interface Action<MCProps = any, MCActions = MCProps> extends LogicOp<MCProps>{
     target?: keyof MCProps; 
     debug?: boolean;
+    secondArg?: any;
     //setFree?: (keyof MCProps & string)[],
 }
 
