@@ -14,8 +14,6 @@ export class PE {
             for (const methodName in vals[1]) {
                 const ec = vals[1][methodName];
                 const { of, doInit, on, abort } = ec;
-                if (!(of instanceof EventTarget))
-                    throw { ec };
                 if (abort !== undefined) {
                     const { of, origMethName, on } = abort;
                     if (!(of instanceof EventTarget))
@@ -30,6 +28,8 @@ export class PE {
                     return;
                 }
                 if (on !== undefined) {
+                    if (!(of instanceof EventTarget))
+                        throw { ec };
                     const ac = new AbortController();
                     const method = instance[methodName];
                     const isAsync = method.constructor.name === 'AsyncFunction';
