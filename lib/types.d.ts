@@ -10,10 +10,11 @@ export interface RenderContextEndUserProps<T = Element, TItem = any>{
 
 export interface BeHaving<TEndUserProps = any> {
     be?: string,
-    beAssigned?: any, //TODO
+    beAssigned?: any, //Untested
     having?: TEndUserProps | undefined,
     waitForResolved?: boolean,
-    waitForResolvedIfLoaded?: boolean, //TODO
+    waitForResolvedIfLoaded?: boolean, //Untested
+    beDeepMerged?: any, //Untested
 }
 
 export type CSSSelectorBeHavingMap = {[key: string]: BeHaving | BeHaving[]}

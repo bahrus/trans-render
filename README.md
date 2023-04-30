@@ -336,6 +336,16 @@ We can do this by simply taking advantage of the dynamic import function:
 </script>
 ```
 
+### Other options with make
+
+We can also use the make key to specify static properties to assign into the element, using 'beAssigned'.
+
+We can also specify static properties to deep merge into the element, using "beMerged".
+
+We can specify to wait for the custom enhancement to "resolve" before proceeding.  This does impose render blocking.
+
+We can finesse that further by specifying to wait for the custom element to resolve, only if the initial enhancement is already loaded in memory (which means any dependencies that might be dynamically loaded are sure not to be far behind, either in the download queue, or already in cache.)
+
 ## Match vs Make
 
 So now we have no less than two ways of "binding from a distance" -- via the transform/match expressions, and via the transform/make expressions.
