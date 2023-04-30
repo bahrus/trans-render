@@ -10,6 +10,16 @@
 
 *trans-rendering* (TR) describes a methodical way of instantiating a template.  It originally drew inspiration from the (least) popular features of XSLT, but has since evolved to more closely resemble standard CSS.  Like XSLT, TR performs transforms on elements by matching tests on those elements.  TR uses css tests on elements via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
 
+TR rests on:
+
+1.  A host that inherits from EventTarget and either contains standard getters/setters, or implements a "propagating" protocol.
+2.  A template that serves as the originator of the DOM structure (optional)
+3.  A template instantiation manifest (TIM), separate from the template itself.  
+4.  A target element to fill and/or update.
+
+The key to trans-rendering is the template instantiation manifest, which will be discussed in detail below.
+ 
+
 A subset of TR, also described below, is "declarative trans-render" syntax [DTR], which is pure, 100% declarative syntax.  
 
 DTR is designed to provide an alternative to the proposed [Template Instantiation proposal](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), the idea being that DTR could continue to supplement what that proposal includes if/when template instantiation support lands in browsers.
@@ -130,6 +140,14 @@ Throughout this documentation, we will be referring to the string before the col
 </details>
 
 The keyword "match" indicates that within that block are CSS Matches.
+
+TR supports two other such keywords:
+
+| keyword   | purpose                                                   |  notes
+------------------------------------------------------------------------------------------------------------------------------------------------------
+| match     | bind to dynamic properties of the host                    |  Uses css match on Elements
+| make      | attach element enhancements, set static properties        |  Uses third party enhancements that can add functionality or help with the template binding
+| evaluate  | use xpath to finding book-ended processing instructions   |  TODO
 
 So for example, this:
 
