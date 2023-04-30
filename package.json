@@ -35,6 +35,7 @@
     "./lib/doSet.js": "./lib/doSet.js",
     "./lib/DTR.js": "./lib/DTR.js",
     "./lib/expImp.js": "./lib/expImp.js",
+    "./lib/findAdjacentElement.js": "./lib/findAdjacentElement.js",
     "./lib/findRealm.js": "./lib/findRealm.js",
     "./lib/getAdjacentChildren.js": "./lib/getAdjacentChildren.js",
     "./lib/getHost.js": "./lib/getHost.js",
