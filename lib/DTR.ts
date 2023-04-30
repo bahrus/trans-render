@@ -22,7 +22,7 @@ export class DTR extends TR{
         const {make} = ctx;
         if(make !== undefined){
             const {makeBe} = await import('./makeBe.js');
-            makeBe(fragment, make);
+            await makeBe(fragment, make);
         }
         return await super.transform(fragment, fragmentManager);
     }

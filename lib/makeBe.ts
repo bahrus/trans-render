@@ -12,20 +12,26 @@ export async function makeBe(fragment: Element | DocumentFragment | Element[], m
         if(Array.isArray(fragment)){
             for(const el of fragment){
                 if(el.matches(cssSelector)){
-                    makeItBe(el, key, make);
+                    await makeItBe(el, key, make);
                 }
-                el.querySelectorAll(cssSelector).forEach(instance => {
-                    makeItBe(instance, key, make);
-                });                
+                const all = Array.from(el.querySelectorAll(cssSelector));
+                for(const instance of all){
+                    await makeItBe(instance, key, make);
+                }               
             }
         }else{
-            fragment.querySelectorAll(cssSelector).forEach(instance => {
-                makeItBe(instance, key, make);
-            });
+            const all = Array.from(fragment.querySelectorAll(cssSelector));
+            for(const instance of all){
+                await makeItBe(instance, key, make);
+            }
         }
 
     }
 }
+
+// async function doMakes(fragment: Element | DocumentFragment, cssSelector: string, key: string){
+
+// }
 
 const hasCapitalLetterRegExp = /[A-Z]/;
 

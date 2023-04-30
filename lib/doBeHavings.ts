@@ -14,10 +14,10 @@ export async function doBeHavings(instance: Element, beHavings: BeHaving[]){
                 Object.assign(base, {...having});
             }
             if(waitForResolved){
-                await (<any>instance).beEnhanced.whenDefined(enh);
+                await (<any>instance).beEnhanced.whenResolved(enh);
             }else if(waitForResolvedIfLoaded){
                 if(customElements.get(enh) !== undefined){
-                    await (<any>instance).beEnhanced.whenDefined(enh);
+                    await (<any>instance).beEnhanced.whenResolved(enh);
                 }
             }
             
