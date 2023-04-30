@@ -234,7 +234,7 @@ We will discuss this type of extension later.
 
 ### Verbal "spells" via inline decorators / element behaviors
 
-The [be-decorated](https://github.com/bahrus/be-decorated) library provides the base class for element behaviors / decorators that can be used to enhance server-side generated HTML.
+The [be-enhanced](https://github.com/bahrus/be-enhanced) library provides the base class for element behaviors / decorators that can be used to enhance server-side generated HTML.
 
 For example:
 
