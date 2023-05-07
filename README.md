@@ -212,7 +212,9 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>The last capital letter in the string is an "I", ends with "d"</td><td>driversLicenseIdId</td><td>.querySelector('#drivers-license-id')</td><td>Untested</td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is an "I", doesn't end with "d", doesn't end with "s"</td><td>nameI</td><td>.querySelector('[itemprop="name"]')</td><td></td>
+        <td>The last capital letter in the string is an "I", doesn't end with "d", doesn't end with "s"</td>
+        <td>nameI</td><td>.querySelector('[itemprop="name"]')</td>
+        <td>Depending on the element name associated with matching elements, will do different things. For example, if the element is the time tag, it will add the value of the full date string to the attribute[TODO]</td>
     </tr>
     <tr>
         <td>The last capital letter in the string is an "I", ends with "s"</td><td>nameItems</td><td>.querySelectorAll('[itemprop="name"]')</td><td></td>
