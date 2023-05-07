@@ -23,7 +23,7 @@ TR also strives to make it easy to generate HTML with microdata, in order to the
 
 Changes needed to be microdata friendly:
 
-1.  Remove support for interpolating without tags.  I.e. [use the platform](http://html5doctor.com/microdata/) ( 😳 ) [TODO]
+1.  Remove support for interpolating without tags, unless the target is a property.  I.e. [use the platform](http://html5doctor.com/microdata/) ( 😳 ) [TODO]
 2.  Auto populate itemtype when possible.
 3.  
  
