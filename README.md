@@ -19,7 +19,7 @@ TR rests on:
 
 The key to trans-rendering is the template instantiation manifest, which will be discussed in detail below.
 
-TR also strives to make it easy to generate HTML with microdata, in order to the rendered content easily indexible by search engines, as well as making the task of hydrating more efficient.[TODO]
+TR also strives to make it easy to generate HTML with microdata, in order to the rendered content easily indexible by search engines, as well as making the task of hydrating more efficient.[WIP]
  
 
 A subset of TR, also described below, is "declarative trans-render" syntax [DTR], which is pure, 100% declarative syntax.  
