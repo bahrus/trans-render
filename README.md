@@ -19,13 +19,14 @@ TR rests on:
 
 The key to trans-rendering is the template instantiation manifest, which will be discussed in detail below.
 
-TR also strives to make it easy to generate HTML with microdata, in order to the rendered content easily indexible by search engines, as well as making the task of hydrating more efficient.[WIP]
+TR also strives to make it easy to generate HTML with microdata, in order for the rendered content easily indexible by search engines, as well as making the task of hydrating more efficient.[WIP]
 
-Changes needed to be microdata friendly:
+Changes needed to complete the mission of making this library microdata friendly:
 
 1.  Strongly discourage use of interpolation for text content, unless the target is a property.  I.e. [use the platform](http://html5doctor.com/microdata/) ( 😳 ) [TODO]
 2.  Auto populate itemtype when possible.
-3.  
+3.  Set value for input, time, etc when itemscope is specified.
+4.  No need to even having to define transform rules for itemscope(d) attributes, will bind automatically.
  
 
 A subset of TR, also described below, is "declarative trans-render" syntax [DTR], which is pure, 100% declarative syntax.  
@@ -52,7 +53,7 @@ This package contains three core libraries.
 
 The first, lib/TR.js, is a tiny, 'non-committal' library that simply allows us to map css matches to user-defined functions, and a little more. 
 
-The second, lib/DTR.js, extends TR.js but provides robust declarative syntax support.  With the help of "hook like" web component decorators / trans-render plugins, we rarely if ever need to define user-defined functions, and can accomplish full, turing complete (?) rendering support while sticking to 100% declarative JSON.
+The second, lib/DTR.js, extends TR.js but provides robust declarative syntax support.  With the help of [custom] enhancements we rarely if ever need to define user-defined functions, and can accomplish full, turing complete (?) rendering support while sticking to 100% declarative JSON.
 
 In addition, this package contains a fairly primitive library for defining custom elements, froop/CE.js, which can be combined with lib/DTR.js via lib/mixins/TemplMgmt.js.
 
