@@ -86,7 +86,7 @@ Option 2 may be a bit controversial, but, until there are more HTML tags to repr
 |---------|----------------------------|-------------
 |Number   |https://schema.org/Number   |num.toString()
 |Date     |https://schema.org/DateTime |date.toISOString()
-|Boolean  |https://schema.org/Boolean  |bn.toString()
+|Boolean  |https://schema.org/Boolean  |bln.toString()
 |Object   |https://schema.org/Thing    |JSON.stringify(obj)
 
 Data elements that resolve to null or undefined would not emit anything in an interpolation.
