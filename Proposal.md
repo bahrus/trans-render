@@ -4,7 +4,7 @@ A good [percentage](https://w3techs.com/technologies/details/da-microdata#:~:tex
 
 I think nudging developers to make use of this feature by making it super easy, when working with template instantiation, would have beneficial impact for the web and society in general.
 
-At a more mundane level, it could have significant performance benefits. It could allow applications to hydrate without the need for passing down the data separately. With the help of meta tags, we can extract "water from rock", passing the data used by the server to generate the HTML output within attributes of the HTML output, consistent with what the client would generate via the template and applied to the same data.  
+At a more mundane level, it could have significant performance benefits. It could allow applications to hydrate without the need for passing down the data separately, and significantly reduce the amount of custom boilerplate in the hydrating code. With the help of meta tags, we can extract "water from rock", passing the data used by the server to generate the HTML output within attributes of the HTML output, consistent with what the client would generate via the template and applied to the same data.  
 
 The specific syntax of this proposal is not meant to be read as a particular endorsement of any particular schema (i.e. handlebar vs moustache vs xslt), and is up in the air, as far as I know, so please interpret the examples "non-literally".
 
@@ -115,10 +115,10 @@ would generate:
 
 ```html
 <ul>
-    <li itemscope itemprop=items>
+    <li itemscope itemprop=items itemtype=https://schema.org/ListItem>
         <div itemprop=message>Message 1</div>
     </li>
-    <li itemscope itemprop=items>
+    <li itemscope itemprop=items itemtype=https://schema.org/ListItem>
         <div itemprop=message>Message 2</div>
     </li>
 </ul>
@@ -141,15 +141,15 @@ would generate:
 
 ```html
 <dl>
-    <meta itemscope itemprop=items>
+    <meta itemscope itemprop=items  itemtype=https://schema.org/ListItem>
     <dt itemprop=word>Beast of Bodmin</dt>
     <dd itemprop=meaning>A large feline inhabiting Bodmin Moor.</dd>
 
-    <meta itemscope itemprop=items>
+    <meta itemscope itemprop=items  itemtype=https://schema.org/ListItem>
     <dt itemprop=word>Morgawr</dt>
     <dd itemprop=meaning>A sea serpent.</dd>
 
-    <meta itemscope itemprop=items>
+    <meta itemscope itemprop=items  itemtype=https://schema.org/ListItem>
     <dt itemprop=word>Owlman</dt>
     <dd itemprop=meaning>A giant owl-like creature.</dd>
 </dl>
@@ -157,7 +157,7 @@ would generate:
 
 Unfortunately, this will not work (for now) with table elements.  
 
-This proposal includes an urgent call to make the meta tag "stick" within a table.  
+This proposal includes an urgent call to make the meta tag "stick" within a table, like the template element does.  
 
 But for now, this will have to do:
 
@@ -185,7 +185,7 @@ would generate:
 ```html
 <table>
     <tbody>
-        <template itemscope itemprop=items></template>
+        <template itemscope itemprop=items itemtype=https://schema.org/ListItem></template>
         <tr class=odd>
             <td itemprop=to>Foo</td>
             <td itemprop=from>Bar</td>
@@ -195,7 +195,7 @@ would generate:
             <td itemprop=message>Qux</td>
         </tr>
         
-        <template itemscope itemprop=items></template>
+        <template itemscope itemprop=items itemtype=https://schema.org/ListItem></template>
         <tr class=odd>
             <td itemprop=to>Quux</td>
             <td itemprop=from>Quuz</td>
