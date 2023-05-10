@@ -4,7 +4,7 @@ A good [percentage](https://w3techs.com/technologies/details/da-microdata#:~:tex
 
 I think nudging developers to make use of this feature by making it super easy, when working with template instantiation, would have beneficial impact for the web and society in general.
 
-At a more mundane level, it could have significant performance benefits. It could allow applications to hydrate without the need for passing down the data separately, and significantly reduce the amount of custom boilerplate in the hydrating code. With the help of meta tags, we can extract "water from rock", passing the data used by the server to generate the HTML output within attributes of the HTML output, consistent with what the client would generate via the template and applied to the same data.  
+At a more mundane level, it could have significant performance benefits. It could allow applications to hydrate without the need for passing down the data separately, and significantly reduce the amount of custom boilerplate in the hydrating code. With the help of meta tags, we can extract "water from rock", passing the data used by the server to generate the HTML output within attributes of the HTML output, consistent with what the client would generate via the template and applied to the same data.  The hydration could happen real time as the html streams in.
 
 The specific syntax of this proposal is not meant to be read as a particular endorsement of any particular schema (i.e. handlebar vs moustache vs xslt), and is up in the air, as far as I know, so please interpret the examples "non-literally".
 
