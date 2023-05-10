@@ -101,7 +101,9 @@ The problem with that argument, is if the platform adds a tag specifically for d
 
 ## Loops
 
-For loops that repeat a single element (with light children), the developer needs to add an itemtype with two url's that is supposed to point to a schema (but the w3c police will probably overlook invalid url's).  The template instantiation engine would emit the itemscope attribute:
+The scenarios get a bit complicated here.  What follows assumes that the developer wants to be able to "reverse engineer" the output, and be able to guarantee they can distinguish between content that come from a loop, vs. content that came from a single sub property.  In what follows, I assume the tougher case.  If no such requirements exist, the developer can drop specifying the itemtype.
+
+For loops that repeat a single element (with light children), the developer needs to add an itemtype with two url's, each of which is supposed to point to a schema (but the w3c police will probably overlook invalid url's).  The template instantiation engine would emit the itemscope attribute, and split the two itemtypes, the first one landing in the parent's itemtype, leaving one in the element that represents each item of the loop.  Easier to explain by examples:
 
 ```html
 <template>
@@ -118,17 +120,17 @@ For loops that repeat a single element (with light children), the developer need
 would generate:
 
 ```html
-<ul>
-    <li itemscope itemprop=items itemtype="https://mywebsite/mySchemaType.TODOList.json https://mywebsite/mySchemaType.TODO.json">
+<ul itemscope itemtype=https://mywebsite/mySchemaType.TODOList.json>
+    <li itemscope itemprop=items itemtype="https://mywebsite/mySchemaType.TODO.json">
         <div itemprop=message>Message 1</div>
     </li>
-    <li itemscope itemprop=items itemtype="https://mywebsite/mySchemaType.TODOList.json https://mywebsite/mySchemaType.TODO.json">
+    <li itemscope itemprop=items itemtype="https://mywebsite/mySchemaType.TODO.json">
         <div itemprop=message>Message 2</div>
     </li>
 </ul>
 ```
 
-Of course, developers would be encouraged to search first for an existing schema before creating their own (or pretending to do so).  If the developer pretends to do so, I suspect the platform will be able to provide less help when/if it resurrects the Metadata API. 
+Of course, developers would be encouraged to search first for an existing schema before creating their own (or pretending to do so).  If the developer pretends to do so, I suspect the platform won't be able to provide as much help when/if it resurrects the Metadata API. 
 
 So when "reverse engineering" this HTML, we can assume that if there are two itemtype url's (space delimited) it was emitted from a loop.  If one or fewer, it is a simple property, (unless there are two children with identical itemprop(s)?)
 
@@ -148,16 +150,16 @@ If the loop has two or more elements, use the meta tag to group them in the outp
 would generate:
 
 ```html
-<dl>
-    <meta itemscope itemprop=items  itemtype=https://mywebsite/mySchemaType.TODOList.json https://mywebsite/mySchemaType.TODO.json>
+<dl itemscope itemtype=https://mywebsite/mySchemaType.TODOList.json >
+    <meta itemscope itemprop=items  itemtype=https://mywebsite/mySchemaType.TODO.json>
     <dt itemprop=word>Beast of Bodmin</dt>
     <dd itemprop=meaning>A large feline inhabiting Bodmin Moor.</dd>
 
-    <meta itemscope itemprop=items  itemtype=https://mywebsite/mySchemaType.TODOList.json https://mywebsite/mySchemaType.TODO.json>
+    <meta itemscope itemprop=items  itemtype=https://mywebsite/mySchemaType.TODO.json>
     <dt itemprop=word>Morgawr</dt>
     <dd itemprop=meaning>A sea serpent.</dd>
 
-    <meta itemscope itemprop=items  itemtype=https://mywebsite/mySchemaType.TODOList.json https://mywebsite/mySchemaType.TODO.json>
+    <meta itemscope itemprop=items  itemtype=https://mywebsite/mySchemaType.TODO.json>
     <dt itemprop=word>Owlman</dt>
     <dd itemprop=meaning>A giant owl-like creature.</dd>
 </dl>
@@ -173,7 +175,7 @@ But for now, this will have to do:
 <template>
     <table>
         <tbody>
-            <template repeat="{{item of items}}">
+            <template repeat="{{item of items}}" itemtype="https://mywebsite/mySchemaType.TODOList.json https://mywebsite/mySchemaType.TODO.json">
                 <tr class=odd>
                     <td>{{item.to}}</td>
                     <td>{{item.from}}</td>
@@ -192,8 +194,8 @@ would generate:
 
 ```html
 <table>
-    <tbody>
-        <template itemscope itemprop=items itemtype=hhttps://mywebsite/mySchemaType.TODOList.json https://mywebsite/mySchemaType.TODO.json></template>
+    <tbody itemscope itemtype=https://mywebsite/mySchemaType.TODOList.json>
+        <template itemscope itemprop=items itemtype=https://mywebsite/mySchemaType.TODO.json></template>
         <tr class=odd>
             <td itemprop=to>Foo</td>
             <td itemprop=from>Bar</td>
@@ -203,7 +205,7 @@ would generate:
             <td itemprop=message>Qux</td>
         </tr>
         
-        <template itemscope itemprop=items itemtype=https://mywebsite/mySchemaType.TODOList.json https://mywebsite/mySchemaType.TODO.json></template>
+        <template itemscope itemprop=items itemtype=https://mywebsite/mySchemaType.TODO.json></template>
         <tr class=odd>
             <td itemprop=to>Quux</td>
             <td itemprop=from>Quuz</td>
