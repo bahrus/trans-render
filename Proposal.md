@@ -15,6 +15,7 @@ This proposal consists of several, somewhat loosely coupled sub-proposals:
 1.  Allow the meta tag to be left unperturbed in most all HTML, including the table element between rows, and inside a select tag (just as we can do with the template element).
 2.  Until 1 is fulfilled, use the template element as a stand-in for the meta tag as a last resort (table row groupings, select tags, maybe others).
 3.  Specify some decisions for how microdata would be emitted in certain scenarios.
+4.  Add the minimal required schemas to schema.org so that every this is legitimate and above board.
 
 But basically, for starters, there would be an option we could specify when invoking the Template Instantiation API:  emitMicrodata.
 
@@ -123,6 +124,13 @@ would generate:
     </li>
 </ul>
 ```
+
+There is some controversy in specifying ListItem, in that schema.org specifies a list of allowed itemprops within a ListItem.  So this goes in the 4th item bucket of our general enhancements:
+
+> 4.  Add the minimal required schemas to schema.org so that every this is legitimate and above board.
+
+For this to be legitimate and above board, we would need to define an itemtype, say:  https://schea.org/GenericListItem that allows all itemprop values within.  
+
 
 If the loop has two or more elements, use the meta tag to group them in the output:
 
