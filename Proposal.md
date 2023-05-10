@@ -129,7 +129,7 @@ There is some controversy in specifying ListItem, in that schema.org specifies a
 
 > 4.  Add the minimal required schemas to schema.org so that every this is legitimate and above board.
 
-For this to be legitimate and above board, we would need to define an itemtype, say:  https://schea.org/GenericListItem that allows all itemprop values within.  
+For this to be legitimate and above board, we would need to define an itemtype, say:  https://schema.org/GenericListItem that allows all itemprop values within.  
 
 
 If the loop has two or more elements, use the meta tag to group them in the output:
