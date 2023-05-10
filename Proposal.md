@@ -2,9 +2,9 @@
 
 A good [percentage](https://w3techs.com/technologies/details/da-microdata#:~:text=Microdata%20is%20used%20by,24.2%25%20of%20all%20the%20websites) of websites use [microdata](http://html5doctor.com/microdata/).
 
-I think nudging developers to make use of this feature by making it super easy, when working with template instantiation, would have beneficial impact for the web and society in general.
+I think nudging developers to make use of this [standard](https://html.spec.whatwg.org/multipage/#toc-microdata) by making it super easy, when working with template instantiation, would have a beneficial impact for the web and society in general.
 
-At a more mundane level, it could have significant performance benefits. It could allow applications to hydrate without the need for passing down the data separately, and significantly reduce the amount of custom boilerplate in the hydrating code. With the help of meta tags, we can extract "water from rock", passing the data used by the server to generate the HTML output within attributes of the HTML output, consistent with what the client would generate via the template and applied to the same data.  **The hydration could happen real time as the html streams in**.
+At a more mundane level, it could have significant performance benefits. It could allow applications to hydrate without the need for passing down the data separately, and significantly reduce the amount of custom boilerplate in the hydrating code. With the help of meta tags, we can [extract](https://html.spec.whatwg.org/multipage/microdata.html#converting-html-to-other-formats) "water from rock", passing the data used by the server to generate the HTML output within attributes of the HTML output, consistent with what the client would generate via the template and applied to the same data.  **The hydration could happen real time as the html streams in**.
 
 The specific syntax of this proposal is not meant to be read as a particular endorsement of any particular schema (i.e. handlebar vs moustache vs xslt), and is up in the air, as far as I know, so please interpret the examples "non-literally".
 
@@ -129,7 +129,21 @@ There is some controversy in specifying ListItem, in that schema.org specifies a
 
 > 4.  Add the minimal required schemas to schema.org so that everything is legitimate and above board.
 
-For this to be legitimate and above board, we would need to define an itemtype, say:  https://schema.org/GenericListItem that allows all itemprop values within.  
+For this to be legitimate and above board, we would need to define an itemtype, say:  https://schema.org/GenericListItem that allows all itemprop values within. 
+
+Developers could specify a more specific itemtype, which template instantiation would honor:
+
+```html
+<template>
+    <ul>
+        <li repeat="{{item of items}}" itemtype=https://schema.org/SomeOtherListItemType>
+            <div>
+                {{item.message}}
+            </div>
+        </li>
+    </ul>
+</template>
+```
 
 
 If the loop has two or more elements, use the meta tag to group them in the output:
