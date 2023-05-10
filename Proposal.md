@@ -8,7 +8,7 @@ At a more mundane level, it could have significant performance benefits. It coul
 
 The specific syntax of this proposal is not meant to be read as a particular endorsement of any particular schema (i.e. handlebar vs moustache vs xslt), and is up in the air, as far as I know, so please interpret the examples "non-literally".
 
-Because there's a performance cost to adding microdata to the output, it should be something that can be opt-in (or opt-out), unless having microdata contained in the output proves to be so beneficial to the ability of specifying parts, that it makes sense to always emit the microdata.
+Because there's a performance cost to adding microdata to the output, it should be something that can be opt-in (or opt-out), unless having microdata contained in the output proves to be so beneficial to the ability of specifying parts, that it makes sense to always emit the microdata, which I personally would find thrilling.
 
 This proposal consists of several, somewhat loosely coupled sub-proposals:
 
@@ -91,9 +91,13 @@ Option 2 may be a bit controversial, but, until there are more HTML tags to repr
 
 Data elements that resolve to null or undefined would not emit anything in an interpolation.
 
+My tentative recommendation:  Use Option 1 for date props, option 2 for the other three primitive types.  
+
+The problem with that argument, is if the platform adds a tag specifically for displaying a number, similar to the time tag, and we go down that road for dates, then I suppose this would mean we would want to do the same for numbers.  But doing so would break backwards compatibility.
+
 ## Loops
 
-Loops that repeat a single element (with light children), we can simply add attribute itemscope to each top level parent:
+For loops that repeat a single element (with light children), we can simply add attribute itemscope to each top level parent:
 
 ```html
 <template>
