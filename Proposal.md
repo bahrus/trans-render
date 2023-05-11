@@ -1,6 +1,6 @@
 # Template Instantiation Support for Microdata
 
-A good [percentage](https://w3techs.com/technologies/details/da-microdata#:~:text=Microdata%20is%20used%20by,24.2%25%20of%20all%20the%20websites) of websites use [microdata](http://html5doctor.com/microdata/).
+A good [percentage](https://w3techs.com/technologies/details/da-microdata#:~:text=Microdata%20is%20used%20by,24.2%25%20of%20all%20the%20websites) of websites use [microdata](http://html5doctor.com/microdata/).  It is still lagging behind some competitors.  The standard suffered a setback in the early 2010's, and only in the late 2010's did it experience a comeback.  Some sites haven't [been properly updated](https://caniuse.com/sr_microdata) to reflect that fact, which can partly explain why this comeback seems to have slipped under the development community's radar.
 
 I think nudging developers to make use of this [standard](https://html.spec.whatwg.org/multipage/#toc-microdata) by making it super easy, when working with template instantiation, would have a beneficial impact for the web and society in general.
 
@@ -108,7 +108,7 @@ For loops that repeat a single element (with light children), the developer need
 ```html
 <template>
     <ul>
-        <li repeat="{{item of items}}" itemtype="https://mywebsite/mySchemaType.TODOList.json https://mywebsite/mySchemaType.TODO.json">
+        <li repeat="{{item of items}}" itemtype="https://mywebsite/mySchemaType.TODO.json of https://mywebsite/mySchemaType.TODOList.json">
             <div>
                 {{item.message}}
             </div>
@@ -130,6 +130,8 @@ would generate:
 </ul>
 ```
 
+So basically, an element with one or more itemtypes but not an itemprop is assumed to be an "array" possessor.
+
 Of course, developers would be encouraged to search first for an existing schema before creating their own (or pretending to do so).  If the developer pretends to do so, I suspect the platform won't be able to provide as much help when/if it resurrects the Metadata API. 
 
 So when "reverse engineering" this HTML, we can assume that if there are two itemtype url's (space delimited) it was emitted from a loop.  If one or fewer, it is a simple property, (unless there are two children with identical itemprop(s)?)
@@ -139,7 +141,7 @@ If the loop has two or more elements, use the meta tag to group them in the outp
 ```html
 <template>
 <dl>
-    <template repeat="{{item of items}}" itemtype="https://mywebsite/mySchemaType.TODOList.json https://mywebsite/mySchemaType.TODO.json">
+    <template repeat="{{item of items}}" itemtype="https://mywebsite/mySchemaType.TODO.json of https://mywebsite/mySchemaType.TODOList.json">
         <dt>{{item.word}}</dt>
         <dd>{{item.meaning}}</dd>
     </template>
@@ -175,7 +177,7 @@ But for now, this will have to do:
 <template>
     <table>
         <tbody>
-            <template repeat="{{item of items}}" itemtype="https://mywebsite/mySchemaType.TODOList.json https://mywebsite/mySchemaType.TODO.json">
+            <template repeat="{{item of items}}" itemtype="https://mywebsite/mySchemaType.TODO.json of https://mywebsite/mySchemaType.TODOList.json">
                 <tr class=odd>
                     <td>{{item.to}}</td>
                     <td>{{item.from}}</td>

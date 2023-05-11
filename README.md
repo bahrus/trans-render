@@ -19,7 +19,7 @@ TR rests on:
 
 The key to trans-rendering is the template instantiation manifest, which will be discussed in detail below.
 
-TR also strives to make it easy to generate HTML with microdata, in order for the rendered content easily indexible by search engines, as well as making the task of hydrating more efficient.[WIP]
+TR also strives to make it easy to generate HTML with microdata, in order for the rendered content to be easily indexible by search engines, as well as making the task of hydrating more efficient.[WIP]
 
 Changes needed to complete the mission of making this library microdata friendly:
 
