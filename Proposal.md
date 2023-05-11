@@ -241,7 +241,7 @@ Of course, developers would be encouraged to search first for an existing schema
 ```html
 <template>
 <dl>
-    <template repeat="{{monster of monsters}}" itemtype="https://mywebsite.com/Monsters.json">
+    <template repeat="{{monster of monsters}}" itemtype="https://mywebsite.com/Monster.json of https://schema.org/ItemList">
         <dt>{{monster.name}}</dt>
         <dd>{{monster.description}}</dd>
     </template>
@@ -252,8 +252,8 @@ Of course, developers would be encouraged to search first for an existing schema
 would generate:
 
 ```html
-<dl>
-    <dt itemprop=name>Beast of Bodmin</dt>
+<dl itemscope itemtype=https://schema.org/ItemList>
+    <dt itemscope itemprop="itemListElement monster" itemType=https://mywebsite.com/Monster.json><meta itemprop=name content="Beast of Bodmin"/>Beast of Bodmin</dt>
     <dd itemprop=description>A large feline inhabiting Bodmin Moor.</dd>
 
     
