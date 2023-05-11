@@ -113,7 +113,7 @@ The rules for what we are doing are summarized below:
 
 All these primitive types are [officially recognized](https://schema.org/DataType) by schema.org, with the possible exception of the last one.  If the usage above for the last one is considered incorrect (which, honestly, I think it is), I would suggest https://schema.org/DataType/SchemalessObject be added to schema.org.  It is a controversial move, as now we are almost encouraging sites to send information not viewable by the user, which is inefficient (especially when updating initial values sent down from the server), could lead to yet more gaming of page rankings.  However, it would speed up development, in my opinion.  I'm leaning towards dropping that one. 
 
-
+Not that with the nested object, the div is actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But that example, if it is supported, is doing more than emitting.  So assuming that example holds, the correct phrase should be integrateWithMicrodata.
 
 
 ## Formatting
