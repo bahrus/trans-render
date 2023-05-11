@@ -181,9 +181,9 @@ For loops that repeat a single element (with light children), the developer need
 ```html
 <template>
     <ul>
-        <li repeat="{{item of items}}" itemtype="https://mywebsite/mySchemaType.TODO.json of https://mywebsite/mySchemaType.TODOList.json">
+        <li repeat="{{item of items}}" itemtype="https://mywebsite.com/TODOItem.json of https://mywebsite.com/TODOList.json">
             <div>
-                {{item.}}
+                {{item.task}}
             </div>
         </li>
     </ul>
@@ -193,23 +193,18 @@ For loops that repeat a single element (with light children), the developer need
 would generate:
 
 ```html
-<ul itemscope itemtype=https://mywebsite/mySchemaType.TODOList.json>
-    <li itemscope itemprop=items itemtype="https://mywebsite/mySchemaType.TODO.json">
+<ul itemscope itemtype=https://mywebsite.com/TODOList.json>
+    <li itemscope itemprop=todoItem itemtype="https://mywebsite.com/TODOItem.json">
         <div itemprop=task>Brush teeth</div>
     </li>
-    <li itemscope itemprop=items itemtype="https://mywebsite/mySchemaType.TODO.json">
-        <div itemprop=message>Comb hair</div>
+    <li itemscope itemprop=todoItem itemtype="https://mywebsite.com/TODOItem.json">
+        <div itemprop=task>Comb hair</div>
     </li>
 </ul>
 ```
 
-~~So basically, an element with one or more itemtypes but not an itemprop is assumed to be an "array" possessor.~~
-
 Of course, developers would be encouraged to search first for an existing schema before creating their own (or pretending to do so).  If the developer pretends to do so, I suspect the platform won't be able to provide much if any help as far as hydrating, if/when it resurrects the Metadata API. 
 
-
-
-If the loop has two or more elements, use the meta tag to group them in the output:
 
 ```html
 <template>
