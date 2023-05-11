@@ -33,7 +33,7 @@ Because there's a tiny performance cost to adding microdata to the output, it sh
 This proposal consists of several, somewhat loosely coupled sub-proposals:
 
 1.  Allow the meta tag to be left unperturbed in most all HTML, including the table element between rows, and inside a select tag (just as we can do with the template element). **Update**:  The need for this was based on my misunderstanding of the specifications, so this issue is highly in doubt as to whether it is needed.
-2.  Until 1 is fulfilled, use the template element as a stand-in for the meta tag as a last resort (table row groupings, select tags, maybe others).
+2.  ~~Until 1 is fulfilled, use the template element as a stand-in for the meta tag as a last resort (table row groupings, select tags, maybe others)~~.
 3.  Specify some decisions for how microdata would be emitted in certain scenarios.
 4.  Add the minimal required schemas to schema.org so that everything is legitimate and above board.
 5.  Resurrect the Metadata API. 
@@ -111,13 +111,13 @@ The rules for what we are doing are summarized below:
 |Number   |https://schema.org/Number   |num.toString()       |num.toLocaleString()
 |Date     |https://schema.org/DateTime |date.toISOString()   |date.toLocaleDateString()
 |Boolean  |https://schema.org/Boolean  |bln.toString()       |true/false
-|Object   |https://schema.org/Thing    |JSON.stringify(obj)  |Whatever the browser uses to display JSON when opening a JSON file/url in the browser, (or none)
+|Object   |https://schema.org/Thing    |JSON.stringify(obj)  |None (for now)
 
 All these primitive types are [officially recognized](https://schema.org/DataType) by schema.org, with the possible exception of the last one.  If the usage above for the last one is considered incorrect (which, honestly, I think it is), I would suggest https://schema.org/DataType/SchemalessObject be added to schema.org.  It is a controversial move, as now we are almost encouraging sites to send information not viewable by the user, which is inefficient (especially when updating initial values sent down from the server), could lead to yet more gaming of page rankings.  However, it would speed up development, in my opinion.  I'm leaning towards dropping that one. 
 
-Not that with the nested object, the div is actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But that example, if it is supported, is doing more than emitting.  So assuming that example holds, the correct phrase should be integrateWithMicrodata.
+Note that with the nested object, the div is actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But that example, if it is supported, kind of burst through the initial understanding.  It is doing more than emitting.  So assuming that example holds, the correct phrase should be integrateWithMicrodata.
 
-With the last example, it may be that the correct interpretation of the specs should be a little bit of repetition:
+With the last example, it may be that the correct interpretation of the specs should require a little bit of repetition in the output:
 
 ```html
 <span itemscope itemprop=address><meta itemprop=street content="123 Penny Lane">123 Penny Lane</span>
@@ -178,6 +178,8 @@ The scenarios get a bit complicated here.  What follows assumes that the develop
 
 For loops that repeat a single element (with light children), the developer needs to add an itemtype with two url's, each of which is supposed to point to a schema (but the w3c police will probably overlook invalid url's).  The template instantiation engine would emit the itemscope attribute, and split the two itemtypes, the first one landing in the parent's itemtype, leaving one in the element that represents each item of the loop.  Easier to explain by examples:
 
+### Example 1
+
 ```html
 <template>
     <ul>
@@ -202,6 +204,36 @@ would generate:
     </li>
 </ul>
 ```
+
+### Example 2
+
+```html
+<template>
+    <ul>
+        <li repeat="{{item of items}}" itemtype="https://mywebsite.com.com/TODOItem.json of https://schema.org/ItemList">
+            <div>
+                {{item.task}}
+            </div>
+        </li>
+    </ul>
+</template>
+```
+
+would [generate](https://schema.org/ItemList):
+
+```html
+<ul itemscope itemtype="https://schema.org/ItemList">
+    <li itemscope itemprop="itemListElement"  itemtype="https://mywebsite.com.com/TODOItem.json">
+        <div itemprop=task>Brush teeth</div>
+    </li>
+    <li itemscope itemprop="itemListElement" itemtype="https://mywebsite.com.com/TODOItem.json">
+        <div itemprop=task>Comb hair</div>
+    </li>
+</ul>
+```
+
+I *think* the second example would make it unambiguous, when hydrating, if there's a single list item, that we are working with an array of items, rather than a sub property, but I'm still trying to understand this.
+
 
 Of course, developers would be encouraged to search first for an existing schema before creating their own (or pretending to do so).  If the developer pretends to do so, I suspect the platform won't be able to provide much if any help as far as hydrating, if/when it resurrects the Metadata API. 
 
