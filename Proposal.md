@@ -111,7 +111,7 @@ The rules for what we are doing are summarized below:
 |Boolean  |https://schema.org/Boolean  |bln.toString()       |true/false
 |Object   |https://schema.org/Thing    |JSON.stringify(obj)  |Whatever the browser uses to display JSON when opening a JSON file/url in the browser, (or none)
 
-All these primitive types are [officially recognized](https://schema.org/DataType) by schema.org, with the possible exception of the last one.  If the usage above for the last one is considered incorrect (which, honestly, I think it is), I would suggest https://schema.org/DataType/Object be added to schema.org.  It is a controversial move, as now we are almost encouraging the sites to send information not viewable by the user, which is inefficient (especially when updating initial values sent down from the server), could lead to yet more gaming of page rankings.  However, it would speed up development, in my opinion.  So I'm leaning towards dropping that one. 
+All these primitive types are [officially recognized](https://schema.org/DataType) by schema.org, with the possible exception of the last one.  If the usage above for the last one is considered incorrect (which, honestly, I think it is), I would suggest https://schema.org/DataType/SchemalessObject be added to schema.org.  It is a controversial move, as now we are almost encouraging sites to send information not viewable by the user, which is inefficient (especially when updating initial values sent down from the server), could lead to yet more gaming of page rankings.  However, it would speed up development, in my opinion.  I'm leaning towards dropping that one. 
 
 
 
@@ -165,7 +165,7 @@ Data elements that resolve to null or undefined would not emit anything in an in
 
 ## Loops
 
-The scenarios get a bit complicated here.  What follows assumes that the developer wants to be able to "reverse engineer" the output, and be able to guarantee they can distinguish between content that come from a loop, vs. content that came from a single sub property.  In what follows, I assume the tougher case.  If no such requirements exist, the developer can drop specifying the itemtype.
+The scenarios get a bit complicated here.  What follows assumes that the developer wants to be able to "reverse engineer" the output, and be able to guarantee they can distinguish between content that came from a loop, vs. content that came from a single sub property.  In what follows, I assume the tougher case.  If no such requirements exist, the developer can drop specifying the itemtype.
 
 For loops that repeat a single element (with light children), the developer needs to add an itemtype with two url's, each of which is supposed to point to a schema (but the w3c police will probably overlook invalid url's).  The template instantiation engine would emit the itemscope attribute, and split the two itemtypes, the first one landing in the parent's itemtype, leaving one in the element that represents each item of the loop.  Easier to explain by examples:
 
@@ -174,7 +174,7 @@ For loops that repeat a single element (with light children), the developer need
     <ul>
         <li repeat="{{item of items}}" itemtype="https://mywebsite/mySchemaType.TODO.json of https://mywebsite/mySchemaType.TODOList.json">
             <div>
-                {{item.message}}
+                {{item.}}
             </div>
         </li>
     </ul>
@@ -186,10 +186,10 @@ would generate:
 ```html
 <ul itemscope itemtype=https://mywebsite/mySchemaType.TODOList.json>
     <li itemscope itemprop=items itemtype="https://mywebsite/mySchemaType.TODO.json">
-        <div itemprop=message>Message 1</div>
+        <div itemprop=task>Brush teeth</div>
     </li>
     <li itemscope itemprop=items itemtype="https://mywebsite/mySchemaType.TODO.json">
-        <div itemprop=message>Message 2</div>
+        <div itemprop=message>Comb hair</div>
     </li>
 </ul>
 ```
@@ -198,7 +198,7 @@ would generate:
 
 Of course, developers would be encouraged to search first for an existing schema before creating their own (or pretending to do so).  If the developer pretends to do so, I suspect the platform won't be able to provide much if any help as far as hydrating, if/when it resurrects the Metadata API. 
 
-So when "reverse engineering" this HTML, we can assume that if there are two itemtype url's (space delimited) it was emitted from a loop.  If one or fewer, it is a simple property, (unless there are two children with identical itemprop(s)?)
+
 
 If the loop has two or more elements, use the meta tag to group them in the output:
 
