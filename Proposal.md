@@ -223,10 +223,10 @@ would [generate](https://schema.org/ItemList):
 
 ```html
 <ul itemscope itemtype="https://schema.org/ItemList">
-    <li itemscope itemprop="itemListElement"  itemtype="https://mywebsite.com.com/TODOItem.json">
+    <li itemscope itemprop="itemListElement todoItem"  itemtype="https://mywebsite.com.com/TODOItem.json">
         <div itemprop=task>Brush teeth</div>
     </li>
-    <li itemscope itemprop="itemListElement" itemtype="https://mywebsite.com.com/TODOItem.json">
+    <li itemscope itemprop="itemListElement todoItem" itemtype="https://mywebsite.com.com/TODOItem.json">
         <div itemprop=task>Comb hair</div>
     </li>
 </ul>
