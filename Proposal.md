@@ -24,7 +24,7 @@ With the help of the meta tag and microdata attributes, we can [extract](https:/
 
 ## Caveats
 
-The specific syntax of this proposal is just my view of the best way of representing integration with microdata, and is not meant to imply any "final decision", as if I'm in a position to do so.  I'm not yet an expert on the microdata standard, so it is possible that some of what I suggests contradicts some fine point specified somewhere.  But I do hope others find this helpful.
+The specific syntax of this proposal is just my view of the best way of representing integration with microdata, and is not meant to imply any "final decision", as if I'm in a position to do so.  I'm not yet an expert on the microdata standard, so it is possible that some of what I suggests contradict some fine point specified somewhere in the standard.  But I do hope others find this helpful.
 
 Because there's a tiny performance cost to adding microdata to the output, it should perhaps be something that can be opt-in (or opt-out).  If having microdata contained in the output proves to be so beneficial to the ability of specifying parts and working with streaming declarative shadow DOM, that it makes sense to always integrate with microdata, in my view the performance penalty is worth it, and would do much more good than harm (the harm seems negligible).
 
@@ -111,11 +111,8 @@ The rules for what we are doing are summarized below:
 |Boolean  |https://schema.org/Boolean  |bln.toString()       |true/false
 |Object   |https://schema.org/Thing    |JSON.stringify(obj)  |Whatever the browser uses to display JSON when opening a JSON file/url in the browser, (or none)
 
-All these primitive types are [officially recognized](https://schema.org/DataType) by schema.org, with the possible exception of the last one.  If the usage above for the last one is considered incorrect (which, honestly, I think it is), I would suggest https://schema.org/DataType/Object be added to schema.org.  It is a controversial move, as now we almost encouraging the sites to send information not viewable by the user, which is inefficient (especially when updating initial values sent down from the server), could lead to yet more gaming of page rankings.  However, it would speed up development, in my opinion.  So I'm leaning towards dropping that one. 
+All these primitive types are [officially recognized](https://schema.org/DataType) by schema.org, with the possible exception of the last one.  If the usage above for the last one is considered incorrect (which, honestly, I think it is), I would suggest https://schema.org/DataType/Object be added to schema.org.  It is a controversial move, as now we are almost encouraging the sites to send information not viewable by the user, which is inefficient (especially when updating initial values sent down from the server), could lead to yet more gaming of page rankings.  However, it would speed up development, in my opinion.  So I'm leaning towards dropping that one. 
 
-
-
-### Binding to numeric value
 
 
 
@@ -156,18 +153,15 @@ Option 2:
 <div>Hello <meta itemprop=name>Bob<meta content>, the event will begin at <meta itemprop=eventDate itemtype=https://schema.org/DateTime content=2011-11-18T14:54:39.929Z>11/18/2011</time></div>
 ```
 
-Option 2 may the lesser appealing, to me at least.  But until there are more HTML tags to represent things like numbers, booleans, we have little choice, it seems to me, but to go with option 2.  Should HTML tags be introduced for numbers, booleans, objects, this could become a future configuration setting, "semanticTagMapping" or something like that, which would allow the developer to specify which tag to use for which object type.
+Option 2 may be the lesser appealing one, to me at least.  But until there are more HTML tags to represent things like numbers, booleans, we have little choice, it seems to me, but to go with option 2.  Should HTML tags be introduced for numbers, booleans, objects, this could become a future configuration setting, "semanticTagMapping" or something like that, which would allow the developer to specify which tag to use for which object type.
 
 
 My tentative recommendation:  Use option 2.  
-
-Option 1 is more appealing to me, as it is more semantic.  The problem with that argument, is if the platform adds a tag specifically for displaying a number, similar to the time tag, and we go down that road for dates, then this would mean we would want to do the same for numbers.  But doing so would break backwards compatibility.
 
 For now, this question is the very last thing we should be fretting about.  It is so little effort for the developer to opt to replace the moustache binding with the time tag, that we should leave this decision to the developer, and just use option 2 for simplicity.
 
 Data elements that resolve to null or undefined would not emit anything in an interpolation.
 
-Eventually, if semantic elements become built in to the platform for all the primitive types, perhaps that could be an option we enable explicitly, and it would apply across the board.
 
 ## Loops
 
