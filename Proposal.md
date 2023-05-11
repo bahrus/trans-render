@@ -209,9 +209,9 @@ Of course, developers would be encouraged to search first for an existing schema
 ```html
 <template>
 <dl>
-    <template repeat="{{item of items}}" itemtype="https://mywebsite.com/TODOItem.json">
-        <dt>{{item.word}}</dt>
-        <dd>{{item.meaning}}</dd>
+    <template repeat="{{monster of monsters}}" itemtype="https://mywebsite.com/Monsters.json">
+        <dt>{{monster.name}}</dt>
+        <dd>{{monster.description}}</dd>
     </template>
 </dl>
 </template>
@@ -220,17 +220,16 @@ Of course, developers would be encouraged to search first for an existing schema
 would generate:
 
 ```html
-<dl itemscope itemtype=https://mywebsite.com/TODOList.json >
-    <dt itemprop=word>Beast of Bodmin</dt>
-    <dd itemprop=meaning>A large feline inhabiting Bodmin Moor.</dd>
+<dl>
+    <dt itemprop=name>Beast of Bodmin</dt>
+    <dd itemprop=description>A large feline inhabiting Bodmin Moor.</dd>
 
-    <meta itemscope itemprop=items  itemtype=https://mywebsite.com/TODOItem.json>
-    <dt itemprop=word>Morgawr</dt>
-    <dd itemprop=meaning>A sea serpent.</dd>
+    
+    <dt itemprop=name>Morgawr</dt>
+    <dd itemprop=description>A sea serpent.</dd>
 
-    <meta itemscope itemprop=items  itemtype=https://mywebsite.com/TODOList.json>
-    <dt itemprop=word>Owlman</dt>
-    <dd itemprop=meaning>A giant owl-like creature.</dd>
+    <dt itemprop=name>Owlman</dt>
+    <dd itemprop=description>A giant owl-like creature.</dd>
 </dl>
 ```
 
