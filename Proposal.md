@@ -37,6 +37,8 @@ This proposal consists of several, somewhat loosely coupled sub-proposals:
 3.  Specify some decisions for how microdata would be emitted in certain scenarios.
 4.  Add the minimal required schemas to schema.org so that everything is legitimate and above board.
 5.  Resurrect the Metadata API. 
+6.  Add semantic tags for numbers, booleans.
+7.  Support for nested property paths.
 
 So basically, for starters, unless this proposal is required for the handshake between server generated HTML and the client template instantiation to work properly, we would need to specify a setting when invoking the Template Instantiation API:  **integrateWithMicrodata**.
 
@@ -117,9 +119,11 @@ Not that with the nested object, the div is actually using microdata bindings in
 
 With the last example, it may be that the correct interpretation of the specs should be a little bit of repetition:
 
-```
+```html
 <span itemscope itemprop=address><meta itemprop=street content="123 Penny Lane">123 Penny Lane</span>
 ```
+
+Also, this solution would only work two levels deep.  There's no indication in the specs that nested property paths are supported.
 
 ## Formatting
 
