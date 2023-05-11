@@ -4,13 +4,13 @@ A good [percentage](https://w3techs.com/technologies/details/da-microdata#:~:tex
 
 ## Historical backdrop
 
-Given the age of the second link above, it is natural to ask the question, why did it take so long for anyone to raise the possibility of integrating template binding with microdata?  I was ready to attribute this to a massive market failure on the part of the web development community, but the explanation isn't that simple, thankfully.
+Given the age of the second link above, it is natural to ask the question, why did it take so long for anyone to raise the possibility of integrating template binding with microdata?  Or is there some fatal flaw in even trying?  I was ready to attribute this to a massive market failure on the part of the web development community, including myself, but the explanation isn't that simple, thankfully.
 
 What I've learned is that for years, the microdata initiative was in a kind of simmering battle with another proposal, RDFa, as far as which one would be embraced as the standard.
 
 The microdata proposal suffered a significant setback in the early 2010's, and only in the late 2010's did it experience a comeback, and it seems safe now to conclude that microdata has won out, permanently.  Some sites haven't [been properly updated](https://caniuse.com/sr_microdata) to reflect that fact, which can partly explain why this comeback seems to have slipped under the development community's radar.
 
-## Nudge
+## Nudging developers
 
 I think nudging developers to make use of this [standard](https://html.spec.whatwg.org/multipage/#toc-microdata) by making it super easy, when working with template instantiation, would have a beneficial impact for the web and society in general.
 
@@ -18,11 +18,17 @@ I think nudging developers to make use of this [standard](https://html.spec.what
 
 At a more mundane level, it could have significant performance benefits. It could allow applications to hydrate without the need for passing down the data separately, and significantly reduce the amount of custom boilerplate in the hydrating code. 
 
-With the help of meta tags, we can [extract](https://html.spec.whatwg.org/multipage/microdata.html#converting-html-to-other-formats) "water from rock", passing the data used by the server to generate the HTML output within attributes of the HTML output, consistent with what the client would generate via the template and applied to the same data.  **The hydration could happen real time as the html streams in**.
+The biggest cost associated with supporting microdata, is whether *updates* to the HTML should include updates to hidden meta tags.  Not updating them would have no effect on hydrating, but *might* have an impact on search results / indexing.
 
-The specific syntax of this proposal is not meant to be read as a particular endorsement of any particular schema (i.e. handlebar vs moustache vs xslt), and is up in the air, as far as I know, so please interpret the examples "non-literally".
+With the help of the meta tag and microdata attributes, we can [extract](https://html.spec.whatwg.org/multipage/microdata.html#converting-html-to-other-formats) "water from rock", passing the data used by the server to generate the HTML output within attributes of the HTML output, consistent with what the client would generate via the template and applied to the same data.  **The hydration could happen real time as the html streams in**.
 
-Because there's a performance cost to adding microdata to the output, it should be something that can be opt-in (or opt-out), unless having microdata contained in the output proves to be so beneficial to the ability of specifying parts, that it makes sense to always emit the microdata, which I personally would find thrilling.
+## Caveats
+
+The specific syntax of this proposal is just my view of the best way of representing integration with microdata, and is not meant to imply any "final decision", as if I'm in a position to do so.  I'm not yet an expert on the microdata standard, so it is possible that some of what I suggests contradicts some fine point specified somewhere.  But I do hope others find this helpful.
+
+Because there's a tiny performance cost to adding microdata to the output, it should perhaps be something that can be opt-in (or opt-out).  If having microdata contained in the output proves to be so beneficial to the ability of specifying parts and working with streaming declarative shadow DOM, that it makes sense to always integrate with microdata, in my view the performance penalty is worth it, and would do much more good than harm (the harm seems negligible).
+
+## Highlights
 
 This proposal consists of several, somewhat loosely coupled sub-proposals:
 
@@ -32,7 +38,9 @@ This proposal consists of several, somewhat loosely coupled sub-proposals:
 4.  Add the minimal required schemas to schema.org so that everything is legitimate and above board.
 5.  Resurrect the Metadata API. 
 
-So basically, for starters, there would be an option we could specify when invoking the Template Instantiation API:  emitMicrodata (or would it always do so?).
+So basically, for starters, unless this proposal is required for the handshake between server generated HTML and the client template instantiation to work properly, we would need to specify a setting when invoking the Template Instantiation API:  **integrateWithMicrodata**.
+
+## Simple Object Example
 
 What this would do:
 
@@ -41,23 +49,75 @@ Let's say our (custom element) host object looks like:
 ```JavaScript
 const host = {
     name: 'Bob'
-    eventDate: new Date()
+    eventDate: new Date(),
+    secondsSinceBirth: 1_166_832_000,
+    isVegetarian: true,
+    address: {
+        street: '123 Penny Lane',
+        zipCode: 12345
+    }
 }
 ```
 
-And we apply it to the template:
+There are two fundamental scenarios to consider:
+
+1.  If the author specifies the itemtype for the itemscope surrounding the html element where the binding takes place.
+2.  No such schema is provided.
+
+In what follows, we consider the latter scenario, so that emitting the type is critical for us to be able to hydrate the data accurately.
+
+### Binding to simple primitive values, and simple, non repeating objects with non semantic tags
+
+Let us apply the template to the host object defined above:
 
 ```html
 <template>
     <span>{{name}}</span>
+    <span>{{eventDate}}</span>
+    <span>{{secondsSinceBirth}}</span>
+    <span>{{isVegetarian}}</span>
+    <span>{{address}}</span>
+    <div itemscope itemprop=address>
+        <span>{{street}}</span>
+    <div>
+    <span>{{address.street}}</span>
 </template>
 ```
 
-then with the emitMicrodata setting it would generate:
+then with the integrateWithMicrodata setting enabled it would generate (with US as the locale):
 
 ```html
 <span itemprop=name>Bob</span>
+<span itemprop=eventDate itemtype=https://schema.org/DateTime>5/11/2023</span>
+<span itemprop=secondsSinceBirth itemtype=https://schema.org/Number>1,166,832,000</span>
+<span itemprop=isVegetarian itemtype=https://schema.org/Boolean>true</span>
+<span><meta itemprop=address itemtype=https://schema.org/Thing content='{"street": "123 Penny Lane", "zipCode": 12345}'></span>
+<div itemscope itemprop=address>
+    <span itemprop=street>123 Penny Lane</span>
+</div>
+<span itemscope itemprop=address><meta itemprop=street content>123 Penny Lane</span>
 ```
+
+The last
+
+I think we could save bandwidth if we suppress "itemtype" if the value is a string.
+
+The rules for what we are doing are summarized below:
+
+|Type     |Url                         |Content value        |Visible content
+|---------|----------------------------|---------------------|----------------
+|Number   |https://schema.org/Number   |num.toString()       |num.toLocaleString()
+|Date     |https://schema.org/DateTime |date.toISOString()   |date.toLocaleDateString()
+|Boolean  |https://schema.org/Boolean  |bln.toString()       |true/false
+|Object   |https://schema.org/Thing    |JSON.stringify(obj)  |Whatever the browser uses to display JSON when opening a JSON file/url in the browser, (or none)
+
+All these primitive types are [officially recognized](https://schema.org/DataType) by schema.org, with the possible exception of the last one.  If the usage above for the last one is considered incorrect (which, honestly, I think it is), I would suggest https://schema.org/DataType/Object be added to schema.org.  It is a controversial move, as now we almost encouraging the sites to send information not viewable by the user, which is inefficient (especially when updating initial values sent down from the server), could lead to yet more gaming of page rankings.  However, it would speed up development, in my opinion.  So I'm leaning towards dropping that one. 
+
+
+
+### Binding to numeric value
+
+
 
 ## Formatting
 
@@ -98,22 +158,16 @@ Option 2:
 
 Option 2 may the lesser appealing, to me at least.  But until there are more HTML tags to represent things like numbers, booleans, we have little choice, it seems to me, but to go with option 2.  Should HTML tags be introduced for numbers, booleans, objects, this could become a future configuration setting, "semanticTagMapping" or something like that, which would allow the developer to specify which tag to use for which object type.
 
-|Type     |Url                         |Content value        |Visible content
-|---------|----------------------------|---------------------|----------------
-|Number   |https://schema.org/Number   |num.toString()       |num.toLocaleString()
-|Date     |https://schema.org/DateTime |date.toISOString()   |date.toLocaleDateString()
-|Boolean  |https://schema.org/Boolean  |bln.toString()       |true/false
-|Object   |https://schema.org/Thing    |JSON.stringify(obj)  |Whatever the browser uses to display JSON when opening a JSON file/url in the browser
-
-All these primitive types are officially recognized by the Metadata standard, with the possible exception of the last one.  It is unclear if there's a strong use case to need to support interpolation with an object.  
-
-Data elements that resolve to null or undefined would not emit anything in an interpolation.
 
 My tentative recommendation:  Use option 2.  
 
 Option 1 is more appealing to me, as it is more semantic.  The problem with that argument, is if the platform adds a tag specifically for displaying a number, similar to the time tag, and we go down that road for dates, then this would mean we would want to do the same for numbers.  But doing so would break backwards compatibility.
 
 For now, this question is the very last thing we should be fretting about.  It is so little effort for the developer to opt to replace the moustache binding with the time tag, that we should leave this decision to the developer, and just use option 2 for simplicity.
+
+Data elements that resolve to null or undefined would not emit anything in an interpolation.
+
+Eventually, if semantic elements become built in to the platform for all the primitive types, perhaps that could be an option we enable explicitly, and it would apply across the board.
 
 ## Loops
 
