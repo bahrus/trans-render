@@ -181,7 +181,7 @@ For loops that repeat a single element (with light children), the developer need
 ```html
 <template>
     <ul>
-        <li repeat="{{item of items}}" itemtype="https://mywebsite.com/TODOItem.json of https://mywebsite.com/TODOList.json">
+        <li repeat="{{item of items}}" itemtype="https://mywebsite.com.com/TODOItem.json">
             <div>
                 {{item.task}}
             </div>
@@ -193,11 +193,11 @@ For loops that repeat a single element (with light children), the developer need
 would generate:
 
 ```html
-<ul itemscope itemtype=https://mywebsite.com/TODOList.json>
-    <li itemscope itemprop=todoItem itemtype="https://mywebsite.com/TODOItem.json">
+<ul>
+    <li itemscope  itemtype="https://mywebsite.com.com/TODOItem.json">
         <div itemprop=task>Brush teeth</div>
     </li>
-    <li itemscope itemprop=todoItem itemtype="https://mywebsite.com/TODOItem.json">
+    <li itemscope itemtype="https://mywebsite.com.com/TODOItem.json">
         <div itemprop=task>Comb hair</div>
     </li>
 </ul>
@@ -209,7 +209,7 @@ Of course, developers would be encouraged to search first for an existing schema
 ```html
 <template>
 <dl>
-    <template repeat="{{item of items}}" itemtype="https://mywebsite/mySchemaType.TODO.json of https://mywebsite/mySchemaType.TODOList.json">
+    <template repeat="{{item of items}}" itemtype="https://mywebsite.com/TODOItem.json">
         <dt>{{item.word}}</dt>
         <dd>{{item.meaning}}</dd>
     </template>
@@ -220,16 +220,15 @@ Of course, developers would be encouraged to search first for an existing schema
 would generate:
 
 ```html
-<dl itemscope itemtype=https://mywebsite/mySchemaType.TODOList.json >
-    <meta itemscope itemprop=items  itemtype=https://mywebsite/mySchemaType.TODO.json>
+<dl itemscope itemtype=https://mywebsite.com/TODOList.json >
     <dt itemprop=word>Beast of Bodmin</dt>
     <dd itemprop=meaning>A large feline inhabiting Bodmin Moor.</dd>
 
-    <meta itemscope itemprop=items  itemtype=https://mywebsite/mySchemaType.TODO.json>
+    <meta itemscope itemprop=items  itemtype=https://mywebsite.com/TODOItem.json>
     <dt itemprop=word>Morgawr</dt>
     <dd itemprop=meaning>A sea serpent.</dd>
 
-    <meta itemscope itemprop=items  itemtype=https://mywebsite/mySchemaType.TODO.json>
+    <meta itemscope itemprop=items  itemtype=https://mywebsite.com/TODOList.json>
     <dt itemprop=word>Owlman</dt>
     <dd itemprop=meaning>A giant owl-like creature.</dd>
 </dl>
@@ -245,7 +244,7 @@ But for now, this will have to do:
 <template>
     <table>
         <tbody>
-            <template repeat="{{item of items}}" itemtype="https://mywebsite/mySchemaType.TODO.json of https://mywebsite/mySchemaType.TODOList.json">
+            <template repeat="{{item of items}}" itemtype="https://mywebsite.com/TODOList.json of https://mywebsite.com/TODOItem.json">
                 <tr class=odd>
                     <td>{{item.to}}</td>
                     <td>{{item.from}}</td>
@@ -264,8 +263,8 @@ would generate:
 
 ```html
 <table>
-    <tbody itemscope itemtype=https://mywebsite/mySchemaType.TODOList.json>
-        <template itemscope itemprop=items itemtype=https://mywebsite/mySchemaType.TODO.json></template>
+    <tbody itemscope itemtype=https://mywebsite.com/TODOItem.json>
+        <template itemscope itemprop=items itemtype=https://mywebsite.com/TODOList.json></template>
         <tr class=odd>
             <td itemprop=to>Foo</td>
             <td itemprop=from>Bar</td>
@@ -275,7 +274,7 @@ would generate:
             <td itemprop=message>Qux</td>
         </tr>
         
-        <template itemscope itemprop=items itemtype=https://mywebsite/mySchemaType.TODO.json></template>
+        <template itemscope itemprop=items itemtype=https://mywebsite.com/TODOList.json></template>
         <tr class=odd>
             <td itemprop=to>Quux</td>
             <td itemprop=from>Quuz</td>
