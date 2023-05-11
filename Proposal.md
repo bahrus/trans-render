@@ -6,7 +6,7 @@ A good [percentage](https://w3techs.com/technologies/details/da-microdata#:~:tex
 
 Given the age of the second link above, it is natural to ask the question, why did it take so long for anyone to raise the possibility of integrating template binding with microdata?  I was ready to attribute this to a massive market failure on the part of the web development community, but the explanation isn't that simple, thankfully.
 
-What I've learned is that for years, the microdata initiative was in a kind of simmering battle with another proposal, RDFa, in which one would be embraced as the standard.
+What I've learned is that for years, the microdata initiative was in a kind of simmering battle with another proposal, RDFa, as far as which one would be embraced as the standard.
 
 The microdata proposal suffered a significant setback in the early 2010's, and only in the late 2010's did it experience a comeback, and it seems safe now to conclude that microdata has won out, permanently.  Some sites haven't [been properly updated](https://caniuse.com/sr_microdata) to reflect that fact, which can partly explain why this comeback seems to have slipped under the development community's radar.
 
@@ -105,13 +105,15 @@ Option 2 may the lesser appealing (to me at least), until there are more HTML ta
 |Boolean  |https://schema.org/Boolean  |bln.toString()
 |Object   |https://schema.org/Thing    |JSON.stringify(obj)
 
-All these primitive types are officially recognized by the Metadata standard, with the possible exception of the last one.
+All these primitive types are officially recognized by the Metadata standard, with the possible exception of the last one.  It is unclear if there's a strong use case to need to support interpolation with an object.  I would think the developer would want to explicitly specify how to display that object with spans or other tags, so probably not an issue.
 
 Data elements that resolve to null or undefined would not emit anything in an interpolation.
 
-My tentative recommendation:  Use Option 1 for date props, option 2 for the other three primitive types.  
+My tentative recommendation:  Use option 2.  
 
-The problem with that argument, is if the platform adds a tag specifically for displaying a number, similar to the time tag, and we go down that road for dates, then I suppose this would mean we would want to do the same for numbers.  But doing so would break backwards compatibility.
+Option 1 is more appealing to me, as it is more semantic.  The problem with that argument, is if the platform adds a tag specifically for displaying a number, similar to the time tag, and we go down that road for dates, then this would mean we would want to do the same for numbers.  But doing so would break backwards compatibility.
+
+For now, this question is the very last thing we should be fretting about.  It is so little effort for the developer to opt to replace the moustache binding with the time tag, that we should leave this decision to the developer, and just use option 2 for simplicity.
 
 ## Loops
 
