@@ -4,7 +4,7 @@ A good [percentage](https://w3techs.com/technologies/details/da-microdata#:~:tex
 
 ## Historical backdrop
 
-Given the age of the second link above, it is natural to ask the question, why did it take so long for anyone to raise the possibility of integrating template binding with microdata.  I was ready to attribute this to a massive market failure on the part of the web development community, but the explanation isn't that simple, thankfully.
+Given the age of the second link above, it is natural to ask the question, why did it take so long for anyone to raise the possibility of integrating template binding with microdata?  I was ready to attribute this to a massive market failure on the part of the web development community, but the explanation isn't that simple, thankfully.
 
 What I've learned is that for years, the microdata initiative was in a kind of simmering battle with another proposal, RDFa, in which one would be embraced by the w3c.
 
