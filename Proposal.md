@@ -146,7 +146,7 @@ would generate:
 </ul>
 ```
 
-So basically, an element with one or more itemtypes but not an itemprop is assumed to be an "array" possessor.
+~~So basically, an element with one or more itemtypes but not an itemprop is assumed to be an "array" possessor.~~
 
 Of course, developers would be encouraged to search first for an existing schema before creating their own (or pretending to do so).  If the developer pretends to do so, I suspect the platform won't be able to provide as much help when/if it resurrects the Metadata API. 
 
