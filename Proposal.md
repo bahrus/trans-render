@@ -115,6 +115,11 @@ All these primitive types are [officially recognized](https://schema.org/DataTyp
 
 Not that with the nested object, the div is actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But that example, if it is supported, is doing more than emitting.  So assuming that example holds, the correct phrase should be integrateWithMicrodata.
 
+With the last example, it may be that the correct interpretation of the specs should be a little bit of repetition:
+
+```
+<span itemscope itemprop=address><meta itemprop=street content="123 Penny Lane">123 Penny Lane</span>
+```
 
 ## Formatting
 
