@@ -96,16 +96,16 @@ Option 2:
 <div>Hello <meta itemprop=name>Bob<meta content>, the event will begin at <meta itemprop=eventDate itemtype=https://schema.org/DateTime content=2011-11-18T14:54:39.929Z>11/18/2011</time></div>
 ```
 
-Option 2 may the lesser appealing (to me at least), until there are more HTML tags to represent things like numbers, booleans, we have little choice, it seems to me:
+Option 2 may the lesser appealing, to me at least.  But until there are more HTML tags to represent things like numbers, booleans, we have little choice, it seems to me, but to go with option 2.  Should HTML tags be introduced for numbers, booleans, objects, this could become a future configuration setting, "semanticTagMapping" or something like that, which would allow the developer to specify which tag to use for which object type.
 
-|Type     |Url                         |Content value   
-|---------|----------------------------|-------------
-|Number   |https://schema.org/Number   |num.toString()
-|Date     |https://schema.org/DateTime |date.toISOString()
-|Boolean  |https://schema.org/Boolean  |bln.toString()
-|Object   |https://schema.org/Thing    |JSON.stringify(obj)
+|Type     |Url                         |Content value        |Visible content
+|---------|----------------------------|---------------------|----------------
+|Number   |https://schema.org/Number   |num.toString()       |num.toLocaleString()
+|Date     |https://schema.org/DateTime |date.toISOString()   |date.toLocaleDateString()
+|Boolean  |https://schema.org/Boolean  |bln.toString()       |true/false
+|Object   |https://schema.org/Thing    |JSON.stringify(obj)  |Whatever the browser uses to display JSON when opening a JSON file/url in the browser
 
-All these primitive types are officially recognized by the Metadata standard, with the possible exception of the last one.  It is unclear if there's a strong use case to need to support interpolation with an object.  I would think the developer would want to explicitly specify how to display that object with spans or other tags, so probably not an issue.
+All these primitive types are officially recognized by the Metadata standard, with the possible exception of the last one.  It is unclear if there's a strong use case to need to support interpolation with an object.  
 
 Data elements that resolve to null or undefined would not emit anything in an interpolation.
 
