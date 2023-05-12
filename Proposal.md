@@ -32,13 +32,12 @@ Because there's a tiny performance cost to adding microdata to the output, it sh
 
 This proposal consists of several, somewhat loosely coupled sub-proposals:
 
-1.  Allow the meta tag to be left unperturbed in most all HTML, including the table element between rows, and inside a select tag (just as we can do with the template element). **Update**:  The need for this was based on my misunderstanding of the specifications, so this issue is highly in doubt as to whether it is needed.
-2.  ~~Until 1 is fulfilled, use the template element as a stand-in for the meta tag as a last resort (table row groupings, select tags, maybe others)~~.
-3.  Specify some decisions for how microdata would be emitted in certain scenarios.
-4.  Add the minimal required schemas to schema.org so that everything is legitimate and above board.
-5.  Resurrect the Metadata API. 
-6.  Add semantic tags for numbers, booleans.
-7.  Support for nested property paths.
+x.  ~~Allow the meta tag to be left unperturbed in most all HTML, including the table element between rows, and inside a select tag (just as we can do with the template element). ~~**Update**:  The need for this was based on my misunderstanding of the specifications, so this is being removed.
+x.  ~~Until 1 is fulfilled, use the template element as a stand-in for the meta tag as a last resort (table row groupings, select tags, maybe others)~~.
+1.  Specify some decisions for how microdata would be emitted in certain scenarios.
+2.  Add the minimal required schemas, if any, to schema.org so that everything is legitimate and above board.
+3.  Resurrect the Metadata API. 
+4.  Add semantic tags for numbers, booleans, objects.
 
 So basically, for starters, unless this proposal is required for the handshake between server generated HTML and the client template instantiation to work properly, we would need to specify a setting when invoking the Template Instantiation API:  **integrateWithMicrodata**.
 
@@ -257,8 +256,8 @@ I *think* the second example would make it unambiguous, when hydrating, if there
 <template>
 <dl>
     <template repeat="{{monster of monsters}}" itemtype="https://mywebsite.com/Monster.json of https://schema.org/ItemList">
-        <dt itemref="{monster.id}_description"><span>{{monster.name}}</span></dt>
-        <dd id={monster.id}_description>{{monster.description}}</dd>
+        <dt itemref="{{monster.id}}_description"><span>{{monster.name}}</span></dt>
+        <dd id={{monster.id}}_description>{{monster.description}}</dd>
     </template>
 </dl>
 </template>
@@ -268,13 +267,13 @@ would generate:
 
 ```html
 <dl itemscope itemtype=https://schema.org/ItemList>
-    <dt itemref=monster_1_description itemscope itemprop=itemListElement itemType=https://mywebsite.com/Monster.json>
+    <dt itemref=monster_1_description itemscope itemprop=itemListElement itemtype=https://mywebsite.com/Monster.json>
         <span itemprop=name>Beast of Bodmin</span>
     </dt>
     <dd id=monster_1_description itemprop=description>A large feline inhabiting Bodmin Moor.</dd>
 
     
-    <dt itemref=monster_2_description itemscope itemprop=itemListElement itemType=https://mywebsite.com/Monster.json>
+    <dt itemref=monster_2_description itemscope itemprop=itemListElement itemtype=https://mywebsite.com/Monster.json>
         <span itemprop=name>Morgawr</span>
     </dt>
     <dd id=monster_2_description itemprop=itemListElement>A sea serpent.</dd>
@@ -286,19 +285,20 @@ would generate:
 </dl>
 ```
 
-An open question here is whether template instantiation could provide any shortcuts for specifying this itemref/id pairing?
+An open question here is whether template instantiation could provide any shortcuts for specifying this itemref/id pairing, so they are guaranteed to stay in sync?
 
+Similarly for grouped table rows:
 
 ```html
 <template>
     <table>
         <tbody>
             <template repeat="{{item of items}}" itemtype="https://mywebsite.com/Message.json of https://schema.org/ItemList">
-                <tr class=odd>
+                <tr itemref={{item.id}}_even class=odd>
                     <td>{{item.to}}</td>
                     <td>{{item.from}}</td>
                 </tr>
-                <tr class=even>
+                <tr id={{item.id}}_even class=even>
                     <td>{{item.subject}}</td>
                     <td>{{item.message}}</td>
                 </tr>
@@ -313,22 +313,20 @@ would generate:
 ```html
 <table>
     <tbody itemscope itemtype=https://schema.org/ItemList>
-        <template itemscope itemprop=items itemtype=https://mywebsite.com/TODOList.json></template>
-        <tr class=odd>
+        <tr itemref=first_item itemscope itemprop=itemListElement itemtype=https://mywebsite.com/Message.json class=odd>
             <td itemprop=to>Foo</td>
             <td itemprop=from>Bar</td>
         </tr>
-        <tr class=even>
+        <tr id=first_item class=even>
             <td itemprop=subject>Baz</td>
             <td itemprop=message>Qux</td>
         </tr>
         
-        <template itemscope itemprop=items itemtype=https://mywebsite.com/TODOList.json></template>
-        <tr class=odd>
+        <tr itemref=second_item itemscope itemprop=itemListElement itemtype=https://mywebsite.com/Message.json class=odd>
             <td itemprop=to>Quux</td>
             <td itemprop=from>Quuz</td>
         </tr>
-        <tr class=even>
+        <tr id=second_item class=even>
             <td itemprop=subject>Corge</td>
             <td itemprop=message>Grault</td>
         </tr>
