@@ -36,10 +36,10 @@ x.  ~~Allow the meta tag to be left unperturbed in most all HTML, including the 
 x.  ~~Until 1 is fulfilled, use the template element as a stand-in for the meta tag as a last resort (table row groupings, select tags, maybe others)~~.
 1.  Specify some decisions for how microdata would be emitted in certain scenarios.
 2.  Add the minimal required schemas, if any, to schema.org so that everything is legitimate and above board.
-3.  Resurrect the Metadata API. 
+3.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata HTML to JSON. 
 4.  Add semantic tags for numbers, booleans, objects.
 
-So basically, for starters, unless this proposal is required for the handshake between server generated HTML and the client template instantiation to work properly, we would need to specify a setting when invoking the Template Instantiation API:  **integrateWithMicrodata**.
+So basically, for starters, unless this proposal is *required* for the handshake between server generated HTML and the client template instantiation to work properly, we would need to specify an option when invoking the Template Instantiation API:  **integrateWithMicrodata**.
 
 ## Simple Object Example
 
