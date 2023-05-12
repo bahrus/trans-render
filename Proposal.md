@@ -182,8 +182,8 @@ For loops that repeat a single element (with light children), the developer need
 
 ```html
 <template>
-    <ul>
-        <li repeat="{{item of items}}" itemtype="https://mywebsite.com.com/TODOItem.json">
+    <ul itemtype=https://mywebsite.com.com/TODOList.json>
+        <li repeat="{{item of items}}" itemtype=https://mywebsite.com.com/TODOItem.json>
             <div>
                 {{item.task}}
             </div>
@@ -207,10 +207,29 @@ would generate:
 
 ### Example 2
 
+Suppose we have a list of todo items:
+
+```JSON
+{
+  "todos": [
+    {
+      "id": 1,
+      "todo": "Do something nice for someone I care about",
+      "completed": true,
+      "userId": 26
+    },
+    {...},
+    {...}
+    // 30 items
+  ]
+}
+```
+
+
 ```html
 <template>
-    <ul>
-        <li repeat="{{item of items}}" itemtype="https://mywebsite.com.com/TODOItem.json of https://schema.org/ItemList">
+    <ul itemprop=todos>
+        <li repeat="{{item of items}}" itemtype="https://mywebsite.com.com/TODOItemSchema.json of https://schema.org/ItemList">
             <div>
                 {{item.task}}
             </div>
@@ -222,28 +241,23 @@ would generate:
 would [generate](https://schema.org/ItemList):
 
 ```html
-<ul itemscope itemtype="https://schema.org/ItemList">
-    <li itemscope itemprop="itemListElement todoItem"  itemtype="https://mywebsite.com.com/TODOItem.json">
-        <div itemprop=task>Brush teeth</div>
+<ul itemscope itemprop=todos itemtype="https://schema.org/ItemList">
+    <li itemscope itemprop="itemListElement"  itemtype="https://mywebsite.com.com/TODOItem.json">
+        <div itemprop=todo>Do something nice for someone I care about</div>
     </li>
-    <li itemscope itemprop="itemListElement todoItem" itemtype="https://mywebsite.com.com/TODOItem.json">
-        <div itemprop=task>Comb hair</div>
-    </li>
+    ...
 </ul>
 ```
 
-I *think* the second example would make it unambiguous, when hydrating, if there's a single list item, that we are working with an array of items, rather than a sub property, but I'm still trying to understand this.
-
-
-Of course, developers would be encouraged to search first for an existing schema before creating their own (or pretending to do so).  If the developer pretends to do so, I suspect the platform won't be able to provide much if any help as far as hydrating, if/when it resurrects the Metadata API. 
+I *think* the second example would make it unambiguous, when hydrating, if there's a single list item, that we are working with an array of items, rather than a sub property.
 
 
 ```html
 <template>
 <dl>
     <template repeat="{{monster of monsters}}" itemtype="https://mywebsite.com/Monster.json of https://schema.org/ItemList">
-        <dt>{{monster.name}}</dt>
-        <dd>{{monster.description}}</dd>
+        <dt itemref="{monster.id}_description"><span>{{monster.name}}</span></dt>
+        <dd id={monster.id}_description>{{monster.description}}</dd>
     </template>
 </dl>
 </template>
@@ -253,23 +267,27 @@ would generate:
 
 ```html
 <dl itemscope itemtype=https://schema.org/ItemList>
-    <dt itemscope itemprop="itemListElement monster" itemType=https://mywebsite.com/Monster.json><meta itemprop=name content="Beast of Bodmin"/>Beast of Bodmin</dt>
-    <dd itemprop=description>A large feline inhabiting Bodmin Moor.</dd>
+    <dt itemref=monster_1_description itemscope itemprop=itemListElement itemType=https://mywebsite.com/Monster.json>
+        <span itemprop=name>Beast of Bodmin</span>
+    </dt>
+    <dd id=monster_1_description itemprop=description>A large feline inhabiting Bodmin Moor.</dd>
 
     
-    <dt itemprop=name>Morgawr</dt>
-    <dd itemprop=description>A sea serpent.</dd>
+    <dt itemref=monster_2_description itemscope itemprop=itemListElement itemType=https://mywebsite.com/Monster.json>
+        <span itemprop=name>Morgawr</span>
+    </dt>
+    <dd id=monster_2_description itemprop=itemListElement>A sea serpent.</dd>
 
-    <dt itemprop=name>Owlman</dt>
-    <dd itemprop=description>A giant owl-like creature.</dd>
+    <dt itemref=monster_3_description itemscope itemprop=itemListElement itemType=https://mywebsite.com/Monster.json>
+        <span itemprop=name>Owlman></span>
+    </dt>
+    <dd id=monster_3_description itemprop=description>A giant owl-like creature.</dd>
 </dl>
 ```
 
-I *think* that the logic that "reverse engineers" the server rendered output would need to have some understanding of HTML, enough to know that  pairs of dt/dd's would come from a single item
+An open question here is whether template instantiation could provide any shortcuts for specifying this itemref/id pairing?
 
-This proposal includes an urgent call to make the meta tag "stick" within a table, like the template element does.  
 
-But for now, this will have to do:
 
 ```html
 <template>
