@@ -248,7 +248,7 @@ would [generate](https://schema.org/ItemList):
 </ul>
 ```
 
-I *think* the second example would make it unambiguous, when hydrating, if there's a single list item, that we are working with an array of items, rather than a sub property.
+I *think* the second example would make it unambiguous, when hydrating, wjem there's a single child list item, that we are working with an array of items, rather than a sub property.
 
 ## Creating artificial hierarchies with itemref
 
