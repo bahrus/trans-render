@@ -18,8 +18,6 @@ I think nudging developers to make use of this [standard](https://html.spec.what
 
 At a more mundane level, it could have significant performance benefits. It could allow applications to hydrate without the need for passing down the data separately, and significantly reduce the amount of custom boilerplate in the hydrating code. 
 
-
-
 With the help of the meta tag and microdata attributes, we can [extract](https://html.spec.whatwg.org/multipage/microdata.html#converting-html-to-other-formats) "water from rock", passing the data used by the server to generate the HTML output within attributes of the HTML output, consistent with what the client would generate via the template and applied to the same data.  **The hydration could happen real time as the html streams in**.
 
 ## Caveats
@@ -133,7 +131,7 @@ If template instantiation supports formatting:
 it would generate:
 
 ```html
-<time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>11/18/2011</time>
+<time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>الجمعة، ١٢ مايو ٢٠٢٣</time>
 ```
 
 Now let's talk about the dreaded interpolation scenario.
@@ -223,7 +221,7 @@ Suppose we have a list of todo items:
 ```html
 <template>
     <ul itemprop=todos>
-        <li repeat="{{item of items}}" itemtype="https://mywebsite.com.com/TODOItem.json of https://schema.org/ItemList">
+        <li repeat="{{item of todos}}" itemtype="https://mywebsite.com.com/TODOItem.json of https://schema.org/ItemList">
             <div>
                 {{item.todo}}
             </div>
@@ -281,6 +279,21 @@ would generate:
 ```
 
 An open question here is whether template instantiation could provide any shortcuts for specifying this itemref/id pairing, so they are guaranteed to stay in sync?
+
+Suggested syntax for that shortcut:
+
+```html
+<template>
+<dl>
+    <template repeat="{{monster of monsters}}" itemtype="https://mywebsite.com/Monster.json of https://schema.org/ItemList">
+        <dt itemref={{#dd}><span>{{monster.name}}</span></dt>
+        <dd id={{monster.id}}_description>{{monster.description}}</dd>
+    </template>
+</dl>
+</template>
+```
+
+Basically, the itemref attribute would be populated with a space delimited list of id's from the dd elements in rhe template.
 
 Similarly for grouped table rows:
 
