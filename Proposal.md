@@ -251,6 +251,7 @@ would [generate](https://schema.org/ItemList):
 
 I *think* the second example would make it unambiguous, when hydrating, if there's a single list item, that we are working with an array of items, rather than a sub property.
 
+## Creating artificial hierarchies with itemref
 
 ```html
 <template>
@@ -288,12 +289,11 @@ would generate:
 An open question here is whether template instantiation could provide any shortcuts for specifying this itemref/id pairing?
 
 
-
 ```html
 <template>
     <table>
         <tbody>
-            <template repeat="{{item of items}}" itemtype="https://mywebsite.com/TODOList.json of https://mywebsite.com/TODOItem.json">
+            <template repeat="{{item of items}}" itemtype="https://mywebsite.com/Message.json of https://schema.org/ItemList">
                 <tr class=odd>
                     <td>{{item.to}}</td>
                     <td>{{item.from}}</td>
@@ -312,7 +312,7 @@ would generate:
 
 ```html
 <table>
-    <tbody itemscope itemtype=https://mywebsite.com/TODOItem.json>
+    <tbody itemscope itemtype=https://schema.org/ItemList>
         <template itemscope itemprop=items itemtype=https://mywebsite.com/TODOList.json></template>
         <tr class=odd>
             <td itemprop=to>Foo</td>
