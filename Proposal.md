@@ -18,11 +18,13 @@ I think nudging developers to make use of this [standard](https://html.spec.what
 
 At a more mundane level, it could have significant performance benefits. It could allow applications to hydrate without the need for passing down the data separately, and significantly reduce the amount of custom boilerplate in the hydrating code. 
 
-The biggest cost associated with supporting microdata, is whether *updates* to the HTML should include updates to hidden meta tags.  Not updating them would have no effect on hydrating, but *might* have an impact on limiting search results / indexing.
+
 
 With the help of the meta tag and microdata attributes, we can [extract](https://html.spec.whatwg.org/multipage/microdata.html#converting-html-to-other-formats) "water from rock", passing the data used by the server to generate the HTML output within attributes of the HTML output, consistent with what the client would generate via the template and applied to the same data.  **The hydration could happen real time as the html streams in**.
 
 ## Caveats
+
+The biggest cost associated with supporting microdata, is whether *updates* to the HTML should include updates to hidden meta tags.  Not updating them would have no effect on hydrating, but *might* have an impact on limiting search results / indexing.
 
 The specific syntax of this proposal is just my view of the best way of representing integration with microdata, and is not meant to imply any "final decision", as if I'm in a position to do so.  I'm not yet an expert on the microdata standard, so it is possible that some of what I suggest below contradicts some fine point specified somewhere in the standard.  But I do hope others find this helpful, especially if it triggers a competing proposal that tries to "get it right".
 
@@ -32,8 +34,6 @@ Because there's a tiny performance cost to adding microdata to the output, it sh
 
 This proposal consists of several, somewhat loosely coupled sub-proposals:
 
-x.  ~~Allow the meta tag to be left unperturbed in most all HTML, including the table element between rows, and inside a select tag (just as we can do with the template element). ~~**Update**:  The need for this was based on my misunderstanding of the specifications, so this is being removed.
-x.  ~~Until 1 is fulfilled, use the template element as a stand-in for the meta tag as a last resort (table row groupings, select tags, maybe others)~~.
 1.  Specify some decisions for how microdata would be emitted in certain scenarios.
 2.  Add the minimal required schemas, if any, to schema.org so that everything is legitimate and above board.
 3.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata HTML to JSON. 
@@ -49,7 +49,7 @@ Let's say our (custom element) host object looks like:
 
 ```JavaScript
 const host = {
-    name: 'Bob'
+    name: 'Bob',
     eventDate: new Date(),
     secondsSinceBirth: 1_166_832_000,
     isVegetarian: true,
@@ -65,7 +65,7 @@ There are two fundamental scenarios to consider:
 1.  If the author specifies the itemtype for the itemscope surrounding the html element where the binding takes place.
 2.  No such schema is provided.
 
-In what follows, we consider the latter scenario, so that emitting the type is critical for us to be able to hydrate the data accurately.
+In what follows, we consider the latter scenario, so that emitting the type of non string primitives is critical for us to be able to hydrate the data accurately.
 
 ### Binding to simple primitive values, and simple, non repeating objects with non semantic tags
 
@@ -85,7 +85,7 @@ Let us apply the template to the host object defined above:
 </template>
 ```
 
-then with the integrateWithMicrodata setting enabled it would generate (with US as the locale):
+Then with the integrateWithMicrodata setting enabled it would generate (with US as the locale):
 
 ```html
 <span itemprop=name>Bob</span>
@@ -98,10 +98,6 @@ then with the integrateWithMicrodata setting enabled it would generate (with US 
 </div>
 <span itemscope itemprop=address><meta itemprop=street content>123 Penny Lane</span>
 ```
-
-The last
-
-I think we could save bandwidth if we suppress "itemtype" if the value is a string.
 
 The rules for what we are doing are summarized below:
 
@@ -158,11 +154,10 @@ Option 1:
 Option 2:
 
 ```html
-<div>Hello <meta itemprop=name>Bob<meta content>, the event will begin at <meta itemprop=eventDate itemtype=https://schema.org/DateTime content=2011-11-18T14:54:39.929Z>11/18/2011</time></div>
+<div>Hello <meta itemprop=name>Bob<meta content>, the event will begin at <meta itemprop=eventDate itemtype=https://schema.org/DateTime content=2011-11-18T14:54:39.929Z>11/18/2011</div>
 ```
 
-Option 2 may be the lesser appealing one, to me at least.  But until there are more HTML tags to represent things like numbers, booleans, we have little choice, it seems to me, but to go with option 2.  Should HTML tags be introduced for numbers, booleans, objects, this could become a future configuration setting, "semanticTagMapping" or something like that, which would allow the developer to specify which tag to use for which object type.
-
+Option 2 may be the lesser appealing one, to me at least.  But until there are more HTML tags to represent things like numbers, booleans, we have little choice, it seems to me, but to go with option 2.  Should HTML tags be introduced for numbers, booleans, objects, this could become a future configuration setting, "semanticTagMapping" or something like that, which would allow the developer to specify which tag to use for which primitive type.
 
 My tentative recommendation:  Use option 2.  
 
@@ -181,7 +176,7 @@ For loops that repeat a single element (with light children), the developer need
 
 ```html
 <template>
-    <ul itemtype=https://mywebsite.com.com/TODOList.json>
+    <ul>
         <li repeat="{{item of items}}" itemtype=https://mywebsite.com.com/TODOItem.json>
             <div>
                 {{item.task}}
@@ -228,9 +223,9 @@ Suppose we have a list of todo items:
 ```html
 <template>
     <ul itemprop=todos>
-        <li repeat="{{item of items}}" itemtype="https://mywebsite.com.com/TODOItemSchema.json of https://schema.org/ItemList">
+        <li repeat="{{item of items}}" itemtype="https://mywebsite.com.com/TODOItem.json of https://schema.org/ItemList">
             <div>
-                {{item.task}}
+                {{item.todo}}
             </div>
         </li>
     </ul>
@@ -248,7 +243,7 @@ would [generate](https://schema.org/ItemList):
 </ul>
 ```
 
-I *think* the second example would make it unambiguous, when hydrating, wjem there's a single child list item, that we are working with an array of items, rather than a sub property.
+I *think* the second example would make it unambiguous, when hydrating, even when there's a single child list item, that we are working with an array of items, rather than a sub property.
 
 ## Creating artificial hierarchies with itemref
 
@@ -256,7 +251,7 @@ I *think* the second example would make it unambiguous, when hydrating, wjem the
 <template>
 <dl>
     <template repeat="{{monster of monsters}}" itemtype="https://mywebsite.com/Monster.json of https://schema.org/ItemList">
-        <dt itemref="{{monster.id}}_description"><span>{{monster.name}}</span></dt>
+        <dt itemref={{monster.id}}_description><span>{{monster.name}}</span></dt>
         <dd id={{monster.id}}_description>{{monster.description}}</dd>
     </template>
 </dl>
