@@ -35,7 +35,7 @@ This proposal consists of several, somewhat loosely coupled sub-proposals:
 
 1.  Specify some decisions for how microdata would be emitted in certain scenarios.
 2.  Add the minimal required schemas, if any, to schema.org so that everything is legitimate and above board.
-3.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata encoded HTML to JSON.  However, **the specs for this conversion is not particularly useful for what an application would want**, is it seems to convert to a schema-like representation of the object.  An application would want to be able to reconstruct the exact object structure that was used to generate the output in conjunction with the template bindings.  This is easy enough to build in userland for starters.
+3.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata encoded HTML to JSON.  However, **the specs for this conversion seem to indicate that the JSON output would be far more verbose than what an application using template instantiation would want**, as it seems to convert to a schema-like representation of the object.  An application would want to be able to reconstruct the simple, exact object structure that was used to generate the output in conjunction with the template bindings.  So one more function would be needed to collapse this generic object representation into a simple POJO, which is easy enough to build in userland.
 4.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for booleans, schema-less objects.  "meter" is a nice tag, but maybe a simpler one is also needed for plain old numbers.
 
 So basically, for starters, unless this proposal is *required* for the handshake between server generated HTML and the client template instantiation to work properly, we would need to specify an option when invoking the Template Instantiation API:  **integrateWithMicrodata**.
@@ -127,7 +127,17 @@ The rules for what we are doing are summarized below:
 |Boolean  |https://schema.org/Boolean  |bln.toString()       |true/false
 |Object   |https://schema.org/Thing    |JSON.stringify(obj)  |None
 
-All these primitive types are [officially recognized](https://schema.org/DataType) by schema.org, with the possible exception of the last one.  If the usage above for the last one is considered incorrect, I would suggest https://schema.org/DataType/SchemalessObject be added to schema.org.  Supporting this "primitive" type would speed up development, in my opinion.  
+All these primitive types are [officially recognized](https://schema.org/DataType) by schema.org, with the possible exception of the last one.  If the usage above for the last one is considered incorrect, I would suggest https://schema.org/DataType/SchemalessObject be added to schema.org.  Supporting this "primitive" type would speed up development, in my opinion. 
+
+It should be noted that for each of these primitive types, a phrase like this is used in the documentation:
+
+> Instances of Number may appear as a value for the following properties
+
+They use the word "may" rather than "must" or "may only".  Maybe that's legalese.  If this is considered improper, maybe a schema should be created specifically for template instantiation where such usage is explicitly granted?  If it is acceptable to use the values above, I suspect search engines would properly know that these values are numbers, even if there's no grander schema that the content is part of.
+
+I don't think the template instantiation engine itself would benefit internally from emitting these types.  The purpose of the types is hydration of server-rendered content, and better search engine accuracy only, which I think is outside the purview of template instantiation.
+
+So perhaps this mapping could be an optional setting of the template instantiation, and if none is provided, no automatic itemtype's are emitted.
 
 So when do we need to use the meta tag?
 
@@ -183,9 +193,21 @@ For now, this question is the very last thing we should be fretting about.  It i
 
 Data elements that resolve to null or undefined would not emit anything in an interpolation.
 
-## Formatting with form participating custom elements
+## Form associated custom elements
 
+```html
+<template>
+    <some-text-field {{eventDate}}></some-text-field>
+</template>
+```
 
+would generate:
+
+```html
+<template>
+    <some-text-field value=2011-11-18T14:54:39.929Z name=eventDate></some-text-field>
+<template>
+```
 
 ## Loops
 
