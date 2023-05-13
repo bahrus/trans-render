@@ -77,19 +77,19 @@ Let us apply the template to the host object defined above:
 <template>
     <span>{{name}}</span>
     <span>{{eventDate as https://schema.org/DateTime}}</span>
-    <span>{{secondsSinceBirth}}</span>
-    <span>{{isVegetarian}}</span>
-    <span>{{address}}</span>
+    <span>{{secondsSinceBirth as https://schema.org/Number}}</span>
+    <span>{{isVegetarian as https://schema.org/Boolean}}</span>
+    <span>{{address as https://schema.org/Thing}}</span>
     <div itemscope itemprop=address>
         <span>{{street}}</span>
     <div>
     <span>{{address.zipCode}}</span>
     <div itemscope itemprop=address>
         <div itemscope itemprop=gpsCoordinates>
-            <span>{{address.gpsCoordinates.latitude.toFixed|2}}</span>
+            <span>{{address.gpsCoordinates.latitude.toFixed|2 as https://schema.org/Number}}</span>
         </div>
     </div>
-    <div>{{address.gpsCoordinates.longitude.toFixed|3}}</div>
+    <div>{{address.gpsCoordinates.longitude.toFixed|3 as https://schema.org/Number}}</div>
 </template>
 ```
 
@@ -123,7 +123,7 @@ The rules for what we are doing are summarized below:
 |Type     |Url                         |Content value        |Visible content
 |---------|----------------------------|---------------------|----------------
 |Number   |https://schema.org/Number   |num.toString()       |num.toLocaleString()
-|Date     | |date.toISOString()   |date.toLocaleDateString()
+|Date     |https://schema.org/DateTime |date.toISOString()   |date.toLocaleDateString()
 |Boolean  |https://schema.org/Boolean  |bln.toString()       |true/false
 |Object   |https://schema.org/Thing    |JSON.stringify(obj)  |None
 
@@ -137,7 +137,7 @@ They use the word "may" rather than "must" or "may only".  Maybe that's legalese
 
 I don't think the template instantiation engine itself would benefit internally from emitting these types.  The purpose of the types is hydration of server-rendered content, and better search engine accuracy only, which I think is outside the purview of template instantiation.
 
-So perhaps this mapping could be an optional setting of the template instantiation, and if none is provided, no automatic itemtype's are emitted.
+So all of these typings are purely optional, up to the developer.  The template instantiation engine would only emit them if provided.
 
 So when do we need to use the meta tag?
 
