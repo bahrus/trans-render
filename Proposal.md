@@ -28,6 +28,7 @@ The specific syntax of this proposal is just my view of the best way of represen
 
 Because there's a tiny performance cost to adding microdata to the output, it should perhaps be something that can be opt-in (or opt-out).  But if having microdata contained in the output proves to be so beneficial to the ability of specifying parts and working with streaming declarative shadow DOM, that it makes sense to always integrate with microdata, in my view the performance penalty is worth it, and would do much more good than harm (the harm seems negligible).
 
+
 ## Highlights
 
 This proposal consists of several, somewhat loosely coupled sub-proposals:
@@ -88,7 +89,7 @@ Let us apply the template to the host object defined above:
             <span>{{address.gpsCoordinates.latitude.toFixed|2}}</span>
         </div>
     </div>
-    <span>{{address.gpsCoordinates.longitude.toFixed|3}}</span>
+    <div>{{address.gpsCoordinates.longitude.toFixed|3}}</div>
 </template>
 ```
 
@@ -109,12 +110,12 @@ Then with the integrateWithMicrodata setting enabled it would generate (with US 
         <span><meta itemprop=latitude itemtype=https://schema.org/Number content=35.77804334830908>35.78</span>
     </div>
 </div>
-<span itemscope itemprop=address>
+<div itemscope itemprop=address>
     <!-- line feeds are for readability -->
     <meta itemscope itemref=a7c4c3a74-272e-4cf5-bf53-60ad9672206f itemprop=gpsCoordinates>
     <meta id=a7c4c3a74-272e-4cf5-bf53-60ad9672206f itemprop=longitude content=-78.64528572271688>
     -78.645
-</span>
+</div>
 ```
 
 The rules for what we are doing are summarized below:
@@ -132,17 +133,10 @@ So when do we need to use the meta tag?
 
 1.  When evaluating an interpolating expression.  (see below)
 2.  When the moustache expression does any manipulation of the data beyond to[Locale][*]String(), making deriving the underlying value impossible.
-3.  When the moustache expression contains a nested property path.  If the path goes beyond two levels, guid id's would be created automatically to manage the hierarchy.
+3.  When the moustache expression contains a nested property path.  If the path goes beyond two levels, guid id's would need to be created automatically to manage the hierarchy.
 
-Note that with the nested object, the div is actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But that example, if it is supported, kind of burst through the initial understanding.  It is doing more than emitting.  So assuming that example holds, the correct phrase should be integrateWithMicrodata.
+Note that with the nested objects, the divs are actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But those examples, if template instantiation supports them, kind of burst through the initial understanding.  It is doing more than emitting.  So assuming those examples hold, the correct phrase should be integrateWithMicrodata.
 
-With the last example, it may be that the correct interpretation of the specs should require a little bit of repetition in the output:
-
-```html
-<span itemscope itemprop=address><meta itemprop=street content="123 Penny Lane">123 Penny Lane</span>
-```
-
-Also, this solution would only work two levels deep.  There's no indication in the specs that nested property paths are supported.
 
 ## Formatting
 
