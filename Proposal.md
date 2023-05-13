@@ -86,7 +86,7 @@ Let us apply the template to the host object defined above:
     <span>{{address.zipCode}}</span>
     <div itemscope itemprop=address>
         <div itemscope itemprop=gpsCoordinates>
-            <span>{{address.gpsCoordinates.latitude.toFixed|2 as https://schema.org/Number}}</span>
+            <span>{{latitude.toFixed|2 as https://schema.org/Number}}</span>
         </div>
     </div>
     <div>{{address.gpsCoordinates.longitude.toFixed|3 as https://schema.org/Number}}</div>
@@ -127,7 +127,7 @@ The rules for what we are doing are summarized below:
 |Boolean  |https://schema.org/Boolean  |bln.toString()       |true/false
 |Object   |https://schema.org/Thing    |JSON.stringify(obj)  |None
 
-All these primitive types are [officially recognized](https://schema.org/DataType) by schema.org, with the possible exception of the last one.  If the usage above for the last one is considered incorrect, I would suggest https://schema.org/DataType/SchemalessObject be added to schema.org.  Supporting this "primitive" type would speed up development, in my opinion. 
+All these *optional* primitive types are [officially recognized](https://schema.org/DataType) by schema.org, with the possible exception of the last one.  If the usage above for the last one is considered incorrect, I would suggest https://schema.org/DataType/SchemalessObject be added to schema.org.  Supporting this "primitive" type would speed up development, in my opinion. 
 
 It should be noted that for each of these primitive types, a phrase like this is used in the documentation:
 
@@ -137,7 +137,7 @@ They use the word "may" rather than "must" or "may only".  Maybe that's legalese
 
 I don't think the template instantiation engine itself would benefit internally from emitting these types.  The purpose of the types is hydration of server-rendered content, and better search engine accuracy only, which I think is outside the purview of template instantiation.
 
-So all of these typings are purely optional, up to the developer.  The template instantiation engine would only emit them if provided.  I think tooling could come to the rescue to make these typings reliable (in conjunction with typescript).
+**So all of these typings are purely optional, up to the developer**.  The template instantiation engine would only emit them if provided.  I think tooling could come to the rescue to make these typings reliable (in conjunction with typescript).
 
 So when do we need to use the meta tag?
 
@@ -145,7 +145,7 @@ So when do we need to use the meta tag?
 2.  When the moustache expression does any manipulation of the data beyond to[Locale][*]String(), making deriving the underlying value impossible.
 3.  When the moustache expression contains a nested property path.  If the path goes beyond two levels, guid id's would need to be created automatically to manage the hierarchy.
 
-Note that with the nested objects, the divs are actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But those examples, if template instantiation supports them, kind of burst through the initial understanding.  It is doing more than emitting.  So assuming those examples hold, the correct phrase should be integrateWithMicrodata.
+Note that with the nested objects, the divs are actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But those examples, if template instantiation supports them, kind of burst through that initial understanding.  It is doing more than emitting.  So assuming those examples hold, the correct phrase should be integrateWithMicrodata.
 
 
 ## Formatting
@@ -178,6 +178,8 @@ This would generate:
 ```html
 <div>Hello <meta itemprop=name content=Bob>Bob<meta content>, the event will begin at <meta itemprop=eventDate itemtype=https://schema.org/DateTime content=2011-11-18T14:54:39.929Z>11/18/2011</div>
 ```
+
+Once again, the itemtype is purely optional.
 
 
 ## Loops
