@@ -76,7 +76,7 @@ Let us apply the template to the host object defined above:
 ```html
 <template>
     <span>{{name}}</span>
-    <span>{{eventDate}}</span>
+    <span>{{eventDate as https://schema.org/DateTime}}</span>
     <span>{{secondsSinceBirth}}</span>
     <span>{{isVegetarian}}</span>
     <span>{{address}}</span>
@@ -123,7 +123,7 @@ The rules for what we are doing are summarized below:
 |Type     |Url                         |Content value        |Visible content
 |---------|----------------------------|---------------------|----------------
 |Number   |https://schema.org/Number   |num.toString()       |num.toLocaleString()
-|Date     |https://schema.org/DateTime |date.toISOString()   |date.toLocaleDateString()
+|Date     | |date.toISOString()   |date.toLocaleDateString()
 |Boolean  |https://schema.org/Boolean  |bln.toString()       |true/false
 |Object   |https://schema.org/Thing    |JSON.stringify(obj)  |None
 
@@ -243,7 +243,7 @@ would [generate](https://schema.org/ItemList):
 </ul>
 ```
 
-I *think* the second example would make it unambiguous, when hydrating, even when there's a single child list item, that we are working with an array of items, rather than a sub property.
+I *think* the second example would make it unambiguous, when hydrating, even when there's a single child list item, that we are working with an array of items, rather than a sub property.  All of the types pointing to schema.org and to mywebsite.com are optional.  I don't think template instantiation would need them for anything.
 
 ## Creating artificial hierarchies with itemref
 
