@@ -154,7 +154,7 @@ If template instantiation supports formatting:
 
 ```html
 <template>
-    <time>{{eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' } as https://schema.org/DateTime }}</time>
+    <time>{{eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</time>
 <template>
 ```
 
@@ -168,30 +168,17 @@ Now let's talk about the dreaded interpolation scenario.
 
 ```html
 <template>
-    <div>Hello {{name}}, the event will begin at {{eventDate}}</div>
+    <div>Hello {{name}}, the event will begin at {{eventDate as https://schema.org/DateTime }}</div>
 </template>
 ```
 
 
-Option 1:
-
-```html
-<div>Hello <meta itemprop=name content=Bob>Bob<meta>, the event will begin at <time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>11/18/2011</time></div>
-```
-
-Option 2:
+This would generate:
 
 ```html
 <div>Hello <meta itemprop=name content=Bob>Bob<meta content>, the event will begin at <meta itemprop=eventDate itemtype=https://schema.org/DateTime content=2011-11-18T14:54:39.929Z>11/18/2011</div>
 ```
 
-Option 2 may be the lesser appealing one, to me at least.  But until there are more HTML tags to represent things like numbers, booleans, we have little choice, it seems to me, but to go with option 2.  Should HTML tags be introduced for numbers, booleans, objects, this could become a future configuration setting, "semanticTagMapping" or something like that, which would allow the developer to specify which tag to use for which primitive type.
-
-My tentative recommendation:  Use option 2.  
-
-For now, this question is the very last thing we should be fretting about.  It requires so little effort for the developer to opt to replace the moustache binding with the time tag, that we should leave this decision to the developer, and just use option 2 for simplicity.
-
-Data elements that resolve to null or undefined would not emit anything in an interpolation.
 
 ## Loops
 
@@ -222,11 +209,9 @@ Suppose we have a list of todo items:
 
 ```html
 <template>
-    <ul itemscope itemprop=todos itemtype=https://schema.org/ItemList>
-        <li itemscope itemprop="{{itemListElement as https://schema.org/ItemList of todos}}" itemtype="https://mywebsite.com.com/TODOItemSchema.json">
-            <div>
-                {{itemListElement.todo}}
-            </div>
+    <ul itemscope itemtype=https://schema.org/ItemList>
+        <li itemscope itemprop="{{itemListElement of todos}}" itemtype="https://mywebsite.com.com/TODOItemSchema.json">
+            <div>{{itemListElement.todo}}</div>
         </li>
     </ul>
 </template>
@@ -243,16 +228,18 @@ would [generate](https://schema.org/ItemList):
 </ul>
 ```
 
-I *think* the second example would make it unambiguous, when hydrating, even when there's a single child list item, that we are working with an array of items, rather than a sub property.  All of the types pointing to schema.org and to mywebsite.com are optional.  I don't think template instantiation would need them for anything.
+I *think* now when hydrating, even when there's a single child list item, that we can tell we are working with an array of items, rather than a sub property.  All of the types pointing to schema.org and to mywebsite.com are optional.  I don't think template instantiation would need them for anything.
 
 ## Creating artificial hierarchies with itemref
 
 ```html
-<template>
-<dl>
-    <template repeat="{{monster of monsters}}" itemtype="https://mywebsite.com/Monster.json of https://schema.org/ItemList">
-        <dt itemref={{monster.id}}_description><span>{{monster.name}}</span></dt>
-        <dd id={{monster.id}}_description>{{monster.description}}</dd>
+<template >
+<dl itemscope itemprop=monsters itemtype=https://schema.org/ItemList>
+    <template>
+        <dt itemprop="{{itemListElement of monsters}}" itemref={{itemListElement.id}}_description>
+            <span>{{itemListElement.name}}</span>
+        </dt>
+        <dd id={{itemListElement.id}}_description>{{itemListElement.description}}</dd>
     </template>
 </dl>
 </template>
@@ -261,7 +248,7 @@ I *think* the second example would make it unambiguous, when hydrating, even whe
 would generate:
 
 ```html
-<dl itemscope itemtype=https://schema.org/ItemList>
+<dl itemscope itemprop=monsters itemtype=https://schema.org/ItemList>
     <dt itemref=monster_1_description itemscope itemprop=itemListElement itemtype=https://mywebsite.com/Monster.json>
         <span itemprop=name>Beast of Bodmin</span>
     </dt>
@@ -285,11 +272,13 @@ An open question here is whether template instantiation could provide any shortc
 Suggested syntax for that shortcut:
 
 ```html
-<template>
-<dl>
-    <template repeat="{{monster of monsters}}" itemtype="https://mywebsite.com/Monster.json of https://schema.org/ItemList">
-        <dt itemref={{#dd}><span>{{monster.name}}</span></dt>
-        <dd id={{monster.id}}_description>{{monster.description}}</dd>
+<template >
+<dl itemscope itemprop=monsters itemtype=https://schema.org/ItemList>
+    <template>
+        <dt itemprop="{{itemListElement of monsters}}" itemref={{##dd}}>
+            <span>{{itemListElement.name}}</span>
+        </dt>
+        <dd id={{itemListElement.id}}_description>{{itemListElement.description}}</dd>
     </template>
 </dl>
 </template>
@@ -301,16 +290,16 @@ Similarly for grouped table rows:
 
 ```html
 <template>
-    <table>
+    <table itemscope itemtype=https://schema.org/ItemList>
         <tbody>
-            <template repeat="{{item of items}}" itemtype="https://mywebsite.com/Message.json of https://schema.org/ItemList">
-                <tr itemref={{item.id}}_even class=odd>
-                    <td>{{item.to}}</td>
-                    <td>{{item.from}}</td>
+            <template>
+                <tr itemprop="{{itemListElement of items}}" itemref={{itemListElement.id}}_even class=odd>
+                    <td>{{itemListElement.to}}</td>
+                    <td>{{itemListElement.from}}</td>
                 </tr>
-                <tr id={{item.id}}_even class=even>
-                    <td>{{item.subject}}</td>
-                    <td>{{item.message}}</td>
+                <tr id={{itemListElement.id}}_even class=even>
+                    <td>{{itemListElement.subject}}</td>
+                    <td>{{itemListElement.message}}</td>
                 </tr>
             <template>
         </tbody>
@@ -322,7 +311,7 @@ would generate:
 
 ```html
 <table>
-    <tbody itemscope itemtype=https://schema.org/ItemList>
+    <tbody itemscope itemprop=items itemtype=https://schema.org/ItemList>
         <tr itemref=first_item itemscope itemprop=itemListElement itemtype=https://mywebsite.com/Message.json class=odd>
             <td itemprop=to>Foo</td>
             <td itemprop=from>Bar</td>
