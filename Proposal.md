@@ -36,7 +36,7 @@ This proposal consists of several, somewhat loosely coupled sub-proposals:
 1.  Specify some decisions for how microdata would be emitted in certain scenarios.
 2.  Add the minimal required schemas, if any, to schema.org so that everything is legitimate and above board.
 3.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata encoded HTML to JSON. 
-4.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for booleans, schema-less objects.
+4.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for booleans, schema-less objects.  meter is a nice tag, but maybe a simpler one is also needed for plain old numbers.
 
 So basically, for starters, unless this proposal is *required* for the handshake between server generated HTML and the client template instantiation to work properly, we would need to specify an option when invoking the Template Instantiation API:  **integrateWithMicrodata**.
 
@@ -166,13 +166,13 @@ Now let's talk about the dreaded interpolation scenario.
 Option 1:
 
 ```html
-<div>Hello <meta itemprop=name>Bob<meta content>, the event will begin at <time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>11/18/2011</time></div>
+<div>Hello <meta itemprop=name content=Bob>Bob<meta content>, the event will begin at <time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>11/18/2011</time></div>
 ```
 
 Option 2:
 
 ```html
-<div>Hello <meta itemprop=name>Bob<meta content>, the event will begin at <meta itemprop=eventDate itemtype=https://schema.org/DateTime content=2011-11-18T14:54:39.929Z>11/18/2011</div>
+<div>Hello <meta itemprop=name content=Bob>Bob<meta content>, the event will begin at <meta itemprop=eventDate itemtype=https://schema.org/DateTime content=2011-11-18T14:54:39.929Z>11/18/2011</div>
 ```
 
 Option 2 may be the lesser appealing one, to me at least.  But until there are more HTML tags to represent things like numbers, booleans, we have little choice, it seems to me, but to go with option 2.  Should HTML tags be introduced for numbers, booleans, objects, this could become a future configuration setting, "semanticTagMapping" or something like that, which would allow the developer to specify which tag to use for which primitive type.
@@ -182,7 +182,6 @@ My tentative recommendation:  Use option 2.
 For now, this question is the very last thing we should be fretting about.  It is so little effort for the developer to opt to replace the moustache binding with the time tag, that we should leave this decision to the developer, and just use option 2 for simplicity.
 
 Data elements that resolve to null or undefined would not emit anything in an interpolation.
-
 
 ## Loops
 
