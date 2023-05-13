@@ -234,7 +234,7 @@ I *think* now when hydrating, even when there's a single child list item, that w
 
 ```html
 <template >
-<dl itemscope itemprop=monsters itemtype=https://schema.org/ItemList>
+<dl itemscope itemtype=https://schema.org/ItemList>
     <template>
         <dt itemprop="{{itemListElement of monsters}}" itemref={{itemListElement.id}}_description>
             <span>{{itemListElement.name}}</span>
@@ -273,7 +273,7 @@ Suggested syntax for that shortcut:
 
 ```html
 <template >
-<dl itemscope itemprop=monsters itemtype=https://schema.org/ItemList>
+<dl itemscope itemtype=https://schema.org/ItemList>
     <template>
         <dt itemprop="{{itemListElement of monsters}}" itemref={{##dd}}>
             <span>{{itemListElement.name}}</span>
