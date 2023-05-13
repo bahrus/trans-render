@@ -1,18 +1,18 @@
 # Template Instantiation Support for Microdata
 
-A good [percentage](https://w3techs.com/technologies/details/da-microdata#:~:text=Microdata%20is%20used%20by,24.2%25%20of%20all%20the%20websites) of websites use [microdata](http://html5doctor.com/microdata/).  It is still lagging behind some non-standardized competitors, however.  Let's try to fix that!  
+A good [percentage](https://w3techs.com/technologies/details/da-microdata#:~:text=Microdata%20is%20used%20by,24.2%25%20of%20all%20the%20websites) of websites use [microdata](http://html5doctor.com/microdata/).  It is still lagging behind some competitors which aren't of the whatwg standard, however.  Let's try to fix that!  
 
 ## Historical backdrop
 
 Given the age of the second link above, it is natural to ask the question, why did it take so long for anyone to raise the possibility of integrating template binding with microdata?  Or is there some fatal flaw in even trying?  I was ready to attribute this to a massive market failure on the part of the web development community, including myself, but I don't think the explanation is that simple, thankfully.
 
-What I've learned is that for years, the microdata initiative was in a kind of simmering battle with another proposal, RDFa, as far as which one would be embraced as the standard.
+What I've learned is that for years, the microdata initiative was in a kind of simmering battle with another proposal, RDFa, as far as which one would be embraced as the one true standard.
 
 The microdata proposal suffered a significant setback in the early 2010's, and only in the late 2010's did it experience a comeback, and it seems safe now to conclude that microdata has won out, permanently, in terms of built-in integration with the browser.  Some sites haven't [been properly updated](https://caniuse.com/sr_microdata) to reflect that fact, which can partly explain why this comeback seems to have slipped under the development community's radar.
 
 ## Nudging developers
 
-I think nudging developers to make use of this [standard](https://html.spec.whatwg.org/multipage/#toc-microdata) by making it super easy, when working with template instantiation, would have a beneficial impact for the web and society in general.
+I think nudging developers to make use of this [standard](https://html.spec.whatwg.org/multipage/#toc-microdata) by making it super easy, when working with template instantiation, would have a beneficial impact for the web and society in general.  It's not just ease we after really.  As we will see, we want to ensure that all bindings are in sync, by avoiding the need to repeat ourselves.
 
 ## Benefits
 
@@ -22,11 +22,11 @@ With the help of the meta tag and microdata attributes, we can [extract](https:/
 
 ## Caveats
 
-The biggest cost associated with supporting microdata, is whether *updates* to the HTML should include updates to hidden meta tags.  Not updating them would have no effect on hydrating, but *might* have an impact on limiting search results / indexing.
+The biggest cost associated with supporting microdata, is whether *updates* to the HTML should include updates to hidden meta tags.  Not updating them would have no effect on hydrating, or what the user sees, but might, I suspect, have an impact on limiting search result accuracy and indexing.
 
 The specific syntax of this proposal is just my view of the best way of representing integration with microdata, and is not meant to imply any "final decision", as if I'm in a position to do so.  I'm not yet an expert on the microdata standard, so it is possible that some of what I suggest below contradicts some fine point specified somewhere in the standard.  But I do hope others find this helpful, especially if it triggers a competing proposal that tries to "get it right".
 
-Because there's a tiny performance cost to adding microdata to the output, it should perhaps be something that can be opt-in (or opt-out).  If having microdata contained in the output proves to be so beneficial to the ability of specifying parts and working with streaming declarative shadow DOM, that it makes sense to always integrate with microdata, in my view the performance penalty is worth it, and would do much more good than harm (the harm seems negligible).
+Because there's a tiny performance cost to adding microdata to the output, it should perhaps be something that can be opt-in (or opt-out).  But if having microdata contained in the output proves to be so beneficial to the ability of specifying parts and working with streaming declarative shadow DOM, that it makes sense to always integrate with microdata, in my view the performance penalty is worth it, and would do much more good than harm (the harm seems negligible).
 
 ## Highlights
 
@@ -34,14 +34,12 @@ This proposal consists of several, somewhat loosely coupled sub-proposals:
 
 1.  Specify some decisions for how microdata would be emitted in certain scenarios.
 2.  Add the minimal required schemas, if any, to schema.org so that everything is legitimate and above board.
-3.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata HTML to JSON. 
-4.  Add semantic tags for numbers, booleans, objects.
+3.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata encoded HTML to JSON. 
+4.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for booleans, schema-less objects.
 
 So basically, for starters, unless this proposal is *required* for the handshake between server generated HTML and the client template instantiation to work properly, we would need to specify an option when invoking the Template Instantiation API:  **integrateWithMicrodata**.
 
 ## Simple Object Example
-
-What this would do:
 
 Let's say our (custom element) host object looks like:
 
@@ -53,14 +51,19 @@ const host = {
     isVegetarian: true,
     address: {
         street: '123 Penny Lane',
-        zipCode: 12345
+        zipCode: '12345',
+        gpsCoordinates: {
+            latitude: 35.77804334830908,
+            longitude: -78.64528572271688
+        }
+
     }
 }
 ```
 
 There are two fundamental scenarios to consider:
 
-1.  If the author specifies the itemtype for the itemscope surrounding the html element where the binding takes place.
+1.  If the author defines or reuses a schema definition for the structure, and specifies the itemtype for the itemscope surrounding the html element where the binding takes place.
 2.  No such schema is provided.
 
 In what follows, we consider the latter scenario, so that emitting the type of non string primitives is critical for us to be able to hydrate the data accurately.
@@ -79,7 +82,13 @@ Let us apply the template to the host object defined above:
     <div itemscope itemprop=address>
         <span>{{street}}</span>
     <div>
-    <span>{{address.street}}</span>
+    <span>{{address.zipCode}}</span>
+    <div itemscope itemprop=address>
+        <div itemscope itemprop=gpsCoordinates>
+            <span>{{address.gpsCoordinates.latitude.toFixed|2}}</span>
+        </div>
+    </div>
+    <span>{{address.gpsCoordinates.longitude.toFixed|3}}</span>
 </template>
 ```
 
@@ -94,7 +103,18 @@ Then with the integrateWithMicrodata setting enabled it would generate (with US 
 <div itemscope itemprop=address>
     <span itemprop=street>123 Penny Lane</span>
 </div>
-<span itemscope itemprop=address><meta itemprop=street content>123 Penny Lane</span>
+<span itemscope itemprop=address><meta itemprop=zipCode content=12345>12345</span>
+<div itemscope itemprop=address>
+    <div itemscope itemprop=gpsCoordinates>
+        <span><meta itemprop=latitude itemtype=https://schema.org/Number content=35.77804334830908>35.78</span>
+    </div>
+</div>
+<span itemscope itemprop=address>
+    <!-- line feeds are for readability -->
+    <meta itemscope itemref=a7c4c3a74-272e-4cf5-bf53-60ad9672206f itemprop=gpsCoordinates>
+    <meta id=a7c4c3a74-272e-4cf5-bf53-60ad9672206f itemprop=longitude content=-78.64528572271688>
+    -78.645
+</span>
 ```
 
 The rules for what we are doing are summarized below:
@@ -104,9 +124,15 @@ The rules for what we are doing are summarized below:
 |Number   |https://schema.org/Number   |num.toString()       |num.toLocaleString()
 |Date     |https://schema.org/DateTime |date.toISOString()   |date.toLocaleDateString()
 |Boolean  |https://schema.org/Boolean  |bln.toString()       |true/false
-|Object   |https://schema.org/Thing    |JSON.stringify(obj)  |None (for now)
+|Object   |https://schema.org/Thing    |JSON.stringify(obj)  |None
 
-All these primitive types are [officially recognized](https://schema.org/DataType) by schema.org, with the possible exception of the last one.  If the usage above for the last one is considered incorrect (which, honestly, I think it is), I would suggest https://schema.org/DataType/SchemalessObject be added to schema.org.  It is a controversial move, as now we are almost encouraging sites to send information not viewable by the user, which is inefficient (especially when updating initial values sent down from the server), could lead to yet more gaming of page rankings.  However, it would speed up development, in my opinion.  I'm leaning towards dropping that one. 
+All these primitive types are [officially recognized](https://schema.org/DataType) by schema.org, with the possible exception of the last one.  If the usage above for the last one is considered incorrect, I would suggest https://schema.org/DataType/SchemalessObject be added to schema.org.  Supporting this "primitive" type would speed up development, in my opinion.  
+
+So when do we need to use the meta tag?
+
+1.  When evaluating an interpolating expression.  (see below)
+2.  When the moustache expression does any manipulation of the data beyond to[Locale][*]String(), making deriving the underlying value impossible.
+3.  When the moustache expression contains a nested property path.  If the path goes beyond two levels, guid id's would be created automatically to manage the hierarchy.
 
 Note that with the nested object, the div is actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But that example, if it is supported, kind of burst through the initial understanding.  It is doing more than emitting.  So assuming that example holds, the correct phrase should be integrateWithMicrodata.
 
