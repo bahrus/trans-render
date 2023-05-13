@@ -154,7 +154,7 @@ If template instantiation supports formatting:
 
 ```html
 <template>
-    <time>{{eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</time>
+    <time>{{eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' } as https://schema.org/DateTime }}</time>
 <template>
 ```
 
