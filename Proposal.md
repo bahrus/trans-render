@@ -35,8 +35,8 @@ This proposal consists of several, somewhat loosely coupled sub-proposals:
 
 1.  Specify some decisions for how microdata would be emitted in certain scenarios.
 2.  Add the minimal required schemas, if any, to schema.org so that everything is legitimate and above board.
-3.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata encoded HTML to JSON. 
-4.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for booleans, schema-less objects.  meter is a nice tag, but maybe a simpler one is also needed for plain old numbers.
+3.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata encoded HTML to JSON.  However, **the specs for this conversion is not particularly useful for what an application would want**, is it seems to convert to a schema-like representation of the object.  An application would want to be able to reconstruct the exact object structure that was used to generate the output in conjunction with the template bindings.  This is easy enough to build in userland for starters.
+4.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for booleans, schema-less objects.  "meter" is a nice tag, but maybe a simpler one is also needed for plain old numbers.
 
 So basically, for starters, unless this proposal is *required* for the handshake between server generated HTML and the client template instantiation to work properly, we would need to specify an option when invoking the Template Instantiation API:  **integrateWithMicrodata**.
 
@@ -182,6 +182,10 @@ My tentative recommendation:  Use option 2.
 For now, this question is the very last thing we should be fretting about.  It is so little effort for the developer to opt to replace the moustache binding with the time tag, that we should leave this decision to the developer, and just use option 2 for simplicity.
 
 Data elements that resolve to null or undefined would not emit anything in an interpolation.
+
+## Formatting with form participating custom elements
+
+
 
 ## Loops
 
