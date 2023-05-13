@@ -137,7 +137,7 @@ They use the word "may" rather than "must" or "may only".  Maybe that's legalese
 
 I don't think the template instantiation engine itself would benefit internally from emitting these types.  The purpose of the types is hydration of server-rendered content, and better search engine accuracy only, which I think is outside the purview of template instantiation.
 
-So all of these typings are purely optional, up to the developer.  The template instantiation engine would only emit them if provided.
+So all of these typings are purely optional, up to the developer.  The template instantiation engine would only emit them if provided.  I think tooling could come to the rescue to make these typings reliable (in conjunction with typescript).
 
 So when do we need to use the meta tag?
 
