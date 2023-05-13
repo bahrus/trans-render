@@ -12,7 +12,7 @@ The microdata proposal suffered a significant setback in the early 2010's, and o
 
 ## Nudging developers
 
-I think nudging developers to make use of this [standard](https://html.spec.whatwg.org/multipage/#toc-microdata) by making it super easy, when working with template instantiation, would have a beneficial impact for the web and society in general.  It's not just ease we after really.  As we will see, we want to ensure that all bindings are in sync, by avoiding the need to repeat ourselves.
+I think nudging developers to make use of this [standard](https://html.spec.whatwg.org/multipage/#toc-microdata) by making it super easy and reliable, when working with template instantiation, would have a beneficial impact for the web and society in general.  As we will see, we want to ensure that all bindings are in sync, by avoiding the need to repeat ourselves.
 
 ## Benefits
 
@@ -176,7 +176,7 @@ Now let's talk about the dreaded interpolation scenario.
 Option 1:
 
 ```html
-<div>Hello <meta itemprop=name content=Bob>Bob<meta content>, the event will begin at <time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>11/18/2011</time></div>
+<div>Hello <meta itemprop=name content=Bob>Bob<meta>, the event will begin at <time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>11/18/2011</time></div>
 ```
 
 Option 2:
@@ -189,60 +189,17 @@ Option 2 may be the lesser appealing one, to me at least.  But until there are m
 
 My tentative recommendation:  Use option 2.  
 
-For now, this question is the very last thing we should be fretting about.  It is so little effort for the developer to opt to replace the moustache binding with the time tag, that we should leave this decision to the developer, and just use option 2 for simplicity.
+For now, this question is the very last thing we should be fretting about.  It requires so little effort for the developer to opt to replace the moustache binding with the time tag, that we should leave this decision to the developer, and just use option 2 for simplicity.
 
 Data elements that resolve to null or undefined would not emit anything in an interpolation.
-
-## Form associated custom elements
-
-```html
-<template>
-    <some-text-field {{eventDate}}></some-text-field>
-</template>
-```
-
-would generate:
-
-```html
-<template>
-    <some-text-field value=2011-11-18T14:54:39.929Z name=eventDate></some-text-field>
-<template>
-```
 
 ## Loops
 
 The scenarios get a bit complicated here.  What follows assumes that the developer wants to be able to "reverse engineer" the output, and be able to guarantee they can distinguish between content that came from a loop, vs. content that came from a single sub property.  In what follows, I assume the tougher case.  If no such requirements exist, the developer can drop specifying the itemtype.
 
-For loops that repeat a single element (with light children), the developer needs to add an itemtype with two url's, each of which is supposed to point to a schema (but the w3c police will probably overlook invalid url's).  The template instantiation engine would emit the itemscope attribute, and split the two itemtypes, the first one landing in the parent's itemtype, leaving one in the element that represents each item of the loop.  Easier to explain by examples:
+
 
 ### Example 1
-
-```html
-<template>
-    <ul>
-        <li repeat="{{item of items}}" itemtype=https://mywebsite.com.com/TODOItem.json>
-            <div>
-                {{item.task}}
-            </div>
-        </li>
-    </ul>
-</template>
-```
-
-would generate:
-
-```html
-<ul>
-    <li itemscope  itemtype="https://mywebsite.com.com/TODOItem.json">
-        <div itemprop=task>Brush teeth</div>
-    </li>
-    <li itemscope itemtype="https://mywebsite.com.com/TODOItem.json">
-        <div itemprop=task>Comb hair</div>
-    </li>
-</ul>
-```
-
-### Example 2
 
 Suppose we have a list of todo items:
 
@@ -265,10 +222,10 @@ Suppose we have a list of todo items:
 
 ```html
 <template>
-    <ul itemprop=todos>
-        <li repeat="{{item of todos}}" itemtype="https://mywebsite.com.com/TODOItem.json of https://schema.org/ItemList">
+    <ul itemscope itemprop=todos itemtype=https://schema.org/ItemList>
+        <li itemscope itemprop="{{itemListElement as https://schema.org/ItemList of todos}}" itemtype="https://mywebsite.com.com/TODOItemSchema.json">
             <div>
-                {{item.todo}}
+                {{itemListElement.todo}}
             </div>
         </li>
     </ul>
@@ -279,7 +236,7 @@ would [generate](https://schema.org/ItemList):
 
 ```html
 <ul itemscope itemprop=todos itemtype="https://schema.org/ItemList">
-    <li itemscope itemprop="itemListElement"  itemtype="https://mywebsite.com.com/TODOItem.json">
+    <li itemscope itemprop="itemListElement"  itemtype="https://mywebsite.com.com/TODOItemSchema.json">
         <div itemprop=todo>Do something nice for someone I care about</div>
     </li>
     ...
