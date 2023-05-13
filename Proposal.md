@@ -12,7 +12,7 @@ The microdata proposal suffered a significant setback in the early 2010's, and o
 
 ## Nudging developers
 
-I think nudging developers to make use of this [standard](https://html.spec.whatwg.org/multipage/#toc-microdata) by making it super easy and reliable, when working with template instantiation, would have a beneficial impact for the web and society in general.  As we will see, we want to ensure that all bindings are in sync, by avoiding the need to repeat ourselves.
+I think nudging developers to make use of this [standard](https://html.spec.whatwg.org/multipage/#toc-microdata) by making it super easy and reliable, when working with template instantiation, would have a beneficial impact for the web and society in general.  As we will see, we want to ensure that all bindings are in sync, by avoiding the need to repeat ourselves.  Since what the search engine sees is so difficult to determine (hydration would catch most issues though), I think it's important to build in that reliability, hence the extra complexity I'm requesting to ensure that we get that reliability.
 
 ## Benefits
 
