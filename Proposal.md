@@ -31,12 +31,15 @@ Because there's a tiny performance cost to adding microdata to the output, it sh
 
 ## Highlights
 
-This proposal consists of several, somewhat loosely coupled sub-proposals:
+This proposal consists of several, somewhat loosely coupled sub-proposals.  
+
+Only the first one is pertinent to template instantiation, really.  The last one would be once all semantic elements for primitive types have been added to the platform.
 
 1.  Specify some decisions for how microdata would be emitted in certain scenarios.
-2.  Add the minimal required schemas, if any, to schema.org so that everything is legitimate and above board.
+2.  I think the requirement that [itemtype](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/itemtype) must be used on an element with itemscope shouldn't be necessary, for describing elements that represent primitive types like numbers, booleans.  Surely, this is useful information to search engines, even if there isn't an overarching schema defined yet?
 3.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata encoded HTML to JSON.  However, **the specs for this conversion seem to indicate that the JSON output would be far more verbose than what an application using template instantiation would want**, as it seems to convert to a schema-like representation of the object.  An application would want to be able to reconstruct the simple, exact object structure that was used to generate the output in conjunction with the template bindings.  So one more function would be needed to collapse this generic object representation into a simple POJO, which is easy enough to build in userland.
-4.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for booleans, schema-less objects.  "meter" is a nice tag, but maybe a simpler one is also needed for plain old numbers.
+4.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for booleans, schema-less objects.  "meter" is a nice tag, but maybe a simpler one is also needed for plain old [numbers](https://github.com/whatwg/html/issues/9294).
+5.  Eventually, allow moustache interpolation to auto generate content with semantic tags.
 
 So basically, for starters, unless this proposal is *required* for the handshake between server generated HTML and the client template instantiation to work properly, we would need to specify an option when invoking the Template Instantiation API:  **integrateWithMicrodata**.
 
@@ -67,7 +70,7 @@ There are two fundamental scenarios to consider:
 1.  If the author defines or reuses a schema definition for the structure, and specifies the itemtype for the itemscope surrounding the html element where the binding takes place.
 2.  No such schema is provided.
 
-In what follows, we consider the latter scenario, so that emitting the type of non string primitives is critical for us to be able to hydrate the data accurately.
+In what follows, we consider the latter scenario, so that emitting the type of non string primitives is critical for us to be able to hydrate the data accurately.  Although this results in rather verbose markup, only in a small cases would template instantiation be summoned to help create this verbose (and perhaps controversial) markup.
 
 ### Binding to simple primitive values, and simple, non repeating objects with non semantic tags
 
@@ -76,20 +79,18 @@ Let us apply the template to the host object defined above:
 ```html
 <template>
     <span>{{name}}</span>
-    <span>{{eventDate as https://schema.org/DateTime}}</span>
-    <span>{{secondsSinceBirth as https://schema.org/Number}}</span>
-    <span>{{isVegetarian as https://schema.org/Boolean}}</span>
-    <span>{{address as https://schema.org/Thing}}</span>
+    <span itemscope itemtype=https://schema.org/DateTime>{{eventDate}}</span>
+    <span itemscope itemtype=https://schema.org/Number>{{secondsSinceBirth}}</span>
+    <span itemscope itemtype=https://schema.org/Boolean>{{isVegetarian}}</span>
     <div itemscope itemprop=address>
         <span>{{street}}</span>
     <div>
     <span>{{address.zipCode}}</span>
     <div itemscope itemprop=address>
         <div itemscope itemprop=gpsCoordinates>
-            <span>{{latitude.toFixed|2 as https://schema.org/Number}}</span>
+            <span itemscope itemtype=https://schema.org/Number>{{latitude.toFixed|2}}</span>
         </div>
     </div>
-    <div>{{address.gpsCoordinates.longitude.toFixed|3 as https://schema.org/Number}}</div>
 </template>
 ```
 
@@ -97,24 +98,17 @@ Then with the integrateWithMicrodata setting enabled it would generate (with US 
 
 ```html
 <span itemprop=name>Bob</span>
-<span itemprop=eventDate itemtype=https://schema.org/DateTime>5/11/2023</span>
-<span itemprop=secondsSinceBirth itemtype=https://schema.org/Number>1,166,832,000</span>
-<span itemprop=isVegetarian itemtype=https://schema.org/Boolean>true</span>
-<span><meta itemprop=address itemtype=https://schema.org/Thing content='{"street": "123 Penny Lane", "zipCode": 12345}'></span>
+<span itemprop=eventDate itemscope itemtype=https://schema.org/DateTime>5/11/2023</span>
+<span itemprop=secondsSinceBirth itemscope itemtype=https://schema.org/Number>1,166,832,000</span>
+<span itemprop=isVegetarian itemscope itemtype=https://schema.org/Boolean>true</span>
 <div itemscope itemprop=address>
     <span itemprop=street>123 Penny Lane</span>
 </div>
 <span itemscope itemprop=address><meta itemprop=zipCode content=12345>12345</span>
 <div itemscope itemprop=address>
     <div itemscope itemprop=gpsCoordinates>
-        <span><meta itemprop=latitude itemtype=https://schema.org/Number content=35.77804334830908>35.78</span>
+        <span itemscope itemtype=https://schema.org/Number itemprop=latitude><meta content=35.77804334830908>35.78</span>
     </div>
-</div>
-<div itemscope itemprop=address>
-    <!-- line feeds are for readability -->
-    <meta itemscope itemref=a7c4c3a74-272e-4cf5-bf53-60ad9672206f itemprop=gpsCoordinates>
-    <meta id=a7c4c3a74-272e-4cf5-bf53-60ad9672206f itemprop=longitude content=-78.64528572271688>
-    -78.645
 </div>
 ```
 
@@ -125,9 +119,8 @@ The rules for what we are doing are summarized below:
 |Number   |https://schema.org/Number   |num.toString()       |num.toLocaleString()
 |Date     |https://schema.org/DateTime |date.toISOString()   |date.toLocaleDateString()
 |Boolean  |https://schema.org/Boolean  |bln.toString()       |true/false
-|Object   |https://schema.org/Thing    |JSON.stringify(obj)  |None
 
-All these *optional* primitive types are [officially recognized](https://schema.org/DataType) by schema.org, with the possible exception of the last one.  If the usage above for the last one is considered incorrect, I would suggest https://schema.org/DataType/SchemalessObject be added to schema.org.  Supporting this "primitive" type would speed up development, in my opinion. 
+All these *optional* primitive types are [officially recognized](https://schema.org/DataType) by schema.org.  Unfortunately, the standards specify that itemtype must be paired with the itemscope attribute, which is why there are so many itemscope attributes (seems wrong to me to require this). Anyway, that is of no concern to the template instantiation.
 
 It should be noted that for each of these primitive types, a phrase like this is used in the documentation:
 
@@ -137,13 +130,12 @@ They use the word "may" rather than "must" or "may only".  Maybe that's legalese
 
 I don't think the template instantiation engine itself would benefit internally from emitting these types.  The purpose of the types is hydration of server-rendered content, and better search engine accuracy only, which I think is outside the purview of template instantiation.
 
-**So all of these typings are purely optional, up to the developer**.  The template instantiation engine would only emit them if provided.  I think tooling could come to the rescue to make these typings reliable (in conjunction with typescript).
+**So all of these typings are purely optional, up to the developer**.  
 
-So when do we need to use the meta tag?
+So when do we need the template instantiation engine to use the meta tag?
 
 1.  When evaluating an interpolating expression.  (see below)
 2.  When the moustache expression does any manipulation of the data beyond to[Locale][*]String(), making deriving the underlying value impossible.
-3.  When the moustache expression contains a nested property path.  If the path goes beyond two levels, guid id's would need to be created automatically to manage the hierarchy.
 
 Note that with the nested objects, the divs are actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But those examples, if template instantiation supports them, kind of burst through that initial understanding.  It is doing more than emitting.  So assuming those examples hold, the correct phrase should be integrateWithMicrodata.
 
@@ -168,7 +160,7 @@ Now let's talk about the dreaded interpolation scenario.
 
 ```html
 <template>
-    <div>Hello {{name}}, the event will begin at {{eventDate as https://schema.org/DateTime }}</div>
+    <div>Hello {{name}}, the event will begin at {{eventDate}}</div>
 </template>
 ```
 
@@ -176,10 +168,10 @@ Now let's talk about the dreaded interpolation scenario.
 This would generate:
 
 ```html
-<div>Hello <meta itemprop=name content=Bob>Bob<meta content>, the event will begin at <meta itemprop=eventDate itemtype=https://schema.org/DateTime content=2011-11-18T14:54:39.929Z>11/18/2011</div>
+<div>Hello <meta itemprop=name content=Bob>Bob<meta content>, the event will begin at <meta itemprop=eventDate content=2011-11-18T14:54:39.929Z>11/18/2011</div>
 ```
 
-Once again, the itemtype is purely optional.
+So this proposal is requesting that the template instantiation engine sets content = oDate.toIsoString() for dates.  Using toString() would be fine for numbers.
 
 
 ## Loops
@@ -277,7 +269,7 @@ Suggested syntax for that shortcut:
 <template >
 <dl itemscope itemtype=https://schema.org/ItemList>
     <template>
-        <dt itemprop="{{itemListElement of monsters}}" itemref={{##dd}}>
+        <dt itemprop="{{itemListElement of monsters}}" itemref={{#dd}}>
             <span>{{itemListElement.name}}</span>
         </dt>
         <dd id={{itemListElement.id}}_description>{{itemListElement.description}}</dd>
@@ -318,7 +310,7 @@ would generate:
             <td itemprop=to>Foo</td>
             <td itemprop=from>Bar</td>
         </tr>
-        <tr id=first_item class=even>
+        <tr id=first_item_even class=even>
             <td itemprop=subject>Baz</td>
             <td itemprop=message>Qux</td>
         </tr>
@@ -327,7 +319,7 @@ would generate:
             <td itemprop=to>Quux</td>
             <td itemprop=from>Quuz</td>
         </tr>
-        <tr id=second_item class=even>
+        <tr id=second_item_even class=even>
             <td itemprop=subject>Corge</td>
             <td itemprop=message>Grault</td>
         </tr>
