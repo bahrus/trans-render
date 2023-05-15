@@ -67,10 +67,10 @@ const host = {
 
 There are two fundamental scenarios to consider:
 
-1.  If the author defines or reuses a schema definition for the structure, and specifies the itemtype for the itemscope surrounding the html element where the binding takes place.
+1.  If the author defines or reuses a schema definition for the structure, and specifies the itemtype for the itemscope surrounding the html element where the binding takes place.  Most web component libraries auto generate a schema file for the custom element manifest, so maybe not a stretch to expect this to be common place?
 2.  No such schema is provided.
 
-In what follows, we consider the latter scenario, so that emitting the type of non string primitives is critical for us to be able to hydrate the data accurately.  Although this results in rather verbose markup, only in a small cases would template instantiation be summoned to help create this verbose (and perhaps controversial) markup.
+In what follows, we consider the latter scenario, so that specifying the type of non string primitives is critical for us to be able to hydrate the data accurately. Note that the template instantiation itself doesn't interact with these types.  Also, the example below might be violating 100% HTML decorum, as specifying an itemtype without an itemscope is considered wrong, accordgint to MDN.  (The specification never spells that out, though.) 
 
 ### Binding to simple primitive values, and simple, non repeating objects with non semantic tags
 
@@ -79,10 +79,10 @@ Let us apply the template to the host object defined above:
 ```html
 <template>
     <span>{{name}}</span>
-    <span itemscope itemtype=https://schema.org/DateTime>{{eventDate}}</span>
-    <span itemscope itemtype=https://schema.org/Number>{{secondsSinceBirth}}</span>
-    <span itemscope itemtype=https://schema.org/Boolean>{{isVegetarian}}</span>
-    <div itemscope itemprop=address>
+    <span itemtype=https://schema.org/DateTime>{{eventDate}}</span>
+    <span itemtype=https://schema.org/Number>{{secondsSinceBirth}}</span>
+    <span itemtype=https://schema.org/Boolean>{{isVegetarian}}</span>
+    <div itemprop=address itemscope>
         <span>{{street}}</span>
     <div>
     <span>{{address.zipCode}}</span>
@@ -98,13 +98,13 @@ Then with the integrateWithMicrodata setting enabled it would generate (with US 
 
 ```html
 <span itemprop=name>Bob</span>
-<span itemprop=eventDate itemscope itemtype=https://schema.org/DateTime>5/11/2023</span>
-<span itemprop=secondsSinceBirth itemscope itemtype=https://schema.org/Number>1,166,832,000</span>
-<span itemprop=isVegetarian itemscope itemtype=https://schema.org/Boolean>true</span>
+<span itemprop=eventDate itemtype=https://schema.org/DateTime>5/11/2023</span>
+<span itemprop=secondsSinceBirth itemtype=https://schema.org/Number>1,166,832,000</span>
+<span itemprop=isVegetarian itemtype=https://schema.org/Boolean>true</span>
 <div itemscope itemprop=address>
     <span itemprop=street>123 Penny Lane</span>
 </div>
-<span itemscope itemprop=address><meta itemprop=zipCode content=12345>12345</span>
+<span itemprop=address><meta itemprop=zipCode content=12345>12345</span>
 <div itemscope itemprop=address>
     <div itemscope itemprop=gpsCoordinates>
         <span itemscope itemtype=https://schema.org/Number itemprop=latitude><meta content=35.77804334830908>35.78</span>
@@ -136,6 +136,7 @@ So when do we need the template instantiation engine to use the meta tag?
 
 1.  When evaluating an interpolating expression.  (see below)
 2.  When the moustache expression does any manipulation of the data beyond to[Locale][*]String(), making deriving the underlying value impossible.
+3.  If template instantiation supports nested prop paths.  If the depth is greater than two, itemref attributes would need to be used, with auto generated unique id's.
 
 Note that with the nested objects, the divs are actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But those examples, if template instantiation supports them, kind of burst through that initial understanding.  It is doing more than emitting.  So assuming those examples hold, the correct phrase should be integrateWithMicrodata.
 
@@ -177,7 +178,6 @@ So this proposal is requesting that the template instantiation engine sets conte
 ## Loops
 
 The scenarios get a bit complicated here.  What follows assumes that the developer wants to be able to "reverse engineer" the output, and be able to guarantee they can distinguish between content that came from a loop, vs. content that came from a single sub property.  In what follows, I assume the tougher case.  If no such requirements exist, the developer can drop specifying the itemtype.
-
 
 
 ### Example 1
