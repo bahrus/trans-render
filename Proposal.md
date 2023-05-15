@@ -36,10 +36,9 @@ This proposal consists of several, somewhat loosely coupled sub-proposals.
 Only the first one is pertinent to template instantiation, really.  The last one would be once all semantic elements for primitive types have been added to the platform.
 
 1.  Specify some decisions for how microdata would be emitted in certain scenarios.
-2.  I think the requirement that [itemtype](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/itemtype) must be used on an element with itemscope shouldn't be necessary, for describing elements that represent primitive types like numbers, booleans.  Surely, this is useful information to search engines, even if there isn't an overarching schema defined yet?
-3.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata encoded HTML to JSON.  However, **the specs for this conversion seem to indicate that the JSON output would be far more verbose than what an application using template instantiation would want**, as it seems to convert to a schema-like representation of the object.  An application would want to be able to reconstruct the simple, exact object structure that was used to generate the output in conjunction with the template bindings.  So one more function would be needed to collapse this generic object representation into a simple POJO, which is easy enough to build in userland.
-4.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for booleans, schema-less objects.  "meter" is a nice tag, but maybe a simpler one is also needed for plain old [numbers](https://github.com/whatwg/html/issues/9294).
-5.  Eventually, allow moustache interpolation to auto generate content with semantic tags.
+2.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata encoded HTML to JSON.  However, **the specs for this conversion seem to indicate that the JSON output would be far more verbose than what an application using template instantiation would want**, as it seems to convert to a schema-like representation of the object.  An application would want to be able to reconstruct the simple, exact object structure that was used to generate the output in conjunction with the template bindings.  So one more function would be needed to collapse this generic object representation into a simple POJO, which is easy enough to build in userland.
+3.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for booleans, schema-less objects.  "meter" is a nice tag, but maybe a simpler one is also needed for plain old [numbers](https://github.com/whatwg/html/issues/9294).
+4.  Eventually, allow moustache interpolation to auto generate content with semantic tags.
 
 So basically, for starters, unless this proposal is *required* for the handshake between server generated HTML and the client template instantiation to work properly, we would need to specify an option when invoking the Template Instantiation API:  **integrateWithMicrodata**.
 
@@ -78,17 +77,20 @@ Let us apply the template to the host object defined above:
 
 ```html
 <template>
+    <meta itemscope itemtype=https://schema.org/DateTime itemref="eventDate">
+    <meta itemscope itemtype=https://schema.org/Number itemref="age latitude">
+    <meta itemscope itemtype=https://schema.org/Boolean itemref="veggie">
     <span>{{name}}</span>
-    <span itemtype=https://schema.org/DateTime>{{eventDate}}</span>
-    <span itemtype=https://schema.org/Number>{{secondsSinceBirth}}</span>
-    <span itemtype=https://schema.org/Boolean>{{isVegetarian}}</span>
+    <span id=eventDate>{{eventDate}}</span>
+    <span id=age>{{secondsSinceBirth}}</span>
+    <span id=veggie>{{isVegetarian}}</span>
     <div itemprop=address itemscope>
         <span>{{street}}</span>
     <div>
     <span>{{address.zipCode}}</span>
     <div itemscope itemprop=address>
         <div itemscope itemprop=gpsCoordinates>
-            <span itemscope itemtype=https://schema.org/Number>{{latitude.toFixed|2}}</span>
+            <span id=latitude>{{latitude.toFixed|2}}</span>
         </div>
     </div>
 </template>
@@ -97,17 +99,22 @@ Let us apply the template to the host object defined above:
 Then with the integrateWithMicrodata setting enabled it would generate (with US as the locale):
 
 ```html
+<!-- optional hack -->
+<meta itemscope itemtype=https://schema.org/DateTime itemref="eventDate">
+<meta itemscope itemtype=https://schema.org/Number itemref="age latitude">
+<meta itemscope itemtype=https://schema.org/Boolean itemref="veggie">
+<!-- end optional hack -->
 <span itemprop=name>Bob</span>
-<span itemprop=eventDate itemtype=https://schema.org/DateTime>5/11/2023</span>
+<span itemprop=eventDate>5/11/2023</span>
 <span itemprop=secondsSinceBirth itemtype=https://schema.org/Number>1,166,832,000</span>
 <span itemprop=isVegetarian itemtype=https://schema.org/Boolean>true</span>
 <div itemscope itemprop=address>
     <span itemprop=street>123 Penny Lane</span>
 </div>
-<span itemprop=address><meta itemprop=zipCode content=12345>12345</span>
+<span itemprop=address><data itemprop=zipCode>12345</data></span>
 <div itemscope itemprop=address>
     <div itemscope itemprop=gpsCoordinates>
-        <span itemscope itemtype=https://schema.org/Number itemprop=latitude><meta content=35.77804334830908>35.78</span>
+        <span id=latitude itemprop=latitude><data value=35.77804334830908>35.78</data></span>
     </div>
 </div>
 ```
@@ -120,7 +127,7 @@ The rules for what we are doing are summarized below:
 |Date     |https://schema.org/DateTime |date.toISOString()   |date.toLocaleDateString()
 |Boolean  |https://schema.org/Boolean  |bln.toString()       |true/false
 
-All these *optional* primitive types are [officially recognized](https://schema.org/DataType) by schema.org.  Unfortunately, the standards specify that itemtype must be paired with the itemscope attribute, which is why there are so many itemscope attributes (seems wrong to me to require this). Anyway, that is of no concern to the template instantiation.
+All these *optional* primitive types are [officially recognized](https://schema.org/DataType) by schema.org.  Unfortunately, the standards specify that itemtype must be paired with the itemscope attribute, and itemref must only be used with an element with itemscope, so the meta tags at the beginning is a kind of hack that appears to get around these restrictions, while efficiently specifying the types of those elements without the help of a vocabulary.
 
 It should be noted that for each of these primitive types, a phrase like this is used in the documentation:
 
