@@ -4,7 +4,7 @@ A good [percentage](https://w3techs.com/technologies/details/da-microdata#:~:tex
 
 ## Historical backdrop
 
-Given the age of the second link above, it is natural to ask the question, why did it take so long for anyone to raise the possibility of integrating template binding with microdata?  Or is there some fatal flaw in even trying?  I was ready to attribute this to a massive market failure on the part of the web development community, including myself, but I don't think the explanation is that simple, thankfully.
+Given the age of the second link above, it is natural to ask the question, why did it take so long for anyone to raise the possibility of integrating template binding with microdata, [at least for a while](https://www.codeproject.com/Articles/233896/ASP-NET-MVC-Add-HTML-Microdata-to-Your-Application)?  Or is there some fatal flaw in even trying?  I was ready to attribute this to a massive market failure on the part of the web development community, including myself, but I don't think the explanation is that simple, thankfully.
 
 What I've learned is that for years, the microdata initiative was in a kind of simmering battle with another proposal, RDFa, as far as which one would be embraced as the one true standard.
 
@@ -230,7 +230,7 @@ I *think* now when hydrating, even when there's a single child list item, that w
 <template >
 <dl itemscope itemtype=https://schema.org/ItemList>
     <template>
-        <dt itemprop="{{itemListElement of monsters}}" itemref={{itemListElement.id}}_description>
+        <dt itemscope itemtype=https://mywebsite.com/Monster.json itemprop="{{itemListElement of monsters}}" itemref={{itemListElement.id}}_description>
             <span>{{itemListElement.name}}</span>
         </dt>
         <dd id={{itemListElement.id}}_description>{{itemListElement.description}}</dd>
@@ -269,7 +269,7 @@ Suggested syntax for that shortcut:
 <template >
 <dl itemscope itemtype=https://schema.org/ItemList>
     <template>
-        <dt itemprop="{{itemListElement of monsters}}" itemref={{#dd}}>
+        <dt  itemtype=https://mywebsite.com/Monster.json itemprop="{{itemListElement of monsters}}" itemref={{#dd}}>
             <span>{{itemListElement.name}}</span>
         </dt>
         <dd id={{itemListElement.id}}_description>{{itemListElement.description}}</dd>
