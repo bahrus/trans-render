@@ -77,13 +77,10 @@ Let us apply the template to the host object defined above:
 
 ```html
 <template>
-    <meta itemscope itemtype=https://schema.org/DateTime itemref="eventDate">
-    <meta itemscope itemtype=https://schema.org/Number itemref="age latitude">
-    <meta itemscope itemtype=https://schema.org/Boolean itemref="veggie">
     <span>{{name}}</span>
-    <span id=eventDate>{{eventDate}}</span>
-    <span id=age>{{secondsSinceBirth}}</span>
-    <span id=veggie>{{isVegetarian}}</span>
+    <span>{{eventDate}}</span>
+    <span>{{secondsSinceBirth}}</span>
+    <span>{{isVegetarian}}</span>
     <div itemprop=address itemscope>
         <span>{{street}}</span>
     <div>
@@ -95,43 +92,20 @@ Let us apply the template to the host object defined above:
 Then with the integrateWithMicrodata setting enabled it would generate (with US as the locale):
 
 ```html
-<!-- optional hack -->
-<meta itemscope itemtype=https://schema.org/DateTime itemref="eventDate">
-<meta itemscope itemtype=https://schema.org/Number itemref="age latitude">
-<meta itemscope itemtype=https://schema.org/Boolean itemref="veggie">
-<!-- end optional hack -->
 <span itemprop=name>Bob</span>
 <span itemprop=eventDate>5/11/2023</span>
-<span itemprop=secondsSinceBirth itemtype=https://schema.org/Number>1,166,832,000</span>
-<span itemprop=isVegetarian itemtype=https://schema.org/Boolean>true</span>
+<span itemprop=secondsSinceBirth>1,166,832,000</span>
+<span itemprop=isVegetarian>true</span>
 <div itemscope itemprop=address>
     <span itemprop=street>123 Penny Lane</span>
 </div>
 <span itemprop=address><data itemprop=zipCode>12345</data></span>
 <div itemscope itemprop=address>
     <data itemscope itemprop=gpsCoordinates>
-        <data itmprop=latitude value=35.77804334830908>35.78</data>
+        <data itemprop=latitude value=35.77804334830908>35.78</data>
     </data>
 </div>
 ```
-
-The rules for what we are doing are summarized below:
-
-|Type     |Url                         |Content value        |Visible content
-|---------|----------------------------|---------------------|----------------
-|Number   |https://schema.org/Number   |num.toString()       |num.toLocaleString()
-|Date     |https://schema.org/DateTime |date.toISOString()   |date.toLocaleDateString()
-|Boolean  |https://schema.org/Boolean  |bln.toString()       |true/false
-
-All these *optional* primitive types are [officially recognized](https://schema.org/DataType) by schema.org.  Unfortunately, the standards specify that itemtype must be paired with the itemscope attribute, and itemref must only be used with an element with itemscope, so the meta tags at the beginning is a kind of hack that appears to get around these restrictions, while efficiently specifying the types of those elements without the help of a vocabulary.
-
-It should be noted that for each of these primitive types, a phrase like this is used in the documentation:
-
-> Instances of Number may appear as a value for the following properties
-
-They use the word "may" rather than "must" or "may only".  Maybe that's legalese.  If this is considered improper, maybe a schema should be created specifically for template instantiation where such usage is explicitly granted?  If it is acceptable to use the values above, I suspect search engines would properly know that these values are numbers, even if there's no grander schema that the content is part of.
-
-I don't think the template instantiation engine itself would benefit internally from emitting these types.  The purpose of the types is hydration of server-rendered content, and better search engine accuracy only, which I think is outside the purview of template instantiation. 
 
 So when do we need the template instantiation engine to use the data tag?
 
