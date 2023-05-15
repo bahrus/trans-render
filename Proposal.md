@@ -88,11 +88,7 @@ Let us apply the template to the host object defined above:
         <span>{{street}}</span>
     <div>
     <span>{{address.zipCode}}</span>
-    <div itemscope itemprop=address>
-        <div itemscope itemprop=gpsCoordinates>
-            <span id=latitude>{{latitude.toFixed|2}}</span>
-        </div>
-    </div>
+    <div>{{address.gpsCoordinates.latitude.toFixed|2}}</div>
 </template>
 ```
 
@@ -113,9 +109,9 @@ Then with the integrateWithMicrodata setting enabled it would generate (with US 
 </div>
 <span itemprop=address><data itemprop=zipCode>12345</data></span>
 <div itemscope itemprop=address>
-    <div itemscope itemprop=gpsCoordinates>
-        <span id=latitude itemprop=latitude><data value=35.77804334830908>35.78</data></span>
-    </div>
+    <data itemscope itemprop=gpsCoordinates>
+        <data itmprop=latitude value=35.77804334830908>35.78</data>
+    </data>
 </div>
 ```
 
@@ -135,15 +131,12 @@ It should be noted that for each of these primitive types, a phrase like this is
 
 They use the word "may" rather than "must" or "may only".  Maybe that's legalese.  If this is considered improper, maybe a schema should be created specifically for template instantiation where such usage is explicitly granted?  If it is acceptable to use the values above, I suspect search engines would properly know that these values are numbers, even if there's no grander schema that the content is part of.
 
-I don't think the template instantiation engine itself would benefit internally from emitting these types.  The purpose of the types is hydration of server-rendered content, and better search engine accuracy only, which I think is outside the purview of template instantiation.
+I don't think the template instantiation engine itself would benefit internally from emitting these types.  The purpose of the types is hydration of server-rendered content, and better search engine accuracy only, which I think is outside the purview of template instantiation. 
 
-**So all of these typings are purely optional, up to the developer**.  
+So when do we need the template instantiation engine to use the data tag?
 
-So when do we need the template instantiation engine to use the meta tag?
-
-1.  When evaluating an interpolating expression.  (see below)
-2.  When the moustache expression does any manipulation of the data beyond to[Locale][*]String(), making deriving the underlying value impossible.
-3.  If template instantiation supports nested prop paths.  If the depth is greater than two, itemref attributes would need to be used, with auto generated unique id's.
+1.  When the moustache expression does any manipulation of the data beyond to[Locale][*]String(), making deriving the underlying value impossible.
+2.  If template instantiation supports nested prop paths.
 
 Note that with the nested objects, the divs are actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But those examples, if template instantiation supports them, kind of burst through that initial understanding.  It is doing more than emitting.  So assuming those examples hold, the correct phrase should be integrateWithMicrodata.
 
@@ -163,6 +156,8 @@ it would generate:
 ```html
 <time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>الجمعة، ١٢ مايو ٢٠٢٣</time>
 ```
+
+The same thing would be done if "data" is used in place of the "time" element above, but attribute value would be used.  
 
 Now let's talk about the dreaded interpolation scenario.
 
