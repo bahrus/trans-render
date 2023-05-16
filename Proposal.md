@@ -78,7 +78,7 @@ Let us apply the template to the host object defined above:
 
 ```html
 <template>
-    <span>{{name as personName}}</span>
+    <span>{{name}}</span>
     <span>{{eventDate}}</span>
     <span>{{secondsSinceBirth}}</span>
     <span>{{isVegetarian}}</span>
@@ -93,7 +93,7 @@ Let us apply the template to the host object defined above:
 Then with the integrateWithMicrodata setting enabled it would generate (with US as the locale):
 
 ```html
-<span itemprop=personName>Bob</span>
+<span itemprop=name>Bob</span>
 <span itemprop=eventDate>5/11/2023</span>
 <span itemprop=secondsSinceBirth>1,166,832,000</span>
 <span itemprop=isVegetarian>true</span>
@@ -108,7 +108,6 @@ Then with the integrateWithMicrodata setting enabled it would generate (with US 
 </div>
 ```
 
-So another way of "opting-in" would be to allow "as" expressions inside the binding (at the risk of reliability.) 
 
 So when do we need the template instantiation engine to use the data tag?
 
