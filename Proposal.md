@@ -313,13 +313,19 @@ Suppose whatwg adopted another microdata attribute, say itempropmap, that would 
 
 
 ```html
-<img alt="description of image" data-date-of-image=2011-11-18T14:54:39.929Z itempropmap="alt:imageDescription;data-date-of-image:imageDateTime">
+<img itemprop="isVegetarian"
+     alt="description of image" 
+     data-date-of-image=2011-11-18T14:54:39.929Z 
+     itempropmap="alt:imageDescription;data-date-of-image:imageDateTime;aria-checked:"
+>
+<div itempropmap=aria-checked:isVegetarian aria-label="Food Preference">Is Vegetarian</div>
 ```
 
-Template instantiation could help generate these mappings:
+Template instantiation could help generate these mappings with reliability:
 
 <template>
     <img alt={{imageDescription}} data-date-of-image={{imageDateTime}}>
+    <div aria-checked={{isVegetarian}} aria-label="Food Preference"></div>
 </template>
 
 
