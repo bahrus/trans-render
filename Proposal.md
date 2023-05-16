@@ -122,6 +122,7 @@ If template instantiation supports formatting:
 ```html
 <template>
     <time>{{eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</time>
+    <div aria-checked={{isVegetarian}} aria-label="Food Preference">{{isVegetarian ? 'Vegetarian' : 'Non-vegetarian'</div>
 <template>
 ```
 
@@ -129,6 +130,7 @@ it would generate:
 
 ```html
 <time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>الجمعة، ١٢ مايو ٢٠٢٣</time>
+<div itemprop=isVegetarian aria-checked>Vegetarian</div>
 ```
 
 The same thing would be done if "data" is used in place of the "time" element above, but attribute value would be used.  
