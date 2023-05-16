@@ -28,17 +28,17 @@ The specific syntax of this proposal is just my view of the best way of represen
 
 Because there's a tiny performance cost to adding microdata to the output, it should perhaps be something that can be opt-in (or opt-out).  But if having microdata contained in the output proves to be so beneficial to the ability of specifying parts and working with streaming declarative shadow DOM, that it makes sense to always integrate with microdata, in my view the performance penalty is worth it, and would do much more good than harm (the harm seems negligible).
 
-
 ## Highlights
 
 This proposal consists of several, somewhat loosely coupled sub-proposals.  
 
 Only the first one is pertinent to template instantiation, really.  The last one would be once all semantic elements for primitive types have been added to the platform.
 
-1.  Specify some decisions for how microdata would be emitted in certain scenarios.
+1.  Specify some decisions for how microdata would be emitted in certain scenarios.  Described below.
 2.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata encoded HTML to JSON.  However, **the specs for this conversion seem to indicate that the JSON output would be far more verbose than what an application using template instantiation would want**, as it seems to convert to a schema-like representation of the object.  An application would want to be able to reconstruct the simple, exact object structure that was used to generate the output in conjunction with the template bindings.  So one more function would be needed to collapse this generic object representation into a simple POJO, which is easy enough to build in userland.
 3.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for booleans, schema-less objects.  "meter" is a nice tag, but maybe a simpler one is also needed for plain old [numbers](https://github.com/whatwg/html/issues/9294).
 4.  Eventually, allow moustache interpolation to auto generate content with semantic tags.
+5.  Extend the microdata standard to allow specifying itemprops that come from individual attributes.
 
 So basically, for starters, unless this proposal is *required* for the handshake between server generated HTML and the client template instantiation to work properly, we would need to specify an option when invoking the Template Instantiation API:  **integrateWithMicrodata**.
 
@@ -69,7 +69,7 @@ There are two fundamental scenarios to consider:
 1.  If the author defines or reuses a schema definition for the structure, and specifies the itemtype for the itemscope surrounding the html element where the binding takes place.  Most web component libraries auto generate a schema file for the custom element manifest, so maybe not a stretch to expect this to be common place?
 2.  No such schema is provided.
 
-In what follows, we consider the latter scenario, so that specifying the type of non string primitives is critical for us to be able to hydrate the data accurately. Note that the template instantiation itself doesn't interact with these types.  Also, the example below might be violating 100% HTML decorum, as specifying an itemtype without an itemscope is considered wrong, accordgint to MDN.  (The specification never spells that out, though.) 
+I don't think template instantiation needs to care which scenario the developer is following.  Despite my initial suspicion that it would be helpful, on reflection, I think we shouldstay clear of making template instantiation emit any itemtype information beyond what the developer specifies explicitly in the attribute. 
 
 ### Binding to simple primitive values, and simple, non repeating objects with non semantic tags
 
@@ -302,6 +302,24 @@ would generate:
     </tbody>
 </table>
 ```
+
+## Conveying searchable content via attributes.
+
+One limitation of microdata, is that much useful information is conveyed from the server in attributes, such as alt, title, value and data-*, and there is no way to specify itemprops for those attributes.
+
+Suppose whatwg adopted another microdata attribute, say itempropmap, that would allows us to provide more useful information:
+
+
+```html
+<img alt="description of image" data-date-of-image=2011-11-18T14:54:39.929Z itempropmap="alt:imageDescription;data-date-of-image:imageDateTime">
+```
+
+Template instantiation could help generate these mappings:
+
+<template>
+    <img alt={{imageDescription}} data-date-of-image={{imageDateTime}}>
+</template>
+
 
 
 
