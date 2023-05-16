@@ -28,6 +28,7 @@ The specific syntax of this proposal is just my view of the best way of represen
 
 Because there's a tiny performance cost to adding microdata to the output, it should perhaps be something that can be opt-in (or opt-out).  But if having microdata contained in the output proves to be so beneficial to the ability of specifying parts and working with streaming declarative shadow DOM, that it makes sense to always integrate with microdata, in my view the performance penalty is worth it, and would do much more good than harm (the harm seems negligible).
 
+
 ## Highlights
 
 This proposal consists of several, somewhat loosely coupled sub-proposals.  
@@ -77,7 +78,7 @@ Let us apply the template to the host object defined above:
 
 ```html
 <template>
-    <span>{{name}}</span>
+    <span>{{name as personName}}</span>
     <span>{{eventDate}}</span>
     <span>{{secondsSinceBirth}}</span>
     <span>{{isVegetarian}}</span>
@@ -92,7 +93,7 @@ Let us apply the template to the host object defined above:
 Then with the integrateWithMicrodata setting enabled it would generate (with US as the locale):
 
 ```html
-<span itemprop=name>Bob</span>
+<span itemprop=personName>Bob</span>
 <span itemprop=eventDate>5/11/2023</span>
 <span itemprop=secondsSinceBirth>1,166,832,000</span>
 <span itemprop=isVegetarian>true</span>
@@ -106,6 +107,8 @@ Then with the integrateWithMicrodata setting enabled it would generate (with US 
     </data>
 </div>
 ```
+
+So another way of "opting-in" would be to allow "as" expressions inside the binding (at the risk of reliability.) 
 
 So when do we need the template instantiation engine to use the data tag?
 
