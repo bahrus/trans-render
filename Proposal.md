@@ -122,7 +122,7 @@ If template instantiation supports formatting:
 ```html
 <template>
     <time>{{eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</time>
-    <div aria-checked={{isVegetarian}} aria-label="Food Preference">{{isVegetarian ? 'Vegetarian' : 'Non-vegetarian'</div>
+    <div aria-checked={{isVegetarian}} aria-label="Food Preference">{{isVegetarian ? 'Vegetarian' : 'Non-vegetarian'}}</div>
 <template>
 ```
 
