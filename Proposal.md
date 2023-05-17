@@ -74,14 +74,14 @@ I don't think template instantiation needs to care which scenario the developer 
 
 ### Binding to simple primitive values, and simple, non repeating objects with non semantic tags
 
-Let us apply the template to the host object defined above:
+Let us apply the template to the host object defined above.
 
 ```html
 <template>
     <span>{{name}}</span>
-    <span>{{eventDate}}</span>
+    <span>{{eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</span>
     <span>{{secondsSinceBirth}}</span>
-    <span>{{isVegetarian}}</span>
+    <span>{{isVegetarian ? 'Is vegetarian' : 'Is not vegetarian'}}</span>
     <div  itemscope itemprop=address>
         <span>{{street}}</span>
     <div>
@@ -94,49 +94,19 @@ Then with the integrateWithMicrodata setting enabled it would generate (with US 
 
 ```html
 <span itemprop=name>Bob</span>
-<span itemprop=eventDate>5/11/2023</span>
-<span itemprop=secondsSinceBirth>1,166,832,000</span>
-<span itemprop=isVegetarian>true</span>
+<span><time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>الجمعة، ١٢ مايو ٢٠٢٣</time></span>
+<span><data itemprop=secondsSinceBirth value="1166832000">1,166,832,000</span>
+<span aria-checked=true><data itemprop=isVegetarian value=true>Is vegetarian</data></span>
 <div itemscope itemprop=address>
     <span itemprop=street>123 Penny Lane</span>
 </div>
-<span itemprop=address><data itemprop=zipCode>12345</data></span>
-<div itemscope itemprop=address>
-    <data itemscope itemprop=gpsCoordinates>
-        <data itemprop=latitude value=35.77804334830908>35.78</data>
-    </data>
-</div>
+<span itemprop=address><span itemprop=zipCode>12345</span></span>
+<div itemscope itemprop=address><span itemscope itemprop=gpsCoordinates><data itemprop=latitude value=35.77804334830908>35.78</data></span></div>
 ```
 
-
-So when do we need the template instantiation engine to use the data tag?
-
-1.  When the moustache expression does any manipulation of the data beyond to[Locale][*]String(), making deriving the underlying value impossible.
-2.  If template instantiation supports nested prop paths.
-3.  When we need interpolation (see below).
 
 Note that with the nested objects, the divs are actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But those examples, if template instantiation supports them, kind of burst through that initial understanding.  It is doing more than emitting.  So assuming those examples hold, the correct phrase should be integrateWithMicrodata.
-
-
-## Formatting
-
-If template instantiation supports formatting:
-
-```html
-<template>
-    <time>{{eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</time>
-    <div aria-checked={{isVegetarian}} aria-label="Food Preference">{{isVegetarian ? 'Vegetarian' : 'Non-vegetarian'}}</div>
-<template>
-```
-
-it would generate:
-
-```html
-<time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>الجمعة، ١٢ مايو ٢٠٢٣</time>
-<div aria-checked=true><data itemprop=isVegetarian value=true>Vegetarian</data></div>
-```
-
-The same thing would be done if "data" is used in place of the "time" element above, but attribute value would be used.  
+ 
 
 Now let's talk about the dreaded interpolation scenario.
 
@@ -150,10 +120,10 @@ Now let's talk about the dreaded interpolation scenario.
 This would generate:
 
 ```html
-<div>Hello <data itemprop=name value=Bob>Bob</data>, the event will begin at <time itemprop=eventDate datetune=2011-11-18T14:54:39.929Z>11/18/2011</time></div>
+<div>Hello <span itemprop=name>Bob</span>, the event will begin at <time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>11/18/2011</time></div>
 ```
 
-Should there exist, in the future, a semantic tag for numbers, the template instantiation would use it, but we would need to "enable" it for backwards compatibility.
+Should there exist, in the future, a semantic tag for numbers and booleans, the template instantiation would use it, but we would need to "enable" it for backwards compatibility.  For now, use data tags for numbers and booleans, span's for string values, and time for dates.
 
 What this example demonstrates is we apparently don't need the use of ranges, when performing interpolation, if we want to support microdata.  If there is a significant performance benefit to using ranges, with meta tags, that could be used as an alternative (that was my original thought on this question).  If the performance difference is tiny, I think the simplicity argument should prevail.
 
