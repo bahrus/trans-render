@@ -106,6 +106,10 @@ Then with the integrateWithMicrodata setting enabled it would generate (with US 
 
 
 Note that with the nested objects, the divs are actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But those examples, if template instantiation supports them, kind of burst through that initial understanding.  It is doing more than emitting.  So assuming those examples hold, the correct phrase should be integrateWithMicrodata.
+
+If expressions involve more than one property, I think here we should leave it up the developer to provide the needed tags (including meta) to provide the needed microdata reflection.
+
+
  
 
 Now let's talk about the dreaded interpolation scenario.
