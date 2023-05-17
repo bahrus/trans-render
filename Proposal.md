@@ -12,7 +12,7 @@ The microdata proposal suffered a significant setback in the early 2010's, and o
 
 ## Nudging developers
 
-I think nudging developers to make use of this [standard](https://html.spec.whatwg.org/multipage/#toc-microdata) by making it super easy and reliable, when working with template instantiation, would have a beneficial impact for the web and society in general.  As we will see, we want to ensure that all bindings are in sync, by avoiding the need to repeat ourselves.  Since what the search engine sees is so difficult to determine (hydration would catch most issues though), I think it's important to build in that reliability, hence the extra complexity I'm requesting to ensure that we get that reliability.
+I think nudging developers to make use of this [standard](https://html.spec.whatwg.org/multipage/#toc-microdata) by making it super easy and reliable, when working with template instantiation, would have a beneficial impact for the web and society in general.  As we will see, we want to ensure that all bindings are in sync, by avoiding the need to repeat ourselves.  Since what the search engine sees is so difficult to determine, I think it's important to build in that reliability, hence the extra complexity I'm requesting to ensure that we get that reliability.
 
 ## Benefits
 
@@ -67,10 +67,10 @@ const host = {
 
 There are two fundamental scenarios to consider:
 
-1.  If the author defines or reuses a schema definition for the structure, and specifies the itemtype for the itemscope surrounding the html element where the binding takes place.  Most web component libraries auto generate a schema file for the custom element manifest, so maybe not a stretch to expect this to be common place?
+1.  If the author defines or reuses a schema definition for the structure, and specifies the itemtype for the itemscope surrounding the html element where the binding takes place.  Most web component libraries can [auto generate](https://www.npmjs.com/package/web-component-analyzer) a schema file for the custom element manifest, so maybe not a stretch to expect this to be common place?
 2.  No such schema is provided.
 
-I don't think template instantiation needs to care which scenario the developer is following.  Despite my initial suspicion that it would be helpful, on reflection, I think we shouldstay clear of making template instantiation emit any itemtype information beyond what the developer specifies explicitly in the attribute. 
+I don't think template instantiation needs to care which scenario the developer is following.  Despite my initial suspicion that it would be helpful, on reflection, I think we should stay clear of making template instantiation emit any itemtype information beyond what the developer specifies explicitly in the attribute. 
 
 ### Binding to simple primitive values, and simple, non repeating objects with non semantic tags
 
@@ -82,11 +82,11 @@ Let us apply the template to the host object defined above:
     <span>{{eventDate}}</span>
     <span>{{secondsSinceBirth}}</span>
     <span>{{isVegetarian}}</span>
-    <div itemprop=address itemscope>
+    <div  itemscope itemprop=address>
         <span>{{street}}</span>
     <div>
     <span>{{address.zipCode}}</span>
-    <div>{{address.gpsCoordinates.latitude.toFixed|2}}</div>
+    <div itemscope>{{address.gpsCoordinates.latitude.toFixed|2}}</div>
 </template>
 ```
 
@@ -113,6 +113,7 @@ So when do we need the template instantiation engine to use the data tag?
 
 1.  When the moustache expression does any manipulation of the data beyond to[Locale][*]String(), making deriving the underlying value impossible.
 2.  If template instantiation supports nested prop paths.
+3.  When we need interpolation (see below).
 
 Note that with the nested objects, the divs are actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But those examples, if template instantiation supports them, kind of burst through that initial understanding.  It is doing more than emitting.  So assuming those examples hold, the correct phrase should be integrateWithMicrodata.
 
@@ -132,7 +133,7 @@ it would generate:
 
 ```html
 <time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>الجمعة، ١٢ مايو ٢٠٢٣</time>
-<div itemprop=isVegetarian aria-checked>Vegetarian</div>
+<div aria-checked=true><data itemprop=isVegetarian value=true>Vegetarian</data></div>
 ```
 
 The same thing would be done if "data" is used in place of the "time" element above, but attribute value would be used.  
@@ -149,11 +150,14 @@ Now let's talk about the dreaded interpolation scenario.
 This would generate:
 
 ```html
-<div>Hello <meta itemprop=name content=Bob>Bob<meta content>, the event will begin at <meta itemprop=eventDate content=2011-11-18T14:54:39.929Z>11/18/2011</div>
+<div>Hello <data itemprop=name>Bob</data>, the event will begin at <time itemprop=eventDate datetune=2011-11-18T14:54:39.929Z>11/18/2011</time></div>
 ```
 
 So this proposal is requesting that the template instantiation engine sets content = oDate.toIsoString() for dates.  Using toString() would be fine for numbers.
 
+Should there exist, in the future, a semantic tag for numbers, the template instantiation would use it, but we would need to "enable" it for backwards compatibility.
+
+What this example demonstrates is we apparently don't need the use of ranges, when performing interpolation.  If there is a significant performance benefit to using ranges, with meta tags, that could be used as an alternative (that was my original thought on this question).  If the performance difference is tiny, I think the simplicity argument should prevail, especially when considering nest property paths in the interpolation.
 
 ## Loops
 
