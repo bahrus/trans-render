@@ -81,7 +81,7 @@ Let us apply the template to the host object defined above.
     <span>{{name}}</span>
     <span>{{eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</span>
     <span>{{secondsSinceBirth}}</span>
-    <span>{{isVegetarian ? 'Is vegetarian' : 'Is not vegetarian'}}</span>
+    <span aria-checked={{isVegetarian}}>{{isVegetarian ? 'Is vegetarian' : 'Is not vegetarian / not specified'}}</span>
     <div  itemscope itemprop=address>
         <span>{{street}}</span>
     <div>
@@ -104,12 +104,11 @@ Then with the integrateWithMicrodata setting enabled it would generate (with US 
 <div itemscope itemprop=address><span itemscope itemprop=gpsCoordinates><data itemprop=latitude value=35.77804334830908>35.78</data></span></div>
 ```
 
-
 Note that with the nested objects, the divs are actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But those examples, if template instantiation supports them, kind of burst through that initial understanding.  It is doing more than emitting.  So assuming those examples hold, the correct phrase should be integrateWithMicrodata.
 
 If expressions involve more than one property, I think here we should leave it up the developer to provide the needed tags (including meta) to provide the needed microdata reflection.
 
-
+For the aria-checked property, if the value of isVegetarian is true/false, set the value to isVegetarian.toString().  Otherwise, set it to "mixed".
  
 
 Now let's talk about the dreaded interpolation scenario.
