@@ -369,7 +369,7 @@ export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLEleme
     unsafeTCount: number;
     styles?: CSSStyleSheet[] | string;
     clonedTemplate?: Node | undefined;
-    noshadow?: boolean;
+    shadowRootMode?: 'open' | 'closed' | undefined | false;
     renderOptions?: RenderOptions;
     mntCnt?: number;
     

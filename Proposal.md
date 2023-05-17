@@ -33,13 +33,10 @@ Because there's a tiny performance cost to adding microdata to the output, it sh
 
 This proposal consists of several, somewhat loosely coupled sub-proposals.  
 
-Only the first one is pertinent to template instantiation, really.  The last one would be once all semantic elements for primitive types have been added to the platform.
-
 1.  Specify some decisions for how microdata would be emitted in certain scenarios.  Described below.
 2.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata encoded HTML to JSON.  However, **the specs for this conversion seem to indicate that the JSON output would be far more verbose than what an application using template instantiation would want**, as it seems to convert to a schema-like representation of the object.  An application would want to be able to reconstruct the simple, exact object structure that was used to generate the output in conjunction with the template bindings.  So one more function would be needed to collapse this generic object representation into a simple POJO, which is easy enough to build in userland.
 3.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for numbers.  "meter" is a nice tag, but maybe a simpler one is also needed for plain old [numbers](https://github.com/whatwg/html/issues/9294).
-4.  Eventually, allow moustache interpolation to auto generate content with semantic tags.
-5.  Extend the microdata standard to allow specifying itemprops that come from individual attributes.
+4.  Extend the microdata standard to allow specifying itemprops that come from individual attributes, and provide support for it with template instantiation.
 
 So basically, for starters, unless this proposal is *required* for the handshake between server generated HTML and the client template instantiation to work properly, we would need to specify an option when invoking the Template Instantiation API:  **integrateWithMicrodata**.
 
