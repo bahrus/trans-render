@@ -155,7 +155,7 @@ This would generate:
 
 Should there exist, in the future, a semantic tag for numbers, the template instantiation would use it, but we would need to "enable" it for backwards compatibility.
 
-What this example demonstrates is we apparently don't need the use of ranges, when performing interpolation.  If there is a significant performance benefit to using ranges, with meta tags, that could be used as an alternative (that was my original thought on this question).  If the performance difference is tiny, I think the simplicity argument should prevail.
+What this example demonstrates is we apparently don't need the use of ranges, when performing interpolation, if we want to support microdata.  If there is a significant performance benefit to using ranges, with meta tags, that could be used as an alternative (that was my original thought on this question).  If the performance difference is tiny, I think the simplicity argument should prevail.
 
 ## Loops
 
