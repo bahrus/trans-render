@@ -306,6 +306,19 @@ Template instantiation could help generate these mappings with reliability:
     <div aria-checked={{isVegetarian}} aria-label="Food Preference"></div>
 </template>
 
+## Forms
+
+The itempropmap proposal would also come in quite handy when working with form elements, which do not have any mapping mechanism as far as microdata.
+
+Perhaps this shouldn't be much of a surprise, as input elements are meant to take input from users, and it wouldn't make much sense for search engines to somehow index content as the user types.
+
+In the meantime,  it would be great if template instantiation could auto emit the name dependencies for the output element 
+
+```html
+<input name=weight>
+<output >
+```
+
 
 
 
