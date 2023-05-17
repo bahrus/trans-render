@@ -22,7 +22,7 @@ With the help of the meta tag and microdata attributes, we can [extract](https:/
 
 ## Caveats
 
-The biggest cost associated with supporting microdata, is whether *updates* to the HTML should include updates to hidden meta tags.  Not updating them would have no effect on hydrating, or what the user sees, but might, I suspect, have an impact on limiting search result accuracy and indexing.
+The biggest cost associated with supporting microdata, is whether *updates* to the HTML should include updates to data tags' value attributes.  Not updating them would have no effect on hydrating, or what the user sees, but might, I suspect, have an impact on limiting search result accuracy and indexing.
 
 The specific syntax of this proposal is just my view of the best way of representing integration with microdata, and is not meant to imply any "final decision", as if I'm in a position to do so.  I'm not yet an expert on the microdata standard, so it is possible that some of what I suggest below contradicts some fine point specified somewhere in the standard.  But I do hope others find this helpful, especially if it triggers a competing proposal that tries to "get it right".
 
@@ -150,14 +150,12 @@ Now let's talk about the dreaded interpolation scenario.
 This would generate:
 
 ```html
-<div>Hello <data itemprop=name>Bob</data>, the event will begin at <time itemprop=eventDate datetune=2011-11-18T14:54:39.929Z>11/18/2011</time></div>
+<div>Hello <data itemprop=name value=Bob>Bob</data>, the event will begin at <time itemprop=eventDate datetune=2011-11-18T14:54:39.929Z>11/18/2011</time></div>
 ```
-
-So this proposal is requesting that the template instantiation engine sets content = oDate.toIsoString() for dates.  Using toString() would be fine for numbers.
 
 Should there exist, in the future, a semantic tag for numbers, the template instantiation would use it, but we would need to "enable" it for backwards compatibility.
 
-What this example demonstrates is we apparently don't need the use of ranges, when performing interpolation.  If there is a significant performance benefit to using ranges, with meta tags, that could be used as an alternative (that was my original thought on this question).  If the performance difference is tiny, I think the simplicity argument should prevail, especially when considering nest property paths in the interpolation.
+What this example demonstrates is we apparently don't need the use of ranges, when performing interpolation.  If there is a significant performance benefit to using ranges, with meta tags, that could be used as an alternative (that was my original thought on this question).  If the performance difference is tiny, I think the simplicity argument should prevail.
 
 ## Loops
 
