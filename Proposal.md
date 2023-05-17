@@ -18,7 +18,7 @@ I think nudging developers to make use of this [standard](https://html.spec.what
 
 At a more mundane level, it could have significant performance benefits. It could allow applications to hydrate without the need for passing down the data separately, and significantly reduce the amount of custom boilerplate in the hydrating code. 
 
-With the help of the meta tag and microdata attributes, we can [extract](https://html.spec.whatwg.org/multipage/microdata.html#converting-html-to-other-formats) "water from rock", passing the data used by the server to generate the HTML output within attributes of the HTML output, consistent with what the client would generate via the template and applied to the same data.  **The hydration could happen real time as the html streams in**.
+With the help of the semantic tags and microdata attributes, we can [extract](https://html.spec.whatwg.org/multipage/microdata.html#converting-html-to-other-formats) "water from rock", passing the data used by the server to generate the HTML output within attributes of the HTML output, consistent with what the client would generate via the template and applied to the same data.  **The hydration could happen real time as the html streams in**.
 
 ## Caveats
 
@@ -79,6 +79,7 @@ Let us apply the template to the host object defined above.
     <span>{{eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</span>
     <span>{{secondsSinceBirth}}</span>
     <span aria-checked={{isVegetarian}}>{{isVegetarian ? 'Is vegetarian' : 'Is not vegetarian / not specified'}}</span>
+    <span>{{isVegegatian}}</span>
     <div  itemscope itemprop=address>
         <span>{{street}}</span>
     <div>
@@ -94,12 +95,15 @@ Then with the integrateWithMicrodata setting enabled it would generate (with US 
 <span><time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>الجمعة، ١٢ مايو ٢٠٢٣</time></span>
 <span><data itemprop=secondsSinceBirth value="1166832000">1,166,832,000</span>
 <span aria-checked=true><data itemprop=isVegetarian value=true>Is vegetarian</data></span>
+<span itemprop=isVegetarian>true</span>
 <div itemscope itemprop=address>
     <span itemprop=street>123 Penny Lane</span>
 </div>
 <span itemprop=address><span itemprop=zipCode>12345</span></span>
 <div itemscope itemprop=address><span itemscope itemprop=gpsCoordinates><data itemprop=latitude value=35.77804334830908>35.78</data></span></div>
 ```
+
+All numbers, dates, booleans are, unless specified, emitted to the user via .toLocaleString/toLocaleDateString.
 
 Note that with the nested objects, the divs are actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But those examples, if template instantiation supports them, kind of burst through that initial understanding.  It is doing more than emitting.  So assuming those examples hold, the correct phrase should be integrateWithMicrodata.
 
