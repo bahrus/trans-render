@@ -79,7 +79,7 @@ Let us apply the template to the host object defined above.
     <span>{{eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</span>
     <span>{{secondsSinceBirth}}</span>
     <span aria-checked={{isVegetarian}}>{{isVegetarian ? 'Is vegetarian' : 'Is not vegetarian / not specified'}}</span>
-    <span>{{isVegegatian}}</span>
+    <span>{{isVegetarian}}</span>
     <div  itemscope itemprop=address>
         <span>{{street}}</span>
     <div>
@@ -95,7 +95,7 @@ Then with the integrateWithMicrodata setting enabled it would generate (with US 
 <span><time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>الجمعة، ١٢ مايو ٢٠٢٣</time></span>
 <span><data itemprop=secondsSinceBirth value="1166832000">1,166,832,000</span>
 <span aria-checked=true><data itemprop=isVegetarian value=true>Is vegetarian</data></span>
-<span itemprop=isVegetarian>true</span>
+<span><data itemprop=isVegetarian value=true>true</span>
 <div itemscope itemprop=address>
     <span itemprop=street>123 Penny Lane</span>
 </div>
