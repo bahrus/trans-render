@@ -287,37 +287,26 @@ would generate:
 
 One limitation of microdata, is that much useful information is conveyed from the server in attributes, such as alt, title, value and data-*, and there is no way to specify itemprops for those attributes.
 
-Suppose whatwg adopted another microdata attribute, say itempropmap, that would allows us to provide more useful information:
+Suppose whatwg adopted another microdata attribute, say itempropmap, that would allow us to provide more useful information:
 
 
 ```html
-<img itemprop="isVegetarian"
+<img
      alt="description of image" 
      data-date-of-image=2011-11-18T14:54:39.929Z 
-     itempropmap="alt:imageDescription;data-date-of-image:imageDateTime;aria-checked:"
+     itempropmap="alt:imageDescription;data-date-of-image:imageDateTime;"
 >
-<div itempropmap=aria-checked:isVegetarian aria-label="Food Preference">Is Vegetarian</div>
 ```
 
 Template instantiation could help generate these mappings with reliability:
 
+```html
 <template>
     <img alt={{imageDescription}} data-date-of-image={{imageDateTime}}>
-    <div aria-checked={{isVegetarian}} aria-label="Food Preference"></div>
 </template>
-
-## Forms
-
-The itempropmap proposal would also come in quite handy when working with form elements, which do not have any mapping mechanism as far as microdata.
-
-Perhaps this shouldn't be much of a surprise, as input elements are meant to take input from users, and it wouldn't make much sense for search engines to somehow index content as the user types.
-
-In the meantime,  it would be great if template instantiation could auto emit the name dependencies for the output element 
-
-```html
-<input name=weight>
-<output >
 ```
+
+
 
 
 
