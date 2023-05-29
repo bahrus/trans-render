@@ -1,4 +1,4 @@
-
+import {ProxyPropChangeInfo} from './types';
 interface PropertySubscriber{
     ref: WeakRef<any>;
     subscribedProps: Set<string>;
@@ -11,9 +11,9 @@ export class BePropagating extends EventTarget{
         super();
         this.#createOrReuseEventTarget(target);
     }
-    async addEventListener(propName: string, callback: EventListenerOrEventListenerObject | null, options?: boolean | AddEventListenerOptions | undefined) {
-        if(propName === 'super.resolved') {
-            super.addEventListener(propName, callback, options);
+    async addEventListener(prop: string, callback: EventListenerOrEventListenerObject | null, options?: boolean | AddEventListenerOptions | undefined) {
+        if(prop === 'super.resolved') {
+            super.addEventListener(prop, callback, options);
             return;
         };
         if(this._innerET === undefined){
@@ -25,29 +25,36 @@ export class BePropagating extends EventTarget{
         }
         if(this.#subscriptions !== undefined){
             const {ref, subscribedProps} = this.#subscriptions;
-            if(!subscribedProps.has(propName)){
+            if(!subscribedProps.has(prop)){
                 const target = ref.deref();
                 if(!target) return;
-                subscribedProps.add(propName);
+                subscribedProps.add(prop);
                 let proto = target;
-                let prop: PropertyDescriptor | undefined = Object.getOwnPropertyDescriptor(proto, propName);
-                while(proto && !prop){
+                let propDescriptor: PropertyDescriptor | undefined = Object.getOwnPropertyDescriptor(proto, prop);
+                while(proto && !propDescriptor){
                     proto = Object.getPrototypeOf(proto);
-                    prop = Object.getOwnPropertyDescriptor(proto, propName);
+                    propDescriptor = Object.getOwnPropertyDescriptor(proto, prop);
                 }
-                if(prop === undefined){
-                    throw {target, propName, message: "Can't find property."};
+                if(propDescriptor === undefined){
+                    throw {target, prop, message: "Can't find property."};
                 }
-                const setter = prop.set!.bind(target);
-                const getter = prop.get!.bind(target);
+                const setter = propDescriptor.set!.bind(target);
+                const getter = propDescriptor.get!.bind(target);
                 const self = this;// as BePropagating;
-                Object.defineProperty(target, propName, {
+                Object.defineProperty(target, prop, {
                     get(){
                         return getter();
                     },
-                    set(nv){
-                        setter(nv);
-                        self._innerET!.dispatchEvent(new Event(propName));
+                    set(newVal: any){
+                        const oldVal = target[prop];
+                        setter(newVal);
+                        self._innerET!.dispatchEvent(new CustomEvent(prop, {
+                            detail: {
+                                prop,
+                                newVal,
+                                oldVal
+                            } as ProxyPropChangeInfo
+                        }));
                     },
                     enumerable: true,
                     configurable: true,
@@ -55,7 +62,7 @@ export class BePropagating extends EventTarget{
             }
         }
 
-        this._innerET!.addEventListener(propName, callback, options);
+        this._innerET!.addEventListener(prop, callback, options);
     }
 
     async #createOrReuseEventTarget(target: any){
