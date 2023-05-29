@@ -61,7 +61,7 @@ export async function findRealm(self: Element, scope: Scope){
         }
         case 'corn':
         case 'closestOrRootNode':
-            const closest = self.querySelector(scope[1]);
+            const closest = self.closest(scope[1]);
             if(closest === null){
                 return self.getRootNode() as Document | ShadowRoot;
             }else{
