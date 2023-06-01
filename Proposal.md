@@ -76,9 +76,11 @@ Let us apply the template to the host object defined above.
 ```html
 <template>
     <span>{{name}}</span>
+    <meta content={{name}}>
     <span>{{eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</span>
     <span>{{secondsSinceBirth}}</span>
     <span aria-checked={{isVegetarian}}>{{isVegetarian ? 'Is vegetarian' : 'Is not vegetarian / not specified'}}</span>
+    <link href="{{isVegetarian ? 'https://schema.org/True' : 'https://schema.org/False'}}">
     <span>{{isVegetarian}}</span>
     <div  itemscope itemprop=address>
         <span>{{street}}</span>
@@ -92,9 +94,11 @@ Then with the integrateWithMicrodata setting enabled it would generate (with US 
 
 ```html
 <span itemprop=name>Bob</span>
+<meta itemprop=name content=Bob>
 <span><time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>الجمعة، ١٢ مايو ٢٠٢٣</time></span>
 <span><data itemprop=secondsSinceBirth value="1166832000">1,166,832,000</span>
 <span aria-checked=true><data itemprop=isVegetarian value=true>Is vegetarian</data></span>
+<link itemprop=isVegetarian href=https://schema.org/True>
 <span><data itemprop=isVegetarian value=true>true</span>
 <div itemscope itemprop=address>
     <span itemprop=street>123 Penny Lane</span>
@@ -129,7 +133,38 @@ This would generate:
 
 Should there exist, in the future, a semantic tag for numbers and booleans, the template instantiation would use it, but we would need to "enable" it for backwards compatibility.  For now, use data tags for numbers and booleans, span's for string values, and time for dates.
 
-What this example demonstrates is we apparently don't need the use of ranges, when performing interpolation, if we want to support microdata.  If there is a significant performance benefit to using ranges, with meta tags, that could be used as an alternative (that was my original thought on this question).  If the performance difference is tiny, I think the simplicity argument should prevail.
+What this example demonstrates is we apparently don't need the use of ranges, when performing interpolation, if we want to support microdata.  If there is a significant performance benefit to using ranges, with meta tags, or link tags for binaries, that could be used as an alternative (that was my original thought on this question).  If the performance difference is tiny, I think the simplicity argument should prevail.
+
+## Conditions
+
+Suppose we want a conditional to output more than one root element.  In this case, we could use a template wrapper around the conditional content:
+
+```html
+<template>
+    <ul>
+        <template itemscope itemprop=USAddress itemref="{{if IsUSAddress}}">
+            <li id=name>{{addresseeName}}</li>
+            <ul itemscope itemprop=Address>
+                <li>{{StreetAddress}}</li>
+            </ul>
+        </template>
+    </ul>
+</template>     
+```
+
+Template instantiation with integrateMicrodata would emit:
+
+```html
+<ul>
+    <template itemscope itemprop=USAddress itemref="name a5a116a19-263d-4d89-8e9c-45b0b8ba77de"></template>
+    <li itemprop=addresseeName id=name>Bob</li>
+    <ul id="a5a116a19-263d-4d89-8e9c-45b0b8ba77de" itemscope itemprop=Address>
+        <li itemprop=StreetAddress>123 Penny Lane</li>
+    </ul>
+</ul>
+```
+
+So we use itemref to maintain a hierarchical tree logical structure, even though the DOM structure is flat.  Leaving the template element in the output may make it easier to implement logic to recreate the DOM elements when the condition becomes false, then true again (if the previous content is deleted).  So even if the performance is slightly worse than a meta tag on the initial render, I suspect the simplicity and even performance may argue in favor of keeping the template element.  It is also more transparent how the rendered content relates to the original template.
 
 ## Loops
 

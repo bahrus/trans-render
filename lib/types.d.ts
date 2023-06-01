@@ -487,6 +487,12 @@ export type Target =
 's' |
 `closest${camelQry}` |
 
+/**
+ * [TODO]
+ * do upsearch for matching itemref
+ */
+'nearestScope' |
+
  
 /**
  * Find nearest previous sibling, parent, previous sibling of parent, etc that matches this string.
