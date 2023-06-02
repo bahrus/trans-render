@@ -12,7 +12,7 @@ export class Tx implements ITx{
         this.#ctx = {
             match,
             host,
-            initiator: realmCitizen
+            $0: realmCitizen
         };
         this.#scope = scope;
     }
@@ -38,7 +38,7 @@ export class Tx implements ITx{
             if(deref !== undefined) return deref;
         }
         const {findRealm} = await import('./findRealm.js');
-        const rn = await findRealm(this.#ctx.initiator!, this.#scope);
+        const rn = await findRealm(this.#ctx.$0!, this.#scope);
         if(!rn) throw '404';
         this.#realm = new WeakRef(rn);
         return rn;

@@ -42,7 +42,7 @@ export interface RenderContext<T = Element, TItem = any> extends RenderContextEn
     queryInfo?: QueryInfo;
     timestampKey?: string;
     self?: Transformer;
-    initiator?: Element;
+    $0?: Element;
     trace?: boolean;
 
 }
