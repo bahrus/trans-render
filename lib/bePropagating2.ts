@@ -35,6 +35,7 @@ export class BePropagating extends EventTarget{
                 let propDescriptor: PropertyDescriptor | undefined = Object.getOwnPropertyDescriptor(proto, prop);
                 while(proto && !propDescriptor){
                     proto = Object.getPrototypeOf(proto);
+                    if(proto === null) throw {target, prop, "msg": 'prop not found.'}
                     propDescriptor = Object.getOwnPropertyDescriptor(proto, prop);
                 }
                 if(propDescriptor === undefined){
