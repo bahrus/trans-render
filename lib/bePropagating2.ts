@@ -6,10 +6,12 @@ interface PropertySubscriber{
 export class BePropagating extends EventTarget{
 
     _innerET: EventTarget | undefined;
+    targetRef: WeakRef<any>;
     #subscriptions: PropertySubscriber | undefined;
     constructor(target: any){
         super();
         this.#createOrReuseEventTarget(target);
+        this.targetRef = new WeakRef(target);
     }
     async addEventListener(prop: string, callback: EventListenerOrEventListenerObject | null, options?: boolean | AddEventListenerOptions | undefined) {
         if(prop === 'super.resolved') {
