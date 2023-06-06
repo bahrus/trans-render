@@ -66,8 +66,10 @@ export class BePropagating extends EventTarget{
     }
 
     async #createOrReuseEventTarget(target: any){
-        const {isDefined} = await import('./isDefined.js');
-        await isDefined(target);
+        if(target instanceof HTMLElement){
+            const {isDefined} = await import('./isDefined.js');
+            await isDefined(target);
+        }
         const xtalState = (<any>target).xtalState as EventTarget;
         if(xtalState !== undefined) {
             this._innerET = xtalState;
