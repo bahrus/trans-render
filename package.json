@@ -2,8 +2,8 @@
   "name": "trans-render",
   "version": "0.0.685",
   "description": "Instantiate an HTML Template",
-  "main": "lib/TR.js",
-  "module": "lib/TR.js",
+  "main": "lib/groom.js",
+  "module": "lib/groom.js",
   "typings": "lib/types.d.ts",
   "scripts": {
     "serve": "node node_modules/may-it-serve/serve.js",

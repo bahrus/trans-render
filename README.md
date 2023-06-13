@@ -10,7 +10,15 @@ The *trans-rendering* npm package provides useful utilities for instantiating a 
 
 ## Template grooming
 
+Perhaps the most import service this npm package provides is to extract inline [custom enhancements](https://github.com/bahrus/be-enhanced) out of a template, and apply them in an efficient way repeatedly.  It does this using the tiny ["groom"](https://github.com/bahrus/trans-render/blob/baseline/lib/groom.ts) utility.
 
+If the developer utilizes the growing list of custom enhancements effectively, the developer will rarely need to use any other feature this package provides, as far as template instantiation.
+
+However, there are scenarios where it isn't practical to insert binding instructions into the HTML we need to instantiate or process.  For that we need:
+
+## Binding from a distance
+
+*trans-rendering* (TR) describes a methodical way of instantiating a template.  It originally drew inspiration from the (least) popular features of XSLT, but has since evolved to more closely resemble standard CSS.  Like XSLT, TR performs transforms on elements by matching tests on those elements.  TR uses css tests on elements via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
 
 TR rests on:
 
@@ -21,15 +29,14 @@ TR rests on:
 
 The key to trans-rendering is the template instantiation manifest, which will be discussed in detail below.
 
-TR also strives to make it easy to generate HTML with microdata, in order for the rendered content to be easily indexible by search engines, as well as making the task of hydrating more efficient.[WIP]
+TR rests on:
 
-Changes needed to complete the mission of making this library microdata friendly:
+1.  A host that inherits from EventTarget and either contains standard getters/setters, or implements a "propagating" protocol.
+2.  A template that serves as the originator of the DOM structure (optional)
+3.  A template instantiation manifest (TIM), separate from the template itself.  
+4.  A target element to fill and/or update.
 
-1.  Strongly discourage use of interpolation for text content, unless the target is a property.  I.e. [use the platform](http://html5doctor.com/microdata/) ( 😳 ) [TODO]
-2.  Auto populate itemtype when possible.
-3.  Set value for input, time, etc when itemscope is specified.
-4.  No need to even having to define transform rules for itemscope(d) attributes, will bind automatically.
- 
+The key to trans-rendering is the template instantiation manifest, which will be discussed in detail below.
 
 A subset of TR, also described below, is "declarative trans-render" syntax [DTR], which is pure, 100% declarative syntax.  
 
