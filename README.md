@@ -42,7 +42,7 @@ The key to trans-rendering is the template instantiation manifest, which will be
 
 A subset of TR, also described below, is "declarative trans-render" syntax [DTR], which is pure, 100% declarative syntax.  
 
-DTR is designed to provide an alternative to the proposed [Template Instantiation proposal]), the idea being that DTR could continue to supplement what that proposal includes if/when template instantiation support lands in browsers.
+DTR is designed to provide an alternative to the proposed [Template Instantiation proposal](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), the idea being that DTR could continue to supplement what that proposal includes if/when template instantiation support lands in browsers.
 
 Other uses cases for TR/DTR:
 
