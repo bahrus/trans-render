@@ -2,8 +2,11 @@ import {lispToCamel} from './lispToCamel.js';
 let count = 0;
 
 const map = new Map<string, any>();
+const alreadyGroomed = new WeakSet<HTMLTemplateElement>();
 
 export function groom(templ: HTMLTemplateElement){
+    if(alreadyGroomed.has(templ)) return;
+    alreadyGroomed.add(templ);
     const bes = Array.from(templ.content.querySelectorAll('[be]'));
     for(const el of bes){
         const beAttr = el.getAttribute('be');

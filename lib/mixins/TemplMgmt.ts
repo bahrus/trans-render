@@ -47,6 +47,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
             root.innerHTML = '';
             this.#needToAppendClone = true;
         }
+        const {groom} = await import('../groom.js');
         switch(typeof mainTemplate){
             case 'string':
                 //const isReally = (<any>this.constructor).isReally as string;
@@ -56,9 +57,11 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
                     templ.innerHTML = mainTemplate;
                     compiledTemplateMap.set(mainTemplate, templ);
                 }
+                groom(templ);
                 this.clonedTemplate = templ.content.cloneNode(true);
                 break;
             default:
+                groom(mainTemplate!);
                 this.clonedTemplate = mainTemplate!.content.cloneNode(true);
         }
         
@@ -70,6 +73,8 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         const fragment = clonedTemplate === undefined ? 
             !shadowRootMode ? this : this.shadowRoot!
             : clonedTemplate as DocumentFragment;
+        const {restore} = await import('../groom.js');
+        await restore(fragment as DocumentFragment);
         if(hydratingTransform || transform){
             const {MainTransforms} = await import('./MainTransforms.js');
             await MainTransforms(this as any as TemplMgmtBaseMixin & HTMLElement, base, fragment as DocumentFragment);
