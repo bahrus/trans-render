@@ -6,13 +6,15 @@
 [![How big is this package in your project?](https://img.shields.io/bundlephobia/minzip/trans-render?style=for-the-badge)](https://bundlephobia.com/result?p=trans-render)
 <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/trans-render?compression=gzip">
 
-The *trans-rendering* npm package provides useful utilities for instantiating a template, including utilities that could still be useful even if template instantiation gets [built into the browser]((https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md).
+The *trans-rendering* npm package provides useful utilities for instantiating a template, including utilities that could still be useful even if template instantiation gets [built into the browser](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md).
 
 ## Template grooming
 
-Perhaps the most import service this npm package provides is to extract inline [custom enhancements](https://github.com/bahrus/be-enhanced) out of a template, and apply them in an efficient way repeatedly.  It does this using the tiny ["groom"](https://github.com/bahrus/trans-render/blob/baseline/lib/groom.ts) utility.
+Perhaps the most important service this npm package provides is to extract inline [custom enhancements](https://github.com/bahrus/be-enhanced) out of a template, and apply them as efficiently as possible for each cloned instance of the template.  It does this using the tiny ["groom"](https://github.com/bahrus/trans-render/blob/baseline/lib/groom.ts) utility.
 
 If the developer utilizes the growing list of custom enhancements effectively, the developer will rarely need to use any other feature this package provides, as far as template instantiation.
+
+[TODO]:  Show some examples
 
 However, there are scenarios where it isn't practical to insert binding instructions into the HTML we need to instantiate or process.  For that we need:
 
