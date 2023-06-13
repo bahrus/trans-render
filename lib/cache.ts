@@ -1,4 +1,4 @@
-import {lispToCamel} from './lispToCamel.js';
+import {lispToCamel} from './lispToCamel';
 let count = 0;
 
 const map = new Map<string, any>();

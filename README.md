@@ -8,9 +8,9 @@
 
 The *trans-rendering* npm package provides useful utilities for instantiating a template, including utilities that could still be useful even if template instantiation gets [built into the browser](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md).
 
-## Template grooming
+## Template part caching
 
-Perhaps the most important service this npm package provides is to extract inline [custom enhancements](https://github.com/bahrus/be-enhanced) out of a template, and apply them as efficiently as possible for each cloned instance of the template.  It does this using the tiny ["groom"](https://github.com/bahrus/trans-render/blob/baseline/lib/groom.ts) utility.
+Perhaps the most important service this npm package provides is to extract inline [custom enhancements](https://github.com/bahrus/be-enhanced) out of a template, and apply them as efficiently as possible for each cloned instance of the template.  It does this using the tiny ["cache"](https://github.com/bahrus/trans-render/blob/baseline/lib/cache.ts) utility.
 
 If the developer utilizes the growing list of custom enhancements effectively, the developer will rarely need to use any other feature this package provides, as far as template instantiation.
 
