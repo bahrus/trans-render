@@ -6,7 +6,6 @@ export function resolve(href: string){
     const linkTest = (<any>globalThis)[finalURL];
     if(linkTest instanceof HTMLLinkElement && linkTest.hasAttribute('onerror') ){
         return linkTest.href;
-        return finalURL;
     }
     const importMap = document.querySelector('script[type="importmap"]');
     if(importMap !== null){

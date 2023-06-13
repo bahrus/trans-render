@@ -43,6 +43,7 @@
     "./lib/getRecipientElement": "./lib/getRecipientElement.js",
     "./lib/getVal.js": "./lib/getVal.js",
     "./lib/getValFromEvent.js": "./lib/getValFromEvent.js",
+    "./lib/groom.js": "./lib/groom.js",
     "./lib/Hashit.js": "./lib/Hashit.js",
     "./lib/homeInOn.js": "./lib/homeInOn.js",
     "./lib/html.js": "./lib/html.js",

@@ -1,4 +1,4 @@
-# trans-render
+# trans-render [WIP]
 
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/trans-render)
 [![NPM version](https://badge.fury.io/js/trans-render.png)](http://badge.fury.io/js/trans-render)
@@ -6,13 +6,15 @@
 [![How big is this package in your project?](https://img.shields.io/bundlephobia/minzip/trans-render?style=for-the-badge)](https://bundlephobia.com/result?p=trans-render)
 <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/trans-render?compression=gzip">
 
+The *trans-rendering* npm package provides useful utilities for instantiating a template, including utilities that could still be useful even if template instantiation gets [built into the browser]((https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md).
+
+## Template grooming
 
 
-*trans-rendering* (TR) describes a methodical way of instantiating a template.  It originally drew inspiration from the (least) popular features of XSLT, but has since evolved to more closely resemble standard CSS.  Like XSLT, TR performs transforms on elements by matching tests on those elements.  TR uses css tests on elements via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
 
 A subset of TR, also described below, is "declarative trans-render" syntax [DTR], which is pure, 100% declarative syntax.  
 
-DTR is designed to provide an alternative to the proposed [Template Instantiation proposal](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), the idea being that DTR could continue to supplement what that proposal includes if/when template instantiation support lands in browsers.
+DTR is designed to provide an alternative to the proposed [Template Instantiation proposal]), the idea being that DTR could continue to supplement what that proposal includes if/when template instantiation support lands in browsers.
 
 Other uses cases for TR/DTR:
 

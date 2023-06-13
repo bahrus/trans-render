@@ -5,8 +5,7 @@
 		"sourceMap": false,
 		"experimentalDecorators": false,
 		"newLine": "LF",
-		"strict": true,
-		"watch": true
+		"strict": true
 	},
 	"include": [
 		"lib/*",
