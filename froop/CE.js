@@ -21,7 +21,8 @@ export class CE extends Svc {
      * @overridable
      */
     async addSvcClasses(args) {
-        args.servers = {};
+        if (args.servers === undefined)
+            args.servers = {};
         const { servers: serviceClasses } = args;
         if (args.mixins || args.superclass) {
             const { Mix } = await import('./Mix.js');
@@ -31,8 +32,10 @@ export class CE extends Svc {
         serviceClasses.itemizer = PropRegistry;
         const { PropSvc } = await import('./PropSvc.js');
         serviceClasses.propper = PropSvc;
-        const config = args.config;
-        if (config.actions !== undefined) {
+        const { config } = args;
+        const { actions, propDefaults } = config;
+        //const config = args.config as WCConfig;
+        if (actions || propDefaults) {
             const { Hookup } = await import('./Hookup.js');
             serviceClasses.hooker = Hookup;
         }
@@ -51,12 +54,12 @@ export class CE extends Svc {
     }
     async #createClass(args) {
         const { services } = args;
-        const { itemizer: createPropInfos, mixer: addMixins } = services;
-        await createPropInfos.resolve();
-        const ext = addMixins?.ext || HTMLElement;
+        const { itemizer, mixer } = services;
+        await itemizer.resolve();
+        const ext = mixer?.ext || HTMLElement;
         const config = args.config;
         const { tagName, formAss } = config;
-        const observedAttributes = await createPropInfos.getAttrNames(ext);
+        const observedAttributes = await itemizer.getAttrNames(ext);
         class newClass extends ext {
             static is = tagName;
             static observedAttributes = observedAttributes;

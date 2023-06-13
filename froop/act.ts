@@ -5,13 +5,14 @@ const PETLookup = new WeakMap<EventTarget, IPET>();
 export async function act(instance: EventTarget, actions: {[methodName: string]: Action}){
     for(const methodName in actions){
         const action = actions[methodName];
-        if(action.debug) debugger;
+        const {debug, secondArg} = action;
+        if(debug) debugger;
         const method = (<any>instance)[methodName];
         if(method === undefined) throw {
             msg: 404, methodName, instance
         }
         const isAsync = method.constructor.name === 'AsyncFunction';
-        const ret = isAsync ? await (<any>instance)[methodName](instance) : (<any>instance)[methodName](instance);
+        const ret = isAsync ? await (<any>instance)[methodName](instance, secondArg) : (<any>instance)[methodName](instance, secondArg);
         if(ret === undefined) continue;
         if(Array.isArray(ret)){
             switch(ret.length){

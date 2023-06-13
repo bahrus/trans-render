@@ -12,6 +12,25 @@ The *trans-rendering* npm package provides useful utilities for instantiating a 
 
 
 
+TR rests on:
+
+1.  A host that inherits from EventTarget and either contains standard getters/setters, or implements a "propagating" protocol.
+2.  A template that serves as the originator of the DOM structure (optional)
+3.  A template instantiation manifest (TIM), separate from the template itself.  
+4.  A target element to fill and/or update.
+
+The key to trans-rendering is the template instantiation manifest, which will be discussed in detail below.
+
+TR also strives to make it easy to generate HTML with microdata, in order for the rendered content to be easily indexible by search engines, as well as making the task of hydrating more efficient.[WIP]
+
+Changes needed to complete the mission of making this library microdata friendly:
+
+1.  Strongly discourage use of interpolation for text content, unless the target is a property.  I.e. [use the platform](http://html5doctor.com/microdata/) ( 😳 ) [TODO]
+2.  Auto populate itemtype when possible.
+3.  Set value for input, time, etc when itemscope is specified.
+4.  No need to even having to define transform rules for itemscope(d) attributes, will bind automatically.
+ 
+
 A subset of TR, also described below, is "declarative trans-render" syntax [DTR], which is pure, 100% declarative syntax.  
 
 DTR is designed to provide an alternative to the proposed [Template Instantiation proposal]), the idea being that DTR could continue to supplement what that proposal includes if/when template instantiation support lands in browsers.
@@ -36,7 +55,7 @@ This package contains three core libraries.
 
 The first, lib/TR.js, is a tiny, 'non-committal' library that simply allows us to map css matches to user-defined functions, and a little more. 
 
-The second, lib/DTR.js, extends TR.js but provides robust declarative syntax support.  With the help of "hook like" web component decorators / trans-render plugins, we rarely if ever need to define user-defined functions, and can accomplish full, turing complete (?) rendering support while sticking to 100% declarative JSON.
+The second, lib/DTR.js, extends TR.js but provides robust declarative syntax support.  With the help of [custom] enhancements we rarely if ever need to define user-defined functions, and can accomplish full, turing complete (?) rendering support while sticking to 100% declarative JSON.
 
 In addition, this package contains a fairly primitive library for defining custom elements, froop/CE.js, which can be combined with lib/DTR.js via lib/mixins/TemplMgmt.js.
 
@@ -133,6 +152,14 @@ Throughout this documentation, we will be referring to the string before the col
 
 The keyword "match" indicates that within that block are CSS Matches.
 
+TR supports two other such keywords:
+
+| keyword   | purpose                                                   |  notes
+------------------------------------------------------------------------------------------------------------------------------------------------------
+| match     | bind to dynamic properties of the host                    |  Uses css match on Elements
+| make      | attach element enhancements, set static properties        |  Uses third party enhancements that can add functionality or help with the template binding
+| evaluate  | use xpath to finding book-ended processing instructions   |  TODO
+
 So for example, this:
 
 ```JavaScript
@@ -194,7 +221,9 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>The last capital letter in the string is an "I", ends with "d"</td><td>driversLicenseIdId</td><td>.querySelector('#drivers-license-id')</td><td>Untested</td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is an "I", doesn't end with "d", doesn't end with "s"</td><td>nameI</td><td>.querySelector('[itemprop="name"]')</td><td></td>
+        <td>The last capital letter in the string is an "I", doesn't end with "d", doesn't end with "s"</td>
+        <td>nameI</td><td>.querySelector('[itemprop="name"]')</td>
+        <td>Depending on the element name associated with matching elements, will do different things. For example, if the element is the time tag, it will add the value of the full date string to the attribute[TODO]</td>
     </tr>
     <tr>
         <td>The last capital letter in the string is an "I", ends with "s"</td><td>nameItems</td><td>.querySelectorAll('[itemprop="name"]')</td><td></td>
@@ -236,7 +265,7 @@ We will discuss this type of extension later.
 
 ### Verbal "spells" via inline decorators / element behaviors
 
-The [be-decorated](https://github.com/bahrus/be-decorated) library provides the base class for element behaviors / decorators that can be used to enhance server-side generated HTML.
+The [be-enhanced](https://github.com/bahrus/be-enhanced) library provides the base class for element behaviors / decorators that can be used to enhance server-side generated HTML.
 
 For example:
 
@@ -319,6 +348,16 @@ We can do this by simply taking advantage of the dynamic import function:
     ...
 </script>
 ```
+
+### Other options with make
+
+We can also use the make key to specify static properties to assign into the element, using 'beAssigned'.
+
+We can also specify static properties to deep merge into the element, using "beMerged".
+
+We can specify to wait for the custom enhancement to "resolve" before proceeding.  This does impose render blocking.
+
+We can finesse that further by specifying to wait for the custom element to resolve, only if the initial enhancement is already loaded in memory (which means any dependencies that might be dynamically loaded are sure not to be far behind, either in the download queue, or already in cache.)
 
 ## Match vs Make
 

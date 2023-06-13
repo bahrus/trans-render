@@ -9,9 +9,12 @@ export interface RenderContextEndUserProps<T = Element, TItem = any>{
 }
 
 export interface BeHaving<TEndUserProps = any> {
-    be: string,
+    be?: string,
+    beAssigned?: any, //Untested
     having?: TEndUserProps | undefined,
     waitForResolved?: boolean,
+    waitForResolvedIfLoaded?: boolean, //Untested
+    beDeepMerged?: any, //Untested
 }
 
 export type CSSSelectorBeHavingMap = {[key: string]: BeHaving | BeHaving[]}
@@ -39,7 +42,7 @@ export interface RenderContext<T = Element, TItem = any> extends RenderContextEn
     queryInfo?: QueryInfo;
     timestampKey?: string;
     self?: Transformer;
-    initiator?: Element;
+    $0?: Element;
     trace?: boolean;
 
 }
@@ -290,7 +293,9 @@ export interface LogicOp<MCProps = any>{
 
     ifEquals?: LogicOpProp<MCProps>,
 
-    ifAtLeastOneOf?: LogicOpProp<MCProps>
+    ifAtLeastOneOf?: LogicOpProp<MCProps>,
+
+
 
 }
 
@@ -304,6 +309,7 @@ export interface Transform<TMixinComposite = any> extends LogicOp<TMixinComposit
 export interface Action<MCProps = any, MCActions = MCProps> extends LogicOp<MCProps>{
     target?: keyof MCProps; 
     debug?: boolean;
+    secondArg?: any;
     //setFree?: (keyof MCProps & string)[],
 }
 
@@ -363,7 +369,7 @@ export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLEleme
     unsafeTCount: number;
     styles?: CSSStyleSheet[] | string;
     clonedTemplate?: Node | undefined;
-    noshadow?: boolean;
+    shadowRootMode?: 'open' | 'closed' | undefined | false;
     renderOptions?: RenderOptions;
     mntCnt?: number;
     
@@ -480,6 +486,12 @@ export type Target =
  */ 
 's' |
 `closest${camelQry}` |
+
+/**
+ * [TODO]
+ * do upsearch for matching itemref
+ */
+'nearestScope' |
 
  
 /**

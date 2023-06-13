@@ -21,11 +21,11 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         new DoStyles(this, base, root, compiledStyleMap, modernBrowser);
             
     }
-    async cloneTemplate({noshadow, shadowRoot, mainTemplate, mntCnt, hydratingTransform, transform}: TemplMgmtBase){
+    async cloneTemplate({shadowRootMode, shadowRoot, mainTemplate, mntCnt, hydratingTransform, transform}: TemplMgmtBase){
         let root = this as any;
-        if(!noshadow){
+        if(shadowRootMode){
             if(shadowRoot === null){
-                root = this.attachShadow({mode: 'open'});
+                root = this.attachShadow({mode: shadowRootMode});
                 this.#needToAppendClone = true;
                 await this.#adopt(this, root);
                
@@ -66,9 +66,9 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
     }
 
     async doTemplMount(base: TemplMgmtBase){
-        const {hydratingTransform, transform, mntCnt, clonedTemplate, noshadow, DTRCtor, homeInOn} = base;
+        const {hydratingTransform, transform, mntCnt, clonedTemplate, shadowRootMode, DTRCtor, homeInOn} = base;
         const fragment = clonedTemplate === undefined ? 
-            noshadow ? this : this.shadowRoot!
+            !shadowRootMode ? this : this.shadowRoot!
             : clonedTemplate as DocumentFragment;
         if(hydratingTransform || transform){
             const {MainTransforms} = await import('./MainTransforms.js');
@@ -78,7 +78,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
             const {HomeIn} = await import('./HomeIn.js');
         }
         if(this.#needToAppendClone){
-            const root = noshadow ? this : this.shadowRoot!;
+            const root = !shadowRootMode ? this : this.shadowRoot!;
             root.appendChild(fragment);
             this.#needToAppendClone = false;
         }
@@ -108,7 +108,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
 export const beCloned = {
     cloneTemplate: {
         ifAllOf: ['mainTemplate'],
-        ifKeyIn: ['noshadow', 'waitToInit']
+        ifKeyIn: ['shadowRootMode', 'waitToInit']
     } as Action<TemplMgmtProps>,
 }
 

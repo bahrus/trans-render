@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.671",
+  "version": "0.0.685",
   "description": "Instantiate an HTML Template",
   "main": "lib/TR.js",
   "module": "lib/TR.js",
@@ -35,6 +35,7 @@
     "./lib/doSet.js": "./lib/doSet.js",
     "./lib/DTR.js": "./lib/DTR.js",
     "./lib/expImp.js": "./lib/expImp.js",
+    "./lib/findAdjacentElement.js": "./lib/findAdjacentElement.js",
     "./lib/findRealm.js": "./lib/findRealm.js",
     "./lib/getAdjacentChildren.js": "./lib/getAdjacentChildren.js",
     "./lib/getHost.js": "./lib/getHost.js",
@@ -93,7 +94,7 @@
     "froop/*"
   ],
   "devDependencies": {
-    "@playwright/test": "1.32.1",
+    "@playwright/test": "1.34.3",
     "may-it-serve": "0.0.5",
     "xtal-shell": "0.0.27"
   },
