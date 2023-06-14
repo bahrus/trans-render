@@ -26,7 +26,7 @@ function passVal(val: any, el: any, enh: string){
     const enhancement = lispToCamel(enh);
     if(el.beEnhanced === undefined) el.beEnhanced = {};
     const {beEnhanced} = el;
-    beEnhanced[enh] = val;
+    beEnhanced[enhancement] = val;
 }
 export async function restore(clone: DocumentFragment){
     const bes = Array.from(clone.querySelectorAll('[be]'));
