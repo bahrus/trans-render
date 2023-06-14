@@ -74,6 +74,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
             !shadowRootMode ? this : this.shadowRoot!
             : clonedTemplate as DocumentFragment;
         const {restore} = await import('../cache.js');
+        (<any>fragment).host = this;
         await restore(fragment as DocumentFragment);
         if(hydratingTransform || transform){
             const {MainTransforms} = await import('./MainTransforms.js');
