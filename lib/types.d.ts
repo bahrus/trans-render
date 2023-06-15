@@ -478,13 +478,9 @@ export type Target =
  */
 'porn' |
 /**
- * Use the parent as the target.  If no parent, use root node host.
+ * Do "closest" for element with "-"" in the name.  If non found, get host of getRootNode()
  */
-'parentOrHost' |
-/**
- * abbrev for parent or host
- */
-'poho' | 
+'hostish' |
 /**
  * Use the element itself as the target
  */ 

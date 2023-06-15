@@ -15,16 +15,20 @@ export async function findRealm(self: Element, scope: Scope){
             case 'porn':
             case 'parentOrRootNode':
                 return self.parentElement || self.getRootNode();
-            case 'poho':
-            case 'parentOrHost':
-                return self.parentElement || (<any>self.getRootNode()).host;
+            case 'hostish':{
+                const {getHost} = await import('./getHost.js');
+                return await getHost(self, false, true);
+            }
+                
             case 'rn':
             case 'rootNode':
                 return self.getRootNode() as Document | ShadowRoot;
             case 'h':
-            case 'host':
+            case 'host':{
                 const {getHost} = await import('./getHost.js');
                 return await getHost(self);
+            }
+                
             case 'sd':
             case 'shadowDOM':
                 //a little bit of playing favorites with TemplMgmt mixin -- this allows performing transforms prior to appending

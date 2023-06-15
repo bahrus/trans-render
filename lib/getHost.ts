@@ -1,4 +1,4 @@
-export function getHost(self:Element, tocoho?: boolean | string): EventTarget | null{
+export function getHost(self:Element, tocoho: boolean | string = false, ish: boolean = false): EventTarget | null{
     let host: Element | null | undefined;
     if(tocoho){
         const closest = tocoho === true ? '[itemscope]' : tocoho;
@@ -9,12 +9,18 @@ export function getHost(self:Element, tocoho?: boolean | string): EventTarget | 
             return host;
         }
     }
-    host = (<any>self.getRootNode()).host;
-    if(host === undefined){
+    if(ish){
         host = self.parentElement;
         while(host && !host.localName.includes('-')){
             host = host.parentElement;
+            if(host !== null && host.localName.includes('-')) return host;
         }
+        
+
+    }
+    host = (<any>self.getRootNode()).host;
+    if(host === undefined){
+        return null;
     }
     return host;
 }
