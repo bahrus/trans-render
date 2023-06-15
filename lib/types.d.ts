@@ -478,6 +478,14 @@ export type Target =
  */
 'porn' |
 /**
+ * Use the parent as the target.  If no parent, use root node host.
+ */
+'parentOrHost' |
+/**
+ * abbrev for parent or host
+ */
+'poho' | 
+/**
  * Use the element itself as the target
  */ 
 'self' | 

@@ -15,6 +15,9 @@ export async function findRealm(self: Element, scope: Scope){
             case 'porn':
             case 'parentOrRootNode':
                 return self.parentElement || self.getRootNode();
+            case 'poho':
+            case 'parentOrHost':
+                return self.parentElement || (<any>self.getRootNode()).host;
             case 'rn':
             case 'rootNode':
                 return self.getRootNode() as Document | ShadowRoot;
