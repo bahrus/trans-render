@@ -50,5 +50,6 @@ export async function restore(clone: DocumentFragment){
                     }
             }
         }
+        el.removeAttribute('be');
     }
 }
