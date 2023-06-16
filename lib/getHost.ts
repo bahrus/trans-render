@@ -11,6 +11,7 @@ export function getHost(self:Element, tocoho: boolean | string = false, ish: boo
     }
     if(ish){
         host = self.parentElement;
+        if(host !== null && host.localName.includes('-')) return host;
         while(host && !host.localName.includes('-')){
             host = host.parentElement;
             if(host !== null && host.localName.includes('-')) return host;

@@ -372,7 +372,7 @@ export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLEleme
     shadowRootMode?: 'open' | 'closed' | undefined | false;
     renderOptions?: RenderOptions;
     mntCnt?: number;
-    
+    skipTemplateClone?: boolean;
     homeInOn?: Partial<{[key in keyof MCProps]: TransformPacket}>;
 }
 

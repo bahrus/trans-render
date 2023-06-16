@@ -114,7 +114,8 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
 export const beCloned = {
     cloneTemplate: {
         ifAllOf: ['mainTemplate'],
-        ifKeyIn: ['shadowRootMode', 'waitToInit']
+        ifKeyIn: ['shadowRootMode', 'waitToInit'],
+        ifNoneOf: ['skipTemplateClone']
     } as Action<TemplMgmtProps>,
 }
 
