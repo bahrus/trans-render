@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.688",
+  "version": "0.0.689",
   "description": "Instantiate an HTML Template",
   "main": "lib/groom.js",
   "module": "lib/groom.js",
