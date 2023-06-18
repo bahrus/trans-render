@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.689",
+  "version": "0.0.690",
   "description": "Instantiate an HTML Template",
   "main": "lib/cache.js",
   "module": "lib/cache.js",
