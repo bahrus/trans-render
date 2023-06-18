@@ -44,8 +44,10 @@ export async function restore(clone: DocumentFragment){
                     break;
                 default:
                     const tagName = 'be-' + key;
+                    console.log({tagName, val, el, msg: 'passVal'});
                     passVal(val, el, tagName);
                     if(customElements.get(tagName)){
+                        console.log({tagName, msg: 'await when resolved'});
                         await (<any>el).beEnhanced.whenResolved(tagName);
                     }
             }
