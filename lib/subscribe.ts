@@ -23,7 +23,7 @@ export async function subscribe(element: EventTarget, propName: string, callback
     if(tooSoon(element)){
         await customElements.whenDefined(element.localName);
     }
-    const propagator = (<any>element.constructor)?.ceDef?.services?.propper?.stores?.get(element) as EventTarget;
+    const propagator = (<any>element).xtalState; //(<any>element.constructor)?.ceDef?.services?.propper?.stores?.get(element) as EventTarget;
     if(propagator !== undefined){
         subscribeToPropagator(propagator, propName, callback);
         return;
