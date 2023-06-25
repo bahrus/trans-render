@@ -9,10 +9,21 @@ export function cache(templ: HTMLTemplateElement){
     alreadyCached.add(templ);
     const bes = Array.from(templ.content.querySelectorAll('[be]'));
     for(const el of bes){
-        const beAttr = el.getAttribute('be');
+        const beAttr = el.getAttribute('be')!;
         const newAttr = 'be-' + count++;
         try{
-            const parsed = JSON.parse(beAttr!);
+            const parsed = JSON.parse(beAttr);
+            for(const key in parsed){
+                const val = atob(parsed[key]);
+                if(val.startsWith('{') || val.startsWith('[')){
+                    try{
+                        const parsedVal = JSON.parse(val);
+                        parsed[key] = parsedVal;
+                    }catch(e){
+                        parsed[key] = val;
+                    }
+                }
+            }
             map.set(newAttr, parsed);
         }catch(e){
             console.error({el, msg: "Error parsing be attribute", e});
