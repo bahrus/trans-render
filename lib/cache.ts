@@ -22,6 +22,8 @@ export function cache(templ: HTMLTemplateElement){
                     }catch(e){
                         parsed[key] = val;
                     }
+                }else{
+                    parsed[key] = val;
                 }
             }
             map.set(newAttr, parsed);
