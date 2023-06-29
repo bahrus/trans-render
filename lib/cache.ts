@@ -1,4 +1,5 @@
 import {lispToCamel} from './lispToCamel.js';
+import {atou, utoa} from './tau.js'
 let count = 0;
 
 const map = new Map<string, any>();
@@ -14,7 +15,7 @@ export function cache(templ: HTMLTemplateElement){
         try{
             const parsed = JSON.parse(beAttr);
             for(const key in parsed){
-                const val = atob(parsed[key]);
+                const val = atou(parsed[key]);
                 if(val.startsWith('{') || val.startsWith('[')){
                     try{
                         const parsedVal = JSON.parse(val);

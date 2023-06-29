@@ -77,6 +77,7 @@
     "./lib/SplitText.js": "./lib/SplitText.js",
     "./lib/structuralClone.js": "./lib/structuralClone.js",
     "./lib/subscribe.js": "./lib/subscribe.js",
+    "./lib/tou.js": "./lib/tou.js",
     "./lib/tsChecker.js": "./lib/tsChecker.js",
     "./lib/TR.js": "./lib/TR.js",
     "./lib/Tx.js": "./lib/Tx.js",

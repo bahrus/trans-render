@@ -1,10 +1,11 @@
+import {atou, utoa} from './tau.js';
 export class Hashit{
     constructor(public open: string, public close: string){}
 
     stringify(id: string, obj: any): string{
         let {hash} = location;
         if(hash.length > 0 && hash[0] === '#') hash = hash.substr(1);
-        const json = btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
+        const json = utoa(JSON.stringify(obj));
         const idEncoded = btoa(id);
         const iPosOfStart = hash.indexOf(this.open + idEncoded );
         if(iPosOfStart > -1){
@@ -27,7 +28,7 @@ export class Hashit{
         if(iPosOfStart === -1) return null;
         const iPosOfEnd = hash.indexOf(this.close, iPosOfStart);
         if(iPosOfEnd === -1) return null;
-        const json = JSON.parse(decodeURIComponent(escape(atob(hash.substring(iPosOfStart + this.open.length + idEncoded.length, iPosOfEnd)))));
+        const json = JSON.parse(atou(hash.substring(iPosOfStart + this.open.length + idEncoded.length, iPosOfEnd)));
         return json;
     }
 }
