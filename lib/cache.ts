@@ -1,5 +1,5 @@
 import {lispToCamel} from './lispToCamel.js';
-import {atou, utoa} from './tau.js'
+import {atou} from './tau.js'
 let count = 0;
 
 const map = new Map<string, any>();
