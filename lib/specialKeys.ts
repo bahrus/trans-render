@@ -2,7 +2,7 @@ import { camelToLisp } from "./camelToLisp.js";
 import {QueryInfo, matchTypes} from './types';
 
 
-const picaden: Set<string> = new Set(['P', 'I', 'C', 'A', 'D', 'E', 'N'])
+const picaden: Set<string> = new Set(['P', 'I', 'C', 'A', 'M', 'E', 'N'])
 
 const queryLookup = new Map<string, QueryInfo>();
 
@@ -72,7 +72,7 @@ export function getQuery(key: string): QueryInfo{
                 first = true;
             }
             break;
-        case "D":
+        case "M":
             query = `[-${attrib}]`;
             lhsProp = attrib;
             break;
