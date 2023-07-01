@@ -708,7 +708,7 @@ export interface ICTXNavRecursive<T = any>{
  * A = attribute
  * N = name
  */
-export type camelQry = `${string}E` | `${string}P` | `${string}C` | `${string}Id` | `${string}I` | `${string}A` | `${string}N`;
+export type camelQry = `${string}E` | `${string}P` | `${string}C` | `${string}Id` | `${string}I` | `${string}A` | `${string}N` | `${string}M`;
 
 export interface ExpectedCamelQry<T = any>{
     [key: camelQry] : ICtxNav<T>
