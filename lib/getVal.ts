@@ -4,6 +4,10 @@ export async function getVal(ctx: getValArg, path: string, delay?: number): Prom
     const {host} = ctx;
     if (host === undefined)
         return path;
+    switch(path){
+        case '$0':
+            return host;
+    }
     switch(path[0]){
         case '.':{
             if(path === '.') return host;
