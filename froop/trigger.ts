@@ -2,6 +2,7 @@ import {Action, IActionProcessor, WCConfig} from '../lib/types';
 import {pc} from './const.js';
 import {CEArgs, IPropagator, IPropChg} from './types';
 
+const cache = new Map<any, Map<string, Set<string>>>();
 
 export function trigger(instance: EventTarget, propagator: IPropagator, args: CEArgs){
     //console.debug('addPropBagListener');
@@ -30,9 +31,18 @@ export function trigger(instance: EventTarget, propagator: IPropagator, args: CE
             //console.debug({changedKeys, actions});
             propagator.dk = new Set<string>();
             let foundAction = false;
+            const ctr = instance.constructor;
+            if(!cache.has(ctr)){
+                cache.set(ctr, new Map<string, Set<string>>());
+            }
+            const propLookup = cache.get(ctr)!
             for(const methodName in actions){
                 const action = actions[methodName] as string | Action;
-                const props = createPropInfos.getPropsFromAction(action); //TODO:  cache this
+                let props  = propLookup.get(methodName);
+                if(props === undefined){
+                    props = createPropInfos.getPropsFromAction(action);
+                    propLookup.set(methodName, props);
+                }
                 const int = intersection(props, changedKeys);
                 if(int.size === 0) continue;
                 const typedAction = (typeof action === 'string') ? {ifAllOf:[action]} as Action : action as Action;

@@ -1,4 +1,5 @@
 import { pc } from './const.js';
+const cache = new Map();
 export function trigger(instance, propagator, args) {
     //console.debug('addPropBagListener');
     propagator.addEventListener(pc, async (e) => {
@@ -26,9 +27,18 @@ export function trigger(instance, propagator, args) {
             //console.debug({changedKeys, actions});
             propagator.dk = new Set();
             let foundAction = false;
+            const ctr = instance.constructor;
+            if (!cache.has(ctr)) {
+                cache.set(ctr, new Map());
+            }
+            const propLookup = cache.get(ctr);
             for (const methodName in actions) {
                 const action = actions[methodName];
-                const props = createPropInfos.getPropsFromAction(action); //TODO:  cache this
+                let props = propLookup.get(methodName);
+                if (props === undefined) {
+                    props = createPropInfos.getPropsFromAction(action);
+                    propLookup.set(methodName, props);
+                }
                 const int = intersection(props, changedKeys);
                 if (int.size === 0)
                     continue;
