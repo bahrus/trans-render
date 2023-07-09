@@ -2,7 +2,7 @@ import {WCConfig} from '../lib/types';
 import { InstSvc } from "./InstSvc.js";
 import {xsr, mse, acb} from './const.js';
 import { CEArgs, IHookup, INewPropagator, IAttrChgCB } from './types';
-
+import {trigger} from './trigger.js';
 /**
  * Connects the prop change subscription via Propagate observer to the corresponding actions
  */
@@ -30,12 +30,12 @@ export class Hookup extends InstSvc {
             await parse(acbE, propInfos, defaults);
         });
         
-        propper.addEventListener(xsr, async e => {
+        propper.addEventListener(xsr, e => {
             const propagatorEvent = (e as CustomEvent).detail as INewPropagator;
             const {instance, propagator} = propagatorEvent;
-            const {trigger} = await import('./trigger.js');
+            //const {trigger} = await import('./trigger.js');
             //console.debug({instance, propagator});
-                trigger(instance, propagator, args);
+            trigger(instance, propagator, args);
             this.instanceResolved = instance;
             
             this.#propUp(instance, allPropNames, defaults);

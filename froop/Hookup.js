@@ -1,5 +1,6 @@
 import { InstSvc } from "./InstSvc.js";
 import { xsr, mse, acb } from './const.js';
+import { trigger } from './trigger.js';
 /**
  * Connects the prop change subscription via Propagate observer to the corresponding actions
  */
@@ -26,10 +27,10 @@ export class Hookup extends InstSvc {
             await args.definer.resolveInstanceSvcs(args, instance);
             await parse(acbE, propInfos, defaults);
         });
-        propper.addEventListener(xsr, async (e) => {
+        propper.addEventListener(xsr, e => {
             const propagatorEvent = e.detail;
             const { instance, propagator } = propagatorEvent;
-            const { trigger } = await import('./trigger.js');
+            //const {trigger} = await import('./trigger.js');
             //console.debug({instance, propagator});
             trigger(instance, propagator, args);
             this.instanceResolved = instance;
