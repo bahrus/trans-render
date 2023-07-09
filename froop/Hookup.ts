@@ -35,7 +35,7 @@ export class Hookup extends InstSvc {
             const {instance, propagator} = propagatorEvent;
             const {trigger} = await import('./trigger.js');
             //console.debug({instance, propagator});
-            trigger(instance, propagator, args);
+                trigger(instance, propagator, args);
             this.instanceResolved = instance;
             
             this.#propUp(instance, allPropNames, defaults);
@@ -54,8 +54,13 @@ export class Hookup extends InstSvc {
     #propUp<T>(instance: HTMLElement, props: string[], defaultValues?: T){
         for(const prop of props){
             let value = (<any>instance)[prop];
-            if(value === undefined && defaultValues !== undefined){
-                value = (<any>defaultValues)[prop];
+            if(value === undefined){
+                if(defaultValues !== undefined){
+                    const val = (<any>defaultValues)[prop];
+                    if(val !== undefined)
+                    try{(<any>instance)[prop] = val;}catch{}
+                } 
+                continue;
             }
             if (instance.hasOwnProperty(prop)) {
                 delete (<any>instance)[prop];

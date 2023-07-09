@@ -47,8 +47,16 @@ export class Hookup extends InstSvc {
     #propUp(instance, props, defaultValues) {
         for (const prop of props) {
             let value = instance[prop];
-            if (value === undefined && defaultValues !== undefined) {
-                value = defaultValues[prop];
+            if (value === undefined) {
+                if (defaultValues !== undefined) {
+                    const val = defaultValues[prop];
+                    if (val !== undefined)
+                        try {
+                            instance[prop] = val;
+                        }
+                        catch { }
+                }
+                continue;
             }
             if (instance.hasOwnProperty(prop)) {
                 delete instance[prop];
