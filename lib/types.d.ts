@@ -264,6 +264,7 @@ export interface DefineArgs<MixinCompositeProps = any, MixinCompositeActions = M
 
 export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction = Action>{
     tagName?: string;
+    isEnh?: boolean;
     propDefaults?: Partial<{[key in keyof MCProps]: MCProps[key]}>;
     propInfo?: Partial<{[key in keyof MCProps]: TPropInfo}>
     derivedProps?: (keyof MCProps & string)[];

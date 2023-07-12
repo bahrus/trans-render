@@ -67,8 +67,8 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
         await itemizer.resolve();
         const ext = mixer?.ext || HTMLElement;
         const config = args.config as WCConfig;
-        const {tagName, formAss} = config;
-        const observedAttributes = await itemizer.getAttrNames(ext);
+        const {tagName, formAss, isEnh} = config;
+        const observedAttributes = isEnh ? undefined :  await itemizer.getAttrNames(ext);
         class newClass extends (<any>ext){
             static is = tagName; 
             static observedAttributes = observedAttributes;
@@ -76,7 +76,7 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
             static formAssociated = formAss;
             constructor(){
                 super();
-                if(this.attachInternals !== undefined){
+                if(this.attachInternals !== undefined && !isEnh){
                     this._internals_ = this.attachInternals(); //Safari 16.4 doesn't yet support
                 }
                 
@@ -98,9 +98,11 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
                 //console.debug('connectedCallback');
                 if(super.connectedCallback) super.connectedCallback();
                 const dh = 'defer-hydration';
-                if((this as any as HTMLElement).hasAttribute(dh)){
-                    const {wfac} = await import('../lib/wfac.js');
-                    await wfac(this as any as HTMLElement, dh, (s: string | null) => s === null);
+                if(!isEnh){
+                    if((this as any as HTMLElement).hasAttribute(dh)){
+                        const {wfac} = await import('../lib/wfac.js');
+                        await wfac(this as any as HTMLElement, dh, (s: string | null) => s === null);
+                    }
                 }
                 services!.definer.dispatchEvent(new CustomEvent(ccb, {
                     detail: {
