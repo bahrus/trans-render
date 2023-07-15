@@ -11,7 +11,8 @@
     "doc": "wca analyze trans-render.js --outFile custom-elements.json",
     "package-check": "package-check",
     "compress": "terser lib/CE.js -o dist/CE.min.js -c -m ",
-    "safari": "npx playwright wk http://localhost:3030"
+    "safari": "npx playwright wk http://localhost:3030",
+    "update": "ncu -u && npm install"
   },
   "exports": {
     ".": "./froop/CE.js",
@@ -95,7 +96,7 @@
     "froop/*"
   ],
   "devDependencies": {
-    "@playwright/test": "1.35.0",
+    "@playwright/test": "1.36.1",
     "may-it-serve": "0.0.5",
     "xtal-shell": "0.0.27"
   },
