@@ -9,14 +9,14 @@ const cache = new Map<any, Map<string, Set<string>>>();
 
 export function trigger(instance: EventTarget, propagator: IPropagator, args: CEArgs){
     //console.debug('addPropBagListener');
-    propagator.addEventListener(pc, async e => {
+    propagator.addEventListener(pc, e => {
         
         const chg = (e as CustomEvent).detail as IPropChg;
         const {key, oldVal, newVal} = chg;
         //console.debug({key, oldVal, newVal});
         const {services} = args;
         const {itemizer: createPropInfos} = services!;
-        await createPropInfos.resolve();
+        //await createPropInfos.resolve();
         const {nonDryProps} = createPropInfos;
         if(!nonDryProps.has(key)){
             if(oldVal === newVal && propagator.mk.has(key)) return;
@@ -48,7 +48,7 @@ export function trigger(instance: EventTarget, propagator: IPropagator, args: CE
             const int = intersection(props, changedKeys);
             if(int.size === 0) continue;
             const typedAction = (typeof action === 'string') ? {ifAllOf:[action]} as Action : action as Action;
-            if(await pq(typedAction, instance)){
+            if(pq(typedAction, instance)){
                 filteredActions[methodName] = action;
                 foundAction = true;
             }

@@ -5,13 +5,13 @@ import { act } from './act.js';
 const cache = new Map();
 export function trigger(instance, propagator, args) {
     //console.debug('addPropBagListener');
-    propagator.addEventListener(pc, async (e) => {
+    propagator.addEventListener(pc, e => {
         const chg = e.detail;
         const { key, oldVal, newVal } = chg;
         //console.debug({key, oldVal, newVal});
         const { services } = args;
         const { itemizer: createPropInfos } = services;
-        await createPropInfos.resolve();
+        //await createPropInfos.resolve();
         const { nonDryProps } = createPropInfos;
         if (!nonDryProps.has(key)) {
             if (oldVal === newVal && propagator.mk.has(key))
@@ -45,7 +45,7 @@ export function trigger(instance, propagator, args) {
             if (int.size === 0)
                 continue;
             const typedAction = (typeof action === 'string') ? { ifAllOf: [action] } : action;
-            if (await pq(typedAction, instance)) {
+            if (pq(typedAction, instance)) {
                 filteredActions[methodName] = action;
                 foundAction = true;
             }

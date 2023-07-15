@@ -3,7 +3,7 @@ import {all} from './all.js';
 import {none} from './none.js';
 import {eq} from './eq.js';
 import {oneOf} from './oneOf.js';
-export async function pq<MCProps = any>(expr: LogicOp<any>, src: MCProps): Promise<boolean>{
+export function pq<MCProps = any>(expr: LogicOp<any>, src: MCProps){
     const {ifAllOf, ifNoneOf, ifEquals, ifAtLeastOneOf} = expr;
     if(ifAllOf !== undefined){
         //const {all} = await import('./all.js');
