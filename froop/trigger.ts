@@ -2,7 +2,7 @@ import {Action, IActionProcessor, WCConfig} from '../lib/types';
 import {pc} from './const.js';
 import {CEArgs, IPropagator, IPropChg} from './types';
 import {pq} from '../lib/pq.js';
-import {intersection} from '../lib/intersection.js';
+import {intersects} from '../lib/intersects.js';
 import {act} from './act.js';
 
 const cache = new Map<any, Map<string, Set<string>>>();
@@ -45,8 +45,7 @@ export function trigger(instance: EventTarget, propagator: IPropagator, args: CE
                 props = createPropInfos.getPropsFromAction(action);
                 propLookup.set(methodName, props);
             }
-            const int = intersection(props, changedKeys);
-            if(int.size === 0) continue;
+            if(!intersects(props, changedKeys)) continue;
             const typedAction = (typeof action === 'string') ? {ifAllOf:[action]} as Action : action as Action;
             if(pq(typedAction, instance)){
                 filteredActions[methodName] = action;

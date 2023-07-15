@@ -1,6 +1,6 @@
 import { pc } from './const.js';
 import { pq } from '../lib/pq.js';
-import { intersection } from '../lib/intersection.js';
+import { intersects } from '../lib/intersects.js';
 import { act } from './act.js';
 const cache = new Map();
 export function trigger(instance, propagator, args) {
@@ -41,8 +41,7 @@ export function trigger(instance, propagator, args) {
                 props = createPropInfos.getPropsFromAction(action);
                 propLookup.set(methodName, props);
             }
-            const int = intersection(props, changedKeys);
-            if (int.size === 0)
+            if (!intersects(props, changedKeys))
                 continue;
             const typedAction = (typeof action === 'string') ? { ifAllOf: [action] } : action;
             if (pq(typedAction, instance)) {
