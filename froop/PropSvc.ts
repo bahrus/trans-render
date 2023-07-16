@@ -12,6 +12,11 @@ export class PropSvc extends Svc implements IPropSvc{
         
     }
 
+    createPropBag(instance: HTMLElement){
+        const propBag = this.#getStore(instance, true); //causes propagator to be created
+        propBag['#resolved'] = true;
+    }
+
     async #do(args: CEArgs){
         const {services} = args;
         const {definer: createCustomEl, itemizer: createPropInfos} = services!;

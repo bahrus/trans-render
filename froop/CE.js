@@ -94,6 +94,8 @@ export class CE extends Svc {
                         await wfac(this, dh, (s) => s === null);
                     }
                 }
+                //console.log({propper: services?.propper, createPropBag: services?.propper.createPropBag});
+                //services?.propper.createPropBag(this as any as HTMLElement);
                 services.definer.dispatchEvent(new CustomEvent(ccb, {
                     detail: {
                         instance: this,

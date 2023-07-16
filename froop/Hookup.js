@@ -16,17 +16,22 @@ export class Hookup extends InstSvc {
     async #do(args) {
         const { services } = args;
         const { propper, itemizer, definer } = services;
-        await itemizer.resolve();
+        if (!itemizer.resolved) {
+            await itemizer.resolve();
+        }
         const config = args.config;
+        const { isEnh } = config;
         const defaults = { ...args.complexPropDefaults, ...config.propDefaults };
         const { allPropNames, propInfos } = itemizer;
-        definer.addEventListener(acb, async (e) => {
-            const acbE = e.detail;
-            const { instance, name, newVal, oldVal } = acbE;
-            const { parse } = await import('./parse.js');
-            await args.definer.resolveInstanceSvcs(args, instance);
-            await parse(acbE, propInfos, defaults);
-        });
+        if (isEnh) {
+            definer.addEventListener(acb, async (e) => {
+                const acbE = e.detail;
+                const { instance, name, newVal, oldVal } = acbE;
+                const { parse } = await import('./parse.js');
+                await args.definer.resolveInstanceSvcs(args, instance);
+                await parse(acbE, propInfos, defaults);
+            });
+        }
         propper.addEventListener(xsr, e => {
             const propagatorEvent = e.detail;
             const { instance, propagator } = propagatorEvent;

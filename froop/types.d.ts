@@ -71,7 +71,7 @@ export interface IDefine extends IResolvableService{
 }
 
 export interface IPropSvc extends IResolvableService{
-
+    createPropBag(instance: Element): void;
 }
 
 export interface IHookup extends IInstanceResolvableService{

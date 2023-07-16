@@ -54,6 +54,7 @@
     "./lib/insertAdjacentClone.js": "./lib/insertAdjacentClone.js",
     "./lib/insertAdjacentTemplate.js": "./lib/insertAdjacentTemplate.js",
     "./lib/intersection.js": "./lib/intersection.js",
+    "./lib/intersects.js": "./lib/intersects.js",
     "./lib/linkTemplates.js": "./lib/linkTemplates.js",
     "./lib/lispToCamel.js": "./lib/lispToCamel.js",
     "./lib/makeBe.js": "./lib/makeBe.js",

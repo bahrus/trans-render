@@ -9,6 +9,10 @@ export class PropSvc extends Svc {
             this.#do(args);
         }, { once: true });
     }
+    createPropBag(instance) {
+        const propBag = this.#getStore(instance, true); //causes propagator to be created
+        propBag['#resolved'] = true;
+    }
     async #do(args) {
         const { services } = args;
         const { definer: createCustomEl, itemizer: createPropInfos } = services;

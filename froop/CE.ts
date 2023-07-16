@@ -104,6 +104,8 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
                         await wfac(this as any as HTMLElement, dh, (s: string | null) => s === null);
                     }
                 }
+                //console.log({propper: services?.propper, createPropBag: services?.propper.createPropBag});
+                //services?.propper.createPropBag(this as any as HTMLElement);
                 services!.definer.dispatchEvent(new CustomEvent(ccb, {
                     detail: {
                         instance: this as any as HTMLElement,
