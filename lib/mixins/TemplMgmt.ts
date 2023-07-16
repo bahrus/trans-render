@@ -1,6 +1,6 @@
 //import { DTR } from '../DTR.js';
-import { RenderContext, TemplMgmtBase, TemplMgmtProps, Action, Matches } from '../types.js';
-export {TemplMgmtProps, TemplMgmtActions, Action} from '../types.js';
+import { RenderContext, TemplMgmtBase, TemplMgmtProps, Action, Matches, PropInfo } from '../types.js';
+export {TemplMgmtProps, TemplMgmtActions, Action, PropInfo} from '../types.js';
 
 export type TemplMgmtBaseMixin = {new(): TemplMgmtBase};
 
@@ -120,6 +120,31 @@ export const beCloned = {
         ifKeyIn: ['shadowRootMode', 'waitToInit'],
         ifNoneOf: ['skipTemplateClone']
     } as Action<TemplMgmtProps>,
+}
+
+
+export const propInfo: Partial<{[key in keyof TemplMgmtProps]: PropInfo}> = {
+    clonedTemplate:{
+        parse: false,
+    },
+    mntCnt:{
+        parse: false,
+    },
+    hydratingTransform:{
+        parse: false,
+    },
+    unsafeTransform:{
+        parse: false,
+    },
+    unsafeTCount: {
+        parse: false,
+    },
+    mainTemplate: {
+        parse: false,
+    },
+    styles: {
+        parse: false,
+    }
 }
 
 export const beMounted = {
