@@ -1,4 +1,4 @@
-# trans-render [WIP]
+# trans-render
 
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/trans-render)
 [![NPM version](https://badge.fury.io/js/trans-render.png)](http://badge.fury.io/js/trans-render)
@@ -14,27 +14,24 @@ Perhaps the most important service this npm package provides is to extract inlin
 
 If the developer utilizes the growing list of custom enhancements effectively, the developer will rarely need to use any other feature this package provides, as far as template instantiation.
 
-[TODO]:  Show some examples
+This feature is largely used "behind the scenes", so that the developer need not be aware this feature exists.
+
+It is used in conjunction with be-hive's "beatify.js" function.
+
+<details>
+    <summary>More details on template part caching [TODO]</summary>
+</details>
 
 However, there are scenarios where it isn't practical to insert binding instructions into the HTML we need to instantiate or process.  For that we need:
 
 ## Binding from a distance
 
-*trans-rendering* (TR) describes a methodical way of instantiating a template.  It originally drew inspiration from the (least) popular features of XSLT, but has since evolved to more closely resemble standard CSS.  Like XSLT, TR performs transforms on elements by matching tests on those elements.  TR uses css tests on elements via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
+*trans-rendering* (TR) describes a methodical way of instantiating a template, and updating the DOM that emanated from said template.  It originally drew inspiration from the (least) popular features of XSLT, but has since evolved to more closely resemble standard CSS.  Like XSLT, TR performs transforms on elements by matching tests on those elements.  TR uses css tests on elements via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
 
 TR rests on:
 
 1.  A host that inherits from EventTarget and either contains standard getters/setters, or implements a "propagating" protocol.
-2.  A template that serves as the originator of the DOM structure (optional)
-3.  A template instantiation manifest (TIM), separate from the template itself.  
-4.  A target element to fill and/or update.
-
-The key to trans-rendering is the template instantiation manifest, which will be discussed in detail below.
-
-TR rests on:
-
-1.  A host that inherits from EventTarget and either contains standard getters/setters, or implements a "propagating" protocol.
-2.  A template that serves as the originator of the DOM structure (optional)
+2.  A template that serves as the originator of the DOM structure (optional).
 3.  A template instantiation manifest (TIM), separate from the template itself.  
 4.  A target element to fill and/or update.
 
@@ -247,10 +244,10 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>The last capital letter in the string is a "E", doesn't end with "s"</td><td>flagIconElement</td><td>.querySelector('flag-icon')</td><td></td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "M"</td><td>textContentMarker</td><td>.querySelectorAll('[-text-content]')</td><td>Useful for binding properties in bulk, with minimal syntax.</td>
+        <td>The last capital letter in the string is an "M"</td><td>textContentMarker</td><td>.querySelectorAll('[-text-content]')</td><td>Useful for binding properties in bulk, with minimal syntax.</td>
     </tr>
     <tr>
-        <td>The last capital letter in the string is a "N", ends with "s"</td><td>firstNameNames</td><td>.querySelectorAll('[name="first-name"]')</td><td></td>
+        <td>The last capital letter in the string is an "N", ends with "s"</td><td>firstNameNames</td><td>.querySelectorAll('[name="first-name"]')</td><td></td>
     </tr>
     <tr>
         <td>The last capital letter in the string is a "N", doesn't end with "s"</td><td>firstNameN</td><td>.querySelector('[name="first-name"]')</td><td></td>
