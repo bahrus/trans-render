@@ -23,7 +23,7 @@ export class Hookup extends InstSvc {
         const { isEnh } = config;
         const defaults = { ...args.complexPropDefaults, ...config.propDefaults };
         const { allPropNames, propInfos } = itemizer;
-        if (isEnh) {
+        if (!isEnh) {
             definer.addEventListener(acb, async (e) => {
                 const acbE = e.detail;
                 const { instance, name, newVal, oldVal } = acbE;
