@@ -1,10 +1,10 @@
-
+import {insertAdjacentClone} from './insertAdjacentClone.js';
 /**
  * "Expand" HTMLTemplateElement by replacing special tags with referenced templates
  * @param templ 
  * @param templLookup 
  */
-export async function birtualize(templ: HTMLTemplateElement, templRefs: {[key: string]: HTMLTemplateElement}, templLookup: (key: string) => HTMLTemplateElement | undefined){
+export function birtualize(templ: HTMLTemplateElement, templRefs: {[key: string]: HTMLTemplateElement}, templLookup: (key: string) => HTMLTemplateElement | undefined){
     if(templ.dataset.birtualized) return;
     const {content} = templ;
     const bis = content.querySelectorAll('b-i');
@@ -20,7 +20,7 @@ export async function birtualize(templ: HTMLTemplateElement, templRefs: {[key: s
         }
         
         
-        await birtualize(referencedTempl!, templRefs, templLookup);
+        //await birtualize(referencedTempl!, templRefs, templLookup);
         const clone = document.importNode(referencedTempl!.content, true);
         const slots = bi.querySelectorAll(`[slot-bot]`);
 
@@ -33,6 +33,8 @@ export async function birtualize(templ: HTMLTemplateElement, templRefs: {[key: s
                 slot.remove();
             }
         }
+        // should this go higher, where it is commented out?
+        birtualize(referencedTempl!, templRefs, templLookup);
         const parentElement = bi.parentElement;
         const hintTempl = document.createElement('template');
         hintTempl.dataset.ref = href;
@@ -47,7 +49,7 @@ export async function birtualize(templ: HTMLTemplateElement, templRefs: {[key: s
         if(parentElement !== null && !hasSibling){
             parentElement.append(clone);
         }else{
-            const {insertAdjacentClone} = await import('./insertAdjacentClone.js');
+            //const {insertAdjacentClone} = await import('./insertAdjacentClone.js');
             insertAdjacentClone(clone, hintTempl, 'afterend');
         }
         bi.remove();
