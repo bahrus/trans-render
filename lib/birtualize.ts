@@ -9,23 +9,24 @@ export async function birtualize(templ: HTMLTemplateElement, templRefs: {[key: s
     const {content} = templ;
     const bis = content.querySelectorAll('b-i');
     for(const bi of bis){
-        const {children} = bi;
         const href = bi.getAttribute('href')?.replace('#', '');
         if(!href) continue;
-        const hasChildren = children.length > 0;
-        const slotLookup = new Map<string, Element[]>();
-        if(hasChildren){
-            const childrenArr = Array.from(children);
-            for(const child of childrenArr){
-                const slot = child.getAttribute('slot-bot');
-                if(slot === null) continue; //TODO:  slots with no names
-                if(!slotLookup.has(slot)){
-                    slotLookup.set(slot, []);
-                }
-                const arr = slotLookup.get(slot);
-                arr?.push(child);
-            }
-        }
+        //const {children} = bi;
+        
+        //const hasChildren = children.length > 0;
+        //const slotLookup = new Map<string, Element[]>();
+        // if(hasChildren){
+        //     const childrenArr = Array.from(children);
+        //     for(const child of childrenArr){
+        //         const slot = child.getAttribute('slot-bot');
+        //         if(slot === null) continue; //TODO:  slots with no names
+        //         if(!slotLookup.has(slot)){
+        //             slotLookup.set(slot, []);
+        //         }
+        //         const arr = slotLookup.get(slot);
+        //         arr?.push(child);
+        //     }
+        // }
         let referencedTempl: HTMLTemplateElement | undefined = templRefs[href];
         if(referencedTempl === undefined){
             referencedTempl = templLookup(href);
@@ -36,19 +37,28 @@ export async function birtualize(templ: HTMLTemplateElement, templRefs: {[key: s
         
         await birtualize(referencedTempl!, templRefs, templLookup);
         const clone = document.importNode(referencedTempl!.content, true);
-        if(hasChildren){
-            const slots = slotLookup.keys();
-            for(const slot of slots){
-                const slotTarget = clone.querySelector(`slot-bot[name="${slot}"]`);
-                if(slotTarget === null) continue;
-                slotTarget.innerHTML = ''; // fallback
-                for(const matchingChild of slotLookup.get(slot)!){
-                    matchingChild.removeAttribute('slot-bot');
-                    slotTarget.appendChild(matchingChild)
-                }
+        const slots = bi.querySelectorAll(`[slot-bot]`);
+        // if(hasChildren){
+        //     const slots = slotLookup.keys();
+        //     for(const slot of slots){
+        //         const slotTarget = clone.querySelector(`slot-bot[name="${slot}"]`);
+        //         if(slotTarget === null) continue;
+        //         slotTarget.innerHTML = ''; // fallback
+        //         for(const matchingChild of slotLookup.get(slot)!){
+        //             matchingChild.removeAttribute('slot-bot');
+        //             slotTarget.appendChild(matchingChild)
+        //         }
+        //     }
+        // }
+        for(const slot of slots){
+            const name = slot.getAttribute('slot-bot')!;
+            const target = clone.querySelector(`slot-bot[name="${name}"]`);
+            if(target !== null){
+                target.appendChild(slot);
+            }else{
+                slot.remove();
             }
         }
-        
         const parentElement = bi.parentElement;
         const hintTempl = document.createElement('template');
         hintTempl.dataset.ref = href;
