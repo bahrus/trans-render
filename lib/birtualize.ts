@@ -54,6 +54,7 @@ export function birtualize(templ: HTMLTemplateElement, templRefs: {[key: string]
             if(bi.shadowRoot === null){
                 bi.attachShadow({mode: shadowrootmode as ShadowRootMode});
                 const rootNode = bi.shadowRoot!;
+                rootNode.appendChild(clone);
             }
         }else{
             bi.insertAdjacentElement('afterend', hintTempl);
