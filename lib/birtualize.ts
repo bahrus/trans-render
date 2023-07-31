@@ -41,14 +41,14 @@ export function birtualize(templ: HTMLTemplateElement, templRefs: {[key: string]
         // should this go higher, where it is commented out?
         //birtualize(referencedTempl!, templRefs, templLookup);
         const parentElement = bi.parentElement;
-        const hintTempl = document.createElement('template');
-        hintTempl.dataset.ref = href;
-        hintTempl.dataset.cnt = (clone.childNodes.length + 1).toString(); // includes text nodes, to match what insertAdjacentClone does now
+        // const hintTempl = document.createElement('template');
+        // hintTempl.dataset.ref = href;
+        // hintTempl.dataset.cnt = (clone.childNodes.length + 1).toString(); // includes text nodes, to match what insertAdjacentClone does now
         const names = bi.getAttributeNames();
-        for(const name of names){
-            if(name === 'bi') continue;
-            hintTempl.setAttribute(name, bi.getAttribute(name)!)
-        }
+        // for(const name of names){
+        //     if(name === 'bi') continue;
+        //     hintTempl.setAttribute(name, bi.getAttribute(name)!)
+        // }
         const hasSibling = bi.nextElementSibling !== null;
         if(shadowrootmode !== null){
             if(bi.shadowRoot === null){
@@ -57,12 +57,12 @@ export function birtualize(templ: HTMLTemplateElement, templRefs: {[key: string]
                 rootNode.appendChild(clone);
             }
         }else{
-            bi.insertAdjacentElement('afterend', hintTempl);
+            //bi.insertAdjacentElement('afterend', hintTempl);
             if(parentElement !== null && !hasSibling){
                 parentElement.append(clone);
             }else{
                 //const {insertAdjacentClone} = await import('./insertAdjacentClone.js');
-                insertAdjacentClone(clone, hintTempl, 'afterend');
+                insertAdjacentClone(clone, bi, 'afterend');
             }
             bi.remove();
         }
