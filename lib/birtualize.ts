@@ -20,7 +20,7 @@ export function birtualize(templ: HTMLTemplateElement, templRefs: {[key: string]
         }
         
         
-        //await birtualize(referencedTempl!, templRefs, templLookup);
+        birtualize(referencedTempl!, templRefs, templLookup);
         const clone = document.importNode(referencedTempl!.content, true);
         if(shadowrootmode !== null){
 
@@ -39,7 +39,7 @@ export function birtualize(templ: HTMLTemplateElement, templRefs: {[key: string]
         }
 
         // should this go higher, where it is commented out?
-        birtualize(referencedTempl!, templRefs, templLookup);
+        //birtualize(referencedTempl!, templRefs, templLookup);
         const parentElement = bi.parentElement;
         const hintTempl = document.createElement('template');
         hintTempl.dataset.ref = href;
