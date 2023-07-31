@@ -11,7 +11,7 @@ export function birtualize(templ: HTMLTemplateElement, templRefs: {[key: string]
     for(const bi of bis){
         const href = bi.getAttribute('href')?.replace('#', '');
         if(!href) continue;
-
+        const shadowrootmode = bi.getAttribute('shadowrootmode');
         let referencedTempl: HTMLTemplateElement | undefined = templRefs[href];
         if(referencedTempl === undefined){
             referencedTempl = templLookup(href);
@@ -22,17 +22,22 @@ export function birtualize(templ: HTMLTemplateElement, templRefs: {[key: string]
         
         //await birtualize(referencedTempl!, templRefs, templLookup);
         const clone = document.importNode(referencedTempl!.content, true);
-        const slots = bi.querySelectorAll(`[slot-bot]`);
+        if(shadowrootmode !== null){
 
-        for(const slot of slots){
-            const name = slot.getAttribute('slot-bot')!;
-            const target = clone.querySelector(`slot-bot[name="${name}"]`);
-            if(target !== null){
-                target.appendChild(slot);
-            }else{
-                slot.remove();
+        }else{
+            const slots = bi.querySelectorAll(`[slot-bot]`);
+
+            for(const slot of slots){
+                const name = slot.getAttribute('slot-bot')!;
+                const target = clone.querySelector(`slot-bot[name="${name}"]`);
+                if(target !== null){
+                    target.appendChild(slot);
+                }else{
+                    slot.remove();
+                }
             }
         }
+
         // should this go higher, where it is commented out?
         birtualize(referencedTempl!, templRefs, templLookup);
         const parentElement = bi.parentElement;
@@ -45,14 +50,23 @@ export function birtualize(templ: HTMLTemplateElement, templRefs: {[key: string]
             hintTempl.setAttribute(name, bi.getAttribute(name)!)
         }
         const hasSibling = bi.nextElementSibling !== null;
-        bi.insertAdjacentElement('afterend', hintTempl);
-        if(parentElement !== null && !hasSibling){
-            parentElement.append(clone);
+        if(shadowrootmode !== null){
+            if(bi.shadowRoot === null){
+                bi.attachShadow({mode: shadowrootmode as ShadowRootMode});
+                const rootNode = bi.shadowRoot!;
+            }
         }else{
-            //const {insertAdjacentClone} = await import('./insertAdjacentClone.js');
-            insertAdjacentClone(clone, hintTempl, 'afterend');
+            bi.insertAdjacentElement('afterend', hintTempl);
+            if(parentElement !== null && !hasSibling){
+                parentElement.append(clone);
+            }else{
+                //const {insertAdjacentClone} = await import('./insertAdjacentClone.js');
+                insertAdjacentClone(clone, hintTempl, 'afterend');
+            }
+            bi.remove();
         }
-        bi.remove();
+        
+
     };
     templ.dataset.birtualized = ''
 }
