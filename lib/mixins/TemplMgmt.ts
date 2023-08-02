@@ -67,8 +67,10 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         
         this.#repeatVisit = true;
     }
-
+    #mounted = false;
     async doTemplMount(base: TemplMgmtBase){
+        if(this.#mounted) return;
+        this.#mounted = true;
         const {hydratingTransform, transform, mntCnt, clonedTemplate, shadowRootMode, DTRCtor, homeInOn} = base;
         const fragment = clonedTemplate === undefined ? 
             !shadowRootMode ? this : this.shadowRoot!
