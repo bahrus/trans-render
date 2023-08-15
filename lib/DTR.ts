@@ -33,7 +33,7 @@ export class DTR extends TR{
         const fragment = host!.shadowRoot || host!;
         for(const key of deps){
             const firstToken = key[0] === '.' ? this.getFirstToken(key) : key;
-            const et = isPropagating ? host : await bePropagating(host, firstToken);
+            const et = isPropagating ? (host.xtalState || host) : await bePropagating(host, firstToken);
             et.addEventListener(firstToken, async () => {
                 await this.transform(fragment);
             });

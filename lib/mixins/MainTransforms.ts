@@ -28,7 +28,7 @@ export async function MainTransforms(
                 if(!self.hasAttribute('defer-rendering')){
                     await dtr.transform(fragment);
                 }
-                await dtr.subscribe(!!self._isPropagating);
+                await dtr.subscribe(!!self._isPropagating || !!self.xtalState);
                 if(beJoinable){
                     //this functionality is not yet used.  Waiting 
                     //for a rock-solid use case.  If one is not found by 6/1/2023, will be removed.
