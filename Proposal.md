@@ -35,7 +35,7 @@ This proposal consists of several, somewhat loosely coupled sub-proposals.
 
 1.  Specify some decisions for how microdata would be emitted in certain scenarios.  Described below.
 2.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata encoded HTML to JSON.  However, **the specs for this conversion seem to indicate that the JSON output would be far more verbose than what an application using template instantiation would want**, as it seems to convert to a schema-like representation of the object.  An application would want to be able to reconstruct the simple, exact object structure that was used to generate the output in conjunction with the template bindings.  So one more function would be needed to collapse this generic object representation into a simple POJO, which is easy enough to build in userland.
-3.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for numbers.  "meter" is a nice tag, but maybe a simpler one is also needed for plain old [numbers](https://github.com/whatwg/html/issues/9294).
+3.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for numbers.  "meter" is a nice tag, but maybe a simpler one is also needed for plain old [numbers](https://github.com/whatwg/html/issues/9294).  Enhance [the time tag](https://github.com/whatwg/html/issues/2404).
 4.  Extend the microdata standard to allow specifying itemprops that come from individual attributes, and provide support for it with template instantiation.
 
 So basically, for starters, unless this proposal is *required* for the handshake between server generated HTML and the client template instantiation to work properly, we would need to specify an option when invoking the Template Instantiation API:  **integrateWithMicrodata**.
@@ -71,15 +71,15 @@ I don't think template instantiation needs to care which scenario the developer 
 
 ### Binding to simple primitive values, and simple, non repeating objects with non semantic tags
 
-Let us apply the template to the host object defined above.
+Let's apply the template to the host object defined above.
 
 ```html
 <template>
-    <span>{{name}}</span>
-    <meta content={{name}}>
-    <span>{{eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</span>
-    <span>{{secondsSinceBirth}}</span>
-    <span aria-checked={{isVegetarian}}>{{isVegetarian ? 'Is vegetarian' : 'Is not vegetarian / not specified'}}</span>
+    <span>{{% name }}</span>
+    <meta content={{% name}}>
+    <span>{{% eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</span>
+    <span>{{% secondsSinceBirth}}</span>
+    <span aria-checked={{isVegetarian}}>{{% isVegetarian ? 'Is vegetarian' : 'Is not vegetarian / not specified'}}</span>
     <link href="{{isVegetarian ? 'https://schema.org/True' : 'https://schema.org/False'}}">
     <span>{{isVegetarian}}</span>
     <div  itemscope itemprop=address>
