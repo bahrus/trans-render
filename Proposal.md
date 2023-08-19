@@ -1,8 +1,39 @@
-# Template Instantiation Support for Microdata
+# Template Instantiation Developer Productivity
 
-A good [percentage](https://w3techs.com/technologies/details/da-microdata#:~:text=Microdata%20is%20used%20by,24.2%25%20of%20all%20the%20websites) of websites use [microdata](http://html5doctor.com/microdata/).  It is still lagging behind some competitors which aren't of the whatwg standard, however.  Let's try to fix that!  
+## Support for Microdata, Name and ID attributes, toLocaleString/toLocaleDateString
 
-## Historical backdrop
+Idea for this (updated) proposal partly inspired by [(misreading?) this article](https://eisenbergeffect.medium.com/the-future-of-native-html-templating-and-data-binding-5f3e52fda259).
+
+A common "chore" developers need to perform when binding to forms, is to "repeat oneself" when binding the value and name and id of a form field.  [For example](https://www.freecodecamp.org/news/how-to-build-forms-in-react/):
+
+```JSX
+export default function Multiple() {
+  ...
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="name">Name:</label>
+      <input type="text" id="name" name="name" value={formData.name} onChange={handleChange}/>
+
+      <label htmlFor="email">Email:</label>
+      <input type="email" id="email" name="email" value={formData.email} onChange={handleChange}/>
+
+      <label htmlFor="message">Message:</label>
+      <textarea id="message" name="message" value={formData.message} onChange={handleChange}/>
+
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+The property names "name", "email", "message" are repeated no less than three time per field, causing unnecessary carpel syndrome, and room for errors.
+
+## Microdata support
+
+A good [percentage](https://w3techs.com/technologies/details/da-microdata#:~:text=Microdata%20is%20used%20by,24.2%25%20of%20all%20the%20websites) of websites use [microdata](http://html5doctor.com/microdata/).  It is still lagging behind some competitors which aren't of the WHATWG standard, however.  Let's try to fix that! 
+
+### Historical backdrop
 
 Given the age of the second link above, it is natural to ask the question, why did it take so long for anyone to raise the possibility of integrating template binding with microdata, [at least for a while](https://www.codeproject.com/Articles/233896/ASP-NET-MVC-Add-HTML-Microdata-to-Your-Application)?  Or is there some fatal flaw in even trying?  I was ready to attribute this to a massive market failure on the part of the web development community, including myself, but I don't think the explanation is that simple, thankfully.
 
@@ -10,17 +41,19 @@ What I've learned is that for years, the microdata initiative was in a kind of s
 
 The microdata proposal suffered a significant setback in the early 2010's, and only in the late 2010's did it experience a comeback, and it seems safe now to conclude that microdata has won out, permanently, in terms of built-in integration with the browser.  Some sites haven't [been properly updated](https://caniuse.com/sr_microdata) to reflect that fact, which can partly explain why this comeback seems to have slipped under the development community's radar.
 
-## Nudging developers
+### Nudging developers
 
 I think nudging developers to make use of this [standard](https://html.spec.whatwg.org/multipage/#toc-microdata) by making it super easy and reliable, when working with template instantiation, would have a beneficial impact for the web and society in general.  As we will see, we want to ensure that all bindings are in sync, by avoiding the need to repeat ourselves.  Since what the search engine sees is so difficult to determine, I think it's important to build in that reliability, hence the extra complexity I'm requesting to ensure that we get that reliability.
 
-## Benefits
+### Benefits
 
 At a more mundane level, it could have significant performance benefits. It could allow applications to hydrate without the need for passing down the data separately, and significantly reduce the amount of custom boilerplate in the hydrating code. 
 
 With the help of the semantic tags and microdata attributes, we can [extract](https://html.spec.whatwg.org/multipage/microdata.html#converting-html-to-other-formats) "water from rock", passing the data used by the server to generate the HTML output within attributes of the HTML output, consistent with what the client would generate via the template and applied to the same data.  **The hydration could happen real time as the html streams in**.
 
-## Caveats
+In addition
+
+### Caveats
 
 The biggest cost associated with supporting microdata, is whether *updates* to the HTML should include updates to data tags' value attributes.  Not updating them would have no effect on hydrating, or what the user sees, but might, I suspect, have an impact on limiting search result accuracy and indexing.
 
@@ -29,16 +62,15 @@ The specific syntax of this proposal is just my view of the best way of represen
 Because there's a tiny performance cost to adding microdata to the output, it should perhaps be something that can be opt-in (or opt-out).  But if having microdata contained in the output proves to be so beneficial to the ability of specifying parts and working with streaming declarative shadow DOM, that it makes sense to always integrate with microdata, in my view the performance penalty is worth it, and would do much more good than harm (the harm seems negligible).
 
 
-## Highlights
+### Highlights
 
 This proposal consists of several, somewhat loosely coupled sub-proposals.  
 
-1.  Specify some decisions for how microdata would be emitted in certain scenarios.  Described below.
+1.  Specify some decisions for how microdata and other attributes would be emitted in certain scenarios.  Described below.
 2.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata encoded HTML to JSON.  However, **the specs for this conversion seem to indicate that the JSON output would be far more verbose than what an application using template instantiation would want**, as it seems to convert to a schema-like representation of the object.  An application would want to be able to reconstruct the simple, exact object structure that was used to generate the output in conjunction with the template bindings.  So one more function would be needed to collapse this generic object representation into a simple POJO, which is easy enough to build in userland.
-3.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for numbers.  "meter" is a nice tag, but maybe a simpler one is also needed for plain old [numbers](https://github.com/whatwg/html/issues/9294).  Enhance [the time tag](https://github.com/whatwg/html/issues/2404).
+3.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for numbers.  "meter" is a nice tag, but maybe a simpler one is also needed for plain old [numbers](https://github.com/whatwg/html/issues/9294).  Enhance [the time tag](https://github.com/whatwg/html/issues/2404). This would lighten the load on template instantiation having to make up syntax for extremely common place requirements, and add much needed context for search engines and hydrating code.
 4.  Extend the microdata standard to allow specifying itemprops that come from individual attributes, and provide support for it with template instantiation.
 
-So basically, for starters, unless this proposal is *required* for the handshake between server generated HTML and the client template instantiation to work properly, we would need to specify an option when invoking the Template Instantiation API:  **integrateWithMicrodata**.
 
 ## Simple Object Example
 
@@ -69,31 +101,43 @@ There are two fundamental scenarios to consider:
 
 I don't think template instantiation needs to care which scenario the developer is following.  Despite my initial suspicion that it would be helpful, on reflection, I think we should stay clear of making template instantiation emit any itemtype information beyond what the developer specifies explicitly in the attribute. 
 
+| Symbol | Attribute | Connection                                                                    |
+|--------|-----------|-------------------------------------------------------------------------------|
+| #      | id        | # used by css for id                                                          |
+| @      | itemscope | [scoping css](https://css.oddbird.net/scope/explainer/#proposed-solution)     |
+| &      | name      | Query string uses & to separate field names                                   |
+| i      | itemprop  | First letter of itemprop                                                      |
+
 ### Binding to simple primitive values, and simple, non repeating objects with non semantic tags
 
-Let's apply the template to the host object defined above.
+Let's apply the following template: 
 
 ```html
 <template>
-    <span>{{% name }}</span>
-    <meta content={{% name}}>
-    <span>{{% eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</span>
-    <span>{{% secondsSinceBirth}}</span>
-    <span aria-checked={{isVegetarian}}>{{% isVegetarian ? 'Is vegetarian' : 'Is not vegetarian / not specified'}}</span>
-    <link href="{{isVegetarian ? 'https://schema.org/True' : 'https://schema.org/False'}}">
-    <span>{{isVegetarian}}</span>
-    <div  itemscope itemprop=address>
-        <span>{{street}}</span>
+    <span>{{i name}}</span>
+    <span>{{#i name}}</span>
+    <input value="{{& name}}">
+    <meta content="{{i name}}">
+    <span>{{i eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</span>
+    <span>{{i secondsSinceBirth}}</span>
+    <span aria-checked={{isVegetarian}}>{{i isVegetarian ? 'Is vegetarian' : 'Is not vegetarian' : 'Not specified.'}}</span>
+    <link href="{{i isVegetarian ? 'https://schema.org/True' : 'https://schema.org/False' : ''}}">
+    <span>{{i isVegetarian}}</span>
+    <div  {{@i address}}>
+        <span>{{i street}}</span>
     <div>
-    <span>{{address.zipCode}}</span>
-    <div itemscope>{{address.gpsCoordinates.latitude.toFixed|2}}</div>
+    <span>{{i address.zipCode}}</span>
+    <div {{@i address}}>{{@i gpsCoordinates.latitude.toFixed|2}}</div>
 </template>
 ```
 
-Then with the integrateWithMicrodata setting enabled it would generate (with US as the locale):
+... to the host object defined above.  What template instantiation would emit is:
+
 
 ```html
 <span itemprop=name>Bob</span>
+<span id=name itemprop=name>Bob</span>
+<input name=name value=Bob>
 <meta itemprop=name content=Bob>
 <span><time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>الجمعة، ١٢ مايو ٢٠٢٣</time></span>
 <span><data itemprop=secondsSinceBirth value="1166832000">1,166,832,000</span>
@@ -109,18 +153,17 @@ Then with the integrateWithMicrodata setting enabled it would generate (with US 
 
 All numbers, dates, booleans are, unless specified, emitted to the user via .toLocaleString/toLocaleDateString.
 
-Note that with the nested objects, the divs are actually using microdata bindings in conjunction with moustache syntax.  I initially was using the phrase "emitMicrodata" to describe what this proposal is all about.  But those examples, if template instantiation supports them, kind of burst through that initial understanding.  It is doing more than emitting.  So assuming those examples hold, the correct phrase should be integrateWithMicrodata.
-
 If expressions involve more than one property, I think here we should leave it up the developer to provide the needed tags (including meta) to provide the needed microdata reflection.
 
 For the aria-checked property, if the value of isVegetarian is true/false, set the value to isVegetarian.toString().  Otherwise, set it to "mixed".
- 
+
+This proposal is also advocating support for "quaternio" conditional expressions (true/false/other). 
 
 Now let's talk about the dreaded interpolation scenario.
 
 ```html
 <template>
-    <div>Hello {{name}}, the event will begin at {{eventDate}}</div>
+    <div>Hello {{i name}}, the event will begin at {{i eventDate}}</div>
 </template>
 ```
 
