@@ -192,16 +192,16 @@ It often arises that the id for one element should be dynamic, and another eleme
 
 Examples are the label's for attribute, numerous aria- attributes, and microdata's itemref attributes.
 
-Suggested [syntax](https://github.com/behowell/aom/blob/element-handles-explainer/element-handles-explainer.md):
-
 ```html
 <template>
-    <span
-    role="checkbox"
-    aria-checked="false"
-    tabindex="0"
-    aria-labelledby="{{handle(my-handle)}}"></span>
-    <span handle=my-handle id="terms_and_conditions_{{item_id}}">I agree to the Terms and Conditions.</span>
+    {{foreach items}}
+        <span
+        role="checkbox"
+        aria-checked="false"
+        tabindex="0"
+        aria-labelledby="{{idref(.my-class)}}"></span>
+        <span class=my-class id="terms_and_conditions_{{item_id}}">I agree to the Terms and Conditions.</span>
+    {{/foreach}}
 </template>
 ```
 
@@ -213,35 +213,41 @@ This would generate:
     aria-checked="false"
     tabindex="0"
     aria-labelledby="terms_and_conditions_17811"></span>
-    <span handle=my-handle id="terms_and_conditions_17811">I agree to the Terms and Conditions.</span>
+<span class=my-class id="terms_and_conditions_17811">I agree to the Terms and Conditions.</span>
 ```
+
+So the css query must be carefully performed within the foreach block of tags.
+
+Note that the handle proposal linked above relies on each handle being unique within the Shadow DOM.  That poses a problem for dynamic lists, with id's.
 
 ### Referential support with auto-generated id's.
 
 ```html
 <template>
-    <span
-    role="checkbox"
-    aria-checked="false"
-    tabindex="0"
-    aria-labelledby="{{handle(my-handle)}}"></span>
-    <span handle=my-handle id={{generate-id()}}>I agree to the Terms and Conditions.</span>
+    {{foreach items}}
+        <span
+        role="checkbox"
+        aria-checked="false"
+        tabindex="0"
+        aria-labelledby="{{idref(.my-class)}}"></span>
+        <span class=my-class id={{generate-id()}}>I agree to the Terms and Conditions.</span>
+    {{/foreach }}
 </template>
 ```
 
 ## Conditions
 
-Suppose we want a conditional to output more than one root element.  In this case, we could use a template wrapper around the conditional content:
+Suppose we want a conditional to output more than one root element.
 
 ```html
 <template>
     <ul>
-        <template itemscope itemprop=USAddress itemref="{{if IsUSAddress}}">
-            <li id=name>{{addresseeName}}</li>
-            <ul itemscope itemprop=Address>
+        {{@ if IsUsAddress}}
+            <li itemref={{handle(my-ui-handle)}}>{{i addresseeName}}</li>
+            <ul handle=my-ui-handle id={{generate-id()}} itemscope itemprop=Address>
                 <li>{{StreetAddress}}</li>
             </ul>
-        </template>
+        {{/if}}
     </ul>
 </template>     
 ```
