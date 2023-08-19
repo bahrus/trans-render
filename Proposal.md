@@ -218,8 +218,6 @@ This would generate:
 
 So the css query must be carefully performed within the foreach block of tags.
 
-Note that the handle proposal linked above relies on each handle being unique within the Shadow DOM.  That poses a problem for dynamic lists, with id's.
-
 ### Referential support with auto-generated id's.
 
 ```html
@@ -235,16 +233,18 @@ Note that the handle proposal linked above relies on each handle being unique wi
 </template>
 ```
 
-## Conditions
+## Conditions with microdata
 
 Suppose we want a conditional to output more than one root element.
+
+### Solution 1:  With considerable tender loving care from the developer
 
 ```html
 <template>
     <ul>
-        {{@ if IsUsAddress}}
-            <li itemref={{handle(my-ui-handle)}}>{{i addresseeName}}</li>
-            <ul handle=my-ui-handle id={{generate-id()}} itemscope itemprop=Address>
+        {{if IsUsAddress}}
+            <li {{@i USAddress}}  itemref={{itemref(ul)}}>{{i addresseeName}}</li>
+            <ul id={{generate-id()}} itemscope itemprop=Address>
                 <li>{{StreetAddress}}</li>
             </ul>
         {{/if}}
@@ -252,19 +252,39 @@ Suppose we want a conditional to output more than one root element.
 </template>     
 ```
 
-Template instantiation with integrateMicrodata would emit:
+Would generate:
 
 ```html
 <ul>
-    <template itemscope itemprop=USAddress itemref="name a5a116a19-263d-4d89-8e9c-45b0b8ba77de"></template>
-    <li itemprop=addresseeName id=name>Bob</li>
+    <li itemscope itemprop=USAddress itemref=a5a116a19-263d-4d89-8e9c-45b0b8ba77de><span itemprop=addresseeName>Bob</span></li>
     <ul id="a5a116a19-263d-4d89-8e9c-45b0b8ba77de" itemscope itemprop=Address>
         <li itemprop=StreetAddress>123 Penny Lane</li>
     </ul>
 </ul>
 ```
 
-So we use itemref to maintain a hierarchical tree logical structure, even though the DOM structure is flat.  Leaving the template element in the output may make it easier to implement logic to recreate the DOM elements when the condition becomes false, then true again (if the previous content is deleted).  So even if the performance is slightly worse than a meta tag on the initial render, I suspect the simplicity and even performance may argue in favor of keeping the template element.  It is also more transparent how the rendered content relates to the original template.
+So we use itemref to maintain a hierarchical tree logical structure, even though the DOM structure is flat. 
+
+### Solution 2:  Relieving the developer from managing itemref:
+
+The following would require more "thinking on its feet" from the template instantiation engine:
+
+```html
+<template>
+    <ul>
+        {{if IsUsAddress}}
+            <li {{@i USAddress}}>{{i addresseeName}}</li>
+            <ul itemscope itemprop=Address>
+                <li>{{StreetAddress}}</li>
+            </ul>
+        {{/if}}
+    </ul>
+</template>     
+```
+
+So the template instantiation would automatically add id={{generate-id()}} to all but the first element inside the condition, unless the developer specifies an id.
+
+The template instantiation engine would automatically set the itemref attribute of the first element inside the condition, which would be a space delimited list of all the other id's within the condition.
 
 ## Loops
 
