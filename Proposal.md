@@ -1,8 +1,10 @@
-# Template Instantiation Developer Productivity
+# Template Instantiation Developer Productivity Proposal
+
+The following outlines some productivity (and higher reliability) enhancement proposals that would make template instantiation more effective.
 
 ## Support for Microdata, Name and ID attributes, toLocaleString/toLocaleDateString
 
-Idea for this (updated) proposal partly inspired by [(misreading?) this article](https://eisenbergeffect.medium.com/the-future-of-native-html-templating-and-data-binding-5f3e52fda259).
+Idea for this (updated) section of the proposal is partly inspired by [(misreading?) this article](https://eisenbergeffect.medium.com/the-future-of-native-html-templating-and-data-binding-5f3e52fda259).
 
 A common "chore" developers need to perform when binding to forms, is to "repeat oneself" when binding the value and name and id of a form field.  [For example](https://www.freecodecamp.org/news/how-to-build-forms-in-react/):
 
@@ -51,8 +53,6 @@ At a more mundane level, it could have significant performance benefits. It coul
 
 With the help of the semantic tags and microdata attributes, we can [extract](https://html.spec.whatwg.org/multipage/microdata.html#converting-html-to-other-formats) "water from rock", passing the data used by the server to generate the HTML output within attributes of the HTML output, consistent with what the client would generate via the template and applied to the same data.  **The hydration could happen real time as the html streams in**.
 
-In addition
-
 ### Caveats
 
 The biggest cost associated with supporting microdata, is whether *updates* to the HTML should include updates to data tags' value attributes.  Not updating them would have no effect on hydrating, or what the user sees, but might, I suspect, have an impact on limiting search result accuracy and indexing.
@@ -67,9 +67,11 @@ Because there's a tiny performance cost to adding microdata to the output, it sh
 This proposal consists of several, somewhat loosely coupled sub-proposals.  
 
 1.  Specify some decisions for how microdata and other attributes would be emitted in certain scenarios.  Described below.
-2.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata encoded HTML to JSON.  However, **the specs for this conversion seem to indicate that the JSON output would be far more verbose than what an application using template instantiation would want**, as it seems to convert to a schema-like representation of the object.  An application would want to be able to reconstruct the simple, exact object structure that was used to generate the output in conjunction with the template bindings.  So one more function would be needed to collapse this generic object representation into a simple POJO, which is easy enough to build in userland.
-3.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for numbers.  "meter" is a nice tag, but maybe a simpler one is also needed for plain old [numbers](https://github.com/whatwg/html/issues/9294).  Enhance [the time tag](https://github.com/whatwg/html/issues/2404). This would lighten the load on template instantiation having to make up syntax for extremely common place requirements, and add much needed context for search engines and hydrating code.
-4.  Extend the microdata standard to allow specifying itemprops that come from individual attributes, and provide support for it with template instantiation.
+2.  Support for quaternion expressions.
+3.  Support for dynamic id management.
+4.  Provide a built-in function that can [convert](https://html.spec.whatwg.org/multipage/microdata.html#json) microdata encoded HTML to JSON.  However, **the specs for this conversion seem to indicate that the JSON output would be far more verbose than what an application using template instantiation would want**, as it seems to convert to a schema-like representation of the object.  An application would want to be able to reconstruct the simple, exact object structure that was used to generate the output in conjunction with the template bindings.  So one more function would be needed to collapse this generic object representation into a simple POJO, which is easy enough to build in userland.
+5.  Add [semantic tags](https://github.com/whatwg/html/issues/8693) for numbers.  "meter" is a nice tag, but maybe a simpler one is also needed for plain old [numbers](https://github.com/whatwg/html/issues/9294).  Enhance [the time tag](https://github.com/whatwg/html/issues/2404). This would lighten the load on template instantiation having to make up syntax for extremely common place requirements, and add much needed context for search engines and hydrating code.
+6.  Extend the microdata standard to allow specifying itemprops that come from individual attributes, and provide support for it with template instantiation.
 
 
 ## Simple Object Example
@@ -101,12 +103,16 @@ There are two fundamental scenarios to consider:
 
 I don't think template instantiation needs to care which scenario the developer is following.  Despite my initial suspicion that it would be helpful, on reflection, I think we should stay clear of making template instantiation emit any itemtype information beyond what the developer specifies explicitly in the attribute. 
 
+## Suggested symbol shortcuts
+
 | Symbol | Attribute | Connection                                                                    |
 |--------|-----------|-------------------------------------------------------------------------------|
 | #      | id        | # used by css for id                                                          |
 | @      | itemscope | [scoping css](https://css.oddbird.net/scope/explainer/#proposed-solution)     |
 | &      | name      | Query string uses & to separate field names                                   |
 | i      | itemprop  | First letter of itemprop                                                      |
+
+
 
 ### Binding to simple primitive values, and simple, non repeating objects with non semantic tags
 
@@ -157,13 +163,13 @@ If expressions involve more than one property, I think here we should leave it u
 
 For the aria-checked property, if the value of isVegetarian is true/false, set the value to isVegetarian.toString().  Otherwise, set it to "mixed".
 
-This proposal is also advocating support for "quaternio" conditional expressions (true/false/other). 
+This proposal is also advocating support for "quaternio" conditional expressions (condition ? true : false : other). 
 
 Now let's talk about the dreaded interpolation scenario.
 
 ```html
 <template>
-    <div>Hello {{i name}}, the event will begin at {{i eventDate}}</div>
+    <div>Hello {{i name}}, the event will begin at {{i eventDate}}.</div>
 </template>
 ```
 
@@ -171,12 +177,57 @@ Now let's talk about the dreaded interpolation scenario.
 This would generate:
 
 ```html
-<div>Hello <span itemprop=name>Bob</span>, the event will begin at <time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>11/18/2011</time></div>
+<div>Hello <span itemprop=name>Bob</span>, the event will begin at <time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>11/18/2011</time>.</div>
 ```
 
 Should there exist, in the future, a semantic tag for numbers and booleans, the template instantiation would use it, but we would need to "enable" it for backwards compatibility.  For now, use data tags for numbers and booleans, span's for string values, and time for dates.
 
 What this example demonstrates is we apparently don't need the use of ranges, when performing interpolation, if we want to support microdata.  If there is a significant performance benefit to using ranges, with meta tags, or link tags for binaries, that could be used as an alternative (that was my original thought on this question).  If the performance difference is tiny, I think the simplicity argument should prevail.
+
+## id management
+
+### Referential support with user specified reference id.
+
+It often arises that the id for one element should be dynamic, and another element needs to reference this dynamic value.
+
+Examples are the label's for attribute, numerous aria- attributes, and microdata's itemref attributes.
+
+Suggested [syntax](https://github.com/behowell/aom/blob/element-handles-explainer/element-handles-explainer.md):
+
+```html
+<template>
+    <span
+    role="checkbox"
+    aria-checked="false"
+    tabindex="0"
+    aria-labelledby="{{handle(my-handle)}}"></span>
+    <span handle=my-handle id="terms_and_conditions_{{item_id}}">I agree to the Terms and Conditions.</span>
+</template>
+```
+
+This would generate:
+
+```html
+<span
+    role="checkbox"
+    aria-checked="false"
+    tabindex="0"
+    aria-labelledby="terms_and_conditions_17811"></span>
+    <span handle=my-handle id="terms_and_conditions_17811">I agree to the Terms and Conditions.</span>
+```
+
+### Referential support with auto-generated id's.
+
+```html
+<template>
+    <span
+    role="checkbox"
+    aria-checked="false"
+    tabindex="0"
+    aria-labelledby="{{handle(my-handle)}}"></span>
+    <span handle=my-handle id={{generate-id()}}>I agree to the Terms and Conditions.</span>
+</template>
+```
 
 ## Conditions
 
