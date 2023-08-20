@@ -286,6 +286,8 @@ So the template instantiation would automatically add id={{generate-id()}} to al
 
 The template instantiation engine would automatically set the itemref attribute of the first element inside the condition, which would be a space delimited list of all the other id's within the condition.
 
+In the following section, we assume the template instantiation engine is able to apply this sophisticated logic (easy the burden on the developer.)
+
 ## Loops
 
 The scenarios get a bit complicated here.  What follows assumes that the developer wants to be able to "reverse engineer" the output, and be able to guarantee they can distinguish between content that came from a loop, vs. content that came from a single sub property.  In what follows, I assume the tougher case.  If no such requirements exist, the developer can drop specifying the itemtype.
@@ -314,11 +316,14 @@ Suppose we have a list of todo items:
 
 ```html
 <template>
-    <ul itemscope itemtype=https://schema.org/ItemList>
-        <li itemscope itemprop="{{itemListElement of todos}}" itemtype="https://mywebsite.com.com/TODOItemSchema.json">
-            <div>{{itemListElement.todo}}</div>
-        </li>
+    <ul itemtype=https://schema.org/ItemList>
+        {{ foreach @i itemListElement of @i todos}}
+            <li itemtype="https://mywebsite.com.com/TODOItemSchema.json">
+                <div>{{i itemListElement.todo}}</div>
+            </li>
+        {{/foreach}}
     </ul>
+    
 </template>
 ```
 
@@ -335,17 +340,19 @@ would [generate](https://schema.org/ItemList):
 
 I *think* now when hydrating, even when there's a single child list item, that we can tell we are working with an array of items, rather than a sub property.  All of the types pointing to schema.org and to mywebsite.com are optional.  I don't think template instantiation would need them for anything.
 
-## Creating artificial hierarchies with itemref
+## Creating artificial hierarchies with itemref and loops
+
+Similar to the conditional:
 
 ```html
 <template >
-<dl itemscope itemtype=https://schema.org/ItemList>
-    <template>
-        <dt itemscope itemtype=https://mywebsite.com/Monster.json itemprop="{{itemListElement of monsters}}" itemref={{itemListElement.id}}_description>
+<dl itemtype=https://schema.org/ItemList>
+    {{ foreach @i itemListElement of @i monsters }}
+        <dt itemscope itemtype=https://mywebsite.com/Monster.json>
             <span>{{itemListElement.name}}</span>
         </dt>
         <dd id={{itemListElement.id}}_description>{{itemListElement.description}}</dd>
-    </template>
+    {{/foreach}}
 </dl>
 </template>
 ```
@@ -372,77 +379,12 @@ would generate:
 </dl>
 ```
 
-An open question here is whether template instantiation could provide any shortcuts for specifying this itemref/id pairing, so they are guaranteed to stay in sync?
-
-Suggested syntax for that shortcut:
-
-```html
-<template >
-<dl itemscope itemtype=https://schema.org/ItemList>
-    <template>
-        <dt  itemtype=https://mywebsite.com/Monster.json itemprop="{{itemListElement of monsters}}" itemref={{#dd}}>
-            <span>{{itemListElement.name}}</span>
-        </dt>
-        <dd id={{itemListElement.id}}_description>{{itemListElement.description}}</dd>
-    </template>
-</dl>
-</template>
-```
-
-Basically, the itemref attribute would be populated with a space delimited list of id's from the dd elements in rhe template.
-
-Similarly for grouped table rows:
-
-```html
-<template>
-    <table itemscope itemtype=https://schema.org/ItemList>
-        <tbody>
-            <template>
-                <tr itemprop="{{itemListElement of items}}" itemref={{itemListElement.id}}_even class=odd>
-                    <td>{{itemListElement.to}}</td>
-                    <td>{{itemListElement.from}}</td>
-                </tr>
-                <tr id={{itemListElement.id}}_even class=even>
-                    <td>{{itemListElement.subject}}</td>
-                    <td>{{itemListElement.message}}</td>
-                </tr>
-            <template>
-        </tbody>
-    </table>
-</template>
-```
-
-would generate:
-
-```html
-<table>
-    <tbody itemscope itemprop=items itemtype=https://schema.org/ItemList>
-        <tr itemref=first_item itemscope itemprop=itemListElement itemtype=https://mywebsite.com/Message.json class=odd>
-            <td itemprop=to>Foo</td>
-            <td itemprop=from>Bar</td>
-        </tr>
-        <tr id=first_item_even class=even>
-            <td itemprop=subject>Baz</td>
-            <td itemprop=message>Qux</td>
-        </tr>
-        
-        <tr itemref=second_item itemscope itemprop=itemListElement itemtype=https://mywebsite.com/Message.json class=odd>
-            <td itemprop=to>Quux</td>
-            <td itemprop=from>Quuz</td>
-        </tr>
-        <tr id=second_item_even class=even>
-            <td itemprop=subject>Corge</td>
-            <td itemprop=message>Grault</td>
-        </tr>
-    </tbody>
-</table>
-```
 
 ## Conveying searchable content via attributes.
 
-One limitation of microdata, is that much useful information is conveyed from the server in attributes, such as alt, title, value and data-*, and there is no way to specify itemprops for those attributes.
+One serious limitation of the microdata standard, is that much useful information is conveyed from the server in attributes, such as alt, title, value and data-*, and there is no way to specify itemprops for those attributes.
 
-Suppose whatwg adopted another microdata attribute, say itempropmap, that would allow us to provide more useful information:
+Suppose WHATWG adopted another microdata attribute, say itempropmap, that would allow us to provide more useful information:
 
 
 ```html
@@ -457,7 +399,7 @@ Template instantiation could help generate these mappings with reliability:
 
 ```html
 <template>
-    <img alt={{imageDescription}} data-date-of-image={{imageDateTime}}>
+    <img alt="{{i imageDescription}}" data-date-of-image="{{i imageDateTime}}">
 </template>
 ```
 
