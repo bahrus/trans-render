@@ -31,6 +31,8 @@ export default function Multiple() {
 
 The property names "name", "email", "message" are repeated no less than three time per field, causing unnecessary carpel syndrome, and room for errors.
 
+So eliminating this unreliability caused by needing to keep all three in sync would be a great benefit.  Especially if the same idea could be extended to at least one additional attribute:  itemprop.  I.e. it would be great if template instantiation provided...
+
 ## Microdata support
 
 A good [percentage](https://w3techs.com/technologies/details/da-microdata#:~:text=Microdata%20is%20used%20by,24.2%25%20of%20all%20the%20websites) of websites use [microdata](http://html5doctor.com/microdata/).  It is still lagging behind some competitors which aren't of the WHATWG standard, however.  Let's try to fix that! 
@@ -105,6 +107,8 @@ I don't think template instantiation needs to care which scenario the developer 
 
 ## Suggested symbol shortcuts
 
+As mentioned above, what we want to do is allow developers to easily emit the name of the property they are binding to to various attributes of the element.  Each attribute binding would be specified by a single character in the binding instruction, to keep this added support light and small.  Suggested symbols are below:
+
 | Symbol | Attribute | Connection                                                                    |
 |--------|-----------|-------------------------------------------------------------------------------|
 | #      | id        | # used by css for id                                                          |
@@ -112,7 +116,7 @@ I don't think template instantiation needs to care which scenario the developer 
 | &      | name      | Query string uses & to separate field names                                   |
 | i      | itemprop  | First letter of itemprop                                                      |
 
-
+Let's see some examples of this in action:
 
 ### Binding to simple primitive values, and simple, non repeating objects with non semantic tags
 
@@ -159,11 +163,11 @@ Let's apply the following template:
 
 All numbers, dates, booleans are, unless specified, emitted to the user via .toLocaleString/toLocaleDateString.
 
-If expressions involve more than one property, I think here we should leave it up the developer to provide the needed tags (including meta) to provide the needed microdata reflection.
+If expressions involve more than one property, I think here we should leave it up to the developer to provide the needed tags (including meta) to provide the desired microdata reflection.
 
 For the aria-checked property, if the value of isVegetarian is true/false, set the value to isVegetarian.toString().  Otherwise, set it to "mixed".
 
-This proposal is also advocating support for "quaternio" conditional expressions (condition ? true : false : other). 
+This proposal is also advocating support for "quaternio" conditional expressions (condition ? === true : === false : other). 
 
 Now let's talk about the dreaded interpolation scenario.
 
@@ -192,6 +196,8 @@ It often arises that the id for one element should be dynamic, and another eleme
 
 Examples are the label's for attribute, numerous aria- attributes, and microdata's itemref attributes.
 
+To help with this, I propose:
+
 ```html
 <template>
     {{foreach items}}
@@ -205,7 +211,7 @@ Examples are the label's for attribute, numerous aria- attributes, and microdata
 </template>
 ```
 
-This would generate:
+... would generate:
 
 ```html
 <span
@@ -244,7 +250,7 @@ Suppose we want a conditional to output more than one root element.
     <ul>
         {{if IsUsAddress}}
             <li {{@i USAddress}}  itemref={{itemref(ul)}}>{{i addresseeName}}</li>
-            <ul id={{generate-id()}} itemscope itemprop=Address>
+            <ul id={{generate-id()}} {{@i Address}}>
                 <li>{{StreetAddress}}</li>
             </ul>
         {{/if}}
@@ -252,7 +258,7 @@ Suppose we want a conditional to output more than one root element.
 </template>     
 ```
 
-Would generate:
+... would generate:
 
 ```html
 <ul>
@@ -274,7 +280,7 @@ The following would require more "thinking on its feet" from the template instan
     <ul>
         {{if IsUsAddress}}
             <li {{@i USAddress}}>{{i addresseeName}}</li>
-            <ul itemscope itemprop=Address>
+            <ul {{@i Address}}>
                 <li>{{StreetAddress}}</li>
             </ul>
         {{/if}}
@@ -282,7 +288,7 @@ The following would require more "thinking on its feet" from the template instan
 </template>     
 ```
 
-So the template instantiation would automatically add id={{generate-id()}} to all but the first element inside the condition, unless the developer specifies an id.
+So the template instantiation would automatically add the equivalent of id={{generate-id()}} to all but the first element inside the condition, unless the developer specifies an id.
 
 The template instantiation engine would automatically set the itemref attribute of the first element inside the condition, which would be a space delimited list of all the other id's within the condition.
 
