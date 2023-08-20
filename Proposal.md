@@ -63,7 +63,6 @@ The specific syntax of this proposal is just my view of the best way of represen
 
 Because there's a tiny performance cost to adding microdata to the output, it should perhaps be something that can be opt-in (or opt-out).  But if having microdata contained in the output proves to be so beneficial to the ability of specifying parts and working with streaming declarative shadow DOM, that it makes sense to always integrate with microdata, in my view the performance penalty is worth it, and would do much more good than harm (the harm seems negligible).
 
-
 ### Highlights
 
 This proposal consists of several, somewhat loosely coupled sub-proposals.  
@@ -241,17 +240,18 @@ So the css query must be carefully performed within the foreach block of tags.
 
 ## Conditions with microdata
 
-Suppose we want a conditional to output more than one root element.
+Suppose we want a conditional to output more than one root element.  It's unclear to me what the final outcome will be as far as whether built-in template instantiation will use some "marker" in the live DOM tree that can be used to remember the contents of the template from which the conditional content derived.  Such a marker could be useful, if the condition changes to be false, and the conditional content is removed, and then the condition changes back to true.  Perhaps built-in template instantiation could be smart enough to do this without any markers in the live DOM tree.  We assume below that template instantiation would rely on such a marker, and suggest that that marker be an empty template element (with the already parsed "content" stored in some memory location, so that no parsing of the inner HTML would be required).
 
-### Solution 1:  With considerable tender loving care from the developer
+If no such markers are needed, then it seems to me there will be some inevitable loss of information as far as microdata is concerned, and as far as "reverse engineering" the output in order to infer the template is concerned.  But if the performance improvement from not needing a marker is significant enough, that should probably trump concerns about loss of information.
+
 
 ```html
 <template>
     <ul>
-        {{if IsUsAddress}}
-            <li {{@i USAddress}}  itemref={{itemref(ul)}}>{{i addresseeName}}</li>
-            <ul id={{generate-id()}} {{@i Address}}>
-                <li>{{StreetAddress}}</li>
+        {{if IsUSAddress @i USAddress}}
+            <li>{{@i addresseeName}}</li>
+            <ul {{@i Address}}>
+                <li>{{i StreetAddress}}</li>
             </ul>
         {{/if}}
     </ul>
@@ -262,8 +262,9 @@ Suppose we want a conditional to output more than one root element.
 
 ```html
 <ul>
-    <li itemscope itemprop=USAddress itemref=a5a116a19-263d-4d89-8e9c-45b0b8ba77de><span itemprop=addresseeName>Bob</span></li>
-    <ul id="a5a116a19-263d-4d89-8e9c-45b0b8ba77de" itemscope itemprop=Address>
+    <template itemscope itemprop="USAddress" itemref="a23241 c72389"></template>
+    <li id="a23241" itemprop=addresseeName>Bob</li>
+    <ul id="c72389" itemscope itemprop=Address>
         <li itemprop=StreetAddress>123 Penny Lane</li>
     </ul>
 </ul>
@@ -271,28 +272,9 @@ Suppose we want a conditional to output more than one root element.
 
 So we use itemref to maintain a hierarchical tree logical structure, even though the DOM structure is flat. 
 
-### Solution 2:  Relieving the developer from managing itemref:
+Also, the template instantiation would automatically add the equivalent of id={{generate-id()}} to all elements inside the condition, unless the developer specifies an id.
 
-The following would require more "thinking on its feet" from the template instantiation engine:
-
-```html
-<template>
-    <ul>
-        {{if IsUsAddress}}
-            <li {{@i USAddress}}>{{i addresseeName}}</li>
-            <ul {{@i Address}}>
-                <li>{{StreetAddress}}</li>
-            </ul>
-        {{/if}}
-    </ul>
-</template>     
-```
-
-So the template instantiation would automatically add the equivalent of id={{generate-id()}} to all but the first element inside the condition, unless the developer specifies an id.
-
-The template instantiation engine would automatically set the itemref attribute of the first element inside the condition, which would be a space delimited list of all the other id's within the condition.
-
-In the following section, we assume the template instantiation engine is able to apply this sophisticated logic (easy the burden on the developer.)
+In the interest of openness, let me confess that even with the help of this template marker, there is a loss of information:  It is unclear from the output that the contents were displayed because the condition "IsUSAddress" evaluated to be true.
 
 ## Loops
 
