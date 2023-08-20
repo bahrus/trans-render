@@ -274,7 +274,7 @@ So we use itemref to maintain a hierarchical tree logical structure, even though
 
 Also, the template instantiation would automatically add the equivalent of id={{generate-id()}} to all elements inside the condition, unless the developer specifies an id.
 
-In the interest of openness, let me confess that even with the help of this template marker, there is a loss of information:  It is unclear from the output that the contents were displayed because the condition "IsUSAddress" evaluated to be true.
+In the interest of openness, let me confess that even with the help of this template marker, there is a loss of information:  It is unclear from the output that the contents were displayed because the condition "IsUSAddress" evaluated to be true.  I'm currently stumped how to represent this based on existing standards.
 
 ## Loops
 
