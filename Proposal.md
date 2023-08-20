@@ -29,7 +29,7 @@ export default function Multiple() {
 }
 ```
 
-The property names "name", "email", "message" are repeated no less than three time per field, causing unnecessary carpel syndrome, and room for errors.
+The property names "name", "email", "message" are repeated no less than three time per field, causing unnecessary carpal syndrome, and room for errors.
 
 So eliminating this unreliability caused by needing to keep all three in sync would be a great benefit.  Especially if the same idea could be extended to at least one additional attribute:  itemprop.  I.e. it would be great if template instantiation provided...
 
