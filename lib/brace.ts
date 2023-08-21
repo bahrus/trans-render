@@ -42,3 +42,19 @@ export function getPartVals(val: string, parts: Parts){
     }
     return vals;
 }
+
+export function getParsedObject(val: string, parts: Parts){
+    const partVals = getPartVals(val, parts);
+    let cnt = 0;
+    const parsedObject: any = {};
+    for(const part of parts){
+        switch(typeof part){
+            case 'object':
+                parsedObject[part[0]] = partVals[cnt];
+                cnt++;
+                break;
+
+        }
+    }
+    return parsedObject;
+}
