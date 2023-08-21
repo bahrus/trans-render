@@ -29,3 +29,16 @@ export function getBounds(val: string, parts: Parts){
     }
     return boundaries;
 }
+
+export function getPartVals(val: string, parts: Parts){
+    const boundaries = getBounds(val, parts);
+    const vals = [];
+    for(let i = 0, ii = boundaries.length - 1; i< ii;  i++){
+        const boundary = boundaries[i];
+        const boundaryPlusOne = boundaries[i + 1];
+        const start = boundary[1];
+        const end = boundaryPlusOne[0];
+        vals.push(val.substring(start, end));
+    }
+    return vals;
+}
