@@ -731,5 +731,13 @@ export interface ICtxNav<T = any> extends ICTXNavRecursive<T>, ICTXNavElement, I
     xtalState(): Promise<EventTarget | undefined>;
 }
 
+export type ConstString = String;
+
+export type NameOfProp = string;
+
+export type StringOrProp = ConstString | [NameOfProp, PropInfo];
+
+export type Parts = Array<StringOrProp>;
+
 
 
