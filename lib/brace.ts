@@ -15,3 +15,17 @@ export function toParts(expr: string){
     }
     return parts;
 }
+
+export function getBounds(val: string, parts: Parts){
+    const boundaries = [];
+    let cursorPos = 0;
+    for(const part of parts){
+        switch(typeof part){
+            case 'string':
+                cursorPos = val.indexOf(part, cursorPos);
+                boundaries.push([cursorPos, cursorPos + part.length]);
+                cursorPos += part.length;
+        }
+    }
+    return boundaries;
+}
