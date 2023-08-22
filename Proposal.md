@@ -166,7 +166,7 @@ If expressions involve more than one property, I think here we should leave it u
 
 For the aria-checked property, if the value of isVegetarian is true/false, set the value to isVegetarian.toString().  Otherwise, set it to "mixed".
 
-This proposal is also advocating support for "quaternio" conditional expressions (condition ? === true : === false : other). 
+This proposal is also advocating support for "quaternion" conditional expressions (condition ? === true : === false : other). 
 
 Now let's talk about the dreaded interpolation scenario.
 
