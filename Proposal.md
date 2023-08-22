@@ -135,7 +135,7 @@ Let's apply the following template:
     <div  {{@i address}}>
         <span>{{i street}}</span>
     <div>
-    <span>{{i address.zipCode}}</span>
+    <span>{{@i address.zipCode}}</span>
     <div {{@i address}}>{{@i gpsCoordinates.latitude.toFixed|2}}</div>
 </template>
 ```
@@ -156,7 +156,7 @@ Let's apply the following template:
 <div itemscope itemprop=address>
     <span itemprop=street>123 Penny Lane</span>
 </div>
-<span itemprop=address><span itemprop=zipCode>12345</span></span>
+<span itemscope itemprop=address><span itemprop=zipCode>12345</span></span>
 <div itemscope itemprop=address><span itemscope itemprop=gpsCoordinates><data itemprop=latitude value=35.77804334830908>35.78</data></span></div>
 ```
 
