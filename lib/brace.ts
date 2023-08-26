@@ -22,14 +22,12 @@ export function getBounds(val: string, parts: Parts){
     for(const part of parts){
         switch(typeof part){
             case 'string':
-                console.log(part);
                 cursorPos = val.indexOf(part, cursorPos);
                 if(part === '') continue;
                 boundaries.push([cursorPos, cursorPos + part.length]);
                 cursorPos += part.length;
         }
     }
-    console.log({boundaries});
     return boundaries;
 }
 
@@ -57,14 +55,11 @@ export function getPartVals(val: string, parts: Parts){
  
             const end = boundaryPlusOne[0];
             const betweenBoundaries = val.substring(start, end);
-            if(betweenBoundaries === '') debugger;
             vals.push(betweenBoundaries);
         }
         
     }
-    //debugger;
-    //const restStart = boundaryPlusOne[1];
-    //vals.push(val.substring(restStart));
+
     return vals;
 }
 
