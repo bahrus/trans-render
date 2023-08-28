@@ -25,11 +25,11 @@ export function birtualize(templ: HTMLTemplateElement, templRefs: {[key: string]
         if(shadowrootmode !== null){
 
         }else{
-            const slots = bi.querySelectorAll(`[slot-bot]`);
+            const slots = bi.querySelectorAll(`[slot]`);
 
             for(const slot of slots){
-                const name = slot.getAttribute('slot-bot')!;
-                const target = clone.querySelector(`slot-bot[name="${name}"]`);
+                const name = slot.getAttribute('slot')!;
+                const target = clone.querySelector(`slot[name="${name}"]`);
                 if(target !== null){
                     target.appendChild(slot);
                 }else{
