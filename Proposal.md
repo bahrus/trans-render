@@ -172,7 +172,7 @@ Now let's talk about the dreaded interpolation scenario.
 
 ```html
 <template>
-    <div>Hello {{i name}}, the event will begin at {{i eventDate}}.</div>
+    <div>Hello {{| name}}, the event will begin at {{| eventDate}}.</div>
 </template>
 ```
 
@@ -221,7 +221,7 @@ To help with this, I propose:
 <span class=my-class id="terms_and_conditions_17811">I agree to the Terms and Conditions.</span>
 ```
 
-So the css query must be carefully performed within the foreach block of tags.
+So the css query must be carefully performed within the foreach block of tags.  If multiple elements are found matching the css query within that block, then the attribute is a space delimited list of all the id's of matching elements.
 
 ### Referential support with auto-generated id's.
 
@@ -248,10 +248,10 @@ If no such markers are needed, then it seems to me there will be some inevitable
 ```html
 <template>
     <ul>
-        {{if IsUSAddress @i USAddress}}
-            <li>{{@i addresseeName}}</li>
-            <ul {{@i Address}}>
-                <li>{{i StreetAddress}}</li>
+        {{if | isUSAddress $ USAddress}}
+            <li>{{| addresseeName}}</li>
+            <ul {{$ Address}}>
+                <li>{{| StreetAddress}}</li>
             </ul>
         {{/if}}
     </ul>
@@ -262,10 +262,11 @@ If no such markers are needed, then it seems to me there will be some inevitable
 
 ```html
 <ul>
+    <meta content=true itemprop=IsUSAddress>
     <template itemscope itemprop="USAddress" itemref="a23241 c72389"></template>
     <li id="a23241" itemprop=addresseeName>Bob</li>
-    <ul id="c72389" itemscope itemprop=Address>
-        <li itemprop=StreetAddress>123 Penny Lane</li>
+    <ul id="c72389" itemscope itemprop=address>
+        <li itemprop=streetAddress>123 Penny Lane</li>
     </ul>
 </ul>
 ```
