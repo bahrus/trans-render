@@ -183,7 +183,7 @@ This would generate:
 <div>Hello <span itemprop=name>Bob</span>, the event will begin at <time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>11/18/2011</time>.</div>
 ```
 
-Should there exist, in the future, a semantic tag for numbers and booleans, the template instantiation would use it, but we would need to "enable" it for backwards compatibility.  For now, use data tags for numbers and booleans, span's for string values, and time for dates.
+Should there exist, in the future, a semantic tag for read only numbers and booleans, the template instantiation would use it, but we would need to "enable" it for backwards compatibility.  For now, use data tags for numbers and booleans, span's for string values, and time for dates.
 
 What this example demonstrates is we apparently don't need the use of ranges, when performing interpolation, if we want to support microdata.  If there is a significant performance benefit to using ranges, with meta tags, or link tags for binaries, that could be used as an alternative (that was my original thought on this question).  If the performance difference is tiny, I think the simplicity argument should prevail.
 
@@ -193,7 +193,7 @@ What this example demonstrates is we apparently don't need the use of ranges, wh
 
 It often arises that the id for one element should be dynamic, and another element needs to reference this dynamic value.
 
-Examples are the label's for attribute, numerous aria- attributes, and microdata's itemref attributes.
+Examples are the label's for attribute, numerous aria- attributes, and microdata's itemref attributes.  In many cases (itemref, output's for attribute) we allow for a space delimited list of id's.
 
 To help with this, I propose:
 
@@ -262,7 +262,7 @@ If no such markers are needed, then it seems to me there will be some inevitable
 
 ```html
 <ul>
-    <meta content=true itemprop=IsUSAddress>
+    <data itemprop=isUSAddress value=true></data>
     <template itemscope itemprop="USAddress" itemref="a23241 c72389"></template>
     <li id="a23241" itemprop=addresseeName>Bob</li>
     <ul id="c72389" itemscope itemprop=address>
@@ -274,8 +274,6 @@ If no such markers are needed, then it seems to me there will be some inevitable
 So we use itemref to maintain a hierarchical tree logical structure, even though the DOM structure is flat. 
 
 Also, the template instantiation would automatically add the equivalent of id={{generate-id()}} to all elements inside the condition, unless the developer specifies an id.
-
-In the interest of openness, let me confess that even with the help of this template marker, there is a loss of information:  It is unclear from the output that the contents were displayed because the condition "IsUSAddress" evaluated to be true.  I'm currently stumped how to represent this based on existing standards.
 
 ## Loops
 
@@ -306,9 +304,9 @@ Suppose we have a list of todo items:
 ```html
 <template>
     <ul itemtype=https://schema.org/ItemList>
-        {{ foreach @i itemListElement of @i todos}}
+        {{foreach $ itemListElement of $ todos}}
             <li itemtype="https://mywebsite.com.com/TODOItemSchema.json">
-                <div>{{i itemListElement.todo}}</div>
+                <div>{{| itemListElement.todo}}</div>
             </li>
         {{/foreach}}
     </ul>
@@ -336,11 +334,11 @@ Similar to the conditional:
 ```html
 <template >
 <dl itemtype=https://schema.org/ItemList>
-    {{ foreach @i itemListElement of @i monsters }}
-        <dt itemscope itemtype=https://mywebsite.com/Monster.json>
-            <span>{{itemListElement.name}}</span>
+    {{ foreach $ itemListElement of $ monsters }}
+        <dt itemtype=https://mywebsite.com/Monster.json>
+            <span>{{| itemListElement.name}}</span>
         </dt>
-        <dd id={{itemListElement.id}}_description>{{itemListElement.description}}</dd>
+        <dd id={{itemListElement.id}}_description>{{| itemListElement.description}}</dd>
     {{/foreach}}
 </dl>
 </template>
