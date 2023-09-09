@@ -1,10 +1,10 @@
 # Template Instantiation Developer Productivity Proposal
 
-The following outlines some productivity (and higher reliability) enhancement proposals that would make template instantiation more effective.
+The following outlines some productivity, and higher reliability enhancement proposals, that would make template instantiation more effective.
 
 ## Support for Microdata, Name and ID attributes, toLocaleString/toLocaleDateString
 
-Idea for this (updated) section of the proposal is partly inspired by [(misreading?) this article](https://eisenbergeffect.medium.com/the-future-of-native-html-templating-and-data-binding-5f3e52fda259).
+Idea for this updated section of the proposal is partly inspired by [(misreading?) this article](https://eisenbergeffect.medium.com/the-future-of-native-html-templating-and-data-binding-5f3e52fda259).
 
 A common "chore" developers need to perform when binding to forms, is to "repeat oneself" when binding the value and name and id of a form field.  [For example](https://www.freecodecamp.org/news/how-to-build-forms-in-react/):
 
@@ -108,12 +108,12 @@ I don't think template instantiation needs to care which scenario the developer 
 
 As mentioned above, what we want to do is allow developers to easily emit the name of the property they are binding to to various attributes of the element.  Each attribute binding would be specified by a single character in the binding instruction, to keep this added support light and small.  Suggested symbols are below:
 
-| Symbol | Attribute | Connection                                                                    |
-|--------|-----------|-------------------------------------------------------------------------------|
-| #      | id        | # used by css for id                                                          |
-| @      | itemscope | [scoping css](https://css.oddbird.net/scope/explainer/#proposed-solution)     |
-| &      | name      | Query string uses & to separate field names                                   |
-| i      | itemprop  | First letter of itemprop                                                      |
+| Symbol | Attribute             | Connection                                                                                                 |
+|--------|-----------------------|------------------------------------------------------------------------------------------------------------|
+| #      | id                    | # used by css for id, also bookmarks in urls that points to id's                                           |
+| |      | itemprop              | "Pipe" is kind of close to itemprop, and is half of a dollar sign, and kind of looks like an I             |
+| &      | name                  | Query string uses & to separate field names                                                                |
+| $      | itemscope + itemprop  | Combination of S for Scope and Pipe which resembles itemprop a bit                                         |
 
 Let's see some examples of this in action:
 
@@ -123,20 +123,20 @@ Let's apply the following template:
 
 ```html
 <template>
-    <span>{{i name}}</span>
-    <span>{{#i name}}</span>
+    <span>{{| name}}</span>
+    <span>{{#| name}}</span>
     <input value="{{& name}}">
-    <meta content="{{i name}}">
-    <span>{{i eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</span>
-    <span>{{i secondsSinceBirth}}</span>
-    <span aria-checked={{isVegetarian}}>{{i isVegetarian ? 'Is vegetarian' : 'Is not vegetarian' : 'Not specified.'}}</span>
-    <link href="{{i isVegetarian ? 'https://schema.org/True' : 'https://schema.org/False' : ''}}">
-    <span>{{i isVegetarian}}</span>
-    <div  {{@i address}}>
-        <span>{{i street}}</span>
+    <meta content="{{| name}}">
+    <span>{{| eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</span>
+    <span>{{| secondsSinceBirth}}</span>
+    <span aria-checked={{isVegetarian}}>{{| isVegetarian ? 'Is vegetarian' : 'Is not vegetarian' : 'Not specified.'}}</span>
+    <link href="{{| isVegetarian ? 'https://schema.org/True' : 'https://schema.org/False' : ''}}">
+    <span>{{| isVegetarian}}</span>
+    <div  {{$ address}}>
+        <span>{{| street}}</span>
     <div>
-    <span>{{@i address.zipCode}}</span>
-    <div {{@i address}}>{{@i gpsCoordinates.latitude.toFixed|2}}</div>
+    <span>{{$ address.zipCode}}</span>
+    <div {{$ address}}>{{$ gpsCoordinates.latitude.toFixed|2}}</div>
 </template>
 ```
 
