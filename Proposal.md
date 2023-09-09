@@ -114,7 +114,7 @@ As mentioned above, what we want to do is allow developers to easily emit the na
 | Symbol | Attribute             | Connection                                                                                                 |
 |--------|-----------------------|------------------------------------------------------------------------------------------------------------|
 | #      | id                    | # used by css for id, also bookmarks in urls that points to id's                                           |
-| |      | itemprop              | "Pipe" is kind of close to itemprop, and is half of a dollar sign, and it kind of looks like an I          |
+| \|     | itemprop              | "Pipe" is kind of close to itemprop, and is half of a dollar sign, and it kind of looks like an I          |
 | &      | name                  | Query string uses & to separate field names                                                                |
 | $      | itemscope + itemprop  | Combination of S for Scope and Pipe which resembles itemprop a bit                                         |
 
@@ -392,11 +392,3 @@ Template instantiation could help generate these mappings with reliability:
     <img alt="{{i imageDescription}}" data-date-of-image="{{i imageDateTime}}">
 </template>
 ```
-
-
-
-
-
-
-
-
