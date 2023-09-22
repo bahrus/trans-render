@@ -4,7 +4,12 @@ import {insertAdjacentClone} from './insertAdjacentClone.js';
  * @param templ 
  * @param templLookup 
  */
-export function birtualize(templ: HTMLTemplateElement, templRefs: {[key: string]: HTMLTemplateElement}, templLookup: (key: string) => HTMLTemplateElement | undefined){
+export function birtualize(
+    templ: HTMLTemplateElement, 
+    templRefs: {[key: string]: HTMLTemplateElement}, 
+    templLookup: (key: string) => HTMLTemplateElement | undefined,
+    templCloner: (templ: HTMLTemplateElement) => DocumentFragment,
+){
     if(templ.dataset.birtualized) return;
     const {content} = templ;
     const bis = content.querySelectorAll('b-i');
@@ -18,10 +23,8 @@ export function birtualize(templ: HTMLTemplateElement, templRefs: {[key: string]
             if(referencedTempl === undefined) continue;
             templRefs[href] = referencedTempl;
         }
-        
-        
-        birtualize(referencedTempl!, templRefs, templLookup);
-        const clone = document.importNode(referencedTempl!.content, true);
+        birtualize(referencedTempl!, templRefs, templLookup, templCloner);
+        const clone = templCloner(referencedTempl); //document.importNode(referencedTempl!.content, true);
         if(shadowrootmode !== null){
 
         }else{

@@ -441,7 +441,22 @@ export type TargetTuple =
      * abbrev for withinRootNode
      */
     | ['wrn', string]
-
+    /**
+     * Find first element matching string within itemscope.
+     */
+    | ['withinItemScope', string]
+    /**
+     * abbrev for within item scope
+     */
+    | ['wis', string]
+    /**
+     * First first element matching string within form.
+     */
+    | ['withinForm', string]
+    /**
+     * abbrev for within form
+     */
+    | ['wf', string]
 
 ;
 /**

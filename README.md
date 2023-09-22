@@ -61,7 +61,7 @@ This package contains three core libraries.
 
 The first, lib/TR.js, is a tiny, 'non-committal' library that simply allows us to map css matches to user-defined functions, and a little more. 
 
-The second, lib/DTR.js, extends TR.js but provides robust declarative syntax support.  With the help of [custom] enhancements we rarely if ever need to define user-defined functions, and can accomplish full, turing complete (?) rendering support while sticking to 100% declarative JSON.
+The second, lib/DTR.js, extends TR.js but provides robust declarative syntax support.  With the help of [custom enhancements](https://github.com/WICG/webcomponents/issues/1000) we rarely if ever need to define user-defined functions, and can accomplish full, turing complete (?) rendering support while sticking to 100% declarative JSON.
 
 In addition, this package contains a fairly primitive library for defining custom elements, froop/CE.js, which can be combined with lib/DTR.js via lib/mixins/TemplMgmt.js.
 
@@ -199,6 +199,8 @@ tr.transform(container, {...})
 
 We can also start getting a sense of how transforms can be tied to custom element events.  Although the example above is hardly declarative, as we create more rules that allow us to update the DOM, and link events to transforms, we will achieve something approaching a declarative yet Turing complete(?) solution.
 
+### Last capital letter pattern matching
+
 The following table lists how the LHS is translated into CSS multi-match queries:
 
 <table>
@@ -257,6 +259,21 @@ The following table lists how the LHS is translated into CSS multi-match queries
 </table>
 
 
+
+### First symbol pattern matching [TODO]
+
+For reasons that will be apparent when working with ["Hemingway notation"](https://github.com/bahrus/be-switched), trans-render also supports special syntax for css matches that start with three special characters:
+
+<table>
+    <tr>
+        <th>Pattern</th><th>Example</th><th>Query that is used</th><th>Notes</th>
+    </tr>
+    <tr>
+        <td>Starts with #</td>
+        <td>#isHappy</td>
+        <td>.querySelector()
+    </tr>
+</table>
 
 
 ## Extending TR, DTR "vertically"

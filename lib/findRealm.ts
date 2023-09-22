@@ -67,16 +67,29 @@ export async function findRealm(self: Element, scope: Scope){
             }
         }
         case 'corn':
-        case 'closestOrRootNode':
+        case 'closestOrRootNode':{
             const closest = self.closest(scope[1]);
             if(closest === null){
                 return self.getRootNode() as Document | ShadowRoot;
             }else{
                 return closest;
             }
+        }
         case 'wrn':
         case 'withinRootNode':
             return (self.getRootNode() as DocumentFragment).querySelector(scope[1]);
+        case 'wis':
+        case 'withinItemScope':{
+            const closest = self.closest('[itemscope]');
+            if(closest === null) return null;
+            return closest.querySelector(`[itemprop="${scope[1]}"]`);
+        }
+        case 'wf':
+        case 'withinForm':{
+            let closest = (self.closest('form') || self.getRootNode()) as any as DocumentFragment;
+            if(closest === null) return null;
+            return closest.querySelector(`[name="${scope[1]}"]`);
+        }
     }
     
 }
@@ -100,6 +113,10 @@ async function sift(scopeString: Scope & string) : Promise<ScopeTuple> {
     if(test !== null) return ['c', await getSecondArg(test)];
     test = reWithinRootNode.exec(scopeString);
     if(test !== null) return ['wrn', await getSecondArg(test)];
+    test = reWithinItemScope.exec(scopeString);
+    if(test !== null) return ['wis', await getSecondArg(test)];
+    test = reWithinForm.exec(scopeString);
+    if(test !== null) return ['wf', await getSecondArg(test)];
     throw 'sift.NI';
 }
 
@@ -108,4 +125,6 @@ const reUpSearch = /^upSearchFor(?<camelQry>\w+)/;
 const reClosestOrHost = /^closest(?<camelQry>\w+)OrHost/;
 const reClosestOrRootNode = /^closest(?<camelQry>\w+)OrRootNode/;
 const reClosest = /^closest(?<camelQry>\w+)/;
-const reWithinRootNode = /(?<camelQry>\w+)WithinRootNode/;
+const reWithinRootNode = /(?<camelQry>\w+)(?<!\\)WithinRootNode/;
+const reWithinItemScope = /(?<camelQry>\w+)(?<!\\)WithinItemScope/;
+const reWithinForm = /(?<camelQry>\w+)(?<!\\)WithinForm/;
