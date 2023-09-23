@@ -82,6 +82,7 @@ export async function findRealm(self: Element, scope: Scope){
         case 'withinItemScope':{
             const closest = self.closest('[itemscope]');
             if(closest === null) return null;
+            //TODO use @scope donut hole.
             return closest.querySelector(`[itemprop="${scope[1]}"]`);
         }
         case 'wf':
