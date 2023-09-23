@@ -260,7 +260,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
 
 
 
-### First symbol pattern matching [TODO]
+<!-- ### First symbol pattern matching [TODO]
 
 For reasons that will be apparent when working with ["Hemingway notation"](https://github.com/bahrus/be-switched), trans-render also supports special syntax for css matches that start with three special characters:
 
@@ -273,7 +273,7 @@ For reasons that will be apparent when working with ["Hemingway notation"](https
         <td>#isHappy</td>
         <td>.querySelector()
     </tr>
-</table>
+</table> -->
 
 
 ## Extending TR, DTR "vertically"
