@@ -1,7 +1,7 @@
 # Template Instantiation Developer Productivity Proposal
 
 Author:  Bruce B. Anderson
-Last Updated: 2023-9-9
+Last Updated: 2023-9-23
 
 The following outlines some productivity, and higher reliability enhancement proposals, that would make template instantiation more effective.
 
@@ -115,7 +115,7 @@ As mentioned above, what we want to do is allow developers to easily emit the na
 |--------|-----------------------|------------------------------------------------------------------------------------------------------------|
 | #      | id                    | # used by css for id, also bookmarks in urls that points to id's                                           |
 | \|     | itemprop              | "Pipe" is kind of close to itemprop, and is half of a dollar sign, and it kind of looks like an I          |
-| &      | name                  | Query string uses & to separate field names                                                                |
+| @      | name                  | Second letter of name.                                                                                     |
 | $      | itemscope + itemprop  | Combination of S for Scope and Pipe which resembles itemprop a bit                                         |
 
 Let's see some examples of this in action:
@@ -128,7 +128,7 @@ Let's apply the following template:
 <template>
     <span>{{| name}}</span>
     <span>{{#| name}}</span>
-    <input value="{{& name}}">
+    <input value="{{@ name}}">
     <meta content="{{| name}}">
     <span>{{| eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</span>
     <span>{{| secondsSinceBirth}}</span>
