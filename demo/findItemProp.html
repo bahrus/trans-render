@@ -6,8 +6,14 @@
     <title>Document</title>
 </head>
 <body>
+    <div itemscope>
+        <link itemprop=isHappy>
+        <template id=template></template>
+    </div>
     <script type=module>
-        import {} from '../lib/'
+        import {findItemProp} from './findItemProp.js';
+        const test = await  findItemProp(template);
+        console.log(test);
     </script>
 </body>
 </html>
