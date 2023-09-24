@@ -1,7 +1,7 @@
 # Template Instantiation Developer Productivity Proposal
 
 Author:  Bruce B. Anderson
-Last Updated: 2023-9-23
+Last Updated: 2023-9-24
 
 The following outlines some productivity, and higher reliability enhancement proposals, that would make template instantiation more effective.
 
@@ -111,12 +111,12 @@ I don't think template instantiation needs to care which scenario the developer 
 
 As mentioned above, what we want to do is allow developers to easily emit the name of the property they are binding to to various attributes of the element.  Each attribute binding would be specified by a single character in the binding instruction, to keep this added support light and small.  Suggested symbols are below:
 
-| Symbol | Attribute             | Connection                                                                                                 |
-|--------|-----------------------|------------------------------------------------------------------------------------------------------------|
-| #      | id                    | # used by css for id, also bookmarks in urls that points to id's                                           |
-| \|     | itemprop              | "Pipe" is kind of close to itemprop, and is half of a dollar sign, and it kind of looks like an I          |
-| @      | name                  | Second letter of name.                                                                                     |
-| $      | itemscope + itemprop  | Combination of S for Scope and Pipe which resembles itemprop a bit                                         |
+| Symbol | Attribute             | Connection                                                                                                                |
+|--------|-----------------------|---------------------------------------------------------------------------------------------------------------------------|
+| #      | id                    | # used by css for id, also bookmarks in urls that points to id's                                                          |
+| \|     | itemprop              | "Pipe" is kind of close to itemprop, and is half of a dollar sign, and it kind of looks like an I                         |
+| @      | name                  | Second letter of name. Also, common in social media sites/github to type this letter in order to select someone's name.   |
+| $      | itemscope + itemprop  | Combination of S for Scope and Pipe which resembles itemprop a bit                                                        |
 
 Let's see some examples of this in action:
 
