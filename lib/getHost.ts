@@ -6,6 +6,7 @@ export function getHost(self:Element, tocoho: boolean | string = false, ish: boo
         if(host) {
             const scope = (<any>host)?.beDecorated?.scoped?.scope as EventTarget;
             if(scope != undefined) return scope;
+            if(host.localName.includes('-')) return host;
             return host;
         }
     }
