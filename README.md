@@ -208,7 +208,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
         <td>@ [name of elements]</td><td>"@ myName"</td><td>document.querySelectorAll('[name="myName"]')</td><td>[TODO]</td>
     </tr>
     <tr>
-        <td>$ [itemprop of elements]</td><td>"@ myProp"</td><td>document.querySelectorAll('[itemprop="myProp"]')</td><td>[TODO] within scope</td>
+        <td>$ [itemprop of elements]</td><td>"$ myProp"</td><td>document.querySelectorAll('[itemprop="myProp"]')</td><td>[TODO] within scope</td>
     </tr>
     <tr>
         <td>The last capital letter in the string is a "P", and ends with "s"</td><td>myRegionParts</td><td>.querySelectorAll('[part~="my-region"]')</td><td>Suggested <a href=https://github.com/WICG/webcomponents/issues/964#issuecomment-1203296793>here</a>.  Hopefully this is precise.</td>
