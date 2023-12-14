@@ -156,10 +156,9 @@ The keyword "match" indicates that within that block are CSS Matches.
 TR supports two other such keywords:
 
 | keyword   | purpose                                                   |  notes
----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| match     | bind to dynamic properties of the host                    |  Uses css match on Elements                                                                |
-| make      | attach element enhancements, set static properties        |  Uses third party enhancements that can add functionality or help with the template binding
-| evaluate  | use xpath to finding book-ended processing instructions   |  TODO
+|-----------|-----------------------------------------------------------|---------------------------------------------------------------------------------------------|
+| match     | bind to dynamic properties of the host                    |  Uses css match on Elements                                                                 |
+| make      | attach element enhancements, set static properties        |  Uses third party enhancements that can add functionality or help with the template binding |
 
 So for example, this:
 
