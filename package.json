@@ -97,8 +97,11 @@
     "xslt/*",
     "froop/*"
   ],
+  "dependencies": {
+    "mount-observer": "0.0.4"
+  },
   "devDependencies": {
-    "@playwright/test": "1.38.1",
+    "@playwright/test": "1.40.1",
     "may-it-serve": "0.0.6",
     "xtal-shell": "0.0.27"
   },
