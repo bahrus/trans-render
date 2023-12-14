@@ -12,11 +12,6 @@ The *trans-rendering* npm package provides useful utilities for instantiating a 
 
 Perhaps the most important service this npm package provides is to extract inline [custom enhancements](https://github.com/bahrus/be-enhanced) out of a template, and apply them as efficiently as possible for each cloned instance of the template.  It does this using the tiny ["cache"](https://github.com/bahrus/trans-render/blob/baseline/lib/cache.ts) utility.
 
-If the developer utilizes the growing list of custom enhancements effectively, the developer will rarely need to use any other feature this package provides, as far as template instantiation.
-
-This feature is largely used "behind the scenes", so that the developer need not be aware this feature exists.
-
-It is used in conjunction with be-hive's "beatify.js" function.
 
 <details>
     <summary>More details on template part caching [TODO]</summary>
@@ -161,8 +156,8 @@ The keyword "match" indicates that within that block are CSS Matches.
 TR supports two other such keywords:
 
 | keyword   | purpose                                                   |  notes
-------------------------------------------------------------------------------------------------------------------------------------------------------
-| match     | bind to dynamic properties of the host                    |  Uses css match on Elements
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| match     | bind to dynamic properties of the host                    |  Uses css match on Elements                                                                |
 | make      | attach element enhancements, set static properties        |  Uses third party enhancements that can add functionality or help with the template binding
 | evaluate  | use xpath to finding book-ended processing instructions   |  TODO
 
@@ -199,13 +194,22 @@ tr.transform(container, {...})
 
 We can also start getting a sense of how transforms can be tied to custom element events.  Although the example above is hardly declarative, as we create more rules that allow us to update the DOM, and link events to transforms, we will achieve something approaching a declarative yet Turing complete(?) solution.
 
-### Last capital letter pattern matching
+### Special keys for common css queries.
 
-The following table lists how the LHS is translated into CSS multi-match queries:
+The following table lists how the LHS is translated into CSS multi-match queries, for the convenience of the developer
 
 <table>
     <tr>
         <th>Pattern</th><th>Example</th><th>Query that is used</th><th>Notes</th>
+    </tr>
+    <tr>
+        <td># [id of elements]</td><td>"# myID"</td><td>document.querySelector('#myID')</td><td>[TODO]</td>
+    </tr>
+    <tr>
+        <td>@ [name of elements]</td><td>"@ myName"</td><td>document.querySelectorAll('[name="myName"]')</td><td>[TODO]</td>
+    </tr>
+    <tr>
+        <td>$ [itemprop of elements]</td><td>"@ myProp"</td><td>document.querySelectorAll('[itemprop="myProp"]')</td><td>[TODO] within scope</td>
     </tr>
     <tr>
         <td>The last capital letter in the string is a "P", and ends with "s"</td><td>myRegionParts</td><td>.querySelectorAll('[part~="my-region"]')</td><td>Suggested <a href=https://github.com/WICG/webcomponents/issues/964#issuecomment-1203296793>here</a>.  Hopefully this is precise.</td>
