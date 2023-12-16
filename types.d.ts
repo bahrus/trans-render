@@ -35,10 +35,10 @@ export type CSSQuery = string;
 
 export interface Pique<TModel>{
     p: keyof TModel & string | (keyof TModel & string)[],
-    i: any,
+    i?: any,
     q: PropQueryExpression,
-    u: UpdateInstruction,
-    e: any,
+    u?: UpdateInstruction,
+    e?: any,
 
 }
 

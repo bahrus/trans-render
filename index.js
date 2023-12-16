@@ -100,14 +100,22 @@ export class PiqueProcessor extends EventTarget {
         this.pique = pique;
         this.queryInfo = queryInfo;
         const { q } = pique;
+        const match = transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
-            match: transformer.calcCSS(queryInfo),
+            match,
             do: {
                 onMount: async (matchingElement) => {
                     this.doUpdate(matchingElement);
                 }
             }
         });
+        const { target } = transformer;
+        if (Array.isArray(target)) {
+            throw 'NI';
+        }
+        else {
+            this.#mountObserver.observe(target);
+        }
     }
     #attachedEvents = false;
     doUpdate(matchingElement) {

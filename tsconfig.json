@@ -11,6 +11,7 @@
 		"index.ts",
 		"lib/*",
 		"demo/*",
+		"demo/pique/*",
 		"lib/mixins/*",
 		"xslt/*",
 		"froop/*"

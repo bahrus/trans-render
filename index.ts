@@ -2,12 +2,12 @@ import {MountObserver} from 'mount-observer/MountObserver.js';
 import {TransformerTarget, Model, FragmentManifest, QueryInfo, PropQueryExpression, PropAttrQueryType, Pique, UpdateInstruction} from './types';
 import { MountContext, PipelineStage } from '../mount-observer/types';
 
-export class Transformer extends EventTarget {
+export class Transformer<TModel = any> extends EventTarget {
     #piqueProcessors: Array<PiqueProcessor>;
     constructor(
         public target: TransformerTarget, 
         public model: Model,
-        public manifest: FragmentManifest){
+        public manifest: FragmentManifest<TModel>){
         super();
         const {piques} = manifest;
         this.#piqueProcessors = [];
@@ -100,14 +100,22 @@ export class PiqueProcessor extends EventTarget{
     constructor(public transformer: Transformer, public pique: Pique<any>, public queryInfo: QueryInfo){
         super();
         const {q} = pique;
+        const match = transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
-            match: transformer.calcCSS(queryInfo),
+            match,
             do:{
                 onMount: async (matchingElement) => {
                     this.doUpdate(matchingElement);
                 }
             }
         });
+        const {target} = transformer;
+        if(Array.isArray(target)){
+            throw 'NI';
+        }else{
+            this.#mountObserver.observe(target);
+        }
+        
     }
     #attachedEvents = false;
     doUpdate(matchingElement: Element){
