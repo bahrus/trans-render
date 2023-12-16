@@ -1,5 +1,5 @@
 import {MountObserver} from 'mount-observer/MountObserver.js';
-import {TransformerTarget, Model, FragmentManifest, QueryInfo, PropQueryExpression, PropAttrQueryType, Pique} from './types';
+import {TransformerTarget, Model, FragmentManifest, QueryInfo, PropQueryExpression, PropAttrQueryType, Pique, UpdateInstruction} from './types';
 import { MountContext, PipelineStage } from '../mount-observer/types';
 
 export class Transformer extends EventTarget {
@@ -64,6 +64,30 @@ export class Transformer extends EventTarget {
 
         }
     }
+
+    doUpdate(matchingElement: Element, piqueProcessor: PiqueProcessor, u: UpdateInstruction){
+        switch(typeof u){
+            case 'number':
+                this.doNumberU(matchingElement, piqueProcessor, u);
+        }
+    }
+
+    doNumberU(matchingElement: Element, piqueProcessor: PiqueProcessor, u: number){
+        const {pique} = piqueProcessor;
+        const {p} = pique;
+        const propName = (p as string[])[u];
+        const val = this.model[propName];
+    }
+
+    setPrimeValue(matchingElement: Element, val: any){
+        (<any>matchingElement)[this.getDefaultProp(matchingElement)] = val;
+    }
+
+    getDefaultProp(matchingElement: Element){
+        if('href' in matchingElement) return 'href';
+        if('value' in matchingElement && !('button-li'.includes(matchingElement.localName))) return 'value';
+        return 'textContent';
+    }
 }
 
 export function arr<T = any>(inp: T | T[] | undefined) : T[] {
@@ -87,9 +111,12 @@ export class PiqueProcessor extends EventTarget{
     }
     #attachedEvents = false;
     doUpdate(matchingElement: Element){
-        const {e} = this.pique;
+        const {e, u} = this.pique;
         if(e !== undefined && !this.#attachedEvents){
             this.#attachedEvents = true;
+        }
+        if(u !== undefined){
+            this.transformer.doUpdate(matchingElement, this, u);
         }
     }
 }

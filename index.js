@@ -62,6 +62,28 @@ export class Transformer extends EventTarget {
                 return `${ln}-${prop} ${c}`.trimEnd() + ',' + `${ln}data-${prop} ${c}`.trimEnd();
         }
     }
+    doUpdate(matchingElement, piqueProcessor, u) {
+        switch (typeof u) {
+            case 'number':
+                this.doNumberU(matchingElement, piqueProcessor, u);
+        }
+    }
+    doNumberU(matchingElement, piqueProcessor, u) {
+        const { pique } = piqueProcessor;
+        const { p } = pique;
+        const propName = p[u];
+        const val = this.model[propName];
+    }
+    setPrimeValue(matchingElement, val) {
+        matchingElement[this.getDefaultProp(matchingElement)] = val;
+    }
+    getDefaultProp(matchingElement) {
+        if ('href' in matchingElement)
+            return 'href';
+        if ('value' in matchingElement && !('button-li'.includes(matchingElement.localName)))
+            return 'value';
+        return 'textContent';
+    }
 }
 export function arr(inp) {
     return inp === undefined ? []
@@ -89,9 +111,12 @@ export class PiqueProcessor extends EventTarget {
     }
     #attachedEvents = false;
     doUpdate(matchingElement) {
-        const { e } = this.pique;
+        const { e, u } = this.pique;
         if (e !== undefined && !this.#attachedEvents) {
             this.#attachedEvents = true;
+        }
+        if (u !== undefined) {
+            this.transformer.doUpdate(matchingElement, this, u);
         }
     }
 }

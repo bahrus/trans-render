@@ -15,7 +15,9 @@ export type Expr1 = [...Expr0, string];
 export type Expr2 = [...Expr1, number];
 export type Expr3 = [...Expr2, string];
 
+export type UpdateInstruction = InterpolatingExpression;
 export type InterpolatingExpression = number | Expr0 | Expr1 | Expr2 | Expr3;
+
 
 
 
@@ -35,7 +37,7 @@ export interface Pique<TModel>{
     p: keyof TModel & string | (keyof TModel & string)[],
     i: any,
     q: PropQueryExpression,
-    u: InterpolatingExpression,
+    u: UpdateInstruction,
     e: any,
 
 }
@@ -49,4 +51,7 @@ export interface QueryInfo{
 
 export type TransformerTarget = Element | DocumentFragment | Element[] | ShadowRoot;
 
-export type Model = {} | EventTarget;
+
+export type Model = {
+    [key: string]: any
+}
