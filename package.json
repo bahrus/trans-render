@@ -2,8 +2,8 @@
   "name": "trans-render",
   "version": "0.0.707",
   "description": "Instantiate an HTML Template",
-  "main": "lib/cache.js",
-  "module": "lib/cache.js",
+  "main": "index.js",
+  "module": "index.js",
   "typings": "lib/types.d.ts",
   "scripts": {
     "serve": "node node_modules/may-it-serve/serve.js",
@@ -15,7 +15,7 @@
     "update": "ncu -u && npm install"
   },
   "exports": {
-    ".": "./froop/CE.js",
+    ".": "./index.js",
     "./froop/CE.js": "./froop/CE.js",
     "./lib/applyP.js": "./lib/applyP.js",
     "./lib/applyPE.js": "./lib/applyPE.js",
