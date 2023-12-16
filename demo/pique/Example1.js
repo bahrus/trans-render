@@ -7,7 +7,8 @@ const transform = new Transformer(div, model, {
     piques: [
         {
             p: ['greeting'],
-            q: 'span'
+            q: 'span',
+            u: 0
         }
     ]
 });

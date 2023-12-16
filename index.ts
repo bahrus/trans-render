@@ -77,6 +77,7 @@ export class Transformer<TModel = any> extends EventTarget {
         const {p} = pique;
         const propName = (p as string[])[u];
         const val = this.model[propName];
+        this.setPrimeValue(matchingElement, val);
     }
 
     setPrimeValue(matchingElement: Element, val: any){

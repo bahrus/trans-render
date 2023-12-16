@@ -13,7 +13,8 @@ const transform = new Transformer<IModel>(div, model, {
     piques: [
         {
             p: ['greeting'],
-            q: 'span'
+            q: 'span',
+            u: 0
         }
     ]
 });

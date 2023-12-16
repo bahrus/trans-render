@@ -73,6 +73,7 @@ export class Transformer extends EventTarget {
         const { p } = pique;
         const propName = p[u];
         const val = this.model[propName];
+        this.setPrimeValue(matchingElement, val);
     }
     setPrimeValue(matchingElement, val) {
         matchingElement[this.getDefaultProp(matchingElement)] = val;
