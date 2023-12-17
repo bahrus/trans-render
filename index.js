@@ -125,7 +125,7 @@ export class PiqueProcessor extends EventTarget {
                     this.doUpdate(matchingElement);
                 },
                 onDismount: async (matchingElement) => {
-                    throw 'NI';
+                    this.#cleanUp(matchingElement);
                     //TODO remove weak ref from matching eleents;
                 }
             }
