@@ -5,14 +5,15 @@ import {
     IPiqueProcessor, NumberExpression, InterpolatingExpression,
     ObjectExpression,
 } from './types';
+import { Target } from './lib/types';
 
-export class Transformer<TModel = any> extends EventTarget {
-    #piqueProcessors: Array<PiqueProcessor<TModel>>;
+export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
+    #piqueProcessors: Array<PiqueProcessor<TProps, TActions>>;
     constructor(
-        public target: TransformerTarget, 
+        public target: TransformerTarget,
         public model: Model,
-        public manifest: FragmentManifest<TModel>,
-        public propagator?: EventTarget,
+        public manifest: FragmentManifest<TProps>,
+        public propagator?: EventTarget, 
     ){
         super();
         let {piques, piqueMap} = manifest;
@@ -21,7 +22,7 @@ export class Transformer<TModel = any> extends EventTarget {
             piques = [];
             for(const key in piqueMap){
                 const piqueWOQ = (piqueMap as any)[key];
-                const pique: Pique<TModel> = {
+                const pique: Pique<TProps> = {
                     ...piqueWOQ,
                     q: key
                 };
@@ -84,7 +85,7 @@ export class Transformer<TModel = any> extends EventTarget {
         }
     }
 
-    async doUpdate(matchingElement: Element, piqueProcessor: PiqueProcessor<TModel>, u: UpdateInstruction<TModel>){
+    async doUpdate(matchingElement: Element, piqueProcessor: PiqueProcessor<TProps>, u: UpdateInstruction<TProps>){
         switch(typeof u){
             case 'number':{
                 const val = this.getNumberUVal(piqueProcessor, u);
@@ -112,14 +113,14 @@ export class Transformer<TModel = any> extends EventTarget {
         
     }
 
-    async getNestedObjVal(piqueProcessor: PiqueProcessor<TModel>, u: ObjectExpression<TModel>){
-        const returnObj: Partial<TModel> = {};
+    async getNestedObjVal(piqueProcessor: PiqueProcessor<TProps>, u: ObjectExpression<TProps>){
+        const returnObj: Partial<TProps> = {};
         for(const key in u){
-            const v = u[key as keyof TModel & string] as UpdateInstruction<TModel>;
+            const v = u[key as keyof TProps & string] as UpdateInstruction<TProps>;
             switch(typeof v){
                 case 'number':{
                     const val = this.getNumberUVal(piqueProcessor, v);
-                    returnObj[key as keyof TModel & string] = val;
+                    (<any>returnObj)[key as keyof TProps & string] = val;
                     break;
                 }
                 case 'function':{
@@ -128,15 +129,15 @@ export class Transformer<TModel = any> extends EventTarget {
                 case 'object': {
                     if(Array.isArray(v)){
                         const val = this.getArrayVal(piqueProcessor, v);
-                        (<any>returnObj)[key as keyof TModel & string] = val;
+                        (<any>returnObj)[key as keyof TProps & string] = val;
                     }else{
                         const val = this.getNestedObjVal(piqueProcessor, v);
-                        (<any>returnObj)[key as keyof TModel & string] = val;
+                        (<any>returnObj)[key as keyof TProps & string] = val;
                     }
                 }
                 case 'boolean':
                 case 'string': {
-                    (<any>returnObj)[key as keyof TModel & string] = v;
+                    (<any>returnObj)[key as keyof TProps & string] = v;
                     break;
                 }
                 
@@ -145,7 +146,7 @@ export class Transformer<TModel = any> extends EventTarget {
         return returnObj;
     }
 
-    getArrayVal(piqueProcessor: PiqueProcessor<TModel>, u: NumberExpression | InterpolatingExpression){
+    getArrayVal(piqueProcessor: PiqueProcessor<TProps>, u: NumberExpression | InterpolatingExpression){
         if(u.length === 1 && typeof u[0] === 'number') return u[0];
         const mapped = u.map(x => {
             switch(typeof x){
@@ -160,11 +161,11 @@ export class Transformer<TModel = any> extends EventTarget {
         return mapped.join('');
     }
 
-    getNumberUVal(piqueProcessor: PiqueProcessor<TModel>, u: number){
+    getNumberUVal(piqueProcessor: PiqueProcessor<TProps>, u: number){
         const {pique} = piqueProcessor;
         const {p} = pique;
         const propName = (p as string[])[u];
-        const val = this.model[propName];
+        const val = (<any>this.model)[propName as keyof TProps];
         return val;
     }
 
@@ -186,7 +187,7 @@ export function arr<T = any>(inp: T | T[] | undefined) : T[] {
         : Array.isArray(inp) ? inp : [inp];
 }
 
-export class PiqueProcessor<TModel> extends EventTarget implements IPiqueProcessor<TModel> {
+export class PiqueProcessor<TProps, TActions = TProps> extends EventTarget implements IPiqueProcessor<TProps, TActions> {
     #mountObserver: MountObserver;
     #matchingElements: WeakRef<Element>[] = [];
     constructor(public transformer: Transformer, public pique: Pique<any>, public queryInfo: QueryInfo){

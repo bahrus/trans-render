@@ -1,7 +1,7 @@
-export interface FragmentManifest<TModel = any>{
-    piques?: Pique<TModel>[],
-    //piqueMap?: {[key in PropQueryExpression]: PiqueWOQ<TModel>}
-    piqueMap?: {[key: string]: PiqueWOQ<TModel>}
+export interface FragmentManifest<TProps = any, TActions = TProps>{
+    piques?: Pique<TProps>[],
+    //piqueMap?: {[key in PropQueryExpression]: PiqueWOQ<TProps>}
+    piqueMap?: {[key: string]: PiqueWOQ<TProps>}
 }
 
 export type PropAttrQueryType = 
@@ -26,24 +26,28 @@ export type Expr10 = [...Expr9, number];
 export type Expr11 = [...Expr10, string];
 export type Expr12 = [...Expr11, number];
 
-export type Action<TModel> = (matchingElement: Element, pique: IPiqueProcessor<TModel>) => Promise<UpdateInstruction<TModel>> | Promise<void>;
+export type Action<TProps> = (matchingElement: Element, pique: IPiqueProcessor<TProps>) => Promise<UpdateInstruction<TProps>> | Promise<void>;
 export type InterpolatingExpression = Expr0 | Expr1 | Expr2 | Expr3 | Expr4 | Expr5 | Expr6 | Expr7 | Expr8 | Expr9 | Expr10 | Expr11 | Expr12;
 export type NumberExpression = [number];
-export type ObjectExpression<TModel> = {
-    [key: string]: UpdateInstruction<TModel>;
+export type ObjectExpression<TProps> = {
+    [key: string]: UpdateInstruction<TProps>;
 };
 
-export type UpdateInstruction<TModel> = 
+export type UpdateInstruction<TProps> = 
     | number 
     | InterpolatingExpression 
-    | Action<TModel> 
+    | Action<TProps> 
     | NumberExpression 
-    | ObjectExpression<TModel>
+    | ObjectExpression<TProps>
     | string
     | boolean
 ;
 
-export interface IPiqueProcessor<TModel>{
+export type EventListenerInstruction = [];
+
+export type EventListenerInstructions<TProps> = Array<EventListenerInstruction>;
+
+export interface IPiqueProcessor<TProps, TActions = TProps>{
     //TODO add all the methods
 }
 
@@ -59,11 +63,11 @@ export type PropQueryExpression =
 
 export type CSSQuery = string;
 
-export interface PiqueWOQ<TModel>{
+export interface PiqueWOQ<TProps, TMethods = TProps>{
     /**
      * props
      */
-    p: keyof TModel & string | (keyof TModel & string)[],
+    p: keyof TProps & string | (keyof TProps & string)[],
     /**
      * ifs
      */
@@ -71,14 +75,14 @@ export interface PiqueWOQ<TModel>{
     /**
      * update instructions
      */
-    u?: UpdateInstruction<TModel>,
+    u?: UpdateInstruction<TProps>,
     /**
      * event listeners
      */
-    e?: any,
+    e?: EventListenerInstructions<TMethods>,
 }
 
-export interface Pique<TModel> extends PiqueWOQ<TModel>{
+export interface Pique<TProps> extends PiqueWOQ<TProps>{
     q: PropQueryExpression,
 }
 
@@ -90,6 +94,8 @@ export interface QueryInfo{
 }
 
 export type TransformerTarget = Element | DocumentFragment | Element[] | ShadowRoot;
+
+
 
 
 export type Model = {
