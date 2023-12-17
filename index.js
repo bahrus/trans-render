@@ -3,12 +3,14 @@ export class Transformer extends EventTarget {
     target;
     model;
     manifest;
+    propagator;
     #piqueProcessors;
-    constructor(target, model, manifest) {
+    constructor(target, model, manifest, propagator) {
         super();
         this.target = target;
         this.model = model;
         this.manifest = manifest;
+        this.propagator = propagator;
         let { piques, piqueMap } = manifest;
         if (piques === undefined) {
             if (piqueMap === undefined)
@@ -108,28 +110,55 @@ export class PiqueProcessor extends EventTarget {
     pique;
     queryInfo;
     #mountObserver;
+    #matchingElements = [];
     constructor(transformer, pique, queryInfo) {
         super();
         this.transformer = transformer;
         this.pique = pique;
         this.queryInfo = queryInfo;
-        const { q } = pique;
+        const { p, q } = pique;
         const match = transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
             match,
             do: {
                 onMount: async (matchingElement) => {
                     this.doUpdate(matchingElement);
+                },
+                onDismount: async (matchingElement) => {
+                    throw 'NI';
+                    //TODO remove weak ref from matching eleents;
                 }
             }
         });
-        const { target } = transformer;
+        const { target, propagator } = transformer;
+        if (propagator !== undefined) {
+            for (const propName in p) {
+                propagator.addEventListener(propName, e => {
+                    const all = this.#cleanUp();
+                    for (const matchingElement of all) {
+                        this.doUpdate(matchingElement);
+                    }
+                });
+            }
+        }
         if (Array.isArray(target)) {
             throw 'NI';
         }
         else {
             this.#mountObserver.observe(target);
         }
+    }
+    #cleanUp(matchingElement) {
+        const newRefs = [];
+        const all = [];
+        for (const ref of this.#matchingElements) {
+            const deref = ref.deref();
+            if (deref !== undefined && deref !== matchingElement) {
+                newRefs.push(ref);
+                all.push(deref);
+            }
+        }
+        return all;
     }
     #attachedEvents = false;
     doUpdate(matchingElement) {

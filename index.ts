@@ -7,7 +7,9 @@ export class Transformer<TModel = any> extends EventTarget {
     constructor(
         public target: TransformerTarget, 
         public model: Model,
-        public manifest: FragmentManifest<TModel>){
+        public manifest: FragmentManifest<TModel>,
+        public propagator?: EventTarget,
+    ){
         super();
         let {piques, piqueMap} = manifest;
         if(piques === undefined){
@@ -111,25 +113,54 @@ export function arr<T = any>(inp: T | T[] | undefined) : T[] {
 
 export class PiqueProcessor extends EventTarget{
     #mountObserver: MountObserver;
+    #matchingElements: WeakRef<Element>[] = [];
     constructor(public transformer: Transformer, public pique: Pique<any>, public queryInfo: QueryInfo){
         super();
-        const {q} = pique;
+        
+        const {p, q} = pique;
         const match = transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
             match,
             do:{
                 onMount: async (matchingElement) => {
                     this.doUpdate(matchingElement);
+
+                },
+                onDismount: async(matchingElement) => {
+                    throw 'NI';
+                    //TODO remove weak ref from matching eleents;
                 }
             }
         });
-        const {target} = transformer;
+        const {target, propagator} = transformer;
+        if(propagator !== undefined){
+            for(const propName in (p as string[])){
+                propagator.addEventListener(propName, e => {
+                    const all = this.#cleanUp();
+                    for(const matchingElement of all){
+                        this.doUpdate(matchingElement);
+                    }
+                })
+            }
+        }
         if(Array.isArray(target)){
             throw 'NI';
         }else{
             this.#mountObserver.observe(target);
         }
         
+    }
+    #cleanUp(matchingElement?: Element){
+        const newRefs: WeakRef<Element>[] = [];
+        const all: Element[] = [];
+        for(const ref of this.#matchingElements){
+            const deref = ref.deref();
+            if(deref !== undefined && deref !== matchingElement){
+                newRefs.push(ref);
+                all.push(deref);
+            }
+        }
+        return all;
     }
     #attachedEvents = false;
     doUpdate(matchingElement: Element){
