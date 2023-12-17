@@ -1,3 +1,5 @@
+import { MountContext, PipelineStage } from "mount-observer/types";
+
 export interface FragmentManifest<TProps = any, TActions = TProps>{
     piques?: Pique<TProps>[],
     //piqueMap?: {[key in PropQueryExpression]: PiqueWOQ<TProps>}
@@ -43,9 +45,21 @@ export type UpdateInstruction<TProps> =
     | boolean
 ;
 
-export type EventListenerInstruction = [];
+export interface MethodInvocation<TMethods>{
+    do: keyof TMethods,
+    with: any
+}
 
-export type EventListenerInstructions<TProps> = Array<EventListenerInstruction>;
+export type onMountOrOnDismount = 'onMount' | 'onDismount';
+
+export interface MethodInvocationCallback<TModel> {
+    with?: any,
+    type: onMountOrOnDismount,
+    stage?: PipelineStage,
+    mountContext: MountContext
+}
+
+export type EnhancementInstructions<TMethods> =  (keyof TMethods & string) | MethodInvocation<TMethods> | Array<MethodInvocation<TMethods>>;
 
 export interface IPiqueProcessor<TProps, TActions = TProps>{
     //TODO add all the methods
@@ -77,9 +91,9 @@ export interface PiqueWOQ<TProps, TMethods = TProps>{
      */
     u?: UpdateInstruction<TProps>,
     /**
-     * event listeners
+     * enhance, for example, add event listener
      */
-    e?: EventListenerInstructions<TMethods>,
+    e?:  EnhancementInstructions<TMethods>,
 }
 
 export interface Pique<TProps> extends PiqueWOQ<TProps>{

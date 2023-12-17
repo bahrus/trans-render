@@ -103,6 +103,34 @@ export class Transformer extends EventTarget {
             }
         }
     }
+    async doEnhance(matchingElement, type, piqueProcessor, mountContext, stage) {
+        const { pique } = piqueProcessor;
+        const { e } = pique;
+        const methodArg = {
+            mountContext,
+            stage,
+            type
+        };
+        const model = this.model;
+        if (e !== undefined) {
+            switch (typeof e) {
+                case 'string': {
+                    model[e](model, methodArg);
+                    break;
+                }
+                case 'object':
+                    const es = arr(e);
+                    for (const enhance of es) {
+                        const { do: d, with: w } = enhance;
+                        model[d](model, {
+                            ...methodArg,
+                            with: w
+                        });
+                    }
+                    break;
+            }
+        }
+    }
     async getNestedObjVal(piqueProcessor, u) {
         const returnObj = {};
         for (const key in u) {
@@ -183,17 +211,19 @@ export class PiqueProcessor extends EventTarget {
         this.transformer = transformer;
         this.pique = pique;
         this.queryInfo = queryInfo;
-        const { p, q } = pique;
+        const { p } = pique;
         const match = transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
             match,
             do: {
-                onMount: async (matchingElement) => {
-                    this.doUpdate(matchingElement);
+                onMount: async (matchingElement, ctx, stage) => {
+                    await this.doUpdate(matchingElement);
                     this.#matchingElements.push(new WeakRef(matchingElement));
+                    await transformer.doEnhance(matchingElement, 'onMount', this, ctx, stage);
                 },
-                onDismount: async (matchingElement) => {
+                onDismount: async (matchingElement, ctx, stage) => {
                     this.#cleanUp(matchingElement);
+                    await transformer.doEnhance(matchingElement, 'onDismount', this, ctx, stage);
                     //TODO remove weak ref from matching eleents;
                 }
             }
@@ -229,13 +259,13 @@ export class PiqueProcessor extends EventTarget {
         return all;
     }
     #attachedEvents = false;
-    doUpdate(matchingElement) {
+    async doUpdate(matchingElement) {
         const { e, u } = this.pique;
         if (e !== undefined && !this.#attachedEvents) {
             this.#attachedEvents = true;
         }
         if (u !== undefined) {
-            this.transformer.doUpdate(matchingElement, this, u);
+            await this.transformer.doUpdate(matchingElement, this, u);
         }
     }
 }

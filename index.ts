@@ -4,8 +4,10 @@ import {
     PropQueryExpression, PropAttrQueryType, Pique, UpdateInstruction, 
     IPiqueProcessor, NumberExpression, InterpolatingExpression,
     ObjectExpression,
+    MethodInvocationCallback,
+    onMountOrOnDismount,
 } from './types';
-import { Target } from './lib/types';
+import { MountContext, PipelineStage } from 'mount-observer/types';
 
 export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
     #piqueProcessors: Array<PiqueProcessor<TProps, TActions>>;
@@ -113,6 +115,36 @@ export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
         
     }
 
+    async doEnhance(matchingElement: Element, type: onMountOrOnDismount, piqueProcessor: PiqueProcessor<TProps>, mountContext: MountContext, stage: PipelineStage | undefined){
+        const {pique} = piqueProcessor;
+        const {e} = pique;
+        const methodArg: MethodInvocationCallback<TActions> = {
+            mountContext,
+            stage,
+            type
+        };
+        const model = this.model as any;
+        if(e !== undefined){
+            switch(typeof e){
+                case 'string':{
+                    model[e](model, methodArg);
+                    break;
+                }
+                case 'object':
+                    const es = arr(e);
+                    for(const enhance of es){
+                        const {do: d, with: w} = enhance;
+                        model[d](model, {
+                            ...methodArg,
+                            with: w
+                        });
+                    }
+                    break;
+            }
+
+        }
+    }
+
     async getNestedObjVal(piqueProcessor: PiqueProcessor<TProps>, u: ObjectExpression<TProps>){
         const returnObj: Partial<TProps> = {};
         for(const key in u){
@@ -180,6 +212,8 @@ export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
         if('value' in matchingElement && !('button-li'.includes(matchingElement.localName))) return 'value';
         return 'textContent';
     }
+
+    
 }
 
 export function arr<T = any>(inp: T | T[] | undefined) : T[] {
@@ -193,17 +227,20 @@ export class PiqueProcessor<TProps, TActions = TProps> extends EventTarget imple
     constructor(public transformer: Transformer, public pique: Pique<any>, public queryInfo: QueryInfo){
         super();
         
-        const {p, q} = pique;
+        const {p} = pique;
         const match = transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
             match,
             do:{
-                onMount: async (matchingElement) => {
-                    this.doUpdate(matchingElement);
+                onMount: async (matchingElement, ctx, stage) => {
+                    await this.doUpdate(matchingElement);
                     this.#matchingElements.push(new WeakRef(matchingElement));
+                    await transformer.doEnhance(matchingElement, 'onMount', this, ctx, stage);
+
                 },
-                onDismount: async(matchingElement) => {
+                onDismount: async(matchingElement, ctx, stage) => {
                     this.#cleanUp(matchingElement);
+                    await transformer.doEnhance(matchingElement, 'onDismount', this, ctx, stage);
                     //TODO remove weak ref from matching eleents;
                 }
             }
@@ -239,13 +276,13 @@ export class PiqueProcessor<TProps, TActions = TProps> extends EventTarget imple
         return all;
     }
     #attachedEvents = false;
-    doUpdate(matchingElement: Element){
+    async doUpdate(matchingElement: Element){
         const {e, u} = this.pique;
         if(e !== undefined && !this.#attachedEvents){
             this.#attachedEvents = true;
         }
         if(u !== undefined){
-            this.transformer.doUpdate(matchingElement, this, u);
+            await this.transformer.doUpdate(matchingElement, this, u);
         }
     }
 }
