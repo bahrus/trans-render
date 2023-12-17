@@ -1,9 +1,9 @@
 import { MountContext, PipelineStage } from "mount-observer/types";
 
 export interface FragmentManifest<TProps = any, TActions = TProps>{
-    piques?: Pique<TProps>[],
+    piques?: Pique<TProps, TActions>[],
     //piqueMap?: {[key in PropQueryExpression]: PiqueWOQ<TProps>}
-    piqueMap?: {[key: string]: PiqueWOQ<TProps>}
+    piqueMap?: {[key: string]: PiqueWOQ<TProps, TActions>}
 }
 
 export type PropAttrQueryType = 
@@ -47,7 +47,7 @@ export type UpdateInstruction<TProps> =
 
 export interface MethodInvocation<TMethods>{
     do: keyof TMethods,
-    with: any
+    with?: any
 }
 
 export type onMountOrOnDismount = 'onMount' | 'onDismount';
@@ -59,7 +59,11 @@ export interface MethodInvocationCallback<TModel> {
     mountContext: MountContext
 }
 
-export type EnhancementInstructions<TMethods> =  (keyof TMethods & string) | MethodInvocation<TMethods> | Array<MethodInvocation<TMethods>>;
+export type EnhancementInstructions<TMethods> = 
+    | (keyof TMethods & string)
+    | MethodInvocation<TMethods> 
+    | Array<MethodInvocation<TMethods>>
+;
 
 export interface IPiqueProcessor<TProps, TActions = TProps>{
     //TODO add all the methods
@@ -96,7 +100,7 @@ export interface PiqueWOQ<TProps, TMethods = TProps>{
     e?:  EnhancementInstructions<TMethods>,
 }
 
-export interface Pique<TProps> extends PiqueWOQ<TProps>{
+export interface Pique<TProps, TActions> extends PiqueWOQ<TProps, TActions>{
     q: PropQueryExpression,
 }
 
@@ -108,9 +112,6 @@ export interface QueryInfo{
 }
 
 export type TransformerTarget = Element | DocumentFragment | Element[] | ShadowRoot;
-
-
-
 
 export type Model = {
     [key: string]: any

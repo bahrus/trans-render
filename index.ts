@@ -14,7 +14,7 @@ export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
     constructor(
         public target: TransformerTarget,
         public model: Model,
-        public manifest: FragmentManifest<TProps>,
+        public manifest: FragmentManifest<TProps, TActions>,
         public propagator?: EventTarget, 
     ){
         super();
@@ -24,7 +24,7 @@ export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
             piques = [];
             for(const key in piqueMap){
                 const piqueWOQ = (piqueMap as any)[key];
-                const pique: Pique<TProps> = {
+                const pique: Pique<TProps, TActions> = {
                     ...piqueWOQ,
                     q: key
                 };
@@ -118,31 +118,30 @@ export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
     async doEnhance(matchingElement: Element, type: onMountOrOnDismount, piqueProcessor: PiqueProcessor<TProps>, mountContext: MountContext, stage: PipelineStage | undefined){
         const {pique} = piqueProcessor;
         const {e} = pique;
+        if(e === undefined) return;
         const methodArg: MethodInvocationCallback<TActions> = {
             mountContext,
             stage,
             type
         };
         const model = this.model as any;
-        if(e !== undefined){
-            switch(typeof e){
-                case 'string':{
-                    model[e](model, methodArg);
-                    break;
-                }
-                case 'object':
-                    const es = arr(e);
-                    for(const enhance of es){
-                        const {do: d, with: w} = enhance;
-                        model[d](model, {
-                            ...methodArg,
-                            with: w
-                        });
-                    }
-                    break;
+        switch(typeof e){
+            case 'string':{
+                model[e](model, matchingElement, methodArg);
+                break;
             }
-
+            case 'object':
+                const es = arr(e);
+                for(const enhance of es){
+                    const {do: d, with: w} = enhance;
+                    model[d](model, matchingElement, {
+                        ...methodArg,
+                        with: w
+                    });
+                }
+                break;
         }
+
     }
 
     async getNestedObjVal(piqueProcessor: PiqueProcessor<TProps>, u: ObjectExpression<TProps>){
@@ -224,7 +223,7 @@ export function arr<T = any>(inp: T | T[] | undefined) : T[] {
 export class PiqueProcessor<TProps, TActions = TProps> extends EventTarget implements IPiqueProcessor<TProps, TActions> {
     #mountObserver: MountObserver;
     #matchingElements: WeakRef<Element>[] = [];
-    constructor(public transformer: Transformer, public pique: Pique<any>, public queryInfo: QueryInfo){
+    constructor(public transformer: Transformer, public pique: Pique<TProps, TActions>, public queryInfo: QueryInfo){
         super();
         
         const {p} = pique;

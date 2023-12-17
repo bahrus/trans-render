@@ -106,29 +106,29 @@ export class Transformer extends EventTarget {
     async doEnhance(matchingElement, type, piqueProcessor, mountContext, stage) {
         const { pique } = piqueProcessor;
         const { e } = pique;
+        if (e === undefined)
+            return;
         const methodArg = {
             mountContext,
             stage,
             type
         };
         const model = this.model;
-        if (e !== undefined) {
-            switch (typeof e) {
-                case 'string': {
-                    model[e](model, methodArg);
-                    break;
-                }
-                case 'object':
-                    const es = arr(e);
-                    for (const enhance of es) {
-                        const { do: d, with: w } = enhance;
-                        model[d](model, {
-                            ...methodArg,
-                            with: w
-                        });
-                    }
-                    break;
+        switch (typeof e) {
+            case 'string': {
+                model[e](model, matchingElement, methodArg);
+                break;
             }
+            case 'object':
+                const es = arr(e);
+                for (const enhance of es) {
+                    const { do: d, with: w } = enhance;
+                    model[d](model, matchingElement, {
+                        ...methodArg,
+                        with: w
+                    });
+                }
+                break;
         }
     }
     async getNestedObjVal(piqueProcessor, u) {
