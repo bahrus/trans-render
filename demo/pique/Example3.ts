@@ -19,8 +19,8 @@ const transform = new Transformer<IModel>(div, model, {
             u: ['msg1: ', 0, ', msg2: ', 1]
         }
     }
-    
 }, et);
+
 setTimeout(() => {
     const span = document.createElement('span');
     div.appendChild(span);
