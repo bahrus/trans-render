@@ -96,8 +96,15 @@ export class Transformer extends EventTarget {
                     const val = this.getArrayVal(piqueProcessor, u);
                     this.setPrimeValue(matchingElement, val);
                 }
+                else {
+                    const val = this.getNestedObjVal(piqueProcessor, u);
+                    Object.assign(matchingElement, val);
+                }
             }
         }
+    }
+    getNestedObjVal(piqueProcessor, u) {
+        const returnObj = {};
     }
     getArrayVal(piqueProcessor, u) {
         if (u.length === 1 && typeof u[0] === 'number')

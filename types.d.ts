@@ -26,7 +26,7 @@ export type Expr10 = [...Expr9, number];
 export type Expr11 = [...Expr10, string];
 export type Expr12 = [...Expr11, number];
 
-export type Action<TModel> = (matchingElement: Element, pique: IPiqueProcessor<TModel>) => Promise<UpdateInstruction<Model>> | Promise<void>;
+export type Action<TModel> = (matchingElement: Element, pique: IPiqueProcessor<TModel>) => Promise<UpdateInstruction<TModel>> | Promise<void>;
 export type InterpolatingExpression = Expr0 | Expr1 | Expr2 | Expr3 | Expr4 | Expr5 | Expr6 | Expr7 | Expr8 | Expr9 | Expr10 | Expr11 | Expr12;
 export type NumberExpression = [number];
 export type ObjectExpression<TModel> = {

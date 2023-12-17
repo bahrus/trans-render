@@ -1,5 +1,10 @@
 import {MountObserver} from 'mount-observer/MountObserver.js';
-import {TransformerTarget, Model, FragmentManifest, QueryInfo, PropQueryExpression, PropAttrQueryType, Pique, UpdateInstruction, IPiqueProcessor, NumberExpression, InterpolatingExpression} from './types';
+import {
+    TransformerTarget, Model, FragmentManifest, QueryInfo, 
+    PropQueryExpression, PropAttrQueryType, Pique, UpdateInstruction, 
+    IPiqueProcessor, NumberExpression, InterpolatingExpression,
+    ObjectExpression,
+} from './types';
 import { MountContext, PipelineStage } from '../mount-observer/types';
 
 export class Transformer<TModel = any> extends EventTarget {
@@ -98,11 +103,19 @@ export class Transformer<TModel = any> extends EventTarget {
                 if(Array.isArray(u)){
                     const val = this.getArrayVal(piqueProcessor, u);
                     this.setPrimeValue(matchingElement, val);
+                }else{
+                    const val = this.getNestedObjVal(piqueProcessor, u);
+                    Object.assign(matchingElement, val);
                 }
             }
 
         }
         
+    }
+
+    getNestedObjVal(piqueProcessor: PiqueProcessor<TModel>, u: ObjectExpression<TModel>){
+        const returnObj: Partial<TModel> = {};
+
     }
 
     getArrayVal(piqueProcessor: PiqueProcessor<TModel>, u: NumberExpression | InterpolatingExpression){
