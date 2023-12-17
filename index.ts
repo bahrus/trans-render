@@ -104,7 +104,7 @@ export class Transformer<TModel = any> extends EventTarget {
                     const val = this.getArrayVal(piqueProcessor, u);
                     this.setPrimeValue(matchingElement, val);
                 }else{
-                    const val = this.getNestedObjVal(piqueProcessor, u);
+                    const val = await this.getNestedObjVal(piqueProcessor, u);
                     Object.assign(matchingElement, val);
                 }
             }
@@ -113,9 +113,37 @@ export class Transformer<TModel = any> extends EventTarget {
         
     }
 
-    getNestedObjVal(piqueProcessor: PiqueProcessor<TModel>, u: ObjectExpression<TModel>){
+    async getNestedObjVal(piqueProcessor: PiqueProcessor<TModel>, u: ObjectExpression<TModel>){
         const returnObj: Partial<TModel> = {};
-
+        for(const key in u){
+            const v = u[key as keyof TModel & string] as UpdateInstruction<TModel>;
+            switch(typeof v){
+                case 'number':{
+                    const val = this.getNumberUVal(piqueProcessor, v);
+                    returnObj[key as keyof TModel & string] = val;
+                    break;
+                }
+                case 'function':{
+                    throw 'NI';
+                }
+                case 'object': {
+                    if(Array.isArray(v)){
+                        const val = this.getArrayVal(piqueProcessor, v);
+                        (<any>returnObj)[key as keyof TModel & string] = val;
+                    }else{
+                        const val = this.getNestedObjVal(piqueProcessor, v);
+                        (<any>returnObj)[key as keyof TModel & string] = val;
+                    }
+                }
+                case 'string': {
+                    throw 'NI';
+                }
+                case 'boolean': {
+                    throw 'NI';
+                }
+            }
+        }
+        return returnObj;
     }
 
     getArrayVal(piqueProcessor: PiqueProcessor<TModel>, u: NumberExpression | InterpolatingExpression){

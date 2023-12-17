@@ -97,14 +97,44 @@ export class Transformer extends EventTarget {
                     this.setPrimeValue(matchingElement, val);
                 }
                 else {
-                    const val = this.getNestedObjVal(piqueProcessor, u);
+                    const val = await this.getNestedObjVal(piqueProcessor, u);
                     Object.assign(matchingElement, val);
                 }
             }
         }
     }
-    getNestedObjVal(piqueProcessor, u) {
+    async getNestedObjVal(piqueProcessor, u) {
         const returnObj = {};
+        for (const key in u) {
+            const v = u[key];
+            switch (typeof v) {
+                case 'number': {
+                    const val = this.getNumberUVal(piqueProcessor, v);
+                    returnObj[key] = val;
+                    break;
+                }
+                case 'function': {
+                    throw 'NI';
+                }
+                case 'object': {
+                    if (Array.isArray(v)) {
+                        const val = this.getArrayVal(piqueProcessor, v);
+                        returnObj[key] = val;
+                    }
+                    else {
+                        const val = this.getNestedObjVal(piqueProcessor, v);
+                        returnObj[key] = val;
+                    }
+                }
+                case 'string': {
+                    throw 'NI';
+                }
+                case 'boolean': {
+                    throw 'NI';
+                }
+            }
+        }
+        return returnObj;
     }
     getArrayVal(piqueProcessor, u) {
         if (u.length === 1 && typeof u[0] === 'number')
