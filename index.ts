@@ -9,8 +9,21 @@ export class Transformer<TModel = any> extends EventTarget {
         public model: Model,
         public manifest: FragmentManifest<TModel>){
         super();
-        const {piques} = manifest;
+        let {piques, piqueMap} = manifest;
+        if(piques === undefined){
+            if(piqueMap === undefined) throw 400;
+            piques = [];
+            for(const key in piqueMap){
+                const piqueWOQ = (piqueMap as any)[key];
+                const pique: Pique<TModel> = {
+                    ...piqueWOQ,
+                    q: key
+                };
+                piques.push(pique);
+            }
+        }
         this.#piqueProcessors = [];
+
         for(const pique of piques){
             pique.p = arr(pique.p);
             const {p, q} = pique;

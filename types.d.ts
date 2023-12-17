@@ -1,5 +1,7 @@
 export interface FragmentManifest<TModel = any>{
-    piques: Pique<TModel>[],
+    piques?: Pique<TModel>[],
+    //piqueMap?: {[key in PropQueryExpression]: PiqueWOQ<TModel>}
+    piqueMap?: {[key: string]: PiqueWOQ<TModel>}
 }
 
 export type PropAttrQueryType = 
@@ -33,13 +35,15 @@ export type PropQueryExpression =
 
 export type CSSQuery = string;
 
-export interface Pique<TModel>{
+export interface PiqueWOQ<TModel>{
     p: keyof TModel & string | (keyof TModel & string)[],
     i?: any,
-    q: PropQueryExpression,
     u?: UpdateInstruction,
     e?: any,
+}
 
+export interface Pique<TModel> extends PiqueWOQ<TModel>{
+    q: PropQueryExpression,
 }
 
 export interface QueryInfo{

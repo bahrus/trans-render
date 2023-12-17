@@ -9,7 +9,20 @@ export class Transformer extends EventTarget {
         this.target = target;
         this.model = model;
         this.manifest = manifest;
-        const { piques } = manifest;
+        let { piques, piqueMap } = manifest;
+        if (piques === undefined) {
+            if (piqueMap === undefined)
+                throw 400;
+            piques = [];
+            for (const key in piqueMap) {
+                const piqueWOQ = piqueMap[key];
+                const pique = {
+                    ...piqueWOQ,
+                    q: key
+                };
+                piques.push(pique);
+            }
+        }
         this.#piqueProcessors = [];
         for (const pique of piques) {
             pique.p = arr(pique.p);
