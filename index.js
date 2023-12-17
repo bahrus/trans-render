@@ -126,11 +126,10 @@ export class Transformer extends EventTarget {
                         returnObj[key] = val;
                     }
                 }
+                case 'boolean':
                 case 'string': {
-                    throw 'NI';
-                }
-                case 'boolean': {
-                    throw 'NI';
+                    returnObj[key] = v;
+                    break;
                 }
             }
         }

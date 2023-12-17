@@ -39,6 +39,8 @@ export type UpdateInstruction<TModel> =
     | Action<TModel> 
     | NumberExpression 
     | ObjectExpression<TModel>
+    | string
+    | boolean
 ;
 
 export interface IPiqueProcessor<TModel>{

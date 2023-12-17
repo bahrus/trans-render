@@ -13,7 +13,9 @@ const transform = new Transformer(div, model, {
             u: {
                 readOnly: 1,
                 tabIndex: 2,
-                value: 0
+                value: 0,
+                type: 'number',
+                disabled: true
             }
         }
     }

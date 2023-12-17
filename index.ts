@@ -135,12 +135,12 @@ export class Transformer<TModel = any> extends EventTarget {
                         (<any>returnObj)[key as keyof TModel & string] = val;
                     }
                 }
+                case 'boolean':
                 case 'string': {
-                    throw 'NI';
+                    (<any>returnObj)[key as keyof TModel & string] = v;
+                    break;
                 }
-                case 'boolean': {
-                    throw 'NI';
-                }
+                
             }
         }
         return returnObj;
