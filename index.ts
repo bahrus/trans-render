@@ -124,7 +124,7 @@ export class PiqueProcessor extends EventTarget{
             do:{
                 onMount: async (matchingElement) => {
                     this.doUpdate(matchingElement);
-
+                    this.#matchingElements.push(new WeakRef(matchingElement));
                 },
                 onDismount: async(matchingElement) => {
                     this.#cleanUp(matchingElement);
@@ -134,7 +134,7 @@ export class PiqueProcessor extends EventTarget{
         });
         const {target, propagator} = transformer;
         if(propagator !== undefined){
-            for(const propName in (p as string[])){
+            for(const propName of (p as string[])){
                 propagator.addEventListener(propName, e => {
                     const all = this.#cleanUp();
                     for(const matchingElement of all){
