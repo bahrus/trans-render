@@ -81,19 +81,24 @@ export class Transformer<TModel = any> extends EventTarget {
     }
 
     doUpdate(matchingElement: Element, piqueProcessor: PiqueProcessor, u: UpdateInstruction){
+        let val: any;
         switch(typeof u){
             case 'number':
-                this.doNumberU(matchingElement, piqueProcessor, u);
+                val = this.getNumberUVal(piqueProcessor, u);
+                this.setPrimeValue(matchingElement, val);
         }
+        
     }
 
-    doNumberU(matchingElement: Element, piqueProcessor: PiqueProcessor, u: number){
+    getNumberUVal(piqueProcessor: PiqueProcessor, u: number){
         const {pique} = piqueProcessor;
         const {p} = pique;
         const propName = (p as string[])[u];
         const val = this.model[propName];
-        this.setPrimeValue(matchingElement, val);
+        return val;
     }
+
+
 
     setPrimeValue(matchingElement: Element, val: any){
         (<any>matchingElement)[this.getDefaultProp(matchingElement)] = val;

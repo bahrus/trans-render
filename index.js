@@ -78,17 +78,19 @@ export class Transformer extends EventTarget {
         }
     }
     doUpdate(matchingElement, piqueProcessor, u) {
+        let val;
         switch (typeof u) {
             case 'number':
-                this.doNumberU(matchingElement, piqueProcessor, u);
+                val = this.getNumberUVal(piqueProcessor, u);
+                this.setPrimeValue(matchingElement, val);
         }
     }
-    doNumberU(matchingElement, piqueProcessor, u) {
+    getNumberUVal(piqueProcessor, u) {
         const { pique } = piqueProcessor;
         const { p } = pique;
         const propName = p[u];
         const val = this.model[propName];
-        this.setPrimeValue(matchingElement, val);
+        return val;
     }
     setPrimeValue(matchingElement, val) {
         matchingElement[this.getDefaultProp(matchingElement)] = val;
