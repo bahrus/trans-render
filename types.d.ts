@@ -17,9 +17,9 @@ export type Expr1 = [...Expr0, string];
 export type Expr2 = [...Expr1, number];
 export type Expr3 = [...Expr2, string];
 
-export type UpdateInstruction = InterpolatingExpression;
+export type Action<TModel> = (matchingElement: Element, pique: Pique<TModel>) => UpdateInstruction<TModel> | void;
 export type InterpolatingExpression = number | Expr0 | Expr1 | Expr2 | Expr3;
-
+export type UpdateInstruction<TModel> = InterpolatingExpression | Action<TModel>;
 
 
 
@@ -38,7 +38,7 @@ export type CSSQuery = string;
 export interface PiqueWOQ<TModel>{
     p: keyof TModel & string | (keyof TModel & string)[],
     i?: any,
-    u?: UpdateInstruction,
+    u?: UpdateInstruction<TModel>,
     e?: any,
 }
 
