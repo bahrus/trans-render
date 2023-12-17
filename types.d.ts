@@ -50,11 +50,11 @@ export interface MethodInvocation<TMethods>{
     with?: any
 }
 
-export type onMountOrOnDismount = 'onMount' | 'onDismount';
+export type onMountStatusChange = 'onMount' | 'onDismount' | 'onDisconnect';
 
 export interface MethodInvocationCallback<TModel> {
     with?: any,
-    type: onMountOrOnDismount,
+    type: onMountStatusChange,
     stage?: PipelineStage,
     mountContext: MountContext
 }

@@ -5,7 +5,7 @@ import {
     IPiqueProcessor, NumberExpression, InterpolatingExpression,
     ObjectExpression,
     MethodInvocationCallback,
-    onMountOrOnDismount,
+    onMountStatusChange,
 } from './types';
 import { MountContext, PipelineStage } from 'mount-observer/types';
 
@@ -115,7 +115,7 @@ export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
         
     }
 
-    async doEnhance(matchingElement: Element, type: onMountOrOnDismount, piqueProcessor: PiqueProcessor<TProps>, mountContext: MountContext, stage: PipelineStage | undefined){
+    async doEnhance(matchingElement: Element, type: onMountStatusChange, piqueProcessor: PiqueProcessor<TProps>, mountContext: MountContext, stage: PipelineStage | undefined){
         const {pique} = piqueProcessor;
         const {e} = pique;
         if(e === undefined) return;
@@ -241,6 +241,10 @@ export class PiqueProcessor<TProps, TActions = TProps> extends EventTarget imple
                     this.#cleanUp(matchingElement);
                     await transformer.doEnhance(matchingElement, 'onDismount', this, ctx, stage);
                     //TODO remove weak ref from matching eleents;
+                },
+                onDisconnect: async(matchingElement, ctx, stage) => {
+                    this.#cleanUp(matchingElement);
+                    await transformer.doEnhance(matchingElement, 'onDisconnect', this, ctx, stage);
                 }
             }
         });

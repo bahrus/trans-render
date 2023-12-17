@@ -225,6 +225,10 @@ export class PiqueProcessor extends EventTarget {
                     this.#cleanUp(matchingElement);
                     await transformer.doEnhance(matchingElement, 'onDismount', this, ctx, stage);
                     //TODO remove weak ref from matching eleents;
+                },
+                onDisconnect: async (matchingElement, ctx, stage) => {
+                    this.#cleanUp(matchingElement);
+                    await transformer.doEnhance(matchingElement, 'onDisconnect', this, ctx, stage);
                 }
             }
         });
