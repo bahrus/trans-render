@@ -18,8 +18,9 @@ export type Expr2 = [...Expr1, number];
 export type Expr3 = [...Expr2, string];
 
 export type Action<TModel> = (matchingElement: Element, pique: IPiqueProcessor<TModel>) => Promise<UpdateInstruction<Model>> | Promise<void>;
-export type InterpolatingExpression = number | Expr0 | Expr1 | Expr2 | Expr3;
-export type UpdateInstruction<TModel> = InterpolatingExpression | Action<TModel>;
+export type InterpolatingExpression = Expr0 | Expr1 | Expr2 | Expr3;
+export type NumberExpression = [number]
+export type UpdateInstruction<TModel> = number | InterpolatingExpression | Action<TModel> | NumberExpression;
 
 export interface IPiqueProcessor<TModel>{
 
@@ -38,9 +39,21 @@ export type PropQueryExpression =
 export type CSSQuery = string;
 
 export interface PiqueWOQ<TModel>{
+    /**
+     * props
+     */
     p: keyof TModel & string | (keyof TModel & string)[],
+    /**
+     * ifs
+     */
     i?: any,
+    /**
+     * update instructions
+     */
     u?: UpdateInstruction<TModel>,
+    /**
+     * event listeners
+     */
     e?: any,
 }
 

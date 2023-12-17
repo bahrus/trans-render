@@ -1,9 +1,9 @@
 import {MountObserver} from 'mount-observer/MountObserver.js';
-import {TransformerTarget, Model, FragmentManifest, QueryInfo, PropQueryExpression, PropAttrQueryType, Pique, UpdateInstruction, IPiqueProcessor} from './types';
+import {TransformerTarget, Model, FragmentManifest, QueryInfo, PropQueryExpression, PropAttrQueryType, Pique, UpdateInstruction, IPiqueProcessor, NumberExpression, InterpolatingExpression} from './types';
 import { MountContext, PipelineStage } from '../mount-observer/types';
 
 export class Transformer<TModel = any> extends EventTarget {
-    #piqueProcessors: Array<PiqueProcessor>;
+    #piqueProcessors: Array<PiqueProcessor<TModel>>;
     constructor(
         public target: TransformerTarget, 
         public model: Model,
@@ -92,10 +92,32 @@ export class Transformer<TModel = any> extends EventTarget {
                 if(newU !== undefined){
                     await this.doUpdate(matchingElement, piqueProcessor, newU);
                 }
+                break;
+            }
+            case 'object': {
+                if(Array.isArray(u)){
+                    const val = this.getArrayVal(piqueProcessor, u);
+                    this.setPrimeValue(matchingElement, val);
+                }
             }
 
         }
         
+    }
+
+    getArrayVal(piqueProcessor: PiqueProcessor<TModel>, u: NumberExpression | InterpolatingExpression){
+        if(u.length === 1 && typeof u[0] === 'number') return u[0];
+        const mapped = u.map(x => {
+            switch(typeof x){
+                case 'number':
+                    return this.getNumberUVal(piqueProcessor, x);
+                case 'string':
+                    return x;
+                default:
+                    throw 'NI';
+            }
+        });
+        return mapped.join('');
     }
 
     getNumberUVal(piqueProcessor: PiqueProcessor<TModel>, u: number){
