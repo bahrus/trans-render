@@ -5,7 +5,6 @@ import {
     IPiqueProcessor, NumberExpression, InterpolatingExpression,
     ObjectExpression,
 } from './types';
-import { MountContext, PipelineStage } from '../mount-observer/types';
 
 export class Transformer<TModel = any> extends EventTarget {
     #piqueProcessors: Array<PiqueProcessor<TModel>>;

@@ -8,7 +8,7 @@ interface IModel{
 
 const div = document.querySelector('div')!;
 const model: IModel = {
-    msg1: 'hello',
+    msg1: '123',
     rO: true,
     num: 7
 };
@@ -34,6 +34,6 @@ setTimeout(() => {
     div.appendChild(input);
 }, 1000);
 setTimeout(() => {
-    model.msg1 = 'bye';
+    model.msg1 = '456';
     et.dispatchEvent(new Event('msg1'));
 }, 2000);

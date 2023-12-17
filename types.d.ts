@@ -44,7 +44,7 @@ export type UpdateInstruction<TModel> =
 ;
 
 export interface IPiqueProcessor<TModel>{
-
+    //TODO add all the methods
 }
 
 export type PropQueryExpression =
