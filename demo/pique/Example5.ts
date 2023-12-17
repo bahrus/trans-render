@@ -51,3 +51,6 @@ setTimeout(() => {
     model.msg1 = '456';
     et.dispatchEvent(new Event('msg1'));
 }, 2000);
+setTimeout(() => {
+    div.innerHTML = '';
+}, 5000)
