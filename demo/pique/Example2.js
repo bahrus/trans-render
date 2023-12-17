@@ -11,3 +11,7 @@ const transform = new Transformer(div, model, {
         }
     }
 });
+setTimeout(() => {
+    const span = document.createElement('span');
+    div.appendChild(span);
+}, 1000);

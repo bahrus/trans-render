@@ -18,3 +18,7 @@ const transform = new Transformer<IModel>(div, model, {
     }
     
 });
+setTimeout(() => {
+    const span = document.createElement('span');
+    div.appendChild(span);
+}, 1000);
