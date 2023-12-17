@@ -77,12 +77,19 @@ export class Transformer extends EventTarget {
                 return `${ln}-${prop} ${c}`.trimEnd() + ',' + `${ln}data-${prop} ${c}`.trimEnd();
         }
     }
-    doUpdate(matchingElement, piqueProcessor, u) {
-        let val;
+    async doUpdate(matchingElement, piqueProcessor, u) {
         switch (typeof u) {
-            case 'number':
-                val = this.getNumberUVal(piqueProcessor, u);
+            case 'number': {
+                const val = this.getNumberUVal(piqueProcessor, u);
                 this.setPrimeValue(matchingElement, val);
+                break;
+            }
+            case 'function': {
+                const newU = await u(matchingElement, piqueProcessor);
+                if (newU !== undefined) {
+                    await this.doUpdate(matchingElement, piqueProcessor, newU);
+                }
+            }
         }
     }
     getNumberUVal(piqueProcessor, u) {

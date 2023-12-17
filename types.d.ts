@@ -17,11 +17,13 @@ export type Expr1 = [...Expr0, string];
 export type Expr2 = [...Expr1, number];
 export type Expr3 = [...Expr2, string];
 
-export type Action<TModel> = (matchingElement: Element, pique: Pique<TModel>) => UpdateInstruction<TModel> | void;
+export type Action<TModel> = (matchingElement: Element, pique: IPiqueProcessor<TModel>) => Promise<UpdateInstruction<Model>> | Promise<void>;
 export type InterpolatingExpression = number | Expr0 | Expr1 | Expr2 | Expr3;
 export type UpdateInstruction<TModel> = InterpolatingExpression | Action<TModel>;
 
+export interface IPiqueProcessor<TModel>{
 
+}
 
 export type PropQueryExpression =
     | `* ${CSSQuery}` 

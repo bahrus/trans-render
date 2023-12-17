@@ -1,5 +1,5 @@
 import {MountObserver} from 'mount-observer/MountObserver.js';
-import {TransformerTarget, Model, FragmentManifest, QueryInfo, PropQueryExpression, PropAttrQueryType, Pique, UpdateInstruction} from './types';
+import {TransformerTarget, Model, FragmentManifest, QueryInfo, PropQueryExpression, PropAttrQueryType, Pique, UpdateInstruction, IPiqueProcessor} from './types';
 import { MountContext, PipelineStage } from '../mount-observer/types';
 
 export class Transformer<TModel = any> extends EventTarget {
@@ -80,17 +80,25 @@ export class Transformer<TModel = any> extends EventTarget {
         }
     }
 
-    doUpdate(matchingElement: Element, piqueProcessor: PiqueProcessor, u: UpdateInstruction){
-        let val: any;
+    async doUpdate(matchingElement: Element, piqueProcessor: PiqueProcessor<TModel>, u: UpdateInstruction<TModel>){
         switch(typeof u){
-            case 'number':
-                val = this.getNumberUVal(piqueProcessor, u);
+            case 'number':{
+                const val = this.getNumberUVal(piqueProcessor, u);
                 this.setPrimeValue(matchingElement, val);
+                break;
+            }
+            case 'function':{
+                const newU = await u(matchingElement, piqueProcessor);
+                if(newU !== undefined){
+                    await this.doUpdate(matchingElement, piqueProcessor, newU);
+                }
+            }
+
         }
         
     }
 
-    getNumberUVal(piqueProcessor: PiqueProcessor, u: number){
+    getNumberUVal(piqueProcessor: PiqueProcessor<TModel>, u: number){
         const {pique} = piqueProcessor;
         const {p} = pique;
         const propName = (p as string[])[u];
@@ -116,7 +124,7 @@ export function arr<T = any>(inp: T | T[] | undefined) : T[] {
         : Array.isArray(inp) ? inp : [inp];
 }
 
-export class PiqueProcessor extends EventTarget{
+export class PiqueProcessor<TModel> extends EventTarget implements IPiqueProcessor<TModel> {
     #mountObserver: MountObserver;
     #matchingElements: WeakRef<Element>[] = [];
     constructor(public transformer: Transformer, public pique: Pique<any>, public queryInfo: QueryInfo){
@@ -178,3 +186,4 @@ export class PiqueProcessor extends EventTarget{
         }
     }
 }
+
