@@ -32,7 +32,10 @@ There is a growing (🎉) list of semantically meaningful native-born DOM Elemen
 
 But even more dramatically, with the advent of imported, naturalized custom elements, the ratio between semantically meaningful tag names and divs/spans in the template markup will tend to grow much higher, looking more like XML of yore. trans-render's usefulness grows as a result of the increasingly semantic nature of the template markup.  
 
-In addition, the introduction of the aria- attributes for accessibility, "part" attributes for styling, as well as the re-emergence of microdata attributes as a standard that here to stay, means that we using a library like TR nudges us to "do the right thing" and adopt semantic approaches to our HTML, resulting in elegant approaches to binding.
+In addition, the introduction of the aria- attributes for accessibility, "part" attributes for styling, as well as the re-emergence of microdata attributes as a standard that is here to stay, means that using a library like TR nudges us to "do the right thing" and adopt semantic approaches to our HTML, resulting in elegant approaches to binding, and it will be quite rare for this style of development to feel limiting or "hackish".
 
 This can leave the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may be needed to keep the binding rules in sync.  Much like how separate css style rules often need adjusting when the document structure changes.
 
+## Example 1
+
+## The 80% rule.
