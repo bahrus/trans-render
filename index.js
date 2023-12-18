@@ -103,6 +103,24 @@ export class Transformer extends EventTarget {
             }
         }
     }
+    async doIfs(matchingElement, piqueProcessor, i) {
+        const iffs = arr(i);
+        for (const iff of iffs) {
+            const { ifAllOf, ifEqual, ifNoneOf, u } = iff;
+            if (ifAllOf !== undefined) {
+                for (const n of ifAllOf) {
+                    if (!this.getNumberUVal(piqueProcessor, n))
+                        continue;
+                }
+            }
+            if (ifNoneOf !== undefined) {
+                for (const n of ifNoneOf) {
+                    if (this.getNumberUVal(piqueProcessor, n))
+                        continue;
+                }
+            }
+        }
+    }
     async doEnhance(matchingElement, type, piqueProcessor, mountContext, stage) {
         const { pique } = piqueProcessor;
         const { e } = pique;
@@ -262,14 +280,13 @@ export class PiqueProcessor extends EventTarget {
         }
         return all;
     }
-    #attachedEvents = false;
     async doUpdate(matchingElement) {
-        const { e, u } = this.pique;
-        if (e !== undefined && !this.#attachedEvents) {
-            this.#attachedEvents = true;
-        }
+        const { u, i } = this.pique;
         if (u !== undefined) {
             await this.transformer.doUpdate(matchingElement, this, u);
+        }
+        if (i !== undefined) {
+            await this.transformer.doIfs(matchingElement, this, i);
         }
     }
 }

@@ -6,6 +6,7 @@ import {
     ObjectExpression,
     MethodInvocationCallback,
     onMountStatusChange,
+    IfInstructions,
 } from './types';
 import { MountContext, PipelineStage } from 'mount-observer/types';
 
@@ -113,6 +114,23 @@ export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
 
         }
         
+    }
+
+    async doIfs(matchingElement: Element, piqueProcessor: PiqueProcessor<TProps>, i: IfInstructions<TProps>){
+        const iffs = arr(i);
+        for(const iff of iffs){
+            const {ifAllOf, ifEqual, ifNoneOf, u} = iff;
+            if(ifAllOf !== undefined){
+                for(const n of ifAllOf){
+                    if(!this.getNumberUVal(piqueProcessor, n)) continue;
+                }
+            }
+            if(ifNoneOf !== undefined){
+                for(const n of ifNoneOf){
+                    if(this.getNumberUVal(piqueProcessor, n)) continue;
+                }
+            }
+        }
     }
 
     async doEnhance(matchingElement: Element, type: onMountStatusChange, piqueProcessor: PiqueProcessor<TProps>, mountContext: MountContext, stage: PipelineStage | undefined){
@@ -278,14 +296,13 @@ export class PiqueProcessor<TProps, TActions = TProps> extends EventTarget imple
         }
         return all;
     }
-    #attachedEvents = false;
     async doUpdate(matchingElement: Element){
-        const {e, u} = this.pique;
-        if(e !== undefined && !this.#attachedEvents){
-            this.#attachedEvents = true;
-        }
+        const {u, i} = this.pique;
         if(u !== undefined){
             await this.transformer.doUpdate(matchingElement, this, u);
+        }
+        if(i !== undefined){
+            await this.transformer.doIfs(matchingElement, this, i);
         }
     }
 }
