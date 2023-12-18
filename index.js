@@ -82,46 +82,8 @@ export class Transformer extends EventTarget {
         await doUpdate(this, matchingElement, piqueProcessor, u);
     }
     async doIfs(matchingElement, piqueProcessor, i) {
-        const iffs = arr(i);
-        for (const iff of iffs) {
-            const { ifAllOf, ifEqual, ifNoneOf, u } = iff;
-            if (ifAllOf !== undefined) {
-                for (const n of ifAllOf) {
-                    if (!this.getNumberUVal(piqueProcessor, n))
-                        continue;
-                }
-            }
-            if (ifNoneOf !== undefined) {
-                for (const n of ifNoneOf) {
-                    if (this.getNumberUVal(piqueProcessor, n))
-                        continue;
-                }
-            }
-            if (ifEqual !== undefined) {
-                const [lhsN, rhsNorS] = ifEqual;
-                const lhs = this.getNumberUVal(piqueProcessor, lhsN);
-                let rhs;
-                switch (typeof rhsNorS) {
-                    case 'number':
-                        rhs = this.getNumberUVal(piqueProcessor, rhsNorS);
-                        break;
-                    case 'object':
-                        if (Array.isArray(rhsNorS)) {
-                            [rhs] = rhsNorS;
-                        }
-                        else {
-                            throw 'NI';
-                        }
-                        break;
-                    case 'string':
-                        rhs = rhsNorS;
-                        break;
-                }
-                if (lhs !== rhs)
-                    continue;
-            }
-            await this.doUpdate(matchingElement, piqueProcessor, u);
-        }
+        const { doIfs } = await import('./pique/doIfs.js');
+        await doIfs(this, matchingElement, piqueProcessor, i);
     }
     async doEnhance(matchingElement, type, piqueProcessor, mountContext, stage) {
         const { pique } = piqueProcessor;
