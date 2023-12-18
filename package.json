@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.709",
+  "version": "0.0.710",
   "description": "Instantiate an HTML Template",
   "main": "index.js",
   "module": "index.js",
