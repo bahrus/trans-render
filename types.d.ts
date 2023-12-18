@@ -81,6 +81,15 @@ export type PropQueryExpression =
 
 export type CSSQuery = string;
 
+export interface ConditionalUpdate<TProps>{
+    ifAllOf?: number[],
+    ifNoneOf?: number[],
+    ifEqual?: [number, number | [number] | string],
+    u: UpdateInstruction<TProps>
+}
+
+export type IfInstructions<TProps> = ConditionalUpdate<TProps> | Array<ConditionalUpdate<TProps>>;
+
 export interface PiqueWOQ<TProps, TMethods = TProps>{
     /**
      * props
@@ -89,7 +98,7 @@ export interface PiqueWOQ<TProps, TMethods = TProps>{
     /**
      * ifs
      */
-    i?: any,
+    i?: IfInstructions<TProps>,
     /**
      * update instructions
      */
