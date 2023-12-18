@@ -15,17 +15,15 @@ const model: IModel = {
 const et = new EventTarget();
 
 const transform = new Transformer<IModel>(div, model, {
-    piqueMap: {
-        input: {
-            p: ['msg1', 'rO', 'num'],
-            u: {
-                readOnly: 1,
-                tabIndex: 2,
-                value: 0,
-                type: 'number',
-                disabled: true
-            } 
-        }
+    input: {
+        p: ['msg1', 'rO', 'num'],
+        u: {
+            readOnly: 1,
+            tabIndex: 2,
+            value: 0,
+            type: 'number',
+            disabled: true
+        } 
     }
 }, et);
 

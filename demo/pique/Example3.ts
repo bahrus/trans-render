@@ -13,11 +13,9 @@ const model: IModel = {
 const et = new EventTarget();
 
 const transform = new Transformer<IModel>(div, model, {
-    piqueMap: {
-        span: {
-            p: ['msg1', 'msg2'],
-            u: ['msg1: ', 0, ', msg2: ', 1]
-        }
+    span: {
+        p: ['msg1', 'msg2'],
+        u: ['msg1: ', 0, ', msg2: ', 1]
     }
 }, et);
 

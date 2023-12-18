@@ -10,21 +10,19 @@ const model = {
 };
 const et = new EventTarget();
 const transform = new Transformer(div, model, {
-    piqueMap: {
-        input: {
-            p: ['msg1', 'rO', 'num'],
-            u: {
-                readOnly: 1,
-                tabIndex: 2,
-                value: 0,
-                type: 'number',
-                disabled: true
-            },
-            e: {
-                do: 'onInput',
-                with: {
-                    beCommitted: true
-                }
+    input: {
+        p: ['msg1', 'rO', 'num'],
+        u: {
+            readOnly: 1,
+            tabIndex: 2,
+            value: 0,
+            type: 'number',
+            disabled: true
+        },
+        e: {
+            do: 'onInput',
+            with: {
+                beCommitted: true
             }
         }
     }
