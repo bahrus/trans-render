@@ -2,31 +2,31 @@ import { MountObserver } from 'mount-observer/MountObserver.js';
 export class Transformer extends EventTarget {
     target;
     model;
-    manifest;
+    piqueMap;
     propagator;
     #piqueProcessors;
-    constructor(target, model, manifest, propagator) {
+    #piques = [];
+    constructor(target, model, piqueMap, 
+    //public manifest: FragmentManifest<TProps, TActions>,
+    propagator) {
         super();
         this.target = target;
         this.model = model;
-        this.manifest = manifest;
+        this.piqueMap = piqueMap;
         this.propagator = propagator;
-        let { piques, piqueMap } = manifest;
-        if (piques === undefined) {
-            if (piqueMap === undefined)
-                throw 400;
-            piques = [];
-            for (const key in piqueMap) {
-                const piqueWOQ = piqueMap[key];
-                const pique = {
-                    ...piqueWOQ,
-                    q: key
-                };
-                piques.push(pique);
-            }
+        let prevKey;
+        for (const key in piqueMap) {
+            const newKey = key[0] === '^' ? prevKey : key;
+            prevKey = newKey;
+            const piqueWOQ = piqueMap[newKey];
+            const pique = {
+                ...piqueWOQ,
+                q: newKey
+            };
+            this.#piques.push(pique);
         }
         this.#piqueProcessors = [];
-        for (const pique of piques) {
+        for (const pique of this.#piques) {
             pique.p = arr(pique.p);
             const { p, q } = pique;
             const qi = this.calcQI(q, p);

@@ -6,35 +6,35 @@ import {
     ObjectExpression,
     MethodInvocationCallback,
     onMountStatusChange,
-    IfInstructions,
+    IfInstructions, PiqueWOQ
 } from './types';
 import { MountContext, PipelineStage } from 'mount-observer/types';
 
 export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
     #piqueProcessors: Array<PiqueProcessor<TProps, TActions>>;
+    #piques: Array<Pique<TProps, TActions>> = [];
     constructor(
         public target: TransformerTarget,
         public model: Model,
-        public manifest: FragmentManifest<TProps, TActions>,
+        public piqueMap: Partial<{[key in PropQueryExpression]: PiqueWOQ<TProps>}>,
+        //public manifest: FragmentManifest<TProps, TActions>,
         public propagator?: EventTarget, 
     ){
         super();
-        let {piques, piqueMap} = manifest;
-        if(piques === undefined){
-            if(piqueMap === undefined) throw 400;
-            piques = [];
-            for(const key in piqueMap){
-                const piqueWOQ = (piqueMap as any)[key];
-                const pique: Pique<TProps, TActions> = {
-                    ...piqueWOQ,
-                    q: key
-                };
-                piques.push(pique);
-            }
+        let prevKey: string | undefined;
+        for(const key in piqueMap){
+            const newKey = key[0] ==='^' ? prevKey : key;
+            prevKey = newKey;
+            const piqueWOQ = (<any>piqueMap)[newKey as string];
+            const pique: Pique<TProps, TActions> = {
+                ...piqueWOQ,
+                q: newKey
+            };
+            this.#piques.push(pique);
         }
         this.#piqueProcessors = [];
 
-        for(const pique of piques){
+        for(const pique of this.#piques){
             pique.p = arr(pique.p);
             const {p, q} = pique;
             const qi = this.calcQI(q, p);

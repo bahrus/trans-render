@@ -40,4 +40,76 @@ This can leave the template markup quite pristine, but it does mean that the sep
 
 ## Example 1
 
+Suppose our HTML looks as follows:
+
+```html
+<div>
+    <span></span>
+</div>
+```
+
+We can bind to this DOM fragment as follows:
+
+```TypeScript
+interface IModel{
+    greeting: string;
+}
+
+const div = document.querySelector('div')!;
+const model: IModel = {
+    greeting: 'hello'
+};
+const et = new EventTarget();
+
+const transform = new Transformer<IModel>(div, model, {
+    span: {
+        p: ['greeting'],
+        u: 0
+    },
+}, et);
+```
+
+Explanation:
+
+The critical transform definition is this snippet from above:
+
+```JavaScript
+{
+    span: {
+        p: ['greeting'],
+        u: 0
+    },
+}
+```
+
+The "span" css-selector is saying watch for any span tags.
+
+The "p" parameter is specifying the list of properties to bind to from the model.  The order is important, as the rest of the transform mapping will frequently references these properties via the index in this array.  
+
+And in fact the "u" parameter is saying "update the span from the value of the 0th property from the p setting"
+
+The result is:
+
+```html
+<div>
+    <span></span>
+</div>
+```
+
+We can see the dynamic, css sheet like power of this library by adding some script at the end of the html document:
+
+```JavaScript
+//script #1
+setTimeout(() => {
+    const span = document.createElement('span');
+    div.appendChild(span);
+}, 1000);
+
+//script #2
+setTimeout(() => {
+    model.greeting = 'bye';
+    et.dispatchEvent(new Event('greeting'));
+}, 2000);
+```
+
 ## The 80% rule.
