@@ -119,6 +119,30 @@ export class Transformer extends EventTarget {
                         continue;
                 }
             }
+            if (ifEqual !== undefined) {
+                const [lhsN, rhsNorS] = ifEqual;
+                const lhs = this.getNumberUVal(piqueProcessor, lhsN);
+                let rhs;
+                switch (typeof rhsNorS) {
+                    case 'number':
+                        rhs = this.getNumberUVal(piqueProcessor, rhsNorS);
+                        break;
+                    case 'object':
+                        if (Array.isArray(rhsNorS)) {
+                            [rhs] = rhsNorS;
+                        }
+                        else {
+                            throw 'NI';
+                        }
+                        break;
+                    case 'string':
+                        rhs = rhsNorS;
+                        break;
+                }
+                if (lhs !== rhs)
+                    continue;
+            }
+            await this.doUpdate(matchingElement, piqueProcessor, u);
         }
     }
     async doEnhance(matchingElement, type, piqueProcessor, mountContext, stage) {
