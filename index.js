@@ -78,30 +78,8 @@ export class Transformer extends EventTarget {
         }
     }
     async doUpdate(matchingElement, piqueProcessor, u) {
-        switch (typeof u) {
-            case 'number': {
-                const val = this.getNumberUVal(piqueProcessor, u);
-                this.setPrimeValue(matchingElement, val);
-                break;
-            }
-            case 'function': {
-                const newU = await u(matchingElement, piqueProcessor);
-                if (newU !== undefined) {
-                    await this.doUpdate(matchingElement, piqueProcessor, newU);
-                }
-                break;
-            }
-            case 'object': {
-                if (Array.isArray(u)) {
-                    const val = this.getArrayVal(piqueProcessor, u);
-                    this.setPrimeValue(matchingElement, val);
-                }
-                else {
-                    const val = await this.getNestedObjVal(piqueProcessor, u);
-                    Object.assign(matchingElement, val);
-                }
-            }
-        }
+        const { doUpdate } = await import('./pique/doUpdate.js');
+        await doUpdate(this, matchingElement, piqueProcessor, u);
     }
     async doIfs(matchingElement, piqueProcessor, i) {
         const iffs = arr(i);
