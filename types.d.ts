@@ -1,10 +1,10 @@
 import { MountContext, PipelineStage } from "mount-observer/types";
 
-export interface FragmentManifest<TProps = any, TActions = TProps>{
-    piques?: Pique<TProps, TActions>[],
-    piqueMap?: {[key in PropQueryExpression]: PiqueWOQ<TProps>}
-    //piqueMap?: {[key: string]: PiqueWOQ<TProps, TActions>}
-}
+// export interface FragmentManifest<TProps = any, TActions = TProps>{
+//     piques?: Pique<TProps, TActions>[],
+//     piqueMap?: {[key in PropQueryExpression]: PiqueWOQ<TProps>}
+//     //piqueMap?: {[key: string]: PiqueWOQ<TProps, TActions>}
+// }
 
 export type PropAttrQueryType = 
     | '$' //microdata itemprop

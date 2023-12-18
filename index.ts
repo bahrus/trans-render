@@ -16,7 +16,7 @@ export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
     constructor(
         public target: TransformerTarget,
         public model: Model,
-        public piqueMap: Partial<{[key in PropQueryExpression]: PiqueWOQ<TProps>}>,
+        public piqueMap: Partial<{[key in PropQueryExpression]: PiqueWOQ<TProps, TActions>}>,
         //public manifest: FragmentManifest<TProps, TActions>,
         public propagator?: EventTarget, 
     ){
