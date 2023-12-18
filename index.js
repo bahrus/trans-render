@@ -86,64 +86,12 @@ export class Transformer extends EventTarget {
         await doIfs(this, matchingElement, piqueProcessor, i);
     }
     async doEnhance(matchingElement, type, piqueProcessor, mountContext, stage) {
-        const { pique } = piqueProcessor;
-        const { e } = pique;
-        if (e === undefined)
-            return;
-        const methodArg = {
-            mountContext,
-            stage,
-            type
-        };
-        const model = this.model;
-        switch (typeof e) {
-            case 'string': {
-                model[e](model, matchingElement, methodArg);
-                break;
-            }
-            case 'object':
-                const es = arr(e);
-                for (const enhance of es) {
-                    const { do: d, with: w } = enhance;
-                    model[d](model, matchingElement, {
-                        ...methodArg,
-                        with: w
-                    });
-                }
-                break;
-        }
+        const { doEnhance } = await import('./pique/doEnhance.js');
+        await doEnhance(this, matchingElement, type, piqueProcessor, mountContext, stage);
     }
     async getNestedObjVal(piqueProcessor, u) {
-        const returnObj = {};
-        for (const key in u) {
-            const v = u[key];
-            switch (typeof v) {
-                case 'number': {
-                    const val = this.getNumberUVal(piqueProcessor, v);
-                    returnObj[key] = val;
-                    break;
-                }
-                case 'function': {
-                    throw 'NI';
-                }
-                case 'object': {
-                    if (Array.isArray(v)) {
-                        const val = this.getArrayVal(piqueProcessor, v);
-                        returnObj[key] = val;
-                    }
-                    else {
-                        const val = this.getNestedObjVal(piqueProcessor, v);
-                        returnObj[key] = val;
-                    }
-                }
-                case 'boolean':
-                case 'string': {
-                    returnObj[key] = v;
-                    break;
-                }
-            }
-        }
-        return returnObj;
+        const { getNestedObjVal } = await import('./pique/getNestedObjVal.js');
+        return await getNestedObjVal(this, piqueProcessor, u);
     }
     getArrayVal(piqueProcessor, u) {
         if (u.length === 1 && typeof u[0] === 'number')

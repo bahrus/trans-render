@@ -99,65 +99,13 @@ export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
     }
 
     async doEnhance(matchingElement: Element, type: onMountStatusChange, piqueProcessor: PiqueProcessor<TProps>, mountContext: MountContext, stage: PipelineStage | undefined){
-        const {pique} = piqueProcessor;
-        const {e} = pique;
-        if(e === undefined) return;
-        const methodArg: MethodInvocationCallback<TActions> = {
-            mountContext,
-            stage,
-            type
-        };
-        const model = this.model as any;
-        switch(typeof e){
-            case 'string':{
-                model[e](model, matchingElement, methodArg);
-                break;
-            }
-            case 'object':
-                const es = arr(e);
-                for(const enhance of es){
-                    const {do: d, with: w} = enhance;
-                    model[d](model, matchingElement, {
-                        ...methodArg,
-                        with: w
-                    });
-                }
-                break;
-        }
-
+        const {doEnhance} = await import('./pique/doEnhance.js');
+        await doEnhance(this, matchingElement, type, piqueProcessor, mountContext, stage);
     }
 
     async getNestedObjVal(piqueProcessor: PiqueProcessor<TProps>, u: ObjectExpression<TProps>){
-        const returnObj: Partial<TProps> = {};
-        for(const key in u){
-            const v = u[key as keyof TProps & string] as UpdateInstruction<TProps>;
-            switch(typeof v){
-                case 'number':{
-                    const val = this.getNumberUVal(piqueProcessor, v);
-                    (<any>returnObj)[key as keyof TProps & string] = val;
-                    break;
-                }
-                case 'function':{
-                    throw 'NI';
-                }
-                case 'object': {
-                    if(Array.isArray(v)){
-                        const val = this.getArrayVal(piqueProcessor, v);
-                        (<any>returnObj)[key as keyof TProps & string] = val;
-                    }else{
-                        const val = this.getNestedObjVal(piqueProcessor, v);
-                        (<any>returnObj)[key as keyof TProps & string] = val;
-                    }
-                }
-                case 'boolean':
-                case 'string': {
-                    (<any>returnObj)[key as keyof TProps & string] = v;
-                    break;
-                }
-                
-            }
-        }
-        return returnObj;
+        const {getNestedObjVal} = await import('./pique/getNestedObjVal.js');
+        return await getNestedObjVal(this, piqueProcessor, u);
     }
 
     getArrayVal(piqueProcessor: PiqueProcessor<TProps>, u: NumberExpression | InterpolatingExpression){
