@@ -6,7 +6,7 @@ import {
     MethodInvocationCallback,
     TransformerTarget, 
     onMountStatusChange,
-    IfInstructions, PiqueWOQ, QueryInfo
+    IfInstructions, PiqueWOQ, QueryInfo, PropOrComputedProp
 } from './types';
 import { MountContext, PipelineStage } from 'mount-observer/types';
 
@@ -35,14 +35,13 @@ export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
         this.#piqueProcessors = [];
 
         for(const pique of this.#piques){
-            //pique.p = arr(pique.p);
             const {p, q} = pique;
             const qi = this.calcQI(q, p);
             const newProcessor = new PiqueProcessor(this, pique, qi);
             this.#piqueProcessors.push(newProcessor);
         }
     }
-    calcQI(pqe: PropQueryExpression, p: string[]){
+    calcQI(pqe: PropQueryExpression, p: Array<PropOrComputedProp<TProps, TActions>>){
         const qi: QueryInfo = {};
         const asterSplit = pqe.split('*');
         if(asterSplit.length === 2){
@@ -58,7 +57,7 @@ export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
         }
         if(first !== undefined){
             qi.propAttrType = first as PropAttrQueryType;
-            qi.prop = p[Number(second)];
+            qi.prop = this.#getPropName(p, Number(second));
         }
         return qi;
     }
@@ -131,7 +130,11 @@ export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
         return val;
     }
 
-
+    #getPropName(p: Array<PropOrComputedProp<TProps, TActions>>, n: number){
+        const pOrC = p[n];
+        if(Array.isArray(pOrC)) return pOrC[0];
+        return pOrC;
+    }
 
     setPrimeValue(matchingElement: Element, val: any){
         (<any>matchingElement)[this.getDefaultProp(matchingElement)] = val;

@@ -27,7 +27,6 @@ export class Transformer extends EventTarget {
         }
         this.#piqueProcessors = [];
         for (const pique of this.#piques) {
-            //pique.p = arr(pique.p);
             const { p, q } = pique;
             const qi = this.calcQI(q, p);
             const newProcessor = new PiqueProcessor(this, pique, qi);
@@ -50,7 +49,7 @@ export class Transformer extends EventTarget {
         }
         if (first !== undefined) {
             qi.propAttrType = first;
-            qi.prop = p[Number(second)];
+            qi.prop = this.#getPropName(p, Number(second));
         }
         return qi;
     }
@@ -114,6 +113,12 @@ export class Transformer extends EventTarget {
         const propName = p[u];
         const val = this.model[propName];
         return val;
+    }
+    #getPropName(p, n) {
+        const pOrC = p[n];
+        if (Array.isArray(pOrC))
+            return pOrC[0];
+        return pOrC;
     }
     setPrimeValue(matchingElement, val) {
         matchingElement[this.getDefaultProp(matchingElement)] = val;

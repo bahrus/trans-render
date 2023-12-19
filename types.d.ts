@@ -98,7 +98,7 @@ export interface PiqueWOQ<TProps, TMethods = TProps>{
     /**
      * props
      */
-    p: (keyof TProps & string)[],
+    p: PropOrComputedProp<TProps, TMethods>[],
     /**
      * ifs
      */
