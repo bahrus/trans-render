@@ -6,7 +6,7 @@ import {
     MethodInvocationCallback,
     TransformerTarget, 
     onMountStatusChange,
-    IfInstructions, PiqueWOQ
+    IfInstructions, PiqueWOQ, QueryInfo
 } from './types';
 import { MountContext, PipelineStage } from 'mount-observer/types';
 
@@ -35,7 +35,7 @@ export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
         this.#piqueProcessors = [];
 
         for(const pique of this.#piques){
-            pique.p = arr(pique.p);
+            //pique.p = arr(pique.p);
             const {p, q} = pique;
             const qi = this.calcQI(q, p);
             const newProcessor = new PiqueProcessor(this, pique, qi);

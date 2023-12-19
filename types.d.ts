@@ -90,11 +90,15 @@ export interface ConditionalUpdate<TProps>{
 
 export type IfInstructions<TProps> = ConditionalUpdate<TProps> | Array<ConditionalUpdate<TProps>>;
 
+export type PropOrComputedProp<TProps, TMethods = TProps> = 
+    | keyof TProps & string
+    | [keyof TProps & string, (val: any) => any]
+    | [keyof TProps & string, keyof TMethods & string]
 export interface PiqueWOQ<TProps, TMethods = TProps>{
     /**
      * props
      */
-    p: keyof TProps & string | (keyof TProps & string)[],
+    p: (keyof TProps & string)[],
     /**
      * ifs
      */

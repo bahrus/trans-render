@@ -27,7 +27,7 @@ export class Transformer extends EventTarget {
         }
         this.#piqueProcessors = [];
         for (const pique of this.#piques) {
-            pique.p = arr(pique.p);
+            //pique.p = arr(pique.p);
             const { p, q } = pique;
             const qi = this.calcQI(q, p);
             const newProcessor = new PiqueProcessor(this, pique, qi);
