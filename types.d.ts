@@ -118,7 +118,7 @@ export interface Pique<TProps, TActions> extends PiqueWOQ<TProps, TActions>{
     q: string
 }
 
-export type RHS<TProps, TActions> = 0 | keyof TProps & string | Pique<TProps, TActions>;
+export type RHS<TProps, TActions> = 0 | keyof TProps & string | PiqueWOQ<TProps, TActions>;
 
 export interface QueryInfo{
     cssQuery?: string,
