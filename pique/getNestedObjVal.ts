@@ -1,8 +1,8 @@
 import {PiqueProcessor, Transformer, arr} from '../index.js';
 import {IfInstructions, ObjectExpression, UpdateInstruction} from '../types';
-export async function getNestedObjVal<TProps, TActions = TProps>(
-    transformer: Transformer<TProps, TActions>, 
-    piqueProcessor: PiqueProcessor<TProps>, 
+export async function getNestedObjVal<TProps, TMethods = TProps>(
+    transformer: Transformer<TProps, TMethods>, 
+    piqueProcessor: PiqueProcessor<TProps, TMethods>, 
     u: ObjectExpression<TProps>){
     const returnObj: Partial<TProps> = {};
     for(const key in u){

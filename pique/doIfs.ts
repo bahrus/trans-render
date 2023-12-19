@@ -1,9 +1,9 @@
 import {PiqueProcessor, Transformer, arr} from '../index.js';
 import {IfInstructions} from '../types';
-export async function doIfs<TProps, TActions = TProps>(
-    transformer: Transformer<TProps, TActions>, 
+export async function doIfs<TProps, TMethods = TProps>(
+    transformer: Transformer<TProps, TMethods>, 
     matchingElement: Element, 
-    piqueProcessor: PiqueProcessor<TProps>, 
+    piqueProcessor: PiqueProcessor<TProps, TMethods>, 
     i: IfInstructions<TProps>
 ){
     const iffs = arr(i);

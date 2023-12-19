@@ -87,22 +87,22 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         }
     }
 
-    async doUpdate(matchingElement: Element, piqueProcessor: PiqueProcessor<TProps>, u: UpdateInstruction<TProps>){
+    async doUpdate(matchingElement: Element, piqueProcessor: PiqueProcessor<TProps, TMethods>, u: UpdateInstruction<TProps>){
         const {doUpdate} = await import('./pique/doUpdate.js');
         await doUpdate(this, matchingElement, piqueProcessor, u);
     }
 
-    async doIfs(matchingElement: Element, piqueProcessor: PiqueProcessor<TProps>, i: IfInstructions<TProps>){
+    async doIfs(matchingElement: Element, piqueProcessor: PiqueProcessor<TProps, TMethods>, i: IfInstructions<TProps>){
         const {doIfs} = await import('./pique/doIfs.js');
         await doIfs(this, matchingElement, piqueProcessor, i);
     }
 
-    async doEnhance(matchingElement: Element, type: onMountStatusChange, piqueProcessor: PiqueProcessor<TProps>, mountContext: MountContext, stage: PipelineStage | undefined){
+    async doEnhance(matchingElement: Element, type: onMountStatusChange, piqueProcessor: PiqueProcessor<TProps, TMethods>, mountContext: MountContext, stage: PipelineStage | undefined){
         const {doEnhance} = await import('./pique/doEnhance.js');
         await doEnhance(this, matchingElement, type, piqueProcessor, mountContext, stage);
     }
 
-    async getNestedObjVal(piqueProcessor: PiqueProcessor<TProps>, u: ObjectExpression<TProps>){
+    async getNestedObjVal(piqueProcessor: PiqueProcessor<TProps, TMethods>, u: ObjectExpression<TProps>){
         const {getNestedObjVal} = await import('./pique/getNestedObjVal.js');
         return await getNestedObjVal(this, piqueProcessor, u);
     }

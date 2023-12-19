@@ -1,9 +1,9 @@
 import {PiqueProcessor, Transformer} from '../index.js';
 import { UpdateInstruction } from '../types';
-export async function doUpdate<TProps, TActions = TProps>(
-    transformer: Transformer<TProps, TActions>,
+export async function doUpdate<TProps, TMethods = TProps>(
+    transformer: Transformer<TProps, TMethods>,
     matchingElement: Element, 
-    piqueProcessor: PiqueProcessor<TProps>, 
+    piqueProcessor: PiqueProcessor<TProps, TMethods>, 
     u: UpdateInstruction<TProps>
 ){
     switch(typeof u){

@@ -2,15 +2,15 @@ import { MountContext, PipelineStage } from 'mount-observer/types';
 import {PiqueProcessor, Transformer, arr} from '../index.js';
 import {onMountStatusChange, MethodInvocationCallback} from '../types';
 
-export async  function doEnhance<TProps, TActions=TProps>(
-    transformer: Transformer<TProps, TActions>, 
+export async  function doEnhance<TProps, TMethods=TProps>(
+    transformer: Transformer<TProps, TMethods>, 
     matchingElement: Element, 
     type: onMountStatusChange, 
-    piqueProcessor: PiqueProcessor<TProps>, mountContext: MountContext, stage: PipelineStage | undefined){
+    piqueProcessor: PiqueProcessor<TProps, TMethods>, mountContext: MountContext, stage: PipelineStage | undefined){
     const {pique} = piqueProcessor;
     const {e} = pique;
     if(e === undefined) return;
-    const methodArg: MethodInvocationCallback<TActions> = {
+    const methodArg: MethodInvocationCallback<TMethods> = {
         mountContext,
         stage,
         type
