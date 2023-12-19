@@ -10,14 +10,14 @@ import {
 } from './types';
 import { MountContext, PipelineStage } from 'mount-observer/types';
 
-export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
-    #piqueProcessors: Array<PiqueProcessor<TProps, TActions>>;
-    #piques: Array<Pique<TProps, TActions>> = [];
+export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
+    #piqueProcessors: Array<PiqueProcessor<TProps, TMethods>>;
+    #piques: Array<Pique<TProps, TMethods>> = [];
     constructor(
         public target: TransformerTarget,
-        public model: TProps & TActions,
+        public model: TProps & TMethods,
         //public piqueMap: Partial<{[key in PropQueryExpression]: PiqueWOQ<TProps, TActions>}>,
-        public piqueMap: Partial<{[key: string]: PiqueWOQ<TProps, TActions>}>,
+        public piqueMap: Partial<{[key: string]: PiqueWOQ<TProps, TMethods>}>,
         public propagator?: EventTarget, 
     ){
         super();
@@ -26,7 +26,7 @@ export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
             const newKey = key[0] ==='^' ? prevKey : key;
             prevKey = newKey;
             const piqueWOQ = (<any>piqueMap)[newKey as string];
-            const pique: Pique<TProps, TActions> = {
+            const pique: Pique<TProps, TMethods> = {
                 ...piqueWOQ,
                 q: newKey
             };
@@ -41,7 +41,7 @@ export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
             this.#piqueProcessors.push(newProcessor);
         }
     }
-    calcQI(pqe: PropQueryExpression, p: Array<PropOrComputedProp<TProps, TActions>>){
+    calcQI(pqe: PropQueryExpression, p: Array<PropOrComputedProp<TProps, TMethods>>){
         const qi: QueryInfo = {};
         const asterSplit = pqe.split('*');
         if(asterSplit.length === 2){
@@ -130,7 +130,7 @@ export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
         return val;
     }
 
-    #getPropName(p: Array<PropOrComputedProp<TProps, TActions>>, n: number){
+    #getPropName(p: Array<PropOrComputedProp<TProps, TMethods>>, n: number){
         const pOrC = p[n];
         if(Array.isArray(pOrC)) return pOrC[0];
         return pOrC;
@@ -154,10 +154,10 @@ export function arr<T = any>(inp: T | T[] | undefined) : T[] {
         : Array.isArray(inp) ? inp : [inp];
 }
 
-export class PiqueProcessor<TProps, TActions = TProps> extends EventTarget implements IPiqueProcessor<TProps, TActions> {
+export class PiqueProcessor<TProps, TMethods = TProps> extends EventTarget implements IPiqueProcessor<TProps, TMethods> {
     #mountObserver: MountObserver;
     #matchingElements: WeakRef<Element>[] = [];
-    constructor(public transformer: Transformer, public pique: Pique<TProps, TActions>, public queryInfo: QueryInfo){
+    constructor(public transformer: Transformer, public pique: Pique<TProps, TMethods>, public queryInfo: QueryInfo){
         super();
         
         const {p} = pique;
