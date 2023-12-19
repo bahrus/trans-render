@@ -118,5 +118,24 @@ Is the syntax above the most readable thing you have ever seen?  Probably not.  
 
 In fact, the syntax above is so likely to appear repeatedly, that we provide the following shortcut for it:
 
+We can replace:
 
+```TypeScript
+const transform = new Transformer<IModel>(div, model, {
+    span: {
+        o: ['greeting'],
+        u: 0
+    },
+}, et);
+```
+
+with the shortcut:
+
+```TypeScript
+Transform<IModel>(div, model, {
+    span: 'greeting',
+}, et);
+```
+
+But it is important to know what the shortcut is for, just as in calculus it is import to know that prime is shorthand for dy/dx.
 
