@@ -137,5 +137,5 @@ Transform<IModel>(div, model, {
 }, et);
 ```
 
-But it is important to know what the shortcut is for, just as in calculus it is import to know that prime is shorthand for dy/dx.
+But it is important to know what the shortcut is for, just as in calculus it is import to know that y' is shorthand for dy/dx.
 
