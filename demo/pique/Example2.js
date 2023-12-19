@@ -1,19 +1,19 @@
 import { Transformer } from '../../index.js';
-const div = document.querySelector('div');
+const form = document.querySelector('form');
 const model = {
     greeting: 'hello'
 };
 const et = new EventTarget();
-const transform = new Transformer(div, model, {
-    '$ 0': {
+const transform = new Transformer(form, model, {
+    '@ 0': {
         o: ['greeting'],
         u: 0
     },
 }, et);
 setTimeout(() => {
-    const section = document.createElement('section');
-    section.setAttribute('itemprop', 'greeting');
-    div.appendChild(section);
+    const section = document.createElement('input');
+    section.setAttribute('name', 'greeting');
+    form.appendChild(section);
 }, 1000);
 setTimeout(() => {
     model.greeting = 'bye';
