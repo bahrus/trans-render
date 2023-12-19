@@ -63,7 +63,7 @@ const et = new EventTarget();
 
 const transform = new Transformer<IModel>(div, model, {
     span: {
-        p: ['greeting'],
+        o: ['greeting'],
         u: 0
     },
 }, et);
