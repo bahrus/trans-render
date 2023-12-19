@@ -1,10 +1,10 @@
 import {MountObserver} from 'mount-observer/MountObserver.js';
 import {
-    TransformerTarget, Model, FragmentManifest, QueryInfo, 
     PropQueryExpression, PropAttrQueryType, Pique, UpdateInstruction, 
     IPiqueProcessor, NumberExpression, InterpolatingExpression,
     ObjectExpression,
     MethodInvocationCallback,
+    TransformerTarget, 
     onMountStatusChange,
     IfInstructions, PiqueWOQ
 } from './types';
@@ -15,9 +15,9 @@ export class Transformer<TProps = any, TActions = TProps> extends EventTarget {
     #piques: Array<Pique<TProps, TActions>> = [];
     constructor(
         public target: TransformerTarget,
-        public model: Model,
-        public piqueMap: Partial<{[key in PropQueryExpression]: PiqueWOQ<TProps, TActions>}>,
-        //public manifest: FragmentManifest<TProps, TActions>,
+        public model: TProps & TActions,
+        //public piqueMap: Partial<{[key in PropQueryExpression]: PiqueWOQ<TProps, TActions>}>,
+        public piqueMap: Partial<{[key: string]: PiqueWOQ<TProps, TActions>}>,
         public propagator?: EventTarget, 
     ){
         super();
