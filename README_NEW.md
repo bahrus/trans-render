@@ -113,3 +113,8 @@ setTimeout(() => {
 ```
 
 ## The 80% rule.
+
+Is the syntax above the most readable thing you have ever seen?  Probably not.  This library is striving to balance a number of concerns:  1)  Minimizing unnecessary renders by being precise about what needs to be re-rendered, when, and 2)  Keeping repetitive syntax small.  Potentially, it could serve as a compile-time target to a more verbose, expressive syntax.  But like css, we believe the syntax can be "gotten used to", and we remember having a similar reaction when encountering css for the first time.
+
+In fact, the syntax above is so likely to appear repeatedly, that we provide the following shortcut for it:
+
