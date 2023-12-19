@@ -1,4 +1,4 @@
-import {Transformer} from '../../index.js';
+import {Transform} from '../../index.js';
 
 interface IModel{
     greeting: string;
@@ -10,7 +10,7 @@ const model: IModel = {
 };
 const et = new EventTarget();
 
-const transform = new Transformer<IModel>(div, model, {
+Transform<IModel>(div, model, {
     span: 'greeting',
 }, et);
 setTimeout(() => {

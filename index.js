@@ -1,4 +1,9 @@
 import { MountObserver } from 'mount-observer/MountObserver.js';
+export function Transform(target, model, 
+//public piqueMap: Partial<{[key in PropQueryExpression]: PiqueWOQ<TProps, TActions>}>,
+piqueMap, propagator) {
+    return new Transformer(target, model, piqueMap, propagator);
+}
 export class Transformer extends EventTarget {
     target;
     model;
@@ -18,12 +23,30 @@ export class Transformer extends EventTarget {
         for (const key in piqueMap) {
             const newKey = key[0] === '^' ? prevKey : key;
             prevKey = newKey;
-            const piqueWOQ = piqueMap[newKey];
-            const pique = {
-                ...piqueWOQ,
-                q: newKey
-            };
-            this.#piques.push(pique);
+            const rhs = (piqueMap)[newKey];
+            switch (typeof rhs) {
+                case 'number': //0
+                    throw 'NI';
+                case 'string':
+                    {
+                        const pique = {
+                            o: [rhs],
+                            u: 0,
+                            q: newKey
+                        };
+                        this.#piques.push(pique);
+                    }
+                    break;
+                case 'object':
+                    {
+                        const pique = {
+                            ...rhs,
+                            q: newKey
+                        };
+                        this.#piques.push(pique);
+                    }
+                    break;
+            }
         }
         this.#piqueProcessors = [];
         for (const pique of this.#piques) {

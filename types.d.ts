@@ -114,8 +114,11 @@ export interface PiqueWOQ<TProps, TMethods = TProps>{
 }
 
 export interface Pique<TProps, TActions> extends PiqueWOQ<TProps, TActions>{
-    q: PropQueryExpression,
+    //q: PropQueryExpression,
+    q: string
 }
+
+export type RHS<TProps, TActions> = 0 | keyof TProps & string | Pique<TProps, TActions>;
 
 export interface QueryInfo{
     cssQuery?: string,

@@ -1,10 +1,10 @@
-import { Transformer } from '../../index.js';
+import { Transform } from '../../index.js';
 const div = document.querySelector('div');
 const model = {
     greeting: 'hello'
 };
 const et = new EventTarget();
-const transform = new Transformer(div, model, {
+Transform(div, model, {
     span: 'greeting',
 }, et);
 setTimeout(() => {

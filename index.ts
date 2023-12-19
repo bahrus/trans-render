@@ -3,12 +3,21 @@ import {
     PropQueryExpression, PropAttrQueryType, Pique, UpdateInstruction, 
     IPiqueProcessor, NumberExpression, InterpolatingExpression,
     ObjectExpression,
-    MethodInvocationCallback,
     TransformerTarget, 
-    onMountStatusChange,
+    onMountStatusChange, RHS,
     IfInstructions, PiqueWOQ, QueryInfo, PropOrComputedProp
 } from './types';
 import { MountContext, PipelineStage } from 'mount-observer/types';
+
+export function Transform<TProps = any, TMethods = TProps>(
+    target: TransformerTarget,
+    model: TProps & TMethods,
+        //public piqueMap: Partial<{[key in PropQueryExpression]: PiqueWOQ<TProps, TActions>}>,
+    piqueMap: Partial<{[key: string]: RHS<TProps, TMethods>}>,
+    propagator?: EventTarget, 
+){
+    return new Transformer<TProps, TMethods>(target, model, piqueMap, propagator);
+}
 
 export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
     #piqueProcessors: Array<PiqueProcessor<TProps, TMethods>>;
@@ -17,7 +26,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         public target: TransformerTarget,
         public model: TProps & TMethods,
         //public piqueMap: Partial<{[key in PropQueryExpression]: PiqueWOQ<TProps, TActions>}>,
-        public piqueMap: Partial<{[key: string]: PiqueWOQ<TProps, TMethods>}>,
+        public piqueMap: Partial<{[key: string]: RHS<TProps, TMethods>}>,
         public propagator?: EventTarget, 
     ){
         super();
@@ -25,12 +34,31 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         for(const key in piqueMap){
             const newKey = key[0] ==='^' ? prevKey : key;
             prevKey = newKey;
-            const piqueWOQ = (<any>piqueMap)[newKey as string];
-            const pique: Pique<TProps, TMethods> = {
-                ...piqueWOQ,
-                q: newKey
-            };
-            this.#piques.push(pique);
+            const rhs = (piqueMap)[newKey as string];
+            switch(typeof rhs){
+                case 'number': //0
+                    throw 'NI';
+                case 'string':
+                    {
+                        const pique: Pique<TProps, TMethods> = {
+                            o: [rhs],
+                            u: 0,
+                            q: newKey!
+                        };
+                        this.#piques.push(pique);
+                    }
+                    break;
+                case 'object':
+                    {
+                        const pique: Pique<TProps, TMethods> = {
+                            ...rhs,
+                            q: newKey!
+                        };
+                        this.#piques.push(pique);
+                    }
+                    break;
+            }
+
         }
         this.#piqueProcessors = [];
 
@@ -41,7 +69,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
             this.#piqueProcessors.push(newProcessor);
         }
     }
-    calcQI(pqe: PropQueryExpression, p: Array<PropOrComputedProp<TProps, TMethods>>){
+    calcQI(pqe: string, p: Array<PropOrComputedProp<TProps, TMethods>>){
         const qi: QueryInfo = {};
         const asterSplit = pqe.split('*');
         if(asterSplit.length === 2){
