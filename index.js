@@ -111,7 +111,18 @@ export class Transformer extends EventTarget {
         const { pique } = piqueProcessor;
         const { p } = pique;
         const propName = this.#getPropName(p, u);
-        const val = this.model[propName];
+        const pOrC = p[u];
+        const model = this.model;
+        let val = model[propName];
+        if (Array.isArray(pOrC)) {
+            const c = pOrC[1];
+            if (typeof c === 'function') {
+                val = c(val);
+            }
+            else {
+                val = model[c](val);
+            }
+        }
         return val;
     }
     #getPropName(p, n) {
