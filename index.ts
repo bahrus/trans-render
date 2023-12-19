@@ -35,7 +35,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         this.#piqueProcessors = [];
 
         for(const pique of this.#piques){
-            const {p, q} = pique;
+            const {o: p, q} = pique;
             const qi = this.calcQI(q, p);
             const newProcessor = new PiqueProcessor(this, pique, qi);
             this.#piqueProcessors.push(newProcessor);
@@ -124,7 +124,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
 
     getNumberUVal(piqueProcessor: PiqueProcessor<TProps, TMethods>, u: number){
         const {pique} = piqueProcessor;
-        const {p} = pique;
+        const {o: p} = pique;
         const propName = this.#getPropName(p, u);
         const pOrC = p[u];
         const model = this.model as any;
@@ -170,7 +170,7 @@ export class PiqueProcessor<TProps, TMethods = TProps> extends EventTarget imple
     constructor(public transformer: Transformer, public pique: Pique<TProps, TMethods>, public queryInfo: QueryInfo){
         super();
         
-        const {p} = pique;
+        const {o: p} = pique;
         const match = transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
             match,

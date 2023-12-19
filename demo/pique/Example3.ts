@@ -14,7 +14,7 @@ const et = new EventTarget();
 
 const transform = new Transformer<IModel>(div, model, {
     span: {
-        p: ['msg1', 'msg2'],
+        o: ['msg1', 'msg2'],
         u: ['msg1: ', 0, ', msg2: ', 1]
     }
 }, et);

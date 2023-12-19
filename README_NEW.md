@@ -76,27 +76,27 @@ The critical transform definition is this snippet from above:
 ```JavaScript
 {
     span: {
-        p: ['greeting'],
+        o: ['greeting'],
         u: 0
     },
 }
 ```
 
-The "span" css-selector is saying watch for any span tags.
+The "span" css-selector is saying watch for any span tags within the observed fragment.
 
-The "p" parameter is specifying the list of properties to bind to from the model.  The order is important, as the rest of the transform mapping will frequently references these properties via the index in this array.  
+The "o" parameter is specifying the list of properties to observe from the model.  The order is important, as the rest of the transform mapping will frequently reference these observed properties via the index of this array.  
 
-And in fact the "u" parameter is saying "update the span from the value of the 0th property from the p setting"
+And in fact in this example the "u" parameter is saying "update the span from the value of the 0th observed property".
 
 The result is:
 
 ```html
 <div>
-    <span></span>
+    <span>hello</span>
 </div>
 ```
 
-We can see the dynamic, css sheet like power of this library by adding some script at the end of the html document:
+We can see the dynamic, css sheet-like power of this library in action by adding some script at the end of the html document:
 
 ```JavaScript
 //script #1

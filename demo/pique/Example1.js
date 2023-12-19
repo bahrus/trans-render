@@ -6,7 +6,7 @@ const model = {
 const et = new EventTarget();
 const transform = new Transformer(div, model, {
     span: {
-        p: ['greeting'],
+        o: ['greeting'],
         u: 0
     },
 }, et);

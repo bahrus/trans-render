@@ -16,7 +16,7 @@ const et = new EventTarget();
 
 const transform = new Transformer<IModel>(div, model, {
     input: {
-        p: ['msg1', 'rO', 'num'],
+        o: ['msg1', 'rO', 'num'],
         u: {
             readOnly: 1,
             tabIndex: 2,

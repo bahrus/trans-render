@@ -27,7 +27,7 @@ export class Transformer extends EventTarget {
         }
         this.#piqueProcessors = [];
         for (const pique of this.#piques) {
-            const { p, q } = pique;
+            const { o: p, q } = pique;
             const qi = this.calcQI(q, p);
             const newProcessor = new PiqueProcessor(this, pique, qi);
             this.#piqueProcessors.push(newProcessor);
@@ -109,7 +109,7 @@ export class Transformer extends EventTarget {
     }
     getNumberUVal(piqueProcessor, u) {
         const { pique } = piqueProcessor;
-        const { p } = pique;
+        const { o: p } = pique;
         const propName = this.#getPropName(p, u);
         const pOrC = p[u];
         const model = this.model;
@@ -157,7 +157,7 @@ export class PiqueProcessor extends EventTarget {
         this.transformer = transformer;
         this.pique = pique;
         this.queryInfo = queryInfo;
-        const { p } = pique;
+        const { o: p } = pique;
         const match = transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
             match,
