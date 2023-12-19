@@ -84,7 +84,7 @@ The critical transform definition is this snippet from above:
 
 The "span" css-selector is saying watch for any span tags within the observed fragment.
 
-The "o" parameter is specifying the list of properties to observe from the model.  The order is important, as the rest of the transform mapping will frequently reference these observed properties via the index of this array.  
+The "o" parameter is specifying the list of properties to **o**bserve from the model.  The order is important, as the rest of the transform mapping will frequently reference these observed properties via the index of this array.  
 
 And in fact in this example the "u" parameter is saying "update the span from the value of the 0th observed property".
 
@@ -112,9 +112,15 @@ setTimeout(() => {
 }, 2000);
 ```
 
+So dynamically adding new HTML elements that match the css selector will immediately get bound, as does dispatching events matching the property names.  Using an event target as our mechanism [TODO] continuing pontificating on this.
+
 ## The 80% rule.
 
-Is the syntax above the most readable thing you have ever seen?  Probably not.  This library is striving to balance a number of concerns:  1)  Minimizing unnecessary renders by being precise about what needs to be re-rendered, when, and 2)  Keeping repetitive syntax small.  Potentially, it could serve as a compile-time target to a more verbose, expressive syntax.  But like css, we believe the syntax can be "gotten used to", and we remember having a similar reaction when encountering css for the first time.
+Is the syntax above the most readable thing you have ever seen?  Probably not.  This library is striving to balance a number of concerns:  
+
+1.  Minimizing unnecessary renders by being precise about what needs to be re-rendered, when, and
+2.  Keeping repetitive syntax small.  Potentially, it could serve as a compile-time target to a more verbose, expressive syntax.  But like css, we believe the syntax can be "gotten used to", and we remember having a similar reaction when encountering css for the first time.
+3.  It should be JSON serializable as much as possible.
 
 In fact, the syntax above is so likely to appear repeatedly, that we provide the following shortcut for it:
 
@@ -138,4 +144,21 @@ Transform<IModel>(div, model, {
 ```
 
 But it is important to know what the shortcut is for, just as in calculus it is import to know that y' is shorthand for dy/dx.
+
+Throughout the rest of the document, we will refer to the css selector key (in this case "span") as the "LHS", and the stuff to the right of the colon as the "RHS" ('greeting') in this case.
+
+The syntax above should give anyone who works with css a warm and fuzzy feeling:  "span" is, after all, a valid css selector.  However, that warm and fuzzy feeling will quickly fade as we look closely at shortcuts that we will discuss below, designed to optimize on the 80% of anticipated use cases, use cases we will encounter repeatedly.  Whereas css doesn't require (or allow for that matter) quotes around the selector, JSON does, as does JS as soon as non alphanumeric characters get introduced.  An earlier attempt to avoid the quotes issue by encouraging camel-case to kebab conversions, while useful, no longer appears, after experimenting with that syntax for a few years, to be the most helpful syntactic sugar we can provide as far as reducing repetitive/verbose configuration.  
+
+Instead, we encourage the use of some key, standard attributes, where the value of the attribute matches the(camel-cased) name of the property it binds to.
+
+We will very shortly be expounding on exactly what these conventions are.  But don't worry, if you are thinking "but that will prevent me from using free form css to match my elements."
+
+There is an "escape hatch" for free form css -- start the expression with "* ":
+
+```TypeScript
+Transform<IModel>(div, model, {
+    '* div > p + p ~ span[class$="name"]': 'greeting',
+}, et);
+```
+
 
