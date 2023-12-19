@@ -107,7 +107,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         return await getNestedObjVal(this, piqueProcessor, u);
     }
 
-    getArrayVal(piqueProcessor: PiqueProcessor<TProps>, u: NumberExpression | InterpolatingExpression){
+    getArrayVal(piqueProcessor: PiqueProcessor<TProps, TMethods>, u: NumberExpression | InterpolatingExpression){
         if(u.length === 1 && typeof u[0] === 'number') return u[0];
         const mapped = u.map(x => {
             switch(typeof x){
@@ -122,10 +122,10 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         return mapped.join('');
     }
 
-    getNumberUVal(piqueProcessor: PiqueProcessor<TProps>, u: number){
+    getNumberUVal(piqueProcessor: PiqueProcessor<TProps, TMethods>, u: number){
         const {pique} = piqueProcessor;
         const {p} = pique;
-        const propName = (p as string[])[u];
+        const propName = this.#getPropName(p, u);
         const val = (<any>this.model)[propName as keyof TProps];
         return val;
     }

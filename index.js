@@ -110,7 +110,7 @@ export class Transformer extends EventTarget {
     getNumberUVal(piqueProcessor, u) {
         const { pique } = piqueProcessor;
         const { p } = pique;
-        const propName = p[u];
+        const propName = this.#getPropName(p, u);
         const val = this.model[propName];
         return val;
     }
