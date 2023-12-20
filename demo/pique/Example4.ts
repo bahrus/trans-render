@@ -1,20 +1,20 @@
 import {Transformer} from '../../index.js';
 
-interface IModel{
+interface Model{
     msg1: string;
     rO: boolean;
     num: number;
 }
 
 const div = document.querySelector('div')!;
-const model: IModel = {
+const model: Model = {
     msg1: '123',
     rO: true,
     num: 7
 };
 const et = new EventTarget();
 
-const transform = new Transformer<IModel>(div, model, {
+const transform = new Transformer<Model>(div, model, {
     input: {
         o: ['msg1', 'rO', 'num'],
         u: {
