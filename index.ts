@@ -63,6 +63,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
                 case 'object':
                     {
                         const pique: Pique<TProps, TMethods> = {
+                            u: 0,
                             ...rhs,
                             q: newKey!
                         };

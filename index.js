@@ -52,6 +52,7 @@ export class Transformer extends EventTarget {
                 case 'object':
                     {
                         const pique = {
+                            u: 0,
                             ...rhs,
                             q: newKey
                         };
