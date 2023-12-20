@@ -25,8 +25,20 @@ export class Transformer extends EventTarget {
             prevKey = newKey;
             const rhs = (piqueMap)[newKey];
             switch (typeof rhs) {
-                case 'number': //0
-                    throw 'NI';
+                case 'number': {
+                    if (rhs !== 0)
+                        throw 'NI';
+                    const qi = this.calcQI(newKey);
+                    const { prop } = qi;
+                    const pique = {
+                        o: [prop],
+                        u: 0,
+                        qi,
+                        q: newKey
+                    };
+                    this.#piques.push(pique);
+                    break;
+                }
                 case 'string':
                     {
                         const pique = {
@@ -50,13 +62,14 @@ export class Transformer extends EventTarget {
         }
         this.#piqueProcessors = [];
         for (const pique of this.#piques) {
-            const { o: p, q } = pique;
-            const qi = this.calcQI(q, p);
+            let { o, q, qi } = pique;
+            if (qi === undefined)
+                qi = this.calcQI(q, o);
             const newProcessor = new PiqueProcessor(this, pique, qi);
             this.#piqueProcessors.push(newProcessor);
         }
     }
-    calcQI(pqe, p) {
+    calcQI(pqe) {
         const qi = {};
         const asterSplit = pqe.split('*');
         if (asterSplit.length === 2) {
@@ -72,7 +85,7 @@ export class Transformer extends EventTarget {
         }
         if (first !== undefined) {
             qi.propAttrType = first;
-            qi.prop = this.#getPropName(p, Number(second));
+            qi.prop = second;
         }
         return qi;
     }

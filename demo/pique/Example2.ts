@@ -11,10 +11,7 @@ const model: IModel = {
 const et = new EventTarget();
 
 const transform = new Transformer<IModel>(form, model, {
-    '@ 0': {
-        o: ['greeting'],
-        u: 0
-    },
+    '@ greeting': 0,
 }, et);
 setTimeout(() => {
     const section = document.createElement('input');

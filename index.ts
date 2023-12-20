@@ -36,8 +36,20 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
             prevKey = newKey;
             const rhs = (piqueMap)[newKey as string];
             switch(typeof rhs){
-                case 'number': //0
-                    throw 'NI';
+                case 'number': {
+                    if(rhs !== 0) throw 'NI';
+                    const qi = this.calcQI(newKey!);
+                    const {prop} = qi;
+                    const pique: Pique<TProps, TMethods> = {
+                        o: [prop! as keyof TProps & string],
+                        u: 0,
+                        qi,
+                        q: newKey!
+                    };
+                    this.#piques.push(pique);
+                    break;
+                }
+
                 case 'string':
                     {
                         const pique: Pique<TProps, TMethods> = {
@@ -63,13 +75,13 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         this.#piqueProcessors = [];
 
         for(const pique of this.#piques){
-            const {o: p, q} = pique;
-            const qi = this.calcQI(q, p);
+            let {o, q, qi} = pique;
+            if(qi === undefined) qi = this.calcQI(q, o);
             const newProcessor = new PiqueProcessor(this, pique, qi);
             this.#piqueProcessors.push(newProcessor);
         }
     }
-    calcQI(pqe: string, p: Array<PropOrComputedProp<TProps, TMethods>>){
+    calcQI(pqe: string){
         const qi: QueryInfo = {};
         const asterSplit = pqe.split('*');
         if(asterSplit.length === 2){
@@ -85,7 +97,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         }
         if(first !== undefined){
             qi.propAttrType = first as PropAttrQueryType;
-            qi.prop = this.#getPropName(p, Number(second));
+            qi.prop = second;
         }
         return qi;
     }

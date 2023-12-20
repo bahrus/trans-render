@@ -163,7 +163,7 @@ Transform<IModel>(div, model, {
 }, et);
 ```
 
-## Example 2 -- binding using the name attribute [TODO]
+## Example 2 -- binding using the name attribute
 
 We often find ourselves defining in our HTML input (or other form-associated) elements, where it is reasonable and less taxing to avoid confusing mapping, and make the name of the form element match the name of the property from the domain object / model from which it derives and/or updates.  So if the developer follows this convention, the example below illustrates how we make the amount of boilerplate syntax as small as possible.
 

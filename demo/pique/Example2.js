@@ -5,10 +5,7 @@ const model = {
 };
 const et = new EventTarget();
 const transform = new Transformer(form, model, {
-    '@ 0': {
-        o: ['greeting'],
-        u: 0
-    },
+    '@ greeting': 0,
 }, et);
 setTimeout(() => {
     const section = document.createElement('input');

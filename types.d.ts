@@ -115,7 +115,8 @@ export interface PiqueWOQ<TProps, TMethods = TProps>{
 
 export interface Pique<TProps, TActions> extends PiqueWOQ<TProps, TActions>{
     //q: PropQueryExpression,
-    q: string
+    q: string,
+    qi?: QueryInfo,
 }
 
 export type RHS<TProps, TActions> = 0 | keyof TProps & string | PiqueWOQ<TProps, TActions>;
