@@ -199,7 +199,7 @@ The relationship between "@" and the name attribute is a bit weak but here it is
 
 Why the space between @ and greeting?  The extra work necessary to type the space is there to make it clear that this is *not* a css selector, but a convenient shortcut that essentially maps to [name='greeting']
 
-Going back to our calculus analogy, where the syntax above is equivalent to y', what does the equivalent dy/dx look like? The syntax above gets immediately "transpiled" to the following syntax, that is considerably clunkier to have to type over and over again (but does in fact do the same exact thing):
+Going back to our calculus analogy, where the syntax above is equivalent to y', what does the equivalent dy/dx look like? The syntax above gets immediately "transpiled" to the following syntax (in memory, not literally), that is considerably clunkier to have to type over and over again (but does in fact accomplish the same exact thing):
 
 ```TypeScript
 new Transformer<IModel>(form, model, {
@@ -210,4 +210,3 @@ new Transformer<IModel>(form, model, {
 }, et);
 ```
 
-which does the same exact thing.
