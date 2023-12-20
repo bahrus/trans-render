@@ -276,7 +276,7 @@ Transform<Model>(div, model, {
 }, et);
 ```
 
-Once again, we don't claim this to be the most elegant syntax, and can certainly envision an "icing layer" that  translates a tagged template literal expression into this syntax, but that is outside the scope of this library.  The syntax is optimized for JSON parsing and small footprints over the wire, while still being somewhat maintainable by hand.
+Once again, we don't claim this to be the most elegant syntax, and can certainly envision an "icing layer" that  translates a tagged template literal expression into this syntax, but that is outside the scope of this Transform function / Transformer class.  The syntax above is optimized for unopinionated JSON parsing and small footprints over the wire, while still being somewhat maintainable by hand.
 
 Anyway, we can again dynamically modify the fragment and/or domain object, and the transformer will keep everything in sync:
 
