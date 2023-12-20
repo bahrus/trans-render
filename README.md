@@ -145,7 +145,7 @@ Transform<IModel>(div, model, {
 }, et);
 ```
 
-But it is important to know what the shortcut is for, just as in calculus it is import to know that y' is shorthand for dy/dx.
+But it is important to know what the shortcut is for, just as in calculus it is important to know that y' is shorthand for dy/dx.
 
 Throughout the rest of the document, we will refer to the css selector key (in this case "span") as the "LHS", and the stuff to the right of the colon as the "RHS" ('greeting') in this case.
 
@@ -175,10 +175,27 @@ So say our HTML looks as follows:
     </form>
 ```
 
-And say our model/domain object contains to have a property with matching name *greeting*.  Then we can bind from a distance using TR as follows:
+And say our model/domain object contains a property with matching name *greeting*.  Then we can bind from a distance using TR as follows:
 
 ```TypeScript
 Transform<IModel>(form, model, {
     '@ greeting': 0,
 }, et);
 ```
+
+The relationship between "@" and the name attribute is a bit weak but here it is:  It looks like the second letter of the word "name", and also in github and many social media sites, to refer to a person "by name" the character that is typed is the @ symbol.  
+
+Why the space between @ and greeting?  The extra work necessary to type the space is there to make it clear that this is *not* a css selector, but a convenient shortcut that essentially maps to [name='greeting']
+
+Going back to our calculus analogy, where the syntax above is equivalent to y', the syntax above gets immediately "transpiled" to the following syntax:
+
+```TypeScript
+new Transformer<IModel>(form, model, {
+    '* [name="greeting"]': {
+        o: ['greeting'],
+        u: 0
+    },
+}, et);
+```
+
+which does the same exact thing.
