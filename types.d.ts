@@ -11,7 +11,7 @@ export type PropAttrQueryType =
     | '@' //form element name
     | '#' //id
     | '%' //part
-    | '.' //css
+    | '.' //class
     | '-' //marker
 
 export type Expr0 = [string, number];
@@ -69,14 +69,14 @@ export interface IPiqueProcessor<TProps, TActions = TProps>{
     //TODO add all the methods
 }
 
-export type PropQueryExpression =
+export type PropQueryExpression<TProps> =
     | `* ${CSSQuery}` 
     | `${keyof HTMLElementTagNameMap}`
     | `${keyof HTMLElementTagNameMap} * ${CSSQuery}` 
-    | `${keyof HTMLElementTagNameMap} ${PropAttrQueryType} ${number}` 
-    | `${keyof HTMLElementTagNameMap} ${PropAttrQueryType} ${number} * ${CSSQuery}`
-    | `${PropAttrQueryType} ${number}`
-    | `${PropAttrQueryType} ${number} * ${CSSQuery}`
+    | `${keyof HTMLElementTagNameMap} ${PropAttrQueryType} ${keyof TProps & string}` 
+    | `${keyof HTMLElementTagNameMap} ${PropAttrQueryType} ${keyof TProps & string} * ${CSSQuery}`
+    | `${PropAttrQueryType} ${keyof TProps & string}`
+    | `${PropAttrQueryType} ${keyof TProps & string} * ${CSSQuery}`
 ;
 
 export type CSSQuery = string;

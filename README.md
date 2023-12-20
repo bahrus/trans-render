@@ -236,7 +236,17 @@ new Transformer<IModel>(form, model, {
 }, et);
 ```
 
-Other symbols for other attributes
+Other symbols for other attributes are defined by:
+
+```TypeScript
+export type PropAttrQueryType = 
+    | '$' //microdata itemprop
+    | '@' //form element name
+    | '#' //id
+    | '%' //part
+    | '.' //class
+    | '-' //marker
+```
 
 ## Example 3  Interpolation
 
