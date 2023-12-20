@@ -1,4 +1,4 @@
-import { Transformer } from '../../index.js';
+import { Transform } from '../../index.js';
 const div = document.querySelector('div');
 const model = {
     msg1: '123',
@@ -6,7 +6,7 @@ const model = {
     num: 7
 };
 const et = new EventTarget();
-const transform = new Transformer(div, model, {
+Transform(div, model, {
     input: {
         o: ['msg1', 'rO', 'num'],
         u: {

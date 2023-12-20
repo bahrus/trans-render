@@ -1,10 +1,26 @@
-export async function getNestedObjVal(transformer, piqueProcessor, u) {
+const dependencyLookup = new Map();
+export async function getNestedObjVal(transformer, piqueProcessor, u, propName) {
+    let dependencyTracker;
+    if (!dependencyLookup.has(u)) {
+        console.log('new u');
+        dependencyTracker = new Map();
+        dependencyLookup.set(u, dependencyTracker);
+    }
+    else {
+        const dep = dependencyLookup.get(u);
+        console.log({ dep, propName });
+    }
     const returnObj = {};
     for (const key in u) {
         const v = u[key];
+        let vSet;
+        if (dependencyTracker !== undefined) {
+            vSet = new Set();
+            dependencyTracker.set(key, vSet);
+        }
         switch (typeof v) {
             case 'number': {
-                const val = transformer.getNumberUVal(piqueProcessor, v);
+                const val = transformer.getNumberUVal(piqueProcessor, v, vSet);
                 returnObj[key] = val;
                 break;
             }

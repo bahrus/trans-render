@@ -1,4 +1,4 @@
-export async function doUpdate(transformer, matchingElement, piqueProcessor, u) {
+export async function doUpdate(transformer, matchingElement, piqueProcessor, u, propName) {
     switch (typeof u) {
         case 'number': {
             const val = transformer.getNumberUVal(piqueProcessor, u);
@@ -18,7 +18,7 @@ export async function doUpdate(transformer, matchingElement, piqueProcessor, u) 
                 transformer.setPrimeValue(matchingElement, val);
             }
             else {
-                const val = await transformer.getNestedObjVal(piqueProcessor, u);
+                const val = await transformer.getNestedObjVal(piqueProcessor, u, propName);
                 Object.assign(matchingElement, val);
             }
         }

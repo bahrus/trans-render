@@ -310,5 +310,42 @@ setTimeout(() => {
 }, 2000);
 ```
 
+## Example 4  Setting props of the element
+
+We glossed over a subtlety in our example above.  Without specifying to do so, we are automatically setting the span's text content, the input's value, based on a single binding.  The property we are setting is assume based on context.  In the case of the hyperink (a), we set the href.  This decision is guided by how microdata works.
+
+But in many cases we need to specify exactly which property we want to set.  This can be done if the value of "u" (update) is an object type:
+
+```TypeScript
+interface Model{
+    msg1: string;
+    rO: boolean;
+    num: number;
+}
+
+const div = document.querySelector('div')!;
+const model: Model = {
+    msg1: '123',
+    rO: true,
+    num: 7
+};
+const et = new EventTarget();
+Transform<Model>(div, model, {
+    input: {
+        o: ['msg1', 'rO', 'num'],
+        u: {
+            readOnly: 1,
+            tabIndex: 2,
+            value: 0,
+            type: 'number',
+            disabled: true
+        } 
+    }
+}, et);
+```
+
+This will set the input's readOnly property from the r0 field from the model.  Likewise, tabIndex is set from the num field, value from msg1.  type is "hardcoded" to number, disabled to true.
+
+
 
 

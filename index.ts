@@ -5,7 +5,7 @@ import {
     ObjectExpression,
     TransformerTarget, 
     onMountStatusChange, RHS,
-    IfInstructions, PiqueWOQ, QueryInfo, PropOrComputedProp
+    IfInstructions, PiqueWOQ, QueryInfo, PropOrComputedProp, DependencyTracker
 } from './types';
 import { MountContext, PipelineStage } from 'mount-observer/types';
 
@@ -77,7 +77,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
 
         for(const pique of this.#piques){
             let {o, q, qi} = pique;
-            if(qi === undefined) qi = this.calcQI(q, o);
+            if(qi === undefined) qi = this.calcQI(q);
             const newProcessor = new PiqueProcessor(this, pique, qi);
             this.#piqueProcessors.push(newProcessor);
         }
@@ -128,9 +128,9 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         }
     }
 
-    async doUpdate(matchingElement: Element, piqueProcessor: PiqueProcessor<TProps, TMethods>, u: UpdateInstruction<TProps>){
+    async doUpdate(matchingElement: Element, piqueProcessor: PiqueProcessor<TProps, TMethods>, u: UpdateInstruction<TProps>, propName?: string){
         const {doUpdate} = await import('./pique/doUpdate.js');
-        await doUpdate(this, matchingElement, piqueProcessor, u);
+        await doUpdate(this, matchingElement, piqueProcessor, u, propName);
     }
 
     async doIfs(matchingElement: Element, piqueProcessor: PiqueProcessor<TProps, TMethods>, i: IfInstructions<TProps>){
@@ -143,9 +143,9 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         await doEnhance(this, matchingElement, type, piqueProcessor, mountContext, stage);
     }
 
-    async getNestedObjVal(piqueProcessor: PiqueProcessor<TProps, TMethods>, u: ObjectExpression<TProps>){
+    async getNestedObjVal(piqueProcessor: PiqueProcessor<TProps, TMethods>, u: ObjectExpression<TProps>, propName?: string){
         const {getNestedObjVal} = await import('./pique/getNestedObjVal.js');
-        return await getNestedObjVal(this, piqueProcessor, u);
+        return await getNestedObjVal(this, piqueProcessor, u, propName);
     }
 
     getArrayVal(piqueProcessor: PiqueProcessor<TProps, TMethods>, u: NumberExpression | InterpolatingExpression){
@@ -163,10 +163,11 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         return mapped.join('');
     }
 
-    getNumberUVal(piqueProcessor: PiqueProcessor<TProps, TMethods>, u: number){
+    getNumberUVal(piqueProcessor: PiqueProcessor<TProps, TMethods>, u: number, dSet?: Set<string>){
         const {pique} = piqueProcessor;
         const {o: p} = pique;
         const propName = this.#getPropName(p, u);
+        if(dSet !== undefined) dSet.add(propName);
         const pOrC = p[u];
         const model = this.model as any;
         let val = model[propName as keyof TProps];
@@ -211,7 +212,7 @@ export class PiqueProcessor<TProps, TMethods = TProps> extends EventTarget imple
     constructor(public transformer: Transformer, public pique: Pique<TProps, TMethods>, public queryInfo: QueryInfo){
         super();
         
-        const {o: p} = pique;
+        const {o} = pique;
         const match = transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
             match,
@@ -235,11 +236,11 @@ export class PiqueProcessor<TProps, TMethods = TProps> extends EventTarget imple
         });
         const {target, propagator} = transformer;
         if(propagator !== undefined){
-            for(const propName of (p as string[])){
+            for(const propName of (o as string[])){
                 propagator.addEventListener(propName, e => {
                     const all = this.#cleanUp();
                     for(const matchingElement of all){
-                        this.doUpdate(matchingElement);
+                        this.doUpdate(matchingElement, propName);
                     }
                 })
             }
@@ -263,10 +264,10 @@ export class PiqueProcessor<TProps, TMethods = TProps> extends EventTarget imple
         }
         return all;
     }
-    async doUpdate(matchingElement: Element){
+    async doUpdate(matchingElement: Element, propName?: string){
         const {u, i} = this.pique;
         if(u !== undefined){
-            await this.transformer.doUpdate(matchingElement, this, u);
+            await this.transformer.doUpdate(matchingElement, this, u, propName);
         }
         if(i !== undefined){
             await this.transformer.doIfs(matchingElement, this, i);
