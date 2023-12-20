@@ -1,4 +1,4 @@
-import {Transformer} from '../../index.js';
+import {Transform} from '../../index.js';
 
 interface Model{
     msg1: string;
@@ -12,7 +12,7 @@ const model: Model = {
 };
 const et = new EventTarget();
 
-const transform = new Transformer<Model>(div, model, {
+Transform<Model>(div, model, {
     span: {
         o: ['msg1', 'msg2'],
         u: ['msg1: ', 0, ', msg2: ', 1]

@@ -1,11 +1,11 @@
-import { Transformer } from '../../index.js';
+import { Transform } from '../../index.js';
 const div = document.querySelector('div');
 const model = {
     msg1: 'hello',
     msg2: 'world'
 };
 const et = new EventTarget();
-const transform = new Transformer(div, model, {
+Transform(div, model, {
     span: {
         o: ['msg1', 'msg2'],
         u: ['msg1: ', 0, ', msg2: ', 1]

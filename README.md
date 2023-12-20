@@ -268,12 +268,27 @@ const model: Model = {
 };
 const et = new EventTarget();
 
-const transform = new Transformer<Model>(div, model, {
+Transform<Model>(div, model, {
     span: {
         o: ['msg1', 'msg2'],
         u: ['msg1: ', 0, ', msg2: ', 1]
     }
 }, et);
+```
+
+Once again, we don't claim this to be the most elegant syntax, and can certainly envision an "icing layer" that  translates a tagged template literal expression into this syntax, but that is outside the scope of this library.  The syntax is optimized for JSON parsing and small footprints over the wire, while still being somewhat maintainable by hand.
+
+Anyway, we can again dynamically modify the fragment and/or domain object, and the transformer will keep everything in sync:
+
+```TypeScript
+setTimeout(() => {
+    const span = document.createElement('span');
+    div.appendChild(span);
+}, 1000);
+setTimeout(() => {
+    model.msg1 = 'bye';
+    et.dispatchEvent(new Event('msg1'));
+}, 2000);
 ```
 
 
