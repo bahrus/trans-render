@@ -236,7 +236,9 @@ new Transformer<IModel>(form, model, {
 }, et);
 ```
 
-Other symbols for other attributes are defined by:
+(Another small timesaver:  u: 0 is assumed if not specified above.)
+
+Other symbols for other attributes are specified below:
 
 ```TypeScript
 export type PropAttrQueryType = 
