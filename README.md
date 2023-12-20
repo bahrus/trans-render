@@ -51,12 +51,12 @@ Suppose our HTML looks as follows:
 We can bind to this DOM fragment as follows:
 
 ```TypeScript
-interface IModel{
+interface Model{
     greeting: string;
 }
 
 const div = document.querySelector('div')!;
-const model: IModel = {
+const model: Model = {
     greeting: 'hello'
 };
 const et = new EventTarget();
@@ -86,7 +86,7 @@ The "span" css-selector is saying watch for any span tags within the observed fr
 
 The "o" parameter is specifying the list of properties to **o**bserve from the model.  The order is important, as the rest of the transform mapping will frequently reference these observed properties via the index of this array.  
 
-And in fact in this example the "u" parameter is saying "update the span from the value of the 0th observed property".
+And in fact in this example the "u" parameter is saying "**u**pdate the span from the value of the 0th observed property".
 
 The result is:
 
@@ -112,14 +112,20 @@ setTimeout(() => {
 }, 2000);
 ```
 
-So dynamically adding new HTML elements that match the css selector will immediately get bound, as does dispatching events matching the property names.  Using an event target as our mechanism [TODO] continuing pontificating on this.
+So dynamically adding new HTML elements that match the css selector will immediately get bound, as does dispatching events matching the property names.  
+
+Using an event target as our mechanism for providing our reactive observer to observe changes, as opposed to getters/setters of a class seems like the most generic solution we can think of.
+
+Any library that dynamically creates property getters and setters (for example libraries that use decorators) can easily provide an event target that can be subscribed to.
+
+Libraries that adopt less class-based approaches could also furnish such an interface.  The key is that the event target always emits an event matching the name of the property from the domain / view model as they change.
 
 ## The 80% rule.
 
 Is the syntax above the most readable thing you have ever seen?  Probably not.  This library is striving to balance a number of concerns:  
 
 1.  Minimizing unnecessary renders by being precise about what needs to be re-rendered, when, and
-2.  Keeping repetitive syntax small.  Potentially, it could serve as a compile-time target to a more verbose, expressive syntax.  But like css, we believe the syntax can be "gotten used to", and we remember having a similar reaction when encountering css for the first time.
+2.  Keeping repetitive syntax small.  Potentially, it could serve as a compile-time target to a more verbose, expressive syntax.  But event without such a verbose pre-compiled syntax, is it that bad? Like css, we believe the syntax can be "gotten used to", and we remember having a similar reaction when encountering css for the first time.
 3.  It should be JSON serializable as much as possible.
 
 In fact, the syntax above is so likely to appear repeatedly, that we provide the following shortcut for it:
@@ -173,7 +179,7 @@ We often find ourselves defining in our HTML *input* tags (or other form-associa
 </form>
 ```
 
-We often need to give the form element a name attribute, which then gets submitted to the server based on that name.  Often, to avoid confusing mappings between different systems, we want that name to match the name of the domain object property from which it derives (and probably also map the name of a domain object property on the server side as well).
+We often need to give the form element a name attribute, which then gets submitted to the server based on that name.  Often, to avoid confusing mappings between different systems, we want that name to match the name of the domain object property from which it derives (and probably also map to the same name of a domain object property on the server side as well).
 
 Another scenario -- some server we have no control over generates HTML with some form elements, containing form elements with certain name attributes.  We want to add some pixie dust and hydrate the HTML with some client side logic, based on client side domain objects.  The most natural thing would be for the domain objects to define properties with names matching what the server generated HTML defines.
 
@@ -181,7 +187,7 @@ We want to keep the boilerplate at a minimum for this common scenario.
 
 So if the developer follows this convention, the example below illustrates how we make the amount of boilerplate syntax as small as possible for binding from a distance to this form element.
 
-So our HTML may look as follows:
+So our HTML above may now look as follows, with the addition of the name attribute:
 
 ```html
 <form>
@@ -192,12 +198,25 @@ So our HTML may look as follows:
 ... in conjunction with our model/domain object that contains a property with matching name *greeting*.  Then we can bind from a distance using this library as follows:
 
 ```TypeScript
-Transform<IModel>(form, model, {
+const model: Model = {
+    greeting: 'hello'
+};
+Transform<Model>(form, model, {
     '@ greeting': 0,
 }, et);
 ```
 
-The relationship between "@" and the name attribute is a bit weak but here it is:  It looks like the second letter of the word "name", and also in github and many social media sites, to refer to a person "by name" the character that is typed, in order to get autocomplete suggestions of names is the @ symbol.  
+... which result in:
+
+```html
+<form>
+    <input name=greeting value=hello>
+</form>
+```
+
+Note that the trans-render library only provides one-way binding support (but more on that in a bit).
+
+The relationship between "@" and the name attribute is a bit weak, but here it is:  It looks like the second letter of the word "name", and also in github and many social media sites, to refer to a person "by name" the character that is typed, in order to get autocomplete suggestions of names, is the @ symbol.  
 
 Why the space between @ and greeting?  The extra work necessary to type the space is there to make it clear that this is *not* a css selector, but a convenient shortcut that essentially maps to [name='greeting']
 
