@@ -1,16 +1,16 @@
 import {Transform} from '../../index.js';
 
-interface IModel{
+interface Model{
     greeting: string;
 }
 
 const div = document.querySelector('div')!;
-const model: IModel = {
+const model: Model = {
     greeting: 'hello'
 };
 const et = new EventTarget();
 
-Transform<IModel>(div, model, {
+Transform<Model>(div, model, {
     span: 'greeting',
 }, et);
 setTimeout(() => {

@@ -130,7 +130,7 @@ In fact this package provides some utility functions that [do just that](https:/
 Is the syntax above the most readable thing you have ever seen?  Probably not.  This library is striving to balance a number of concerns:  
 
 1.  Minimizing unnecessary renders by being precise about what needs to be re-rendered, when, and
-2.  Keeping repetitive syntax small.  Potentially, it could serve as a compile-time target to a more verbose, expressive syntax.  But event without such a verbose pre-compiled syntax, is it that bad? Like css, we believe the syntax can be "gotten used to", and we remember having a similar reaction when encountering css for the first time.
+2.  Keeping repetitive syntax small.  Potentially, it could serve as a compile-time target to a more verbose, expressive syntax.  But even without such a verbose pre-compiled syntax, is it that bad? Like css, we believe the syntax can be "gotten used to", and we remember having a similar reaction when encountering css for the first time.
 3.  It should be JSON serializable as much as possible.
 
 In fact, the syntax above is so likely to appear repeatedly, that we provide the following shortcut for it:
@@ -138,7 +138,7 @@ In fact, the syntax above is so likely to appear repeatedly, that we provide the
 We can replace:
 
 ```TypeScript
-const transform = new Transformer<IModel>(div, model, {
+const transform = new Transformer<Model>(div, model, {
     span: {
         o: ['greeting'],
         u: 0
@@ -151,7 +151,7 @@ with the shortcut:
 ## Example 1a
 
 ```TypeScript
-Transform<IModel>(div, model, {
+Transform<Model>(div, model, {
     span: 'greeting',
 }, et);
 ```
