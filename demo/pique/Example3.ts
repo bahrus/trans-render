@@ -1,18 +1,18 @@
 import {Transformer} from '../../index.js';
 
-interface IModel{
+interface Model{
     msg1: string;
     msg2: string;
 }
 
 const div = document.querySelector('div')!;
-const model: IModel = {
+const model: Model = {
     msg1: 'hello',
     msg2: 'world'
 };
 const et = new EventTarget();
 
-const transform = new Transformer<IModel>(div, model, {
+const transform = new Transformer<Model>(div, model, {
     span: {
         o: ['msg1', 'msg2'],
         u: ['msg1: ', 0, ', msg2: ', 1]

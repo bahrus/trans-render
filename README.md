@@ -231,3 +231,50 @@ new Transformer<IModel>(form, model, {
 }, et);
 ```
 
+## Example 3  Interpolation
+
+Suppose our domain object has two properties, and we need to dynamically combine them together in our UI:
+
+Say our HTML fragment looks as follows:
+
+```html
+<div>
+    <span></span>
+</div>
+```
+
+... and the shape of our model looks as follows:
+
+```TypeScript
+interface Model{
+    msg1: string;
+    msg2: string;
+}
+```
+
+We follow an approach that is as old as the sun in the programming world, similar to C#'s [String.Format](https://www.programiz.com/csharp-programming/library/string/format) function:
+
+```C#
+string strFormat = String.Format("{0} eats {1}", name, food);
+```
+
+But for us, we combine the two together as follows:
+
+```TypeScript
+const div = document.querySelector('div')!;
+const model: Model = {
+    msg1: 'hello',
+    msg2: 'world'
+};
+const et = new EventTarget();
+
+const transform = new Transformer<Model>(div, model, {
+    span: {
+        o: ['msg1', 'msg2'],
+        u: ['msg1: ', 0, ', msg2: ', 1]
+    }
+}, et);
+```
+
+
+
