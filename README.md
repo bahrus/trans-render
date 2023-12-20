@@ -236,6 +236,8 @@ new Transformer<IModel>(form, model, {
 }, et);
 ```
 
+Other symbols for other attributes
+
 ## Example 3  Interpolation
 
 Suppose our domain object has two properties, and we need to dynamically combine them together in our UI:
