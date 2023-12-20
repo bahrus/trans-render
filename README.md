@@ -165,17 +165,29 @@ Transform<IModel>(div, model, {
 
 ## Example 2 -- binding using the name attribute
 
-We often find ourselves defining in our HTML input (or other form-associated) elements, where it is reasonable and less taxing to avoid confusing mapping, and make the name of the form element match the name of the property from the domain object / model from which it derives and/or updates.  So if the developer follows this convention, the example below illustrates how we make the amount of boilerplate syntax as small as possible.
-
-So say our HTML looks as follows:
+We often find ourselves defining in our HTML *input* tags (or other form-associated) elements:
 
 ```html
-    <form>
-        <input name=greeting>
-    </form>
+<form>
+    <input>
+</form>
 ```
 
-And say our model/domain object contains a property with matching name *greeting*.  Then we can bind from a distance using TR as follows:
+We often need to give the form element a name attribute, which then gets submitted to the server based on that name.  Often, to avoid confusing mappings between different systems, we want that name to match the name of the domain object property from which it derives (and probably also map the name of a domain object property on the server side as well).
+
+We want to keep the boilerplate at a minimum for this common scenario.
+
+So if the developer follows this convention, the example below illustrates how we make the amount of boilerplate syntax as small as possible for binding from a distance to this form element.
+
+So our HTML may look as follows:
+
+```html
+<form>
+    <input name=greeting>
+</form>
+```
+
+... in conjunction with our model/domain object that contains a property with matching name *greeting*.  Then we can bind from a distance using this library as follows:
 
 ```TypeScript
 Transform<IModel>(form, model, {
@@ -183,11 +195,11 @@ Transform<IModel>(form, model, {
 }, et);
 ```
 
-The relationship between "@" and the name attribute is a bit weak but here it is:  It looks like the second letter of the word "name", and also in github and many social media sites, to refer to a person "by name" the character that is typed is the @ symbol.  
+The relationship between "@" and the name attribute is a bit weak but here it is:  It looks like the second letter of the word "name", and also in github and many social media sites, to refer to a person "by name" the character that is typed, in order to get autocomplete suggestions of names is the @ symbol.  
 
 Why the space between @ and greeting?  The extra work necessary to type the space is there to make it clear that this is *not* a css selector, but a convenient shortcut that essentially maps to [name='greeting']
 
-Going back to our calculus analogy, where the syntax above is equivalent to y', the syntax above gets immediately "transpiled" to the following syntax:
+Going back to our calculus analogy, where the syntax above is equivalent to y', what does the equivalent dy/dx look like? The syntax above gets immediately "transpiled" to the following syntax, that is considerably clunkier to have to type over and over again (but does in fact do the same exact thing):
 
 ```TypeScript
 new Transformer<IModel>(form, model, {
