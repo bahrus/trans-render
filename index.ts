@@ -163,11 +163,11 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         return mapped.join('');
     }
 
-    getNumberUVal(piqueProcessor: PiqueProcessor<TProps, TMethods>, u: number){
+    getNumberUVal(piqueProcessor: PiqueProcessor<TProps, TMethods>, d: number){
         const {pique} = piqueProcessor;
-        const {o: p} = pique;
-        const propName = this.#getPropName(p, u);
-        const pOrC = p[u];
+        const {o} = pique;
+        const propName = this.#getPropName(arr(o), d);
+        const pOrC = o[d];
         const model = this.model as any;
         let val = model[propName as keyof TProps];
         if(Array.isArray(pOrC)){

@@ -32,7 +32,7 @@ export class Transformer extends EventTarget {
                     const { prop } = qi;
                     const pique = {
                         o: [prop],
-                        u: 0,
+                        d: 0,
                         qi,
                         q: newKey
                     };
@@ -43,7 +43,7 @@ export class Transformer extends EventTarget {
                     {
                         const pique = {
                             o: [rhs],
-                            u: 0,
+                            d: 0,
                             q: newKey
                         };
                         this.#piques.push(pique);
@@ -52,7 +52,7 @@ export class Transformer extends EventTarget {
                 case 'object':
                     {
                         const pique = {
-                            u: 0,
+                            d: 0,
                             ...rhs,
                             q: newKey
                         };
@@ -144,11 +144,11 @@ export class Transformer extends EventTarget {
         });
         return mapped.join('');
     }
-    getNumberUVal(piqueProcessor, u) {
+    getNumberUVal(piqueProcessor, d) {
         const { pique } = piqueProcessor;
-        const { o: p } = pique;
-        const propName = this.#getPropName(p, u);
-        const pOrC = p[u];
+        const { o } = pique;
+        const propName = this.#getPropName(arr(o), d);
+        const pOrC = o[d];
         const model = this.model;
         let val = model[propName];
         if (Array.isArray(pOrC)) {
@@ -246,9 +246,9 @@ export class PiqueProcessor extends EventTarget {
         return all;
     }
     async doUpdate(matchingElement) {
-        const { u, i } = this.pique;
-        if (u !== undefined) {
-            await this.transformer.doUpdate(matchingElement, this, u);
+        const { d, i } = this.pique;
+        if (d !== undefined) {
+            await this.transformer.doUpdate(matchingElement, this, d);
         }
         if (i !== undefined) {
             await this.transformer.doIfs(matchingElement, this, i);

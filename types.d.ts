@@ -92,16 +92,16 @@ export type PropOrComputedProp<TProps, TMethods = TProps> =
     | [keyof TProps & string, keyof TMethods & string]
 export interface PiqueWOQ<TProps, TMethods = TProps, TElement = Element>{
     /**
-     * props
+     * observed props
      */
-    o: PropOrComputedProp<TProps, TMethods>[],
+    o: keyof TProps & string | PropOrComputedProp<TProps, TMethods>[],
 
     /**
      * derived value
      */
     d?: Derivative<TProps>,
     /**
-     * ifs
+     * ifs ands or buts
      */
     i?: IfInstructions<TProps>,
     /**

@@ -8,7 +8,7 @@ const et = new EventTarget();
 Transform(div, model, {
     span: {
         o: ['msg1', 'msg2'],
-        u: ['msg1: ', 0, ', msg2: ', 1]
+        d: ['msg1: ', 0, ', msg2: ', 1]
     }
 }, et);
 setTimeout(() => {
