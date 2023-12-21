@@ -354,15 +354,15 @@ This will set the input's readOnly property from the r0 field from the model.  L
 
 ## Example 5 Enhancing an element
 
-Most framework / teamplate libraries provide a way to explicitly add event handlers to an element.  This library takes a step back, and instead provides more generic support for "enhancing" or hydrating an element.  The thinking is there are two many ways configuring how event handling should take place --  it is easy enough to add a standard event listener attacher as a standard method to the base class of the custom element, that can choose exactly how it wants to deal with events.
+Most framework / teamplate libraries provide a way to explicitly add event handlers to an element.  This library takes a step back, and instead provides more generic support for "enhancing" or hydrating an element.  The thinking is there are too many ways configuring how event handling should take place --  it is easy enough to add a standard event listener attacher as a standard method to the base class of the custom element, that can choose exactly how it wants to deal with events.
 
-Likewise, instead of adding event handlers, we may instead want to add one or more custom enhancements.
+Likewise, instead of adding event handlers, we may instead want to add one or more [custom enhancements](https://github.com/bahrus/be-enhanced), like a repeating element enhancement, or a lazy loading enhancement.
 
-So *trans-render* views the best value-add as being able to specify, during initialization / hydration, a method that can be called, and where we can specify values to pass into that value.
+So *trans-render* views the best value-add as being able to specify, during initialization / hydration, a method that can be called, and where we can specify values to pass into that method.  
 
 So what follows below, example 5, extends example 4 above (just to give a bird's eye view of how this would look in context).
 
-What has been added is the "e" section, which kind of loosely stands for "enhancement"/"event managing".
+What has been added is the "e" section, which kind of vaguely stands for "enhancements"/"event managing" callbacks.
 
 
 
