@@ -94,7 +94,7 @@ export type PropOrComputedProp<TProps, TMethods = TProps> =
     | keyof TProps & string
     | [keyof TProps & string, (val: any) => any]
     | [keyof TProps & string, keyof TMethods & string]
-export interface PiqueWOQ<TProps, TMethods = TProps>{
+export interface PiqueWOQ<TProps, TMethods = TProps, TElement = Element>{
     /**
      * props
      */
@@ -112,6 +112,10 @@ export interface PiqueWOQ<TProps, TMethods = TProps>{
      * enhance, for example, add event listener
      */
     e?:  EnhancementInstructions<TMethods>,
+    /**
+     * set value of target
+     */
+    s?: (keyof TElement & string) | Partial<TElement>
 }
 
 export interface Pique<TProps, TActions> extends PiqueWOQ<TProps, TActions>{

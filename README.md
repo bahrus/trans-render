@@ -336,12 +336,12 @@ const et = new EventTarget();
 Transform<Model>(div, model, {
     input: [
         {o: 'msg1', s: 'value'},
-        {o: rO, s: 'readOnly'},
-        {o: num, s: 'tabIndex'},
+        {o: 'rO',   s: 'readOnly'},
+        {o: 'num',  s: 'tabIndex'},
         {
             s: {
                 type: 'number',
-                disabled: 'true'
+                disabled: true
             }
         }
     ]
