@@ -63,7 +63,7 @@ export class Transformer extends EventTarget {
         }
         this.#piqueProcessors = [];
         for (const pique of this.#piques) {
-            let { o, q, qi } = pique;
+            let { q, qi } = pique;
             if (qi === undefined)
                 qi = this.calcQI(q);
             const newProcessor = new PiqueProcessor(this, pique, qi);
@@ -113,9 +113,9 @@ export class Transformer extends EventTarget {
                 return `${ln}-${prop} ${c}`.trimEnd() + ',' + `${ln}data-${prop} ${c}`.trimEnd();
         }
     }
-    async doUpdate(matchingElement, piqueProcessor, u, propName) {
+    async doUpdate(matchingElement, piqueProcessor, u) {
         const { doUpdate } = await import('./pique/doUpdate.js');
-        await doUpdate(this, matchingElement, piqueProcessor, u, propName);
+        await doUpdate(this, matchingElement, piqueProcessor, u);
     }
     async doIfs(matchingElement, piqueProcessor, i) {
         const { doIfs } = await import('./pique/doIfs.js');
@@ -125,9 +125,9 @@ export class Transformer extends EventTarget {
         const { doEnhance } = await import('./pique/doEnhance.js');
         await doEnhance(this, matchingElement, type, piqueProcessor, mountContext, stage);
     }
-    async getNestedObjVal(piqueProcessor, u, propName) {
+    async getNestedObjVal(piqueProcessor, u) {
         const { getNestedObjVal } = await import('./pique/getNestedObjVal.js');
-        return await getNestedObjVal(this, piqueProcessor, u, propName);
+        return await getNestedObjVal(this, piqueProcessor, u);
     }
     getArrayVal(piqueProcessor, u) {
         if (u.length === 1 && typeof u[0] === 'number')
@@ -144,12 +144,10 @@ export class Transformer extends EventTarget {
         });
         return mapped.join('');
     }
-    getNumberUVal(piqueProcessor, u, dSet) {
+    getNumberUVal(piqueProcessor, u) {
         const { pique } = piqueProcessor;
         const { o: p } = pique;
         const propName = this.#getPropName(p, u);
-        if (dSet !== undefined)
-            dSet.add(propName);
         const pOrC = p[u];
         const model = this.model;
         let val = model[propName];
@@ -196,7 +194,7 @@ export class PiqueProcessor extends EventTarget {
         this.transformer = transformer;
         this.pique = pique;
         this.queryInfo = queryInfo;
-        const { o } = pique;
+        const { o: p } = pique;
         const match = transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
             match,
@@ -219,11 +217,11 @@ export class PiqueProcessor extends EventTarget {
         });
         const { target, propagator } = transformer;
         if (propagator !== undefined) {
-            for (const propName of o) {
+            for (const propName of p) {
                 propagator.addEventListener(propName, e => {
                     const all = this.#cleanUp();
                     for (const matchingElement of all) {
-                        this.doUpdate(matchingElement, propName);
+                        this.doUpdate(matchingElement);
                     }
                 });
             }
@@ -247,10 +245,10 @@ export class PiqueProcessor extends EventTarget {
         }
         return all;
     }
-    async doUpdate(matchingElement, propName) {
+    async doUpdate(matchingElement) {
         const { u, i } = this.pique;
         if (u !== undefined) {
-            await this.transformer.doUpdate(matchingElement, this, u, propName);
+            await this.transformer.doUpdate(matchingElement, this, u);
         }
         if (i !== undefined) {
             await this.transformer.doIfs(matchingElement, this, i);

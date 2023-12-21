@@ -134,5 +134,3 @@ export type Model = {
     [key: string]: any
 }
 
-export type DependencyTracker = Map<string, Set<string>>;
-//export type DependencyTrackerCallback = (propName: string) => void | undefined;

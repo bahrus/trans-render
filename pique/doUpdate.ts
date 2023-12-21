@@ -4,8 +4,7 @@ export async function doUpdate<TProps, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>,
     matchingElement: Element, 
     piqueProcessor: PiqueProcessor<TProps, TMethods>, 
-    u: UpdateInstruction<TProps>,
-    propName?: string,
+    u: UpdateInstruction<TProps>
 ){
     switch(typeof u){
         case 'number':{
@@ -25,7 +24,7 @@ export async function doUpdate<TProps, TMethods = TProps>(
                 const val = transformer.getArrayVal(piqueProcessor, u);
                 transformer.setPrimeValue(matchingElement, val);
             }else{
-                const val = await transformer.getNestedObjVal(piqueProcessor, u, propName);
+                const val = await transformer.getNestedObjVal(piqueProcessor, u);
                 Object.assign(matchingElement, val);
             }
         }
