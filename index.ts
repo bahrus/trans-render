@@ -129,22 +129,22 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
     }
 
     async doUpdate(matchingElement: Element, piqueProcessor: PiqueProcessor<TProps, TMethods>, u: UpdateInstruction<TProps>){
-        const {doUpdate} = await import('./pique/doUpdate.js');
+        const {doUpdate} = await import('./aeiou/doUpdate.js');
         await doUpdate(this, matchingElement, piqueProcessor, u);
     }
 
     async doIfs(matchingElement: Element, piqueProcessor: PiqueProcessor<TProps, TMethods>, i: IfInstructions<TProps>){
-        const {doIfs} = await import('./pique/doIfs.js');
+        const {doIfs} = await import('./aeiou/doIfs.js');
         await doIfs(this, matchingElement, piqueProcessor, i);
     }
 
     async doEnhance(matchingElement: Element, type: onMountStatusChange, piqueProcessor: PiqueProcessor<TProps, TMethods>, mountContext: MountContext, stage: PipelineStage | undefined){
-        const {doEnhance} = await import('./pique/doEnhance.js');
+        const {doEnhance} = await import('./aeiou/doEnhance.js');
         await doEnhance(this, matchingElement, type, piqueProcessor, mountContext, stage);
     }
 
     async getNestedObjVal(piqueProcessor: PiqueProcessor<TProps, TMethods>, u: ObjectExpression<TProps>){
-        const {getNestedObjVal} = await import('./pique/getNestedObjVal.js');
+        const {getNestedObjVal} = await import('./aeiou/getNestedObjVal.js');
         return await getNestedObjVal(this, piqueProcessor, u);
     }
 

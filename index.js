@@ -114,19 +114,19 @@ export class Transformer extends EventTarget {
         }
     }
     async doUpdate(matchingElement, piqueProcessor, u) {
-        const { doUpdate } = await import('./pique/doUpdate.js');
+        const { doUpdate } = await import('./aeiou/doUpdate.js');
         await doUpdate(this, matchingElement, piqueProcessor, u);
     }
     async doIfs(matchingElement, piqueProcessor, i) {
-        const { doIfs } = await import('./pique/doIfs.js');
+        const { doIfs } = await import('./aeiou/doIfs.js');
         await doIfs(this, matchingElement, piqueProcessor, i);
     }
     async doEnhance(matchingElement, type, piqueProcessor, mountContext, stage) {
-        const { doEnhance } = await import('./pique/doEnhance.js');
+        const { doEnhance } = await import('./aeiou/doEnhance.js');
         await doEnhance(this, matchingElement, type, piqueProcessor, mountContext, stage);
     }
     async getNestedObjVal(piqueProcessor, u) {
-        const { getNestedObjVal } = await import('./pique/getNestedObjVal.js');
+        const { getNestedObjVal } = await import('./aeiou/getNestedObjVal.js');
         return await getNestedObjVal(this, piqueProcessor, u);
     }
     getArrayVal(piqueProcessor, u) {
