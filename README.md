@@ -358,7 +358,7 @@ Most framework / teamplate libraries provide a way to explicitly add event handl
 
 Likewise, instead of adding event handlers, we may instead want to add one or more [custom enhancements](https://github.com/bahrus/be-enhanced), like a repeating element enhancement, or a lazy loading enhancement.
 
-So *trans-render* views the best value-add as being able to specify, during initialization / hydration, a method that can be called, and where we can specify values to pass into that method.  
+So *trans-render* views the best value-add as being able to specify, during initialization / hydration, a method that can be called, and where we can specify values to pass into that method.  This makes the trans-render extremely loosely coupled / un-opinionated.  
 
 So what follows below, example 5, extends example 4 above (just to give a bird's eye view of how this would look in context).
 
@@ -368,17 +368,28 @@ What has been added is the "e" section, which kind of vaguely stands for "enhanc
 
 ```TypeScript
 
-const model: IProps & IActions = {
+interface Props{
+    msg1: string;
+    rO: boolean;
+    num: number;
+}
+
+interface Methods{
+    hydrateInputElement:(m:Props & Methods, el: Element, ctx: MethodInvocationCallback<Props>) => void;
+}
+
+const div = document.querySelector('div')!;
+const model: Props & Methods = {
     msg1: '123',
     rO: true,
     num: 7,
-    hydrateInputElement:(m:IProps, el: Element, ctx: MethodInvocationCallback<IProps>) => {
-        console.log({m, el, ctx})
+    hydrateInputElement:(model: Props & Methods, el: Element, ctx: MethodInvocationCallback<Props>) => {
+        console.log({model, el, ctx})
     }
 };
+const et = new EventTarget();
 
-
-Transform<IProps, IActions>(div, model, {
+Transform<Props, Methods>(div, model, {
     input: [
         {o: 'msg1', s: 'value'},
         {o: 'rO',   s: 'readOnly'},
@@ -402,4 +413,33 @@ Transform<IProps, IActions>(div, model, {
 The method hydrateInputElement gets called once and only once per input element that gets added or found in the DOM fragment.  It is also called when the input elements are are disconnected from the DOM fragment (with a different argument):
 
 The MethodInvocationCallback interface can be seen [here](https://github.com/bahrus/trans-render/blob/baseline/types.d.ts).
+
+## Example 6 Instant gratification [TODO]
+
+Okay, okay, maybe we don't want to  have to bound around in our code just to add an event handler.  This appears to me to be one of the apparent appeals of JSX and tagged template libraries like Lit/FAST/Stencil/Atomico, etc.
+
+So, we take the "if you can't beat them, join them" approach to this question.  This is the first example, where we deviate from side-effect free, truly declarative, JSON serializable syntax:
+
+```TypeScript
+Transform<Props, Methods>(div, model, {
+    input: {
+        e: (model:Model, el: HTMLInputElement, ctx: MethodInvocationCallback<Props>) => {
+            const {type} = ctx;
+            switch(type){
+                case 'onMount':
+                    // knock yourself out
+                    el.addEventListener('input', e => {
+                        el.appendChild(document.body);
+                    });
+                    break;
+            }
+
+            
+        })
+    }
+    
+}, et);
+```
+
+[TODO]  Provide some helper functions to make this amount of boilerplate smaller.
 

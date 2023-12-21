@@ -4,8 +4,8 @@ const model = {
     msg1: '123',
     rO: true,
     num: 7,
-    hydrateInputElement: (m, el, ctx) => {
-        console.log({ m, el, ctx });
+    hydrateInputElement: (model, el, ctx) => {
+        console.log({ model, el, ctx });
     }
 };
 const et = new EventTarget();

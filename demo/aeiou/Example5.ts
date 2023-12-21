@@ -1,28 +1,28 @@
 import {Transform} from '../../index.js';
 import { MethodInvocationCallback } from '../../types.js';
 
-interface IProps{
+interface Props{
     msg1: string;
     rO: boolean;
     num: number;
 }
 
-interface IActions{
-    hydrateInputElement:(m:IProps, el: Element, ctx: MethodInvocationCallback<IProps>) => void;
+interface Methods{
+    hydrateInputElement:(m:Props & Methods, el: Element, ctx: MethodInvocationCallback<Props>) => void;
 }
 
 const div = document.querySelector('div')!;
-const model: IProps & IActions = {
+const model: Props & Methods = {
     msg1: '123',
     rO: true,
     num: 7,
-    hydrateInputElement:(m:IProps, el: Element, ctx: MethodInvocationCallback<IProps>) => {
-        console.log({m, el, ctx})
+    hydrateInputElement:(model: Props & Methods, el: Element, ctx: MethodInvocationCallback<Props>) => {
+        console.log({model, el, ctx})
     }
 };
 const et = new EventTarget();
 
-Transform<IProps, IActions>(div, model, {
+Transform<Props, Methods>(div, model, {
     input: [
         {o: 'msg1', s: 'value'},
         {o: 'rO',   s: 'readOnly'},
