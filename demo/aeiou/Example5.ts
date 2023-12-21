@@ -38,7 +38,18 @@ const transform = new Transformer<IProps, IActions>(div, model, {
                 beCommitted: true
             }
         } 
-    }
+    },
+    input: [
+        {o: 'msg1', s: 'value'},
+        {o: 'rO',   s: 'readOnly'},
+        {o: 'num',  s: 'tabIndex'},
+        {
+            s: {
+                type: 'number',
+                disabled: true
+            } as Partial<HTMLInputElement>
+        }
+    ]
 }, et);
 
 setTimeout(() => {

@@ -25,7 +25,18 @@ const transform = new Transformer(div, model, {
                 beCommitted: true
             }
         }
-    }
+    },
+    input: [
+        { o: 'msg1', s: 'value' },
+        { o: 'rO', s: 'readOnly' },
+        { o: 'num', s: 'tabIndex' },
+        {
+            s: {
+                type: 'number',
+                disabled: true
+            }
+        }
+    ]
 }, et);
 setTimeout(() => {
     const input = document.createElement('input');
