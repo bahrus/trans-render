@@ -177,7 +177,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
     getNumberUVal(uow: UnitOfWork<TProps, TMethods>, d: number){
         const {o} = uow;
         const propName = this.#getPropName(arr(o), d);
-        const pOrC = o[d];
+        const pOrC = o![d];
         const model = this.model as any;
         let val = model[propName as keyof TProps];
         if(Array.isArray(pOrC)){
