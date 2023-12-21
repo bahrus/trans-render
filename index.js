@@ -8,7 +8,7 @@ export class Transformer extends EventTarget {
     xform;
     propagator;
     #piqueProcessors;
-    #piques = [];
+    //#piques: Array<QuenitOfWork<TProps, TMethods>> = [];
     constructor(target, model, xform, propagator) {
         super();
         this.target = target;
@@ -16,6 +16,7 @@ export class Transformer extends EventTarget {
         this.xform = xform;
         this.propagator = propagator;
         let prevKey;
+        const uows = [];
         for (const key in xform) {
             const newKey = key[0] === '^' ? prevKey : key;
             prevKey = newKey;
@@ -32,7 +33,7 @@ export class Transformer extends EventTarget {
                         qi,
                         q: newKey
                     };
-                    this.#piques.push(pique);
+                    uows.push(pique);
                     break;
                 }
                 case 'string':
@@ -42,23 +43,23 @@ export class Transformer extends EventTarget {
                             d: 0,
                             q: newKey
                         };
-                        this.#piques.push(pique);
+                        uows.push(pique);
                     }
                     break;
                 case 'object':
                     {
-                        const pique = {
+                        const uow = {
                             d: 0,
                             ...rhs,
                             q: newKey
                         };
-                        this.#piques.push(pique);
+                        uows.push(uow);
                     }
                     break;
             }
         }
         this.#piqueProcessors = [];
-        for (const pique of this.#piques) {
+        for (const pique of uows) {
             let { q, qi } = pique;
             if (qi === undefined)
                 qi = this.calcQI(q);

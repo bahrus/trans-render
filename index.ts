@@ -20,7 +20,7 @@ export function Transform<TProps = any, TMethods = TProps>(
 
 export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
     #piqueProcessors: Array<MountOrchestrator<TProps, TMethods>>;
-    #piques: Array<QuenitOfWork<TProps, TMethods>> = [];
+    //#piques: Array<QuenitOfWork<TProps, TMethods>> = [];
     constructor(
         public target: TransformerTarget,
         public model: TProps & TMethods,
@@ -29,6 +29,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
     ){
         super();
         let prevKey: string | undefined;
+        const uows : Array<QuenitOfWork<TProps, TMethods>> = [];
         for(const key in xform){
             const newKey = key[0] ==='^' ? prevKey : key;
             prevKey = newKey;
@@ -44,7 +45,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
                         qi,
                         q: newKey!
                     };
-                    this.#piques.push(pique);
+                    uows.push(pique);
                     break;
                 }
 
@@ -55,17 +56,17 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
                             d: 0,
                             q: newKey!
                         };
-                        this.#piques.push(pique);
+                        uows.push(pique);
                     }
                     break;
                 case 'object':
                     {
-                        const pique: QuenitOfWork<TProps, TMethods> = {
+                        const uow: QuenitOfWork<TProps, TMethods> = {
                             d: 0,
                             ...rhs!,
                             q: newKey!
                         };
-                        this.#piques.push(pique);
+                        uows.push(uow);
                     }
                     break;
             }
@@ -73,7 +74,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         }
         this.#piqueProcessors = [];
 
-        for(const pique of this.#piques){
+        for(const pique of uows){
             let {q, qi} = pique;
             if(qi === undefined) qi = this.calcQI(q);
             const newProcessor = new MountOrchestrator(this, pique, qi);
