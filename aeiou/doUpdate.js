@@ -1,8 +1,19 @@
 export async function doUpdate(transformer, matchingElement, uow) {
-    const { d } = uow;
+    const { d, o, s } = uow;
+    if (o === undefined) {
+        if (s === undefined)
+            throw 'NI';
+        Object.assign(matchingElement, s);
+        return;
+    }
+    if (typeof s === 'object')
+        throw 'NI';
     switch (typeof d) {
         case 'number': {
             const val = transformer.getNumberUVal(uow, d);
+            if (s !== undefined) {
+                matchingElement[s] = val;
+            }
             transformer.setPrimeValue(matchingElement, val);
             break;
         }
