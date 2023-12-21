@@ -95,7 +95,7 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**
      * observed props
      */
-    o: keyof TProps & string | PropOrComputedProp<TProps, TMethods>[],
+    o?: keyof TProps & string | PropOrComputedProp<TProps, TMethods>[],
 
     /**
      * derived value from observed props
@@ -112,7 +112,7 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**
      * set value of target
      */
-    s?: (keyof TElement & string) | Partial<TElement>
+    s?: (keyof TElement & string) | {}
 }
 
 export interface QuenitOfWork<TProps, TActions> extends UnitOfWork<TProps, TActions>{

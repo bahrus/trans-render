@@ -15,15 +15,17 @@ const model: Model = {
 const et = new EventTarget();
 
 Transform<Model>(div, model, {
-    // input: {
-        // o: ['msg1', 'rO', 'num'],
-        // a: {
-            
-        //     value: 0,
-        //     readOnly: 'r0',
-        //     tabIndex: 'num'
-        // },
-    // }
+    input: [
+        {o: 'msg1', s: 'value'},
+        {o: 'rO',   s: 'readOnly'},
+        {o: 'num',  s: 'tabIndex'},
+        {
+            s: {
+                type: 'number',
+                disabled: true
+            } as Partial<HTMLInputElement>
+        }
+    ]
 }, et);
 
 setTimeout(() => {

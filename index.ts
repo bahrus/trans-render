@@ -61,12 +61,24 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
                     break;
                 case 'object':
                     {
-                        const uow: QuenitOfWork<TProps, TMethods> = {
-                            d: 0,
-                            ...rhs!,
-                            q: newKey!
-                        };
-                        uows.push(uow);
+                        if(Array.isArray(rhs)){
+                            for(const rhsPart of rhs){
+                                const uow: QuenitOfWork<TProps, TMethods> = {
+                                    d: 0,
+                                    ...rhsPart!,
+                                    q: newKey!
+                                };
+                                uows.push(uow);
+                            }
+                        }else{
+                            const uow: QuenitOfWork<TProps, TMethods> = {
+                                d: 0,
+                                ...rhs!,
+                                q: newKey!
+                            };
+                            uows.push(uow);
+                        }
+
                     }
                     break;
             }

@@ -48,12 +48,24 @@ export class Transformer extends EventTarget {
                     break;
                 case 'object':
                     {
-                        const uow = {
-                            d: 0,
-                            ...rhs,
-                            q: newKey
-                        };
-                        uows.push(uow);
+                        if (Array.isArray(rhs)) {
+                            for (const rhsPart of rhs) {
+                                const uow = {
+                                    d: 0,
+                                    ...rhsPart,
+                                    q: newKey
+                                };
+                                uows.push(uow);
+                            }
+                        }
+                        else {
+                            const uow = {
+                                d: 0,
+                                ...rhs,
+                                q: newKey
+                            };
+                            uows.push(uow);
+                        }
                     }
                     break;
             }
