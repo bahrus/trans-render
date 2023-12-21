@@ -46,16 +46,15 @@ export class Transformer extends EventTarget {
                     }
                     break;
                 case 'object':
-                    throw 'NI';
-                // {
-                //     const pique: QuenitOfWork<TProps, TMethods> = {
-                //         d: 0,
-                //         ...rhs,
-                //         q: newKey!
-                //     };
-                //     this.#piques.push(pique);
-                // }
-                // break;
+                    {
+                        const pique = {
+                            d: 0,
+                            ...rhs,
+                            q: newKey
+                        };
+                        this.#piques.push(pique);
+                    }
+                    break;
             }
         }
         this.#piqueProcessors = [];
