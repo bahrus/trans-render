@@ -62,7 +62,7 @@ const model: Model = {
 };
 const et = new EventTarget();
 
-const transform = new Transformer<IModel>(div, model, {
+const transform = new Transformer<Model>(div, model, {
     span: {
         o: ['greeting'],
         u: 0
@@ -310,7 +310,7 @@ setTimeout(() => {
 }, 2000);
 ```
 
-## Example 4  Setting props of the element
+## Example 4  Setting props of the element [TODO]
 
 We glossed over a subtlety in our example above.  Without specifying to do so, we are automatically setting the span's text content, the input's value, based on a single binding.  The property we are setting is assume based on context.  In the case of the hyperink (a), we set the href.  This decision is guided by how microdata works.
 
@@ -332,14 +332,13 @@ const model: Model = {
 const et = new EventTarget();
 Transform<Model>(div, model, {
     input: {
-        o: ['msg1', 'rO', 'num'],
-        u: {
-            readOnly: 1,
-            tabIndex: 2,
-            value: 0,
-            type: 'number',
-            disabled: true
-        } 
+        a: {
+            value: msg1,
+            readOnly: r0,
+            tabIndex: num
+            type: ['number'],
+            disabled: [true]
+        },
     }
 }, et);
 ```
