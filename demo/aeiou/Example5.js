@@ -1,31 +1,15 @@
-import { Transformer } from '../../index.js';
+import { Transform } from '../../index.js';
 const div = document.querySelector('div');
 const model = {
     msg1: '123',
     rO: true,
     num: 7,
-    onInput: (m, el, ctx) => {
+    hydrateInputElement: (m, el, ctx) => {
         console.log({ m, el, ctx });
     }
 };
 const et = new EventTarget();
-const transform = new Transformer(div, model, {
-    input: {
-        o: ['msg1', 'rO', 'num'],
-        d: {
-            readOnly: 1,
-            tabIndex: 2,
-            value: 0,
-            type: 'number',
-            disabled: true
-        },
-        e: {
-            do: 'onInput',
-            with: {
-                beCommitted: true
-            }
-        }
-    },
+Transform(div, model, {
     input: [
         { o: 'msg1', s: 'value' },
         { o: 'rO', s: 'readOnly' },
@@ -34,6 +18,12 @@ const transform = new Transformer(div, model, {
             s: {
                 type: 'number',
                 disabled: true
+            },
+            e: {
+                do: 'hydrateInputElement',
+                with: {
+                    beCommitted: true
+                }
             }
         }
     ]
@@ -48,4 +38,4 @@ setTimeout(() => {
 }, 2000);
 setTimeout(() => {
     div.innerHTML = '';
-}, 5000);
+}, 15000);

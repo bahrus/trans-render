@@ -352,5 +352,54 @@ Transform<Model>(div, model, {
 This will set the input's readOnly property from the r0 field from the model.  Likewise, tabIndex is set from the num field, value from msg1.  "type" is "hardcoded" to "number", "disabled" initialized to "true".
 
 
+## Example 5 Enhancing an element
 
+Most framework / teamplate libraries provide a way to explicitly add event handlers to an element.  This library takes a step back, and instead provides more generic support for "enhancing" or hydrating an element.  The thinking is there are two many ways configuring how event handling should take place --  it is easy enough to add a standard event listener attacher as a standard method to the base class of the custom element, that can choose exactly how it wants to deal with events.
+
+Likewise, instead of adding event handlers, we may instead want to add one or more custom enhancements.
+
+So *trans-render* views the best value-add as being able to specify, during initialization / hydration, a method that can be called, and where we can specify values to pass into that value.
+
+So what follows below, example 5, extends example 4 above (just to give a bird's eye view of how this would look in context).
+
+What has been added is the "e" section, which kind of loosely stands for "enhancement"/"event managing".
+
+
+
+```TypeScript
+
+const model: IProps & IActions = {
+    msg1: '123',
+    rO: true,
+    num: 7,
+    hydrateInputElement:(m:IProps, el: Element, ctx: MethodInvocationCallback<IProps>) => {
+        console.log({m, el, ctx})
+    }
+};
+
+
+Transform<IProps, IActions>(div, model, {
+    input: [
+        {o: 'msg1', s: 'value'},
+        {o: 'rO',   s: 'readOnly'},
+        {o: 'num',  s: 'tabIndex'},
+        {
+            s: {
+                type: 'number',
+                disabled: true
+            } as Partial<HTMLInputElement>,
+            e: {
+                do: 'hydrateInputElement',
+                with: {
+                    beCommitted: true
+                }
+            }
+        }
+    ]
+}, et);
+```
+
+The method hydrateInputElement gets called once and only once per input element that gets added or found in the DOM fragment.  It is also called when the input elements are are disconnected from the DOM fragment (with a different argument):
+
+The MethodInvocationCallback interface can be seen [here](https://github.com/bahrus/trans-render/blob/baseline/types.d.ts).
 

@@ -1,4 +1,4 @@
-import {Transformer} from '../../index.js';
+import {Transform} from '../../index.js';
 import { MethodInvocationCallback } from '../../types.js';
 
 interface IProps{
@@ -8,7 +8,7 @@ interface IProps{
 }
 
 interface IActions{
-    onInput:(m:IProps, el: Element, ctx: MethodInvocationCallback<IProps>) => void;
+    hydrateInputElement:(m:IProps, el: Element, ctx: MethodInvocationCallback<IProps>) => void;
 }
 
 const div = document.querySelector('div')!;
@@ -16,29 +16,13 @@ const model: IProps & IActions = {
     msg1: '123',
     rO: true,
     num: 7,
-    onInput:(m:IProps, el: Element, ctx: MethodInvocationCallback<IProps>) => {
+    hydrateInputElement:(m:IProps, el: Element, ctx: MethodInvocationCallback<IProps>) => {
         console.log({m, el, ctx})
     }
 };
 const et = new EventTarget();
 
-const transform = new Transformer<IProps, IActions>(div, model, {
-    input: {
-        o: ['msg1', 'rO', 'num'],
-        d: {
-            readOnly: 1,
-            tabIndex: 2,
-            value: 0,
-            type: 'number',
-            disabled: true
-        },
-        e: {
-            do: 'onInput',
-            with: {
-                beCommitted: true
-            }
-        } 
-    },
+Transform<IProps, IActions>(div, model, {
     input: [
         {o: 'msg1', s: 'value'},
         {o: 'rO',   s: 'readOnly'},
@@ -47,7 +31,13 @@ const transform = new Transformer<IProps, IActions>(div, model, {
             s: {
                 type: 'number',
                 disabled: true
-            } as Partial<HTMLInputElement>
+            } as Partial<HTMLInputElement>,
+            e: {
+                do: 'hydrateInputElement',
+                with: {
+                    beCommitted: true
+                }
+            }
         }
     ]
 }, et);
@@ -62,4 +52,4 @@ setTimeout(() => {
 }, 2000);
 setTimeout(() => {
     div.innerHTML = '';
-}, 5000)
+}, 15000)
