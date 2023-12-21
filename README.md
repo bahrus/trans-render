@@ -416,26 +416,24 @@ The MethodInvocationCallback interface can be seen [here](https://github.com/bah
 
 ## Example 6 Instant gratification [TODO]
 
-Okay, okay, maybe we don't want to  have to bound around in our code just to add an event handler.  This appears to me to be one of the apparent appeals of JSX and tagged template libraries like Lit/FAST/Stencil/Atomico, etc.
+Okay, okay, maybe we don't want to  have to bouncing around in our code just to add an event handler.  This appears to me to be one of the apparent appeals of JSX and tagged template libraries like Lit/FAST/Stencil/Atomico, etc.
 
 So, we take the "if you can't beat them, join them" approach to this question.  This is the first example, where we deviate from side-effect free, truly declarative, JSON serializable syntax:
 
 ```TypeScript
 Transform<Props, Methods>(div, model, {
     input: {
-        e: (model:Model, el: HTMLInputElement, ctx: MethodInvocationCallback<Props>) => {
-            const {type} = ctx;
-            switch(type){
-                case 'onMount':
+        e: {
+            onMount: (model: Model, el: HTMLInputElement) => {
+                el.addEventListener('input', e => {
                     // knock yourself out
-                    el.addEventListener('input', e => {
-                        el.appendChild(document.body);
-                    });
-                    break;
+                    el.appendChild(document.body);
+                });
+            },
+            onDisconnect: () => {
+                ...
             }
-
-            
-        })
+        }
     }
     
 }, et);
