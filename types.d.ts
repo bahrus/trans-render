@@ -91,7 +91,7 @@ export type PropOrComputedProp<TProps, TMethods = TProps> =
     | [keyof TProps & string, (val: any) => any]
     | [keyof TProps & string, keyof TMethods & string]
 
-export interface PiqueWOQ<TProps, TMethods = TProps, TElement = Element>{
+export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**
      * observed props
      */
@@ -115,13 +115,14 @@ export interface PiqueWOQ<TProps, TMethods = TProps, TElement = Element>{
     s?: (keyof TElement & string) | Partial<TElement>
 }
 
-export interface Pique<TProps, TActions> extends PiqueWOQ<TProps, TActions>{
-    //q: PropQueryExpression,
+export interface QuenitOfWork<TProps, TActions> extends UnitOfWork<TProps, TActions>{
     q: string,
     qi?: QueryInfo,
 }
 
-export type RHS<TProps, TActions> = 0 | keyof TProps & string | PiqueWOQ<TProps, TActions>;
+export type UnitOfWorkRHS<TProps, TMethods> = 0 | keyof TProps & string | UnitOfWork<TProps, TMethods>;
+
+export type RHS<TProps, TMethods> = UnitOfWorkRHS<TProps, TMethods> | Array<UnitOfWork<TProps, TMethods>>;
 
 export interface QueryInfo{
     cssQuery?: string,

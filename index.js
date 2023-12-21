@@ -1,6 +1,6 @@
 import { MountObserver } from 'mount-observer/MountObserver.js';
-export function Transform(target, model, piqueMap, propagator) {
-    return new Transformer(target, model, piqueMap, propagator);
+export function Transform(target, model, xform, propagator) {
+    return new Transformer(target, model, xform, propagator);
 }
 export class Transformer extends EventTarget {
     target;

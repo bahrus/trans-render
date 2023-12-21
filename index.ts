@@ -1,26 +1,26 @@
 import {MountObserver} from 'mount-observer/MountObserver.js';
 import {
-    PropQueryExpression, PropAttrQueryType, Pique, Derivative, 
+    PropQueryExpression, PropAttrQueryType, QuenitOfWork, Derivative, 
     IPiqueProcessor as IMountOrchestrator, NumberExpression, InterpolatingExpression,
     ObjectExpression,
     TransformerTarget, 
     onMountStatusChange, RHS,
-    IfInstructions, PiqueWOQ, QueryInfo, PropOrComputedProp
+    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp
 } from './types';
 import { MountContext, PipelineStage } from 'mount-observer/types';
 
 export function Transform<TProps = any, TMethods = TProps>(
     target: TransformerTarget,
     model: TProps & TMethods,
-    piqueMap: Partial<{[key: string]: RHS<TProps, TMethods>}>,
+    xform: Partial<{[key: string]: RHS<TProps, TMethods>}>,
     propagator?: EventTarget, 
 ){
-    return new Transformer<TProps, TMethods>(target, model, piqueMap, propagator);
+    return new Transformer<TProps, TMethods>(target, model, xform, propagator);
 }
 
 export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
     #piqueProcessors: Array<MountOrchestrator<TProps, TMethods>>;
-    #piques: Array<Pique<TProps, TMethods>> = [];
+    #piques: Array<QuenitOfWork<TProps, TMethods>> = [];
     constructor(
         public target: TransformerTarget,
         public model: TProps & TMethods,
@@ -39,7 +39,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
                     if(rhs !== 0) throw 'NI';
                     const qi = this.calcQI(newKey!);
                     const {prop} = qi;
-                    const pique: Pique<TProps, TMethods> = {
+                    const pique: QuenitOfWork<TProps, TMethods> = {
                         o: [prop! as keyof TProps & string],
                         d: 0,
                         qi,
@@ -51,7 +51,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
 
                 case 'string':
                     {
-                        const pique: Pique<TProps, TMethods> = {
+                        const pique: QuenitOfWork<TProps, TMethods> = {
                             o: [rhs],
                             d: 0,
                             q: newKey!
@@ -61,7 +61,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
                     break;
                 case 'object':
                     {
-                        const pique: Pique<TProps, TMethods> = {
+                        const pique: QuenitOfWork<TProps, TMethods> = {
                             d: 0,
                             ...rhs,
                             q: newKey!
@@ -207,7 +207,7 @@ export function arr<T = any>(inp: T | T[] | undefined) : T[] {
 export class MountOrchestrator<TProps, TMethods = TProps> extends EventTarget implements IMountOrchestrator<TProps, TMethods> {
     #mountObserver: MountObserver;
     #matchingElements: WeakRef<Element>[] = [];
-    constructor(public transformer: Transformer, public pique: Pique<TProps, TMethods>, public queryInfo: QueryInfo){
+    constructor(public transformer: Transformer, public pique: QuenitOfWork<TProps, TMethods>, public queryInfo: QueryInfo){
         super();
         
         const {o: p} = pique;
