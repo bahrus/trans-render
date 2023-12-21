@@ -1,9 +1,9 @@
 import {MountOrchestrator, Transformer, arr} from '../index.js';
-import {IfInstructions} from '../types';
+import {IfInstructions, UnitOfWork} from '../types';
 export async function doIfs<TProps, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>, 
     matchingElement: Element, 
-    piqueProcessor: MountOrchestrator<TProps, TMethods>, 
+    uow: UnitOfWork<TProps, TMethods>, 
     i: IfInstructions<TProps>
 ){
     const iffs = arr(i);
@@ -11,21 +11,21 @@ export async function doIfs<TProps, TMethods = TProps>(
         const {ifAllOf, ifEqual, ifNoneOf, u} = iff;
         if(ifAllOf !== undefined){
             for(const n of ifAllOf){
-                if(!transformer.getNumberUVal(piqueProcessor, n)) continue;
+                if(!transformer.getNumberUVal(uow, n)) continue;
             }
         }
         if(ifNoneOf !== undefined){
             for(const n of ifNoneOf){
-                if(transformer.getNumberUVal(piqueProcessor, n)) continue;
+                if(transformer.getNumberUVal(uow, n)) continue;
             }
         }
         if(ifEqual !== undefined){
             const [lhsN, rhsNorS] = ifEqual;
-            const lhs = transformer.getNumberUVal(piqueProcessor, lhsN);
+            const lhs = transformer.getNumberUVal(uow, lhsN);
             let rhs;
             switch(typeof rhsNorS){
                 case 'number':
-                    rhs = transformer.getNumberUVal(piqueProcessor, rhsNorS);
+                    rhs = transformer.getNumberUVal(uow, rhsNorS);
                     break;
                 case 'object':
                     if(Array.isArray(rhsNorS)){
@@ -40,6 +40,6 @@ export async function doIfs<TProps, TMethods = TProps>(
             }
             if(lhs !== rhs) continue;
         }
-        await transformer.doUpdate(matchingElement, piqueProcessor, u);
+        await transformer.doUpdate(matchingElement, uow, u);
     }
 }

@@ -1,7 +1,6 @@
 import { arr } from '../index.js';
-export async function doEnhance(transformer, matchingElement, type, piqueProcessor, mountContext, stage) {
-    const { pique } = piqueProcessor;
-    const { e } = pique;
+export async function doEnhance(transformer, matchingElement, type, uow, mountContext, stage) {
+    const { e } = uow;
     if (e === undefined)
         return;
     const methodArg = {

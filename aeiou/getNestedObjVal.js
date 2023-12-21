@@ -1,10 +1,10 @@
-export async function getNestedObjVal(transformer, piqueProcessor, u) {
+export async function getNestedObjVal(transformer, uow, u) {
     const returnObj = {};
     for (const key in u) {
         const v = u[key];
         switch (typeof v) {
             case 'number': {
-                const val = transformer.getNumberUVal(piqueProcessor, v);
+                const val = transformer.getNumberUVal(uow, v);
                 returnObj[key] = val;
                 break;
             }
@@ -13,11 +13,11 @@ export async function getNestedObjVal(transformer, piqueProcessor, u) {
             }
             case 'object': {
                 if (Array.isArray(v)) {
-                    const val = transformer.getArrayVal(piqueProcessor, v);
+                    const val = transformer.getArrayVal(uow, v);
                     returnObj[key] = val;
                 }
                 else {
-                    const val = transformer.getNestedObjVal(piqueProcessor, v);
+                    const val = transformer.getNestedObjVal(uow, v);
                     returnObj[key] = val;
                 }
             }

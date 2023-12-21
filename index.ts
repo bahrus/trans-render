@@ -24,16 +24,15 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
     constructor(
         public target: TransformerTarget,
         public model: TProps & TMethods,
-        //public piqueMap: Partial<{[key in PropQueryExpression]: PiqueWOQ<TProps, TActions>}>,
-        public piqueMap: Partial<{[key: string]: RHS<TProps, TMethods>}>,
+        public xform: Partial<{[key: string]: RHS<TProps, TMethods>}>,
         public propagator?: EventTarget, 
     ){
         super();
         let prevKey: string | undefined;
-        for(const key in piqueMap){
+        for(const key in xform){
             const newKey = key[0] ==='^' ? prevKey : key;
             prevKey = newKey;
-            const rhs = (piqueMap)[newKey as string];
+            const rhs = (xform)[newKey as string];
             switch(typeof rhs){
                 case 'number': {
                     if(rhs !== 0) throw 'NI';
@@ -60,15 +59,16 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
                     }
                     break;
                 case 'object':
-                    {
-                        const pique: QuenitOfWork<TProps, TMethods> = {
-                            d: 0,
-                            ...rhs,
-                            q: newKey!
-                        };
-                        this.#piques.push(pique);
-                    }
-                    break;
+                    throw 'NI';
+                    // {
+                    //     const pique: QuenitOfWork<TProps, TMethods> = {
+                    //         d: 0,
+                    //         ...rhs,
+                    //         q: newKey!
+                    //     };
+                    //     this.#piques.push(pique);
+                    // }
+                    // break;
             }
 
         }
@@ -127,32 +127,32 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         }
     }
 
-    async doUpdate(matchingElement: Element, piqueProcessor: MountOrchestrator<TProps, TMethods>, u: Derivative<TProps>){
+    async doUpdate(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>, d: Derivative<TProps>){
         const {doUpdate} = await import('./aeiou/doUpdate.js');
-        await doUpdate(this, matchingElement, piqueProcessor, u);
+        await doUpdate(this, matchingElement, uow);
     }
 
-    async doIfs(matchingElement: Element, piqueProcessor: MountOrchestrator<TProps, TMethods>, i: IfInstructions<TProps>){
+    async doIfs(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>, i: IfInstructions<TProps>){
         const {doIfs} = await import('./aeiou/doIfs.js');
-        await doIfs(this, matchingElement, piqueProcessor, i);
+        await doIfs(this, matchingElement, uow, i);
     }
 
-    async doEnhance(matchingElement: Element, type: onMountStatusChange, piqueProcessor: MountOrchestrator<TProps, TMethods>, mountContext: MountContext, stage: PipelineStage | undefined){
+    async doEnhance(matchingElement: Element, type: onMountStatusChange, uow: UnitOfWork<TProps, TMethods>, mountContext: MountContext, stage: PipelineStage | undefined){
         const {doEnhance} = await import('./aeiou/doEnhance.js');
-        await doEnhance(this, matchingElement, type, piqueProcessor, mountContext, stage);
+        await doEnhance(this, matchingElement, type, uow, mountContext, stage);
     }
 
-    async getNestedObjVal(piqueProcessor: MountOrchestrator<TProps, TMethods>, u: ObjectExpression<TProps>){
+    async getNestedObjVal(uow: UnitOfWork<TProps, TMethods>, u: ObjectExpression<TProps>){
         const {getNestedObjVal} = await import('./aeiou/getNestedObjVal.js');
-        return await getNestedObjVal(this, piqueProcessor, u);
+        return await getNestedObjVal(this, uow, u);
     }
 
-    getArrayVal(piqueProcessor: MountOrchestrator<TProps, TMethods>, u: NumberExpression | InterpolatingExpression){
+    getArrayVal(uow: UnitOfWork<TProps, TMethods>, u: NumberExpression | InterpolatingExpression){
         if(u.length === 1 && typeof u[0] === 'number') return u[0];
         const mapped = u.map(x => {
             switch(typeof x){
                 case 'number':
-                    return this.getNumberUVal(piqueProcessor, x);
+                    return this.getNumberUVal(uow, x);
                 case 'string':
                     return x;
                 default:
@@ -162,9 +162,8 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         return mapped.join('');
     }
 
-    getNumberUVal(piqueProcessor: MountOrchestrator<TProps, TMethods>, d: number){
-        const {pique} = piqueProcessor;
-        const {o} = pique;
+    getNumberUVal(uow: UnitOfWork<TProps, TMethods>, d: number){
+        const {o} = uow;
         const propName = this.#getPropName(arr(o), d);
         const pOrC = o[d];
         const model = this.model as any;
@@ -207,47 +206,64 @@ export function arr<T = any>(inp: T | T[] | undefined) : T[] {
 export class MountOrchestrator<TProps, TMethods = TProps> extends EventTarget implements IMountOrchestrator<TProps, TMethods> {
     #mountObserver: MountObserver;
     #matchingElements: WeakRef<Element>[] = [];
-    constructor(public transformer: Transformer, public pique: QuenitOfWork<TProps, TMethods>, public queryInfo: QueryInfo){
+    #unitsOfWork: Array<QuenitOfWork<TProps, TMethods>>
+    constructor(
+        public transformer: Transformer, 
+        uows: QuenitOfWork<TProps, TMethods>, 
+        public queryInfo: QueryInfo){
         super();
-        
-        const {o: p} = pique;
+        this.#unitsOfWork = arr(uows);
         const match = transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
             match,
             do:{
                 onMount: async (matchingElement, ctx, stage) => {
-                    await this.doUpdate(matchingElement);
-                    this.#matchingElements.push(new WeakRef(matchingElement));
-                    await transformer.doEnhance(matchingElement, 'onMount', this, ctx, stage);
+                    for(const uow of this.#unitsOfWork){
+                        await this.doUpdate(matchingElement, uow);
+                        this.#matchingElements.push(new WeakRef(matchingElement));
+                        await transformer.doEnhance(matchingElement, 'onMount', uow, ctx, stage);
+                    }
+                    
 
                 },
                 onDismount: async(matchingElement, ctx, stage) => {
-                    this.#cleanUp(matchingElement);
-                    await transformer.doEnhance(matchingElement, 'onDismount', this, ctx, stage);
-                    //TODO remove weak ref from matching eleents;
+                    for(const uow of this.#unitsOfWork){
+                        this.#cleanUp(matchingElement);
+                        await transformer.doEnhance(matchingElement, 'onDismount', uow, ctx, stage);
+                    }
+                    //TODO remove weak ref from matching elements;
                 },
                 onDisconnect: async(matchingElement, ctx, stage) => {
-                    this.#cleanUp(matchingElement);
-                    await transformer.doEnhance(matchingElement, 'onDisconnect', this, ctx, stage);
+                    for(const uow of this.#unitsOfWork){
+                        this.#cleanUp(matchingElement);
+                        await transformer.doEnhance(matchingElement, 'onDisconnect', uow, ctx, stage);
+                    }
                 }
             }
         });
-        const {target, propagator} = transformer;
-        if(propagator !== undefined){
-            for(const propName of (p as string[])){
-                propagator.addEventListener(propName, e => {
-                    const all = this.#cleanUp();
-                    for(const matchingElement of all){
-                        this.doUpdate(matchingElement);
-                    }
-                })
+        for(const uow of this.#unitsOfWork){
+            const {o} = uow;
+            const p = arr(o) as string[];
+
+            const {target, propagator} = transformer;
+            if(propagator !== undefined){
+                for(const propName of p){
+                    if(typeof propName !== 'string') throw 'NI';
+                    propagator.addEventListener(propName, e => {
+                        const all = this.#cleanUp();
+                        for(const matchingElement of all){
+                            this.doUpdate(matchingElement, uow);
+                        }
+                    })
+                }
+            }
+            if(Array.isArray(target)){
+                throw 'NI';
+            }else{
+                this.#mountObserver.observe(target);
             }
         }
-        if(Array.isArray(target)){
-            throw 'NI';
-        }else{
-            this.#mountObserver.observe(target);
-        }
+
         
     }
     #cleanUp(matchingElement?: Element){
@@ -262,13 +278,13 @@ export class MountOrchestrator<TProps, TMethods = TProps> extends EventTarget im
         }
         return all;
     }
-    async doUpdate(matchingElement: Element){
-        const {d, i} = this.pique;
+    async doUpdate(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>){
+        const {d, i} = uow;
         if(d !== undefined){
-            await this.transformer.doUpdate(matchingElement, this, d);
+            await this.transformer.doUpdate(matchingElement, uow, d);
         }
         if(i !== undefined){
-            await this.transformer.doIfs(matchingElement, this, i);
+            await this.transformer.doIfs(matchingElement, uow, i);
         }
     }
 }
