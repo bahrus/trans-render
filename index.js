@@ -1,7 +1,5 @@
 import { MountObserver } from 'mount-observer/MountObserver.js';
-export function Transform(target, model, 
-//public piqueMap: Partial<{[key in PropQueryExpression]: PiqueWOQ<TProps, TActions>}>,
-piqueMap, propagator) {
+export function Transform(target, model, piqueMap, propagator) {
     return new Transformer(target, model, piqueMap, propagator);
 }
 export class Transformer extends EventTarget {
@@ -66,7 +64,7 @@ export class Transformer extends EventTarget {
             let { q, qi } = pique;
             if (qi === undefined)
                 qi = this.calcQI(q);
-            const newProcessor = new PiqueProcessor(this, pique, qi);
+            const newProcessor = new MountOrchestrator(this, pique, qi);
             this.#piqueProcessors.push(newProcessor);
         }
     }
@@ -183,7 +181,7 @@ export function arr(inp) {
     return inp === undefined ? []
         : Array.isArray(inp) ? inp : [inp];
 }
-export class PiqueProcessor extends EventTarget {
+export class MountOrchestrator extends EventTarget {
     transformer;
     pique;
     queryInfo;

@@ -1,7 +1,7 @@
 import {MountObserver} from 'mount-observer/MountObserver.js';
 import {
     PropQueryExpression, PropAttrQueryType, Pique, Derivative, 
-    IPiqueProcessor, NumberExpression, InterpolatingExpression,
+    IPiqueProcessor as IMountOrchestrator, NumberExpression, InterpolatingExpression,
     ObjectExpression,
     TransformerTarget, 
     onMountStatusChange, RHS,
@@ -12,7 +12,6 @@ import { MountContext, PipelineStage } from 'mount-observer/types';
 export function Transform<TProps = any, TMethods = TProps>(
     target: TransformerTarget,
     model: TProps & TMethods,
-        //public piqueMap: Partial<{[key in PropQueryExpression]: PiqueWOQ<TProps, TActions>}>,
     piqueMap: Partial<{[key: string]: RHS<TProps, TMethods>}>,
     propagator?: EventTarget, 
 ){
@@ -20,7 +19,7 @@ export function Transform<TProps = any, TMethods = TProps>(
 }
 
 export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
-    #piqueProcessors: Array<PiqueProcessor<TProps, TMethods>>;
+    #piqueProcessors: Array<MountOrchestrator<TProps, TMethods>>;
     #piques: Array<Pique<TProps, TMethods>> = [];
     constructor(
         public target: TransformerTarget,
@@ -78,7 +77,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         for(const pique of this.#piques){
             let {q, qi} = pique;
             if(qi === undefined) qi = this.calcQI(q);
-            const newProcessor = new PiqueProcessor(this, pique, qi);
+            const newProcessor = new MountOrchestrator(this, pique, qi);
             this.#piqueProcessors.push(newProcessor);
         }
     }
@@ -128,27 +127,27 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         }
     }
 
-    async doUpdate(matchingElement: Element, piqueProcessor: PiqueProcessor<TProps, TMethods>, u: Derivative<TProps>){
+    async doUpdate(matchingElement: Element, piqueProcessor: MountOrchestrator<TProps, TMethods>, u: Derivative<TProps>){
         const {doUpdate} = await import('./aeiou/doUpdate.js');
         await doUpdate(this, matchingElement, piqueProcessor, u);
     }
 
-    async doIfs(matchingElement: Element, piqueProcessor: PiqueProcessor<TProps, TMethods>, i: IfInstructions<TProps>){
+    async doIfs(matchingElement: Element, piqueProcessor: MountOrchestrator<TProps, TMethods>, i: IfInstructions<TProps>){
         const {doIfs} = await import('./aeiou/doIfs.js');
         await doIfs(this, matchingElement, piqueProcessor, i);
     }
 
-    async doEnhance(matchingElement: Element, type: onMountStatusChange, piqueProcessor: PiqueProcessor<TProps, TMethods>, mountContext: MountContext, stage: PipelineStage | undefined){
+    async doEnhance(matchingElement: Element, type: onMountStatusChange, piqueProcessor: MountOrchestrator<TProps, TMethods>, mountContext: MountContext, stage: PipelineStage | undefined){
         const {doEnhance} = await import('./aeiou/doEnhance.js');
         await doEnhance(this, matchingElement, type, piqueProcessor, mountContext, stage);
     }
 
-    async getNestedObjVal(piqueProcessor: PiqueProcessor<TProps, TMethods>, u: ObjectExpression<TProps>){
+    async getNestedObjVal(piqueProcessor: MountOrchestrator<TProps, TMethods>, u: ObjectExpression<TProps>){
         const {getNestedObjVal} = await import('./aeiou/getNestedObjVal.js');
         return await getNestedObjVal(this, piqueProcessor, u);
     }
 
-    getArrayVal(piqueProcessor: PiqueProcessor<TProps, TMethods>, u: NumberExpression | InterpolatingExpression){
+    getArrayVal(piqueProcessor: MountOrchestrator<TProps, TMethods>, u: NumberExpression | InterpolatingExpression){
         if(u.length === 1 && typeof u[0] === 'number') return u[0];
         const mapped = u.map(x => {
             switch(typeof x){
@@ -163,7 +162,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         return mapped.join('');
     }
 
-    getNumberUVal(piqueProcessor: PiqueProcessor<TProps, TMethods>, d: number){
+    getNumberUVal(piqueProcessor: MountOrchestrator<TProps, TMethods>, d: number){
         const {pique} = piqueProcessor;
         const {o} = pique;
         const propName = this.#getPropName(arr(o), d);
@@ -205,7 +204,7 @@ export function arr<T = any>(inp: T | T[] | undefined) : T[] {
         : Array.isArray(inp) ? inp : [inp];
 }
 
-export class PiqueProcessor<TProps, TMethods = TProps> extends EventTarget implements IPiqueProcessor<TProps, TMethods> {
+export class MountOrchestrator<TProps, TMethods = TProps> extends EventTarget implements IMountOrchestrator<TProps, TMethods> {
     #mountObserver: MountObserver;
     #matchingElements: WeakRef<Element>[] = [];
     constructor(public transformer: Transformer, public pique: Pique<TProps, TMethods>, public queryInfo: QueryInfo){

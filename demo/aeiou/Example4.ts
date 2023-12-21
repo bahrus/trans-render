@@ -16,13 +16,13 @@ const et = new EventTarget();
 
 Transform<Model>(div, model, {
     input: {
-        o: ['msg1', 'rO', 'num'],
-        a: {
+        // o: ['msg1', 'rO', 'num'],
+        // a: {
             
-            value: 0,
-            readOnly: 'r0',
-            tabIndex: 'num'
-        },
+        //     value: 0,
+        //     readOnly: 'r0',
+        //     tabIndex: 'num'
+        // },
     }
 }, et);
 

@@ -1,9 +1,9 @@
-import {PiqueProcessor, Transformer} from '../index.js';
+import {MountOrchestrator, Transformer} from '../index.js';
 import { Derivative } from '../types';
 export async function doUpdate<TProps, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>,
     matchingElement: Element, 
-    piqueProcessor: PiqueProcessor<TProps, TMethods>, 
+    piqueProcessor: MountOrchestrator<TProps, TMethods>, 
     u: Derivative<TProps>
 ){
     switch(typeof u){

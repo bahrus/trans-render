@@ -8,12 +8,12 @@ const model = {
 const et = new EventTarget();
 Transform(div, model, {
     input: {
-        o: ['msg1', 'rO', 'num'],
-        a: {
-            value: 0,
-            readOnly: 'r0',
-            tabIndex: 'num'
-        },
+    // o: ['msg1', 'rO', 'num'],
+    // a: {
+    //     value: 0,
+    //     readOnly: 'r0',
+    //     tabIndex: 'num'
+    // },
     }
 }, et);
 setTimeout(() => {
