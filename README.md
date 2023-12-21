@@ -29,6 +29,7 @@ To achieve the css-like ability to respond to new elements being dynamically add
 4.  Morphing the DOM via server-sent events.
 5.  Combined with [progressive element enhancement](https://github.com/WICG/webcomponents/issues/1000) (custom attribute) libraries, such as [be-enhanced](https://github.com/bahrus/be-enhanced), that can also be attached "from a distance", we can build custom elements that can easily evolve over time with absolutely no framework lock-in.
 6.  Apply repetitive, default settings across the board to all instances of certain (custom) elements.
+7.  Merge data from different sources onto one target DOM fragment.
 
 XSLT can take pure XML with no formatting instructions as its input.  Generally speaking, the XML that XSLT acts on isn't a bunch of semantically  meaningless div tags, but rather a nice semantic document, whose intrinsic structure is enough to go on, in order to formulate a "transform" that doesn't feel like a hack.
 

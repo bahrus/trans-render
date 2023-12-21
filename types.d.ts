@@ -90,6 +90,7 @@ export type PropOrComputedProp<TProps, TMethods = TProps> =
     | keyof TProps & string
     | [keyof TProps & string, (val: any) => any]
     | [keyof TProps & string, keyof TMethods & string]
+
 export interface PiqueWOQ<TProps, TMethods = TProps, TElement = Element>{
     /**
      * observed props
@@ -97,7 +98,7 @@ export interface PiqueWOQ<TProps, TMethods = TProps, TElement = Element>{
     o: keyof TProps & string | PropOrComputedProp<TProps, TMethods>[],
 
     /**
-     * derived value
+     * derived value from observed props
      */
     d?: Derivative<TProps>,
     /**
