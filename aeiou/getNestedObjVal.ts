@@ -1,12 +1,12 @@
 import {PiqueProcessor, Transformer, arr} from '../index.js';
-import {IfInstructions, ObjectExpression, Derivations} from '../types';
+import {IfInstructions, ObjectExpression, Derivative} from '../types';
 export async function getNestedObjVal<TProps, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>, 
     piqueProcessor: PiqueProcessor<TProps, TMethods>, 
     u: ObjectExpression<TProps>){
     const returnObj: Partial<TProps> = {};
     for(const key in u){
-        const v = u[key as keyof TProps & string] as Derivations<TProps>;
+        const v = u[key as keyof TProps & string] as Derivative<TProps>;
         switch(typeof v){
             case 'number':{
                 const val = transformer.getNumberUVal(piqueProcessor, v);

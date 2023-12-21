@@ -40,7 +40,7 @@ In addition, the introduction of the [aria- state and properties](https://develo
 
 This can leave the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may be needed to keep the binding rules in sync.  Much like how separate css style rules often need adjusting when the document structure changes.
 
-## Example 1
+## Example 1 - The calculus of DOM updates
 
 Suppose our HTML looks as follows:
 
@@ -66,7 +66,7 @@ const et = new EventTarget();
 const transform = new Transformer<Model>(div, model, {
     span: {
         o: ['greeting'],
-        u: 0
+        d: 0
     },
 }, et);
 ```
@@ -79,7 +79,7 @@ The critical transform definition is this snippet from above:
 {
     span: {
         o: ['greeting'],
-        u: 0
+        d: 0
     },
 }
 ```
@@ -88,7 +88,7 @@ The "span" css-selector is saying watch for any span tags within the observed fr
 
 The "o" parameter is specifying the list of properties to **o**bserve from the model.  The order is important, as the rest of the transform manifest will frequently reference these observed properties via the index of this array.  
 
-And in fact in this example the "u" parameter is saying "**u**pdate the span's textContent property from the value of the 0th observed property".
+And in fact in this example the "d" parameter is saying "**d**erive" the span's textContent property from the value of the 0th observed property".  "0" is basically our "identity" derivation, and can actually be dropped, because it is the assumed default derivation.
 
 The result is:
 
@@ -128,10 +128,10 @@ In fact this package provides some utility functions that [do just that](https:/
 
 ## The 80% rule.
 
-Is the syntax above the most readable thing you have ever seen?  Probably not.  This library is striving to balance a number of concerns:  
+Is the syntax above the most readable thing you have ever seen?  Probably not.  This library is striving to balance a number of goals:  
 
-1.  Minimizing unnecessary renders by being precise about what needs to be re-rendered, when, and
-2.  Keeping repetitive syntax small.  Potentially, it could serve as a compile-time target to a more verbose, expressive syntax.  But even without such a verbose pre-compiled syntax, is it that bad? Like css, we believe the syntax can be "gotten used to", and we remember having a similar reaction when encountering css for the first time.
+1.  Minimizing unnecessary renders by being precise about what needs to be re-rendered, and when.
+2.  Keeping repetitive syntax small.  Potentially, it could serve as a compile-time target to a more verbose, expressive syntax.  But even without such a verbose pre-compiled syntax, is it that bad? Like css, we believe the syntax can be "gotten used to", and we remember having a similar reaction when encountering some aspects of css for the first time.
 3.  It should be JSON serializable as much as possible.
 
 In fact, the syntax above is so likely to appear repeatedly, that we provide the following shortcut for it:
@@ -142,7 +142,7 @@ We can replace:
 const transform = new Transformer<Model>(div, model, {
     span: {
         o: ['greeting'],
-        u: 0
+        d: 0
     },
 }, et);
 ```
@@ -161,13 +161,13 @@ But it is important to know what the shortcut is for, just as in calculus it is 
 
 Throughout the rest of the document, we will refer to the css selector key (in this case "span") as the "LHS", and the stuff to the right of the colon as the "RHS" ('greeting') in this case.
 
-The syntax above should give anyone who works with css a warm and fuzzy feeling:  "span" is, after all, a valid css selector.  However, that warm and fuzzy feeling will quickly fade as we look closely at shortcuts that we will discuss below, designed to optimize on the 80% of anticipated use cases, use cases we will encounter repeatedly.  Whereas css doesn't require (or allow for that matter) quotes around the selector, JSON does, as does JS as soon as non alphanumeric characters get introduced.  An earlier attempt to avoid the quotes issue by encouraging camel-case to kebab conversions, while useful, no longer appears, after experimenting with that syntax for a few years, to be the most helpful syntactic sugar we can provide as far as reducing repetitive/verbose configuration.  
+The syntax above (Example 1a) should give anyone who works with css a warm and fuzzy feeling:  "span" is, after all, a valid css selector.  Unfortunately prepare yourself. That warm and fuzzy feeling will quickly fade as we look closely at shortcuts that we will discuss below, designed to optimize on the 80% of anticipated use cases, use cases we will encounter repeatedly.  Whereas css doesn't require (or allow for that matter) quotes around the selector, JSON does, as does JS as soon as non alphanumeric characters get introduced.  An earlier attempt to avoid the quotes issue by encouraging camel-case to kebab conversions, while useful, no longer appears, after experimenting with that syntax for a few years, to be the most helpful syntactic sugar we can provide as far as reducing repetitive/verbose configuration.  
 
 Instead, we encourage the use of some key, standard attributes, where the value of the attribute matches the(camel-cased) name of the property it binds to.
 
-We will very shortly be expounding on exactly what these conventions are.  But don't worry, if you are thinking "but that will prevent me from using free form css to match my elements."
+We will very shortly be expounding on exactly what these conventions are.  But before diving into that discussion, I want to nip one concern in the bud.  If your reaction to what follows is thinking "but that will prevent me from using free form css to match my elements," fear not.
 
-There is an "escape hatch" for free form css -- start the expression with "* ":
+There is an "escape hatch" for free form css -- start the expression with "* ".  For example:
 
 ```TypeScript
 Transform<IModel>(div, model, {
@@ -232,12 +232,12 @@ Going back to our calculus analogy, where the syntax above is equivalent to y', 
 new Transformer<IModel>(form, model, {
     '* [name="greeting"]': {
         o: ['greeting'],
-        u: 0
+        d: 0
     },
 }, et);
 ```
 
-(Another small timesaver:  u: 0 is assumed if not specified above.)
+(Another small timesaver:  As mentioned before, d: 0 is assumed if not specified above.)
 
 Other symbols for other attributes are specified below:
 
@@ -291,7 +291,7 @@ const et = new EventTarget();
 Transform<Model>(div, model, {
     span: {
         o: ['msg1', 'msg2'],
-        u: ['msg1: ', 0, ', msg2: ', 1]
+        d: ['msg1: ', 0, ', msg2: ', 1]
     }
 }, et);
 ```
@@ -313,9 +313,11 @@ setTimeout(() => {
 
 ## Example 4  Setting props of the element [TODO]
 
-We glossed over a subtlety in our example above.  Without specifying to do so, we are automatically setting the span's text content, the input's value, based on a single binding.  The property we are setting is assume based on context.  In the case of the hyperink (a), we set the href.  This decision is guided by how microdata works.
+We glossed over a subtlety in our examples above.  Without specifying to do so, we are automatically setting the span's text content, the input's value, based on a single binding.  The property we are setting is assumed based on context.  In the case of the hyperink (a), we set the href.  This decision is inspired by how [microdata works](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/itemprop#values).
 
-But in many cases we need to specify exactly which property we want to set.  This can be done if the value of "u" (update) is an object type:
+But in many cases we need to specify exactly which property we want to set.  We do this using the "s" field value.
+
+For example:
 
 ```TypeScript
 interface Model{
@@ -332,21 +334,21 @@ const model: Model = {
 };
 const et = new EventTarget();
 Transform<Model>(div, model, {
-    input: {
-        a: {
-            00: {
+    input: [
+        {o: 'msg1', s: 'value'},
+        {o: rO, s: 'readOnly'},
+        {o: num, s: 'tabIndex'},
+        {
+            s: {
                 type: 'number',
-                disabled: true,
+                disabled: 'true'
             }
-            value: msg1,
-            readOnly: r0,
-            tabIndex: num
-        },
-    }
+        }
+    ]
 }, et);
 ```
 
-This will set the input's readOnly property from the r0 field from the model.  Likewise, tabIndex is set from the num field, value from msg1.  type is "hardcoded" to number, disabled to true.
+This will set the input's readOnly property from the r0 field from the model.  Likewise, tabIndex is set from the num field, value from msg1.  "type" is "hardcoded" to "number", "disabled" initialized to "true".
 
 
 

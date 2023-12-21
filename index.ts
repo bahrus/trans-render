@@ -1,6 +1,6 @@
 import {MountObserver} from 'mount-observer/MountObserver.js';
 import {
-    PropQueryExpression, PropAttrQueryType, Pique, Derivations, 
+    PropQueryExpression, PropAttrQueryType, Pique, Derivative, 
     IPiqueProcessor, NumberExpression, InterpolatingExpression,
     ObjectExpression,
     TransformerTarget, 
@@ -128,7 +128,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         }
     }
 
-    async doUpdate(matchingElement: Element, piqueProcessor: PiqueProcessor<TProps, TMethods>, u: Derivations<TProps>){
+    async doUpdate(matchingElement: Element, piqueProcessor: PiqueProcessor<TProps, TMethods>, u: Derivative<TProps>){
         const {doUpdate} = await import('./aeiou/doUpdate.js');
         await doUpdate(this, matchingElement, piqueProcessor, u);
     }

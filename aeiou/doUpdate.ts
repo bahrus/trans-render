@@ -1,10 +1,10 @@
 import {PiqueProcessor, Transformer} from '../index.js';
-import { Derivations } from '../types';
+import { Derivative } from '../types';
 export async function doUpdate<TProps, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>,
     matchingElement: Element, 
     piqueProcessor: PiqueProcessor<TProps, TMethods>, 
-    u: Derivations<TProps>
+    u: Derivative<TProps>
 ){
     switch(typeof u){
         case 'number':{
