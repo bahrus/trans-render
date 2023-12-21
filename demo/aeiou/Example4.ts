@@ -15,7 +15,7 @@ const model: Model = {
 const et = new EventTarget();
 
 Transform<Model>(div, model, {
-    input: {
+    // input: {
         // o: ['msg1', 'rO', 'num'],
         // a: {
             
@@ -23,7 +23,7 @@ Transform<Model>(div, model, {
         //     readOnly: 'r0',
         //     tabIndex: 'num'
         // },
-    }
+    // }
 }, et);
 
 setTimeout(() => {

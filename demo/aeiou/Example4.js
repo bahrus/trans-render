@@ -7,14 +7,14 @@ const model = {
 };
 const et = new EventTarget();
 Transform(div, model, {
-    input: {
-    // o: ['msg1', 'rO', 'num'],
-    // a: {
-    //     value: 0,
-    //     readOnly: 'r0',
-    //     tabIndex: 'num'
-    // },
-    }
+// input: {
+// o: ['msg1', 'rO', 'num'],
+// a: {
+//     value: 0,
+//     readOnly: 'r0',
+//     tabIndex: 'num'
+// },
+// }
 }, et);
 setTimeout(() => {
     const input = document.createElement('input');
