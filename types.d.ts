@@ -28,14 +28,14 @@ export type Expr10 = [...Expr9, number];
 export type Expr11 = [...Expr10, string];
 export type Expr12 = [...Expr11, number];
 
-export type Action<TProps> = (matchingElement: Element, pique: IPiqueProcessor<TProps>) => Promise<UpdateInstruction<TProps>> | Promise<void>;
+export type Action<TProps> = (matchingElement: Element, pique: IPiqueProcessor<TProps>) => Promise<Derivations<TProps>> | Promise<void>;
 export type InterpolatingExpression = Expr0 | Expr1 | Expr2 | Expr3 | Expr4 | Expr5 | Expr6 | Expr7 | Expr8 | Expr9 | Expr10 | Expr11 | Expr12;
 export type NumberExpression = [number];
 export type ObjectExpression<TProps> = {
-    [key: string]: UpdateInstruction<TProps>;
+    [key: string]: Derivations<TProps>;
 };
 
-export type UpdateInstruction<TProps> = 
+export type Derivations<TProps> = 
     | number 
     | InterpolatingExpression 
     | Action<TProps> 
@@ -85,7 +85,7 @@ export interface ConditionalUpdate<TProps>{
     ifAllOf?: number[],
     ifNoneOf?: number[],
     ifEqual?: [number, number | [number] | string],
-    u: UpdateInstruction<TProps>
+    u: Derivations<TProps>
 }
 
 export type IfInstructions<TProps> = ConditionalUpdate<TProps> | Array<ConditionalUpdate<TProps>>;
@@ -99,14 +99,15 @@ export interface PiqueWOQ<TProps, TMethods = TProps>{
      * props
      */
     o: PropOrComputedProp<TProps, TMethods>[],
+
+    /**
+     * update instructions
+     */
+    d?: Derivations<TProps>,
     /**
      * ifs
      */
     i?: IfInstructions<TProps>,
-    /**
-     * update instructions
-     */
-    u?: UpdateInstruction<TProps>,
     /**
      * enhance, for example, add event listener
      */

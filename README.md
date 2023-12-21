@@ -334,11 +334,13 @@ const et = new EventTarget();
 Transform<Model>(div, model, {
     input: {
         a: {
+            00: {
+                type: 'number',
+                disabled: true,
+            }
             value: msg1,
             readOnly: r0,
             tabIndex: num
-            type: ['number'],
-            disabled: [true]
         },
     }
 }, et);

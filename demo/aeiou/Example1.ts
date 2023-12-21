@@ -13,7 +13,7 @@ const et = new EventTarget();
 const transform = new Transformer<Model>(div, model, {
     span: {
         o: ['greeting'],
-        u: 0
+        d: 0
     },
 }, et);
 setTimeout(() => {

@@ -1,6 +1,6 @@
 import {MountObserver} from 'mount-observer/MountObserver.js';
 import {
-    PropQueryExpression, PropAttrQueryType, Pique, UpdateInstruction, 
+    PropQueryExpression, PropAttrQueryType, Pique, Derivations, 
     IPiqueProcessor, NumberExpression, InterpolatingExpression,
     ObjectExpression,
     TransformerTarget, 
@@ -42,7 +42,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
                     const {prop} = qi;
                     const pique: Pique<TProps, TMethods> = {
                         o: [prop! as keyof TProps & string],
-                        u: 0,
+                        d: 0,
                         qi,
                         q: newKey!
                     };
@@ -54,7 +54,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
                     {
                         const pique: Pique<TProps, TMethods> = {
                             o: [rhs],
-                            u: 0,
+                            d: 0,
                             q: newKey!
                         };
                         this.#piques.push(pique);
@@ -63,7 +63,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
                 case 'object':
                     {
                         const pique: Pique<TProps, TMethods> = {
-                            u: 0,
+                            d: 0,
                             ...rhs,
                             q: newKey!
                         };
@@ -128,7 +128,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         }
     }
 
-    async doUpdate(matchingElement: Element, piqueProcessor: PiqueProcessor<TProps, TMethods>, u: UpdateInstruction<TProps>){
+    async doUpdate(matchingElement: Element, piqueProcessor: PiqueProcessor<TProps, TMethods>, u: Derivations<TProps>){
         const {doUpdate} = await import('./aeiou/doUpdate.js');
         await doUpdate(this, matchingElement, piqueProcessor, u);
     }
@@ -264,9 +264,9 @@ export class PiqueProcessor<TProps, TMethods = TProps> extends EventTarget imple
         return all;
     }
     async doUpdate(matchingElement: Element){
-        const {u, i} = this.pique;
-        if(u !== undefined){
-            await this.transformer.doUpdate(matchingElement, this, u);
+        const {d, i} = this.pique;
+        if(d !== undefined){
+            await this.transformer.doUpdate(matchingElement, this, d);
         }
         if(i !== undefined){
             await this.transformer.doIfs(matchingElement, this, i);

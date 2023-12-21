@@ -25,7 +25,7 @@ const et = new EventTarget();
 const transform = new Transformer<IProps, IActions>(div, model, {
     input: {
         o: ['msg1', 'rO', 'num'],
-        u: {
+        d: {
             readOnly: 1,
             tabIndex: 2,
             value: 0,

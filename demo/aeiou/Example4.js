@@ -9,13 +9,11 @@ const et = new EventTarget();
 Transform(div, model, {
     input: {
         o: ['msg1', 'rO', 'num'],
-        u: {
-            readOnly: 1,
-            tabIndex: 2,
+        a: {
             value: 0,
-            type: 'number',
-            disabled: true
-        }
+            readOnly: 'r0',
+            tabIndex: 'num'
+        },
     }
 }, et);
 setTimeout(() => {
