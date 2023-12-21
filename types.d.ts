@@ -1,11 +1,5 @@
 import { MountContext, PipelineStage } from "mount-observer/types";
 
-// export interface FragmentManifest<TProps = any, TActions = TProps>{
-//     piques?: Pique<TProps, TActions>[],
-//     piqueMap?: {[key in PropQueryExpression]: PiqueWOQ<TProps>}
-//     //piqueMap?: {[key: string]: PiqueWOQ<TProps, TActions>}
-// }
-
 export type PropAttrQueryType = 
     | '$' //microdata itemprop
     | '@' //form element name
@@ -14,6 +8,7 @@ export type PropAttrQueryType =
     | '.' //class
     | '-' //marker
 
+//#region derived expressions
 export type Expr0 = [string, number];
 export type Expr1 = [...Expr0, string];
 export type Expr2 = [...Expr1, number];
@@ -44,6 +39,7 @@ export type Derivative<TProps> =
     | string
     | boolean
 ;
+//#endregion
 
 export interface MethodInvocation<TMethods>{
     do: keyof TMethods,
