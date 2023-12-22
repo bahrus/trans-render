@@ -2,8 +2,8 @@
   "name": "trans-render",
   "version": "0.0.711",
   "description": "Instantiate an HTML Template",
-  "main": "index.js",
-  "module": "index.js",
+  "main": "Transform.js",
+  "module": "Transform.js",
   "typings": "lib/types.d.ts",
   "scripts": {
     "serve": "node node_modules/may-it-serve/serve.js",
@@ -15,7 +15,7 @@
     "update": "ncu -u && npm install"
   },
   "exports": {
-    ".": "./index.js",
+    ".": "./Transform.js",
     "./froop/CE.js": "./froop/CE.js",
     "./lib/applyP.js": "./lib/applyP.js",
     "./lib/applyPE.js": "./lib/applyPE.js",

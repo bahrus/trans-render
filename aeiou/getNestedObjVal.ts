@@ -1,4 +1,4 @@
-import {MountOrchestrator, Transformer, arr} from '../index.js';
+import {MountOrchestrator, Transformer, arr} from '../Transform.js';
 import {IfInstructions, ObjectExpression, Derivative, UnitOfWork} from '../types';
 export async function getNestedObjVal<TProps, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>, 

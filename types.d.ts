@@ -23,7 +23,7 @@ export type Expr10 = [...Expr9, number];
 export type Expr11 = [...Expr10, string];
 export type Expr12 = [...Expr11, number];
 
-export type Action<TProps> = (matchingElement: Element, pique: IPiqueProcessor<TProps>) => Promise<Derivative<TProps>> | Promise<void>;
+export type Action<TProps> = (matchingElement: Element, pique: IMountOrchestrator<TProps>) => Promise<Derivative<TProps>> | Promise<void>;
 export type InterpolatingExpression = Expr0 | Expr1 | Expr2 | Expr3 | Expr4 | Expr5 | Expr6 | Expr7 | Expr8 | Expr9 | Expr10 | Expr11 | Expr12;
 export type NumberExpression = [number];
 export type ObjectExpression<TProps> = {
@@ -61,7 +61,7 @@ export type EnhancementInstructions<TMethods> =
     | Array<MethodInvocation<TMethods>>
 ;
 
-export interface IPiqueProcessor<TProps, TActions = TProps>{
+export interface IMountOrchestrator<TProps, TMethods = TProps>{
     //TODO add all the methods
 }
 

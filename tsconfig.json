@@ -8,7 +8,7 @@
 		"strict": true
 	},
 	"include": [
-		"index.ts",
+		"Transform.ts",
 		"lib/*",
 		"demo/*",
 		"demo/aeiou/*",

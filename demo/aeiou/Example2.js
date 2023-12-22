@@ -1,4 +1,4 @@
-import { Transformer } from '../../index.js';
+import { Transformer } from '../../Transform.js';
 const form = document.querySelector('form');
 const model = {
     greeting: 'hello'

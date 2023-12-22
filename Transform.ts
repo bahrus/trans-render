@@ -1,12 +1,12 @@
 import {MountObserver} from 'mount-observer/MountObserver.js';
 import {
-    PropQueryExpression, PropAttrQueryType, QuenitOfWork, Derivative, 
-    IPiqueProcessor as IMountOrchestrator, NumberExpression, InterpolatingExpression,
+    PropAttrQueryType, QuenitOfWork, Derivative, 
+    IMountOrchestrator, NumberExpression, InterpolatingExpression,
     ObjectExpression,
     TransformerTarget, 
     onMountStatusChange, RHS,
     IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp
-} from './types';
+} from './types.js';
 import { MountContext, PipelineStage } from 'mount-observer/types';
 
 export function Transform<TProps = any, TMethods = TProps>(

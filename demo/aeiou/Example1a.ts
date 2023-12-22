@@ -1,4 +1,4 @@
-import {Transform} from '../../index.js';
+import {Transform} from '../../Transform.js';
 
 interface Model{
     greeting: string;

@@ -1,4 +1,4 @@
-import { arr } from '../index.js';
+import { arr } from '../Transform.js';
 export async function doEnhance(transformer, matchingElement, type, uow, mountContext, stage) {
     const { e } = uow;
     if (e === undefined)

@@ -1,4 +1,4 @@
-import { arr } from '../index.js';
+import { arr } from '../Transform.js';
 export async function doIfs(transformer, matchingElement, uow, i) {
     const iffs = arr(i);
     for (const iff of iffs) {
