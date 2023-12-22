@@ -497,7 +497,7 @@ Transform<Props, Methods>(form, model, {
     input: [
         {
             o: 'typeToEdit', i: {
-                is: 'switch'
+                _is_: 'switch'
                 boolean: {s: {type: 'checkbox', hidden: false}},
                 number: {s: {type: 'number', hidden: false}},
                 object: {s: {hidden: true}},
