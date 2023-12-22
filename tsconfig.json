@@ -11,7 +11,7 @@
 		"Transform.ts",
 		"lib/*",
 		"demo/*",
-		"demo/aeiou/*",
+		"demo/transforms/*",
 		"lib/mixins/*",
 		"xslt/*",
 		"froop/*"
