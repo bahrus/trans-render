@@ -213,7 +213,7 @@ Transform<Model>(form, model, {
 }, et);
 ```
 
-... which result in:
+... which results in:
 
 ```html
 <form>
@@ -238,7 +238,7 @@ new Transformer<IModel>(form, model, {
 }, et);
 ```
 
-(Another small timesaver:  As mentioned before, d: 0 is assumed if not specified above.  Also, if only property needs to be observed, we can forgo the use of the array)
+(Another small timesaver:  As mentioned before, d: 0 is assumed if not specified above.  Also, if only one property needs to be observed, we can forgo the use of the array)
 
 Other symbols for other attributes are specified below:
 
@@ -319,7 +319,7 @@ const div = document.querySelector('div')!;
 const model: Model = {
     msg1: 'hello',
     msg2: 'world'
-    computeMessage: (model: Model, {msg1, msg2} uow: UnitOfWorkCtx) => {
+    computeMessage: ({msg1, msg2}: Model, uow: UnitOfWorkCtx) => {
         return `msg1: ${msg1}, msg2: ${msg2}`
     }
 };
@@ -489,7 +489,9 @@ const et = new EventTarget();
 Transform<Model>(div, model, {
     span: {
         o: ['msg1', 'msg2'],
-        d: ['msg1: ', 0, ', msg2: ', 1]
+        d: ({msg1, msg2}: Model, uow: UnitOfWorkCtx) => {
+            return `msg1: ${msg1}, msg2: ${msg2}`
+        }
     }
 }, et);
 ```
