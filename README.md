@@ -252,7 +252,7 @@ export type PropAttrQueryType =
     | '-' //marker
 ```
 
-## Example 3  Interpolation
+## Example 3a  Declarative Interpolation
 
 Suppose our domain object has two properties, and we need to dynamically combine them together in our UI:
 
@@ -310,6 +310,27 @@ setTimeout(() => {
     model.msg1 = 'bye';
     et.dispatchEvent(new Event('msg1'));
 }, 2000);
+```
+
+## Example 3b Declarative, computed derivations [TODO]
+
+```TypeScript
+const div = document.querySelector('div')!;
+const model: Model = {
+    msg1: 'hello',
+    msg2: 'world'
+    computeMessage: (model: Model, {msg1, msg2} uow: UnitOfWorkCtx) => {
+        return `msg1: ${msg1}, msg2: ${msg2}`
+    }
+};
+const et = new EventTarget();
+
+Transform<Model>(div, model, {
+    span: {
+        o: ['msg1', 'msg2'],
+        d: 'computeMessage'
+    }
+}, et);
 ```
 
 ## Example 4  Setting props of the element
@@ -427,6 +448,8 @@ Okay, okay, maybe we don't want to have to go bouncing around in our code just t
 
 So, we take the "if you can't beat them, join them" approach to this question.  This is the first example, where we deviate from side-effect free, truly declarative, JSON serializable syntax:
 
+### Example 6a:
+
 ```TypeScript
 Transform<Props, Methods>(div, model, {
     input: {
@@ -447,6 +470,29 @@ Transform<Props, Methods>(div, model, {
 ```
 
 [TODO]  Provide some helper functions to make this amount of boilerplate smaller.
+
+
+### Example 6b: Instant gratification for derived values [TODO]
+
+Speaking of unfettered access to the JavaScript runtime engine in the template binding, going back to example 4, this is also supported:
+
+```TypeScript
+const div = document.querySelector('div')!;
+const model: Model = {
+    msg1: 'hello',
+    msg2: 'world'
+
+
+};
+const et = new EventTarget();
+
+Transform<Model>(div, model, {
+    span: {
+        o: ['msg1', 'msg2'],
+        d: ['msg1: ', 0, ', msg2: ', 1]
+    }
+}, et);
+```
 
 ## Example 7 - Conditional Logic [TODO]
 
