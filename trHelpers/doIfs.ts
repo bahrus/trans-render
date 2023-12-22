@@ -1,5 +1,5 @@
 import {MountOrchestrator, Transformer, arr} from '../Transform.js';
-import {IfInstructions, UnitOfWork} from '../types';
+import {IfInstructions, UnitOfWork} from '../types.js';
 export async function doIfs<TProps, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>, 
     matchingElement: Element, 

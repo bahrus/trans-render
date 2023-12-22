@@ -123,19 +123,19 @@ export class Transformer extends EventTarget {
         }
     }
     async doUpdate(matchingElement, uow, d) {
-        const { doUpdate } = await import('./aeiou/doUpdate.js');
+        const { doUpdate } = await import('./trHelpers/doUpdate.js');
         await doUpdate(this, matchingElement, uow);
     }
     async doIfs(matchingElement, uow, i) {
-        const { doIfs } = await import('./aeiou/doIfs.js');
+        const { doIfs } = await import('./trHelpers/doIfs.js');
         await doIfs(this, matchingElement, uow, i);
     }
     async doEnhance(matchingElement, type, uow, mountContext, stage) {
-        const { doEnhance } = await import('./aeiou/doEnhance.js');
+        const { doEnhance } = await import('./trHelpers/doEnhance.js');
         await doEnhance(this, matchingElement, type, uow, mountContext, stage);
     }
     async getNestedObjVal(uow, u) {
-        const { getNestedObjVal } = await import('./aeiou/getNestedObjVal.js');
+        const { getNestedObjVal } = await import('./trHelpers/getNestedObjVal.js');
         return await getNestedObjVal(this, uow, u);
     }
     getArrayVal(uow, u) {

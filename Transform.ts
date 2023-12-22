@@ -140,22 +140,22 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
     }
 
     async doUpdate(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>, d: Derivative<TProps>){
-        const {doUpdate} = await import('./aeiou/doUpdate.js');
+        const {doUpdate} = await import('./trHelpers/doUpdate.js');
         await doUpdate(this, matchingElement, uow);
     }
 
     async doIfs(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>, i: IfInstructions<TProps>){
-        const {doIfs} = await import('./aeiou/doIfs.js');
+        const {doIfs} = await import('./trHelpers/doIfs.js');
         await doIfs(this, matchingElement, uow, i);
     }
 
     async doEnhance(matchingElement: Element, type: onMountStatusChange, uow: UnitOfWork<TProps, TMethods>, mountContext: MountContext, stage: PipelineStage | undefined){
-        const {doEnhance} = await import('./aeiou/doEnhance.js');
+        const {doEnhance} = await import('./trHelpers/doEnhance.js');
         await doEnhance(this, matchingElement, type, uow, mountContext, stage);
     }
 
     async getNestedObjVal(uow: UnitOfWork<TProps, TMethods>, u: ObjectExpression<TProps>){
-        const {getNestedObjVal} = await import('./aeiou/getNestedObjVal.js');
+        const {getNestedObjVal} = await import('./trHelpers/getNestedObjVal.js');
         return await getNestedObjVal(this, uow, u);
     }
 

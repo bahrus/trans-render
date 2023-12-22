@@ -1,5 +1,5 @@
 import {MountOrchestrator, Transformer} from '../Transform.js';
-import { Derivative, UnitOfWork } from '../types';
+import { Derivative, UnitOfWork } from '../types.js';
 export async function doUpdate<TProps, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>,
     matchingElement: Element, 
