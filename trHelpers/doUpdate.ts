@@ -5,7 +5,7 @@ export async function doUpdate<TProps, TMethods = TProps>(
     matchingElement: Element, 
     uow: UnitOfWork<TProps, TMethods>
 ){
-    const {d, o, s} = uow;
+    const {d, o, s, sa} = uow;
     if(o === undefined){
         if(s === undefined) throw 'NI';
         Object.assign(matchingElement, s);
@@ -17,8 +17,13 @@ export async function doUpdate<TProps, TMethods = TProps>(
             const val = transformer.getNumberUVal(uow, d);
             if(s !== undefined){
                 (<any>matchingElement)[s as string] = val;
+            }else if(sa !== undefined){
+                const {A} = await import('../froop/A.js');
+                A({[sa]: val}, matchingElement);
+            }else{
+                transformer.setPrimeValue(matchingElement, val);
             }
-            transformer.setPrimeValue(matchingElement, val);
+            
             break;
         }
         case 'function':{
@@ -35,7 +40,12 @@ export async function doUpdate<TProps, TMethods = TProps>(
         case 'object': {
             if(Array.isArray(d)){
                 const val = transformer.getArrayVal(uow, d);
-                transformer.setPrimeValue(matchingElement, val);
+                if(s !== undefined){
+                    (<any>matchingElement)[s as string] = val;
+                }else{
+                    transformer.setPrimeValue(matchingElement, val);
+                }
+                
             }else{
                 const val = await transformer.getNestedObjVal(uow, d);
                 Object.assign(matchingElement, val);

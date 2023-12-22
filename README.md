@@ -1,4 +1,4 @@
-# trans-render
+# trans-render [WIP]
 
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/trans-render)
 [![NPM version](https://badge.fury.io/js/trans-render.png)](http://badge.fury.io/js/trans-render)
@@ -325,13 +325,15 @@ interface Model{
     msg1: string;
     rO: boolean;
     num: number;
+    propName: string;
 }
 
 const div = document.querySelector('div')!;
 const model: Model = {
     msg1: '123',
     rO: true,
-    num: 7
+    num: 7,
+    propName: 'test'
 };
 const et = new EventTarget();
 Transform<Model>(div, model, {
@@ -339,6 +341,7 @@ Transform<Model>(div, model, {
         {o: 'msg1', s: 'value'},
         {o: 'rO',   s: 'readOnly'},
         {o: 'num',  s: 'tabIndex'},
+        {o: 'prop', sa: 'itemprop'},
         {
             s: {
                 type: 'number',
@@ -351,6 +354,7 @@ Transform<Model>(div, model, {
 
 This will set the input's readOnly property from the r0 field from the model.  Likewise, tabIndex is set from the num field, value from msg1.  "type" is "hardcoded" to "number", "disabled" initialized to "true".
 
+Note the (discouraged) extra property: "sa" which means "set attribute" rather than setting the property.
 
 ## Example 5 Enhancing an element
 
@@ -372,6 +376,7 @@ interface Props{
     msg1: string;
     rO: boolean;
     num: number;
+    propName: string;
 }
 
 interface Methods{
@@ -383,6 +388,7 @@ const model: Props & Methods = {
     msg1: '123',
     rO: true,
     num: 7,
+    propName: 'test',
     hydrateInputElement:(model: Props & Methods, el: Element, ctx: MethodInvocationCallback<Props>) => {
         console.log({model, el, ctx})
     }
@@ -394,6 +400,7 @@ Transform<Props, Methods>(div, model, {
         {o: 'msg1', s: 'value'},
         {o: 'rO',   s: 'readOnly'},
         {o: 'num',  s: 'tabIndex'},
+        {o: 'prop', sa: 'itemprop'},
         {
             s: {
                 type: 'number',
@@ -440,4 +447,6 @@ Transform<Props, Methods>(div, model, {
 ```
 
 [TODO]  Provide some helper functions to make this amount of boilerplate smaller.
+
+## Example 7
 

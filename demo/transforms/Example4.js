@@ -3,7 +3,8 @@ const div = document.querySelector('div');
 const model = {
     msg1: '123',
     rO: true,
-    num: 7
+    num: 7,
+    propName: 'test'
 };
 const et = new EventTarget();
 Transform(div, model, {
@@ -11,6 +12,7 @@ Transform(div, model, {
         { o: 'msg1', s: 'value' },
         { o: 'rO', s: 'readOnly' },
         { o: 'num', s: 'tabIndex' },
+        { o: 'propName', sa: 'itemprop' },
         {
             s: {
                 type: 'number',

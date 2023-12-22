@@ -4,13 +4,15 @@ interface Model{
     msg1: string;
     rO: boolean;
     num: number;
+    propName: string;
 }
 
 const div = document.querySelector('div')!;
 const model: Model = {
     msg1: '123',
     rO: true,
-    num: 7
+    num: 7,
+    propName: 'test'
 };
 const et = new EventTarget();
 
@@ -19,6 +21,7 @@ Transform<Model>(div, model, {
         {o: 'msg1', s: 'value'},
         {o: 'rO',   s: 'readOnly'},
         {o: 'num',  s: 'tabIndex'},
+        {o: 'propName', sa: 'itemprop'},
         {
             s: {
                 type: 'number',

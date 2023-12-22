@@ -1,5 +1,5 @@
 export async function doUpdate(transformer, matchingElement, uow) {
-    const { d, o, s } = uow;
+    const { d, o, s, sa } = uow;
     if (o === undefined) {
         if (s === undefined)
             throw 'NI';
@@ -14,7 +14,13 @@ export async function doUpdate(transformer, matchingElement, uow) {
             if (s !== undefined) {
                 matchingElement[s] = val;
             }
-            transformer.setPrimeValue(matchingElement, val);
+            else if (sa !== undefined) {
+                const { A } = await import('../froop/A.js');
+                A({ [sa]: val }, matchingElement);
+            }
+            else {
+                transformer.setPrimeValue(matchingElement, val);
+            }
             break;
         }
         case 'function': {
@@ -31,7 +37,12 @@ export async function doUpdate(transformer, matchingElement, uow) {
         case 'object': {
             if (Array.isArray(d)) {
                 const val = transformer.getArrayVal(uow, d);
-                transformer.setPrimeValue(matchingElement, val);
+                if (s !== undefined) {
+                    matchingElement[s] = val;
+                }
+                else {
+                    transformer.setPrimeValue(matchingElement, val);
+                }
             }
             else {
                 const val = await transformer.getNestedObjVal(uow, d);

@@ -110,9 +110,13 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
      */
     e?:  EnhancementInstructions<TMethods>,
     /**
-     * set value of target
+     * set specified property of the matching element to the (derived) value
      */
-    s?: (keyof TElement & string) | {}
+    s?: (keyof TElement & string) | {},
+    /**
+     * set specified attribute of the matching element to the (derived) value 
+     */
+    sa?: string
 }
 
 export interface QuenitOfWork<TProps, TActions> extends UnitOfWork<TProps, TActions>{
