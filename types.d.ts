@@ -81,7 +81,7 @@ export interface ConditionalUpdate<TProps>{
     ifAllOf?: number[],
     ifNoneOf?: number[],
     ifEqual?: [number, number | [number] | string],
-    u: Derivative<TProps>
+    d: Derivative<TProps>
 }
 
 export type IfInstructions<TProps> = ConditionalUpdate<TProps> | Array<ConditionalUpdate<TProps>>;

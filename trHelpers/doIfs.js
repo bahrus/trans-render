@@ -2,7 +2,7 @@ import { arr } from '../Transform.js';
 export async function doIfs(transformer, matchingElement, uow, i) {
     const iffs = arr(i);
     for (const iff of iffs) {
-        const { ifAllOf, ifEqual, ifNoneOf, u } = iff;
+        const { ifAllOf, ifEqual, ifNoneOf, d } = iff;
         if (ifAllOf !== undefined) {
             for (const n of ifAllOf) {
                 if (!transformer.getNumberUVal(uow, n))
@@ -38,6 +38,6 @@ export async function doIfs(transformer, matchingElement, uow, i) {
             if (lhs !== rhs)
                 continue;
         }
-        await transformer.doUpdate(matchingElement, uow, u);
+        await transformer.doUpdate(matchingElement, uow, d);
     }
 }

@@ -98,7 +98,7 @@
     "froop/*"
   ],
   "dependencies": {
-    "mount-observer": "0.0.4"
+    "mount-observer": "0.0.5"
   },
   "devDependencies": {
     "@playwright/test": "1.40.1",

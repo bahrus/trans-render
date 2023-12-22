@@ -8,7 +8,7 @@ export async function doIfs<TProps, TMethods = TProps>(
 ){
     const iffs = arr(i);
     for(const iff of iffs){
-        const {ifAllOf, ifEqual, ifNoneOf, u} = iff;
+        const {ifAllOf, ifEqual, ifNoneOf, d} = iff;
         if(ifAllOf !== undefined){
             for(const n of ifAllOf){
                 if(!transformer.getNumberUVal(uow, n)) continue;
@@ -40,6 +40,6 @@ export async function doIfs<TProps, TMethods = TProps>(
             }
             if(lhs !== rhs) continue;
         }
-        await transformer.doUpdate(matchingElement, uow, u);
+        await transformer.doUpdate(matchingElement, uow, d);
     }
 }

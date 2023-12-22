@@ -178,7 +178,7 @@ Transform<IModel>(div, model, {
 
 ## Example 2 -- binding using the name attribute
 
-We often find ourselves defining in our HTML *input* tags (or other form-associated) elements:
+We often find ourselves defining in our HTML *input* tags (or other form-associated elements):
 
 ```html
 <form>
@@ -358,7 +358,7 @@ Note the (discouraged) extra property: "sa" which means "set attribute" rather t
 
 ## Example 5 Enhancing an element
 
-Most framework / teamplate libraries provide a way to explicitly add event handlers to an element.  This library takes a step back, and instead provides more generic support for "enhancing" or hydrating an element.  The thinking is there are too many ways configuring how event handling should take place --  it is easy enough to add a standard event listener attacher as a standard method to the base class of the custom element, that can choose exactly how it wants to deal with events.
+Most framework / template libraries provide a way to explicitly add event handlers to an element.  This library takes a step back, and instead provides more generic support for "enhancing" or hydrating an element.  The thinking is there are too many ways configuring how event handling should take place --  it is easy enough to add a standard event listener attacher as a standard method to the base class of the custom element, that can choose exactly how it wants to deal with events.
 
 Likewise, instead of adding event handlers, we may instead want to add one or more [custom enhancements](https://github.com/bahrus/be-enhanced), like a repeating element enhancement, or a lazy loading enhancement.
 
@@ -423,7 +423,7 @@ The MethodInvocationCallback interface can be seen [here](https://github.com/bah
 
 ## Example 6 Instant gratification [TODO]
 
-Okay, okay, maybe we don't want to  have to bouncing around in our code just to add an event handler.  This appears to me to be one of the apparent appeals of JSX and tagged template libraries like Lit/FAST/Stencil/Atomico, etc.
+Okay, okay, maybe we don't want to have to go bouncing around in our code just to add an event handler.  This appears to me to be one of the apparent appeals of JSX and tagged template libraries like Lit/FAST/Stencil/Atomico, etc.
 
 So, we take the "if you can't beat them, join them" approach to this question.  This is the first example, where we deviate from side-effect free, truly declarative, JSON serializable syntax:
 
@@ -448,5 +448,17 @@ Transform<Props, Methods>(div, model, {
 
 [TODO]  Provide some helper functions to make this amount of boilerplate smaller.
 
-## Example 7
+## Example 7 - Conditional Logic
+
+### Prelude
+
+Much conditional display logic can be accomplished via css -- set various attributes to string values as described above (Example 4), pulling in values from the host, then allow css to interpret those attributes in such a way as to accomplish the conditional display we are after.
+
+But sometimes this isn't sufficient.  Sometimes the values of the attributes (or properties) themselves need to be conditional.  
+
+One approach to accomplishing this is by adding a "computed property" to the host element that calculates what the value of the attribute should be, with the full power of JavaScript at our disposal.  But this solution may not be sufficient when we *have* no host class to begin with (e.g. declarative custom elements).  And it may also be argued that even if we do, these types of computed properties are too tied to the UI.
+
+So, that is what the declarative expressions below address.  As with everything else in this library, the logic for this is only loaded on demand, so use or don't use, the penalty is minimal either way.
+
+### On to business
 
