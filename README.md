@@ -238,7 +238,7 @@ new Transformer<IModel>(form, model, {
 }, et);
 ```
 
-(Another small timesaver:  As mentioned before, d: 0 is assumed if not specified above.)
+(Another small timesaver:  As mentioned before, d: 0 is assumed if not specified above.  Also, if only property needs to be observed, we can forgo the use of the array)
 
 Other symbols for other attributes are specified below:
 
@@ -479,9 +479,30 @@ const model = {
 Transform<Props, Methods>(form, model, {
     input: [
         {o: 'typeToEdit', i: 'boolean', s: {type: 'checkbox', hidden: false}},
-        {o: 'typeToEdit', i: 'number', s: {type: 'number', hidden: false}},
-        {o: 'typeToEdit', i: 'object', s: {hidden: true}}
-    }
+        {o: 'typeToEdit', i: 'number',  s: {type: 'number', hidden: false}},
+        {o: 'typeToEdit', i: 'object',  s: {hidden: true}}
+    ]
+}, et);
+```
+
+As we can see, there's a little repetition.  To reduce the repetition:
+
+### Example 7b: [TODO]
+
+```TypeScript
+const model = {
+    typeToEdit: 'boolean'
+}
+Transform<Props, Methods>(form, model, {
+    input: [
+        {
+            o: 'typeToEdit', i: [
+                {ifEquals: 'boolean', s: {type: 'checkbox', hidden: false}},
+                {ifEquals: 'number', s: {type: 'number', hidden: false}},
+                {ifEquals: 'object', s: {hidden: true}}
+            ]
+        },
+    ]
     
 }, et);
 ```
