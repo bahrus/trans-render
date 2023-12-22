@@ -477,10 +477,10 @@ const model = {
     typeToEdit: 'boolean'
 }
 Transform<Props, Methods>(form, model, {
-    input: {
-        o: ['typeToEdit'],
-        i: 'boolean'.
-        s: {type: 'checkbox'}
+    input: [
+        {o: 'typeToEdit', i: 'boolean', s: {type: 'checkbox', hidden: false}},
+        {o: 'typeToEdit', i: 'number', s: {type: 'number', hidden: false}},
+        {o: 'typeToEdit', i: 'object', s: {hidden: true}}
     }
     
 }, et);
