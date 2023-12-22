@@ -4,7 +4,7 @@ export async function doIfs<TProps, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>, 
     matchingElement: Element, 
     uow: UnitOfWork<TProps, TMethods>, 
-    i: IfInstructions<TProps>
+    i: IfInstructions<TProps, TMethods>
 ){
     const iffs = arr(i);
     for(const iff of iffs){

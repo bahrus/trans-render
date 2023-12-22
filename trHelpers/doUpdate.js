@@ -8,46 +8,51 @@ export async function doUpdate(transformer, matchingElement, uow) {
     }
     if (typeof s === 'object')
         throw 'NI';
+    let val;
     switch (typeof d) {
         case 'number': {
-            const val = transformer.getNumberUVal(uow, d);
-            if (s !== undefined) {
-                matchingElement[s] = val;
-            }
-            else if (sa !== undefined) {
-                const { A } = await import('../froop/A.js');
-                A({ [sa]: val }, matchingElement);
-            }
-            else {
-                transformer.setPrimeValue(matchingElement, val);
-            }
+            val = transformer.getNumberUVal(uow, d);
             break;
         }
         case 'function': {
-            const newU = await d(matchingElement, uow);
-            const newUow = {
-                ...uow,
-                d: newU,
-            };
-            if (newU !== undefined) {
-                await transformer.doUpdate(matchingElement, uow, newU);
-            }
+            throw 'NI';
+            // const newU = await d(matchingElement,  uow);
+            // const newUow = {
+            //     ...uow,
+            //     d: newU,
+            // }
+            // if(newU !== undefined){
+            //     await transformer.doUpdate(matchingElement, uow, newU);
+            // }
             break;
         }
         case 'object': {
-            if (Array.isArray(d)) {
-                const val = transformer.getArrayVal(uow, d);
-                if (s !== undefined) {
-                    matchingElement[s] = val;
-                }
-                else {
-                    transformer.setPrimeValue(matchingElement, val);
-                }
-            }
-            else {
-                const val = await transformer.getNestedObjVal(uow, d);
-                Object.assign(matchingElement, val);
-            }
+            throw 'NI';
+            // if(Array.isArray(d)){
+            //     const val = transformer.getArrayVal(uow, d);
+            //     if(s !== undefined){
+            //         (<any>matchingElement)[s as string] = val;
+            //     }else{
+            //         transformer.setPrimeValue(matchingElement, val);
+            //     }
+            // }else{
+            //     const val = await transformer.getNestedObjVal(uow, d);
+            //     Object.assign(matchingElement, val);
+            // }
         }
+        case 'string': {
+            const { model } = transformer;
+            val = model[d](model);
+        }
+    }
+    if (s !== undefined) {
+        matchingElement[s] = val;
+    }
+    else if (sa !== undefined) {
+        const { A } = await import('../froop/A.js');
+        A({ [sa]: val }, matchingElement);
+    }
+    else {
+        transformer.setPrimeValue(matchingElement, val);
     }
 }

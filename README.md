@@ -115,7 +115,7 @@ setTimeout(() => {
 }, 2000);
 ```
 
-So dynamically adding new HTML elements that match the css selector will immediately get bound, as does dispatching events matching the property names.  
+So dynamically adding new HTML elements that match the css selector will immediately get bound, as does dispatching events matching the observed property name(s).  
 
 Using an event target as our mechanism for providing our reactive observer to observe changes, as opposed to getters/setters of a class seems like the most generic solution we can think of.
 
@@ -421,6 +421,7 @@ Transform<Props, Methods>(div, model, {
         {o: 'msg1', s: 'value'},
         {o: 'rO',   s: 'readOnly'},
         {o: 'num',  s: 'tabIndex'},
+        {o: 'num',  s: '.dataset.num'} //TODO
         {o: 'prop', sa: 'itemprop'},
         {
             s: {
@@ -481,17 +482,13 @@ const div = document.querySelector('div')!;
 const model: Model = {
     msg1: 'hello',
     msg2: 'world'
-
-
 };
 const et = new EventTarget();
 
 Transform<Model>(div, model, {
     span: {
         o: ['msg1', 'msg2'],
-        d: ({msg1, msg2}: Model, uow: UnitOfWorkCtx) => {
-            return `msg1: ${msg1}, msg2: ${msg2}`
-        }
+        d: ({msg1, msg2}: Model, uow: UnitOfWorkCtx) => `msg1: ${msg1}, msg2: ${msg2}`
     }
 }, et);
 ```
@@ -500,7 +497,7 @@ Transform<Model>(div, model, {
 
 ### Prelude
 
-Much conditional display logic can be accomplished via css -- set various attributes to string values as described above (Example 4), pulling in values from the host, then allow css to interpret those attributes in such a way as to accomplish the conditional display we are after.
+Much conditional display logic can be accomplished via css -- set various attributes (e.g. via property dataset) to string values as described above (Example 4), pulling in values from the host, then allow css to interpret those attributes in such a way as to accomplish the conditional display we are after.
 
 But sometimes this isn't sufficient.  Sometimes the values of the attributes (or properties) themselves need to be conditional.  
 
@@ -545,7 +542,7 @@ Transform<Props, Methods>(form, model, {
     input: [
         {
             o: 'typeToEdit', i: {
-                _is_: 'switch'
+                _is_: 'switch' //optional, assume, specify "_froop_" for froop like settings
                 boolean: {s: {type: 'checkbox', hidden: false}},
                 number: {s: {type: 'number', hidden: false}},
                 object: {s: {hidden: true}},

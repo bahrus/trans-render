@@ -23,20 +23,20 @@ export type Expr10 = [...Expr9, number];
 export type Expr11 = [...Expr10, string];
 export type Expr12 = [...Expr11, number];
 
-export type Action<TProps> = (matchingElement: Element, pique: IMountOrchestrator<TProps>) => Promise<Derivative<TProps>> | Promise<void>;
+//export type Action<TProps> = (matchingElement: Element, pique: IMountOrchestrator<TProps>) => Promise<Derivative<TProps>> | Promise<void>;
 export type InterpolatingExpression = Expr0 | Expr1 | Expr2 | Expr3 | Expr4 | Expr5 | Expr6 | Expr7 | Expr8 | Expr9 | Expr10 | Expr11 | Expr12;
 export type NumberExpression = [number];
-export type ObjectExpression<TProps> = {
-    [key: string]: Derivative<TProps>;
+export type ObjectExpression<TProps, TMethods> = {
+    [key: string]: Derivative<TProps, TMethods>;
 };
 
-export type Derivative<TProps> = 
+export type Derivative<TProps, TMethods> = 
     | number 
     | InterpolatingExpression 
-    | Action<TProps> 
+    //| Action<TProps> 
     | NumberExpression 
-    | ObjectExpression<TProps>
-    | string
+    | ObjectExpression<TProps, TMethods>
+    | keyof TMethods
     | boolean
 ;
 //#endregion
@@ -77,14 +77,14 @@ export type PropQueryExpression<TProps> =
 
 export type CSSQuery = string;
 
-export interface ConditionalUpdate<TProps>{
+export interface ConditionalUpdate<TProps, TMethods>{
     ifAllOf?: number[],
     ifNoneOf?: number[],
     ifEqual?: [number, number | [number] | string],
-    d: Derivative<TProps>
+    d: Derivative<TProps, TMethods>
 }
 
-export type IfInstructions<TProps> = ConditionalUpdate<TProps> | Array<ConditionalUpdate<TProps>>;
+export type IfInstructions<TProps, TMethods> = ConditionalUpdate<TProps, TMethods> | Array<ConditionalUpdate<TProps, TMethods>>;
 
 export type PropOrComputedProp<TProps, TMethods = TProps> = 
     | keyof TProps & string
@@ -100,11 +100,11 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**
      * derived value from observed props
      */
-    d?: Derivative<TProps>,
+    d?: Derivative<TProps, TMethods>,
     /**
      * ifs ands or buts
      */
-    i?: IfInstructions<TProps>,
+    i?: IfInstructions<TProps, TMethods>,
     /**
      * enhance, for example, add event listener
      */

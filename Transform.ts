@@ -139,12 +139,12 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         }
     }
 
-    async doUpdate(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>, d: Derivative<TProps>){
+    async doUpdate(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>, d: Derivative<TProps, TMethods>){
         const {doUpdate} = await import('./trHelpers/doUpdate.js');
         await doUpdate(this, matchingElement, uow);
     }
 
-    async doIfs(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>, i: IfInstructions<TProps>){
+    async doIfs(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>, i: IfInstructions<TProps, TMethods>){
         const {doIfs} = await import('./trHelpers/doIfs.js');
         await doIfs(this, matchingElement, uow, i);
     }
@@ -154,7 +154,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         await doEnhance(this, matchingElement, type, uow, mountContext, stage);
     }
 
-    async getNestedObjVal(uow: UnitOfWork<TProps, TMethods>, u: ObjectExpression<TProps>){
+    async getNestedObjVal(uow: UnitOfWork<TProps, TMethods>, u: ObjectExpression<TProps, TMethods>){
         const {getNestedObjVal} = await import('./trHelpers/getNestedObjVal.js');
         return await getNestedObjVal(this, uow, u);
     }

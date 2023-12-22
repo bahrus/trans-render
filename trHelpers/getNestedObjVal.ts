@@ -3,10 +3,10 @@ import {IfInstructions, ObjectExpression, Derivative, UnitOfWork} from '../types
 export async function getNestedObjVal<TProps, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>, 
     uow: UnitOfWork<TProps, TMethods>, 
-    u: ObjectExpression<TProps>){
+    u: ObjectExpression<TProps, TMethods>){
     const returnObj: Partial<TProps> = {};
     for(const key in u){
-        const v = u[key as keyof TProps & string] as Derivative<TProps>;
+        const v = u[key as keyof TProps & string] as Derivative<TProps, TMethods>;
         switch(typeof v){
             case 'number':{
                 const val = transformer.getNumberUVal(uow, v);
