@@ -496,14 +496,16 @@ const model = {
 Transform<Props, Methods>(form, model, {
     input: [
         {
-            o: 'typeToEdit', i: [
-                {ifEquals: 'boolean', s: {type: 'checkbox', hidden: false}},
-                {ifEquals: 'number', s: {type: 'number', hidden: false}},
-                {ifEquals: 'object', s: {hidden: true}}
-            ]
+            o: 'typeToEdit', i: {
+                is: 'switch'
+                boolean: {s: {type: 'checkbox', hidden: false}},
+                number: {s: {type: 'number', hidden: false}},
+                object: {s: {hidden: true}},
+            }
         },
     ]
     
 }, et);
 ```
+ 
 
