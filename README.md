@@ -448,7 +448,7 @@ Transform<Props, Methods>(div, model, {
 
 [TODO]  Provide some helper functions to make this amount of boilerplate smaller.
 
-## Example 7 - Conditional Logic
+## Example 7 - Conditional Logic [TODO]
 
 ### Prelude
 
@@ -461,4 +461,28 @@ One approach to accomplishing this is by adding a "computed property" to the hos
 So, that is what the declarative expressions below address.  As with everything else in this library, the logic for this is only loaded on demand, so use or don't use, the penalty is minimal either way.
 
 ### On to business
+
+For conditional statements, we use the letter "i" for iff.  It supports various different types of RHS's, in order to ramp up to more complex scenarios.
+
+### Example 7a: [TODO]
+
+```html
+<form>
+    <input>
+</form>
+```
+
+```TypeScript
+const model = {
+    typeToEdit: 'boolean'
+}
+Transform<Props, Methods>(form, model, {
+    input: {
+        o: ['typeToEdit'],
+        i: 'boolean'.
+        s: {type: 'checkbox'}
+    }
+    
+}, et);
+```
 
