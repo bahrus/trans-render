@@ -424,7 +424,7 @@ So, we take the "if you can't beat them, join them" approach to this question.  
 Transform<Props, Methods>(div, model, {
     input: {
         e: {
-            onMount: (model: Model, el: HTMLInputElement) => {
+            onMount: (model: Model, el: HTMLInputElement, ctx: UnitOfWorkContext) => {
                 el.addEventListener('input', e => {
                     // knock yourself out
                     el.appendChild(document.body);
