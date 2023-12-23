@@ -510,7 +510,7 @@ So, that is what the declarative expressions below address.  As with everything 
 
 For conditional statements, we use the letter "i" for if.  It supports various different types of RHS's, in order to ramp up to more complex scenarios.
 
-### Example 7a: [TODO]
+### Example 7a:
 
 ```html
 <form>
