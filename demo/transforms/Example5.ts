@@ -27,6 +27,7 @@ Transform<Props, Methods>(div, model, {
         {o: 'msg1', s: 'value'},
         {o: 'rO',   s: 'readOnly'},
         {o: 'num',  s: 'tabIndex'},
+        {o: 'num',  s: '.dataset.num'},
         {
             s: {
                 type: 'number',

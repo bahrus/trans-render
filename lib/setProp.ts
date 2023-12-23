@@ -1,4 +1,4 @@
-export async function setProp(obj: any, path: string, val: any){
+export function setProp(obj: any, path: string, val: any){
     const splitPath = path.split('.');
     const last = splitPath.pop()!;
     let context = obj;

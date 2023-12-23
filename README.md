@@ -312,7 +312,7 @@ setTimeout(() => {
 }, 2000);
 ```
 
-## Example 3b Declarative, computed derivations [TODO]
+## Example 3b Declarative, computed derivations
 
 ```TypeScript
 const div = document.querySelector('div')!;
@@ -362,6 +362,7 @@ Transform<Model>(div, model, {
         {o: 'msg1', s: 'value'},
         {o: 'rO',   s: 'readOnly'},
         {o: 'num',  s: 'tabIndex'},
+        {o: 'num',  s: '.dataset.num'},
         {o: 'prop', sa: 'itemprop'},
         {
             s: {
@@ -421,7 +422,7 @@ Transform<Props, Methods>(div, model, {
         {o: 'msg1', s: 'value'},
         {o: 'rO',   s: 'readOnly'},
         {o: 'num',  s: 'tabIndex'},
-        {o: 'num',  s: '.dataset.num'} //TODO
+        {o: 'num',  s: '.dataset.num'},
         {o: 'prop', sa: 'itemprop'},
         {
             s: {

@@ -46,7 +46,14 @@ export async function doUpdate(transformer, matchingElement, uow) {
         }
     }
     if (s !== undefined) {
-        matchingElement[s] = val;
+        const path = s;
+        if (path[0] === '.') {
+            const { setProp } = await import('../lib/setProp.js');
+            setProp(matchingElement, path, val);
+        }
+        else {
+            matchingElement[s] = val;
+        }
     }
     else if (sa !== undefined) {
         const { A } = await import('../froop/A.js');
