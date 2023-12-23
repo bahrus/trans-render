@@ -1,45 +1,52 @@
 import {MountOrchestrator, Transformer, arr} from '../Transform.js';
-import {IfInstructions, UnitOfWork} from '../types.js';
+import {IfInstructions, ConditionGate, UnitOfWork} from '../types.js';
 export async function doIfs<TProps, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>, 
     matchingElement: Element, 
     uow: UnitOfWork<TProps, TMethods>, 
     i: IfInstructions<TProps, TMethods>
-){
-    const iffs = arr(i);
-    for(const iff of iffs){
-        const {ifAllOf, ifEqual, ifNoneOf, d} = iff;
-        if(ifAllOf !== undefined){
-            for(const n of ifAllOf){
-                if(!transformer.getNumberUVal(uow, n)) continue;
+) : Promise<boolean>{
+    let transpiledIf: ConditionGate<TProps, TMethods> | undefined;
+    switch(typeof i){
+        case 'string':
+            transpiledIf = {
+                d: 0,
+                ifEqual: [0, i]
             }
-        }
-        if(ifNoneOf !== undefined){
-            for(const n of ifNoneOf){
-                if(transformer.getNumberUVal(uow, n)) continue;
-            }
-        }
-        if(ifEqual !== undefined){
-            const [lhsN, rhsNorS] = ifEqual;
-            const lhs = transformer.getNumberUVal(uow, lhsN);
-            let rhs;
-            switch(typeof rhsNorS){
-                case 'number':
-                    rhs = transformer.getNumberUVal(uow, rhsNorS);
-                    break;
-                case 'object':
-                    if(Array.isArray(rhsNorS)){
-                        [rhs] = rhsNorS;
-                    }else{
-                        throw 'NI';
-                    }
-                    break;
-                case 'string':
-                    rhs = rhsNorS;
-                    break;
-            }
-            if(lhs !== rhs) continue;
-        }
-        await transformer.doUpdate(matchingElement, uow, d);
+            break;
+        default: throw 'NI';
     }
+    const {ifAllOf, ifEqual, ifNoneOf, d} = transpiledIf;
+    if(ifAllOf !== undefined){
+        for(const n of ifAllOf){
+            if(!transformer.getNumberUVal(uow, n)) return false;
+        }
+    }
+    if(ifNoneOf !== undefined){
+        for(const n of ifNoneOf){
+            if(transformer.getNumberUVal(uow, n)) return false;
+        }
+    }
+    if(ifEqual !== undefined){
+        const [lhsN, rhsNorS] = ifEqual;
+        const lhs = transformer.getNumberUVal(uow, lhsN);
+        let rhs;
+        switch(typeof rhsNorS){
+            case 'number':
+                rhs = transformer.getNumberUVal(uow, rhsNorS);
+                break;
+            case 'object':
+                if(Array.isArray(rhsNorS)){
+                    [rhs] = rhsNorS;
+                }else{
+                    throw 'NI';
+                }
+                break;
+            case 'string':
+                rhs = rhsNorS;
+                break;
+        }
+        if(lhs !== rhs) return false;
+    }
+    return true;
 }

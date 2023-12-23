@@ -508,7 +508,7 @@ So, that is what the declarative expressions below address.  As with everything 
 
 ### On to business
 
-For conditional statements, we use the letter "i" for iff.  It supports various different types of RHS's, in order to ramp up to more complex scenarios.
+For conditional statements, we use the letter "i" for if.  It supports various different types of RHS's, in order to ramp up to more complex scenarios.
 
 ### Example 7a: [TODO]
 

@@ -144,9 +144,9 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
         await doUpdate(this, matchingElement, uow);
     }
 
-    async doIfs(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>, i: IfInstructions<TProps, TMethods>){
+    async doIfs(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>, i: IfInstructions<TProps, TMethods>): Promise<boolean>{
         const {doIfs} = await import('./trHelpers/doIfs.js');
-        await doIfs(this, matchingElement, uow, i);
+        return await doIfs(this, matchingElement, uow, i);
     }
 
     async doEnhance(matchingElement: Element, type: onMountStatusChange, uow: UnitOfWork<TProps, TMethods>, mountContext: MountContext, stage: PipelineStage | undefined){
@@ -291,13 +291,14 @@ export class MountOrchestrator<TProps, TMethods = TProps> extends EventTarget im
         return all;
     }
     async doUpdate(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>){
-        const {d, i} = uow;
+        const {d} = uow;
+        // if(i !== undefined){
+        //     await this.transformer.doIfs(matchingElement, uow, i);
+        // }
         if(d !== undefined){
             await this.transformer.doUpdate(matchingElement, uow, d);
         }
-        if(i !== undefined){
-            await this.transformer.doIfs(matchingElement, uow, i);
-        }
+        
     }
 }
 

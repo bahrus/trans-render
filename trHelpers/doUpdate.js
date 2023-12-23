@@ -1,13 +1,20 @@
 export async function doUpdate(transformer, matchingElement, uow) {
-    const { d, o, s, sa } = uow;
-    if (o === undefined) {
-        if (s === undefined)
-            throw 'NI';
+    const { d, o, s, sa, i } = uow;
+    if (i !== undefined) {
+        const valOfIf = await transformer.doIfs(matchingElement, uow, i);
+        if (!valOfIf)
+            return;
+    }
+    // if(o === undefined){
+    //     if(s === undefined) throw 'NI';
+    //     Object.assign(matchingElement, s);
+    //     return;
+    // }
+    if (typeof s === 'object') {
         Object.assign(matchingElement, s);
         return;
     }
-    if (typeof s === 'object')
-        throw 'NI';
+    ;
     let val;
     switch (typeof d) {
         case 'number': {
