@@ -20,47 +20,10 @@ export async function doUpdate<TProps, TMethods = TProps>(
         Object.assign(matchingElement, s);
         return;
     };
-    let val: any;
-    switch(typeof d){
-        case 'number':{
-            val = transformer.getNumberUVal(uow, d);
-            
-            
-            break;
-        }
-        case 'function':{
-            throw 'NI';
-            // const newU = await d(matchingElement,  uow);
-            // const newUow = {
-            //     ...uow,
-            //     d: newU,
-            // }
-            // if(newU !== undefined){
-            //     await transformer.doUpdate(matchingElement, uow, newU);
-            // }
-            break;
-        }
-        case 'object': {
-            throw 'NI';
-            // if(Array.isArray(d)){
-            //     const val = transformer.getArrayVal(uow, d);
-            //     if(s !== undefined){
-            //         (<any>matchingElement)[s as string] = val;
-            //     }else{
-            //         transformer.setPrimeValue(matchingElement, val);
-            //     }
-                
-            // }else{
-            //     const val = await transformer.getNestedObjVal(uow, d);
-            //     Object.assign(matchingElement, val);
-            // }
-        }
-        case 'string': {
-            const {model} = transformer;
-            val = (<any>model[d])(model);
-        }
+    //let val: any;
+    if(d === undefined) throw 'NI';
+    const val = await transformer.getDerivedVal(uow, d);
 
-    }
     if(s !== undefined){
         const path = s as string;
         if(path[0] === '.'){

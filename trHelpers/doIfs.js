@@ -7,9 +7,19 @@ export async function doIfs(transformer, matchingElement, uow, i) {
                 ifEqual: [0, i]
             };
             break;
+        case 'object':
+            if (Array.isArray(i))
+                throw 'NI';
+            transpiledIf = i;
+            break;
         default: throw 'NI';
     }
     const { ifAllOf, ifEqual, ifNoneOf, d } = transpiledIf;
+    if (d !== undefined) {
+        const derivedVal = await transformer.getDerivedVal(uow, d);
+        if (!derivedVal)
+            return false;
+    }
     if (ifAllOf !== undefined) {
         for (const n of ifAllOf) {
             if (!transformer.getNumberUVal(uow, n))

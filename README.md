@@ -41,6 +41,8 @@ In addition, the introduction of the [aria- state and properties](https://develo
 
 This can leave the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may be needed to keep the binding rules in sync.  Much like how separate css style rules often need adjusting when the document structure changes.
 
+All the examples described below can [be seen fully here](https://github.com/bahrus/trans-render/tree/baseline/demo/transforms)
+
 ## Example 1 - The calculus of DOM updates
 
 Suppose our HTML looks as follows:
@@ -494,7 +496,7 @@ Transform<Model>(div, model, {
 }, et);
 ```
 
-## Example 7 - Conditional Logic [TODO]
+## Example 7 - Conditional Logic [WIP]
 
 ### Prelude
 
@@ -504,13 +506,11 @@ But sometimes this isn't sufficient.  Sometimes the values of the attributes (or
 
 One approach to accomplishing this is by adding a "computed property" to the host element that calculates what the value of the attribute should be, with the full power of JavaScript at our disposal.  But this solution may not be sufficient when we *have* no host class to begin with (e.g. declarative custom elements).  And it may also be argued that even if we do, these types of computed properties are too tied to the UI.
 
-So, that is what the declarative expressions below address.  As with everything else in this library, the logic for this is only loaded on demand, so use or don't use, the penalty is minimal either way.
-
 ### On to business
 
 For conditional statements, we use the letter "i" for if.  It supports various different types of RHS's, in order to ramp up to more complex scenarios.
 
-### Example 7a:
+### Example 7a - Switch statement for string property:
 
 ```html
 <form>
@@ -531,9 +531,83 @@ Transform<Props, Methods>(form, model, {
 }, et);
 ```
 
-As we can see, there's a little repetition.  To reduce the repetition:
+### Example 7b  - Custom method to check boolean condition
 
-### Example 7b: [TODO]
+```html
+<form>
+    <input>
+</form>
+```
+
+```TypeScript
+interface Props {
+    typeToEditIsLimited: true,
+}
+interface Methods{
+    isRange: (p: Props) => boolean,
+    isUnlimited: (p: Props) => boolean,
+}
+const model: Props & Methods = {
+    typeToEditIsLimited: true,
+    isRange: ({typeToEditIsLimited}) => typeToEditIsLimited,
+    isUnlimited: ({typeToEditIsLimited}) => !typeToEditIsLimited,
+}
+const form = document.querySelector('form')!;
+const et = new EventTarget();
+
+Transform<Props, Methods>(form, model, {
+    input: [
+        {
+            o: 'typeToEditIsLimited', 
+            i: {d: 'isRange'},
+            s: {type: 'range'}
+        },
+        {
+            o: 'typeToEditIsLimited', 
+            i: {d: 'isUnlimited'},
+            s: {type: 'number'}
+        },
+    ]
+}, et);
+```
+
+### Example 7c:  Instant gratification
+
+```html
+<form>
+    <input>
+</form>
+```
+
+```TypeScript
+const model = {
+    typeToEdit: 'number',
+    typeToEditIsLimited: true,
+};
+Transform<Props, Methods>(form, model, {
+    input: [
+        {
+            o: 'typeToEdit', 
+            i:{
+                d: ({typeToEdit, typeToEditIsLimited}) => typeToEditIsLimited
+            },
+            s: {type: 'range'}
+        },
+        {
+            o: 'typeToEdit', 
+            i:{
+                d: ({typeToEdit, typeToEditIsLimited}) => !typeToEditIsLimited
+            },
+            s: {type: 'range'}
+        },
+    ]
+}, et);
+```
+
+
+As we can see with example 7a, there's a little repetition.  To reduce the repetition:
+
+### Example 7d: [TODO]
 
 ```TypeScript
 const model = {
@@ -542,8 +616,7 @@ const model = {
 Transform<Props, Methods>(form, model, {
     input: [
         {
-            o: 'typeToEdit', i: {
-                _is_: 'switch' //optional, assume, specify "_froop_" for froop like settings
+            o: 'typeToEdit', is: {
                 boolean: {s: {type: 'checkbox', hidden: false}},
                 number: {s: {type: 'number', hidden: false}},
                 object: {s: {hidden: true}},
@@ -553,5 +626,7 @@ Transform<Props, Methods>(form, model, {
     
 }, et);
 ```
+
+
  
 

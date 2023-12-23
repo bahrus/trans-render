@@ -81,7 +81,8 @@ export interface ConditionGate<TProps, TMethods>{
     ifAllOf?: number[],
     ifNoneOf?: number[],
     ifEqual?: [number, number | [number] | string],
-    d: Derivative<TProps, TMethods>
+    d?: Derivative<TProps, TMethods>,
+
 }
 
 export type IfInstructions<TProps, TMethods> = string | boolean | number | [number] | ConditionGate<TProps, TMethods> ;

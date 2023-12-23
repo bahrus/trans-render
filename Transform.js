@@ -134,6 +134,43 @@ export class Transformer extends EventTarget {
         const { doEnhance } = await import('./trHelpers/doEnhance.js');
         await doEnhance(this, matchingElement, type, uow, mountContext, stage);
     }
+    async getDerivedVal(uow, d) {
+        switch (typeof d) {
+            case 'number': {
+                return await this.getNumberUVal(uow, d);
+            }
+            case 'function': {
+                throw 'NI';
+                // const newU = await d(matchingElement,  uow);
+                // const newUow = {
+                //     ...uow,
+                //     d: newU,
+                // }
+                // if(newU !== undefined){
+                //     await transformer.doUpdate(matchingElement, uow, newU);
+                // }
+                break;
+            }
+            case 'object': {
+                throw 'NI';
+                // if(Array.isArray(d)){
+                //     const val = transformer.getArrayVal(uow, d);
+                //     if(s !== undefined){
+                //         (<any>matchingElement)[s as string] = val;
+                //     }else{
+                //         transformer.setPrimeValue(matchingElement, val);
+                //     }
+                // }else{
+                //     const val = await transformer.getNestedObjVal(uow, d);
+                //     Object.assign(matchingElement, val);
+                // }
+            }
+            case 'string': {
+                const { model } = this;
+                return model[d](model);
+            }
+        }
+    }
     async getNestedObjVal(uow, u) {
         const { getNestedObjVal } = await import('./trHelpers/getNestedObjVal.js');
         return await getNestedObjVal(this, uow, u);
