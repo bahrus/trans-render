@@ -581,24 +581,19 @@ Transform<Props, Methods>(form, model, {
 
 ```TypeScript
 const model = {
-    typeToEdit: 'number',
     typeToEditIsLimited: true,
 };
 Transform<Props, Methods>(form, model, {
     input: [
         {
-            o: 'typeToEdit', 
-            i:{
-                d: ({typeToEdit, typeToEditIsLimited}) => typeToEditIsLimited
-            },
+            o: 'typeToEditIsLimited', 
+            i: {d: ({typeToEditIsLimited}) => typeToEditIsLimited},
             s: {type: 'range'}
         },
         {
-            o: 'typeToEdit', 
-            i:{
-                d: ({typeToEdit, typeToEditIsLimited}) => !typeToEditIsLimited
-            },
-            s: {type: 'range'}
+            o: 'typeToEditIsLimited', 
+            i: {d: ({typeToEditIsLimited}) => !typeToEditIsLimited},
+            s: {type: 'number'}
         },
     ]
 }, et);

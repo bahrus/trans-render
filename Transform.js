@@ -140,16 +140,8 @@ export class Transformer extends EventTarget {
                 return await this.getNumberUVal(uow, d);
             }
             case 'function': {
-                throw 'NI';
-                // const newU = await d(matchingElement,  uow);
-                // const newUow = {
-                //     ...uow,
-                //     d: newU,
-                // }
-                // if(newU !== undefined){
-                //     await transformer.doUpdate(matchingElement, uow, newU);
-                // }
-                break;
+                const { model } = this;
+                return await d(model);
             }
             case 'object': {
                 throw 'NI';

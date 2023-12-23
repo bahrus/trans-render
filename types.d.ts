@@ -33,7 +33,7 @@ export type ObjectExpression<TProps, TMethods> = {
 export type Derivative<TProps, TMethods> = 
     | number 
     | InterpolatingExpression 
-    //| Action<TProps> 
+    | ((model: TProps & TMethods) => any)
     | NumberExpression 
     | ObjectExpression<TProps, TMethods>
     | keyof TMethods
