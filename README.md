@@ -472,7 +472,7 @@ Transform<Props, Actions>(form, model, {
 }, propagator);
 ```
 
-## Example 5c -- Instant gratification event handlers [TODO]
+## Example 5c -- Instant gratification event handlers
 
 As mentioned earlier:  In some cases, we may want our domain object to only have stable, proven, mature functionality.  Maybe it is shared by multiple components, even across projects.
 
