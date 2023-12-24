@@ -5,7 +5,7 @@ import {
     ObjectExpression,
     TransformerTarget, 
     onMountStatusChange, RHS,
-    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp
+    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer
 } from './types.js';
 import { MountContext, PipelineStage } from 'mount-observer/types';
 
@@ -18,7 +18,7 @@ export function Transform<TProps = any, TMethods = TProps>(
     return new Transformer<TProps, TMethods>(target, model, xform, propagator);
 }
 
-export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
+export class Transformer<TProps = any, TMethods = TProps> extends EventTarget implements ITransformer<TProps, TMethods>{
     #piqueProcessors: Array<MountOrchestrator<TProps, TMethods>>;
     //#piques: Array<QuenitOfWork<TProps, TMethods>> = [];
     constructor(
@@ -150,6 +150,8 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget {
     }
 
     async doEnhance(matchingElement: Element, type: onMountStatusChange, uow: UnitOfWork<TProps, TMethods>, mountContext: MountContext, stage: PipelineStage | undefined){
+        const {e} = uow;
+        if(e === undefined) return
         const {doEnhance} = await import('./trHelpers/doEnhance.js');
         await doEnhance(this, matchingElement, type, uow, mountContext, stage);
     }
@@ -252,7 +254,7 @@ export class MountOrchestrator<TProps, TMethods = TProps> extends EventTarget im
     #matchingElements: WeakRef<Element>[] = [];
     #unitsOfWork: Array<QuenitOfWork<TProps, TMethods>>
     constructor(
-        public transformer: Transformer, 
+        public transformer: Transformer<TProps, TMethods>, 
         uows: QuenitOfWork<TProps, TMethods>, 
         public queryInfo: QueryInfo){
         super();
@@ -266,6 +268,22 @@ export class MountOrchestrator<TProps, TMethods = TProps> extends EventTarget im
                         await this.doUpdate(matchingElement, uow);
                         this.#matchingElements.push(new WeakRef(matchingElement));
                         await transformer.doEnhance(matchingElement, 'onMount', uow, ctx, stage);
+                        const {a} = uow;
+                        if(a !== undefined){
+                            const as = arr(a);
+                            const {AddEventListener} = await import('./trHelpers/AddEventListener.js')
+                            for(const ap of as){
+                                const {on, do: action, options} = ap;
+                                new AddEventListener<TProps, TMethods>(
+                                    this.#mountObserver, 
+                                    transformer,
+                                    uow,
+                                    matchingElement,
+                                    on,
+                                    action,
+                                );
+                            }
+                        }
                     }
                     
 

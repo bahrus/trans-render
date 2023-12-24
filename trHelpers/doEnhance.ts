@@ -8,7 +8,6 @@ export async  function doEnhance<TProps, TMethods=TProps>(
     type: onMountStatusChange, 
     uow: UnitOfWork<TProps, TMethods>, mountContext: MountContext, stage: PipelineStage | undefined){
     const {e} = uow;
-    if(e === undefined) return;
     const methodArg: MethodInvocationCallback<TMethods> = {
         mountContext,
         stage,

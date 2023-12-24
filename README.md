@@ -600,7 +600,7 @@ Transform<Props, Methods>(form, model, {
 ```
 
 
-As we can see with example 7a, there's a little repetition.  To reduce the repetition:
+<!--As we can see with example 7a, there's a little repetition.  To reduce the repetition:
 
 ### Example 7d: [TODO]
 
@@ -621,6 +621,7 @@ Transform<Props, Methods>(form, model, {
     
 }, et);
 ```
+-->
 
 
  

@@ -94,6 +94,10 @@ export type PropOrComputedProp<TProps, TMethods = TProps> =
 
 export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**
+     * add event istener
+     */
+    a?: AddEventListener<TProps, TMethods> | Array<AddEventListener<TProps, TMethods>>
+    /**
      * observed props
      */
     o?: keyof TProps & string | PropOrComputedProp<TProps, TMethods>[],
@@ -142,3 +146,17 @@ export type Model = {
     [key: string]: any
 }
 
+export type EventListenerAction<TProps, TMethods> = (e?: Event, t?: ITransformer<TProps, TMethods>, uow?: UnitOfWork<TProps, TMethods>) => void;
+
+export interface AddEventListener<TProps, TMethods>{
+    on: string,
+    do: EventListenerAction<TProps, TMethods>,
+    options?: boolean | EventListenerOptions, 
+}
+
+export interface ITransformer<TProps, TMethods>{
+    target: TransformerTarget,
+    model: TProps & TMethods,
+    xform: Partial<{[key: string]: RHS<TProps, TMethods>}>,
+    propagator?: EventTarget,
+}

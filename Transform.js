@@ -131,6 +131,9 @@ export class Transformer extends EventTarget {
         return await doIfs(this, matchingElement, uow, i);
     }
     async doEnhance(matchingElement, type, uow, mountContext, stage) {
+        const { e } = uow;
+        if (e === undefined)
+            return;
         const { doEnhance } = await import('./trHelpers/doEnhance.js');
         await doEnhance(this, matchingElement, type, uow, mountContext, stage);
     }
@@ -240,6 +243,15 @@ export class MountOrchestrator extends EventTarget {
                         await this.doUpdate(matchingElement, uow);
                         this.#matchingElements.push(new WeakRef(matchingElement));
                         await transformer.doEnhance(matchingElement, 'onMount', uow, ctx, stage);
+                        const { a } = uow;
+                        if (a !== undefined) {
+                            const as = arr(a);
+                            const { AddEventListener } = await import('./trHelpers/AddEventListener.js');
+                            for (const ap of as) {
+                                const { on, do: action, options } = ap;
+                                new AddEventListener(this.#mountObserver, transformer, uow, matchingElement, on, action);
+                            }
+                        }
                     }
                 },
                 onDismount: async (matchingElement, ctx, stage) => {

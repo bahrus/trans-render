@@ -1,8 +1,6 @@
 import { arr } from '../Transform.js';
 export async function doEnhance(transformer, matchingElement, type, uow, mountContext, stage) {
     const { e } = uow;
-    if (e === undefined)
-        return;
     const methodArg = {
         mountContext,
         stage,
