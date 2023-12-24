@@ -64,14 +64,14 @@ const div = document.querySelector('div')!;
 const model: Model = {
     greeting: 'hello'
 };
-const et = new EventTarget();
+const propagator = new EventTarget();
 
 const transform = new Transformer<Model>(div, model, {
     span: {
         o: ['greeting'],
         d: 0
     },
-}, et);
+}, propagator);
 ```
 
 Explanation:
@@ -119,13 +119,13 @@ setTimeout(() => {
 
 So dynamically adding new HTML elements that match the css selector will immediately get bound, as does dispatching events matching the observed property name(s).  
 
-Using an event target as our mechanism for providing our reactive observer to observe changes, as opposed to getters/setters of a class seems like the most generic solution we can think of.
+Using an event target as our mechanism for providing our reactive observer to observe changes, as opposed to getters/setters of a class seems like the most generic solution we can think of.  Will refer to this universal interface is the "propagator" for the model.
 
-Any library that dynamically creates property getters and setters (for example libraries that use decorators) can easily provide an event target that can be subscribed to.
+Any library that dynamically creates property getters and setters (for example libraries that use decorators) can easily provide this propagator.
 
 Libraries that adopt less class-based approaches could also furnish such an interface.  The key is that the event target always emits an event matching the name of the property from the domain / view model as they change.
 
-And thanks to the power of JavaScript, if a developer provides a plain old JavaScript class, it is quite easy, using reflection, to dynamically generate an event target that provides the events needed.
+And thanks to the power of JavaScript, if a developer provides a plain old JavaScript class, it is quite easy, using reflection, to dynamically generate a propagator.
 
 In fact this package provides some utility functions that [do just that](https://github.com/bahrus/trans-render/blob/baseline/lib/subscribe2.ts).
 
@@ -291,7 +291,7 @@ const model: Model = {
     msg1: 'hello',
     msg2: 'world'
 };
-const et = new EventTarget();
+const propagator = new EventTarget();
 
 Transform<Model>(div, model, {
     span: {
@@ -327,7 +327,7 @@ const model: Model = {
         return `msg1: ${msg1}, msg2: ${msg2}`
     }
 };
-const et = new EventTarget();
+const propagator = new EventTarget();
 
 Transform<Model>(div, model, {
     span: {
@@ -349,7 +349,7 @@ const model: Model = {
     msg1: 'hello',
     msg2: 'world'
 };
-const et = new EventTarget();
+const propagator = new EventTarget();
 
 Transform<Model>(div, model, {
     span: {
@@ -382,7 +382,7 @@ const model: Model = {
     num: 7,
     propName: 'test'
 };
-const et = new EventTarget();
+const propagator = new EventTarget();
 Transform<Model>(div, model, {
     input: [
         {o: 'msg1', s: 'value'},
@@ -489,7 +489,7 @@ const model: Props & Methods = {
     isUnlimited: ({typeToEditIsLimited}) => !typeToEditIsLimited,
 }
 const form = document.querySelector('form')!;
-const et = new EventTarget();
+const propagator = new EventTarget();
 
 Transform<Props, Methods>(form, model, {
     input: [
@@ -596,7 +596,7 @@ const model: Props & Methods = {
         console.log({model, el, ctx})
     }
 };
-const et = new EventTarget();
+const propagator = new EventTarget();
 
 Transform<Props, Methods>(div, model, {
     input: [

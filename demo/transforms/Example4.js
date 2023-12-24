@@ -6,7 +6,7 @@ const model = {
     num: 7,
     propName: 'test'
 };
-const et = new EventTarget();
+const propagator = new EventTarget();
 Transform(div, model, {
     input: [
         { o: 'msg1', s: 'value' },

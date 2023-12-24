@@ -3,7 +3,7 @@ const div = document.querySelector('div');
 const model = {
     greeting: 'hello'
 };
-const et = new EventTarget();
+const propagator = new EventTarget();
 const transform = new Transformer(div, model, {
     span: {
         o: ['greeting'],

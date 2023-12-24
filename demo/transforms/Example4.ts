@@ -14,7 +14,7 @@ const model: Model = {
     num: 7,
     propName: 'test'
 };
-const et = new EventTarget();
+const propagator = new EventTarget();
 
 Transform<Model>(div, model, {
     input: [

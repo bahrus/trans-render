@@ -20,7 +20,7 @@
         }
 
         const ct = new ClassTest();
-        const et = new EventTarget();
+        const propagator = new EventTarget();
         et.addEventListener('stringProp', e => {
             console.log({e});
         })

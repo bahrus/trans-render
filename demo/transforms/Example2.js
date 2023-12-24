@@ -3,7 +3,7 @@ const form = document.querySelector('form');
 const model = {
     greeting: 'hello'
 };
-const et = new EventTarget();
+const propagator = new EventTarget();
 const transform = new Transformer(form, model, {
     '@ greeting': 0,
 }, et);

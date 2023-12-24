@@ -7,7 +7,7 @@ const model = {
     typeToEdit: 'boolean'
 }
 const form = document.querySelector('form')!;
-const et = new EventTarget();
+const propagator = new EventTarget();
 
 Transform<Model>(form, model, {
     input: [

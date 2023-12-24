@@ -13,7 +13,7 @@ const model: Props & Methods = {
     isUnlimited: ({typeToEditIsLimited}) => !typeToEditIsLimited,
 }
 const form = document.querySelector('form')!;
-const et = new EventTarget();
+const propagator = new EventTarget();
 
 Transform<Props, Methods>(form, model, {
     input: [

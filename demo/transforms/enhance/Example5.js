@@ -1,4 +1,4 @@
-import { Transform } from '../../Transform.js';
+import { Transform } from '../../../Transform.js';
 const div = document.querySelector('div');
 const model = {
     msg1: '123',
@@ -8,7 +8,7 @@ const model = {
         console.log({ model, el, ctx });
     }
 };
-const et = new EventTarget();
+const propagator = new EventTarget();
 Transform(div, model, {
     input: [
         { o: 'msg1', s: 'value' },

@@ -1,5 +1,5 @@
-import {Transform} from '../../Transform.js';
-import { MethodInvocationCallback } from '../../types.js';
+import {Transform} from '../../../Transform.js';
+import { MethodInvocationCallback } from '../../../types.js';
 
 interface Props{
     msg1: string;
@@ -20,7 +20,7 @@ const model: Props & Methods = {
         console.log({model, el, ctx})
     }
 };
-const et = new EventTarget();
+const propagator = new EventTarget();
 
 Transform<Props, Methods>(div, model, {
     input: [

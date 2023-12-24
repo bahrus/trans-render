@@ -4,7 +4,7 @@ const model = {
     msg1: 'hello',
     msg2: 'world'
 };
-const et = new EventTarget();
+const propagator = new EventTarget();
 Transform(div, model, {
     span: {
         o: ['msg1', 'msg2'],

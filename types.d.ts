@@ -146,7 +146,7 @@ export type Model = {
     [key: string]: any
 }
 
-export type EventListenerAction<TProps, TMethods> = (e?: Event, t?: ITransformer<TProps, TMethods>, uow?: UnitOfWork<TProps, TMethods>) => void;
+export type EventListenerAction<TProps, TMethods> = (keyof TMethods & string) | ((e?: Event, t?: ITransformer<TProps, TMethods>, uow?: UnitOfWork<TProps, TMethods>) => void);
 
 export interface AddEventListener<TProps, TMethods>{
     on: string,

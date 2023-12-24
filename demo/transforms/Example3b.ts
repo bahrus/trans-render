@@ -17,7 +17,7 @@ const model: Props & Methods = {
         return `msg1: ${msg1}, msg2: ${msg2}`
     }
 };
-const et = new EventTarget();
+const propagator = new EventTarget();
 
 Transform<Props & Methods>(div, model, {
     span: {

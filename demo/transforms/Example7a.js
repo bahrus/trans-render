@@ -3,7 +3,7 @@ const model = {
     typeToEdit: 'boolean'
 };
 const form = document.querySelector('form');
-const et = new EventTarget();
+const propagator = new EventTarget();
 Transform(form, model, {
     input: [
         { o: 'typeToEdit', i: 'boolean', s: { type: 'checkbox', hidden: false } },

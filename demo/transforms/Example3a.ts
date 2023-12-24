@@ -10,7 +10,7 @@ const model: Model = {
     msg1: 'hello',
     msg2: 'world'
 };
-const et = new EventTarget();
+const propagator = new EventTarget();
 
 Transform<Model>(div, model, {
     span: {

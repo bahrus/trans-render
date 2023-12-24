@@ -8,7 +8,7 @@ const form = document.querySelector('form')!;
 const model: IModel = {
     greeting: 'hello'
 };
-const et = new EventTarget();
+const propagator = new EventTarget();
 
 const transform = new Transformer<IModel>(form, model, {
     '@ greeting': 0,
