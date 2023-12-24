@@ -129,6 +129,8 @@ And thanks to the power of JavaScript, if a developer provides a plain old JavaS
 
 In fact this package provides some utility functions that [do just that](https://github.com/bahrus/trans-render/blob/baseline/lib/subscribe2.ts).
 
+And creating a simple utility function, modeled after "signals", that wraps updating the model and the eventType instance is quite trivial.
+
 ## The 80% rule.
 
 Is the syntax above the most readable thing you have ever seen?  Probably not.  This library is striving to balance a number of goals:  
@@ -335,6 +337,28 @@ Transform<Model>(div, model, {
 }, et);
 ```
 
+### Example 3c: Instant gratification for computed derivations [TODO]
+
+In some cases, we may want our domain object to only have stable, proven, mature functionality.  Maybe it is shared by multiple components, even across projects.
+
+But some new functionality, where the requirements may be in flux, comes up, so we would rather "experiment" with such functionality closer to the UI.  We can do that, as shown below:
+
+```TypeScript
+const div = document.querySelector('div')!;
+const model: Model = {
+    msg1: 'hello',
+    msg2: 'world'
+};
+const et = new EventTarget();
+
+Transform<Model>(div, model, {
+    span: {
+        o: ['msg1', 'msg2'],
+        d: ({msg1, msg2}: Model, uow: UnitOfWorkCtx) => `msg1: ${msg1}, msg2: ${msg2}`
+    }
+}, et);
+```
+
 ## Example 4  Setting props of the element
 
 We glossed over a subtlety in our examples above.  Without specifying to do so, we are automatically setting the span's text content, the input's value, based on a single binding.  The property we are setting is assumed based on context.  In the case of the hyperlink (a), we set the href for example.  This decision is inspired by how [microdata works](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/itemprop#values).
@@ -380,121 +404,33 @@ This will set the input's readOnly property from the r0 field from the model.  L
 
 Note the (discouraged) extra property: "sa" which means "set attribute" rather than setting the property.
 
-## Example 5 Enhancing an element
 
-Most framework / template libraries provide a way to explicitly add event handlers to an element.  This library takes a step back, and instead provides more generic support for "enhancing" or hydrating an element.  The thinking is there are too many ways configuring how event handling should take place --  it is easy enough to add a standard event listener attacher as a standard method to the base class of the custom element, that can choose exactly how it wants to deal with events.
+## Example 5a - Adding a single event listener, handled by the model
 
-Likewise, instead of adding event handlers, we may instead want to add one or more [custom enhancements](https://github.com/bahrus/be-enhanced), like a repeating element enhancement, or a lazy loading enhancement.
-
-So *trans-render* views the best value-add as being able to specify, during initialization / hydration, a method that can be called, and where we can specify values to pass into that method.  This makes the trans-render extremely loosely coupled / un-opinionated.  
-
-So what follows below, example 5, extends example 4 above (just to give a bird's eye view of how this would look in context).
-
-What has been added is the "e" section, which kind of vaguely stands for "enhancements"/"event managing" callbacks.
-
-
-
-```TypeScript
-
-interface Props{
-    msg1: string;
-    rO: boolean;
-    num: number;
-    propName: string;
-}
-
-interface Methods{
-    hydrateInputElement:(m:Props & Methods, el: Element, ctx: MethodInvocationCallback<Props>) => void;
-}
-
-const div = document.querySelector('div')!;
-const model: Props & Methods = {
-    msg1: '123',
-    rO: true,
-    num: 7,
-    propName: 'test',
-    hydrateInputElement:(model: Props & Methods, el: Element, ctx: MethodInvocationCallback<Props>) => {
-        console.log({model, el, ctx})
-    }
-};
-const et = new EventTarget();
-
-Transform<Props, Methods>(div, model, {
-    input: [
-        {o: 'msg1', s: 'value'},
-        {o: 'rO',   s: 'readOnly'},
-        {o: 'num',  s: 'tabIndex'},
-        {o: 'num',  s: '.dataset.num'},
-        {o: 'prop', sa: 'itemprop'},
-        {
-            s: {
-                type: 'number',
-                disabled: true
-            } as Partial<HTMLInputElement>,
-            e: {
-                do: 'hydrateInputElement',
-                with: {
-                    beCommitted: true
-                }
-            }
-        }
-    ]
-}, et);
+```html
+<form>
+    <input>
+</form>
 ```
 
-The method hydrateInputElement gets called once and only once per input element that gets added or found in the DOM fragment.  It is also called when the input elements are are disconnected from the DOM fragment (with a different argument):
-
-The MethodInvocationCallback interface can be seen [here](https://github.com/bahrus/trans-render/blob/baseline/types.d.ts).
-
-## Example 6 Instant gratification [TODO]
-
-Okay, okay, maybe we don't want to have to go bouncing around in our code just to add an event handler.  This appears to me to be one of the apparent appeals of JSX and tagged template libraries like Lit/FAST/Stencil/Atomico, etc.
-
-So, we take the "if you can't beat them, join them" approach to this question.  This is the first example, where we deviate from side-effect free, truly declarative, JSON serializable syntax:
-
-### Example 6a:
-
 ```TypeScript
-Transform<Props, Methods>(div, model, {
+const model = {
+    isHappy: 'boolean',
+    handleChangeEvent: (e: Event, {model}) => {
+        model.isHappy = !model.isHappy;
+        et.dispatchEvent(new Event('isHappy'));
+    }
+}
+Transform(form, model, {
     input: {
-        e: {
-            onMount: (model: Model, el: HTMLInputElement, ctx: UnitOfWorkContext) => {
-                el.addEventListener('input', e => {
-                    // knock yourself out
-                    el.appendChild(document.body);
-                });
-            },
-            onDisconnect: () => {
-                ...
-            }
+        a: {
+            on: 'change',
+            do: 'handleChangeEvent'
         }
     }
-    
 }, et);
 ```
 
-[TODO]  Provide some helper functions to make this amount of boilerplate smaller.
-
-
-### Example 6b: Instant gratification for derived values [TODO]
-
-Speaking of unfettered access to the JavaScript runtime engine in the template binding, going back to example 4, this is also supported:
-
-```TypeScript
-const div = document.querySelector('div')!;
-const model: Model = {
-    msg1: 'hello',
-    msg2: 'world'
-};
-const et = new EventTarget();
-
-Transform<Model>(div, model, {
-    span: {
-        o: ['msg1', 'msg2'],
-        d: ({msg1, msg2}: Model, uow: UnitOfWorkCtx) => `msg1: ${msg1}, msg2: ${msg2}`
-    }
-}, et);
-```
 
 ## Example 7 - Conditional Logic [WIP]
 
@@ -622,6 +558,104 @@ Transform<Props, Methods>(form, model, {
 }, et);
 ```
 -->
+
+## Example 5 Enhancing an element
+
+Most framework / template libraries provide a way to explicitly add event handlers to an element.  This library takes a step back, and instead provides more generic support for "enhancing" or hydrating an element.  The thinking is there are too many ways configuring how event handling should take place --  it is easy enough to add a standard event listener attacher as a standard method to the base class of the custom element, that can choose exactly how it wants to deal with events.
+
+Likewise, instead of adding event handlers, we may instead want to add one or more [custom enhancements](https://github.com/bahrus/be-enhanced), like a repeating element enhancement, or a lazy loading enhancement.
+
+So *trans-render* views the best value-add as being able to specify, during initialization / hydration, a method that can be called, and where we can specify values to pass into that method.  This makes the trans-render extremely loosely coupled / un-opinionated.  
+
+So what follows below, example 5, extends example 4 above (just to give a bird's eye view of how this would look in context).
+
+What has been added is the "e" section, which kind of vaguely stands for "enhancements"/"event managing" callbacks.
+
+
+
+```TypeScript
+
+interface Props{
+    msg1: string;
+    rO: boolean;
+    num: number;
+    propName: string;
+}
+
+interface Methods{
+    hydrateInputElement:(m:Props & Methods, el: Element, ctx: MethodInvocationCallback<Props>) => void;
+}
+
+const div = document.querySelector('div')!;
+const model: Props & Methods = {
+    msg1: '123',
+    rO: true,
+    num: 7,
+    propName: 'test',
+    hydrateInputElement:(model: Props & Methods, el: Element, ctx: MethodInvocationCallback<Props>) => {
+        console.log({model, el, ctx})
+    }
+};
+const et = new EventTarget();
+
+Transform<Props, Methods>(div, model, {
+    input: [
+        {o: 'msg1', s: 'value'},
+        {o: 'rO',   s: 'readOnly'},
+        {o: 'num',  s: 'tabIndex'},
+        {o: 'num',  s: '.dataset.num'},
+        {o: 'prop', sa: 'itemprop'},
+        {
+            s: {
+                type: 'number',
+                disabled: true
+            } as Partial<HTMLInputElement>,
+            e: {
+                do: 'hydrateInputElement',
+                with: {
+                    beCommitted: true
+                }
+            }
+        }
+    ]
+}, et);
+```
+
+The method hydrateInputElement gets called once and only once per input element that gets added or found in the DOM fragment.  It is also called when the input elements are are disconnected from the DOM fragment (with a different argument):
+
+The MethodInvocationCallback interface can be seen [here](https://github.com/bahrus/trans-render/blob/baseline/types.d.ts).
+
+## Example 6 Instant gratification [TODO]
+
+Okay, okay, maybe we don't want to have to go bouncing around in our code just to add an event handler.  This appears to me to be one of the apparent appeals of JSX and tagged template libraries like Lit/FAST/Stencil/Atomico, etc.
+
+So, we take the "if you can't beat them, join them" approach to this question.  This is the first example, where we deviate from side-effect free, truly declarative, JSON serializable syntax:
+
+### Example 6a:
+
+```TypeScript
+Transform<Props, Methods>(div, model, {
+    input: {
+        e: {
+            onMount: (model: Model, el: HTMLInputElement, ctx: UnitOfWorkContext) => {
+                el.addEventListener('input', e => {
+                    // knock yourself out
+                    el.appendChild(document.body);
+                });
+            },
+            onDisconnect: () => {
+                ...
+            }
+        }
+    }
+    
+}, et);
+```
+
+[TODO]  Provide some helper functions to make this amount of boilerplate smaller.
+
+
+
 
 
  
