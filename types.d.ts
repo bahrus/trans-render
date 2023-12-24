@@ -96,7 +96,7 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**
      * add event istener
      */
-    a?: AddEventListener<TProps, TMethods> | Array<AddEventListener<TProps, TMethods>>
+    a?: keyof TMethods & string | AddEventListener<TProps, TMethods> | Array<AddEventListener<TProps, TMethods>>
     /**
      * observed props
      */

@@ -255,9 +255,26 @@ export class MountOrchestrator extends EventTarget {
                         await transformer.doEnhance(matchingElement, 'onMount', uow, ctx, stage);
                         const { a } = uow;
                         if (a !== undefined) {
-                            const as = arr(a);
+                            let transpiledActions;
+                            if (typeof a === 'string') {
+                                let on = 'click';
+                                switch (matchingElement.localName) {
+                                    case 'input':
+                                        on = 'input';
+                                        break;
+                                    case 'slot':
+                                        on = 'slotchange';
+                                }
+                                transpiledActions = [{
+                                        on,
+                                        do: a,
+                                    }];
+                            }
+                            else {
+                                transpiledActions = arr(a);
+                            }
                             const { AddEventListener } = await import('./trHelpers/AddEventListener.js');
-                            for (const ap of as) {
+                            for (const ap of transpiledActions) {
                                 const { on, do: action, options } = ap;
                                 new AddEventListener(this.#mountObserver, transformer, uow, matchingElement, on, action);
                             }
