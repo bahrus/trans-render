@@ -510,7 +510,7 @@ So what follows below, example 5, extends example 4 above (just to give a bird's
 
 What has been added is the "e" section, which kind of vaguely stands for "enhancements"/"event managing" callbacks.
 
-
+### Example 6a
 
 ```TypeScript
 
@@ -563,35 +563,6 @@ Transform<Props, Methods>(div, model, {
 The method hydrateInputElement gets called once and only once per input element that gets added or found in the DOM fragment.  It is also called when the input elements are are disconnected from the DOM fragment (with a different argument):
 
 The MethodInvocationCallback interface can be seen [here](https://github.com/bahrus/trans-render/blob/baseline/types.d.ts).
-
-## Example 6 Instant gratification [TODO]
-
-Okay, okay, maybe we don't want to have to go bouncing around in our code just to add an event handler.  This appears to me to be one of the apparent appeals of JSX and tagged template libraries like Lit/FAST/Stencil/Atomico, etc.
-
-So, we take the "if you can't beat them, join them" approach to this question.  This is the first example, where we deviate from side-effect free, truly declarative, JSON serializable syntax:
-
-### Example 6a:
-
-```TypeScript
-Transform<Props, Methods>(div, model, {
-    input: {
-        e: {
-            onMount: (model: Model, el: HTMLInputElement, ctx: UnitOfWorkContext) => {
-                el.addEventListener('input', e => {
-                    // knock yourself out
-                    el.appendChild(document.body);
-                });
-            },
-            onDisconnect: () => {
-                ...
-            }
-        }
-    }
-    
-}, et);
-```
-
-[TODO]  Provide some helper functions to make this amount of boilerplate smaller.
 
 ## Example 7 - Conditional Logic
 
