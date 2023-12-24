@@ -10,4 +10,4 @@ Transform(form, model, {
         { o: 'typeToEdit', i: 'number', s: { type: 'number', hidden: false } },
         { o: 'typeToEdit', i: 'object', s: { hidden: true } }
     ]
-}, et);
+}, propagator);

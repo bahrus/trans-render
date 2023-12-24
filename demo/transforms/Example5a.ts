@@ -24,5 +24,5 @@ Transform<Props, Actions>(form, model, {
             do: 'handleChange'
         }
     },
-    span: 'isHappy'
+    //span: 'isHappy'
 }, propagator);

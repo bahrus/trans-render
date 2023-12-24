@@ -64,18 +64,20 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget im
                         if(Array.isArray(rhs)){
                             for(const rhsPart of rhs){
                                 const uow: QuenitOfWork<TProps, TMethods> = {
-                                    d: 0,
+                                    //d: 0,
                                     ...rhsPart!,
                                     q: newKey!
                                 };
+                                if(uow.o !== undefined && uow.d === undefined) uow.d = 0;
                                 uows.push(uow);
                             }
                         }else{
                             const uow: QuenitOfWork<TProps, TMethods> = {
-                                d: 0,
+                                //d: 0,
                                 ...rhs!,
                                 q: newKey!
                             };
+                            if(uow.o !== undefined && uow.d === undefined) uow.d = 0;
                             uows.push(uow);
                         }
 
