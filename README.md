@@ -494,7 +494,106 @@ Transform<Props, Actions>(form, model, {
 }, propagator);
 ```
 
-## Example 7 - Conditional Logic [WIP]
+## Enhancing an element
+
+What about conditionally loading blocks of HTML?  What about loops / repeating content?  
+
+Traditionally, inline binding libraries have supported this, often as add-on's.  The amount of finessing and tailoring for these solutions makes them an art form.  This library is choosing (for now) to steer away from diving into that thicket.
+
+However, this library has been designed so that the various settings (a, e, i, o, s, etc) can be overridden for more powerful functionality, or extended to support additional functionality, perhaps keyed from new letters / words.  
+
+But more importantly, the Transform function / Transformer class provides a clean way of hooking up DOM elements to [custom enhancements](https://github.com/WICG/webcomponents/issues/1000), that can certainly include support for conditional loading and repeating DOM structures.  For such enhancement to work well with this library, they need to provide a formal api for getting "attached" to the element, not dependent on an inline attribute (which would be clunky, frankly).  
+
+So *trans-render* views the best value-add as being able to specify, during initialization / hydration, a method that can be called, and where we can specify values to pass into that method.  This makes the trans-render extremely loosely coupled / un-opinionated.  
+
+So what follows below, example 5, extends example 4 above (just to give a bird's eye view of how this would look in context).
+
+What has been added is the "e" section, which kind of vaguely stands for "enhancements"/"event managing" callbacks.
+
+
+
+```TypeScript
+
+interface Props{
+    msg1: string;
+    rO: boolean;
+    num: number;
+    propName: string;
+}
+
+interface Methods{
+    hydrateInputElement:(m:Props & Methods, el: Element, ctx: MethodInvocationCallback<Props>) => void;
+}
+
+const div = document.querySelector('div')!;
+const model: Props & Methods = {
+    msg1: '123',
+    rO: true,
+    num: 7,
+    propName: 'test',
+    hydrateInputElement:(model: Props & Methods, el: Element, ctx: MethodInvocationCallback<Props>) => {
+        console.log({model, el, ctx})
+    }
+};
+const propagator = new EventTarget();
+
+Transform<Props, Methods>(div, model, {
+    input: [
+        {o: 'msg1', s: 'value'},
+        {o: 'rO',   s: 'readOnly'},
+        {o: 'num',  s: 'tabIndex'},
+        {o: 'num',  s: '.dataset.num'},
+        {o: 'prop', sa: 'itemprop'},
+        {
+            s: {
+                type: 'number',
+                disabled: true
+            } as Partial<HTMLInputElement>,
+            e: {
+                do: 'hydrateInputElement',
+                with: {
+                    beCommitted: true
+                }
+            }
+        }
+    ]
+}, et);
+```
+
+The method hydrateInputElement gets called once and only once per input element that gets added or found in the DOM fragment.  It is also called when the input elements are are disconnected from the DOM fragment (with a different argument):
+
+The MethodInvocationCallback interface can be seen [here](https://github.com/bahrus/trans-render/blob/baseline/types.d.ts).
+
+## Example 6 Instant gratification [TODO]
+
+Okay, okay, maybe we don't want to have to go bouncing around in our code just to add an event handler.  This appears to me to be one of the apparent appeals of JSX and tagged template libraries like Lit/FAST/Stencil/Atomico, etc.
+
+So, we take the "if you can't beat them, join them" approach to this question.  This is the first example, where we deviate from side-effect free, truly declarative, JSON serializable syntax:
+
+### Example 6a:
+
+```TypeScript
+Transform<Props, Methods>(div, model, {
+    input: {
+        e: {
+            onMount: (model: Model, el: HTMLInputElement, ctx: UnitOfWorkContext) => {
+                el.addEventListener('input', e => {
+                    // knock yourself out
+                    el.appendChild(document.body);
+                });
+            },
+            onDisconnect: () => {
+                ...
+            }
+        }
+    }
+    
+}, et);
+```
+
+[TODO]  Provide some helper functions to make this amount of boilerplate smaller.
+
+## Example 7 - Conditional Logic
 
 ### Prelude
 
@@ -621,100 +720,7 @@ Transform<Props, Methods>(form, model, {
 ```
 -->
 
-## Example 5 Enhancing an element
 
-Most framework / template libraries provide a way to explicitly add event handlers to an element.  This library takes a step back, and instead provides more generic support for "enhancing" or hydrating an element.  The thinking is there are too many ways configuring how event handling should take place --  it is easy enough to add a standard event listener attacher as a standard method to the base class of the custom element, that can choose exactly how it wants to deal with events.
-
-Likewise, instead of adding event handlers, we may instead want to add one or more [custom enhancements](https://github.com/bahrus/be-enhanced), like a repeating element enhancement, or a lazy loading enhancement.
-
-So *trans-render* views the best value-add as being able to specify, during initialization / hydration, a method that can be called, and where we can specify values to pass into that method.  This makes the trans-render extremely loosely coupled / un-opinionated.  
-
-So what follows below, example 5, extends example 4 above (just to give a bird's eye view of how this would look in context).
-
-What has been added is the "e" section, which kind of vaguely stands for "enhancements"/"event managing" callbacks.
-
-
-
-```TypeScript
-
-interface Props{
-    msg1: string;
-    rO: boolean;
-    num: number;
-    propName: string;
-}
-
-interface Methods{
-    hydrateInputElement:(m:Props & Methods, el: Element, ctx: MethodInvocationCallback<Props>) => void;
-}
-
-const div = document.querySelector('div')!;
-const model: Props & Methods = {
-    msg1: '123',
-    rO: true,
-    num: 7,
-    propName: 'test',
-    hydrateInputElement:(model: Props & Methods, el: Element, ctx: MethodInvocationCallback<Props>) => {
-        console.log({model, el, ctx})
-    }
-};
-const propagator = new EventTarget();
-
-Transform<Props, Methods>(div, model, {
-    input: [
-        {o: 'msg1', s: 'value'},
-        {o: 'rO',   s: 'readOnly'},
-        {o: 'num',  s: 'tabIndex'},
-        {o: 'num',  s: '.dataset.num'},
-        {o: 'prop', sa: 'itemprop'},
-        {
-            s: {
-                type: 'number',
-                disabled: true
-            } as Partial<HTMLInputElement>,
-            e: {
-                do: 'hydrateInputElement',
-                with: {
-                    beCommitted: true
-                }
-            }
-        }
-    ]
-}, et);
-```
-
-The method hydrateInputElement gets called once and only once per input element that gets added or found in the DOM fragment.  It is also called when the input elements are are disconnected from the DOM fragment (with a different argument):
-
-The MethodInvocationCallback interface can be seen [here](https://github.com/bahrus/trans-render/blob/baseline/types.d.ts).
-
-## Example 6 Instant gratification [TODO]
-
-Okay, okay, maybe we don't want to have to go bouncing around in our code just to add an event handler.  This appears to me to be one of the apparent appeals of JSX and tagged template libraries like Lit/FAST/Stencil/Atomico, etc.
-
-So, we take the "if you can't beat them, join them" approach to this question.  This is the first example, where we deviate from side-effect free, truly declarative, JSON serializable syntax:
-
-### Example 6a:
-
-```TypeScript
-Transform<Props, Methods>(div, model, {
-    input: {
-        e: {
-            onMount: (model: Model, el: HTMLInputElement, ctx: UnitOfWorkContext) => {
-                el.addEventListener('input', e => {
-                    // knock yourself out
-                    el.appendChild(document.body);
-                });
-            },
-            onDisconnect: () => {
-                ...
-            }
-        }
-    }
-    
-}, et);
-```
-
-[TODO]  Provide some helper functions to make this amount of boilerplate smaller.
 
 
 
