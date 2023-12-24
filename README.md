@@ -449,7 +449,7 @@ Transform<Props, Actions>(form, model, {
 }, propagator);
 ```
 
-## Example 5b -- Adding a singe event listener, the most standard one [TODO]
+## Example 5b -- Adding a singe event listener, the most standard one
 
 There some elements where the most common event we attach is pretty clear - for the button it is click, for the input element is it the input event.
 
@@ -472,6 +472,27 @@ Transform<Props, Actions>(form, model, {
 }, propagator);
 ```
 
+## Example 5c -- Instant gratification event handlers [TODO]
+
+As mentioned earlier:  In some cases, we may want our domain object to only have stable, proven, mature functionality.  Maybe it is shared by multiple components, even across projects.
+
+But some new functionality, where the requirements may be in flux, comes up, so we would rather "experiment" with such functionality closer to the UI.  We can do that, as shown below:
+
+```TypeScript
+Transform<Props, Actions>(form, model, {
+    input: {
+        a: {
+            on: 'change',
+            do: (e: Event, {model, propagator}) => {
+                model.isHappy = !model.isHappy;
+                propagator?.dispatchEvent(new Event('isHappy'));
+                
+            }
+        }
+    },
+    span: 'isHappy'
+}, propagator);
+```
 
 ## Example 7 - Conditional Logic [WIP]
 

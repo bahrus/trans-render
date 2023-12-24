@@ -4,7 +4,7 @@ import {
     IMountOrchestrator, NumberExpression, InterpolatingExpression,
     ObjectExpression,
     TransformerTarget, 
-    onMountStatusChange, RHS, AddEventListener
+    onMountStatusChange, RHS, AddEventListener,
     IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer
 } from './types.js';
 import { MountContext, PipelineStage } from 'mount-observer/types';
