@@ -15,7 +15,7 @@
 1.  A JavaScript object -- the model.
 2.  A DOM fragment to update / enhance.
 3.  A user defined "Fragment Manifest" where the binding rules are defined, mostly declaratively.
-4.  Optionally, an EventTarget that emits events when properties of the model change.
+4.  Optionally, an EventTarget that emits events when properties of the model change.  We will refer to this optional EventTarget as the "propagator".
 
 *TR* is designed to provide an alternative to the proposed [Template Instantiation proposal](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), the idea being that *TR* could continue to supplement what that proposal includes if/when template instantiation support lands in browsers.
 
