@@ -30,7 +30,7 @@ Transform<Model>(div, model, {
             } as Partial<HTMLInputElement>
         }
     ]
-}, et);
+}, propagator);
 
 setTimeout(() => {
     const input = document.createElement('input');
@@ -38,5 +38,5 @@ setTimeout(() => {
 }, 1000);
 setTimeout(() => {
     model.msg1 = '456';
-    et.dispatchEvent(new Event('msg1'));
+    propagator.dispatchEvent(new Event('msg1'));
 }, 2000);

@@ -6,12 +6,12 @@ const model = {
 const propagator = new EventTarget();
 Transform(div, model, {
     span: 'greeting',
-}, et);
+}, propagator);
 setTimeout(() => {
     const span = document.createElement('span');
     div.appendChild(span);
 }, 1000);
 setTimeout(() => {
     model.greeting = 'bye';
-    et.dispatchEvent(new Event('greeting'));
+    propagator.dispatchEvent(new Event('greeting'));
 }, 2000);

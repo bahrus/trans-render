@@ -9,12 +9,12 @@ const transform = new Transformer(div, model, {
         o: ['greeting'],
         d: 0
     },
-}, et);
+}, propagator);
 setTimeout(() => {
     const span = document.createElement('span');
     div.appendChild(span);
 }, 1000);
 setTimeout(() => {
     model.greeting = 'bye';
-    et.dispatchEvent(new Event('greeting'));
+    propagator.dispatchEvent(new Event('greeting'));
 }, 2000);

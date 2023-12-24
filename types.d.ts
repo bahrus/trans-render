@@ -159,4 +159,5 @@ export interface ITransformer<TProps, TMethods>{
     model: TProps & TMethods,
     xform: Partial<{[key: string]: RHS<TProps, TMethods>}>,
     propagator?: EventTarget,
+    //s(p: keyof TProps, val: any): void;
 }

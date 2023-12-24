@@ -28,4 +28,4 @@ Transform<Props, Methods>(form, model, {
             s: {type: 'number'}
         },
     ]
-}, et);
+}, propagator);

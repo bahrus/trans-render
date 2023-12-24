@@ -243,7 +243,11 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget im
         return 'textContent';
     }
 
-    
+    s(p: keyof TProps, val: any){
+        const {model, propagator} = this;
+        model[p] = val;
+        if(propagator !== undefined) propagator.dispatchEvent(new Event('p'));
+    }
 }
 
 export function arr<T = any>(inp: T | T[] | undefined) : T[] {

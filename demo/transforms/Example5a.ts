@@ -12,6 +12,7 @@ const model: Props & Actions = {
     handleChange: (e: Event, {model, propagator}) => {
         model.isHappy = !model.isHappy;
         propagator?.dispatchEvent(new Event('isHappy'));
+        
     }
 }
 const form = document.querySelector('form')!;

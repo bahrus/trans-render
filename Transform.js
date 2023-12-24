@@ -222,6 +222,12 @@ export class Transformer extends EventTarget {
             return 'value';
         return 'textContent';
     }
+    s(p, val) {
+        const { model, propagator } = this;
+        model[p] = val;
+        if (propagator !== undefined)
+            propagator.dispatchEvent(new Event('p'));
+    }
 }
 export function arr(inp) {
     return inp === undefined ? []

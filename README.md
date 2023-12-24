@@ -113,7 +113,7 @@ setTimeout(() => {
 //script #2
 setTimeout(() => {
     model.greeting = 'bye';
-    et.dispatchEvent(new Event('greeting'));
+    propagator.dispatchEvent(new Event('greeting'));
 }, 2000);
 ```
 
@@ -130,6 +130,12 @@ And thanks to the power of JavaScript, if a developer provides a plain old JavaS
 In fact this package provides some utility functions that [do just that](https://github.com/bahrus/trans-render/blob/baseline/lib/subscribe2.ts).
 
 And creating a simple utility function, modeled after "signals", that wraps updating the model and the eventType instance is quite trivial.
+
+It is quite easy to create an ES Proxy that serves as a propagator.  This package also provides this [TODO].
+
+<!--Finally, the transformer class provides a utility method, "s" that allows for setting the value and dispatching the event in one line (think "setValue").-->
+
+This way we can set model.greeting = 'bye', and the model will emit the event with matching name.  (There is possibly a slight performance hit with this approach, but it is unlikely to be the bottleneck for your application.)
 
 ## The 80% rule.
 
@@ -312,7 +318,7 @@ setTimeout(() => {
 }, 1000);
 setTimeout(() => {
     model.msg1 = 'bye';
-    et.dispatchEvent(new Event('msg1'));
+    propagator.dispatchEvent(new Event('msg1'));
 }, 2000);
 ```
 
@@ -410,25 +416,60 @@ Note the (discouraged) extra property: "sa" which means "set attribute" rather t
 ```html
 <form>
     <input>
+    <span></span>
 </form>
 ```
 
 ```TypeScript
-const model = {
-    isHappy: 'boolean',
-    handleChangeEvent: (e: Event, {model}) => {
+interface Props {
+    isHappy: boolean,
+}
+interface Actions {
+    handleChange: (e: Event, transformer: ITransformer<Props, Actions>) => void;
+}
+const model: Props & Actions = {
+    isHappy: false,
+    handleChange: (e: Event, {model, propagator}) => {
         model.isHappy = !model.isHappy;
-        et.dispatchEvent(new Event('isHappy'));
+        propagator?.dispatchEvent(new Event('isHappy'));
+        
     }
 }
-Transform(form, model, {
+const form = document.querySelector('form')!;
+const propagator = new EventTarget();
+
+Transform<Props, Actions>(form, model, {
     input: {
         a: {
             on: 'change',
-            do: 'handleChangeEvent'
+            do: 'handleChange'
         }
-    }
-}, et);
+    },
+    span: 'isHappy'
+}, propagator);
+```
+
+## Example 5b -- Adding a singe event listener, the most standard one [TODO]
+
+There some elements where the most common event we attach is pretty clear - for the button it is click, for the input element is it the input event.
+
+So to make such scenarios simple, we adopt the following rules:
+
+| Element     | Assumed event type |
+|-------------|--------------------|
+| input       | input              |
+| slot        | slotchange         |
+| all others  | click              |
+
+So Example 5b is the same as 5a, but we can use the following to respond to input events:
+
+```TypeScript
+Transform<Props, Actions>(form, model, {
+    input: {
+        a: 'handleInput'
+    },
+    span: 'isHappy'
+}, propagator);
 ```
 
 

@@ -6,7 +6,7 @@ const model = {
 const propagator = new EventTarget();
 const transform = new Transformer(form, model, {
     '@ greeting': 0,
-}, et);
+}, propagator);
 setTimeout(() => {
     const section = document.createElement('input');
     section.setAttribute('name', 'greeting');
@@ -14,5 +14,5 @@ setTimeout(() => {
 }, 1000);
 setTimeout(() => {
     model.greeting = 'bye';
-    et.dispatchEvent(new Event('greeting'));
+    propagator.dispatchEvent(new Event('greeting'));
 }, 2000);

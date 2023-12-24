@@ -17,7 +17,7 @@ Transform<Model>(div, model, {
         o: ['msg1', 'msg2'],
         d: ['msg1: ', 0, ', msg2: ', 1]
     }
-}, et);
+}, propagator);
 
 setTimeout(() => {
     const span = document.createElement('span');
@@ -25,5 +25,5 @@ setTimeout(() => {
 }, 1000);
 setTimeout(() => {
     model.msg1 = 'bye';
-    et.dispatchEvent(new Event('msg1'));
+    propagator.dispatchEvent(new Event('msg1'));
 }, 2000);
