@@ -1,4 +1,4 @@
-import { Transform } from '../../../Transform.js';
+import { Transform } from '../../Transform.js';
 const div = document.querySelector('div');
 const model = {
     msg1: '123',
@@ -28,14 +28,14 @@ Transform(div, model, {
             }
         }
     ]
-}, et);
+}, propagator);
 setTimeout(() => {
     const input = document.createElement('input');
     div.appendChild(input);
 }, 1000);
 setTimeout(() => {
     model.msg1 = '456';
-    et.dispatchEvent(new Event('msg1'));
+    propagator.dispatchEvent(new Event('msg1'));
 }, 2000);
 setTimeout(() => {
     div.innerHTML = '';
