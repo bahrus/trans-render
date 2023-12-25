@@ -710,7 +710,7 @@ Transform<Props, Methods>(form, model, {
 
 To support our holy quest for doing as much as possible declaratively, we provide for some ways of modifying the host without requiring writing code in an event handler, to account for a significant number of use cases.
 
-### Example 8a [TODO]
+### Example 8a 
 
 ```html
 <div>

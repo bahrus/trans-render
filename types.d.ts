@@ -130,7 +130,7 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
 
 export interface ModificationUnitOfWork<TProps, TMethods>{
     on: string,
-    inc?: keyof TProps,
+    inc?: keyof TProps & string,
     byAmt?: number | string,
 }
 
