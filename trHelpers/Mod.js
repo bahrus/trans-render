@@ -37,6 +37,9 @@ export class Mod {
                         const { getVal } = await import('../lib/getVal.js');
                         valToSet = await getVal({ host: matchingElement }, toValFrom);
                     }
+                    else {
+                        valToSet = matchingElement[toValFrom];
+                    }
                 }
                 else {
                     throw 'NI';

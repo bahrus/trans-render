@@ -125,7 +125,7 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**
      * modify the host in a (mostly) declarative  way
      */
-    m?: ModificationUnitOfWork<TProps, TMethods>
+    m?: ModificationUnitOfWork<TProps, TMethods> | Array<ModificationUnitOfWork<TProps, TMethods>>
 }
 
 export interface ModificationUnitOfWork<TProps, TMethods>{

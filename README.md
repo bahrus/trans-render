@@ -786,6 +786,45 @@ Transform<Props, Methods>(div, model, {
 }, propagator);
 ```
 
+## Example 8d Multiple modifications
+
+```html
+<form>
+    <input>
+    <span id=stringValue></span>
+    <span class=booleanValue></span>
+</form>
+```
+
+```TypeScript
+const model: Props & Methods = {
+    booleanValue: false,
+    stringValue: ''
+}
+const form = document.querySelector('form')!;
+const propagator = new EventTarget();
+Transform<Props, Methods>(form, model, {
+    input: {
+        m:[
+            {
+                on: 'focus',
+                toggle: 'booleanValue'
+            },
+            {
+                on: 'input',
+                s: 'stringValue',
+                toValFrom: 'value'
+            }
+        ]
+            
+    },
+    '. booleanValue': 0,
+    '# stringValue': 0,
+}, propagator);
+```
+
+## Example 8e Hydratng with "onload" event
+
 
 
 

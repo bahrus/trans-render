@@ -42,6 +42,8 @@ export class Mod<TProps, TMethods>{
                     if(toValFrom[0] === '.'){
                         const {getVal} = await import('../lib/getVal.js');
                         valToSet = await getVal({host: matchingElement}, toValFrom);
+                    }else{
+                        valToSet = (<any>matchingElement)[toValFrom];
                     }
                 }else{
                     throw 'NI';

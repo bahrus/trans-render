@@ -296,8 +296,12 @@ export class MountOrchestrator<TProps, TMethods = TProps> extends EventTarget im
                             }
                         }
                         if(m !== undefined){
+                            const transpiledMs = arr(m);
                             const {Mod} = await import('./trHelpers/Mod.js');
-                            new Mod(this.#mountObserver, transformer, matchingElement, m);
+                            for(const mi of transpiledMs){
+                                new Mod(this.#mountObserver, transformer, matchingElement, mi);
+                            }
+                            
                         }
                     }
                     
