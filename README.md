@@ -635,7 +635,7 @@ Transform<Props, Methods>(form, model, {
         {o: 'typeToEdit', i: 'number',  s: {type: 'number', hidden: false}},
         {o: 'typeToEdit', i: 'object',  s: {hidden: true}}
     ]
-}, et);
+}, propagator);
 ```
 
 ### Example 7b  - Custom method to check boolean condition
@@ -675,7 +675,7 @@ Transform<Props, Methods>(form, model, {
             s: {type: 'number'}
         },
     ]
-}, et);
+}, propagator);
 ```
 
 ### Example 7c:  Instant gratification
@@ -703,38 +703,38 @@ Transform<Props, Methods>(form, model, {
             s: {type: 'number'}
         },
     ]
-}, et);
+}, propagator);
 ```
 
 ## Modifying the host
 
 To support our holy quest for doing as much as possible declaratively, we provide for some ways of modifying the host without requiring writing code in an event handler, to account for a significant number of use cases.
 
+### Example 8a [TODO]
 
-
-
-<!--As we can see with example 7a, there's a little repetition.  To reduce the repetition:
-
-### Example 7d: [TODO]
+```html
+<div>
+    <button part=down data-d=-1>-</button><span part=count></span><button part=up data-d=1>+</button>
+</div>
+```
 
 ```TypeScript
 const model = {
-    typeToEdit: 'boolean'
-}
-Transform<Props, Methods>(form, model, {
-    input: [
-        {
-            o: 'typeToEdit', is: {
-                boolean: {s: {type: 'checkbox', hidden: false}},
-                number: {s: {type: 'number', hidden: false}},
-                object: {s: {hidden: true}},
-            }
-        },
-    ]
-    
-}, et);
+    count: 30
+};
+Transform<Props, Methods>(div, model, {
+    button: {
+        m:{
+            on: 'click',
+            inc: 'count',
+            byAmt: '.dataset.d'
+        }
+    },
+    '% count': 0
+}, propagator)
 ```
--->
+
+This modifies the count value of the host, incrementing by -1 if clicking the left button, by +1 if clicking on the right button.
 
 
 

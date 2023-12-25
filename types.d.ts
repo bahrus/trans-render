@@ -94,7 +94,7 @@ export type PropOrComputedProp<TProps, TMethods = TProps> =
 
 export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**
-     * add event istener
+     * add event listener
      */
     a?:  AddEventListenerType<TProps, TMethods> | Array<AddEventListenerType<TProps, TMethods>>
     /**
@@ -122,9 +122,19 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
      * set specified attribute of the matching element to the (derived) value 
      */
     sa?: string
+    /**
+     * modify the host in a (mostly) declarative  way
+     */
+    m?: ModificationUnitOfWork<TProps, TMethods>
 }
 
-export interface QuenitOfWork<TProps, TActions> extends UnitOfWork<TProps, TActions>{
+export interface ModificationUnitOfWork<TProps, TMethods>{
+    on: string,
+    inc?: keyof TProps,
+    byAmt?: number | string,
+}
+
+export interface QuenitOfWork<TProps, TMethods> extends UnitOfWork<TProps, TMethods>{
     q: string,
     qi?: QueryInfo,
 }
