@@ -762,7 +762,7 @@ Transform<Props, Methods>(div, model, {
 }, propagator);
 ```
 
-## Example 8c Toggling a host property [TODO]
+## Example 8c Toggling a host property
 
 ```html
 <div>
