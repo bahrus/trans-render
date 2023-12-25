@@ -253,7 +253,7 @@ export class MountOrchestrator extends EventTarget {
                         await this.doUpdate(matchingElement, uow);
                         this.#matchingElements.push(new WeakRef(matchingElement));
                         await transformer.doEnhance(matchingElement, 'onMount', uow, ctx, stage);
-                        const { a } = uow;
+                        const { a, m } = uow;
                         if (a !== undefined) {
                             let transpiledActions;
                             if (typeof a === 'string') {
@@ -267,6 +267,10 @@ export class MountOrchestrator extends EventTarget {
                                 const { on, do: action, options } = ap;
                                 new AddEventListener(this.#mountObserver, transformer, uow, matchingElement, on, action);
                             }
+                        }
+                        if (m !== undefined) {
+                            const { Mod } = await import('./trHelpers/Mod.js');
+                            new Mod(this.#mountObserver, transformer, matchingElement, m);
                         }
                     }
                 },

@@ -18,9 +18,10 @@ export class Mod<TProps, TMethods>{
                     case 'string':
                         if(byAmt[0] === '.'){
                             const {getVal} = await import('../lib/getVal.js');
-                            valToIncBy = Number(getVal({host: model}, byAmt));
+                            const sVal = await getVal({host: matchingElement}, byAmt);
+                            valToIncBy = Number(sVal);
                         }else{
-                            valToIncBy = Number(model[byAmt]);
+                            valToIncBy = Number((<any>matchingElement)[byAmt]);
                         }
                         break;
                     case 'number':
@@ -30,7 +31,7 @@ export class Mod<TProps, TMethods>{
                 }
                 (model[inc] as number) += valToIncBy;
                 if(!(model instanceof EventTarget) && propagator !== undefined){
-                    propagator.dispatchEvent(new Event('inc'));
+                    propagator.dispatchEvent(new Event(inc));
                 }
             }
             

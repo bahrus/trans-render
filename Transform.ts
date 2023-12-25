@@ -274,7 +274,7 @@ export class MountOrchestrator<TProps, TMethods = TProps> extends EventTarget im
                         await this.doUpdate(matchingElement, uow);
                         this.#matchingElements.push(new WeakRef(matchingElement));
                         await transformer.doEnhance(matchingElement, 'onMount', uow, ctx, stage);
-                        const {a} = uow;
+                        const {a, m} = uow;
                         if(a !== undefined){
                             let transpiledActions: Array<AddEventListener<TProps, TMethods>> | undefined;
                             if(typeof a === 'string'){
@@ -294,6 +294,10 @@ export class MountOrchestrator<TProps, TMethods = TProps> extends EventTarget im
                                     action,
                                 );
                             }
+                        }
+                        if(m !== undefined){
+                            const {Mod} = await import('./trHelpers/Mod.js');
+                            new Mod(this.#mountObserver, transformer, matchingElement, m);
                         }
                     }
                     
