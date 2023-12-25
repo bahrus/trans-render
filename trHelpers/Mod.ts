@@ -10,7 +10,7 @@ export class Mod<TProps, TMethods>{
     ){
         const {on} = m;
         matchingElement.addEventListener(on, async e => {
-            const {inc, byAmt, s} = m;
+            const {inc, byAmt, s, toggle} = m;
             const {model, propagator} = transformer;
             const isPropagating = !(model instanceof EventTarget) && propagator !== undefined
             if(inc !== undefined){
@@ -49,6 +49,12 @@ export class Mod<TProps, TMethods>{
                 (model[s]) = valToSet;
                 if(isPropagating){
                     propagator.dispatchEvent(new Event(s));
+                }
+            }
+            if(toggle !== undefined){
+                (<any>model)[toggle] = !model[toggle];
+                if(isPropagating){
+                    propagator.dispatchEvent(new Event(toggle));
                 }
             }
         }, {

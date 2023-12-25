@@ -762,6 +762,30 @@ Transform<Props, Methods>(div, model, {
 }, propagator);
 ```
 
+## Example 8c Toggling a host property [TODO]
+
+```html
+<div>
+    <button>Toggle Value</button>
+    <span id=booleanValue></span>
+</div>
+```
+
+```TypeScript
+const model = {
+    booleanValue: false
+}
+Transform<Props, Methods>(div, model, {
+    button: {
+        m:{
+            on: 'click',
+            toggle: 'booleanValue'
+        }
+    },
+    '# booleanValue': 0
+}, propagator);
+```
+
 
 
 

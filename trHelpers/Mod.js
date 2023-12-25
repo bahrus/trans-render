@@ -3,7 +3,7 @@ export class Mod {
     constructor(mountObserver, transformer, matchingElement, m) {
         const { on } = m;
         matchingElement.addEventListener(on, async (e) => {
-            const { inc, byAmt, s } = m;
+            const { inc, byAmt, s, toggle } = m;
             const { model, propagator } = transformer;
             const isPropagating = !(model instanceof EventTarget) && propagator !== undefined;
             if (inc !== undefined) {
@@ -44,6 +44,12 @@ export class Mod {
                 (model[s]) = valToSet;
                 if (isPropagating) {
                     propagator.dispatchEvent(new Event(s));
+                }
+            }
+            if (toggle !== undefined) {
+                model[toggle] = !model[toggle];
+                if (isPropagating) {
+                    propagator.dispatchEvent(new Event(toggle));
                 }
             }
         }, {
