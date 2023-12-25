@@ -193,7 +193,7 @@ Transform<IModel>(div, model, {
 }, propagator);
 ```
 
-## Example 2 -- binding using the name attribute
+## Example 2 -- binding using special, standard attributes
 
 We often find ourselves defining in our HTML *input* tags (or other form-associated elements):
 

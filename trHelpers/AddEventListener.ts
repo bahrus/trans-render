@@ -29,7 +29,7 @@ export class AddEventListener<TProps, TMethods>{
         }, options);
         mountObserver.addEventListener('disconnect', e => {
             this.#abortController.abort();
-        })
+        });
     }
 
     // onDisconnect(){
