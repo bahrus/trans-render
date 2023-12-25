@@ -8,7 +8,7 @@
 
 ## Binding from a distance
 
-*trans-rendering* (TR) provides a methodical way of "binding from a distance" -- updating DOM fragments without the need for custom inline binding instructions.  It draws inspiration from the (least) popular features of XSLT, and more significantly, CSS.  Like those syntaxes, *TR* performs transforms on elements by matching tests on those elements.  *TR* uses css selector tests on elements via the element.matches() and element.querySelectorAll() methods.  Unlike XSLT/CSS, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible.
+*trans-rendering* (TR) provides a methodical way of "binding from a distance" -- updating DOM fragments without the need for custom inline binding instructions.  It draws inspiration from the (least) popular features of XSLT, and more significantly, CSS.  Unlike XSLT/CSS, though, the transform is defined with JavaScript, adhering to JSON-like declarative constraints as much as possible. Like those syntaxes, *TR* performs transforms on elements by matching tests on those elements.  *TR* uses css selector tests on elements via the element.matches() and element.querySelectorAll() methods.  
 
 *TR* rests on:
 
@@ -37,7 +37,9 @@ In the past, this didn't seem workable with HTML.  But today, there is a growing
 
 Even more dramatically, with the advent of imported, naturalized custom elements, the ratio between semantically meaningful tag names and divs/spans in the template markup will tend to grow much higher, looking more like XML of yore. trans-render's usefulness grows as a result of the increasingly semantic nature of the template markup.  
 
-In addition, the introduction of the [aria- state and properties](https://developer.mozilla.org/en-US/docs/web/Accessibility/ARIA/Attributes) attributes for accessibility, "part" attributes for externally provided styling, as well as the re-emergence of [microdata attributes](https://github.com/WICG/webcomponents/issues/1013) as a standard that is here to stay, means that using a library like TR nudges us to "do the right thing" and adopt semantic approaches to our HTML, resulting in elegant approaches to binding.  The bottom line is that like with XSLT, it will be quite rare for this style of development to feel limiting or "hackish".
+In addition, the introduction of the [aria- state and properties](https://developer.mozilla.org/en-US/docs/web/Accessibility/ARIA/Attributes) attributes for accessibility, "part" attributes for externally provided styling, as well as the re-emergence of [microdata attributes](https://github.com/WICG/webcomponents/issues/1013) as a standard that is here to stay, means that using a library like TR nudges us to "do the right thing" and adopt semantic approaches to our HTML, resulting in elegant approaches to binding.  
+
+The bottom line is that like with XSLT, it will be quite rare for this style of development to feel limiting or "hackish".
 
 This can leave the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may be needed to keep the binding rules in sync.  Much like how separate css style rules often need adjusting when the document structure changes.
 
@@ -110,6 +112,13 @@ setTimeout(() => {
     div.appendChild(span);
 }, 1000);
 
+```
+
+So dynamically adding new HTML elements that match the css selector will immediately get bound, as does dispatching events matching the observed property name(s). 
+
+We can also see the propagator in action:
+
+```JavaScript
 //script #2
 setTimeout(() => {
     model.greeting = 'bye';
@@ -117,9 +126,7 @@ setTimeout(() => {
 }, 2000);
 ```
 
-So dynamically adding new HTML elements that match the css selector will immediately get bound, as does dispatching events matching the observed property name(s).  
-
-Using an event target as our mechanism for providing our reactive observer to observe changes, as opposed to getters/setters of a class seems like the most generic solution we can think of.  Will refer to this universal interface is the "propagator" for the model.
+Using an event target as our mechanism for providing our reactive interface in order to observe changes, as opposed to getters/setters of a class, seems like the most generic solution we can think of.  We will refer to this universal interface as the "propagator" for the model.
 
 Any library that dynamically creates property getters and setters (for example libraries that use decorators) can easily provide this propagator.
 
@@ -131,7 +138,7 @@ In fact this package provides some utility functions that [do just that](https:/
 
 And creating a simple utility function, modeled after "signals", that wraps updating the model and the eventType instance is quite trivial.
 
-It is quite easy to create an ES Proxy that serves as a propagator.  This package also provides this [TODO].
+It is quite easy to create an ES Proxy that serves as a propagator.  This package also [provides this](https://github.com/bahrus/trans-render/blob/baseline/lib/PropertyBag.ts).
 
 <!--Finally, the transformer class provides a utility method, "s" that allows for setting the value and dispatching the event in one line (think "setValue").-->
 
@@ -155,7 +162,7 @@ const transform = new Transformer<Model>(div, model, {
         o: ['greeting'],
         d: 0
     },
-}, et);
+}, propagator);
 ```
 
 with the shortcut:
@@ -165,7 +172,7 @@ with the shortcut:
 ```TypeScript
 Transform<Model>(div, model, {
     span: 'greeting',
-}, et);
+}, propagator);
 ```
 
 But it is important to know what the shortcut is for, just as in calculus it is important to know that y' is shorthand for dy/dx.
@@ -183,7 +190,7 @@ There is an "escape hatch" for free form css -- start the expression with "* ". 
 ```TypeScript
 Transform<IModel>(div, model, {
     '* div > p + p ~ span[class$="name"]': 'greeting',
-}, et);
+}, propagator);
 ```
 
 ## Example 2 -- binding using the name attribute
@@ -220,7 +227,7 @@ const model: Model = {
 };
 Transform<Model>(form, model, {
     '@ greeting': 0,
-}, et);
+}, propagator);
 ```
 
 ... which results in:
@@ -245,7 +252,7 @@ new Transformer<IModel>(form, model, {
         o: ['greeting'],
         d: 0
     },
-}, et);
+}, propagator);
 ```
 
 (Another small timesaver:  As mentioned before, d: 0 is assumed if not specified above.  Also, if only one property needs to be observed, we can forgo the use of the array)
@@ -304,7 +311,7 @@ Transform<Model>(div, model, {
         o: ['msg1', 'msg2'],
         d: ['msg1: ', 0, ', msg2: ', 1]
     }
-}, et);
+}, propagator);
 ```
 
 Once again, we don't claim this to be the most elegant syntax, and can certainly envision an "icing layer" that  translates a tagged template literal expression into this syntax, but that is outside the scope of this Transform function / Transformer class.  The syntax above is optimized for declarative, side-effect free, un-opinionated JSON parsing and small footprints over the wire, while still being somewhat maintainable by hand.
@@ -340,7 +347,7 @@ Transform<Model>(div, model, {
         o: ['msg1', 'msg2'],
         d: 'computeMessage'
     }
-}, et);
+}, propagator);
 ```
 
 ### Example 3c: Instant gratification for computed derivations
@@ -362,7 +369,7 @@ Transform<Model>(div, model, {
         o: ['msg1', 'msg2'],
         d: ({msg1, msg2}: Model, uow: UnitOfWorkCtx) => `msg1: ${msg1}, msg2: ${msg2}`
     }
-}, et);
+}, propagator);
 ```
 
 ## Example 4  Setting props of the element
@@ -403,7 +410,7 @@ Transform<Model>(div, model, {
             }
         }
     ]
-}, et);
+}, propagator);
 ```
 
 This will set the input's readOnly property from the r0 field from the model.  Likewise, tabIndex is set from the num field, value from msg1.  "type" is "hardcoded" to "number", "disabled" initialized to "true".
@@ -494,6 +501,36 @@ Transform<Props, Actions>(form, model, {
 }, propagator);
 ```
 
+## Example 5d -- Multiple Event Handlers
+
+"a" can also be an array:
+
+```TypeScript
+const model: Props & Actions = {
+    isHappy: false,
+    handleInput: (e: Event, {model, propagator}) => {
+        model.isHappy = !model.isHappy;
+        propagator?.dispatchEvent(new Event('isHappy'));
+    }
+}
+const form = document.querySelector('form')!;
+const propagator = new EventTarget();
+
+Transform<Props, Actions>(form, model, {
+    input: {
+        a: ['handleInput', {
+            on: 'change',
+            do: (e, {model, propagator}) => {
+                model.isHappy = !model.isHappy;
+                propagator?.dispatchEvent(new Event('isHappy'));
+            }
+        }]
+    },
+    span: 'isHappy'
+}, propagator);
+```
+
+
 ## Enhancing an element
 
 What about conditionally loading blocks of HTML?  What about loops / repeating content?  
@@ -510,7 +547,7 @@ So what follows below, example 5, extends example 4 above (just to give a bird's
 
 What has been added is the "e" section, which kind of vaguely stands for "enhancements"/"event managing" callbacks.
 
-### Example 6a
+### Example 6a - Single enhancement
 
 ```TypeScript
 
@@ -557,12 +594,14 @@ Transform<Props, Methods>(div, model, {
             }
         }
     ]
-}, et);
+}, propagator);
 ```
 
 The method hydrateInputElement gets called once and only once per input element that gets added or found in the DOM fragment.  It is also called when the input elements are are disconnected from the DOM fragment (with a different argument):
 
 The MethodInvocationCallback interface can be seen [here](https://github.com/bahrus/trans-render/blob/baseline/types.d.ts).
+
+### Example 6b - Multiple enhancements [TODO]
 
 ## Example 7 - Conditional Logic
 
@@ -666,6 +705,12 @@ Transform<Props, Methods>(form, model, {
     ]
 }, et);
 ```
+
+## Modifying the host
+
+To support our holy quest for doing as much as possible declaratively, we provide for some ways of modifying the host without requiring writing code in an event handler, to account for a significant number of use cases.
+
+
 
 
 <!--As we can see with example 7a, there's a little repetition.  To reduce the repetition:

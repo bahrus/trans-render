@@ -96,7 +96,7 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**
      * add event istener
      */
-    a?: keyof TMethods & string | AddEventListener<TProps, TMethods> | Array<AddEventListener<TProps, TMethods>>
+    a?:  AddEventListenerType<TProps, TMethods> | Array<AddEventListenerType<TProps, TMethods>>
     /**
      * observed props
      */
@@ -147,6 +147,10 @@ export type Model = {
 }
 
 export type EventListenerAction<TProps, TMethods> = (keyof TMethods & string) | ((e: Event, t: ITransformer<TProps, TMethods>, uow: UnitOfWork<TProps, TMethods>) => void);
+
+export type AddEventListenerType<TProps, TMethods> =
+    | keyof TMethods & string 
+    | AddEventListener<TProps, TMethods>;
 
 export interface AddEventListener<TProps, TMethods>{
     on: string,

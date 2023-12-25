@@ -278,23 +278,12 @@ export class MountOrchestrator<TProps, TMethods = TProps> extends EventTarget im
                         if(a !== undefined){
                             let transpiledActions: Array<AddEventListener<TProps, TMethods>> | undefined;
                             if(typeof a === 'string'){
-                                let on = 'click';
-                                switch(matchingElement.localName){
-                                    case 'input':
-                                        on = 'input';
-                                        break;
-                                    case 'slot':
-                                        on = 'slotchange'
-                                }
-                                transpiledActions = [{
-                                    on,
-                                    do: a,
-                                }]
+                                transpiledActions = [this.toStdEvt(a, matchingElement)];
                             }else{
-                                transpiledActions = arr(a);
+                                transpiledActions = arr(a).map(ai => typeof ai === 'string' ? this.toStdEvt(ai, matchingElement) : ai);
                             }
                             const {AddEventListener} = await import('./trHelpers/AddEventListener.js')
-                            for(const ap of transpiledActions){
+                            for(const ap of transpiledActions!){
                                 const {on, do: action, options} = ap;
                                 new AddEventListener<TProps, TMethods>(
                                     this.#mountObserver, 
@@ -371,6 +360,21 @@ export class MountOrchestrator<TProps, TMethods = TProps> extends EventTarget im
             await this.transformer.doUpdate(matchingElement, uow, d);
         }
         
+    }
+
+    toStdEvt(a: keyof TMethods, matchingElement: Element): AddEventListener<TProps, TMethods>{
+        let on = 'click';
+        switch(matchingElement.localName){
+            case 'input':
+                on = 'input';
+                break;
+            case 'slot':
+                on = 'slotchange'
+        }
+        return {
+            on,
+            do: a,
+        } as AddEventListener<TProps, TMethods>;
     }
 }
 

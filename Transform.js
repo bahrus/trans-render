@@ -257,21 +257,10 @@ export class MountOrchestrator extends EventTarget {
                         if (a !== undefined) {
                             let transpiledActions;
                             if (typeof a === 'string') {
-                                let on = 'click';
-                                switch (matchingElement.localName) {
-                                    case 'input':
-                                        on = 'input';
-                                        break;
-                                    case 'slot':
-                                        on = 'slotchange';
-                                }
-                                transpiledActions = [{
-                                        on,
-                                        do: a,
-                                    }];
+                                transpiledActions = [this.toStdEvt(a, matchingElement)];
                             }
                             else {
-                                transpiledActions = arr(a);
+                                transpiledActions = arr(a).map(ai => typeof ai === 'string' ? this.toStdEvt(ai, matchingElement) : ai);
                             }
                             const { AddEventListener } = await import('./trHelpers/AddEventListener.js');
                             for (const ap of transpiledActions) {
@@ -340,5 +329,19 @@ export class MountOrchestrator extends EventTarget {
         if (d !== undefined) {
             await this.transformer.doUpdate(matchingElement, uow, d);
         }
+    }
+    toStdEvt(a, matchingElement) {
+        let on = 'click';
+        switch (matchingElement.localName) {
+            case 'input':
+                on = 'input';
+                break;
+            case 'slot':
+                on = 'slotchange';
+        }
+        return {
+            on,
+            do: a,
+        };
     }
 }
