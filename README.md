@@ -742,7 +742,7 @@ This modifies the count value of the host, incrementing by -1 if clicking the le
 <div>
     <button data-val=pizza>Value 1</button>
     <button data-val=salad>Value 2</button>
-    <span itemprop=count></span>
+    <span itemprop=selectedItem></span>
 </div>
 ```
 
@@ -758,7 +758,7 @@ Transform<Props, Methods>(div, model, {
             toValFrom: '.dataset.val'
         }
     },
-    '$ count': 0
+    '$ selectedItem': 0
 }, propagator);
 ```
 

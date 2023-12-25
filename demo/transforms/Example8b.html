@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 8b</title>
+    <script type=importmap>
+        {
+            "imports": {
+                "mount-observer/": "../../node_modules/mount-observer/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <button data-val=pizza>Value 1</button>
+        <button data-val=salad>Value 2</button>
+        <span itemprop=selectedItem></span>
+    </div>
+
+    <script type=module>
+        import './Example8b.js';
+    </script>
+</body>
+</html>
