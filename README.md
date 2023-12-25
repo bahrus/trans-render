@@ -710,7 +710,7 @@ Transform<Props, Methods>(form, model, {
 
 To support our holy quest for doing as much as possible declaratively, we provide for some ways of modifying the host without requiring writing code in an event handler, to account for a significant number of use cases.
 
-### Example 8a 
+### Example 8a Incrementing a counter
 
 ```html
 <div>
@@ -731,12 +731,36 @@ Transform<Props, Methods>(div, model, {
         }
     },
     '% count': 0
-}, propagator)
+}, propagator);
 ```
 
 This modifies the count value of the host, incrementing by -1 if clicking the left button, by +1 if clicking on the right button.
 
+## Example 8b  Elevating a value to the host
 
+```html
+<div>
+    <button data-val=pizza>Value 1</button>
+    <button data-val=salad>Value 2</button>
+    <span itemprop=count></span>
+</div>
+```
+
+```TypeScript
+const model = {
+    selectedItem: 'sandwich'
+}
+Transform<Props, Methods>(div, model, {
+    button: {
+        m:{
+            on: 'click',
+            s: 'selectedItem',
+            toValFrom: '.dataset.val'
+        }
+    },
+    '$ count': 0
+}, propagator);
+```
 
 
 

@@ -130,8 +130,22 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
 
 export interface ModificationUnitOfWork<TProps, TMethods>{
     on: string,
+    /**
+     * Increment
+     */
     inc?: keyof TProps & string,
+    /**
+     * Increment by specified number, or by specified property coming from matching element
+     */
     byAmt?: number | string,
+    //TODO
+    /**
+     * Set this prop
+     */
+    s?: keyof TProps & string,
+    to?: any,
+    toValFrom?: string;
+    toggle?: keyof TProps & string,
 }
 
 export interface QuenitOfWork<TProps, TMethods> extends UnitOfWork<TProps, TMethods>{
