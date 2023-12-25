@@ -3,8 +3,9 @@ export class Mod {
     constructor(mountObserver, transformer, matchingElement, m) {
         const { on } = m;
         matchingElement.addEventListener(on, async (e) => {
-            const { inc, byAmt } = m;
+            const { inc, byAmt, s } = m;
             const { model, propagator } = transformer;
+            const isPropagating = !(model instanceof EventTarget) && propagator !== undefined;
             if (inc !== undefined) {
                 let valToIncBy = 0;
                 switch (typeof byAmt) {
@@ -24,8 +25,25 @@ export class Mod {
                         throw 'NI';
                 }
                 model[inc] += valToIncBy;
-                if (!(model instanceof EventTarget) && propagator !== undefined) {
+                if (isPropagating) {
                     propagator.dispatchEvent(new Event(inc));
+                }
+            }
+            if (s !== undefined) {
+                const { toValFrom, to } = m;
+                let valToSet;
+                if (toValFrom !== undefined) {
+                    if (toValFrom[0] === '.') {
+                        const { getVal } = await import('../lib/getVal.js');
+                        valToSet = await getVal({ host: matchingElement }, toValFrom);
+                    }
+                }
+                else {
+                    throw 'NI';
+                }
+                (model[s]) = valToSet;
+                if (isPropagating) {
+                    propagator.dispatchEvent(new Event(s));
                 }
             }
         }, {
