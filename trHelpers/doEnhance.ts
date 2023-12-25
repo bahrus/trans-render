@@ -1,6 +1,6 @@
 import { MountContext, PipelineStage } from 'mount-observer/types';
 import {MountOrchestrator, Transformer, arr} from '../Transform.js';
-import {onMountStatusChange, MethodInvocationCallback, UnitOfWork} from '../types.js';
+import {onMountStatusChange, MethodInvocationCallback as EnhanceContext, UnitOfWork} from '../types.js';
 
 export async  function doEnhance<TProps, TMethods=TProps>(
     transformer: Transformer<TProps, TMethods>, 
@@ -8,7 +8,7 @@ export async  function doEnhance<TProps, TMethods=TProps>(
     type: onMountStatusChange, 
     uow: UnitOfWork<TProps, TMethods>, mountContext: MountContext, stage: PipelineStage | undefined){
     const {e} = uow;
-    const methodArg: MethodInvocationCallback<TMethods> = {
+    const methodArg: EnhanceContext<TMethods> = {
         mountContext,
         stage,
         type
