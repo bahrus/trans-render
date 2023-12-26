@@ -557,7 +557,7 @@ Other things we can do in addition to enhancing the matched elements:
 4.  Replace the element with some other content.
 
 > [!Note]
-> The method specified may be called more than once:  Once, when the element is found.  But if the element is removed from the DOM fragment, it will also be called.  The difference between the two can be determined by the third parameter, the engagement context object.  When the element is found, the context object has field type: onMount.  When the element is removed from the fragment, it has type: onDisconnect.
+> The e object has three different optional methods than can be specified:  "do", "undo" and "forget".  "do" is invoked when the matching element is encountered.  Undo is when a previously matching element no longer matches.  Forget is when a previously matching element becomes disconnected.  
 
 ### Example 6a - Single engagement
 
@@ -581,7 +581,10 @@ const model: Props & Methods = {
     num: 7,
     propName: 'test',
     hydrateInputElement:(model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
-        console.log({model, el, ctx})
+        console.log({model, el, ctx});
+    }
+    cleanupInputElement: :(model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
+        console.log({model, el, ctx});
     }
 };
 const propagator = new EventTarget();
@@ -600,6 +603,7 @@ Transform<Props, Methods>(div, model, {
             } as Partial<HTMLInputElement>,
             e: {
                 do: 'hydrateInputElement',
+                undo: 'cleanupInputElement'
                 with: {
                     beCommitted: true
                 }
