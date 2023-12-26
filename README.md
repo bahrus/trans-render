@@ -659,13 +659,13 @@ We can also specify an array of engagements:
 
 ```TypeScript
 const model = {
-    [html `<my-element></my-element`]: (model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
+    [html `<my-element></my-element>`]: (model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
         console.log({model, el, ctx});
     }
 }
 ```
 
-Then the tr would infer the engagmenet for all tags of the form:
+Then the transform would infer the engagement for all tags of the form:
 
 ```html
 <my-element></my-element>
