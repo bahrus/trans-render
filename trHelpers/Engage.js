@@ -7,9 +7,9 @@ export async function Engage(transformer, matchingElement, type, uow, mountConte
         type
     };
     const model = transformer.model;
-    const transpiledEngagements = typeof e === 'string' ? [{
+    let transpiledEngagements = typeof e === 'string' ? [{
             do: e
-        }] : arr(e);
+        }] : arr(e).map(x => typeof x === 'string' ? { do: x } : x);
     for (const enhance of transpiledEngagements) {
         const { do: d, with: w, undo, forget, be } = enhance;
         let met;

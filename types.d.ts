@@ -65,10 +65,11 @@ export interface EngagementCtx<TModel> {
     mountContext: MountContext
 }
 
+export type EngagementOrKey<TMethods> = (keyof TMethods & string) | Engagement<TMethods>;
+
 export type Engagements<TMethods> = 
-    | (keyof TMethods & string)
-    | Engagement<TMethods> 
-    | Array<Engagement<TMethods>>
+    | EngagementOrKey<TMethods>
+    | Array<EngagementOrKey<TMethods>>
 ;
 
 export interface IMountOrchestrator<TProps, TMethods = TProps>{

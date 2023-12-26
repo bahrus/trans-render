@@ -629,7 +629,31 @@ If you only need to "do" something, not "undo" or "forget about it", and you don
 
 
 
-### Example 6c - Multiple enhancements [TODO]
+### Example 6c - Multiple enhancements 
+
+We can also specify an array of engagements:
+
+```TypeScript
+{
+    e: [
+        {
+            do: 'hydrateInputElement',
+            forget: 'cleanupInputElement',
+            be: 'committed',
+            with: {
+                to: 'change'
+            }
+        },
+        'enhanceInputElement',
+        {
+            do: 'registerInputElement',
+            forget: 'cleanupInputElement',
+            be: 'counted',
+            with: 'some attribute value'
+        }
+    ]
+}
+```
 
 ## Example 7 - Conditional Logic
 

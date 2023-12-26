@@ -14,10 +14,10 @@ export async function Engage<TProps, TMethods = TProps>(
         type
     };
     const model = transformer.model as any;
-    const transpiledEngagements: Array<Engagement<TMethods>> =
+    let transpiledEngagements: Array<Engagement<TMethods>> =
         typeof e === 'string' ? [{
             do: e
-        }] : arr(e!);
+        }] : arr(e!).map(x => typeof x === 'string' ? {do: x} : x);
     for (const enhance of transpiledEngagements) {
         const { do: d, with: w, undo, forget, be } = enhance;
         let met: (keyof TMethods & string) | undefined;
