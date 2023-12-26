@@ -269,6 +269,8 @@ export type PropAttrQueryType =
     | '-' //marker
 ```
 
+We will see examples of these in use (especially in the Examples8*).
+
 ## Example 3a  Declarative Interpolation
 
 Suppose our domain object has two properties, and we need to dynamically combine them together in our UI:
@@ -736,6 +738,9 @@ Transform<Props, Methods>(div, model, {
 
 This modifies the count value of the host, incrementing by -1 if clicking the left button, by +1 if clicking on the right button.
 
+> [!Note]
+> Notice that we are using the same letter, "s" in two very different ways in this library.  In example 4 above, we saw s being used outside the m object.  In that case, we are setting properties of the target element that was matched by the css match.  Now we are seeing s being used inside the modify/mutate (m) object, which is specifically modifying the host props.  It is important to keep on eye on the context in which s is used.
+
 ### Example 8b  Elevating a value to the host
 
 ```html
@@ -823,9 +828,9 @@ Transform<Props, Methods>(form, model, {
 }, propagator);
 ```
 
-## Example 8e Hydrating with "onload" event
+## Example 8e Hydrating with "load" event
 
-A special event name - "load" is reserved for setting host properties one time only based on server rendered HTML.  It is expected that once the "ownership" of the value is passed from the server rendered HTML to the host model, other binding instructions will continue to keep them in sync via one-way binding down from the host/model to the UI.
+A special event name -- "load" -- is reserved for setting host properties one time only based on server rendered HTML.  It is expected that once the "ownership" of the value is passed from the server rendered HTML to the host model, other binding instructions will continue to keep them in sync via one-way binding down from the host/model to the UI.
 
 
 
