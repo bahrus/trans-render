@@ -55,7 +55,7 @@ export interface EngagementCtx<TModel> {
     mountContext: MountContext
 }
 
-export type EnhancementInstructions<TMethods> = 
+export type Engagements<TMethods> = 
     | (keyof TMethods & string)
     | MethodInvocation<TMethods> 
     | Array<MethodInvocation<TMethods>>
@@ -111,9 +111,9 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
      */
     i?: IfInstructions<TProps, TMethods>,
     /**
-     * enhance element, or register the found element in some way
+     * enhance / engage with element, or register the found element in some way
      */
-    e?:  EnhancementInstructions<TMethods>,
+    e?:  Engagements<TMethods>,
     /**
      * set specified property of the matching element to the (derived) value
      */

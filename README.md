@@ -533,7 +533,7 @@ Transform<Props, Actions>(form, model, {
 ```
 
 
-## Enhancing / Engaging with matching elements
+## Enhancing / Hydrating /  Engaging with matching elements
 
 What about conditionally loading blocks of HTML?  What about loops / repeating content?  
 
@@ -553,9 +553,12 @@ Other things we can do in addition to enhancing the matched elements:
 
 1.  Add a (weak) reference to the element(s)
 2.  Add a custom event listener, if [the declarative way isn't sufficient](#example-5a---adding-a-single-event-listener-handled-by-the-model).
+3.  Other hydration activities.
 
+> [!Note]
+> The method specified may be called more than once:  Once, when the element is found.  But if the element is removed from the DOM fragment, it will also be called.  The difference between the two can be determined by the third parameter, the engagement context object.  When the element is found, the context object has field type: onMount.  When the element is removed from the fragment, it has type: onDisconnect.
 
-### Example 6a - Single enhancement
+### Example 6a - Single engagement
 
 ```TypeScript
 
