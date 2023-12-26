@@ -583,7 +583,7 @@ const model: Props & Methods = {
     hydrateInputElement:(model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
         console.log({model, el, ctx});
     },
-    cleanupInputElement: :(model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
+    cleanupInputElement: (model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
         console.log({model, el, ctx});
     }
 };
@@ -654,6 +654,24 @@ We can also specify an array of engagements:
     ]
 }
 ```
+
+[TODO]  Do only if a strong use case:  Infer engagement based on the name of the method.  For example, suppose the model looks ike:
+
+```TypeScript
+const model = {
+    [html `<my-element></my-element`]: (model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
+        console.log({model, el, ctx});
+    }
+}
+```
+
+Then the tr would infer the engagmenet for all tags of the form:
+
+```html
+<my-element></my-element>
+```
+
+Could be used for defining "virtual, JSX-like" tags in the template markup, for things like loops, conditionals, etc.
 
 ## Example 7 - Conditional Logic
 
@@ -877,6 +895,9 @@ Transform<Props, Methods>(form, model, {
     '# stringValue': 0,
 }, propagator);
 ```
+
+[TODO] Support shortcuts (assume value of on based on context allow for string value that makes lots of assumptions, etc.)  Only do this if a good use case presents itself.  Support "tvf" abbreviation for toValFrom if it comes up repeatedly in some use cases.
+
 
 ### Example 8e - Computed value
 
