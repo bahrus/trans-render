@@ -41,7 +41,7 @@ export type Derivative<TProps, TMethods> =
 ;
 //#endregion
 
-export interface MethodInvocation<TMethods>{
+export interface Engagement<TMethods>{
     do: keyof TMethods,
     with?: any
 }
@@ -57,8 +57,8 @@ export interface EngagementCtx<TModel> {
 
 export type Engagements<TMethods> = 
     | (keyof TMethods & string)
-    | MethodInvocation<TMethods> 
-    | Array<MethodInvocation<TMethods>>
+    | Engagement<TMethods> 
+    | Array<Engagement<TMethods>>
 ;
 
 export interface IMountOrchestrator<TProps, TMethods = TProps>{
