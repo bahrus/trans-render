@@ -617,7 +617,17 @@ The method hydrateInputElement gets called once and only once per input element 
 
 The MethodInvocationCallback interface can be seen [here](https://github.com/bahrus/trans-render/blob/baseline/types.d.ts).
 
-### Example 6b Simple enhancement / registration
+### Example 6b Enhancement / Engagement / Hydration shortcut
+
+If you only need to "do" something, not "undo" or "forget about it", and you don't need to pass in any "with" parameters, just specify the method:
+
+```TypeScript
+{
+    e: 'hydrateInputElement'
+}
+```
+
+
 
 ### Example 6c - Multiple enhancements [TODO]
 
@@ -755,7 +765,7 @@ Transform<Props, Methods>(div, model, {
 This modifies the count value of the host, incrementing by -1 if clicking the left button, by +1 if clicking on the right button.
 
 > [!Note]
-> Notice that we are using the same letter, "s" in two very different ways in this library.  In [example 4](#example-4-setting-props-of-the-element) above, we saw "s" being used outside the "m" object.  In that case, we are setting properties of the target (html) element that was matched by the css match.  *Now* we are seeing "s" being used inside the modify/mutate (m) object, which is specifically modifying the host props.  It is important to keep a an alert eye on the context in which "s" is used, in other words.
+> Notice that we are using the same letter, "s" in two very different ways in this library.  In [example 4](#example-4-setting-props-of-the-element) above, we saw "s" being used outside the "m" object.  In that case, we are setting properties of the target (html) element that was matched by the css match.  *Now* we are seeing "s" being used inside the modify/mutate (m) object, which is specifically modifying the host props.  It is important to keep an alert eye on the context in which "s" is being used, in other words.
 
 ### Example 8b  Elevating a value to the host
 

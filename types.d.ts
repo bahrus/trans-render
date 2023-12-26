@@ -149,11 +149,25 @@ export interface ModificationUnitOfWork<TProps, TMethods>{
      * Increment by specified number, or by specified property coming from matching element
      */
     byAmt?: number | string,
-    //TODO
     /**
-     * Set this prop
+     * Set this prop on the host
      */
     s?: keyof TProps & string,
+    /**
+     * [TODO] -- Set Custom State --only available for xtal-element
+     */
+    ss?: string,
+    /**
+     * [TODO] -- Set attribute
+     */
+    sa?: string,
+    /**
+     * [TODO] -- Set enhancement property / attribute -- only availabe for be-enhanced.
+     */
+    se?: string,
+    /**
+     * [TODO]  Set hardcoded value
+     */
     to?: any,
     toValFrom?: string | ValueFromElement<TProps, TMethods>;
     toggle?: keyof TProps & string,
