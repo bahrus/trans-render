@@ -48,6 +48,11 @@ export interface Engagement<TMethods>{
     undo?: keyof TMethods & string,
     /** Invoked when a previously matching element is disconnected. */
     forget?: keyof TMethods & string,
+    /**
+     * Can be used for any kind of label, but most common use is for specifying a behavior/enhancement
+     * to attach.
+     */
+    be?: string,
     with?: any
 }
 
@@ -162,7 +167,7 @@ export interface ModificationUnitOfWork<TProps, TMethods>{
      */
     sa?: string,
     /**
-     * [TODO] -- Set enhancement property / attribute -- only availabe for be-enhanced.
+     * [TODO] -- Set enhancement property / attribute -- only available for be-enhanced.
      */
     se?: string,
     /**
