@@ -127,6 +127,12 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
      */
     m?: ModificationUnitOfWork<TProps, TMethods> | Array<ModificationUnitOfWork<TProps, TMethods>>
 }
+export type ValueFromElement<TProps, TMethods> = 
+    (
+        matchingElement: Element, 
+        transformer: ITransformer<TProps, TMethods>, 
+        mod: ModificationUnitOfWork<TProps, TMethods>
+    ) => any
 
 export interface ModificationUnitOfWork<TProps, TMethods>{
     on: string,
@@ -144,7 +150,7 @@ export interface ModificationUnitOfWork<TProps, TMethods>{
      */
     s?: keyof TProps & string,
     to?: any,
-    toValFrom?: string;
+    toValFrom?: string | ValueFromElement<TProps, TMethods>;
     toggle?: keyof TProps & string,
 }
 

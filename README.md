@@ -828,7 +828,12 @@ Transform<Props, Methods>(form, model, {
 }, propagator);
 ```
 
-## Example 8e Hydrating with "load" event
+### Example 8e - Computed value [TODO]
+
+
+
+
+## Example 8h Hydrating with "load" event
 
 A special event name -- "load" -- is reserved for setting host properties one time only based on server rendered HTML.  It is expected that once the "ownership" of the value is passed from the server rendered HTML to the host model, other binding instructions will continue to keep them in sync via one-way binding down from the host/model to the UI.
 

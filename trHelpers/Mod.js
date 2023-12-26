@@ -33,12 +33,21 @@ export class Mod {
                 const { toValFrom, to } = m;
                 let valToSet;
                 if (toValFrom !== undefined) {
-                    if (toValFrom[0] === '.') {
-                        const { getVal } = await import('../lib/getVal.js');
-                        valToSet = await getVal({ host: matchingElement }, toValFrom);
-                    }
-                    else {
-                        valToSet = matchingElement[toValFrom];
+                    switch (typeof toValFrom) {
+                        case 'string':
+                            if (toValFrom[0] === '.') {
+                                const { getVal } = await import('../lib/getVal.js');
+                                valToSet = await getVal({ host: matchingElement }, toValFrom);
+                            }
+                            else {
+                                valToSet = matchingElement[toValFrom];
+                            }
+                            break;
+                        case 'function':
+                            valToSet = toValFrom(matchingElement, transformer, m);
+                            break;
+                        default:
+                            throw 'NI';
                     }
                 }
                 else {
