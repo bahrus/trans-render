@@ -828,9 +828,13 @@ Transform<Props, Methods>(form, model, {
 }, propagator);
 ```
 
-### Example 8e - Computed value [TODO]
+### Example 8e - Computed value
 
+The "toValFrom" parameter can be a function:
 
+```TypeScript
+toValFrom: (matchingElement, transformer, modUOW) =>  (matchingElement as HTMLInputElement).value.length.toString()
+```
 
 
 ## Example 8h Hydrating with "load" event
