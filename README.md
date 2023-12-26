@@ -533,7 +533,7 @@ Transform<Props, Actions>(form, model, {
 ```
 
 
-## Enhancing an element
+## Enhancing / Engaging with matching elements
 
 What about conditionally loading blocks of HTML?  What about loops / repeating content?  
 
@@ -545,9 +545,15 @@ But more importantly, the Transform function / Transformer class provides a clea
 
 So *trans-render* views the best value-add as being able to specify, during initialization / hydration, a method that can be called, and where we can specify values to pass into that method.  This makes the trans-render extremely loosely coupled / un-opinionated.  
 
-So what follows below, example 5, extends example 4 above (just to give a bird's eye view of how this would look in context).
+So what follows below, examples 6*, extends example 4 above (just to give a bird's eye view of how this would look in context).
 
-What has been added is the "e" section, which kind of vaguely stands for "enhancements"/"event managing" callbacks.
+What has been added is the "e" section, which kind of vaguely stands for "engagement" callbacks.
+
+Other things we can do in addition to enhancing the matched elements:
+
+1.  Add a (weak) reference to the element(s)
+2.  Add a custom event listener, if [the declarative way isn't sufficient](#example-5a---adding-a-single-event-listener-handled-by-the-model).
+
 
 ### Example 6a - Single enhancement
 
@@ -561,7 +567,7 @@ interface Props{
 }
 
 interface Methods{
-    hydrateInputElement:(m:Props & Methods, el: Element, ctx: MethodInvocationCallback<Props>) => void;
+    hydrateInputElement:(m:Props & Methods, el: Element, ctx: EngagementCtx<Props>) => void;
 }
 
 const div = document.querySelector('div')!;
@@ -570,7 +576,7 @@ const model: Props & Methods = {
     rO: true,
     num: 7,
     propName: 'test',
-    hydrateInputElement:(model: Props & Methods, el: Element, ctx: MethodInvocationCallback<Props>) => {
+    hydrateInputElement:(model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
         console.log({model, el, ctx})
     }
 };
@@ -603,7 +609,9 @@ The method hydrateInputElement gets called once and only once per input element 
 
 The MethodInvocationCallback interface can be seen [here](https://github.com/bahrus/trans-render/blob/baseline/types.d.ts).
 
-### Example 6b - Multiple enhancements [TODO]
+### Example 6b Simple enhancement / registration
+
+### Example 6c - Multiple enhancements [TODO]
 
 ## Example 7 - Conditional Logic
 

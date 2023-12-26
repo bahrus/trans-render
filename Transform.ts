@@ -154,7 +154,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget im
     async doEnhance(matchingElement: Element, type: onMountStatusChange, uow: UnitOfWork<TProps, TMethods>, mountContext: MountContext, stage: PipelineStage | undefined){
         const {e} = uow;
         if(e === undefined) return
-        const {doEnhance} = await import('./trHelpers/doEnhance.js');
+        const {Engage: doEnhance} = await import('./trHelpers/Engage.js');
         await doEnhance(this, matchingElement, type, uow, mountContext, stage);
     }
 

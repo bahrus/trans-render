@@ -138,7 +138,7 @@ export class Transformer extends EventTarget {
         const { e } = uow;
         if (e === undefined)
             return;
-        const { doEnhance } = await import('./trHelpers/doEnhance.js');
+        const { Engage: doEnhance } = await import('./trHelpers/Engage.js');
         await doEnhance(this, matchingElement, type, uow, mountContext, stage);
     }
     async getDerivedVal(uow, d) {

@@ -1,5 +1,5 @@
 import { arr } from '../Transform.js';
-export async function doEnhance(transformer, matchingElement, type, uow, mountContext, stage) {
+export async function Engage(transformer, matchingElement, type, uow, mountContext, stage) {
     const { e } = uow;
     const methodArg = {
         mountContext,

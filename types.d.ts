@@ -48,7 +48,7 @@ export interface MethodInvocation<TMethods>{
 
 export type onMountStatusChange = 'onMount' | 'onDismount' | 'onDisconnect';
 
-export interface MethodInvocationCallback<TModel> {
+export interface EngagementCtx<TModel> {
     with?: any,
     type: onMountStatusChange,
     stage?: PipelineStage,
@@ -111,7 +111,7 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
      */
     i?: IfInstructions<TProps, TMethods>,
     /**
-     * enhance, for example, add event listener
+     * enhance element, or register the found element in some way
      */
     e?:  EnhancementInstructions<TMethods>,
     /**

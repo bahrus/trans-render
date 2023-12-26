@@ -33,12 +33,7 @@ Transform<Props, Methods>(div, model, {
                 type: 'number',
                 disabled: true
             } as Partial<HTMLInputElement>,
-            e: {
-                do: 'hydrateInputElement',
-                with: {
-                    beCommitted: true
-                }
-            }
+            e: 'hydrateInputElement'
         }
     ]
 }, propagator);
