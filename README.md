@@ -89,11 +89,11 @@ The critical transform definition is this snippet from above:
 }
 ```
 
-The "span" css-selector is saying watch for any span tags within the observed fragment.
+The "span" css-selector is saying "watch for any span tags within the observed fragment".
 
 The "o" parameter is specifying the list of properties to **o**bserve from the model.  The order is important, as the rest of the transform manifest will frequently reference these observed properties via the index of this array.  
 
-And in fact in this example the "d" parameter is saying "**d**erive" the span's textContent property from the value of the 0th observed property".  "0" is basically our "identity" derivation, and can actually be dropped, because it is the assumed default derivation.
+And in fact in this example the "d" parameter is saying "**d**erive the span's textContent property from the value of the 0th observed property".  "0" is basically our "identity" derivation, and can actually be dropped, because it is the assumed default derivation.
 
 The result is:
 
@@ -114,9 +114,9 @@ setTimeout(() => {
 
 ```
 
-So dynamically adding new HTML elements that match the css selector will immediately get bound, as does dispatching events matching the observed property name(s). 
+So dynamically adding new HTML elements that match the css selector will immediately get bound.
 
-We can also see the propagator in action:
+As does dispatching events matching the observed property name(s), as shown below:
 
 ```JavaScript
 //script #2
@@ -138,7 +138,7 @@ In fact this package provides some utility functions that [do just that](https:/
 
 And creating a simple utility function, modeled after "signals", that wraps updating the model and the eventType instance is quite trivial.
 
-It is quite easy to create an ES Proxy that serves as a propagator.  This package also [provides this](https://github.com/bahrus/trans-render/blob/baseline/lib/PropertyBag.ts).
+It is also quite easy to create an ES Proxy that serves as a propagator.  This package also [provides this](https://github.com/bahrus/trans-render/blob/baseline/lib/PropertyBag.ts).
 
 <!--Finally, the transformer class provides a utility method, "s" that allows for setting the value and dispatching the event in one line (think "setValue").-->
 
