@@ -15,11 +15,27 @@ export async function Engage(transformer, matchingElement, type, uow, mountConte
         case 'object':
             const es = arr(e);
             for (const enhance of es) {
-                const { do: d, with: w } = enhance;
-                model[d](model, matchingElement, {
-                    ...methodArg,
-                    with: w
-                });
+                const { do: d, with: w, undo, forget } = enhance;
+                let met;
+                switch (type) {
+                    case 'onMount': {
+                        met = d;
+                        break;
+                    }
+                    case 'onDisconnect': {
+                        met = forget;
+                        break;
+                    }
+                    case 'onDismount': {
+                        met = undo;
+                    }
+                }
+                if (met !== undefined) {
+                    model[met](model, matchingElement, {
+                        ...methodArg,
+                        with: w
+                    });
+                }
             }
             break;
     }

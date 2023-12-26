@@ -1,6 +1,6 @@
 import { MountContext, PipelineStage } from 'mount-observer/types';
 import {MountOrchestrator, Transformer, arr} from '../Transform.js';
-import {onMountStatusChange, EngagementCtx as EnhanceContext, UnitOfWork} from '../types.js';
+import {onMountStatusChange, EngagementCtx, UnitOfWork} from '../types.js';
 
 export async  function Engage<TProps, TMethods=TProps>(
     transformer: Transformer<TProps, TMethods>, 
@@ -8,7 +8,7 @@ export async  function Engage<TProps, TMethods=TProps>(
     type: onMountStatusChange, 
     uow: UnitOfWork<TProps, TMethods>, mountContext: MountContext, stage: PipelineStage | undefined){
     const {e} = uow;
-    const methodArg: EnhanceContext<TMethods> = {
+    const methodArg: EngagementCtx<TMethods> = {
         mountContext,
         stage,
         type
@@ -22,11 +22,29 @@ export async  function Engage<TProps, TMethods=TProps>(
         case 'object':
             const es = arr(e);
             for(const enhance of es){
-                const {do: d, with: w} = enhance;
-                model[d](model, matchingElement, {
-                    ...methodArg,
-                    with: w
-                });
+                const {do: d, with: w, undo, forget} = enhance;
+                let met: (keyof TMethods & string) | undefined;
+                switch(type){
+                    case 'onMount': {
+                        met = d;
+                        break;
+                    }
+                    case 'onDisconnect': {
+                        met = forget;
+                        break;
+                    }
+                    case 'onDismount': {
+                        met = undo;
+                    }
+                }
+                if(met !== undefined){
+                    model[met](model, matchingElement, {
+                        ...methodArg,
+                        with: w
+                    });
+                }
+
+
             }
             break;
     }

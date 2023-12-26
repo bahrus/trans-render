@@ -42,7 +42,12 @@ export type Derivative<TProps, TMethods> =
 //#endregion
 
 export interface Engagement<TMethods>{
-    do: keyof TMethods,
+    /** Invoked when the element is encountered. */
+    do?: keyof TMethods & string,
+    /** Invoked when a previously matching element is no longer matching. */
+    undo?: keyof TMethods & string,
+    /** Invoked when a previously matching element is disconnected. */
+    forget?: keyof TMethods & string,
     with?: any
 }
 
