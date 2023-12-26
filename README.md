@@ -352,7 +352,7 @@ Transform<Model>(div, model, {
 }, propagator);
 ```
 
-### Example 3c: Instant gratification for computed derivations
+## Example 3c: Instant gratification for computed derivations
 
 In some cases, we may want our domain object to only have stable, proven, mature functionality.  Maybe it is shared by multiple components, even across projects.
 
