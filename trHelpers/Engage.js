@@ -7,36 +7,31 @@ export async function Engage(transformer, matchingElement, type, uow, mountConte
         type
     };
     const model = transformer.model;
-    switch (typeof e) {
-        case 'string': {
-            model[e](model, matchingElement, methodArg);
-            break;
-        }
-        case 'object':
-            const es = arr(e);
-            for (const enhance of es) {
-                const { do: d, with: w, undo, forget } = enhance;
-                let met;
-                switch (type) {
-                    case 'onMount': {
-                        met = d;
-                        break;
-                    }
-                    case 'onDisconnect': {
-                        met = forget;
-                        break;
-                    }
-                    case 'onDismount': {
-                        met = undo;
-                    }
-                }
-                if (met !== undefined) {
-                    model[met](model, matchingElement, {
-                        ...methodArg,
-                        with: w
-                    });
-                }
+    const transpiledEngagements = typeof e === 'string' ? [{
+            do: e
+        }] : arr(e);
+    for (const enhance of transpiledEngagements) {
+        const { do: d, with: w, undo, forget, be } = enhance;
+        let met;
+        switch (type) {
+            case 'onMount': {
+                met = d;
+                break;
             }
-            break;
+            case 'onDisconnect': {
+                met = forget;
+                break;
+            }
+            case 'onDismount': {
+                met = undo;
+            }
+        }
+        if (met !== undefined) {
+            model[met](model, matchingElement, {
+                ...methodArg,
+                be,
+                with: w
+            });
+        }
     }
 }

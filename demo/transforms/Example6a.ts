@@ -40,8 +40,9 @@ Transform<Props, Methods>(div, model, {
             e: {
                 do: 'hydrateInputElement',
                 forget: 'cleanupInputElement',
+                be: 'committed',
                 with: {
-                    beCommitted: true
+                    to: 'change'
                 }
             }
         }

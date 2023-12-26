@@ -167,9 +167,10 @@ export interface ModificationUnitOfWork<TProps, TMethods>{
      */
     sa?: string,
     /**
-     * [TODO] -- Set enhancement property / attribute -- only available for be-enhanced.
+     * [TODO] enhance / engage the host, or register the host in some way
+     * don't implement this until a good use case is found, make sure it makes sense.
      */
-    se?: string,
+    e?:  Engagements<TMethods>,
     /**
      * [TODO]  Set hardcoded value
      */
