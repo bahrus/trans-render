@@ -582,7 +582,7 @@ const model: Props & Methods = {
     propName: 'test',
     hydrateInputElement:(model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
         console.log({model, el, ctx});
-    }
+    },
     cleanupInputElement: :(model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
         console.log({model, el, ctx});
     }
@@ -603,7 +603,7 @@ Transform<Props, Methods>(div, model, {
             } as Partial<HTMLInputElement>,
             e: {
                 do: 'hydrateInputElement',
-                undo: 'cleanupInputElement'
+                forget: 'cleanupInputElement'
                 with: {
                     beCommitted: true
                 }

@@ -8,7 +8,8 @@ interface Props{
 }
 
 interface Methods{
-    hydrateInputElement:(m:Props & Methods, el: Element, ctx: EngagementCtx<Props>) => void;
+    hydrateInputElement: (m:Props & Methods, el: Element, ctx: EngagementCtx<Props>) => void;
+    cleanupInputElement: (m:Props & Methods, el: Element, ctx: EngagementCtx<Props>) => void;
 }
 
 const div = document.querySelector('div')!;
@@ -17,6 +18,9 @@ const model: Props & Methods = {
     rO: true,
     num: 7,
     hydrateInputElement:(model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
+        console.log({model, el, ctx})
+    },
+    cleanupInputElement:(model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
         console.log({model, el, ctx})
     }
 };
@@ -35,6 +39,7 @@ Transform<Props, Methods>(div, model, {
             } as Partial<HTMLInputElement>,
             e: {
                 do: 'hydrateInputElement',
+                forget: 'cleanupInputElement',
                 with: {
                     beCommitted: true
                 }

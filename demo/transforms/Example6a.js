@@ -6,6 +6,9 @@ const model = {
     num: 7,
     hydrateInputElement: (model, el, ctx) => {
         console.log({ model, el, ctx });
+    },
+    cleanupInputElement: (model, el, ctx) => {
+        console.log({ model, el, ctx });
     }
 };
 const propagator = new EventTarget();
@@ -22,6 +25,7 @@ Transform(div, model, {
             },
             e: {
                 do: 'hydrateInputElement',
+                forget: 'cleanupInputElement',
                 with: {
                     beCommitted: true
                 }
