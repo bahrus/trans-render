@@ -736,7 +736,7 @@ Transform<Props, Methods>(div, model, {
 
 This modifies the count value of the host, incrementing by -1 if clicking the left button, by +1 if clicking on the right button.
 
-## Example 8b  Elevating a value to the host
+### Example 8b  Elevating a value to the host
 
 ```html
 <div>
@@ -762,7 +762,7 @@ Transform<Props, Methods>(div, model, {
 }, propagator);
 ```
 
-## Example 8c Toggling a host property
+### Example 8c Toggling a host property
 
 ```html
 <div>
@@ -786,7 +786,7 @@ Transform<Props, Methods>(div, model, {
 }, propagator);
 ```
 
-## Example 8d Multiple modifications
+### Example 8d Multiple modifications
 
 ```html
 <form>
@@ -823,7 +823,11 @@ Transform<Props, Methods>(form, model, {
 }, propagator);
 ```
 
-## Example 8e Hydratng with "onload" event
+## Example 8e Hydrating with "onload" event
+
+A special event name - "load" is reserved for setting host properties one time only based on server rendered HTML.  It is expected that once the "ownership" of the value is passed from the server rendered HTML to the host model, other binding instructions will continue to keep them in sync via one-way binding down from the host/model to the UI.
+
+
 
 
 
