@@ -49,18 +49,18 @@ import {RHS} from '../types';
 // }
 
 
-// export type matchTypes = 'parts'| 'part' | 'id' | 'classes' | 'class' | 'attribs' | 'attrib' | 'elements' | 'element' | 'names' | 'name' | 'props' | 'placeholders';
+export type matchTypes = 'parts'| 'part' | 'id' | 'classes' | 'class' | 'attribs' | 'attrib' | 'elements' | 'element' | 'names' | 'name' | 'props' | 'placeholders';
 
-// export interface QueryInfo{
-//     query: string;
-//     match: string;
-//     attrib?: string;
-//     lhsProp?: string;
-//     first?: boolean;
-//     verb?: string;
-//     havingAlso?: QueryInfo[];
-//     havingInner?: QueryInfo;
-// }
+export interface QueryInfo{
+    query: string;
+    match: string;
+    attrib?: string;
+    lhsProp?: string;
+    first?: boolean;
+    verb?: string;
+    havingAlso?: QueryInfo[];
+    havingInner?: QueryInfo;
+}
 
 // export interface RenderOptions{
 //     prepend?: boolean;
