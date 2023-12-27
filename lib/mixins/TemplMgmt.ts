@@ -21,7 +21,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         new DoStyles(this, base, root, compiledStyleMap, modernBrowser);
             
     }
-    async cloneTemplate({shadowRootMode, shadowRoot, mainTemplate, mntCnt, hydratingTransform, transform}: TemplMgmtBase){
+    async cloneTemplate({shadowRootMode, shadowRoot, mainTemplate, mntCnt}: TemplMgmtBase){
         let root = this as any;
         if(shadowRootMode){
             if(shadowRoot === null){
@@ -87,7 +87,8 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
             //await MainTransforms(this as any as TemplMgmtBaseMixin & HTMLElement, base, fragment as DocumentFragment);
         }
         if(homeInOn){
-            const {HomeIn} = await import('./HomeIn.js');
+            throw 'NI';
+            //const {HomeIn} = await import('./HomeIn.js');
             //TODO
         }
         if(this.#needToAppendClone){
@@ -103,18 +104,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         
         this.clonedTemplate = undefined;
     }
-    initUnsafeTCnt({}: this){
-        this.unsafeTCount = 0;
-    }
-    async doComplexTR({unsafeTransform, shadowRoot}: this){
-        const ctx: RenderContext = {
-            host: this,
-            match: unsafeTransform as any as Matches,
-        }
-        const fragment = shadowRoot || this;
-        const {TR} = await import('../TR.js');
-        TR.transform(fragment, ctx);
-    }
+
 
 }
 
@@ -137,18 +127,6 @@ export const propInfo: Partial<{[key in keyof TemplMgmtProps]: PropInfo}> = {
     xform:{
         parse: false,
     },
-    // hydratingTransform:{
-    //     parse: false,
-    // },
-    // unsafeTransform:{
-    //     parse: false,
-    // },
-    // unsafeTCount: {
-    //     parse: false,
-    // },
-    // mainTemplate: {
-    //     parse: false,
-    // },
     styles: {
         parse: false,
     }
