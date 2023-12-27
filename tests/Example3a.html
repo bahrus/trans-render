@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 3a</title>
+    <script type=importmap>
+        {
+            "imports": {
+                "mount-observer/": "../../node_modules/mount-observer/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <span></span>
+    </div>
+    <section id=target></section>
+    <script type=module>
+        import './Example3a.js';
+    </script>
+        <script>
+            function runTest(){
+                if(document.querySelector('span').textContent === 'msg1: bye, msg2: world'){
+                    target.setAttribute('mark', 'good');
+                }
+            }
+            setTimeout(() => {
+                runTest();
+            }, 3000);
+        </script>
+</body>
+</html>

@@ -159,35 +159,8 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget im
     }
 
     async getDerivedVal(uow: UnitOfWork<TProps, TMethods>, d: Derivative<TProps, TMethods>){
-        switch(typeof d){
-            case 'number':{
-                return await this.getNumberUVal(uow, d);
-            }
-            case 'function':{
-                const {model} = this;
-                return await d(model);
-            }
-            case 'object': {
-                throw 'NI';
-                // if(Array.isArray(d)){
-                //     const val = transformer.getArrayVal(uow, d);
-                //     if(s !== undefined){
-                //         (<any>matchingElement)[s as string] = val;
-                //     }else{
-                //         transformer.setPrimeValue(matchingElement, val);
-                //     }
-                    
-                // }else{
-                //     const val = await transformer.getNestedObjVal(uow, d);
-                //     Object.assign(matchingElement, val);
-                // }
-            }
-            case 'string': {
-                const {model} = this;
-                return (<any>model[d])(model);
-            }
-    
-        }
+        const {getDerivedVal} = await import('./trHelpers/getDerivedVal.js');
+        return await getDerivedVal(this, uow, d);
     }
 
     async getNestedObjVal(uow: UnitOfWork<TProps, TMethods>, u: ObjectExpression<TProps, TMethods>){

@@ -75,6 +75,7 @@
   },
   "files": [
     "lib/*.js",
+    "lib/mixins/*.js",
     "lib/*.d.ts",
     "trHelpers/*.js",
     "xslt/*.js",
