@@ -269,7 +269,7 @@ export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropIn
     propDefaults?: Partial<{[key in keyof MCProps]: MCProps[key]}>;
     propInfo?: Partial<{[key in keyof MCProps]: TPropInfo}>
     derivedProps?: (keyof MCProps & string)[];
-    actions?: Partial<{[key in keyof MCActions]: TAction | keyof MCProps}> 
+    actions?: Partial<{[key in keyof MCActions & string]: TAction | keyof MCProps}> 
     propChangeMethod?: keyof MCActions;
     style?: Partial<CSSStyleDeclaration>;
     /**

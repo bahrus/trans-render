@@ -1,12 +1,13 @@
 import {TemplMgmt, TemplMgmtProps, TemplMgmtActions, beTransformed} from '../lib/mixins/TemplMgmt.js';
 import {CE} from '../froop/CE.js';
+import { RHS } from '../types.js';
 
 export interface DTRCounterProps {
     count: number;
 } 
 
 
-const ce = new CE<DTRCounterProps & TemplMgmtProps<DTRCounterProps & HTMLElement>, TemplMgmtActions>({
+const ce = new CE<DTRCounterProps  & TemplMgmtProps, TemplMgmtActions>({
     config:  {
         tagName:'dtr-counter',
         actions:{
@@ -23,7 +24,7 @@ const ce = new CE<DTRCounterProps & TemplMgmtProps<DTRCounterProps & HTMLElement
                         byAmt: '.dataset.d',
                     }
                 }
-            },
+            } as Partial<{[key: string]: RHS<DTRCounterProps, TemplMgmtActions>}> as any,
             shadowRootMode: 'open',
             styles: String.raw `
 <style>
