@@ -374,7 +374,7 @@ export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLEleme
     clonedTemplate?: Node | undefined;
     shadowRootMode?: 'open' | 'closed' | undefined | false;
     xform: Partial<{[key: string]: RHS<MCProps, MCMethods>}>,
-    xformImpl?: ToTransformer<MCProps, MCMethods>,
+    xformImpl?: () => Promise<ToTransformer<MCProps, MCMethods>>,
     mntCnt?: number;
     skipTemplateClone?: boolean;
     homeInOn?: Partial<{[key in keyof MCProps]: Partial<{[key: string]: RHS<MCProps, MCMethods>}>}>;
