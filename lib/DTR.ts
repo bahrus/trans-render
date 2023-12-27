@@ -1,6 +1,6 @@
-import {TR} from './TR.js';
+import {TR} from './void/TR.js';
 import {RenderContext} from './types';
-export {TR} from './TR.js';
+export {TR} from './void/TR.js';
 //declare const Sanitizer: any;
 
 const propSplitterRegExp = /[\|\.\s\?]/;

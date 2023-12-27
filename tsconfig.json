@@ -15,7 +15,7 @@
 		"lib/mixins/*",
 		"xslt/*",
 		"froop/*"
-, "demo/transforms/enhance/Example5.js", "demo/transforms/Example6a.ts"	],
+, "demo/transforms/enhance/Example5.js", "demo/transforms/Example6a.ts", "lib/void/TR.ts"	],
 	"exclude":[
 		"build",
 		"bower_components",
