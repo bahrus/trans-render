@@ -8,18 +8,28 @@ const ce = new CE({
         },
         propDefaults: {
             count: 30,
-            hydratingTransform: {
-                buttonElements: [{}, { click: {
-                            prop: 'count',
-                            vft: 'dataset.d',
-                            plusEq: true,
-                            parseValAs: 'int',
-                        } }]
+            xform: {
+                '% count': 0,
+                "button": {
+                    m: {
+                        on: 'click',
+                        inc: 'count',
+                        byAmt: '.dataset.d',
+                    }
+                }
             },
+            // hydratingTransform: {
+            //     buttonElements: [{}, {click:{
+            //         prop:'count',
+            //         vft: 'dataset.d',
+            //         plusEq: true,
+            //         parseValAs: 'int',
+            //     }}]
+            // },
             shadowRootMode: 'open',
-            transform: {
-                countPart: '.count.toLocaleString|'
-            },
+            // transform: {
+            //     countPart: '.count.toLocaleString|'
+            // },
             styles: String.raw `
 <style>
     :host{

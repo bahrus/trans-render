@@ -1,5 +1,5 @@
 //import { DTR } from '../DTR.js';
-import { RenderContext, TemplMgmtBase, TemplMgmtProps, Action, Matches, PropInfo } from '../types.js';
+import { TemplMgmtBase, TemplMgmtProps, Action,  PropInfo } from '../types.js';
 export {TemplMgmtProps, TemplMgmtActions, Action, PropInfo} from '../types.js';
 
 export type TemplMgmtBaseMixin = {new(): TemplMgmtBase};
@@ -71,7 +71,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
     async doTemplMount(base: TemplMgmtBase){
         if(this.#mounted) return;
         this.#mounted = true;
-        const {hydratingTransform, transform, mntCnt, clonedTemplate, shadowRootMode, DTRCtor, homeInOn} = base;
+        const {xform, mntCnt, clonedTemplate, shadowRootMode, homeInOn} = base;
         const fragment = clonedTemplate === undefined ? 
             !shadowRootMode ? this : this.shadowRoot!
             : clonedTemplate as DocumentFragment;
@@ -81,12 +81,14 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         }
         
         await restore(fragment as DocumentFragment);
-        if(hydratingTransform || transform){
-            const {MainTransforms} = await import('./MainTransforms.js');
-            await MainTransforms(this as any as TemplMgmtBaseMixin & HTMLElement, base, fragment as DocumentFragment);
+        if(xform){
+            const {Transform} = await import('../../Transform.js');
+            Transform(fragment, this, xform, (<any>this).xtalState);
+            //await MainTransforms(this as any as TemplMgmtBaseMixin & HTMLElement, base, fragment as DocumentFragment);
         }
         if(homeInOn){
             const {HomeIn} = await import('./HomeIn.js');
+            //TODO
         }
         if(this.#needToAppendClone){
             const root = !shadowRootMode ? this : this.shadowRoot!;
@@ -132,18 +134,21 @@ export const propInfo: Partial<{[key in keyof TemplMgmtProps]: PropInfo}> = {
     mntCnt:{
         parse: false,
     },
-    hydratingTransform:{
+    xform:{
         parse: false,
     },
-    unsafeTransform:{
-        parse: false,
-    },
-    unsafeTCount: {
-        parse: false,
-    },
-    mainTemplate: {
-        parse: false,
-    },
+    // hydratingTransform:{
+    //     parse: false,
+    // },
+    // unsafeTransform:{
+    //     parse: false,
+    // },
+    // unsafeTCount: {
+    //     parse: false,
+    // },
+    // mainTemplate: {
+    //     parse: false,
+    // },
     styles: {
         parse: false,
     }
@@ -153,14 +158,14 @@ export const beMounted = {
     doTemplMount: {
         ifAllOf: ['clonedTemplate'],
         ifNoneOf: ['mntCnt'],
-        ifKeyIn: ['transform'],
+        ifKeyIn: ['xform'],
         async: true,
     } as Action<TemplMgmtProps>,
 }
 
 export const beTransformed = {
-    initUnsafeTCnt: 'unsafeTransform',
-    doComplexTR: 'unsafeTCount',
+    //initUnsafeTCnt: 'unsafeTransform',
+    //doComplexTR: 'unsafeTCount',
     ...beCloned,
     ...beMounted
 };
