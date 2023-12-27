@@ -1,7 +1,7 @@
 import {PropertyBag} from './PropertyBag.js';
 import {getQuery} from './specialKeys.js';
 import { upSearch } from './upSearch.js';
-import {ICtxNav, Islet, ExpectedCamelQry} from './types';
+import {ICtxNav, ExpectedCamelQry} from './types';
 
 export class CtxNav<T = any> implements ICtxNav{
 
