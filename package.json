@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.712",
+  "version": "0.0.713",
   "description": "Instantiate an HTML Template",
   "main": "Transform.js",
   "module": "Transform.js",
@@ -82,7 +82,6 @@
     "froop/*.d.ts",
     "*.js",
     "*.d.ts"
-
   ],
   "dependencies": {
     "mount-observer": "0.0.5"
