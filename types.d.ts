@@ -214,10 +214,12 @@ export interface AddEventListener<TProps, TMethods>{
     options?: boolean | EventListenerOptions, 
 }
 
+export type XForm<TProps, TMethods> = Partial<{[key: string]: RHS<TProps, TMethods>}>
+
 export interface ITransformer<TProps, TMethods>{
     target: TransformerTarget,
     model: TProps & TMethods,
-    xform: Partial<{[key: string]: RHS<TProps, TMethods>}>,
+    xform: XForm<TProps, TMethods>,
     propagator?: EventTarget,
     //s(p: keyof TProps, val: any): void;
 }

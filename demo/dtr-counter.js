@@ -15,7 +15,7 @@ const ce = new CE({
                         on: 'click',
                         inc: 'count',
                         byAmt: '.dataset.d',
-                    }
+                    },
                 }
             },
             shadowRootMode: 'open',
