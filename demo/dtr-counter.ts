@@ -1,6 +1,6 @@
 import {TemplMgmt, TemplMgmtProps, TemplMgmtActions, beTransformed} from '../lib/mixins/TemplMgmt.js';
 import {CE} from '../froop/CE.js';
-import { RHS, XForm } from '../types.js';
+import { XForm } from '../types.js';
 
 export interface DTRCounterProps {
     count: number;

@@ -74,9 +74,15 @@
     "./xslt/swap.js": "./xslt/swap.js"
   },
   "files": [
-    "lib/*",
-    "xslt/*",
-    "froop/*"
+    "lib/*.js",
+    "lib/*.d.ts",
+    "trHelpers/*.js",
+    "xslt/*.js",
+    "froop/*.js",
+    "froop/*.d.ts",
+    "*.js",
+    "*.d.ts"
+
   ],
   "dependencies": {
     "mount-observer": "0.0.5"

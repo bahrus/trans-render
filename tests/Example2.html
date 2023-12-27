@@ -7,7 +7,7 @@
     <script type=importmap>
         {
             "imports": {
-                "mount-observer/": "../node_modules/mount-observer/"
+                "mount-observer/": "../../node_modules/mount-observer/"
             }
         }
     </script>
@@ -16,9 +16,19 @@
     <form>
         <input name=greeting>
     </form>
-
+    <div id=target></div>
     <script type=module>
         import './Example2.js';
+    </script>
+    <script>
+        function runTest(){
+            if(document.querySelector('input').value === 'bye'){
+                target.setAttribute('mark', 'good');
+            }
+        }
+        setTimeout(() => {
+            runTest();
+        }, 3000);
     </script>
 </body>
 </html>
