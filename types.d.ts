@@ -221,5 +221,11 @@ export interface ITransformer<TProps, TMethods>{
     model: TProps & TMethods,
     xform: XForm<TProps, TMethods>,
     propagator?: EventTarget,
-    //s(p: keyof TProps, val: any): void;
 }
+
+export type ToTransformer<TProps, TMethods> = (
+    target: TransformerTarget, 
+    model: TProps & TMethods,
+    xform: XForm<TProps, TMethods>,
+    propagator?: EventTarget
+) => ITransformer<TProps, TMethods>;

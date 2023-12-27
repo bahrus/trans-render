@@ -12,6 +12,7 @@ try{
     modernBrowser = ((<any>sheet).replaceSync !== undefined);
 }catch{}
 export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends superclass{
+    
     #repeatVisit = false;
     #isDeclarativeShadowDOM = false;
     #needToAppendClone = false;
@@ -71,7 +72,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
     async doTemplMount(base: TemplMgmtBase){
         if(this.#mounted) return;
         this.#mounted = true;
-        const {xform, mntCnt, clonedTemplate, shadowRootMode, homeInOn} = base;
+        const {xform, xformImpl, mntCnt, clonedTemplate, shadowRootMode, homeInOn} = base;
         const fragment = clonedTemplate === undefined ? 
             !shadowRootMode ? this : this.shadowRoot!
             : clonedTemplate as DocumentFragment;
@@ -82,8 +83,13 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         
         await restore(fragment as DocumentFragment);
         if(xform){
-            const {Transform} = await import('../../Transform.js');
-            Transform(fragment, this, xform, (<any>this).xtalState);
+            if(xformImpl !== undefined){
+                xformImpl(fragment, this, xform, (<any>this).xtalState);
+            }else{
+                const {Transform} = await import('../../Transform.js');
+                Transform(fragment, this, xform, (<any>this).xtalState);
+            }
+
             //await MainTransforms(this as any as TemplMgmtBaseMixin & HTMLElement, base, fragment as DocumentFragment);
         }
         if(homeInOn){
