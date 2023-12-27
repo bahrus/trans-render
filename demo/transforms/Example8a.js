@@ -1,6 +1,6 @@
 import { Transform } from '../../Transform.js';
 const model = {
-    count: 30,
+    count: 30000,
 };
 const div = document.querySelector('div');
 const propagator = new EventTarget();

@@ -1,75 +1,76 @@
-export interface RenderContextEndUserProps<T = Element, TItem = any>{
-    shadowPeer?: Element | undefined;
-    host?: any | undefined;
-    hostController?: any;
-    match?: Matches;
-    make?: CSSSelectorBeHavingMap;
-    autoMatchMethods?: boolean; //TODO
+import {RHS} from '../types';
+// export interface RenderContextEndUserProps<T = Element, TItem = any>{
+//     shadowPeer?: Element | undefined;
+//     host?: any | undefined;
+//     hostController?: any;
+//     match?: Matches;
+//     make?: CSSSelectorBeHavingMap;
+//     autoMatchMethods?: boolean; //TODO
 
-}
+// }
 
-export interface BeHaving<TEndUserProps = any> {
-    be?: string,
-    beAssigned?: any, //Untested
-    having?: TEndUserProps | undefined,
-    waitForResolved?: boolean,
-    waitForResolvedIfLoaded?: boolean, //Untested
-    beDeepMerged?: any, //Untested
-}
+// export interface BeHaving<TEndUserProps = any> {
+//     be?: string,
+//     beAssigned?: any, //Untested
+//     having?: TEndUserProps | undefined,
+//     waitForResolved?: boolean,
+//     waitForResolvedIfLoaded?: boolean, //Untested
+//     beDeepMerged?: any, //Untested
+// }
 
-export type CSSSelectorBeHavingMap = {[key: string]: BeHaving | BeHaving[]}
+//export type CSSSelectorBeHavingMap = {[key: string]: BeHaving | BeHaving[]}
 
-export interface Attachable{
-    attach(target: Element): Promise<void>;
-}
+// export interface Attachable{
+//     attach(target: Element): Promise<void>;
+// }
 
-export interface RenderContext<T = Element, TItem = any> extends RenderContextEndUserProps<T, TItem>, getValArg {
-    ctx?: RenderContext | undefined;
-    transform?: (sourceOrTemplate: HTMLElement | DocumentFragment, ctx: RenderContext, target?: HTMLElement | DocumentFragment) => Promise<RenderContext<T>>;
-    idx?: number;
-    target?: T | null;
-    targetProp?: string;
-    options?: RenderOptions | undefined;
-    attrib?: string | null;
-    name?: string | null;
-    val?: string | null;
-    rhs?: any;
-    depDeclarations?: Set<string>;
-    key?: string;
-    queryCache?: WeakMap<Element | DocumentFragment, {[key: string]: NodeListOf<Element>}>;
-    abort?: boolean | undefined;
-    // templateIds?: string[];
-    queryInfo?: QueryInfo;
-    timestampKey?: string;
-    self?: Transformer;
-    $0?: Element;
-    trace?: boolean;
+// export interface RenderContext<T = Element, TItem = any> extends RenderContextEndUserProps<T, TItem>, getValArg {
+//     ctx?: RenderContext | undefined;
+//     transform?: (sourceOrTemplate: HTMLElement | DocumentFragment, ctx: RenderContext, target?: HTMLElement | DocumentFragment) => Promise<RenderContext<T>>;
+//     idx?: number;
+//     target?: T | null;
+//     targetProp?: string;
+//     options?: RenderOptions | undefined;
+//     attrib?: string | null;
+//     name?: string | null;
+//     val?: string | null;
+//     rhs?: any;
+//     depDeclarations?: Set<string>;
+//     key?: string;
+//     queryCache?: WeakMap<Element | DocumentFragment, {[key: string]: NodeListOf<Element>}>;
+//     abort?: boolean | undefined;
+//     // templateIds?: string[];
+//     queryInfo?: QueryInfo;
+//     timestampKey?: string;
+//     self?: Transformer;
+//     $0?: Element;
+//     trace?: boolean;
 
-}
+// }
 
 
-export type matchTypes = 'parts'| 'part' | 'id' | 'classes' | 'class' | 'attribs' | 'attrib' | 'elements' | 'element' | 'names' | 'name' | 'props' | 'placeholders';
+// export type matchTypes = 'parts'| 'part' | 'id' | 'classes' | 'class' | 'attribs' | 'attrib' | 'elements' | 'element' | 'names' | 'name' | 'props' | 'placeholders';
 
-export interface QueryInfo{
-    query: string;
-    match: string;
-    attrib?: string;
-    lhsProp?: string;
-    first?: boolean;
-    verb?: string;
-    havingAlso?: QueryInfo[];
-    havingInner?: QueryInfo;
-}
+// export interface QueryInfo{
+//     query: string;
+//     match: string;
+//     attrib?: string;
+//     lhsProp?: string;
+//     first?: boolean;
+//     verb?: string;
+//     havingAlso?: QueryInfo[];
+//     havingInner?: QueryInfo;
+// }
 
-export interface RenderOptions{
-    prepend?: boolean;
+// export interface RenderOptions{
+//     prepend?: boolean;
     
-}
+// }
 
 
-export interface PMDo{
-    do(ctx: RenderContext): void;
-}
+// export interface PMDo{
+//     do(ctx: RenderContext): void;
+// }
 
 
 export type PropSettings<T extends Partial<HTMLElement> = HTMLElement, HostProps = any> = {
@@ -347,34 +348,36 @@ export type PropChangeMoment = 'v' | '-a' | '+a' | '+qr' | '+qm';
 
 export type PropChangeMethod = (self: EventTarget, pci: PropChangeInfo, moment: PropChangeMoment) => boolean;
 
-export type RHS<MCProps extends Partial<HTMLElement> = HTMLElement> = 
-    string | boolean 
-    | PSettings<MCProps> | PESettings<MCProps> | PEASettings<MCProps> 
-    | ConditionalSettings<MCProps>
-    | {[key: string]: Matches}
-;
+// export type RHS<MCProps extends Partial<HTMLElement> = HTMLElement> = 
+//     string | boolean 
+//     | PSettings<MCProps> | PESettings<MCProps> | PEASettings<MCProps> 
+//     | ConditionalSettings<MCProps>
+//     | {[key: string]: Matches}
+// ;
 
-export type Matches<MCProps extends Partial<HTMLElement> = HTMLElement> = {[key: string]: RHS<MCProps>};
+// export type Matches<MCProps extends Partial<HTMLElement> = HTMLElement> = {[key: string]: RHS<MCProps>};
 
-export interface TransformPacket<MCProps extends Partial<HTMLElement> = HTMLElement> {
-    hydratingTransform?: Matches;
-    transform?: Matches<MCProps> | Matches<MCProps>[];
-    make?: CSSSelectorBeHavingMap;
-    unsafeTransform?: {[key: string]: (ctx: RenderContext) => any};
-    DTRCtor?: any;
-    beJoinable?: boolean;
-}
+// export interface TransformPacket<MCProps extends Partial<HTMLElement> = HTMLElement, TMethods = MCProps> {
 
-export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLElement> extends TransformPacket<MCProps>{
+//     // hydratingTransform?: Matches;
+//     // transform?: Matches<MCProps> | Matches<MCProps>[];
+//     //make?: CSSSelectorBeHavingMap;
+//     //unsafeTransform?: {[key: string]: (ctx: RenderContext) => any};
+//     //DTRCtor?: any;
+//     //beJoinable?: boolean;
+// }
+
+export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLElement, MCMethods = MCProps>{
     mainTemplate?: HTMLTemplateElement | string;
     unsafeTCount: number;
     styles?: CSSStyleSheet[] | string;
     clonedTemplate?: Node | undefined;
     shadowRootMode?: 'open' | 'closed' | undefined | false;
-    renderOptions?: RenderOptions;
+    xform: Partial<{[key: string]: RHS<MCProps, MCMethods>}>,
+    //renderOptions?: RenderOptions;
     mntCnt?: number;
     skipTemplateClone?: boolean;
-    homeInOn?: Partial<{[key in keyof MCProps]: TransformPacket}>;
+    homeInOn?: Partial<{[key in keyof MCProps]: Partial<{[key: string]: RHS<MCProps, MCMethods>}>}>;
 }
 
 export interface TemplMgmtActions{
@@ -384,24 +387,24 @@ export interface TemplMgmtActions{
 
 export interface TemplMgmtBase extends HTMLElement, TemplMgmtProps, TemplMgmtActions{}
 
-export interface Transformer{
-    transform(fragment: Element | DocumentFragment | Element[], fragmentManager?: Element): Promise<RenderContext>;
-    flushCache(): void;
-    getDefaultProp(target: any): string;
-    do_angle_bracket(ctx: RenderContext): void;
-    ctx: RenderContext;
-}
+// export interface Transformer{
+//     transform(fragment: Element | DocumentFragment | Element[], fragmentManager?: Element): Promise<RenderContext>;
+//     flushCache(): void;
+//     getDefaultProp(target: any): string;
+//     do_angle_bracket(ctx: RenderContext): void;
+//     ctx: RenderContext;
+// }
 
 export interface ITSChecker{
     notChanged(host: Element, fragment: Element | DocumentFragment): boolean;
 }
 
-export interface ITx{
-    transform(): Promise<void>;
-    match?: Matches;
-    make?: CSSSelectorBeHavingMap;
-    scope: Scope;
-}
+// export interface ITx{
+//     transform(): Promise<void>;
+//     match?: Matches;
+//     make?: CSSSelectorBeHavingMap;
+//     scope: Scope;
+// }
 
 export type TargetTuple = 
       /**
@@ -676,40 +679,40 @@ export type AffectOptions =
 //     do: HydrateAction[]
 // }
 
-export interface IsletEndUserProps {
-    debug?: boolean,
-    transform?: Matches,
-    //hydrate : string | HydrateOptions | HydrateOptions[],
-    hydratingTransform?: Matches,
-    /**
-     * If not specified, will default to .
-     * 
-     */
-    observe?: 'beScoped' | 'xtalState' | '.',
-    /**
-     * Defaults to beScoped
-     */
-    of?: '.' | 'host' | 'beScoped',
-    /**
-     * CtxNav query to specify the **default** target which will be affected during event handling.
-     * There are many opportunities to override this default.
-     * If not specified, will default to host.
-     * 
-    **/
-    affect?: AffectOptions,
-}
-export interface Islet extends IsletEndUserProps {
+// export interface IsletEndUserProps {
+//     debug?: boolean,
+//     transform?: Matches,
+//     //hydrate : string | HydrateOptions | HydrateOptions[],
+//     hydratingTransform?: Matches,
+//     /**
+//      * If not specified, will default to .
+//      * 
+//      */
+//     observe?: 'beScoped' | 'xtalState' | '.',
+//     /**
+//      * Defaults to beScoped
+//      */
+//     of?: '.' | 'host' | 'beScoped',
+//     /**
+//      * CtxNav query to specify the **default** target which will be affected during event handling.
+//      * There are many opportunities to override this default.
+//      * If not specified, will default to host.
+//      * 
+//     **/
+//     affect?: AffectOptions,
+// }
+// export interface Islet extends IsletEndUserProps {
     
-    islet: (inp: any, ctxNav: ICtxNav) => any,
-    isletDependencies?: string[],
-    transformDependencies?: Set<string>,
-    transformer?: Transformer
-}
+//     islet: (inp: any, ctxNav: ICtxNav) => any,
+//     isletDependencies?: string[],
+//     transformDependencies?: Set<string>,
+//     transformer?: Transformer
+// }
 
-export interface TransformJoinEvent {
-    match?: Matches,
-    acknowledged?: boolean,
-}
+// export interface TransformJoinEvent {
+//     match?: Matches,
+//     acknowledged?: boolean,
+// }
 
 export interface ICTXNavRecursive<T = any>{
     $?: T;

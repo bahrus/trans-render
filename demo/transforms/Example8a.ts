@@ -7,7 +7,7 @@ interface Methods{
     
 }
 const model: Props & Methods = {
-    count: 30,
+    count: 30000,
 }
 const div = document.querySelector('div')!;
 
