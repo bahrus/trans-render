@@ -18,18 +18,7 @@ const ce = new CE({
                     }
                 }
             },
-            // hydratingTransform: {
-            //     buttonElements: [{}, {click:{
-            //         prop:'count',
-            //         vft: 'dataset.d',
-            //         plusEq: true,
-            //         parseValAs: 'int',
-            //     }}]
-            // },
             shadowRootMode: 'open',
-            // transform: {
-            //     countPart: '.count.toLocaleString|'
-            // },
             styles: String.raw `
 <style>
     :host{

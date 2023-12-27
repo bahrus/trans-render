@@ -142,8 +142,6 @@ export const beMounted = {
 }
 
 export const beTransformed = {
-    //initUnsafeTCnt: 'unsafeTransform',
-    //doComplexTR: 'unsafeTCount',
     ...beCloned,
     ...beMounted
 };

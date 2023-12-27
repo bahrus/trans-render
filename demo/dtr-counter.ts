@@ -6,7 +6,7 @@ export interface DTRCounterProps {
 } 
 
 
-const ce = new CE<DTRCounterProps & TemplMgmtProps, TemplMgmtActions>({
+const ce = new CE<DTRCounterProps & TemplMgmtProps<DTRCounterProps & HTMLElement>, TemplMgmtActions>({
     config:  {
         tagName:'dtr-counter',
         actions:{
@@ -21,22 +21,10 @@ const ce = new CE<DTRCounterProps & TemplMgmtProps, TemplMgmtActions>({
                         on: 'click',
                         inc: 'count',
                         byAmt: '.dataset.d',
-
                     }
                 }
             },
-            // hydratingTransform: {
-            //     buttonElements: [{}, {click:{
-            //         prop:'count',
-            //         vft: 'dataset.d',
-            //         plusEq: true,
-            //         parseValAs: 'int',
-            //     }}]
-            // },
             shadowRootMode: 'open',
-            // transform: {
-            //     countPart: '.count.toLocaleString|'
-            // },
             styles: String.raw `
 <style>
     :host{
