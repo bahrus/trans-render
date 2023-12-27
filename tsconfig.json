@@ -11,7 +11,7 @@
 		"Transform.ts",
 		"lib/*",
 		"demo/*",
-		"demo/transforms/*",
+		"tests/*",
 		"lib/mixins/*",
 		"xslt/*",
 		"froop/*", 
