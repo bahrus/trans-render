@@ -1,4 +1,4 @@
-import {TemplMgmtBase} from '../types';
+import {TemplMgmtBase} from './types';
 export class DoStyles{
     constructor(self: any, {styles}: TemplMgmtBase, root: ShadowRoot, compiledStyleMap: Map<string, CSSStyleSheet[] | HTMLTemplateElement>, modernBrowser: boolean){
         let styleSheets: CSSStyleSheet[] | HTMLTemplateElement | undefined;

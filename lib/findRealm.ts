@@ -1,5 +1,5 @@
-import {Scope, ScopeTuple, TemplMgmtProps} from './types';
-
+import {Scope, ScopeTuple, } from './types';
+import {TemplMgmtProps} from './mixins/types';
 export async function findRealm(self: Element, scope: Scope){
     if(typeof scope === 'string'){ 
         switch(scope){

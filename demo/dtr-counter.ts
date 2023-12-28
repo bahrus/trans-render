@@ -6,14 +6,15 @@ import {
     XForm
 } from '../lib/mixins/TemplMgmt.js';
 import { CE } from '../froop/CE.js';
-import {Localizer, LocalizerMethods, LocalizerProps} from '../lib/mixins/Localizer.js';
+import {Localizer, LocalizerMethods} from '../lib/mixins/Localizer.js';
 
 export interface DTRCounterProps {
     count: number;
 } 
 
 
-const ce = new CE<DTRCounterProps  & TemplMgmtProps & LocalizerProps, TemplMgmtActions & LocalizerMethods>({
+const ce = new CE<DTRCounterProps  & TemplMgmtProps, TemplMgmtActions>({
+    mixins: [TemplMgmt, Localizer],
     config:  {
         tagName:'dtr-counter',
         actions:{
@@ -30,7 +31,7 @@ const ce = new CE<DTRCounterProps  & TemplMgmtProps & LocalizerProps, TemplMgmtA
                         byAmt: '.dataset.d',
                     },
                 }
-            } as XForm<DTRCounterProps, TemplMgmtActions & LocalizerMethods> as any,
+            } as XForm<DTRCounterProps, LocalizerMethods> as any,
             shadowRootMode: 'open',
             styles: String.raw `
 <style>
@@ -61,5 +62,4 @@ const ce = new CE<DTRCounterProps  & TemplMgmtProps & LocalizerProps, TemplMgmtA
         },
         
     },
-    mixins: [TemplMgmt, Localizer],
 });

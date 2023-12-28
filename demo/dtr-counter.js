@@ -2,6 +2,7 @@ import { TemplMgmt, beTransformed } from '../lib/mixins/TemplMgmt.js';
 import { CE } from '../froop/CE.js';
 import { Localizer } from '../lib/mixins/Localizer.js';
 const ce = new CE({
+    mixins: [TemplMgmt, Localizer],
     config: {
         tagName: 'dtr-counter',
         actions: {
@@ -48,5 +49,4 @@ const ce = new CE({
             mainTemplate: String.raw `<button part=down data-d=-1>-</button><span part=count></span><button part=up data-d=1>+</button>`,
         },
     },
-    mixins: [TemplMgmt, Localizer],
 });
