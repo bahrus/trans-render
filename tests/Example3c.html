@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example 1</title>
+    <title>Example 3c</title>
     <script type=importmap>
         {
             "imports": {
@@ -13,16 +13,16 @@
     </script>
 </head>
 <body>
-    <div id=div>
+    <div>
         <span></span>
     </div>
-    <div id=target></div>
+    <section id=target></section>
     <script type=module>
-        import './Example1.js';
+        import './Example3c.js';
     </script>
     <script>
         function runTest(){
-            if(span.textContent === 'bye'){
+            if(document.querySelector('span').textContent === 'msg1: bye, msg2: world'){
                 target.setAttribute('mark', 'good');
             }
         }

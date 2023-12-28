@@ -14,8 +14,8 @@ setTimeout(() => {
     const span = document.createElement('span');
     span.id = 'span';
     div.appendChild(span);
-}, 1000);
+}, 100);
 setTimeout(() => {
     model.greeting = 'bye';
     propagator.dispatchEvent(new Event('greeting'));
-}, 2000);
+}, 200);
