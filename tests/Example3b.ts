@@ -29,8 +29,8 @@ Transform<Props & Methods>(div, model, {
 setTimeout(() => {
     const span = document.createElement('span');
     div.appendChild(span);
-}, 1000);
+}, 100);
 setTimeout(() => {
     model.msg1 = 'bye';
     propagator.dispatchEvent(new Event('msg1'));
-}, 2000);
+}, 200);
