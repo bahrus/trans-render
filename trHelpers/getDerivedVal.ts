@@ -11,7 +11,7 @@ export async function getDerivedVal<TProps, TMethods>(
         }
         case 'function':{
             const {model} = transformer;
-            return await d(model);
+            return await d(model, transformer, uow);
         }
         case 'object': {
             if(Array.isArray(d)){
@@ -26,7 +26,7 @@ export async function getDerivedVal<TProps, TMethods>(
         }
         case 'string': {
             const {model} = transformer;
-            return (<any>model[d])(model);
+            return (<any>model[d])(model, transformer, uow);
         }
 
     }

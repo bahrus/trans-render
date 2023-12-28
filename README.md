@@ -193,7 +193,7 @@ Transform<IModel>(div, model, {
 }, propagator);
 ```
 
-## Example 2 -- binding using special, standard attributes
+## Binding using special, standard attributes
 
 We often find ourselves defining in our HTML *input* tags (or other form-associated elements):
 
@@ -220,6 +220,8 @@ So our HTML above may now look as follows, with the addition of the name attribu
 ```
 
 ... in conjunction with our model/domain object that contains a property with matching name *greeting*.  Then we can bind from a distance using this library as follows:
+
+## Example 2a
 
 ```TypeScript
 const model: Model = {
@@ -270,6 +272,10 @@ export type PropAttrQueryType =
 ```
 
 We will see examples of these in use (especially in the Examples8*).
+
+## Example 2b Deriving value from method
+
+
 
 ## Example 3a  Declarative Interpolation
 

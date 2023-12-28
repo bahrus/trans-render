@@ -33,10 +33,13 @@ export type ObjectExpression<TProps, TMethods> = {
 export type Derivative<TProps, TMethods> = 
     | number 
     | InterpolatingExpression 
-    | ((model: TProps & TMethods) => any)
+    | ((model: TProps & TMethods, transform: ITransformer<TProps, TMethods>, uow: UnitOfWork<TProps, TMethods>) => any)
     | NumberExpression 
     | ObjectExpression<TProps, TMethods>
-    | keyof TMethods
+    // only works if lhs has field/property
+    | keyof TMethods & string 
+    // combined observe an 0
+    | keyof TProps & string
     | boolean
 ;
 //#endregion
@@ -185,7 +188,11 @@ export interface QuenitOfWork<TProps, TMethods> extends UnitOfWork<TProps, TMeth
     qi?: QueryInfo,
 }
 
-export type UnitOfWorkRHS<TProps, TMethods> = 0 | keyof TProps & string | UnitOfWork<TProps, TMethods>;
+export type UnitOfWorkRHS<TProps, TMethods> = 
+    | 0 
+    | keyof TMethods & string 
+    | keyof TProps & string
+    | UnitOfWork<TProps, TMethods>;
 
 export type RHS<TProps, TMethods> = UnitOfWorkRHS<TProps, TMethods> | Array<UnitOfWork<TProps, TMethods>>;
 

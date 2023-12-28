@@ -39,24 +39,37 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget im
                     if(rhs !== 0) throw 'NI';
                     const qi = this.calcQI(newKey!);
                     const {prop} = qi;
-                    const pique: QuenitOfWork<TProps, TMethods> = {
+                    const uow: QuenitOfWork<TProps, TMethods> = {
                         o: [prop! as keyof TProps & string],
                         d: 0,
                         qi,
                         q: newKey!
                     };
-                    uows.push(pique);
+                    uows.push(uow);
                     break;
                 }
 
                 case 'string':
                     {
-                        const pique: QuenitOfWork<TProps, TMethods> = {
-                            o: [rhs],
-                            d: 0,
-                            q: newKey!
-                        };
-                        uows.push(pique);
+                        if(typeof model[rhs] === 'function'){
+                            const qi = this.calcQI(newKey!);
+                            const {prop} = qi;
+                            const uow: QuenitOfWork<TProps, TMethods> = {
+                                o: [prop! as keyof TProps & string],
+                                d: rhs as keyof TMethods & string,
+                                qi,
+                                q: newKey!
+                            };
+                            uows.push(uow);
+                        }else{
+                            const uow: QuenitOfWork<TProps, TMethods> = {
+                                o: [rhs as keyof TProps & string],
+                                d: 0,
+                                q: newKey!
+                            };
+                            uows.push(uow);
+                        }
+
                     }
                     break;
                 case 'object':

@@ -27,23 +27,36 @@ export class Transformer extends EventTarget {
                         throw 'NI';
                     const qi = this.calcQI(newKey);
                     const { prop } = qi;
-                    const pique = {
+                    const uow = {
                         o: [prop],
                         d: 0,
                         qi,
                         q: newKey
                     };
-                    uows.push(pique);
+                    uows.push(uow);
                     break;
                 }
                 case 'string':
                     {
-                        const pique = {
-                            o: [rhs],
-                            d: 0,
-                            q: newKey
-                        };
-                        uows.push(pique);
+                        if (typeof model[rhs] === 'function') {
+                            const qi = this.calcQI(newKey);
+                            const { prop } = qi;
+                            const uow = {
+                                o: [prop],
+                                d: rhs,
+                                qi,
+                                q: newKey
+                            };
+                            uows.push(uow);
+                        }
+                        else {
+                            const uow = {
+                                o: [rhs],
+                                d: 0,
+                                q: newKey
+                            };
+                            uows.push(uow);
+                        }
                     }
                     break;
                 case 'object':
