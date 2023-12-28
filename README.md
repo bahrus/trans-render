@@ -221,7 +221,7 @@ So our HTML above may now look as follows, with the addition of the name attribu
 
 ... in conjunction with our model/domain object that contains a property with matching name *greeting*.  Then we can bind from a distance using this library as follows:
 
-## Example 2a
+## Example 2a Shortcut with pass through derivation
 
 ```TypeScript
 const model: Model = {
@@ -273,9 +273,22 @@ export type PropAttrQueryType =
 
 We will see examples of these in use (especially in the Examples8*).
 
-## Example 2b Deriving value from method
+## Example 2b Shortcut, but deriving value from method
 
+```TypeScript
+const model: Props & Methods = {
+    greeting: 'hello',
+    appendWorld: ({greeting}: Props & Methods, transform: ITransformer<Props, Methods>, uow: UnitOfWork<Props, Methods>) => {
+        console.log({transform, uow});
+        return greeting + ', world';
+    }
+};
+const propagator = new EventTarget();
 
+const transform = new Transformer<Props & Methods>(form, model, {
+    '@ greeting': 'appendWorld',
+}, propagator);
+```
 
 ## Example 3a  Declarative Interpolation
 

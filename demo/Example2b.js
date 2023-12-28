@@ -3,6 +3,7 @@ const form = document.querySelector('form');
 const model = {
     greeting: 'hello',
     appendWorld: ({ greeting }, transform, uow) => {
+        console.log({ transform, uow });
         return greeting + ', world';
     }
 };
