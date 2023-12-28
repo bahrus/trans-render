@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 1</title>
+    <script type=importmap>
+        {
+            "imports": {
+                "mount-observer/": "../node_modules/mount-observer/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <form>
+        <input name=greeting>
+    </form>
+    <div id=target></div>
+    <script type=module>
+        import './Example2b.js';
+    </script>
+    <script>
+        function runTest(){
+            if(document.querySelector('input').value === 'bye, world'){
+                target.setAttribute('mark', 'good');
+            }
+        }
+        setTimeout(() => {
+            runTest();
+        }, 3000);
+    </script>
+</body>
+</html>
