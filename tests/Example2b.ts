@@ -27,8 +27,8 @@ setTimeout(() => {
     const section = document.createElement('input');
     section.setAttribute('name', 'greeting');
     form.appendChild(section);
-}, 1000);
+}, 100);
 setTimeout(() => {
     model.greeting = 'bye';
     propagator.dispatchEvent(new Event('greeting'));
-}, 2000);
+}, 200);

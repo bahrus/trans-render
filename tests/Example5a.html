@@ -3,32 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example 1</title>
+    <title>Example 5a</title>
     <script type=importmap>
         {
             "imports": {
-                "mount-observer/": "../node_modules/mount-observer/"
+                "mount-observer/": "../../node_modules/mount-observer/"
             }
         }
     </script>
 </head>
 <body>
     <form>
-        <input name=greeting>
+        <input>
+        <span></span>
     </form>
     <div id=target></div>
     <script type=module>
-        import './Example2b.js';
+        import './Example5a.js';
     </script>
     <script>
         function runTest(){
-            if(document.querySelector('input').value === 'bye, world'){
-                target.setAttribute('mark', 'good');
-            }
+            document.querySelector('input').dispatchEvent(new Event('change'));
+            setTimeout(() => {
+                if(document.querySelector('span').textContent === 'true'){
+                    target.setAttribute('mark', 'good');
+                }
+            }, 200);
         }
         setTimeout(() => {
             runTest();
-        }, 1000);
+        }, 500);
     </script>
 </body>
 </html>
