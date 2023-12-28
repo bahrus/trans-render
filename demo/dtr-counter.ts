@@ -31,7 +31,7 @@ const ce = new CE<DTRCounterProps  & TemplMgmtProps, TemplMgmtActions>({
                         byAmt: '.dataset.d',
                     },
                 }
-            } as XForm<DTRCounterProps, LocalizerMethods> as any,
+            } as XForm<DTRCounterProps, LocalizerMethods>,
             shadowRootMode: 'open',
             styles: String.raw `
 <style>

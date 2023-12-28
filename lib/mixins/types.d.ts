@@ -6,7 +6,7 @@ export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLEleme
     styles?: CSSStyleSheet[] | string;
     clonedTemplate?: Node | undefined;
     shadowRootMode?: 'open' | 'closed' | undefined | false;
-    xform: Partial<{[key: string]: RHS<MCProps, MCMethods>}>,
+    xform: Partial<{[key: string]: RHS<any, any>}>,
     xformImpl?: () => Promise<ToTransformer<MCProps, MCMethods>>,
     mntCnt?: number;
     skipTemplateClone?: boolean;

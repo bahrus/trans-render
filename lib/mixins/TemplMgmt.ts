@@ -1,3 +1,4 @@
+import { RHS } from '../../types.js';
 import { Action, PropInfo } from '../types.js';
 export { Action, PropInfo } from '../types.js';
 
@@ -88,7 +89,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         await restore(fragment as DocumentFragment);
         if(xform){
             if(xformImpl !== undefined){
-                (await xformImpl())(fragment, this, xform, (<any>this).xtalState);
+                (await xformImpl())(fragment, this, xform as Partial<{[key: string]: RHS<HTMLElement, HTMLElement>}>, (<any>this).xtalState);
             }else{
                 const {Transform} = await import('../../Transform.js');
                 Transform(fragment, this, xform, (<any>this).xtalState);
