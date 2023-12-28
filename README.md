@@ -48,16 +48,27 @@ All the examples described below can [be seen fully here](https://github.com/bah
 # Table of Contents
 
 [Simplest element to prop mapping](#example-1a---simplest-element-to-prop-mapping)
+
 [Attribute to single prop shortcut with pass through derivation](#example-2a-shortcut-with-pass-through-derivation)
+
 [Attribute to single prop shortcut with value derived from host method](#example-2b-shortcut-but-deriving-value-from-method)
+
 [Declarative interpolation of multiple props](#example-3a-declarative-interpolation)
+
 [Declarative computed derivatives with multiple prop dependencies](#example-3b-declarative-computed-derivations)
+
 [Inline computed derivatives with multiple prop dependencies](#example-3c-instant-gratification-for-computed-derivations)
+
 [Setting multiple props of the matching element](#example-4-setting-props-of-the-element)
+
 [Adding a single event listener, handled by a method of the model](#example-5a---adding-a-single-event-listener-handled-by-the-model)
+
 [Shortcut for adding the most common event handler](#example-5b----adding-a-singe-event-listener-the-most-standard-one)
+
 [Inline single event listener](#example-5c----instant-gratification-event-handlers)
+
 [Multiple event handlers for a single matching element](#example-5d----multiple-event-handlers)
+
 [Engaging with an element](#example-6a---single-engagement)
 
 
