@@ -3,7 +3,8 @@ import { Derivative, UnitOfWork } from '../types.js';
 export async function getDerivedVal<TProps, TMethods>(
     transformer: Transformer<TProps, TMethods>, 
     uow: UnitOfWork<TProps, TMethods>, 
-    d: Derivative<TProps, TMethods>
+    d: Derivative<TProps, TMethods>,
+    matchingElement: Element,
 ){
     switch(typeof d){
         case 'number':{
@@ -11,7 +12,7 @@ export async function getDerivedVal<TProps, TMethods>(
         }
         case 'function':{
             const {model} = transformer;
-            return await d(model, transformer, uow);
+            return await d(model, transformer, uow, matchingElement);
         }
         case 'object': {
             if(Array.isArray(d)){
@@ -26,7 +27,7 @@ export async function getDerivedVal<TProps, TMethods>(
         }
         case 'string': {
             const {model} = transformer;
-            return (<any>model[d])(model, transformer, uow);
+            return (<any>model[d])(model, transformer, uow, matchingElement);
         }
 
     }

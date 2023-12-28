@@ -71,7 +71,7 @@ All the examples described below can [be seen fully here](https://github.com/bah
 
 [Engaging with an element](#example-6a---single-engagement)
 
-
+[Modifying the host](#modifying-the-host)
 
 ## Example 1 - The calculus of DOM updates
 
@@ -954,6 +954,11 @@ The "toValFrom" parameter can be a function:
 toValFrom: (matchingElement, transformer, modUOW) =>  (matchingElement as HTMLInputElement).value.length.toString()
 ```
 
+### Example 8f - Invoking a method [TODO]
+
+If we want to call a method from the model, passing in the matching element, we can specify with the "invoke" property of the m object.
+
+If we want to 
 
 ## Example 8h Hydrating with "load" event
 

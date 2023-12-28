@@ -18,7 +18,7 @@ export async function doUpdate(transformer, matchingElement, uow) {
     //let val: any;
     if (d === undefined)
         throw 'NI';
-    const val = await transformer.getDerivedVal(uow, d);
+    const val = await transformer.getDerivedVal(uow, d, matchingElement);
     if (s !== undefined) {
         const path = s;
         if (path[0] === '.') {
@@ -26,7 +26,16 @@ export async function doUpdate(transformer, matchingElement, uow) {
             setProp(matchingElement, path, val);
         }
         else {
+            // if(typeof val === 'object'  && !Array.isArray(val)){
+            //     const keys = Object.keys(val);
+            //     if(keys[0] in matchingElement){
+            //         Object.assign(matchingElement, val);
+            //     }else{
+            //         (<any>matchingElement)[s as string] = val;
+            //     }
+            // }else{
             matchingElement[s] = val;
+            //}
         }
     }
     else if (sa !== undefined) {

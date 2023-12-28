@@ -171,9 +171,9 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget im
         await doEnhance(this, matchingElement, type, uow, mountContext, stage);
     }
 
-    async getDerivedVal(uow: UnitOfWork<TProps, TMethods>, d: Derivative<TProps, TMethods>){
+    async getDerivedVal(uow: UnitOfWork<TProps, TMethods>, d: Derivative<TProps, TMethods>, matchingElement: Element){
         const {getDerivedVal} = await import('./trHelpers/getDerivedVal.js');
-        return await getDerivedVal(this, uow, d);
+        return await getDerivedVal(this, uow, d, matchingElement);
     }
 
     async getNestedObjVal(uow: UnitOfWork<TProps, TMethods>, u: ObjectExpression<TProps, TMethods>){
@@ -220,7 +220,16 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget im
     }
 
     setPrimeValue(matchingElement: Element, val: any){
-        (<any>matchingElement)[this.getDefaultProp(matchingElement)] = val;
+        if(typeof val === 'object'  && !Array.isArray(val)){
+            // const keys = Object.keys(val);
+            // if(keys[0] in matchingElement){
+                Object.assign(matchingElement, val);
+            // }else{
+            //     (<any>matchingElement)[this.getDefaultProp(matchingElement)] = val;
+            // }
+        }else{
+            (<any>matchingElement)[this.getDefaultProp(matchingElement)] = val;
+        }
     }
 
     getDefaultProp(matchingElement: Element){

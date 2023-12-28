@@ -33,7 +33,7 @@ export type ObjectExpression<TProps, TMethods> = {
 export type Derivative<TProps, TMethods> = 
     | number 
     | InterpolatingExpression 
-    | ((model: TProps & TMethods, transform: ITransformer<TProps, TMethods>, uow: UnitOfWork<TProps, TMethods>) => any)
+    | ((model: TProps & TMethods, transform: ITransformer<TProps, TMethods>, uow: UnitOfWork<TProps, TMethods>, matchingElement: Element) => any)
     | NumberExpression 
     | ObjectExpression<TProps, TMethods>
     // only works if lhs has field/property
@@ -59,9 +59,12 @@ export interface Engagement<TMethods>{
     with?: any
 }
 
+//export interface EscalateProp
+
 export type onMountStatusChange = 'onMount' | 'onDismount' | 'onDisconnect';
 
 export interface EngagementCtx<TModel> {
+    be?: string,
     with?: any,
     type: onMountStatusChange,
     stage?: PipelineStage,

@@ -46,7 +46,7 @@ const ce = new CE({
     }
 </style>
 `,
-            mainTemplate: String.raw `<button part=down data-d=-1>-</button><span part=count></span><button part=up data-d=1>+</button>`,
+            mainTemplate: String.raw `<button part=down data-d=-1>-</button><data part=count></data><button part=up data-d=1>+</button>`,
         },
     },
 });

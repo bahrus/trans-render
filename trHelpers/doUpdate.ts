@@ -3,7 +3,7 @@ import { Derivative, UnitOfWork } from '../types.js';
 export async function doUpdate<TProps, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>,
     matchingElement: Element, 
-    uow: UnitOfWork<TProps, TMethods>
+    uow: UnitOfWork<TProps, TMethods>,
 ){
     const {d, o, s, sa, i} = uow;
     if(i !== undefined){
@@ -21,7 +21,7 @@ export async function doUpdate<TProps, TMethods = TProps>(
     };
     //let val: any;
     if(d === undefined) throw 'NI';
-    const val = await transformer.getDerivedVal(uow, d);
+    const val = await transformer.getDerivedVal(uow, d, matchingElement);
 
     if(s !== undefined){
         const path = s as string;
@@ -29,7 +29,17 @@ export async function doUpdate<TProps, TMethods = TProps>(
             const {setProp} = await import('../lib/setProp.js');
             setProp(matchingElement, path, val);
         }else{
-            (<any>matchingElement)[s as string] = val;
+            // if(typeof val === 'object'  && !Array.isArray(val)){
+            //     const keys = Object.keys(val);
+            //     if(keys[0] in matchingElement){
+            //         Object.assign(matchingElement, val);
+            //     }else{
+            //         (<any>matchingElement)[s as string] = val;
+            //     }
+            // }else{
+                (<any>matchingElement)[s as string] = val;
+            //}
+            
         }
         
     }else if(sa !== undefined){

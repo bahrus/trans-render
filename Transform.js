@@ -154,9 +154,9 @@ export class Transformer extends EventTarget {
         const { Engage: doEnhance } = await import('./trHelpers/Engage.js');
         await doEnhance(this, matchingElement, type, uow, mountContext, stage);
     }
-    async getDerivedVal(uow, d) {
+    async getDerivedVal(uow, d, matchingElement) {
         const { getDerivedVal } = await import('./trHelpers/getDerivedVal.js');
-        return await getDerivedVal(this, uow, d);
+        return await getDerivedVal(this, uow, d, matchingElement);
     }
     async getNestedObjVal(uow, u) {
         const { getNestedObjVal } = await import('./trHelpers/getNestedObjVal.js');
@@ -201,7 +201,17 @@ export class Transformer extends EventTarget {
         return pOrC;
     }
     setPrimeValue(matchingElement, val) {
-        matchingElement[this.getDefaultProp(matchingElement)] = val;
+        if (typeof val === 'object' && !Array.isArray(val)) {
+            // const keys = Object.keys(val);
+            // if(keys[0] in matchingElement){
+            Object.assign(matchingElement, val);
+            // }else{
+            //     (<any>matchingElement)[this.getDefaultProp(matchingElement)] = val;
+            // }
+        }
+        else {
+            matchingElement[this.getDefaultProp(matchingElement)] = val;
+        }
     }
     getDefaultProp(matchingElement) {
         if ('href' in matchingElement)

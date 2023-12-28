@@ -22,7 +22,7 @@ export async function doIfs<TProps, TMethods = TProps>(
     }
     const {ifAllOf, ifEqual, ifNoneOf, d} = transpiledIf;
     if(d !== undefined){
-        const derivedVal = await transformer.getDerivedVal(uow, d);
+        const derivedVal = await transformer.getDerivedVal(uow, d, matchingElement);
         if(!derivedVal) return false;
     }
     if(ifAllOf !== undefined){

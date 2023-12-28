@@ -25,7 +25,7 @@ export interface LocalizerProps {
 
 }
 export interface LocalizerMethods{
-    localize(model: any, transformer: ITransformer<any, any>, uow: UnitOfWork<any, any>): string;
+    localize(model: any, transformer: ITransformer<any, any>, uow: UnitOfWork<any, any>, matchingElement: Element): string | Partial<HTMLDataElement>;
 }
 
 export interface Localizer extends HTMLElement, LocalizerProps, LocalizerMethods {}
