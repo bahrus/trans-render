@@ -1,5 +1,6 @@
 import { TemplMgmt, beTransformed } from '../lib/mixins/TemplMgmt.js';
 import { CE } from '../froop/CE.js';
+import { Localizer } from '../lib/mixins/Localizer.js';
 const ce = new CE({
     config: {
         tagName: 'dtr-counter',
@@ -9,7 +10,7 @@ const ce = new CE({
         propDefaults: {
             count: 30,
             xform: {
-                '% count': 0,
+                '% count': 'localize',
                 "button": {
                     m: {
                         on: 'click',
@@ -47,5 +48,5 @@ const ce = new CE({
             mainTemplate: String.raw `<button part=down data-d=-1>-</button><span part=count></span><button part=up data-d=1>+</button>`,
         },
     },
-    mixins: [TemplMgmt],
+    mixins: [TemplMgmt, Localizer],
 });

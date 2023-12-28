@@ -1,13 +1,19 @@
-import {TemplMgmt, TemplMgmtProps, TemplMgmtActions, beTransformed} from '../lib/mixins/TemplMgmt.js';
-import {CE} from '../froop/CE.js';
-import { XForm } from '../types.js';
+import {
+    TemplMgmt, 
+    TemplMgmtProps, 
+    TemplMgmtActions, 
+    beTransformed, 
+    XForm
+} from '../lib/mixins/TemplMgmt.js';
+import { CE } from '../froop/CE.js';
+import {Localizer, LocalizerMethods, LocalizerProps} from '../lib/mixins/Localizer.js';
 
 export interface DTRCounterProps {
     count: number;
 } 
 
 
-const ce = new CE<DTRCounterProps  & TemplMgmtProps, TemplMgmtActions>({
+const ce = new CE<DTRCounterProps  & TemplMgmtProps & LocalizerProps, TemplMgmtActions & LocalizerMethods>({
     config:  {
         tagName:'dtr-counter',
         actions:{
@@ -16,7 +22,7 @@ const ce = new CE<DTRCounterProps  & TemplMgmtProps, TemplMgmtActions>({
         propDefaults:{
             count: 30,
             xform: {
-                '% count': 0,
+                '% count': 'localize',
                 "button": {
                     m: {
                         on: 'click',
@@ -24,7 +30,7 @@ const ce = new CE<DTRCounterProps  & TemplMgmtProps, TemplMgmtActions>({
                         byAmt: '.dataset.d',
                     },
                 }
-            } as XForm<DTRCounterProps, TemplMgmtActions> as any,
+            } as XForm<DTRCounterProps, TemplMgmtActions & LocalizerMethods> as any,
             shadowRootMode: 'open',
             styles: String.raw `
 <style>
@@ -55,5 +61,5 @@ const ce = new CE<DTRCounterProps  & TemplMgmtProps, TemplMgmtActions>({
         },
         
     },
-    mixins: [TemplMgmt],
+    mixins: [TemplMgmt, Localizer],
 });

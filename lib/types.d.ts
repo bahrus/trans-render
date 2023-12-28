@@ -1,52 +1,4 @@
 import {RHS, ToTransformer} from '../types';
-// export interface RenderContextEndUserProps<T = Element, TItem = any>{
-//     shadowPeer?: Element | undefined;
-//     host?: any | undefined;
-//     hostController?: any;
-//     match?: Matches;
-//     make?: CSSSelectorBeHavingMap;
-//     autoMatchMethods?: boolean; //TODO
-
-// }
-
-// export interface BeHaving<TEndUserProps = any> {
-//     be?: string,
-//     beAssigned?: any, //Untested
-//     having?: TEndUserProps | undefined,
-//     waitForResolved?: boolean,
-//     waitForResolvedIfLoaded?: boolean, //Untested
-//     beDeepMerged?: any, //Untested
-// }
-
-//export type CSSSelectorBeHavingMap = {[key: string]: BeHaving | BeHaving[]}
-
-// export interface Attachable{
-//     attach(target: Element): Promise<void>;
-// }
-
-// export interface RenderContext<T = Element, TItem = any> extends RenderContextEndUserProps<T, TItem>, getValArg {
-//     ctx?: RenderContext | undefined;
-//     transform?: (sourceOrTemplate: HTMLElement | DocumentFragment, ctx: RenderContext, target?: HTMLElement | DocumentFragment) => Promise<RenderContext<T>>;
-//     idx?: number;
-//     target?: T | null;
-//     targetProp?: string;
-//     options?: RenderOptions | undefined;
-//     attrib?: string | null;
-//     name?: string | null;
-//     val?: string | null;
-//     rhs?: any;
-//     depDeclarations?: Set<string>;
-//     key?: string;
-//     queryCache?: WeakMap<Element | DocumentFragment, {[key: string]: NodeListOf<Element>}>;
-//     abort?: boolean | undefined;
-//     // templateIds?: string[];
-//     queryInfo?: QueryInfo;
-//     timestampKey?: string;
-//     self?: Transformer;
-//     $0?: Element;
-//     trace?: boolean;
-
-// }
 
 
 export type matchTypes = 'parts'| 'part' | 'id' | 'classes' | 'class' | 'attribs' | 'attrib' | 'elements' | 'element' | 'names' | 'name' | 'props' | 'placeholders';
@@ -61,16 +13,6 @@ export interface QueryInfo{
     havingAlso?: QueryInfo[];
     havingInner?: QueryInfo;
 }
-
-// export interface RenderOptions{
-//     prepend?: boolean;
-    
-// }
-
-
-// export interface PMDo{
-//     do(ctx: RenderContext): void;
-// }
 
 
 export type PropSettings<T extends Partial<HTMLElement> = HTMLElement, HostProps = any> = {
@@ -228,12 +170,7 @@ export type PEUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PSet
 export type PEASettings<T extends Partial<HTMLElement> = HTMLElement> = 
     [props: PropSettings<T> | undefined, events: EventSettings | undefined, attribs: AttribsSettings | undefined];
 export type PEAUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = PEUnionSettings<T> | PEASettings<T>;
-// export type PEATSettings<T extends Partial<HTMLElement> = HTMLElement> = 
-//     [PropSettings<T> | undefined, EventSettings | undefined, AttribsSettings | undefined, TransformValueOptions<T> | undefined];
-// export type PEAT$ettings<T extends Partial<HTMLElement> = HTMLElement> =
-//     [PropSettings<T> | undefined, EventSettings | undefined, AttribsSettings | undefined, TransformValueOptions<T> | undefined, symbol]
-// export type PEATUnionSettings<T extends Partial<HTMLElement> = HTMLElement> = 
-//     PSettings<T> | PESettings<T> | PEASettings<T> | PEATSettings<T> | PEAT$ettings<T>;
+
 export type ConditionalSettings<T extends Partial<HTMLElement> = HTMLElement> = 
     [boolean, IConditional<T>, ...any]
 
@@ -348,63 +285,14 @@ export type PropChangeMoment = 'v' | '-a' | '+a' | '+qr' | '+qm';
 
 export type PropChangeMethod = (self: EventTarget, pci: PropChangeInfo, moment: PropChangeMoment) => boolean;
 
-// export type RHS<MCProps extends Partial<HTMLElement> = HTMLElement> = 
-//     string | boolean 
-//     | PSettings<MCProps> | PESettings<MCProps> | PEASettings<MCProps> 
-//     | ConditionalSettings<MCProps>
-//     | {[key: string]: Matches}
-// ;
 
-// export type Matches<MCProps extends Partial<HTMLElement> = HTMLElement> = {[key: string]: RHS<MCProps>};
 
-// export interface TransformPacket<MCProps extends Partial<HTMLElement> = HTMLElement, TMethods = MCProps> {
-
-//     // hydratingTransform?: Matches;
-//     // transform?: Matches<MCProps> | Matches<MCProps>[];
-//     //make?: CSSSelectorBeHavingMap;
-//     //unsafeTransform?: {[key: string]: (ctx: RenderContext) => any};
-//     //DTRCtor?: any;
-//     //beJoinable?: boolean;
-// }
-
-export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLElement, MCMethods = MCProps>{
-    mainTemplate?: HTMLTemplateElement | string;
-    unsafeTCount: number;
-    styles?: CSSStyleSheet[] | string;
-    clonedTemplate?: Node | undefined;
-    shadowRootMode?: 'open' | 'closed' | undefined | false;
-    xform: Partial<{[key: string]: RHS<MCProps, MCMethods>}>,
-    xformImpl?: () => Promise<ToTransformer<MCProps, MCMethods>>,
-    mntCnt?: number;
-    skipTemplateClone?: boolean;
-    homeInOn?: Partial<{[key in keyof MCProps]: Partial<{[key: string]: RHS<MCProps, MCMethods>}>}>;
-}
-
-export interface TemplMgmtActions{
-    doTransforms(self: this): void;
-    cloneTemplate(self: this): void;
-}
-
-export interface TemplMgmtBase extends HTMLElement, TemplMgmtProps, TemplMgmtActions{}
-
-// export interface Transformer{
-//     transform(fragment: Element | DocumentFragment | Element[], fragmentManager?: Element): Promise<RenderContext>;
-//     flushCache(): void;
-//     getDefaultProp(target: any): string;
-//     do_angle_bracket(ctx: RenderContext): void;
-//     ctx: RenderContext;
-// }
 
 export interface ITSChecker{
     notChanged(host: Element, fragment: Element | DocumentFragment): boolean;
 }
 
-// export interface ITx{
-//     transform(): Promise<void>;
-//     match?: Matches;
-//     make?: CSSSelectorBeHavingMap;
-//     scope: Scope;
-// }
+
 
 export type TargetTuple = 
       /**

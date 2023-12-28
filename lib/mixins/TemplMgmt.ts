@@ -1,6 +1,10 @@
-//import { DTR } from '../DTR.js';
-import { TemplMgmtBase, TemplMgmtProps, Action,  PropInfo } from '../types.js';
-export {TemplMgmtProps, TemplMgmtActions, Action, PropInfo} from '../types.js';
+import { Action, PropInfo } from '../types.js';
+export { Action, PropInfo } from '../types.js';
+
+export {XForm} from '../../types.js'
+
+import { TemplMgmtBase, TemplMgmtProps } from './types.js';
+export { TemplMgmtProps, TemplMgmtActions } from './types.js';
 
 export type TemplMgmtBaseMixin = {new(): TemplMgmtBase};
 
