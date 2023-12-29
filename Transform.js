@@ -15,6 +15,11 @@ export class Transformer extends EventTarget {
         this.model = model;
         this.xform = xform;
         this.propagator = propagator;
+        if (propagator === undefined) {
+            propagator = new EventTarget();
+            propagator['___props'] = new Set();
+            this.propagator = new EventTarget();
+        }
         let prevKey;
         const uows = [];
         for (const key in xform) {
@@ -290,21 +295,29 @@ export class MountOrchestrator extends EventTarget {
                 }
             }
         });
+        this.#subscribe();
+    }
+    async #subscribe() {
         for (const uow of this.#unitsOfWork) {
             const { o } = uow;
             const p = arr(o);
-            const { target, propagator } = transformer;
-            if (propagator !== undefined) {
-                for (const propName of p) {
-                    if (typeof propName !== 'string')
-                        throw 'NI';
-                    propagator.addEventListener(propName, e => {
-                        const all = this.#cleanUp();
-                        for (const matchingElement of all) {
-                            this.doUpdate(matchingElement, uow);
-                        }
-                    });
+            const { target, propagator, model } = this.transformer;
+            for (const propName of p) {
+                if (typeof propName !== 'string')
+                    throw 'NI';
+                const propsSet = propagator['___props'];
+                if (propsSet instanceof Set) {
+                    if (!propsSet.has(propName)) {
+                        const { subscribe } = await import('./lib/subscribe2.js');
+                        await subscribe(model, propName, propagator, true);
+                    }
                 }
+                propagator.addEventListener(propName, e => {
+                    const all = this.#cleanUp();
+                    for (const matchingElement of all) {
+                        this.doUpdate(matchingElement, uow);
+                    }
+                });
             }
             if (Array.isArray(target)) {
                 throw 'NI';

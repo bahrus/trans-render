@@ -15,7 +15,7 @@ export function Transform<TProps = any, TMethods = TProps>(
     xform: Partial<{[key: string]: RHS<TProps, TMethods>}>,
     propagator?: EventTarget, 
 ){
-    return new Transformer<TProps, TMethods>(target, model, xform, propagator);
+    return new Transformer<TProps, TMethods>(target, model, xform, propagator!);
 }
 
 export class Transformer<TProps = any, TMethods = TProps> extends EventTarget implements ITransformer<TProps, TMethods>{
@@ -25,9 +25,14 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget im
         public target: TransformerTarget,
         public model: TProps & TMethods,
         public xform: Partial<{[key: string]: RHS<TProps, TMethods>}>,
-        public propagator?: EventTarget, 
+        public propagator: EventTarget, 
     ){
         super();
+        if(propagator === undefined){
+            propagator = new EventTarget();
+            (<any>propagator)['___props'] = new Set();
+            this.propagator = new EventTarget()
+        }
         let prevKey: string | undefined;
         const uows : Array<QuenitOfWork<TProps, TMethods>> = [];
         for(const key in xform){
@@ -317,21 +322,31 @@ export class MountOrchestrator<TProps, TMethods = TProps> extends EventTarget im
                 }
             }
         });
+        this.#subscribe();
+
+        
+    }
+    async #subscribe(){
         for(const uow of this.#unitsOfWork){
             const {o} = uow;
             const p = arr(o) as string[];
 
-            const {target, propagator} = transformer;
-            if(propagator !== undefined){
-                for(const propName of p){
-                    if(typeof propName !== 'string') throw 'NI';
-                    propagator.addEventListener(propName, e => {
-                        const all = this.#cleanUp();
-                        for(const matchingElement of all){
-                            this.doUpdate(matchingElement, uow);
-                        }
-                    })
+            const {target, propagator, model} = this.transformer;
+            for(const propName of p){
+                if(typeof propName !== 'string') throw 'NI';
+                const propsSet = (<any>propagator)['___props'];
+                if(propsSet instanceof Set){
+                    if(!propsSet.has(propName)){
+                        const {subscribe} = await import('./lib/subscribe2.js');
+                        await subscribe(model, propName, propagator, true);
+                    }
                 }
+                propagator.addEventListener(propName, e => {
+                    const all = this.#cleanUp();
+                    for(const matchingElement of all){
+                        this.doUpdate(matchingElement, uow);
+                    }
+                })
             }
             if(Array.isArray(target)){
                 throw 'NI';
@@ -339,8 +354,6 @@ export class MountOrchestrator<TProps, TMethods = TProps> extends EventTarget im
                 this.#mountObserver.observe(target);
             }
         }
-
-        
     }
     #cleanUp(matchingElement?: Element){
         const newRefs: WeakRef<Element>[] = [];
