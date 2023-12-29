@@ -80,9 +80,11 @@ export interface IHookup extends IInstanceResolvableService{
 
 export interface IAttrChgCB{
     instance: HTMLElement,
-    name: string,
-    oldVal: string,
-    newVal: string,
+    // name: string,
+    // oldVal: string,
+    // newVal: string,
+    newAttrs: {[key: string]: {oldVal: string | null, newVal: string | null}},
+    filteredAttrs: {[key: string]: string}
 }
 
 export interface IConnectedCB{

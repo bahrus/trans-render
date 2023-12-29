@@ -27,8 +27,8 @@ export class Hookup extends InstSvc {
         const {allPropNames, propInfos} = itemizer;
         if(!isEnh){
             definer.addEventListener(acb, async e => {
-                const acbE = (e as CustomEvent).detail as IAttrChgCB;
-                const {instance, name, newVal, oldVal} = acbE;
+                const acbE = {...(e as CustomEvent).detail}  as IAttrChgCB;
+                const {instance} = acbE;
                 const {parse} = await import('./parse.js');
                 await args.definer!.resolveInstanceSvcs(args, instance);
                 await parse(acbE, propInfos, defaults);

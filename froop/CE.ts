@@ -81,17 +81,32 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
                 }
                 
             }
-            attributeChangedCallback(name: string, oldVal: string, newVal: string){
+            #newAttrs: {[key: string]: {oldVal: string | null, newVal: string | null}} = {};
+            #filteredAttrs: {[key: string]: string | null} = {};
+            attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null){
                 if(super.attributeChangedCallback) super.attributeChangedCallback(name, oldVal, newVal);
-                services!.definer.dispatchEvent(new CustomEvent(acb, {
-                    detail: {
-                        instance: this as any as HTMLElement,
-                        name,
-                        oldVal,
-                        newVal,
-                    }  as IAttrChgCB
-                    
-                }))
+                const newAttrs = this.#newAttrs;
+                const filteredAttrs = this.#filteredAttrs;
+                newAttrs[name] = {oldVal, newVal};
+                if(newVal === null){
+                    delete filteredAttrs[name];
+                }else{
+                    filteredAttrs[name] =newVal;
+                }
+                
+                if(this.attributes.length === Object.keys(filteredAttrs).length){
+                    services!.definer.dispatchEvent(new CustomEvent(acb, {
+                        detail: {
+                            instance: this as any as HTMLElement,
+                            newAttrs,
+                            filteredAttrs
+                        }  as IAttrChgCB
+                        
+                    }));
+                    this.#newAttrs = {};
+                }
+                
+
             }
 
             async connectedCallback(){

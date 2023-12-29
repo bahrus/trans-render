@@ -71,17 +71,30 @@ export class CE extends Svc {
                     this._internals_ = this.attachInternals(); //Safari 16.4 doesn't yet support
                 }
             }
+            #newAttrs = {};
+            #filteredAttrs = {};
             attributeChangedCallback(name, oldVal, newVal) {
                 if (super.attributeChangedCallback)
                     super.attributeChangedCallback(name, oldVal, newVal);
-                services.definer.dispatchEvent(new CustomEvent(acb, {
-                    detail: {
-                        instance: this,
-                        name,
-                        oldVal,
-                        newVal,
-                    }
-                }));
+                const newAttrs = this.#newAttrs;
+                const filteredAttrs = this.#filteredAttrs;
+                newAttrs[name] = { oldVal, newVal };
+                if (newVal === null) {
+                    delete filteredAttrs[name];
+                }
+                else {
+                    filteredAttrs[name] = newVal;
+                }
+                if (this.attributes.length === Object.keys(filteredAttrs).length) {
+                    services.definer.dispatchEvent(new CustomEvent(acb, {
+                        detail: {
+                            instance: this,
+                            newAttrs,
+                            filteredAttrs
+                        }
+                    }));
+                    this.#newAttrs = {};
+                }
             }
             async connectedCallback() {
                 //console.debug('connectedCallback');
