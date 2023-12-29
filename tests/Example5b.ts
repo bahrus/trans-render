@@ -9,18 +9,16 @@ interface Actions {
 }
 const model: Props & Actions = {
     isHappy: false,
-    handleInput: (e: Event, {model, propagator}) => {
+    handleInput: (e: Event, {model}) => {
         model.isHappy = !model.isHappy;
-        propagator?.dispatchEvent(new Event('isHappy'));
         
     }
 }
 const form = document.querySelector('form')!;
-const propagator = new EventTarget();
 
 Transform<Props, Actions>(form, model, {
     input: {
         a: 'handleInput'
     },
     span: 'isHappy'
-}, propagator);
+});

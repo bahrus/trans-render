@@ -506,7 +506,6 @@ const model: Props & Actions = {
     isHappy: false,
     handleChange: (e: Event, {model, propagator}) => {
         model.isHappy = !model.isHappy;
-        propagator?.dispatchEvent(new Event('isHappy'));
         
     }
 }
@@ -560,7 +559,6 @@ Transform<Props, Actions>(form, model, {
             on: 'change',
             do: (e: Event, {model, propagator}) => {
                 model.isHappy = !model.isHappy;
-                propagator?.dispatchEvent(new Event('isHappy'));
                 
             }
         }
@@ -578,7 +576,6 @@ const model: Props & Actions = {
     isHappy: false,
     handleInput: (e: Event, {model, propagator}) => {
         model.isHappy = !model.isHappy;
-        propagator?.dispatchEvent(new Event('isHappy'));
     }
 }
 const form = document.querySelector('form')!;
@@ -590,7 +587,6 @@ Transform<Props, Actions>(form, model, {
             on: 'change',
             do: (e, {model, propagator}) => {
                 model.isHappy = !model.isHappy;
-                propagator?.dispatchEvent(new Event('isHappy'));
             }
         }]
     },
