@@ -22,10 +22,10 @@ export async function parse(accb, propInfos, defaults) {
                 if (prop.parse) {
                     if (newVal !== null) {
                         let val = newVal.trim();
-                        if (typeof Sanitizer !== undefined) {
-                            const sanitizer = new Sanitizer();
-                            val = sanitizer.sanitizeFor('template', val);
-                        }
+                        // if(typeof Sanitizer !== undefined){
+                        //     const sanitizer = new Sanitizer();
+                        //     val = sanitizer.sanitizeFor('template', val);
+                        // }
                         try {
                             val = JSON.parse(val);
                         }
