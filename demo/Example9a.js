@@ -7,7 +7,9 @@ const model = {
     }
 };
 Transform(div, model, {
-    '$ address': {},
+    '$ address': {
+        '| zipCode': 0
+    },
 });
 // setTimeout(() => {
 //     const span = document.createElement('span');

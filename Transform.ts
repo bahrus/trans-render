@@ -5,15 +5,15 @@ import {
     ObjectExpression,
     TransformerTarget, 
     onMountStatusChange, RHS, AddEventListener,
-    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer
+    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm
 } from './types.js';
 import { MountContext, PipelineStage } from 'mount-observer/types';
-export {UnitOfWork, ITransformer, EngagementCtx} from './types';
+export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './types';
 
 export async function Transform<TProps = any, TMethods = TProps>(
     target: TransformerTarget,
     model: TProps & TMethods,
-    xform: Partial<{[key: string]: RHS<TProps, TMethods>}>,
+    xform: XForm<TProps, TMethods>,
     propagator?: EventTarget, 
 ){
     const xformer =  new Transformer<TProps, TMethods>(target, model, xform, propagator!);

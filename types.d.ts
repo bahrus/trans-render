@@ -196,7 +196,9 @@ export type UnitOfWorkRHS<TProps, TMethods> =
     | 0 
     | keyof TMethods & string 
     | keyof TProps & string
-    | UnitOfWork<TProps, TMethods>;
+    | UnitOfWork<TProps, TMethods>
+    | XForm<any, any>
+;
 
 export type RHS<TProps, TMethods> = UnitOfWorkRHS<TProps, TMethods> | Array<UnitOfWork<TProps, TMethods>>;
 

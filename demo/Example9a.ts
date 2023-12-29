@@ -1,10 +1,14 @@
-import {Transform} from '../Transform.js';
+import {Transform, XForm} from '../Transform.js';
+
+interface AddressProps{
+    zipCode: string
+}
+
+interface AddressMethods{}
 
 interface Props{
     name: string,
-    address: {
-        zipCode: string
-    }
+    address: AddressProps & AddressMethods
 }
 
 interface Methods{
@@ -21,8 +25,8 @@ const model: Props & Methods = {
 
 Transform<Props & Methods>(div, model, {
     '$ address': {
-
-    },
+        '| zipCode': 0
+    } as XForm<AddressProps, AddressMethods>,
 });
 // setTimeout(() => {
 //     const span = document.createElement('span');
