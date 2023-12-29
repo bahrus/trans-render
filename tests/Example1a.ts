@@ -8,11 +8,10 @@ const div = document.querySelector('div')!;
 const model: Model = {
     greeting: 'hello'
 };
-const propagator = new EventTarget();
 
 Transform<Model>(div, model, {
     span: 'greeting',
-}, propagator);
+});
 setTimeout(() => {
     const span = document.createElement('span');
     span.id = 'span';
@@ -20,5 +19,4 @@ setTimeout(() => {
 }, 100);
 setTimeout(() => {
     model.greeting = 'bye';
-    propagator.dispatchEvent(new Event('greeting'));
 }, 200);
