@@ -71,7 +71,15 @@ All the examples described below can [be seen fully here](https://github.com/bah
 
 [Engaging with an element](#example-6a---single-engagement)
 
+7. [Conditional Logic](#example-7---conditional-logic)
+
+   1. [Switch statement for string property](#example-7a---switch-statement-for-string-property)
+
+   2. [Custom method for evaluating boolean condition](#example-7b---custom-method-to-check-boolean-condition)
+
 [Modifying the host](#modifying-the-host)
+
+[](#)
 
 ## Example 1 - The calculus of DOM updates
 
@@ -291,7 +299,7 @@ Other symbols for other attributes are specified below:
 
 ```TypeScript
 export type PropAttrQueryType = 
-    | '$' //microdata itemprop
+    | '|' //microdata itemprop
     | '@' //form element name
     | '#' //id
     | '%' //part
@@ -963,6 +971,14 @@ If we want to
 ## Example 8h Hydrating with "load" event
 
 A special event name -- "load" -- is reserved for setting host properties one time only based on server rendered HTML.  It is expected that once the "ownership" of the value is passed from the server rendered HTML to the host model, other binding instructions will continue to keep them in sync via one-way binding down from the host/model to the UI.
+
+## Nested Objects => Nested Transforms
+
+```html
+<div itemscope itemprop=subObj>
+    <span itemprop></span>
+</div>
+```
 
 ## Viewing Your Element Locally
 

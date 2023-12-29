@@ -19,5 +19,5 @@ Transform<Props, Methods>(div, model, {
             toValFrom: '.dataset.val'
         }
     },
-    '$ selectedItem': 0
+    '| selectedItem': 0
 }, propagator);

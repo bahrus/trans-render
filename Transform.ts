@@ -139,7 +139,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget im
         switch(propAttrType){
             case '#':
                 return `${ln}#${prop} ${c}`.trimEnd();
-            case '$':
+            case '|':
                 //TODO use scope donut
                 return `${ln}[itemprop~="${prop}"] ${c}`.trimEnd();
             case '%':

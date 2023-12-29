@@ -1,7 +1,7 @@
 import { MountContext, PipelineStage } from "mount-observer/types";
 
 export type PropAttrQueryType = 
-    | '$' //microdata itemprop
+    | '|' //microdata itemprop
     | '@' //form element name
     | '#' //id
     | '%' //part

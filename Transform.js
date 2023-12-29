@@ -126,7 +126,7 @@ export class Transformer extends EventTarget {
         switch (propAttrType) {
             case '#':
                 return `${ln}#${prop} ${c}`.trimEnd();
-            case '$':
+            case '|':
                 //TODO use scope donut
                 return `${ln}[itemprop~="${prop}"] ${c}`.trimEnd();
             case '%':
