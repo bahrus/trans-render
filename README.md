@@ -394,7 +394,6 @@ setTimeout(() => {
 }, 1000);
 setTimeout(() => {
     model.msg1 = 'bye';
-    propagator.dispatchEvent(new Event('msg1'));
 }, 2000);
 ```
 
