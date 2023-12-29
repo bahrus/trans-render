@@ -55,6 +55,8 @@ All the examples described below can [be seen fully here](https://github.com/bah
 
 [Simplest element to prop mapping](#example-1a---simplest-element-to-prop-mapping)
 
+[Part 2 - Binding using special attributes](#part-2-binding-using-special-standard-attributes)
+
 [Attribute to single prop shortcut with pass through derivation](#example-2a-shortcut-with-pass-through-derivation)
 
 [Attribute to single prop shortcut with value derived from host method](#example-2b-shortcut-but-deriving-value-from-method)
@@ -208,7 +210,7 @@ const transform = new Transformer<Model>(div, model, {
         o: ['greeting'],
         d: 0
     },
-}, propagator);
+});
 ```
 
 with the shortcut:
@@ -218,7 +220,7 @@ with the shortcut:
 ```TypeScript
 Transform<Model>(div, model, {
     span: 'greeting',
-}, propagator);
+});
 ```
 
 But it is important to know what the shortcut is for, just as in calculus it is important to know that y' is shorthand for dy/dx.
@@ -236,10 +238,10 @@ There is an "escape hatch" for free form css -- start the expression with "* ". 
 ```TypeScript
 Transform<IModel>(div, model, {
     '* div > p + p ~ span[class$="name"]': 'greeting',
-}, propagator);
+});
 ```
 
-## Binding using special, standard attributes
+## Part 2 Binding using special, standard attributes
 
 We often find ourselves defining in our HTML *input* tags (or other form-associated elements):
 
@@ -275,7 +277,7 @@ const model: Model = {
 };
 Transform<Model>(form, model, {
     '@ greeting': 0,
-}, propagator);
+});
 ```
 
 ... which results in:
@@ -300,7 +302,7 @@ new Transformer<IModel>(form, model, {
         o: ['greeting'],
         d: 0
     },
-}, propagator);
+});
 ```
 
 (Another small timesaver:  As mentioned before, d: 0 is assumed if not specified above.  Also, if only one property needs to be observed, we can forgo the use of the array)
@@ -334,7 +336,7 @@ const propagator = new EventTarget();
 
 const transform = new Transformer<Props & Methods>(form, model, {
     '@ greeting': 'appendWorld',
-}, propagator);
+});
 ```
 
 ## Example 3a  Declarative Interpolation
@@ -379,7 +381,7 @@ Transform<Model>(div, model, {
         o: ['msg1', 'msg2'],
         d: ['msg1: ', 0, ', msg2: ', 1]
     }
-}, propagator);
+});
 ```
 
 Once again, we don't claim this to be the most elegant syntax, and can certainly envision an "icing layer" that  translates a tagged template literal expression into this syntax, but that is outside the scope of this Transform function / Transformer class.  The syntax above is optimized for declarative, side-effect free, un-opinionated JSON parsing and small footprints over the wire, while still being somewhat maintainable by hand.
@@ -415,7 +417,7 @@ Transform<Model>(div, model, {
         o: ['msg1', 'msg2'],
         d: 'computeMessage'
     }
-}, propagator);
+});
 ```
 
 ## Example 3c: Instant gratification for computed derivations
@@ -437,7 +439,7 @@ Transform<Model>(div, model, {
         o: ['msg1', 'msg2'],
         d: ({msg1, msg2}: Model, uow: UnitOfWorkCtx) => `msg1: ${msg1}, msg2: ${msg2}`
     }
-}, propagator);
+});
 ```
 
 ## Example 4  Setting props of the element
@@ -478,7 +480,7 @@ Transform<Model>(div, model, {
             }
         }
     ]
-}, propagator);
+});
 ```
 
 This will set the input's readOnly property from the r0 field from the model.  Likewise, tabIndex is set from the num field, value from msg1.  "type" is "hardcoded" to "number", "disabled" initialized to "true".
@@ -521,7 +523,7 @@ Transform<Props, Actions>(form, model, {
         }
     },
     span: 'isHappy'
-}, propagator);
+});
 ```
 
 ## Example 5b -- Adding a singe event listener, the most standard one
@@ -544,7 +546,7 @@ Transform<Props, Actions>(form, model, {
         a: 'handleInput'
     },
     span: 'isHappy'
-}, propagator);
+});
 ```
 
 ## Example 5c -- Instant gratification event handlers
@@ -566,7 +568,7 @@ Transform<Props, Actions>(form, model, {
         }
     },
     span: 'isHappy'
-}, propagator);
+});
 ```
 
 ## Example 5d -- Multiple Event Handlers
@@ -595,7 +597,7 @@ Transform<Props, Actions>(form, model, {
         }]
     },
     span: 'isHappy'
-}, propagator);
+});
 ```
 
 
@@ -676,7 +678,7 @@ Transform<Props, Methods>(div, model, {
             }
         }
     ]
-}, propagator);
+});
 ```
 
 The method hydrateInputElement gets called once and only once per input element that gets added or found in the DOM fragment.  It is also called when the input elements are are disconnected from the DOM fragment (with a different argument):
@@ -771,7 +773,7 @@ Transform<Props, Methods>(form, model, {
         {o: 'typeToEdit', i: 'number',  s: {type: 'number', hidden: false}},
         {o: 'typeToEdit', i: 'object',  s: {hidden: true}}
     ]
-}, propagator);
+});
 ```
 
 ### Example 7b  - Custom method to check boolean condition
@@ -811,7 +813,7 @@ Transform<Props, Methods>(form, model, {
             s: {type: 'number'}
         },
     ]
-}, propagator);
+});
 ```
 
 ### Example 7c:  Instant gratification
@@ -839,7 +841,7 @@ Transform<Props, Methods>(form, model, {
             s: {type: 'number'}
         },
     ]
-}, propagator);
+});
 ```
 
 ## Modifying the host
@@ -867,7 +869,7 @@ Transform<Props, Methods>(div, model, {
         }
     },
     '% count': 0
-}, propagator);
+});
 ```
 
 This modifies the count value of the host, incrementing by -1 if clicking the left button, by +1 if clicking on the right button.
@@ -898,7 +900,7 @@ Transform<Props, Methods>(div, model, {
         }
     },
     '$ selectedItem': 0
-}, propagator);
+});
 ```
 
 ### Example 8c Toggling a host property
@@ -922,7 +924,7 @@ Transform<Props, Methods>(div, model, {
         }
     },
     '# booleanValue': 0
-}, propagator);
+});
 ```
 
 ### Example 8d Multiple modifications
@@ -959,7 +961,7 @@ Transform<Props, Methods>(form, model, {
     },
     '. booleanValue': 0,
     '# stringValue': 0,
-}, propagator);
+});
 ```
 
 [TODO] Support shortcuts (assume value of on based on context allow for string value that makes lots of assumptions, etc.)  Only do this if a good use case presents itself.  Support "tvf" abbreviation for toValFrom if it comes up repeatedly in some use cases.
