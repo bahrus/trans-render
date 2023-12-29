@@ -17,9 +17,22 @@
         <input>
         <span></span>
     </form>
-
+    <div id=target></div>
     <script type=module>
         import './Example5d.js';
+    </script>
+    <script>
+        function runTest(){
+            document.querySelector('input').dispatchEvent(new Event('change'));
+            setTimeout(() => {
+                if(document.querySelector('span').textContent === 'true'){
+                    target.setAttribute('mark', 'good');
+                }
+            }, 200);
+        }
+        setTimeout(() => {
+            runTest();
+        }, 500);
     </script>
 </body>
 </html>
