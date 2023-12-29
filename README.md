@@ -373,7 +373,7 @@ const model: Model = {
     msg1: 'hello',
     msg2: 'world'
 };
-const propagator = new EventTarget();
+
 
 Transform<Model>(div, model, {
     span: {
@@ -409,7 +409,7 @@ const model: Model = {
         return `msg1: ${msg1}, msg2: ${msg2}`
     }
 };
-const propagator = new EventTarget();
+
 
 Transform<Model>(div, model, {
     span: {
@@ -431,7 +431,7 @@ const model: Model = {
     msg1: 'hello',
     msg2: 'world'
 };
-const propagator = new EventTarget();
+
 
 Transform<Model>(div, model, {
     span: {
@@ -464,7 +464,7 @@ const model: Model = {
     num: 7,
     propName: 'test'
 };
-const propagator = new EventTarget();
+
 Transform<Model>(div, model, {
     input: [
         {o: 'msg1', s: 'value'},
@@ -512,7 +512,7 @@ const model: Props & Actions = {
     }
 }
 const form = document.querySelector('form')!;
-const propagator = new EventTarget();
+
 
 Transform<Props, Actions>(form, model, {
     input: {
@@ -583,7 +583,7 @@ const model: Props & Actions = {
     }
 }
 const form = document.querySelector('form')!;
-const propagator = new EventTarget();
+
 
 Transform<Props, Actions>(form, model, {
     input: {
@@ -654,7 +654,7 @@ const model: Props & Methods = {
         console.log({model, el, ctx});
     }
 };
-const propagator = new EventTarget();
+
 
 Transform<Props, Methods>(div, model, {
     input: [
@@ -797,7 +797,7 @@ const model: Props & Methods = {
     isUnlimited: ({typeToEditIsLimited}) => !typeToEditIsLimited,
 }
 const form = document.querySelector('form')!;
-const propagator = new EventTarget();
+
 
 Transform<Props, Methods>(form, model, {
     input: [
@@ -942,7 +942,7 @@ const model: Props & Methods = {
     stringValue: ''
 }
 const form = document.querySelector('form')!;
-const propagator = new EventTarget();
+
 Transform<Props, Methods>(form, model, {
     input: {
         m:[
