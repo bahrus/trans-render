@@ -7,6 +7,7 @@ export type PropAttrQueryType =
     | '%' //part
     | '.' //class
     | '-' //marker
+    | '$' //microdata itemprop + itemscope attributes (nested)
 
 //#region derived expressions
 export type Expr0 = [string, number];

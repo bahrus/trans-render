@@ -305,6 +305,7 @@ export type PropAttrQueryType =
     | '%' //part
     | '.' //class
     | '-' //marker
+    | '$' //microdata itemscope + itemprop (nested)
 ```
 
 We will see examples of these in use (especially in the Examples8*).
@@ -972,12 +973,23 @@ If we want to
 
 A special event name -- "load" -- is reserved for setting host properties one time only based on server rendered HTML.  It is expected that once the "ownership" of the value is passed from the server rendered HTML to the host model, other binding instructions will continue to keep them in sync via one-way binding down from the host/model to the UI.
 
-## Nested Objects => Nested Transforms
+## Part 9.  Nested Objects => Nested Transforms
 
 ```html
 <div itemscope itemprop=subObj>
-    <span itemprop></span>
+    <span itemprop=subProp1></span>
 </div>
+```
+
+```Typescript
+{
+    $ subObj: [
+        {propagator: {path: '.xtalState', props: ['subProp1']}},
+        {
+            '| subProp1': 0
+        }
+    ]
+}
 ```
 
 ## Viewing Your Element Locally

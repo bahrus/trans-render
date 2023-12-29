@@ -23,7 +23,7 @@ Transform<Props, Methods>(form, model, {
             {
                 on: 'input',
                 s: 'stringValue',
-                toValFrom: (matchingElement) =>  (matchingElement as HTMLInputElement).value.length.toString()
+                toValFrom: (matchingElement) => (matchingElement as HTMLInputElement).value.length.toString()
             }
         ]
             
