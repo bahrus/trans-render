@@ -31,7 +31,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget im
         if(propagator === undefined){
             propagator = new EventTarget();
             (<any>propagator)['___props'] = new Set();
-            this.propagator = new EventTarget()
+            this.propagator = propagator;
         }
         let prevKey: string | undefined;
         const uows : Array<QuenitOfWork<TProps, TMethods>> = [];

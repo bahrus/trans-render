@@ -11,7 +11,7 @@ export async function subscribe(target: any, props: string | string[], propagato
             proto = Object.getPrototypeOf(proto);
             prop = Object.getOwnPropertyDescriptor(proto, propName);
         }
-        if(prop === undefined){
+        if(prop === undefined || prop.set === undefined){
             if(autoCreateProp && propName in target){
                 const currentVal = target[propName];
                 Object.defineProperty(target, propName, {

@@ -18,7 +18,7 @@ export class Transformer extends EventTarget {
         if (propagator === undefined) {
             propagator = new EventTarget();
             propagator['___props'] = new Set();
-            this.propagator = new EventTarget();
+            this.propagator = propagator;
         }
         let prevKey;
         const uows = [];
