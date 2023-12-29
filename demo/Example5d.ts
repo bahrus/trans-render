@@ -1,5 +1,4 @@
-import {Transform} from '../Transform.js';
-import {ITransformer} from '../types.js';
+import {Transform, ITransformer} from '../Transform.js';
 
 interface Props {
     isHappy: boolean,

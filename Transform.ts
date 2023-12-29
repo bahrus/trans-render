@@ -8,6 +8,7 @@ import {
     IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer
 } from './types.js';
 import { MountContext, PipelineStage } from 'mount-observer/types';
+export {UnitOfWork, ITransformer, EngagementCtx} from './types';
 
 export async function Transform<TProps = any, TMethods = TProps>(
     target: TransformerTarget,
