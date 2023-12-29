@@ -1,15 +1,14 @@
-import { Transformer } from '../Transform.js';
+import { Transform } from '../Transform.js';
 const div = self['div'];
 const model = {
     greeting: 'hello'
 };
-const propagator = new EventTarget();
-const transform = new Transformer(div, model, {
+Transform(div, model, {
     span: {
         o: ['greeting'],
         d: 0
     },
-}, propagator);
+});
 setTimeout(() => {
     const span = document.createElement('span');
     span.id = 'span';
@@ -17,5 +16,4 @@ setTimeout(() => {
 }, 100);
 setTimeout(() => {
     model.greeting = 'bye';
-    propagator.dispatchEvent(new Event('greeting'));
 }, 200);

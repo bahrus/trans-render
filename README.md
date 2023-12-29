@@ -15,7 +15,7 @@
 1.  A JavaScript object -- the model, which could, for example, be the hosting custom element.
 2.  A DOM fragment to update / enhance.
 3.  A user defined "Fragment Manifest" where the binding rules are defined, mostly declaratively.
-4.  Optionally, an EventTarget that emits events when properties of the model change.  We will refer to this optional EventTarget as the "propagator".
+4.  Optionally, an EventTarget that emits events when properties of the model change.  We will refer to this optional EventTarget as the "propagator".  If not provided, the transformer creates one automatically.
 
 *TR* is designed to provide an alternative to the proposed [Template Instantiation proposal](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Template-Instantiation.md), the idea being that *TR* could continue to supplement what that proposal includes if/when template instantiation support lands in browsers.
 
@@ -46,6 +46,12 @@ This can leave the template markup quite pristine, but it does mean that the sep
 All the examples described below can [be seen fully here](https://github.com/bahrus/trans-render/tree/baseline/demo/transforms)
 
 # Table of Contents
+
+[Binding from a distance](#binding-from-a-distance)
+
+[Use cases for trans-rendering](#use-cases-for-tr)
+
+[Part 1 - Mapping from props to elements](#part-1---mapping-from-props-to-elements)
 
 [Simplest element to prop mapping](#example-1a---simplest-element-to-prop-mapping)
 
@@ -79,7 +85,7 @@ All the examples described below can [be seen fully here](https://github.com/bah
 
 [Modifying the host](#modifying-the-host)
 
-[](#)
+## Part 1 - Mapping from props to elements
 
 ## Example 1 - The calculus of DOM updates
 
@@ -102,14 +108,13 @@ const div = document.querySelector('div')!;
 const model: Model = {
     greeting: 'hello'
 };
-const propagator = new EventTarget();
 
-const transform = new Transformer<Model>(div, model, {
+Transform<Model>(div, model, {
     span: {
         o: ['greeting'],
         d: 0
     },
-}, propagator);
+});
 ```
 
 Explanation:
@@ -152,15 +157,19 @@ setTimeout(() => {
 
 So dynamically adding new HTML elements that match the css selector will immediately get bound.
 
-As does dispatching events matching the observed property name(s), as shown below:
+As does updating the model by modifying observed property name(s), as shown below:
 
 ```JavaScript
 //script #2
 setTimeout(() => {
     model.greeting = 'bye';
-    propagator.dispatchEvent(new Event('greeting'));
 }, 2000);
 ```
+
+Under the hood, an event target is created that manages the synchronization (if not provided by the consumer, which can be passed as an additional parameter).
+
+<details>
+    <summary>Why use event targets?</summary>
 
 Using an event target as our mechanism for providing our reactive interface in order to observe changes, as opposed to getters/setters of a class, seems like the most generic solution we can think of.  We will refer to this universal interface as the "propagator" for the model.
 
@@ -179,6 +188,7 @@ It is also quite easy to create an ES Proxy that serves as a propagator.  This p
 <!--Finally, the transformer class provides a utility method, "s" that allows for setting the value and dispatching the event in one line (think "setValue").-->
 
 This way we can set model.greeting = 'bye', and the model will emit the event with matching name.  (There is possibly a slight performance hit with this approach, but it is unlikely to be the bottleneck for your application.)
+</details>
 
 ## The 80% rule.
 
