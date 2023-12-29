@@ -14,7 +14,6 @@ const model: Model = {
     num: 7,
     propName: 'test'
 };
-const propagator = new EventTarget();
 
 Transform<Model>(div, model, {
     input: [
@@ -30,7 +29,7 @@ Transform<Model>(div, model, {
             } as Partial<HTMLInputElement>
         }
     ]
-}, propagator);
+});
 
 setTimeout(() => {
     const input = document.createElement('input');
@@ -38,5 +37,4 @@ setTimeout(() => {
 }, 100);
 setTimeout(() => {
     model.msg1 = '456';
-    propagator.dispatchEvent(new Event('msg1'));
 }, 200);
