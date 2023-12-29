@@ -297,7 +297,7 @@ Why the space between @ and greeting?  The extra work necessary to type the spac
 Going back to our calculus analogy, where the syntax above is equivalent to y', what does the equivalent dy/dx look like? The syntax above gets immediately "transpiled" to the following syntax (in memory, not literally), that is considerably clunkier to have to type over and over again (but does in fact accomplish the same exact thing):
 
 ```TypeScript
-new Transformer<IModel>(form, model, {
+Transform<Model>(form, model, {
     '* [name="greeting"]': {
         o: ['greeting'],
         d: 0
@@ -332,9 +332,8 @@ const model: Props & Methods = {
         return greeting + ', world';
     }
 };
-const propagator = new EventTarget();
 
-const transform = new Transformer<Props & Methods>(form, model, {
+Transform<Props & Methods>(form, model, {
     '@ greeting': 'appendWorld',
 });
 ```

@@ -1,4 +1,4 @@
-import { Transformer } from '../Transform.js';
+import { Transform } from '../Transform.js';
 const form = document.querySelector('form');
 const model = {
     greeting: 'hello',
@@ -7,10 +7,9 @@ const model = {
         return greeting + ', world';
     }
 };
-const propagator = new EventTarget();
-const transform = new Transformer(form, model, {
+Transform(form, model, {
     '@ greeting': 'appendWorld',
-}, propagator);
+});
 setTimeout(() => {
     const section = document.createElement('input');
     section.setAttribute('name', 'greeting');
@@ -18,5 +17,4 @@ setTimeout(() => {
 }, 100);
 setTimeout(() => {
     model.greeting = 'bye';
-    propagator.dispatchEvent(new Event('greeting'));
 }, 200);

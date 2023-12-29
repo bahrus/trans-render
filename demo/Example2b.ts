@@ -1,4 +1,4 @@
-import {Transformer} from '../Transform.js';
+import {Transform} from '../Transform.js';
 import { UnitOfWork, ITransformer } from '../types.js';
 
 interface Props{
@@ -18,11 +18,10 @@ const model: Props & Methods = {
         return greeting + ', world';
     }
 };
-const propagator = new EventTarget();
 
-const transform = new Transformer<Props & Methods>(form, model, {
+Transform<Props & Methods>(form, model, {
     '@ greeting': 'appendWorld',
-}, propagator);
+});
 setTimeout(() => {
     const section = document.createElement('input');
     section.setAttribute('name', 'greeting');
@@ -30,5 +29,4 @@ setTimeout(() => {
 }, 1000);
 setTimeout(() => {
     model.greeting = 'bye';
-    propagator.dispatchEvent(new Event('greeting'));
 }, 2000);
