@@ -9,17 +9,19 @@ import {
 } from './types.js';
 import { MountContext, PipelineStage } from 'mount-observer/types';
 
-export function Transform<TProps = any, TMethods = TProps>(
+export async function Transform<TProps = any, TMethods = TProps>(
     target: TransformerTarget,
     model: TProps & TMethods,
     xform: Partial<{[key: string]: RHS<TProps, TMethods>}>,
     propagator?: EventTarget, 
 ){
-    return new Transformer<TProps, TMethods>(target, model, xform, propagator!);
+    const xformer =  new Transformer<TProps, TMethods>(target, model, xform, propagator!);
+    await xformer.do();
+    return xformer;
 }
 
 export class Transformer<TProps = any, TMethods = TProps> extends EventTarget implements ITransformer<TProps, TMethods>{
-    #piqueProcessors: Array<MountOrchestrator<TProps, TMethods>>;
+    #piqueProcessors: Array<MountOrchestrator<TProps, TMethods>> = [];
     //#piques: Array<QuenitOfWork<TProps, TMethods>> = [];
     constructor(
         public target: TransformerTarget,
@@ -28,6 +30,10 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget im
         public propagator: EventTarget, 
     ){
         super();
+    }
+    async do(){
+        const {target, model, xform} = this;
+        let {propagator} = this;
         if(propagator === undefined){
             propagator = new EventTarget();
             (<any>propagator)['___props'] = new Set();
@@ -104,13 +110,13 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget im
             }
 
         }
-        this.#piqueProcessors = [];
 
         for(const pique of uows){
             let {q, qi} = pique;
             if(qi === undefined) qi = this.calcQI(q);
             const newProcessor = new MountOrchestrator(this, pique, qi);
             this.#piqueProcessors.push(newProcessor);
+            await newProcessor.subscribe();
         }
     }
     calcQI(pqe: string){
@@ -322,11 +328,11 @@ export class MountOrchestrator<TProps, TMethods = TProps> extends EventTarget im
                 }
             }
         });
-        this.#subscribe();
+        //this.#subscribe();
 
         
     }
-    async #subscribe(){
+    async subscribe(){
         for(const uow of this.#unitsOfWork){
             const {o} = uow;
             const p = arr(o) as string[];

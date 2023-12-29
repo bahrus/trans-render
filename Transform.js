@@ -1,13 +1,15 @@
 import { MountObserver } from 'mount-observer/MountObserver.js';
-export function Transform(target, model, xform, propagator) {
-    return new Transformer(target, model, xform, propagator);
+export async function Transform(target, model, xform, propagator) {
+    const xformer = new Transformer(target, model, xform, propagator);
+    await xformer.do();
+    return xformer;
 }
 export class Transformer extends EventTarget {
     target;
     model;
     xform;
     propagator;
-    #piqueProcessors;
+    #piqueProcessors = [];
     //#piques: Array<QuenitOfWork<TProps, TMethods>> = [];
     constructor(target, model, xform, propagator) {
         super();
@@ -15,6 +17,10 @@ export class Transformer extends EventTarget {
         this.model = model;
         this.xform = xform;
         this.propagator = propagator;
+    }
+    async do() {
+        const { target, model, xform } = this;
+        let { propagator } = this;
         if (propagator === undefined) {
             propagator = new EventTarget();
             propagator['___props'] = new Set();
@@ -92,13 +98,13 @@ export class Transformer extends EventTarget {
                     break;
             }
         }
-        this.#piqueProcessors = [];
         for (const pique of uows) {
             let { q, qi } = pique;
             if (qi === undefined)
                 qi = this.calcQI(q);
             const newProcessor = new MountOrchestrator(this, pique, qi);
             this.#piqueProcessors.push(newProcessor);
+            await newProcessor.subscribe();
         }
     }
     calcQI(pqe) {
@@ -295,9 +301,9 @@ export class MountOrchestrator extends EventTarget {
                 }
             }
         });
-        this.#subscribe();
+        //this.#subscribe();
     }
-    async #subscribe() {
+    async subscribe() {
         for (const uow of this.#unitsOfWork) {
             const { o } = uow;
             const p = arr(o);
