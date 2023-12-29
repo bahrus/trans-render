@@ -95,6 +95,9 @@ export class CE extends Svc {
                     }));
                     this.#newAttrs = {};
                 }
+                else {
+                    this.isAttrParsed = false;
+                }
             }
             async connectedCallback() {
                 //console.debug('connectedCallback');
@@ -105,6 +108,9 @@ export class CE extends Svc {
                     if (this.hasAttribute(dh)) {
                         const { wfac } = await import('../lib/wfac.js');
                         await wfac(this, dh, (s) => s === null);
+                    }
+                    if (this.attributes.length === 0) {
+                        this.isAttrParsed = true;
                     }
                 }
                 //console.log({propper: services?.propper, createPropBag: services?.propper.createPropBag});

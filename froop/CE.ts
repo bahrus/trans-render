@@ -104,6 +104,8 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
                         
                     }));
                     this.#newAttrs = {};
+                }else{
+                    this.isAttrParsed = false;
                 }
                 
 
@@ -117,6 +119,9 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
                     if((this as any as HTMLElement).hasAttribute(dh)){
                         const {wfac} = await import('../lib/wfac.js');
                         await wfac(this as any as HTMLElement, dh, (s: string | null) => s === null);
+                    }
+                    if(this.attributes.length === 0){
+                        this.isAttrParsed = true;
                     }
                 }
                 //console.log({propper: services?.propper, createPropBag: services?.propper.createPropBag});
