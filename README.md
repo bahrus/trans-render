@@ -665,7 +665,7 @@ Transform<Props, Methods>(div, model, {
             } as Partial<HTMLInputElement>,
             e: {
                 do: 'hydrateInputElement',
-                forget: 'cleanupInputElement'
+                forget: 'cleanupInputElement',
                 with: {
                     beCommitted: true
                 }
@@ -717,7 +717,7 @@ We can also specify an array of engagements:
 }
 ```
 
-[TODO]  Do only if a strong use case:  Infer engagement based on the name of the method.  For example, suppose the model looks ike:
+[TODO]  Do only if a strong use case:  Infer engagement based on the name of the method.  For example, suppose the model looks like:
 
 ```TypeScript
 const model = {
