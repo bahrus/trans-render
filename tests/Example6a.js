@@ -5,7 +5,7 @@ const model = {
     rO: true,
     num: 7,
     hydrateInputElement: (model, el, ctx) => {
-        console.log({ model, el, ctx });
+        window['target'].setAttribute('mark', 'good');
     },
     cleanupInputElement: (model, el, ctx) => {
         console.log({ model, el, ctx });
@@ -36,10 +36,10 @@ Transform(div, model, {
 setTimeout(() => {
     const input = document.createElement('input');
     div.appendChild(input);
-}, 1000);
+}, 100);
 setTimeout(() => {
     model.msg1 = '456';
-}, 2000);
-setTimeout(() => {
-    div.innerHTML = '';
-}, 15000);
+}, 200);
+// setTimeout(() => {
+//     div.innerHTML = '';
+// }, 15000)

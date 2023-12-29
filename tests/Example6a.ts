@@ -18,10 +18,10 @@ const model: Props & Methods = {
     rO: true,
     num: 7,
     hydrateInputElement:(model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
-        console.log({model, el, ctx})
+        ((<any>window)['target'] as HTMLElement).setAttribute('mark', 'good');
     },
     cleanupInputElement:(model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
-        console.log({model, el, ctx})
+        console.log({model, el, ctx});
     }
 };
 
@@ -51,10 +51,10 @@ Transform<Props, Methods>(div, model, {
 setTimeout(() => {
     const input = document.createElement('input');
     div.appendChild(input);
-}, 1000);
+}, 100);
 setTimeout(() => {
     model.msg1 = '456';
-}, 2000);
-setTimeout(() => {
-    div.innerHTML = '';
-}, 15000)
+}, 200);
+// setTimeout(() => {
+//     div.innerHTML = '';
+// }, 15000)

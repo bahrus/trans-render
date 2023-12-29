@@ -981,6 +981,8 @@ A special event name -- "load" -- is reserved for setting host properties one ti
 
 ## Part 9.  Nested Objects => Nested Transforms
 
+## Example 9a
+
 ```html
 <div itemscope itemprop=subObj>
     <span itemprop=subProp1></span>
@@ -989,12 +991,9 @@ A special event name -- "load" -- is reserved for setting host properties one ti
 
 ```Typescript
 {
-    $ subObj: [
-        {propagator: {path: '.xtalState', props: ['subProp1']}},
-        {
-            '| subProp1': 0
-        }
-    ]
+    '$ subObj': {
+        '| subProp1': 0
+    }
 }
 ```
 
