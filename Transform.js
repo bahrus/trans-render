@@ -148,6 +148,8 @@ export class Transformer extends EventTarget {
                 return `${ln}.${prop} ${c}`.trimEnd();
             case '-':
                 return `${ln}-${prop} ${c}`.trimEnd() + ',' + `${ln}data-${prop} ${c}`.trimEnd();
+            case '$':
+                return `${ln}[itemscope][itemprop~="${prop}"] ${c}`.trimEnd();
         }
     }
     async doUpdate(matchingElement, uow, d) {
@@ -258,6 +260,11 @@ export class MountOrchestrator extends EventTarget {
             match,
             do: {
                 onMount: async (matchingElement, ctx, stage) => {
+                    if (this.queryInfo.propAttrType === '$') {
+                        const { doNestedTransforms } = await import('./trHelpers/doNestedTransforms.js');
+                        await doNestedTransforms(matchingElement, this.#unitsOfWork, this);
+                        return;
+                    }
                     for (const uow of this.#unitsOfWork) {
                         await this.doUpdate(matchingElement, uow);
                         this.#matchingElements.push(new WeakRef(matchingElement));
