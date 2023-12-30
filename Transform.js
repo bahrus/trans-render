@@ -6,17 +6,19 @@ export async function Transform(target, model, xform, propagator) {
 }
 export class Transformer extends EventTarget {
     target;
-    model;
     xform;
     propagator;
     #mountOrchestrators = [];
-    //#piques: Array<QuenitOfWork<TProps, TMethods>> = [];
+    #model;
+    get model() {
+        return this.#model;
+    }
     constructor(target, model, xform, propagator) {
         super();
         this.target = target;
-        this.model = model;
         this.xform = xform;
         this.propagator = propagator;
+        this.#model = model;
     }
     async do() {
         const { target, model, xform } = this;

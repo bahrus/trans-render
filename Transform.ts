@@ -23,14 +23,19 @@ export async function Transform<TProps = any, TMethods = TProps>(
 
 export class Transformer<TProps = any, TMethods = TProps> extends EventTarget implements ITransformer<TProps, TMethods>{
     #mountOrchestrators: Array<MountOrchestrator<TProps, TMethods>> = [];
-    //#piques: Array<QuenitOfWork<TProps, TMethods>> = [];
+    #model: TProps & TMethods;
+    get model(){
+        return this.#model;
+    }
     constructor(
         public target: TransformerTarget,
-        public model: TProps & TMethods,
+        model: TProps & TMethods,
         public xform: Partial<{[key: string]: RHS<TProps, TMethods>}>,
         public propagator: MarkedUpEventTarget, 
     ){
         super();
+        this.#model = model;
+        
     }
     async do(){
         const {target, model, xform} = this;
