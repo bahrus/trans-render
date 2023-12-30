@@ -6,6 +6,7 @@ const model = {
     num: 7,
     hydrateInputElement: (model, el, ctx) => {
         console.log({ model, el, ctx });
+        window['target'].setAttribute('mark', 'good');
     }
 };
 const propagator = new EventTarget();

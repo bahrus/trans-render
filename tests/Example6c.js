@@ -12,6 +12,7 @@ const model = {
     },
     enhanceInputElement: (model, el, ctx) => {
         console.log({ model, el, ctx });
+        window['target'].setAttribute('mark', 'good');
     },
     registerInputElement: (model, el, ctx) => {
         console.log({ model, el, ctx });

@@ -77,7 +77,13 @@ All the examples described below can [be seen fully here](https://github.com/bah
 
 [Multiple event handlers for a single matching element](#example-5d----multiple-event-handlers)
 
-[Engaging with an element](#example-6a---single-engagement)
+6. [Part 6 - engaging with matching elements](#part-6---enhancing-or-hydrating-or-engaging-with-matching-elements)
+
+   a.  [Example 6a - Single Engagement with a matching element](#example-6a---single-engagement)
+
+   b.  [Example 6b - Shortcut for single engagement](#example-6b-enhancement--engagement--hydration-shortcut)
+
+   c.  [Example 6c - Multiple engagements](#example-6c---multiple-enhancements)
 
 7. [Conditional Logic](#example-7---conditional-logic)
 
@@ -595,7 +601,7 @@ Transform<Props, Actions>(form, model, {
 ```
 
 
-## Enhancing / Hydrating /  Engaging with matching elements
+## Part 6 - Enhancing or Hydrating or Engaging with matching elements
 
 What about conditionally loading blocks of HTML?  What about loops / repeating content?  
 

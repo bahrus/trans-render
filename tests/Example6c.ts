@@ -19,16 +19,17 @@ const model: Props & Methods = {
     rO: true,
     num: 7,
     hydrateInputElement:(model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
-        console.log({model, el, ctx})
+        console.log({model, el, ctx});
     },
     cleanupInputElement:(model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
-        console.log({model, el, ctx})
+        console.log({model, el, ctx});
     },
     enhanceInputElement:(model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
-        console.log({model, el, ctx})
+        console.log({model, el, ctx});
+        ((<any>window)['target'] as HTMLElement).setAttribute('mark', 'good');
     },
     registerInputElement:(model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
-        console.log({model, el, ctx})
+        console.log({model, el, ctx});
     }
 };
 const propagator = new EventTarget();

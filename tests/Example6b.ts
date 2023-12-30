@@ -16,7 +16,8 @@ const model: Props & Methods = {
     rO: true,
     num: 7,
     hydrateInputElement:(model: Props & Methods, el: Element, ctx: EngagementCtx<Props>) => {
-        console.log({model, el, ctx})
+        console.log({model, el, ctx});
+        ((<any>window)['target'] as HTMLElement).setAttribute('mark', 'good');
     }
 };
 const propagator = new EventTarget();
