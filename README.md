@@ -61,21 +61,25 @@ All the examples described below can [be seen fully here](https://github.com/bah
 
    b. [Attribute to single prop shortcut with value derived from host method](#example-2b-shortcut-but-deriving-value-from-method)
 
-[Declarative interpolation of multiple props](#example-3a-declarative-interpolation)
+3. [Part 3 - Derived values in depth](#part-3---derived-values-in-depth)
 
-[Declarative computed derivatives with multiple prop dependencies](#example-3b-declarative-computed-derivations)
+   a.  [Declarative interpolation of multiple props](#example-3a-declarative-interpolation)
 
-[Inline computed derivatives with multiple prop dependencies](#example-3c-instant-gratification-for-computed-derivations)
+   b.  [Declarative computed derivatives with multiple prop dependencies](#example-3b-declarative-computed-derivations)
 
-[Setting multiple props of the matching element](#example-4-setting-props-of-the-element)
+   c.  [Inline computed derivatives with multiple prop dependencies](#example-3c-instant-gratification-for-computed-derivations)
 
-[Adding a single event listener, handled by a method of the model](#example-5a---adding-a-single-event-listener-handled-by-the-model)
+4. [Part 4 - Setting multiple props of the matching element](#example-4-setting-props-of-the-element)
 
-[Shortcut for adding the most common event handler](#example-5b----adding-a-singe-event-listener-the-most-standard-one)
+5. [Part 5 - Event handling](#part-5---event-handling)
 
-[Inline single event listener](#example-5c----instant-gratification-event-handlers)
+   a. [Adding a single event listener, handled by a method of the model](#example-5a---adding-a-single-event-listener-handled-by-the-model)
 
-[Multiple event handlers for a single matching element](#example-5d----multiple-event-handlers)
+   b. [Shortcut for adding the most common event handler](#example-5b----adding-a-singe-event-listener-the-most-standard-one)
+
+   c. [Inline single event listener](#example-5c----instant-gratification-event-handlers)
+
+   d. [Multiple event handlers for a single matching element](#example-5d----multiple-event-handlers)
 
 6. [Part 6 - engaging with matching elements](#part-6---enhancing-or-hydrating-or-engaging-with-matching-elements)
 
@@ -91,7 +95,7 @@ All the examples described below can [be seen fully here](https://github.com/bah
 
    2. [Custom method for evaluating boolean condition](#example-7b---custom-method-to-check-boolean-condition)
 
-[Modifying the host](#modifying-the-host)
+8.  [Part 8 Modifying the host](#modifying-the-host)
 
 ## Part 1 - Mapping from props to elements
 
@@ -344,6 +348,8 @@ Transform<Props & Methods>(form, model, {
 });
 ```
 
+## Part 3 - Derived values in depth
+
 ## Example 3a  Declarative Interpolation
 
 Suppose our domain object has two properties, and we need to dynamically combine them together in our UI:
@@ -491,6 +497,7 @@ This will set the input's readOnly property from the r0 field from the model.  L
 
 Note the (discouraged) extra property: "sa" which means "set attribute" rather than setting the property.
 
+## Part 5 - Event handling
 
 ## Example 5a - Adding a single event listener, handled by the model
 
