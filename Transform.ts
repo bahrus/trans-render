@@ -22,7 +22,7 @@ export async function Transform<TProps = any, TMethods = TProps>(
 }
 
 export class Transformer<TProps = any, TMethods = TProps> extends EventTarget implements ITransformer<TProps, TMethods>{
-    #piqueProcessors: Array<MountOrchestrator<TProps, TMethods>> = [];
+    #mountOrchestrators: Array<MountOrchestrator<TProps, TMethods>> = [];
     //#piques: Array<QuenitOfWork<TProps, TMethods>> = [];
     constructor(
         public target: TransformerTarget,
@@ -118,7 +118,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget im
             let {q, qi} = pique;
             if(qi === undefined) qi = this.calcQI(q);
             const newProcessor = new MountOrchestrator(this, pique, qi);
-            this.#piqueProcessors.push(newProcessor);
+            this.#mountOrchestrators.push(newProcessor);
             await newProcessor.subscribe();
         }
     }

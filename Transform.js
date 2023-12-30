@@ -9,7 +9,7 @@ export class Transformer extends EventTarget {
     model;
     xform;
     propagator;
-    #piqueProcessors = [];
+    #mountOrchestrators = [];
     //#piques: Array<QuenitOfWork<TProps, TMethods>> = [];
     constructor(target, model, xform, propagator) {
         super();
@@ -105,7 +105,7 @@ export class Transformer extends EventTarget {
             if (qi === undefined)
                 qi = this.calcQI(q);
             const newProcessor = new MountOrchestrator(this, pique, qi);
-            this.#piqueProcessors.push(newProcessor);
+            this.#mountOrchestrators.push(newProcessor);
             await newProcessor.subscribe();
         }
     }
