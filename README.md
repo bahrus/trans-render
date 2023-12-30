@@ -91,9 +91,9 @@ All the examples described below can [be seen fully here](https://github.com/bah
 
 7. [Conditional Logic](#example-7---conditional-logic)
 
-   1. [Switch statement for string property](#example-7a---switch-statement-for-string-property)
+   a. [Switch statement for string property](#example-7a---switch-statement-for-string-property)
 
-   2. [Custom method for evaluating boolean condition](#example-7b---custom-method-to-check-boolean-condition)
+   b. [Custom method for evaluating boolean condition](#example-7b---custom-method-to-check-boolean-condition)
 
 8.  [Part 8 Modifying the host](#modifying-the-host)
 
