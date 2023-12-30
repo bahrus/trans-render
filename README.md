@@ -1017,6 +1017,30 @@ setTimeout(() => {
 
 This results in the span being keep in sync with model.address.zipCode.
 
+## Part 10 - Updating the model
+
+We've seen examples where we update individual properties/fields of the model, using standard JS field assignments.  But what if we make a back-end call, nd retrieve another model, where most of the data is different?
+
+The Transform function returns a class that provides a method for this purpose:
+
+## Example 10a
+
+```Typescript
+const model: Model = {
+    greeting: 'hello'
+};
+
+const tr = await Transform<Model>(div, model, {
+    span: 'greeting',
+});
+
+setTimeout(async () => {
+    await tr.updateModel({
+        greeting: 'bye'
+    })
+}, 2000);
+```
+
 ## Viewing Your Element Locally
 
 Any web server that can serve static files will do, but...

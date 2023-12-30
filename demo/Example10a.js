@@ -10,8 +10,8 @@ setTimeout(() => {
     const span = document.createElement('span');
     div.appendChild(span);
 }, 1000);
-setTimeout(() => {
-    tr.updateModel({
+setTimeout(async () => {
+    await tr.updateModel({
         greeting: 'bye'
     });
 }, 2000);
