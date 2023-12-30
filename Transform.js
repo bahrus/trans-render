@@ -13,6 +13,18 @@ export class Transformer extends EventTarget {
     get model() {
         return this.#model;
     }
+    async updateModel(newModel) {
+        const { propagator } = this;
+        const { ___props, ___nestedProps } = propagator;
+        if (___props === undefined) {
+            this.#model = newModel;
+            return;
+        }
+        if (___nestedProps === undefined) {
+            Object.assign(this.#model, newModel);
+            return;
+        }
+    }
     constructor(target, model, xform, propagator) {
         super();
         this.target = target;

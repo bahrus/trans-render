@@ -2,7 +2,7 @@ import { MountContext, PipelineStage } from 'mount-observer/types';
 import { MountOrchestrator, Transformer, arr } from '../Transform.js';
 import { onMountStatusChange, EngagementCtx, UnitOfWork, Engagement } from '../types.js';
 
-export async function Engage<TProps, TMethods = TProps>(
+export async function Engage<TProps extends {}, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>,
     matchingElement: Element,
     type: onMountStatusChange,

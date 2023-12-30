@@ -10,7 +10,7 @@ import {
 import { MountContext, PipelineStage } from 'mount-observer/types';
 export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './types';
 
-export async function Transform<TProps = any, TMethods = TProps>(
+export async function Transform<TProps extends {}, TMethods = TProps>(
     target: TransformerTarget,
     model: TProps & TMethods,
     xform: XForm<TProps, TMethods>,
@@ -21,11 +21,23 @@ export async function Transform<TProps = any, TMethods = TProps>(
     return xformer;
 }
 
-export class Transformer<TProps = any, TMethods = TProps> extends EventTarget implements ITransformer<TProps, TMethods>{
+export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarget implements ITransformer<TProps, TMethods>{
     #mountOrchestrators: Array<MountOrchestrator<TProps, TMethods>> = [];
     #model: TProps & TMethods;
     get model(){
         return this.#model;
+    }
+    async updateModel(newModel: TProps & TMethods){
+        const {propagator} = this;
+        const {___props, ___nestedProps} = propagator;
+        if(___props === undefined){
+            this.#model = newModel;
+            return;
+        }
+        if(___nestedProps === undefined){
+            Object.assign<TProps & TMethods, TProps & TMethods>(this.#model, newModel);
+            return;
+        }
     }
     constructor(
         public target: TransformerTarget,
@@ -271,7 +283,7 @@ export function arr<T = any>(inp: T | T[] | undefined) : T[] {
         : Array.isArray(inp) ? inp : [inp];
 }
 
-export class MountOrchestrator<TProps, TMethods = TProps> extends EventTarget implements IMountOrchestrator<TProps, TMethods> {
+export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends EventTarget implements IMountOrchestrator<TProps, TMethods> {
     #mountObserver: MountObserver;
     #matchingElements: WeakRef<Element>[] = [];
     #unitsOfWork: Array<QuenitOfWork<TProps, TMethods>>
