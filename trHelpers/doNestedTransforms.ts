@@ -1,7 +1,6 @@
 import {QuenitOfWork, XForm} from '../types';
 import {MountOrchestrator, Transform} from '../Transform.js';
 export async function doNestedTransforms(matchingElement: Element, uows: Array<QuenitOfWork<any, any>>, mo: MountOrchestrator<any, any>){
-    console.log({uows, mo});
     const {queryInfo, transformer} = mo;
     const {prop} = queryInfo;
     const {model} = transformer;

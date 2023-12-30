@@ -984,18 +984,34 @@ A special event name -- "load" -- is reserved for setting host properties one ti
 ## Example 9a
 
 ```html
-<div itemscope itemprop=subObj>
-    <span itemprop=subProp1></span>
+<div>
+    <div itemscope itemprop=address>
+        <span itemprop=zipCode></span>
+    </div>
 </div>
 ```
 
 ```Typescript
-{
-    '$ subObj': {
-        '| subProp1': 0
+const div = document.querySelector('div')!;
+const model: Props & Methods = {
+    name: 'Bob',
+    address: {
+        zipCode: '12345'
     }
-}
+};
+
+Transform<Props & Methods>(div, model, {
+    '$ address': {
+        '| zipCode': 0
+    } as XForm<AddressProps, AddressMethods>,
+});
+
+setTimeout(() => {
+    model.address.zipCode = '54321';
+}, 2000);
 ```
+
+This results in the span being keep in sync with model.address.zipCode.
 
 ## Viewing Your Element Locally
 

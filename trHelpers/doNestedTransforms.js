@@ -1,6 +1,5 @@
 import { Transform } from '../Transform.js';
 export async function doNestedTransforms(matchingElement, uows, mo) {
-    console.log({ uows, mo });
     const { queryInfo, transformer } = mo;
     const { prop } = queryInfo;
     const { model } = transformer;

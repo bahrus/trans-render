@@ -32,6 +32,6 @@ Transform<Props & Methods>(div, model, {
 //     const span = document.createElement('span');
 //     div.appendChild(span);
 // }, 1000);
-// setTimeout(() => {
-//     model.greeting = 'bye';
-// }, 2000);
+setTimeout(() => {
+    model.address.zipCode = '54321';
+}, 2000);
