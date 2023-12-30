@@ -37,6 +37,18 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
         if(___nestedProps === undefined){
             Object.assign<TProps & TMethods, TProps & TMethods>(this.#model, newModel);
             return;
+        }else{
+            for(const prop in newModel){
+                if(___nestedProps.has(prop)){
+                    const tbd = ___nestedProps.get(prop);
+                    const newVal = (<any>newModel)[prop]
+                    if(tbd instanceof Transformer){
+                        await tbd.updateModel(newVal);
+                    }else{
+                        Object.assign(tbd, newVal);
+                    }
+                }
+            }
         }
     }
     constructor(

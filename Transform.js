@@ -24,6 +24,20 @@ export class Transformer extends EventTarget {
             Object.assign(this.#model, newModel);
             return;
         }
+        else {
+            for (const prop in newModel) {
+                if (___nestedProps.has(prop)) {
+                    const tbd = ___nestedProps.get(prop);
+                    const newVal = newModel[prop];
+                    if (tbd instanceof Transformer) {
+                        await tbd.updateModel(newVal);
+                    }
+                    else {
+                        Object.assign(tbd, newVal);
+                    }
+                }
+            }
+        }
     }
     constructor(target, model, xform, propagator) {
         super();

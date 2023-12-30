@@ -245,5 +245,5 @@ export type ToTransformer<TProps, TMethods> = (
 
 export interface MarkedUpEventTarget extends EventTarget{
     ___props?: Set<string>;
-    ___nestedProps?: Set<string>;
+    ___nestedProps?: Map<string, any>;
 }

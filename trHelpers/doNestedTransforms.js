@@ -2,11 +2,13 @@ import { Transform } from '../Transform.js';
 export async function doNestedTransforms(matchingElement, uows, mo) {
     const { queryInfo, transformer } = mo;
     const { prop } = queryInfo;
-    const { model } = transformer;
+    const { model, propagator } = transformer;
     const subModel = model[prop];
+    propagator.___nestedProps = (propagator.___nestedProps || new Map()).set(prop, subModel);
     for (const uow of uows) {
         const newUOW = { ...uow };
         delete newUOW.q;
-        await Transform(matchingElement, subModel, newUOW);
+        const transform = await Transform(matchingElement, subModel, newUOW);
+        propagator.___nestedProps.set(prop, transform);
     }
 }
