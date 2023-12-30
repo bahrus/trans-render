@@ -1,4 +1,5 @@
-export async function subscribe(target: any, props: string | string[], propagator: EventTarget, autoCreateProp = false){
+import {MarkedUpEventTarget} from '../types';
+export async function subscribe(target: any, props: string | string[], propagator: MarkedUpEventTarget, autoCreateProp = false){
     if(target instanceof Element){
         const {isDefined} = await import('./isDefined.js');
         await isDefined(target);
@@ -26,7 +27,7 @@ export async function subscribe(target: any, props: string | string[], propagato
                     configurable: true,
                 });
                 target['__' + propName + '_'] = currentVal;
-                (<any>propagator)['___props'] = ((<any>propagator)['___props'] || new Set<string>()).add(propName);
+                propagator.___props = (propagator.___props || new Set<string>()).add(propName);
                 continue;
             }else{
                 throw {target, propName, message: "Can't find property."};

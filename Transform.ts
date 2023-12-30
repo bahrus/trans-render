@@ -5,7 +5,7 @@ import {
     ObjectExpression,
     TransformerTarget, 
     onMountStatusChange, RHS, AddEventListener,
-    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm
+    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget
 } from './types.js';
 import { MountContext, PipelineStage } from 'mount-observer/types';
 export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './types';
@@ -28,7 +28,7 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget im
         public target: TransformerTarget,
         public model: TProps & TMethods,
         public xform: Partial<{[key: string]: RHS<TProps, TMethods>}>,
-        public propagator: EventTarget, 
+        public propagator: MarkedUpEventTarget, 
     ){
         super();
     }
@@ -36,9 +36,11 @@ export class Transformer<TProps = any, TMethods = TProps> extends EventTarget im
         const {target, model, xform} = this;
         let {propagator} = this;
         if(propagator === undefined){
-            propagator = new EventTarget();
-            (<any>propagator)['___props'] = new Set();
+            propagator = new EventTarget() as MarkedUpEventTarget;
             this.propagator = propagator;
+        }
+        if(propagator.___props === undefined){
+            propagator.___props = new Set();
         }
         let prevKey: string | undefined;
         const uows : Array<QuenitOfWork<TProps, TMethods>> = [];
@@ -350,7 +352,7 @@ export class MountOrchestrator<TProps, TMethods = TProps> extends EventTarget im
             const {target, propagator, model} = this.transformer;
             for(const propName of p){
                 if(typeof propName !== 'string') throw 'NI';
-                const propsSet = (<any>propagator)['___props'];
+                const propsSet = propagator.___props;
                 if(propsSet instanceof Set){
                     if(!propsSet.has(propName)){
                         const {subscribe} = await import('./lib/subscribe2.js');

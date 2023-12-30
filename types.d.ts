@@ -197,7 +197,7 @@ export type UnitOfWorkRHS<TProps, TMethods> =
     | keyof TMethods & string 
     | keyof TProps & string
     | UnitOfWork<TProps, TMethods>
-    | XForm<any, any>
+    | XForm<any, any> //unclear if this is necessary
 ;
 
 export type RHS<TProps, TMethods> = UnitOfWorkRHS<TProps, TMethods> | Array<UnitOfWork<TProps, TMethods>>;
@@ -242,3 +242,7 @@ export type ToTransformer<TProps, TMethods> = (
     xform: XForm<TProps, TMethods>,
     propagator?: EventTarget
 ) => ITransformer<TProps, TMethods>;
+
+export interface MarkedUpEventTarget extends EventTarget{
+    ___props?: Set<string>;
+}

@@ -55,7 +55,7 @@ All the examples described below can [be seen fully here](https://github.com/bah
 
 [Simplest element to prop mapping](#example-1a---simplest-element-to-prop-mapping)
 
-[Part 2 - Binding using special attributes](#part-2-binding-using-special-standard-attributes)
+[Part 2 - Binding using special attributes](#part-2---binding-using-special-standard-attributes)
 
 [Attribute to single prop shortcut with pass through derivation](#example-2a-shortcut-with-pass-through-derivation)
 
@@ -241,7 +241,7 @@ Transform<IModel>(div, model, {
 });
 ```
 
-## Part 2 Binding using special, standard attributes
+## Part 2 - Binding using special, standard attributes
 
 We often find ourselves defining in our HTML *input* tags (or other form-associated elements):
 
@@ -979,9 +979,13 @@ If we want to
 
 A special event name -- "load" -- is reserved for setting host properties one time only based on server rendered HTML.  It is expected that once the "ownership" of the value is passed from the server rendered HTML to the host model, other binding instructions will continue to keep them in sync via one-way binding down from the host/model to the UI.
 
-## Part 9.  Nested Objects => Nested Transforms
+## Part 9 - Nested Objects => Nested Transforms
 
-## Example 9a
+Up until now, the only way we can bind an HTML element to nested sub properties has been via a derived method, either inline in the transform expression, or via a method of the host model. And even that solution isn't very effective -- modifications made directly to the sub property, done without replacing the full top level property, won't be picked up by the binding. 
+
+For true nested binding, we leverage the microdata itemscope attribute, combined with the itemprop attribute on the same element
+
+## Example 9a itemscope/itemprop explicitly spelled out.
 
 ```html
 <div>

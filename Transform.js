@@ -23,8 +23,10 @@ export class Transformer extends EventTarget {
         let { propagator } = this;
         if (propagator === undefined) {
             propagator = new EventTarget();
-            propagator['___props'] = new Set();
             this.propagator = propagator;
+        }
+        if (propagator.___props === undefined) {
+            propagator.___props = new Set();
         }
         let prevKey;
         const uows = [];
@@ -318,7 +320,7 @@ export class MountOrchestrator extends EventTarget {
             for (const propName of p) {
                 if (typeof propName !== 'string')
                     throw 'NI';
-                const propsSet = propagator['___props'];
+                const propsSet = propagator.___props;
                 if (propsSet instanceof Set) {
                     if (!propsSet.has(propName)) {
                         const { subscribe } = await import('./lib/subscribe2.js');
