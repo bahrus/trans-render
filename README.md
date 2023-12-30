@@ -51,15 +51,15 @@ All the examples described below can [be seen fully here](https://github.com/bah
 
 [Use cases for trans-rendering](#use-cases-for-tr)
 
-[Part 1 - Mapping from props to elements](#part-1---mapping-from-props-to-elements)
+1. [Part 1 - Mapping from props to elements](#part-1---mapping-from-props-to-elements)
 
-[Simplest element to prop mapping](#example-1a---simplest-element-to-prop-mapping)
+   a. [Simplest element to prop mapping](#example-1a---simplest-element-to-prop-mapping)
 
-[Part 2 - Binding using special attributes](#part-2---binding-using-special-standard-attributes)
+2. [Part 2 - Binding using special attributes](#part-2---binding-using-special-standard-attributes)
 
-[Attribute to single prop shortcut with pass through derivation](#example-2a-shortcut-with-pass-through-derivation)
+   a. [Attribute to single prop shortcut with pass through derivation](#example-2a-shortcut-with-pass-through-derivation)
 
-[Attribute to single prop shortcut with value derived from host method](#example-2b-shortcut-but-deriving-value-from-method)
+   b. [Attribute to single prop shortcut with value derived from host method](#example-2b-shortcut-but-deriving-value-from-method)
 
 [Declarative interpolation of multiple props](#example-3a-declarative-interpolation)
 
