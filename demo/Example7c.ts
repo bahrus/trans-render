@@ -1,7 +1,7 @@
 import {Transform} from '../Transform.js';
 
 interface Props {
-    typeToEditIsLimited: true,
+    typeToEditIsLimited: boolean,
 }
 interface Methods{
     
@@ -16,12 +16,12 @@ Transform<Props, Methods>(form, model, {
     input: [
         {
             o: 'typeToEditIsLimited', 
-            i: {d: ({typeToEditIsLimited}) => typeToEditIsLimited},
+            i: {d: ({typeToEditIsLimited}: Props & Methods) => typeToEditIsLimited},
             s: {type: 'range'}
         },
         {
             o: 'typeToEditIsLimited', 
-            i: {d: ({typeToEditIsLimited}) => !typeToEditIsLimited},
+            i: {d: ({typeToEditIsLimited}: Props & Methods) => !typeToEditIsLimited},
             s: {type: 'number'}
         },
     ]
