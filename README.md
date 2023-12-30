@@ -523,9 +523,9 @@ Transform<Props, Actions>(form, model, {
 });
 ```
 
-## Example 5b -- Adding a singe event listener, the most standard one
+## Example 5b -- Adding a single event listener, the most standard one
 
-There some elements where the most common event we attach is pretty clear - for the button it is click, for the input element is it the input event.
+There are some elements where the most common event we attach is pretty clear - for the button it is click, for the input element it is the input event.
 
 So to make such scenarios simple, we adopt the following rules:
 
@@ -603,7 +603,7 @@ Traditionally, inline binding libraries have supported this, often as add-on's. 
 
 However, this library has been designed so that the various settings (a, e, i, o, s, etc) can be overridden for more powerful functionality, or extended to support additional functionality, perhaps keyed from new letters / words.  
 
-But more importantly, the Transform function / Transformer class provides a clean way of hooking up DOM elements to [custom enhancements](https://github.com/WICG/webcomponents/issues/1000), that can certainly include support for conditional loading and repeating DOM structures.  For such enhancement to work well with this library, they need to provide a formal api for getting "attached" to the element, not dependent on an inline attribute (which would be clunky, frankly).  
+But more importantly, the Transform function / Transformer class provides a clean way of hooking up DOM elements to [custom enhancements](https://github.com/WICG/webcomponents/issues/1000), that can certainly include support for conditional loading and repeating DOM structures.  For such enhancements to work well with this library, they need to provide a formal api for getting "attached" to the element, not dependent on an inline attribute (which would be clunky, frankly).  
 
 So *trans-render* views the best value-add as being able to specify, during initialization / hydration, a method that can be called, and where we can specify values to pass into that method.  This makes the trans-render extremely loosely coupled / un-opinionated.  
 
