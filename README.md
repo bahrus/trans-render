@@ -523,7 +523,7 @@ Transform<Props, Actions>(form, model, {
 });
 ```
 
-## Example 5b -- Adding a singe event listener, the most standard one
+## Example 5b -- Adding a single event listener, the most standard one
 
 There some elements where the most common event we attach is pretty clear - for the button it is click, for the input element is it the input event.
 
