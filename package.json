@@ -60,6 +60,7 @@
     "./lib/pq.js": "./lib/pq.js",
     "./lib/PropertyBag.js": "./lib/PropertyBag.js",
     "./lib/resolve.js": "./lib/resolve.js",
+    "./lib/setEnhProp.js": "./lib/setEnhProp.js",
     "./lib/setProp.js": "./lib/setProp.js",
     "./lib/specialKeys.js": "./lib/specialKeys.js",
     "./lib/subscribe.js": "./lib/subscribe.js",

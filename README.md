@@ -478,11 +478,11 @@ const model: Model = {
 
 Transform<Model>(div, model, {
     input: [
-        {o: 'msg1', s: 'value'},
-        {o: 'rO',   s: 'readOnly'},
-        {o: 'num',  s: 'tabIndex'},
-        {o: 'num',  s: '.dataset.num'},
-        {o: 'prop', sa: 'itemprop'},
+        {s: 'value', o: 'msg1'},
+        {s: 'readOnly', o: 'rO'},
+        {s: 'tabIndex', o: 'num'},
+        {s: '.dataset.num', o: 'num'},
+        {sa: 'itemprop', o: 'prop'},
         {
             s: {
                 type: 'number',
@@ -728,6 +728,17 @@ We can also specify an array of engagements:
         }
     ]
 }
+```
+
+### Example 6d [Untested]
+
+Set beEnhanced enhancement property value:
+
+Transform<Model>(div, model, {
+    input: [
+        {s: '+beSearching.for', o: 'searchText'},
+    ]
+});
 ```
 
 [TODO]  Do only if a strong use case:  Infer engagement based on the name of the method.  For example, suppose the model looks like:
