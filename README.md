@@ -63,7 +63,7 @@ All the examples described below can [be seen fully here](https://github.com/bah
 
 3. [Part 3 - Derived values in depth](#part-3---derived-values-in-depth)
 
-   a.  [Declarative interpolation of multiple props](#example-3a-declarative-interpolation)
+   a.  [Declarative interpolation of multiple props](#example-3a-declarative-interpolation)  
 
    b.  [Declarative computed derivatives with multiple prop dependencies](#example-3b-declarative-computed-derivations)
 
