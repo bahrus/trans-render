@@ -75,7 +75,7 @@ All the examples described below can [be seen fully here](https://github.com/bah
 
    a. [Adding a single event listener, handled by a method of the model](#example-5a---adding-a-single-event-listener-handled-by-the-model)
 
-   b. [Shortcut for adding the most common event handler](#example-5b----adding-a-singe-event-listener-the-most-standard-one)
+   b. [Shortcut for adding the most common event handler](#example-5b---adding-a-single-event-listener-the-most-standard-one)
 
    c. [Inline single event listener](#example-5c----instant-gratification-event-handlers)
 
@@ -536,7 +536,7 @@ Transform<Props, Actions>(form, model, {
 });
 ```
 
-## Example 5b -- Adding a single event listener, the most standard one
+## Example 5b - Adding a single event listener, the most standard one
 
 There are some elements where the most common event we attach is pretty clear - for the button it is click, for the input element it is the input event.
 
