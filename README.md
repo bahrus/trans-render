@@ -350,7 +350,7 @@ Transform<Props & Methods>(form, model, {
 
 ## Part 3 - Derived values in depth
 
-## Example 3a  Declarative Interpolation
+## Example 3a Declarative Interpolation
 
 Suppose our domain object has two properties, and we need to dynamically combine them together in our UI:
 
