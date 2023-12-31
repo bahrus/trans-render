@@ -783,7 +783,7 @@ Transform<Props, Methods>(form, model, {
 });
 ```
 
-### Example 7b  - Custom method to check boolean condition
+### Example 7b - Custom method to check boolean condition
 
 ```html
 <form>
