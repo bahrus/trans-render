@@ -21,21 +21,17 @@ export async function doUpdate(transformer, matchingElement, uow) {
     const val = await transformer.getDerivedVal(uow, d, matchingElement);
     if (s !== undefined) {
         const path = s;
-        if (path[0] === '.') {
-            const { setProp } = await import('../lib/setProp.js');
-            setProp(matchingElement, path, val);
-        }
-        else {
-            // if(typeof val === 'object'  && !Array.isArray(val)){
-            //     const keys = Object.keys(val);
-            //     if(keys[0] in matchingElement){
-            //         Object.assign(matchingElement, val);
-            //     }else{
-            //         (<any>matchingElement)[s as string] = val;
-            //     }
-            // }else{
-            matchingElement[s] = val;
-            //}
+        switch (path[0]) {
+            case '.':
+                const { setProp } = await import('../lib/setProp.js');
+                setProp(matchingElement, path, val);
+                break;
+            case '+':
+                const { setEnhProp } = await import('../lib/setEnhProp.js');
+                setEnhProp(matchingElement, path, val);
+                break;
+            default:
+                matchingElement[s] = val;
         }
     }
     else if (sa !== undefined) {

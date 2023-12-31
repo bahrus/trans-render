@@ -25,22 +25,19 @@ export async function doUpdate<TProps extends {}, TMethods = TProps>(
 
     if(s !== undefined){
         const path = s as string;
-        if(path[0] === '.'){
-            const {setProp} = await import('../lib/setProp.js');
-            setProp(matchingElement, path, val);
-        }else{
-            // if(typeof val === 'object'  && !Array.isArray(val)){
-            //     const keys = Object.keys(val);
-            //     if(keys[0] in matchingElement){
-            //         Object.assign(matchingElement, val);
-            //     }else{
-            //         (<any>matchingElement)[s as string] = val;
-            //     }
-            // }else{
+        switch(path[0]){
+            case '.':
+                const {setProp} = await import('../lib/setProp.js');
+                setProp(matchingElement, path, val);
+                break;
+            case '+':
+                const {setEnhProp} = await import('../lib/setEnhProp.js');
+                setEnhProp(matchingElement, path, val);
+                break;
+            default:
                 (<any>matchingElement)[s as string] = val;
-            //}
-            
         }
+        
         
     }else if(sa !== undefined){
         const {A} = await import('../froop/A.js');
