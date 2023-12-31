@@ -452,7 +452,7 @@ Transform<Model>(div, model, {
 });
 ```
 
-## Example 4  Setting props of the element
+## Example 4 Setting props of the element
 
 We glossed over a subtlety in our examples above.  Without specifying to do so, we are automatically setting the span's text content, the input's value, based on a single binding.  The property we are setting is assumed based on context.  In the case of the hyperlink (a), we set the href for example.  This decision is inspired by how [microdata works](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/itemprop#values).
 
