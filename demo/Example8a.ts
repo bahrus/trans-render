@@ -11,7 +11,6 @@ const model: Props & Methods = {
 }
 const div = document.querySelector('div')!;
 
-const propagator = new EventTarget();
 
 Transform<Props, Methods>(div, model, {
     button: {
@@ -22,4 +21,4 @@ Transform<Props, Methods>(div, model, {
         }
     },
     '% count': 0
-}, propagator);
+});

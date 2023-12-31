@@ -10,7 +10,6 @@ const model: Props & Methods = {
     booleanValue: false
 }
 const div = document.querySelector('div')!;
-const propagator = new EventTarget();
 Transform<Props, Methods>(div, model, {
     button: {
         m:{
@@ -19,4 +18,4 @@ Transform<Props, Methods>(div, model, {
         }
     },
     '# booleanValue': 0
-}, propagator);
+});

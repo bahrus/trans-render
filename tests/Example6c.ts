@@ -32,7 +32,6 @@ const model: Props & Methods = {
         console.log({model, el, ctx});
     }
 };
-const propagator = new EventTarget();
 
 Transform<Props, Methods>(div, model, {
     input: [
@@ -64,7 +63,7 @@ Transform<Props, Methods>(div, model, {
             ]
         }
     ]
-}, propagator);
+});
 
 setTimeout(() => {
     const input = document.createElement('input');
@@ -72,7 +71,6 @@ setTimeout(() => {
 }, 1000);
 setTimeout(() => {
     model.msg1 = '456';
-    propagator.dispatchEvent(new Event('msg1'));
 }, 2000);
 setTimeout(() => {
     div.innerHTML = '';

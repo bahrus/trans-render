@@ -18,7 +18,6 @@ const model = {
         console.log({ model, el, ctx });
     }
 };
-const propagator = new EventTarget();
 Transform(div, model, {
     input: [
         { o: 'msg1', s: 'value' },
@@ -49,14 +48,13 @@ Transform(div, model, {
             ]
         }
     ]
-}, propagator);
+});
 setTimeout(() => {
     const input = document.createElement('input');
     div.appendChild(input);
 }, 1000);
 setTimeout(() => {
     model.msg1 = '456';
-    propagator.dispatchEvent(new Event('msg1'));
 }, 2000);
 setTimeout(() => {
     div.innerHTML = '';

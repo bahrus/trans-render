@@ -12,7 +12,6 @@ const model: Props & Methods = {
     stringValue: ''
 }
 const form = document.querySelector('form')!;
-const propagator = new EventTarget();
 Transform<Props, Methods>(form, model, {
     input: {
         m:[
@@ -30,4 +29,4 @@ Transform<Props, Methods>(form, model, {
     },
     '. booleanValue': 0,
     '# stringValue': 0,
-}, propagator);
+});

@@ -3,7 +3,6 @@ const model = {
     typeToEditIsLimited: true,
 };
 const form = document.querySelector('form');
-const propagator = new EventTarget();
 Transform(form, model, {
     input: [
         {
@@ -17,4 +16,4 @@ Transform(form, model, {
             s: { type: 'number' }
         },
     ]
-}, propagator);
+});

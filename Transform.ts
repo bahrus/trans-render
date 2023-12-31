@@ -5,7 +5,7 @@ import {
     ObjectExpression,
     TransformerTarget, 
     onMountStatusChange, RHS, AddEventListener,
-    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget
+    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget, TransformOptions
 } from './types.js';
 import { MountContext, PipelineStage } from 'mount-observer/types';
 export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './types';
@@ -14,9 +14,10 @@ export async function Transform<TProps extends {}, TMethods = TProps>(
     target: TransformerTarget,
     model: TProps & TMethods,
     xform: XForm<TProps, TMethods>,
-    propagator?: EventTarget, 
+    options?: TransformOptions
+    //propagator?: EventTarget, 
 ){
-    const xformer =  new Transformer<TProps, TMethods>(target, model, xform, propagator!);
+    const xformer =  new Transformer<TProps, TMethods>(target, model, xform, options!);
     await xformer.do();
     return xformer;
 }
@@ -28,8 +29,9 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
         return this.#model;
     }
     async updateModel(newModel: TProps & TMethods){
-        const {propagator} = this;
-        const {___props, ___nestedProps} = propagator;
+        const {options} = this;
+        const {propagator} = options;
+        const {___props, ___nestedProps} = propagator!;
         if(___props === undefined){
             this.#model = newModel;
             return;
@@ -55,7 +57,7 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
         public target: TransformerTarget,
         model: TProps & TMethods,
         public xform: Partial<{[key: string]: RHS<TProps, TMethods>}>,
-        public propagator: MarkedUpEventTarget, 
+        public options: TransformOptions, 
     ){
         super();
         this.#model = model;
@@ -63,10 +65,15 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
     }
     async do(){
         const {target, model, xform} = this;
-        let {propagator} = this;
+        let {options} = this;
+        if(options === undefined){
+            options = {};
+            this.options = options;
+        }
+        let {propagator} = options;
         if(propagator === undefined){
             propagator = new EventTarget() as MarkedUpEventTarget;
-            this.propagator = propagator;
+            options.propagator = propagator;
         }
         if(propagator.___props === undefined){
             propagator.___props = new Set();
@@ -283,11 +290,11 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
         return 'textContent';
     }
 
-    s(p: keyof TProps, val: any){
-        const {model, propagator} = this;
-        model[p] = val;
-        if(propagator !== undefined) propagator.dispatchEvent(new Event('p'));
-    }
+    // s(p: keyof TProps, val: any){
+    //     const {model, propagator} = this;
+    //     model[p] = val;
+    //     if(propagator !== undefined) propagator.dispatchEvent(new Event('p'));
+    // }
 }
 
 export function arr<T = any>(inp: T | T[] | undefined) : T[] {
@@ -378,17 +385,18 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends Eve
             const {o} = uow;
             const p = arr(o) as string[];
 
-            const {target, propagator, model} = this.transformer;
+            const {target, options, model} = this.transformer;
+            const {propagator} = options;
             for(const propName of p){
                 if(typeof propName !== 'string') throw 'NI';
-                const propsSet = propagator.___props;
+                const propsSet = propagator!.___props;
                 if(propsSet instanceof Set){
                     if(!propsSet.has(propName)){
                         const {subscribe} = await import('./lib/subscribe2.js');
-                        await subscribe(model, propName, propagator, true);
+                        await subscribe(model, propName, propagator!, true);
                     }
                 }
-                propagator.addEventListener(propName, e => {
+                propagator!.addEventListener(propName, e => {
                     const all = this.#cleanUp();
                     for(const matchingElement of all){
                         this.doUpdate(matchingElement, uow);

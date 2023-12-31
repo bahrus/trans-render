@@ -10,7 +10,6 @@ const model: Props & Methods = {
     selectedItem: 'sandwich'
 }
 const div = document.querySelector('div')!;
-const propagator = new EventTarget();
 Transform<Props, Methods>(div, model, {
     button: {
         m:{
@@ -20,4 +19,4 @@ Transform<Props, Methods>(div, model, {
         }
     },
     '| selectedItem': 0
-}, propagator);
+});

@@ -4,7 +4,6 @@ const model = {
     stringValue: ''
 };
 const form = document.querySelector('form');
-const propagator = new EventTarget();
 Transform(form, model, {
     input: {
         m: [
@@ -21,4 +20,4 @@ Transform(form, model, {
     },
     '. booleanValue': 0,
     '# stringValue': 0,
-}, propagator);
+});

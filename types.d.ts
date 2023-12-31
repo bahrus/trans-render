@@ -31,6 +31,11 @@ export type ObjectExpression<TProps, TMethods> = {
     [key: string]: Derivative<TProps, TMethods>;
 };
 
+export interface TransformOptions{
+    propagator?: MarkedUpEventTarget,
+    skipInit?: boolean,
+}
+
 export type Derivative<TProps, TMethods> = 
     | number 
     | InterpolatingExpression 

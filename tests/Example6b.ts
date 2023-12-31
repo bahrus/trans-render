@@ -20,7 +20,6 @@ const model: Props & Methods = {
         ((<any>window)['target'] as HTMLElement).setAttribute('mark', 'good');
     }
 };
-const propagator = new EventTarget();
 
 Transform<Props, Methods>(div, model, {
     input: [
@@ -36,7 +35,7 @@ Transform<Props, Methods>(div, model, {
             e: 'hydrateInputElement'
         }
     ]
-}, propagator);
+});
 
 setTimeout(() => {
     const input = document.createElement('input');
@@ -44,7 +43,6 @@ setTimeout(() => {
 }, 1000);
 setTimeout(() => {
     model.msg1 = '456';
-    propagator.dispatchEvent(new Event('msg1'));
 }, 2000);
 setTimeout(() => {
     div.innerHTML = '';

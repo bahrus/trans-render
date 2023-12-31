@@ -1,20 +1,23 @@
 import { MountObserver } from 'mount-observer/MountObserver.js';
-export async function Transform(target, model, xform, propagator) {
-    const xformer = new Transformer(target, model, xform, propagator);
+export async function Transform(target, model, xform, options
+//propagator?: EventTarget, 
+) {
+    const xformer = new Transformer(target, model, xform, options);
     await xformer.do();
     return xformer;
 }
 export class Transformer extends EventTarget {
     target;
     xform;
-    propagator;
+    options;
     #mountOrchestrators = [];
     #model;
     get model() {
         return this.#model;
     }
     async updateModel(newModel) {
-        const { propagator } = this;
+        const { options } = this;
+        const { propagator } = options;
         const { ___props, ___nestedProps } = propagator;
         if (___props === undefined) {
             this.#model = newModel;
@@ -39,19 +42,24 @@ export class Transformer extends EventTarget {
             }
         }
     }
-    constructor(target, model, xform, propagator) {
+    constructor(target, model, xform, options) {
         super();
         this.target = target;
         this.xform = xform;
-        this.propagator = propagator;
+        this.options = options;
         this.#model = model;
     }
     async do() {
         const { target, model, xform } = this;
-        let { propagator } = this;
+        let { options } = this;
+        if (options === undefined) {
+            options = {};
+            this.options = options;
+        }
+        let { propagator } = options;
         if (propagator === undefined) {
             propagator = new EventTarget();
-            this.propagator = propagator;
+            options.propagator = propagator;
         }
         if (propagator.___props === undefined) {
             propagator.___props = new Set();
@@ -263,12 +271,6 @@ export class Transformer extends EventTarget {
             return 'value';
         return 'textContent';
     }
-    s(p, val) {
-        const { model, propagator } = this;
-        model[p] = val;
-        if (propagator !== undefined)
-            propagator.dispatchEvent(new Event('p'));
-    }
 }
 export function arr(inp) {
     return inp === undefined ? []
@@ -344,7 +346,8 @@ export class MountOrchestrator extends EventTarget {
         for (const uow of this.#unitsOfWork) {
             const { o } = uow;
             const p = arr(o);
-            const { target, propagator, model } = this.transformer;
+            const { target, options, model } = this.transformer;
+            const { propagator } = options;
             for (const propName of p) {
                 if (typeof propName !== 'string')
                     throw 'NI';

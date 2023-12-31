@@ -3,7 +3,6 @@ const model = {
     selectedItem: 'sandwich'
 };
 const div = document.querySelector('div');
-const propagator = new EventTarget();
 Transform(div, model, {
     button: {
         m: {
@@ -13,4 +12,4 @@ Transform(div, model, {
         }
     },
     '| selectedItem': 0
-}, propagator);
+});

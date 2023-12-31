@@ -13,7 +13,6 @@ const model: Props & Methods = {
     isUnlimited: ({typeToEditIsLimited}) => !typeToEditIsLimited,
 }
 const form = document.querySelector('form')!;
-const propagator = new EventTarget();
 
 Transform<Props, Methods>(form, model, {
     input: [
@@ -28,4 +27,4 @@ Transform<Props, Methods>(form, model, {
             s: {type: 'number'}
         },
     ]
-}, propagator);
+});
