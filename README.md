@@ -30,6 +30,7 @@ To achieve the css-like ability to respond to new elements being dynamically add
 5.  Combined with [progressive element enhancement](https://github.com/WICG/webcomponents/issues/1000) (custom attribute) libraries, such as [be-enhanced](https://github.com/bahrus/be-enhanced), that can also be attached "from a distance", we can build custom elements that can easily evolve over time with absolutely no framework lock-in.
 6.  Apply repetitive, default settings across the board to all instances of certain (custom) elements.
 7.  Merge data from different sources onto one target DOM fragment.
+8.  Be able to turn a pure HTML stream into a web component without the need for a separate template being downloaded/imported.
 
 XSLT can take pure XML with no formatting instructions as its input.  Generally speaking, the XML that XSLT acts on isn't a bunch of semantically  meaningless div tags, but rather a nice semantic document, whose intrinsic structure is enough to go on, in order to formulate a "transform" that doesn't feel like a hack.
 
@@ -1063,6 +1064,36 @@ setTimeout(async () => {
         greeting: 'bye'
     })
 }, 2000);
+```
+
+## Part TBD -- trans-render the web component
+
+One concern about using tr as we've seen so far, is that the js needs to be separated from the html, which can be more challenge from a developer point of view, raising concerns about violating "Locality of Behavior".  At least with the style tag, we can intersperse the style tag within the HTML (except for web components that may not perform well).
+
+True, one could also intersperse the HTML with script tags, but there is a certain amount of ceremony in setting this up, plus module scripts don't have a good way of being self-aware, as far the DOM.
+
+So the trans-render web component tag provides the equivalent of the style tag.
+
+Use of this tag makes most sense as a substitute for [be-hive](https://github.com/bahrus/be-hive)
+
+Option 1 -- pure declarative json
+
+```html
+<trans-render xform='{
+    "input": {
+
+    }
+}'>
+```
+
+Option 2 -- eval (within realm, in the future)
+
+```html
+<trans-render xform='{
+    "input": {
+
+    }
+}'>
 ```
 
 ## Viewing Your Element Locally
