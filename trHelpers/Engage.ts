@@ -18,8 +18,8 @@ export async function Engage<TProps extends {}, TMethods = TProps>(
         typeof e === 'string' ? [{
             do: e
         }] : arr(e!).map(x => typeof x === 'string' ? {do: x} : x);
-    for (const enhance of transpiledEngagements) {
-        const { do: d, with: w, undo, forget, be } = enhance;
+    for (const engagement of transpiledEngagements) {
+        const { do: d, with: w, undo, forget, be } = engagement;
         let met: (keyof TMethods & string) | undefined;
         switch (type) {
             case 'onMount': {
