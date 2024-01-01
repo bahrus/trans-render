@@ -240,7 +240,7 @@ Throughout the rest of the document, we will refer to the css selector key (in t
 
 The syntax above (Example 1a) should give anyone who works with css a warm and fuzzy feeling:  "span" is, after all, a valid css selector.  Unfortunately, prepare yourself. That warm and fuzzy feeling will quickly fade as we look closely at shortcuts that we will discuss below, designed to optimize on the 80% of anticipated use cases, use cases we will encounter repeatedly.  Whereas css doesn't require (or allow for that matter) quotes around the selector, JSON does, as does JS as soon as non alphanumeric characters get introduced.  An earlier attempt to avoid the quotes issue by encouraging camel-case to kebab conversions, while useful, no longer appears, after experimenting with that syntax for a few years, to be the most helpful syntactic sugar we can provide as far as reducing repetitive/verbose configuration.  
 
-Instead, we encourage the use of some key, standard attributes, where the value of the attribute matches the(camel-cased) name of the property it binds to.
+Instead, we encourage the use of some key, standard attributes, where the value of the attribute matches the (camelCased) name of the property it binds to.
 
 We will very shortly be expounding on exactly what these conventions are.  But before diving into that discussion, I want to nip one concern in the bud.  If your reaction to what follows is thinking "but that will prevent me from using free form css to match my elements," fear not.
 
@@ -1068,27 +1068,27 @@ setTimeout(async () => {
 
 ## Part TBD -- trans-render the web component [TODO]
 
-One concern about using tr as we've seen so far, is that the js needs to be separated from the html, which can be more challenge from a developer point of view, raising concerns about violating "Locality of Behavior".  At least with the style tag, we can intersperse the style tag within the HTML (except for web components that may not perform well).
+One concern about using TR as we've seen so far, is that the js needs to be separated from the html, which can be more challenging from a developer point of view.  It raises concerns about violating "Locality of Behavior" principles.  At least with the style tag, we can intersperse the style tag within the HTML (except for web components that may not perform well).
 
-True, one could also intersperse the HTML with script tags, but there is a certain amount of ceremony in setting this up, plus module scripts don't have a good way of being self-aware, as far the DOM.
+True, one could also intersperse the HTML with script tags, but there is a certain amount of ceremony in setting the Transformer function up, plus module scripts don't have a good way of being self-aware, as far the DOM.
 
 So the trans-render web component tag provides the equivalent of the style tag.
 
 Use of this tag makes most sense as **a substitute** for [be-hive](https://github.com/bahrus/be-hive).
 
-In this view, be-hive is best for progressive enhancement of HTML, including within Shadow scopes, but if adopting the approach of letting server streamed HTML be used as the basis of a web component, avoid the use of be-hive altogether (TODO, allow be-hive to inherit from root regardless of parent).
+In this development philosophy, be-hive is best for progressive enhancement of HTML, including within Shadow scopes, but if adopting the approach of letting server streamed HTML be used as the basis of a web component, avoid the use of be-hive altogether (TODO, allow be-hive to inherit from root regardless of parent).
 
 Option 1 -- pure declarative json [TODO]
 
 ```html
 <trans-render xform='{
     "input": {
-
+        ...
     }
 }'></trans-render>
 ```
 
-Option 2 -- eval (within realm, in the future)
+Option 2 -- eval (within realm, in the future) [TODO]
 
 ```html
 <trans-render onload=doEval xform="{
@@ -1100,16 +1100,18 @@ Option 2 -- eval (within realm, in the future)
 
 This would allow for inline JS expressions, as we've provided examples for above.
 
-The default "scope" for each instance of the tag is the parent element (but other options can be specified via the scope attribute/property).
+The default "scope" for each instance of the tag is the parent element (but other options can be specified via the scope attribute/property).  If no parent element is found, then the Shadow Root. [TODO]
 
-The default "model" is the web component "host", but can also specify a (relative) scope indicator for source of the model 
+The default "model" is the web component "host", but we can also specify a (relative) scope indicator, so that the source of the model can come from a peer element inside the Shadow Root.  
 
-What [blow-dry](https://github.com/bahrus/blow-dry) does is:  
+We can also specify a sub property path of the host element to bind to. [TODO]
+
+What [blow-dry](https://github.com/bahrus/blow-dry) does is:  [TODO]
 
 1.  Pulls out all instances of trans-render web components, leaving behind unique markers for the DOM scopes, as well as any peer elements that serve as the model, if applicable.  Ignore some trans-render tags based on an agreed upon attribute (once?)
 2.  Forms an "uber" set of transforms in memory, applied to each instance of the web component.
 
-But now how do we define web component using be-definitive?  One of the trans-render tags would have the be-definitive config contained within.
+But now how do we define web components using be-definitive?  One of the trans-render tags would have the be-definitive config contained within.
 
 ## Viewing Your Element Locally
 
