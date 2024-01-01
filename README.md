@@ -1104,7 +1104,7 @@ So the trans-render web component tag provides the equivalent of the style tag.
 
 Use of this tag makes most sense as **a substitute** for [be-hive](https://github.com/bahrus/be-hive).
 
-In this development philosophy, be-hive is best for progressive enhancement of HTML, including within Shadow scopes, but if adopting the approach of letting server streamed HTML be used as the basis of a web component, avoid the use of be-hive altogether (TODO, allow be-hive to inherit from root regardless of parent).
+In this development philosophy, be-hive is best for progressive enhancement of (non repeating) HTML, including within Shadow scopes, but if adopting the approach of letting server streamed HTML be used as the basis of a repeating web component, avoid the use of be-hive altogether (TODO, allow be-hive to inherit from root regardless of parent).
 
 Option 1 -- pure declarative json [TODO]
 
@@ -1126,7 +1126,7 @@ Option 2 -- eval (within realm, in the future) [TODO]
 }"></trans-render>
 ```
 
-This would allow for inline JS expressions, as we've provided examples for above.
+This would allow for inline JS expressions, as we've provided examples for above.  Of course, without TypeScript support [for now(https://github.com/tc39/proposal-type-annotations).
 
 The default "scope" for each instance of the tag is the parent element (but other options can be specified via the scope attribute/property).  If no parent element is found, then the Shadow Root. [TODO]
 
