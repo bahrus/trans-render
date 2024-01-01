@@ -1106,7 +1106,10 @@ The default "model" is the web component "host", but can also specify a (relativ
 
 What [blow-dry](https://github.com/bahrus/blow-dry) does is:  
 
-1.  Pulls out all instances of trans-render web components, leaving behind unique markers for the DOM scopes, as well as any peer elements that serve as the model, if applicable.
+1.  Pulls out all instances of trans-render web components, leaving behind unique markers for the DOM scopes, as well as any peer elements that serve as the model, if applicable.  Ignore some trans-render tags based on an agreed upon attribute (once?)
+2.  Forms an "uber" set of transforms in memory, applied to each instance of the web component.
+
+But now how do we define web component using be-definitive?  One of the trans-render tags would have the be-definitive config contained within.
 
 ## Viewing Your Element Locally
 
