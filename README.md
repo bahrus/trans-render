@@ -1089,12 +1089,14 @@ Option 1 -- pure declarative json
 Option 2 -- eval (within realm, in the future)
 
 ```html
-<trans-render xform='{
-    "input": {
+<trans-render onload=doEval xform="{
+    input: {
 
     }
-}'>
+}">
 ```
+
+This would allow for inline JS expressions, as we've provided examples for above.
 
 ## Viewing Your Element Locally
 
