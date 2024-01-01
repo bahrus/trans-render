@@ -1066,7 +1066,7 @@ setTimeout(async () => {
 }, 2000);
 ```
 
-## Part TBD -- trans-render the web component
+## Part TBD -- trans-render the web component [TODO]
 
 One concern about using tr as we've seen so far, is that the js needs to be separated from the html, which can be more challenge from a developer point of view, raising concerns about violating "Locality of Behavior".  At least with the style tag, we can intersperse the style tag within the HTML (except for web components that may not perform well).
 
@@ -1074,16 +1074,18 @@ True, one could also intersperse the HTML with script tags, but there is a certa
 
 So the trans-render web component tag provides the equivalent of the style tag.
 
-Use of this tag makes most sense as a substitute for [be-hive](https://github.com/bahrus/be-hive)
+Use of this tag makes most sense as **a substitute** for [be-hive](https://github.com/bahrus/be-hive).
 
-Option 1 -- pure declarative json
+In this view, be-hive is best for progressive enhancement of HTML, including within Shadow scopes, but if adopting the approach of letting server streamed HTML be used as the basis of a web component, avoid the use of be-hive altogether (TODO, allow be-hive to inherit from root regardless of parent).
+
+Option 1 -- pure declarative json [TODO]
 
 ```html
 <trans-render xform='{
     "input": {
 
     }
-}'>
+}'></trans-render>
 ```
 
 Option 2 -- eval (within realm, in the future)
@@ -1093,10 +1095,18 @@ Option 2 -- eval (within realm, in the future)
     input: {
 
     }
-}">
+}"></trans-render>
 ```
 
 This would allow for inline JS expressions, as we've provided examples for above.
+
+The default "scope" for each instance of the tag is the parent element (but other options can be specified via the scope attribute/property).
+
+The default "model" is the web component "host", but can also specify a (relative) scope indicator for source of the model 
+
+What [blow-dry](https://github.com/bahrus/blow-dry) does is:  
+
+1.  Pulls out all instances of trans-render web components, leaving behind unique markers for the DOM scopes, as well as any peer elements that serve as the model, if applicable.
 
 ## Viewing Your Element Locally
 
