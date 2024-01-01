@@ -16,6 +16,7 @@
   },
   "exports": {
     ".": "./Transform.js",
+    "./trans-render.js": "./trans-render.js",
     "./froop/CE.js": "./froop/CE.js",
     "./lib/beBeckoned.js": "./lib/beBeckoned.js",
     "./lib/bePropagating.js": "./lib/bePropagating.js",

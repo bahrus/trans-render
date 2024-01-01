@@ -252,3 +252,13 @@ export interface MarkedUpEventTarget extends EventTarget{
     ___props?: Set<string>;
     ___nestedProps?: Map<string, any>;
 }
+
+export interface TransRenderEndUserProps{
+
+}
+
+export interface TransRenderProps extends TransRenderEndUserProps{}
+
+export interface TransRenderMethods{
+
+}

@@ -724,23 +724,51 @@ We can also specify an array of engagements:
         {
             do: 'registerInputElement',
             forget: 'cleanupInputElement',
-            be: 'counted',
             with: 'some attribute value'
         }
     ]
 }
 ```
 
-### Example 6d [Untested]
+### Example 6d - beEnhanced enhancements, part 1 [Untested]
 
-Set beEnhanced enhancement property value:
+*trans-render* plays favorites with be-enhanced enhancements, for obvious reasons. 
 
+1.  Set beEnhanced enhancement property value for dynamic values:
+
+```TypeScript
 Transform<Model>(div, model, {
-    input: [
-        {s: '+beSearching.for', o: 'searchText'},
-    ]
+    input: {s: '+beSearching.for', o: 'searchText'},
 });
 ```
+
+The key is the beginning of the string ('+').
+
+This automatically cases the beSearching to become attached (assuming some other process imports the JS reference).  Support for loading also provided.
+
+2.  Attach be-enhanced enhancement (during engagement, one time only, constant values)
+
+
+### Example 6e - beEnhanced enhancements, part 2
+
+```TypeScript
+Transform<Model>(div, model, {
+    input: 
+        {
+            s: '+beSearching.for', 
+            o: 'searchText',
+            e: {
+                be: 'searching',
+                dep: () => import('be-searching/be-searching.js'),
+                waitForResolved: true
+            }
+        },
+        
+    
+});
+```
+
+Due to the way everything works, the s: property will automatically attach the beSearching enhancement anyway.  But this allows for setting static properties once, if applicable
 
 [TODO]  Do only if a strong use case:  Infer engagement based on the name of the method.  For example, suppose the model looks like:
 
