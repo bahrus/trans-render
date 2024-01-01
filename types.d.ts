@@ -62,7 +62,11 @@ export interface Engagement<TMethods>{
      * to attach.
      */
     be?: string,
-    with?: any
+    with?: any,
+    waitForResolved?: boolean,
+    dep?: () => void;
+    
+
 }
 
 //export interface EscalateProp

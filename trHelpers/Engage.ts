@@ -19,7 +19,7 @@ export async function Engage<TProps extends {}, TMethods = TProps>(
             do: e
         }] : arr(e!).map(x => typeof x === 'string' ? {do: x} : x);
     for (const engagement of transpiledEngagements) {
-        const { do: d, with: w, undo, forget, be } = engagement;
+        const { do: d, with: w, undo, forget, be, dep, waitForResolved } = engagement;
         let met: (keyof TMethods & string) | undefined;
         switch (type) {
             case 'onMount': {
@@ -37,11 +37,29 @@ export async function Engage<TProps extends {}, TMethods = TProps>(
         if (met !== undefined) {
             model[met](model, matchingElement, {
                 ...methodArg,
-                be,
+                //be,
                 with: w
             });
         }
+        if(type === 'onMount'){
+            if(dep !== undefined) dep();
+            if(be !== undefined){
+                const prop = 'be' + be[0].toUpperCase() + be.substring(1);
+                await customElements.whenDefined('be-enhanced');
+                const obj = (<any>matchingElement).beEnhanced.by[prop];
+                if(w !== undefined){
+                    Object.assign(obj, w);
+                }
+                if(waitForResolved){
+                    await (<any>matchingElement).beEnhanced.whenResolved(prop);
+                }else{
+                    (<any>matchingElement).beEnhanced.whenAttached(prop);
+                }
+                                
+            }
+            
 
+        }
 
     }
 

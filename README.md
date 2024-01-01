@@ -749,7 +749,7 @@ This automatically cases the beSearching to become attached (assuming some other
 2.  Attach be-enhanced enhancement (during engagement, one time only, constant values)
 
 
-### Example 6e - beEnhanced enhancements, part 2
+### Example 6e - beEnhanced enhancements, part 2 [Untested]
 
 ```TypeScript
 Transform<Model>(div, model, {
