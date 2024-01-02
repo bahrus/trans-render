@@ -221,7 +221,7 @@ export interface QueryInfo{
     prop?: string,
 }
 
-export type TransformerTarget = Element | DocumentFragment | Element[] | ShadowRoot;
+export type TransformerTarget = Element | DocumentFragment | Element[] | ShadowRoot | Document;
 
 export type Model = {
     [key: string]: any

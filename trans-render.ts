@@ -20,14 +20,20 @@ export class TransRender extends HTMLElement{
     }
     getModel(){
         const modelSrc = this.getAttribute('model-src');
+        let model: any;
         if(modelSrc === null) {
-            const 
+            model = this.shadowRoot?.host
         }
+        if(!model) throw 'NI';
+        return model;
     }
-    connectedCallback(){
-        const documentFragment = this.getTarget();
+
+    async connectedCallback(){
+        const documentFragment = await this.getTarget();
         const xform = this.getXForm();
-        const 
+        const model = this.getModel();
+        const {Transform} = await import('./Transform.js');
+        Transform(documentFragment, model, xform)
     }
 }
 if(!customElements.get('trans-render')) customElements.define('trans-render', TransRender);

@@ -335,9 +335,10 @@ We will see examples of these in use (especially in the Examples8*).
 
 <details>
     <summary>For the Typescipt absolutists</summary>
-One of the exciting recent developments of Typescript is the ability to define template literal types.  In theory, this means we can make the LHS expression typesafe.  However, due to some apparent Typescript compiling issues, this is currently problematic to use in this case, as it caues Typescript to go into an infinite loop.
 
-But benefit from type safety for the LHS, the best I could come up with is:
+One of the exciting recent developments of Typescript is the ability to define template literal types.  In theory, this means we can make the LHS expression type safe.  However, due to some apparent Typescript compiling issues, this is currently problematic to use in this case, as it causes Typescript to go into an infinite loop.
+
+So to benefit from type safety for the LHS, the best I could come up with is:
 
 ```Typescript
 const lhs: LHS<Model>[] = ['@ greeting'];
@@ -1083,7 +1084,7 @@ setTimeout(() => {
 }, 2000);
 ```
 
-This results in the span being keep in sync with model.address.zipCode.
+This results in the span being kept in sync with model.address.zipCode.
 
 ## Part 10 - Updating the model
 
@@ -1111,7 +1112,7 @@ setTimeout(async () => {
 
 ## Part TBD -- trans-render the web component [TODO]
 
-One concern about using TR as we've seen so far, is that the js needs to be separated from the html, which can be more challenging from a developer point of view.  It raises concerns about violating "Locality of Behavior" principles.  At least with the style tag, we can intersperse the style tag within the HTML (except for web components that may not perform well).
+One concern about using TR as we've seen so far, is that the js needs to be separated from the html, which can be more challenging from a developer point of view, especially if it is in a separate file (but no more so than css, fwiw).  It raises concerns about violating "Locality of Behavior" principles.  At least with the style tag, we can intersperse the style tag within the HTML (except for web components that may not perform well).
 
 True, one could also intersperse the HTML with script tags, but there is a certain amount of ceremony in setting the Transformer function up, plus module scripts don't have a good way of being self-aware, as far the DOM.
 
@@ -1119,7 +1120,7 @@ So the trans-render web component tag provides the equivalent of the style tag.
 
 Use of this tag makes most sense as **a substitute** for [be-hive](https://github.com/bahrus/be-hive).
 
-In this development philosophy, be-hive is best for progressive enhancement of (non repeating) HTML, including within Shadow scopes, but if adopting the approach of letting server streamed HTML be used as the basis of a repeating web component, avoid the use of be-hive altogether (TODO, allow be-hive to inherit from root regardless of parent).
+In this development philosophy, be-hive is best for progressive enhancement of (non repeating) HTML, including within Shadow scopes, but if adopting the approach of letting server streamed HTML be used as the basis of a repeating web component, avoiding the use of be-hive altogether, in lieu of this web component, appears to me to be the better option. (TODO, allow be-hive to inherit from root regardless of parent).
 
 Option 1 -- pure declarative json [TODO]
 
@@ -1141,7 +1142,7 @@ Option 2 -- eval (within realm, in the future) [TODO]
 }"></trans-render>
 ```
 
-This would allow for inline JS expressions, as we've provided examples for above.  Of course, without TypeScript support [for now(https://github.com/tc39/proposal-type-annotations).
+This would allow for inline JS expressions, as we've provided examples for above.  Of course, without TypeScript support [for now](https://github.com/tc39/proposal-type-annotations).
 
 The default "scope" for each instance of the tag is the parent element (but other options can be specified via the scope attribute/property).  If no parent element is found, then the Shadow Root. [TODO]
 
