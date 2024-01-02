@@ -1,4 +1,5 @@
 import { MountContext, PipelineStage } from "mount-observer/types";
+import { Scope } from "./lib/types";
 
 export type PropAttrQueryType = 
     | '|' //microdata itemprop
@@ -65,7 +66,7 @@ export interface Engagement<TMethods>{
     with?: any,
     waitForResolved?: boolean,
     dep?: () => void;
-    
+
 
 }
 
@@ -101,6 +102,8 @@ export type PropQueryExpression<TProps> =
     | `${PropAttrQueryType} ${keyof TProps & string}`
     | `${PropAttrQueryType} ${keyof TProps & string} * ${CSSQuery}`
 ;
+
+export type LHS<TProps> = PropQueryExpression<TProps>;
 
 export type CSSQuery = string;
 
@@ -257,11 +260,16 @@ export interface MarkedUpEventTarget extends EventTarget{
     ___nestedProps?: Map<string, any>;
 }
 
-export interface TransRenderEndUserProps{
-
+export interface TransRenderEndUserProps<ModelProps, ModelMethods = ModelProps>{
+    xform: XForm<ModelProps, ModelMethods>;
+    scope: Scope;
+    model?: ModelProps & ModelMethods;
+    options?: TransformOptions;
 }
 
-export interface TransRenderProps extends TransRenderEndUserProps{}
+export interface TransRenderProps<ModelProps, ModelMethods = ModelProps> extends TransRenderEndUserProps<ModelProps, ModelMethods>{
+
+}
 
 export interface TransRenderMethods{
 

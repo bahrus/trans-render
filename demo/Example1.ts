@@ -1,4 +1,5 @@
 import {Transform} from '../Transform.js';
+import { HS } from '../types.js';
 
 interface Model{
     greeting: string;
@@ -10,8 +11,10 @@ const model: Model = {
 };
 //const propagator = new EventTarget();
 
+const spanTest: HS<Model> = 'span';
+
 Transform<Model>(div, model, {
-    span: {
+    [spanTest]: {
         o: ['greeting'],
         d: 0
     },

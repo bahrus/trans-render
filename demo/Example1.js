@@ -4,8 +4,9 @@ const model = {
     greeting: 'hello'
 };
 //const propagator = new EventTarget();
+const spanTest = 'span';
 Transform(div, model, {
-    span: {
+    [spanTest]: {
         o: ['greeting'],
         d: 0
     },
