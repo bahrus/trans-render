@@ -1,16 +1,18 @@
 import {Transform} from '../Transform.js';
+import { LHS } from '../types.js';
 
-interface IModel{
+interface Model{
     greeting: string;
 }
 
 const form = document.querySelector('form')!;
-const model: IModel = {
+const model: Model = {
     greeting: 'hello'
 };
+const lhs: LHS<Model>[] = ['@ greeting'];
 
-Transform<IModel>(form, model, {
-    '@ greeting': 0,
+Transform<Model>(form, model, {
+    [lhs[0]]: 0
 });
 setTimeout(() => {
     const section = document.createElement('input');

@@ -240,6 +240,9 @@ export interface AddEventListener<TProps, TMethods>{
 }
 
 export type XForm<TProps, TMethods> = Partial<{[key: string]: RHS<TProps, TMethods>}>
+// export type XForm<TProps, TMethods> = Partial<{
+//     [key in LHS<TProps>]: RHS<TProps, TMethods>;
+// }>;
 
 export interface ITransformer<TProps, TMethods>{
     target: TransformerTarget,
