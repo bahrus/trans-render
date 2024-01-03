@@ -1132,7 +1132,7 @@ Option 1 -- pure declarative json
 }'></trans-render>
 ```
 
-Option 2 -- eval (within realm, in the future) [Untested]
+Option 2 -- eval (within realm, in the future)
 
 ```html
 <trans-render onload=doEval xform="{
@@ -1144,7 +1144,7 @@ Option 2 -- eval (within realm, in the future) [Untested]
 
 This would allow for inline JS expressions, as we've provided examples for above.  Of course, without TypeScript support [for now](https://github.com/tc39/proposal-type-annotations).
 
-The default "scope" for each instance of the tag is the parent element (but other options can be specified via the scope attribute/property).  If no parent element is found, then the Shadow Root. [TODO]
+The default "scope" for each instance of the tag is the parent element (but other options can be specified via the scope attribute/property).  If no parent element is found, then the Shadow Root. [Untested]
 
 The default "model" is the web component "host", but we can also specify a (relative) scope indicator, so that the source of the model can come from a peer element inside the Shadow Root.  
 
