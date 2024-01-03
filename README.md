@@ -96,7 +96,19 @@ All the examples described below can [be seen fully here](https://github.com/bah
 
    b. [Custom method for evaluating boolean condition](#example-7b---custom-method-to-check-boolean-condition)
 
-8.  [Part 8 Modifying the host](#modifying-the-host)
+8.  [Part 8 Modifying the host or model](#modifying-the-host-or-model)
+
+   a. [Incrementing a counter](#example-8a-incrementing-a-counter)
+
+   b. [Elevating a value to the host or model](#example-8b-elevating-a-value-to-the-host-or-model)
+
+   c. [Toggling a property from the host or model](#example-8c-toggling-a-property-from-the-host-or-model)
+
+   d. [Multiple modifications](#example-8d-multiple-modifications)
+
+   e. [Computed value](#example-8e---computed-value)
+
+   f. []
 
 ## Part 1 - Mapping from props to elements
 
@@ -907,7 +919,7 @@ Transform<Props, Methods>(form, model, {
 });
 ```
 
-## Modifying the host
+## Modifying the host or model
 
 To support our holy quest for doing as much as possible declaratively, we provide for some ways of modifying the host without requiring writing code in an event handler, to account for a significant number of use cases.
 
@@ -940,7 +952,7 @@ This modifies the count value of the host, incrementing by -1 if clicking the le
 > [!Note]
 > Notice that we are using the same letter, "s" in two very different ways in this library.  In [example 4](#example-4-setting-props-of-the-element) above, we saw "s" being used outside the "m" object.  In that case, we are setting properties of the target (html) element that was matched by the css match.  *Now* we are seeing "s" being used inside the modify/mutate (m) object, which is specifically modifying the host props.  It is important to keep an alert eye on the context in which "s" is being used, in other words.
 
-### Example 8b  Elevating a value to the host
+### Example 8b  Elevating a value to the host or model
 
 ```html
 <div>
@@ -966,7 +978,7 @@ Transform<Props, Methods>(div, model, {
 });
 ```
 
-### Example 8c Toggling a host property
+### Example 8c Toggling a property from the host or model
 
 ```html
 <div>
@@ -1044,7 +1056,7 @@ If we want to call a method from the model, passing in the matching element, we 
 
 If we want to 
 
-## Example 8h Hydrating with "load" event
+## Example 8h Hydrating with "load" event [TODO]
 
 A special event name -- "load" -- is reserved for setting host properties one time only based on server rendered HTML.  It is expected that once the "ownership" of the value is passed from the server rendered HTML to the host model, other binding instructions will continue to keep them in sync via one-way binding down from the host/model to the UI.
 
