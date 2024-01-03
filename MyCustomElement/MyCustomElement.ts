@@ -32,7 +32,7 @@ export class MyCustomElement extends HTMLElement{
             <div id=someStringPropVal></div>
             <div id=isVegetarian></div>
             <div id=age></div>
-            <trans-render xform='{
+            <trans-render onload="doEval" xform='{
                 "# age": 0,
                 "# isVegetarian": 0
             }' ></trans-render>

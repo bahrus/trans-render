@@ -13,7 +13,7 @@ export class TransRender extends HTMLElement{
     getXForm(){
         const xform = this.getAttribute('xform')!;
         if(this.getAttribute('onload') === 'doEval'){
-            return eval(xform) as XForm<any, any>;
+            return eval('(' + xform + ')') as XForm<any, any>;
         }else{
             return JSON.parse(xform) as XForm<any, any>;
         }

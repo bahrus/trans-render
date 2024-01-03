@@ -11,7 +11,7 @@ export class TransRender extends HTMLElement {
     getXForm() {
         const xform = this.getAttribute('xform');
         if (this.getAttribute('onload') === 'doEval') {
-            return eval(xform);
+            return eval('(' + xform + ')');
         }
         else {
             return JSON.parse(xform);

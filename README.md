@@ -1110,7 +1110,7 @@ setTimeout(async () => {
 }, 2000);
 ```
 
-## Part TBD -- trans-render the web component [Untested]
+## Part TBD -- trans-render the web component [WIP]
 
 One concern about using TR as we've seen so far, is that the js needs to be separated from the html, which can be more challenging from a developer point of view, especially if it is in a separate file (but no more so than css, fwiw).  It raises concerns about violating "Locality of Behavior" principles.  At least with the style tag, we can intersperse the style tag within the HTML (except for web components that may not perform well).
 
@@ -1122,7 +1122,7 @@ Use of this tag makes most sense as **a substitute** for [be-hive](https://githu
 
 In this development philosophy, be-hive is best for progressive enhancement of (non repeating) HTML, including within Shadow scopes, but if adopting the approach of letting server streamed HTML be used as the basis of a repeating web component, avoiding the use of be-hive altogether, in lieu of this web component, appears to me to be the better option. (TODO, allow be-hive to inherit from root regardless of parent).
 
-Option 1 -- pure declarative json [Untested]
+Option 1 -- pure declarative json
 
 ```html
 <trans-render xform='{
