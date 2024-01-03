@@ -4,7 +4,8 @@ const model = {
     msg1: '123',
     rO: true,
     num: 7,
-    propName: 'test'
+    propName: 'test',
+    color: 'red'
 };
 Transform(div, model, {
     input: [
@@ -13,6 +14,7 @@ Transform(div, model, {
         { o: 'num', s: 'tabIndex' },
         { o: 'num', s: '.dataset.num' },
         { o: 'propName', sa: 'itemprop' },
+        { o: 'color', ss: 'color' },
         {
             s: {
                 type: 'number',

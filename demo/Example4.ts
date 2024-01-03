@@ -5,6 +5,7 @@ interface Model{
     rO: boolean;
     num: number;
     propName: string;
+    color: string;
 }
 
 const div = document.querySelector('div')!;
@@ -12,7 +13,8 @@ const model: Model = {
     msg1: '123',
     rO: true,
     num: 7,
-    propName: 'test'
+    propName: 'test',
+    color: 'red'
 };
 
 Transform<Model>(div, model, {
@@ -22,6 +24,7 @@ Transform<Model>(div, model, {
         {o: 'num',  s: 'tabIndex'},
         {o: 'num',  s: '.dataset.num'}, 
         {o: 'propName', sa: 'itemprop'},
+        {o: 'color', ss: 'color'},
         {
             s: {
                 type: 'number',

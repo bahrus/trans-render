@@ -495,6 +495,7 @@ interface Model{
     rO: boolean;
     num: number;
     propName: string;
+    color: string;
 }
 
 const div = document.querySelector('div')!;
@@ -512,6 +513,7 @@ Transform<Model>(div, model, {
         {s: 'tabIndex', o: 'num'},
         {s: '.dataset.num', o: 'num'},
         {sa: 'itemprop', o: 'prop'},
+        {ss: 'color', o: 'color' },
         {
             s: {
                 type: 'number',
@@ -526,7 +528,7 @@ This will set the input's readOnly property from the r0 field from the model.  L
 
 Note the (discouraged) extra property: "sa" which means "set attribute" rather than setting the property.
 
-[TODO]: "ss" for set style.
+"ss" is used for setting a style property.
 
 ## Part 5 - Event handling
 
