@@ -15,6 +15,7 @@
 		"lib/mixins/*",
 		"xslt/*",
 		"froop/*", 
+		"MyCustomElement/*"
 	],
 	"exclude":[
 		"node_modules"

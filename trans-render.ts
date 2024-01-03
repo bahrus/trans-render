@@ -22,7 +22,7 @@ export class TransRender extends HTMLElement{
         const modelSrc = this.getAttribute('model-src');
         let model: any;
         if(modelSrc === null) {
-            model = this.shadowRoot?.host
+            model = (<any>this.getRootNode()).host;
         }
         if(!model) throw 'NI';
         return model;
