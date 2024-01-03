@@ -33,7 +33,6 @@ Transform(div, model, {
                 {
                     do: 'hydrateInputElement',
                     forget: 'cleanupInputElement',
-                    be: 'committed',
                     with: {
                         to: 'change'
                     }
@@ -42,20 +41,19 @@ Transform(div, model, {
                 {
                     do: 'registerInputElement',
                     forget: 'cleanupInputElement',
-                    be: 'counted',
                     with: 'some attribute value'
                 }
             ]
         }
     ]
 });
-setTimeout(() => {
-    const input = document.createElement('input');
-    div.appendChild(input);
-}, 1000);
-setTimeout(() => {
-    model.msg1 = '456';
-}, 2000);
-setTimeout(() => {
-    div.innerHTML = '';
-}, 15000);
+// setTimeout(() => {
+//     const input = document.createElement('input');
+//     div.appendChild(input);
+// }, 1000);
+// setTimeout(() => {
+//     model.msg1 = '456';
+// }, 2000);
+// setTimeout(() => {
+//     div.innerHTML = '';
+// }, 15000)

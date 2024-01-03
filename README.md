@@ -1110,7 +1110,7 @@ setTimeout(async () => {
 }, 2000);
 ```
 
-## Part TBD -- trans-render the web component [WIP]
+## Part 10 -- trans-render the web component [WIP]
 
 One concern about using TR as we've seen so far, is that the js needs to be separated from the html, which can be more challenging from a developer point of view, especially if it is in a separate file (but no more so than css, fwiw).  It raises concerns about violating "Locality of Behavior" principles.  At least with the style tag, we can intersperse the style tag within the HTML (except for web components that may not perform well).
 
@@ -1156,6 +1156,14 @@ What [blow-dry](https://github.com/bahrus/blow-dry) does is:  [TODO]
 2.  Forms an "uber" set of transforms in memory, applied to each instance of the web component.
 
 But now how do we define web components using be-definitive?  One of the trans-render tags would have the be-definitive config contained within.
+
+## Part 11 - Inheriting transforms from parent shadow scopes [TODO]
+
+```html
+<trans-render inherit="id1 id2"></trans-render>
+```
+
+...inherits by id from parent shadow scope (ids id1, id2 in this case.) 
 
 ## Viewing Your Element Locally
 
