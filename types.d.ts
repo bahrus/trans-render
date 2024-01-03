@@ -151,7 +151,11 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**
      * set specified attribute of the matching element to the (derived) value 
      */
-    sa?: string
+    sa?: string,
+    /**
+     * set specified style of the matching element to the (derived) value
+     */
+    ss?: string,
     /**
      * modify the host in a (mostly) declarative  way
      */

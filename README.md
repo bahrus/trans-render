@@ -526,6 +526,8 @@ This will set the input's readOnly property from the r0 field from the model.  L
 
 Note the (discouraged) extra property: "sa" which means "set attribute" rather than setting the property.
 
+[TODO]: "ss" for set style.
+
 ## Part 5 - Event handling
 
 ## Example 5a - Adding a single event listener, handled by the model

@@ -1,5 +1,5 @@
 export async function doUpdate(transformer, matchingElement, uow) {
-    const { d, o, s, sa, i } = uow;
+    const { d, o, s, sa, i, ss } = uow;
     if (i !== undefined) {
         const valOfIf = await transformer.doIfs(matchingElement, uow, i);
         if (!valOfIf)
@@ -37,6 +37,11 @@ export async function doUpdate(transformer, matchingElement, uow) {
     else if (sa !== undefined) {
         const { A } = await import('../froop/A.js');
         A({ [sa]: val }, matchingElement);
+    }
+    else if (ss !== undefined) {
+        const { setProp } = await import('../lib/setProp.js');
+        setProp(matchingElement.style, ss, val);
+        //A({[ss]: val}, (matchingElement as HTMLElement).style);
     }
     else {
         transformer.setPrimeValue(matchingElement, val);

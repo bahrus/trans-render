@@ -5,7 +5,7 @@ export async function doUpdate<TProps extends {}, TMethods = TProps>(
     matchingElement: Element, 
     uow: UnitOfWork<TProps, TMethods>,
 ){
-    const {d, o, s, sa, i} = uow;
+    const {d, o, s, sa, i, ss} = uow;
     if(i !== undefined){
         const valOfIf = await transformer.doIfs(matchingElement, uow, i);
         if(!valOfIf) return;
@@ -42,6 +42,10 @@ export async function doUpdate<TProps extends {}, TMethods = TProps>(
     }else if(sa !== undefined){
         const {A} = await import('../froop/A.js');
         A({[sa]: val}, matchingElement);
+    }else if(ss !== undefined){
+        const {setProp} = await import('../lib/setProp.js');
+        setProp((matchingElement as HTMLElement).style, ss, val);
+        //A({[ss]: val}, (matchingElement as HTMLElement).style);
     }else{
         transformer.setPrimeValue(matchingElement, val);
     }
