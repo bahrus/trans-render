@@ -1052,13 +1052,7 @@ The "toValFrom" parameter can be a function:
 
 ```TypeScript
 toValFrom: (matchingElement, transformer, modUOW) =>  (matchingElement as HTMLInputElement).value.length.toString()
-```
-
-### Example 8f - Invoking a method [TODO]
-
-If we want to call a method from the model, passing in the matching element, we can specify with the "invoke" property of the m object.
-
-If we want to 
+``` 
 
 ## Example 8h Hydrating with "load" event [TODO]
 

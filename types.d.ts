@@ -270,7 +270,7 @@ export interface MarkedUpEventTarget extends EventTarget{
 export interface TransRenderEndUserProps<ModelProps, ModelMethods = ModelProps>{
     xform: XForm<ModelProps, ModelMethods>;
     scope: Scope;
-    model?: ModelProps & ModelMethods;
+    //model?: ModelProps & ModelMethods;
     options?: TransformOptions;
 }
 

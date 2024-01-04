@@ -18,20 +18,25 @@ export class TransRender extends HTMLElement{
             return JSON.parse(xform) as XForm<any, any>;
         }
     }
-    getModel(){
+    async getModel(){
         const modelSrc = this.getAttribute('model-src');
         let model: any;
         if(modelSrc === null) {
             model = (<any>this.getRootNode()).host;
         }
         if(!model) throw 'NI';
+        const modelPath = this.getAttribute('model-path');
+        if(modelPath !== null){
+            const {getVal} = await import('./lib/getVal.js');
+            model = await getVal({host: model}, modelPath);
+        }
         return model;
     }
 
     async connectedCallback(){
         const documentFragment = await this.getTarget();
         const xform = this.getXForm();
-        const model = this.getModel();
+        const model = await this.getModel();
         const {Transform} = await import('./Transform.js');
         Transform(documentFragment, model, xform)
     }
