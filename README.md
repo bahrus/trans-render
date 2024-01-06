@@ -1184,14 +1184,6 @@ What [blow-dry](https://github.com/bahrus/blow-dry) does is:  [TODO]
 
 But now how do we define web components using be-definitive?  One of the trans-render tags would have the be-definitive config contained within.
 
-## Part 11 - Inheriting transforms from parent shadow scopes [TODO]
-
-```html
-<trans-render inherit="id1 id2"></trans-render>
-```
-
-...inherits by id from parent shadow scope (ids id1, id2 in this case.) 
-
 ## Viewing Your Element Locally
 
 Any web server that can serve static files will do, but...
