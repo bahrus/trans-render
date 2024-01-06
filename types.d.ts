@@ -274,9 +274,12 @@ export interface TransRenderEndUserProps<ModelProps, ModelMethods = ModelProps>{
 }
 
 export interface TransRenderProps<ModelProps, ModelMethods = ModelProps> extends TransRenderEndUserProps<ModelProps, ModelMethods>{
-
+    
 }
 
 export interface TransRenderMethods{
-
+    getTarget(): Promise<Document | ShadowRoot | DocumentFragment | Element>,
+    getXForm(): Promise<XForm<any, any>>,
+    getModel(): Promise<any>,
+    skipInit: boolean,
 }

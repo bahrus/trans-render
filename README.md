@@ -108,7 +108,7 @@ All the examples described below can [be seen fully here](https://github.com/bah
 
    e. [Computed value](#example-8e---computed-value)
 
-   f. []
+10. [Part 10 - trans-render the web component](#part-10----trans-render-the-web-component)
 
 ## Part 1 - Mapping from props to elements
 
@@ -1120,19 +1120,22 @@ setTimeout(async () => {
 }, 2000);
 ```
 
-## Part 10 -- trans-render the web component [WIP]
+## Part 10 -- trans-render the web component
 
 One concern about using TR as we've seen so far, is that the js needs to be separated from the html, which can be more challenging from a developer point of view, especially if it is in a separate file (but no more so than css, fwiw).  It raises concerns about violating "Locality of Behavior" principles.  At least with the style tag, we can intersperse the style tag within the HTML (except for web components that may not perform well).
 
-True, one could also intersperse the HTML with script tags, but there is a certain amount of ceremony in setting the Transformer function up, plus module scripts don't have a good way of being self-aware, as far the DOM.
+True, one could also intersperse the HTML with script tags, but there is a certain amount of ceremony in setting the Transformer function up, plus module scripts don't have a good way of being self-aware, as far the DOM.  And it isn't exactly declarative.
+
+Another concern is that lumping the entire transform together doesn't scale well, as the rules grow in complexity.  Breaking up the transform and evaluating them as the HTML streams in seems like a better approach where it makes sense.  The same argument as for inlining style tags into a document.
+
 
 So the trans-render web component tag provides the equivalent of the style tag.
 
 Use of this tag makes most sense as **a substitute** for [be-hive](https://github.com/bahrus/be-hive).
 
-In this development philosophy, be-hive is best for progressive enhancement of (non repeating) HTML, including within Shadow scopes, but if adopting the approach of letting server streamed HTML be used as the basis of a repeating web component, avoiding the use of be-hive altogether, in lieu of this web component, appears to me to be the better option. (TODO, allow be-hive to inherit from root regardless of parent).
+In this development philosophy, be-hive is best for progressive enhancement of (non repeating) HTML, including within Shadow scopes. But if we let server streamed HTML be used as the basis of a repeating web component, avoiding the use of be-hive altogether, in lieu of this web component, appears to me to be the better option. (TODO, allow be-hive to inherit from root regardless of parent).
 
-Option 1 -- pure declarative json
+## Option 1 -- pure declarative json inline source
 
 ```html
 <trans-render xform='{
@@ -1142,7 +1145,7 @@ Option 1 -- pure declarative json
 }'></trans-render>
 ```
 
-Option 2 -- eval (within realm, in the future)
+## Option 2 -- eval (within realm, in the future), inline source
 
 ```html
 <trans-render onload=doEval xform="{
@@ -1152,13 +1155,27 @@ Option 2 -- eval (within realm, in the future)
 }"></trans-render>
 ```
 
+## Option 3 -- pure declarative json via external source
+
+```html
+<trans-render src=https://example.com/transform.json></trans-render>
+```
+
+## Option 4 -- eval (within realm, in the fure), external source
+
+```html
+<trans-render onload=doEval src=https://example.com/transform.js></trans-render>
+```
+
+For now this uses fetch, until all browsers support [JSON modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules#browser_compatibility)
+
 This would allow for inline JS expressions, as we've provided examples for above.  Of course, without TypeScript support [for now](https://github.com/tc39/proposal-type-annotations).
 
 The default "scope" for each instance of the tag is the parent element (but other options can be specified via the scope attribute/property).  If no parent element is found, then the Shadow Root. [Untested]
 
 The default "model" is the web component "host", but we can also specify a (relative) scope indicator, so that the source of the model can come from a peer element inside the Shadow Root.  
 
-We can also specify a sub property path of the host element to bind to. [TODO]
+We can also specify a sub property path of the host element to bind to. [Untested]
 
 What [blow-dry](https://github.com/bahrus/blow-dry) does is:  [TODO]
 

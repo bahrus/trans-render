@@ -1,6 +1,6 @@
 import {Scope} from './lib/types';
-import { XForm } from './types';
-export class TransRender extends HTMLElement{
+import { TransRenderMethods, XForm } from './types';
+export class TransRender extends HTMLElement implements TransRenderMethods{
     async getTarget(){
         const attrVal = this.getAttribute('scope');
         if(attrVal === null){
@@ -10,8 +10,16 @@ export class TransRender extends HTMLElement{
         const {findRealm} = await import('./lib/findRealm.js');
         return await findRealm(this, scope) as DocumentFragment;
     }
-    getXForm(){
-        const xform = this.getAttribute('xform')!;
+    async getXForm(){
+        let xform: string;
+        const src = this.getAttribute('src');
+        if(src !== null){
+            const resp = await fetch(src);
+            //TODO use import  when all browsers support
+            xform = await resp.text();
+        }else{
+            xform = this.getAttribute('xform')!;
+        }
         if(this.getAttribute('onload') === 'doEval'){
             return eval('(' + xform + ')') as XForm<any, any>;
         }else{
@@ -33,12 +41,18 @@ export class TransRender extends HTMLElement{
         return model;
     }
 
+    get skipInit(){
+        return this.hasAttribute('skip-init');
+    }
+
     async connectedCallback(){
         const documentFragment = await this.getTarget();
-        const xform = this.getXForm();
+        const xform = await this.getXForm();
         const model = await this.getModel();
         const {Transform} = await import('./Transform.js');
-        Transform(documentFragment, model, xform)
+        Transform(documentFragment, model, xform, {
+            skipInit: this.skipInit
+        });
     }
 }
 if(!customElements.get('trans-render')) customElements.define('trans-render', TransRender);
