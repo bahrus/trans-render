@@ -5,7 +5,7 @@ export class TransRender extends HTMLElement {
             return this.parentElement || this.shadowRoot || document;
         }
         const scope = (attrVal[0] === '[' ? JSON.parse(attrVal) : attrVal);
-        const { findRealm } = await import('./lib/findRealm');
+        const { findRealm } = await import('./lib/findRealm.js');
         return await findRealm(this, scope);
     }
     getXForm() {

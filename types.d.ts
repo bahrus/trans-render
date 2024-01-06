@@ -78,7 +78,6 @@ export interface EngagementCtx<TModel> {
     be?: string,
     with?: any,
     type: onMountStatusChange,
-    stage?: PipelineStage,
     mountContext: MountContext
 }
 

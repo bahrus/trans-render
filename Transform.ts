@@ -7,7 +7,7 @@ import {
     onMountStatusChange, RHS, AddEventListener,
     IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget, TransformOptions
 } from './types.js';
-import { MountContext, PipelineStage } from 'mount-observer/types';
+import { IMountObserver, MountContext, PipelineStage } from 'mount-observer/types';
 export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './types';
 
 export async function Transform<TProps extends {}, TMethods = TProps>(
@@ -150,10 +150,10 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
 
         }
 
-        for(const pique of uows){
-            let {q, qi} = pique;
+        for(const uow of uows){
+            let {q, qi} = uow;
             if(qi === undefined) qi = this.calcQI(q);
-            const newProcessor = new MountOrchestrator(this, pique, qi);
+            const newProcessor = new MountOrchestrator(this, uow, qi);
             this.#mountOrchestrators.push(newProcessor);
             await newProcessor.subscribe();
         }
@@ -216,11 +216,11 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
         return await doIfs(this, matchingElement, uow, i);
     }
 
-    async doEnhance(matchingElement: Element, type: onMountStatusChange, uow: UnitOfWork<TProps, TMethods>, mountContext: MountContext, stage: PipelineStage | undefined){
+    async engage(matchingElement: Element, type: onMountStatusChange, uow: UnitOfWork<TProps, TMethods>, observer: IMountObserver, mountContext: MountContext){
         const {e} = uow;
         if(e === undefined) return
-        const {Engage: doEnhance} = await import('./trHelpers/Engage.js');
-        await doEnhance(this, matchingElement, type, uow, mountContext, stage);
+        const {Engage} = await import('./trHelpers/Engage.js');
+        await Engage(this, matchingElement, type, uow, observer, mountContext);
     }
 
     async getDerivedVal(uow: UnitOfWork<TProps, TMethods>, d: Derivative<TProps, TMethods>, matchingElement: Element){
@@ -313,10 +313,12 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends Eve
         super();
         this.#unitsOfWork = arr(uows);
         const match = transformer.calcCSS(queryInfo);
+        const {options} = transformer;
+        const {skipInit} = options;
         this.#mountObserver = new MountObserver({
             match,
             do:{
-                onMount: async (matchingElement, ctx, stage) => {
+                onMount: async (matchingElement, observer, ctx) => {
                     if(this.queryInfo.propAttrType === '$'){
                         const {doNestedTransforms} = await import('./trHelpers/doNestedTransforms.js');
                         await doNestedTransforms(matchingElement, this.#unitsOfWork, this);
@@ -324,10 +326,13 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends Eve
                     }
                         
                     for(const uow of this.#unitsOfWork){
+                        //this is where we could look to see if we need to do update if already updated by server
+                        if(!skipInit || !ctx.initializing){
+                            await this.doUpdate(matchingElement, uow);
+                        }
                         
-                        await this.doUpdate(matchingElement, uow);
                         this.#matchingElements.push(new WeakRef(matchingElement));
-                        await transformer.doEnhance(matchingElement, 'onMount', uow, ctx, stage);
+                        await transformer.engage(matchingElement, 'onMount', uow, observer, ctx);
                         const {a, m} = uow;
                         if(a !== undefined){
                             let transpiledActions: Array<AddEventListener<TProps, TMethods>> | undefined;
@@ -364,14 +369,14 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends Eve
                 onDismount: async(matchingElement, ctx, stage) => {
                     for(const uow of this.#unitsOfWork){
                         this.#cleanUp(matchingElement);
-                        await transformer.doEnhance(matchingElement, 'onDismount', uow, ctx, stage);
+                        await transformer.engage(matchingElement, 'onDismount', uow, ctx, stage);
                     }
                     //TODO remove weak ref from matching elements;
                 },
                 onDisconnect: async(matchingElement, ctx, stage) => {
                     for(const uow of this.#unitsOfWork){
                         this.#cleanUp(matchingElement);
-                        await transformer.doEnhance(matchingElement, 'onDisconnect', uow, ctx, stage);
+                        await transformer.engage(matchingElement, 'onDisconnect', uow, ctx, stage);
                     }
                 }
             }

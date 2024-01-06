@@ -1,4 +1,4 @@
-import { MountContext, PipelineStage } from 'mount-observer/types';
+import { IMountObserver, MountContext, PipelineStage } from 'mount-observer/types';
 import { MountOrchestrator, Transformer, arr } from '../Transform.js';
 import { onMountStatusChange, EngagementCtx, UnitOfWork, Engagement } from '../types.js';
 
@@ -6,11 +6,10 @@ export async function Engage<TProps extends {}, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>,
     matchingElement: Element,
     type: onMountStatusChange,
-    uow: UnitOfWork<TProps, TMethods>, mountContext: MountContext, stage: PipelineStage | undefined) {
+    uow: UnitOfWork<TProps, TMethods>, mountOberver: IMountObserver, mountContext: MountContext) {
     const { e } = uow;
     const methodArg: EngagementCtx<TMethods> = {
         mountContext,
-        stage,
         type
     };
     const model = transformer.model as any;

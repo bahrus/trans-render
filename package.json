@@ -88,7 +88,7 @@
     "*.d.ts"
   ],
   "dependencies": {
-    "mount-observer": "0.0.5"
+    "mount-observer": "0.0.6"
   },
   "devDependencies": {
     "@playwright/test": "1.40.1",
