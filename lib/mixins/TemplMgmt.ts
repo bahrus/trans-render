@@ -92,7 +92,9 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
                 (await xformImpl())(fragment, this, xform as Partial<{[key: string]: RHS<HTMLElement, HTMLElement>}>, (<any>this).xtalState);
             }else{
                 const {Transform} = await import('../../Transform.js');
-                Transform(fragment, this, xform, (<any>this).xtalState);
+                await Transform(fragment, this, xform, {
+                    propagator: (<any>this).xtalState
+                });
             }
 
             //await MainTransforms(this as any as TemplMgmtBaseMixin & HTMLElement, base, fragment as DocumentFragment);

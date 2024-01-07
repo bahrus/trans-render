@@ -8,8 +8,17 @@ export class TransRender extends HTMLElement {
         const { findRealm } = await import('./lib/findRealm.js');
         return await findRealm(this, scope);
     }
-    getXForm() {
-        const xform = this.getAttribute('xform');
+    async getXForm() {
+        let xform;
+        const src = this.getAttribute('src');
+        if (src !== null) {
+            const resp = await fetch(src);
+            //TODO use import  when all browsers support
+            xform = await resp.text();
+        }
+        else {
+            xform = this.getAttribute('xform');
+        }
         if (this.getAttribute('onload') === 'doEval') {
             return eval('(' + xform + ')');
         }
@@ -32,12 +41,17 @@ export class TransRender extends HTMLElement {
         }
         return model;
     }
+    get skipInit() {
+        return this.hasAttribute('skip-init');
+    }
     async connectedCallback() {
         const documentFragment = await this.getTarget();
-        const xform = this.getXForm();
+        const xform = await this.getXForm();
         const model = await this.getModel();
         const { Transform } = await import('./Transform.js');
-        Transform(documentFragment, model, xform);
+        Transform(documentFragment, model, xform, {
+            skipInit: this.skipInit
+        });
     }
 }
 if (!customElements.get('trans-render'))

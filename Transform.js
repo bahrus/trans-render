@@ -136,11 +136,11 @@ export class Transformer extends EventTarget {
                     break;
             }
         }
-        for (const pique of uows) {
-            let { q, qi } = pique;
+        for (const uow of uows) {
+            let { q, qi } = uow;
             if (qi === undefined)
                 qi = this.calcQI(q);
-            const newProcessor = new MountOrchestrator(this, pique, qi);
+            const newProcessor = new MountOrchestrator(this, uow, qi);
             this.#mountOrchestrators.push(newProcessor);
             await newProcessor.subscribe();
         }
@@ -198,12 +198,12 @@ export class Transformer extends EventTarget {
         const { doIfs } = await import('./trHelpers/doIfs.js');
         return await doIfs(this, matchingElement, uow, i);
     }
-    async doEnhance(matchingElement, type, uow, mountContext, stage) {
+    async engage(matchingElement, type, uow, observer, mountContext) {
         const { e } = uow;
         if (e === undefined)
             return;
-        const { Engage: doEnhance } = await import('./trHelpers/Engage.js');
-        await doEnhance(this, matchingElement, type, uow, mountContext, stage);
+        const { Engage } = await import('./trHelpers/Engage.js');
+        await Engage(this, matchingElement, type, uow, observer, mountContext);
     }
     async getDerivedVal(uow, d, matchingElement) {
         const { getDerivedVal } = await import('./trHelpers/getDerivedVal.js');
@@ -288,19 +288,24 @@ export class MountOrchestrator extends EventTarget {
         this.queryInfo = queryInfo;
         this.#unitsOfWork = arr(uows);
         const match = transformer.calcCSS(queryInfo);
+        const { options } = transformer;
+        const { skipInit } = options;
         this.#mountObserver = new MountObserver({
             match,
             do: {
-                onMount: async (matchingElement, ctx, stage) => {
+                onMount: async (matchingElement, observer, ctx) => {
                     if (this.queryInfo.propAttrType === '$') {
                         const { doNestedTransforms } = await import('./trHelpers/doNestedTransforms.js');
                         await doNestedTransforms(matchingElement, this.#unitsOfWork, this);
                         return;
                     }
                     for (const uow of this.#unitsOfWork) {
-                        await this.doUpdate(matchingElement, uow);
+                        //this is where we could look to see if we need to do update if already updated by server
+                        if (!skipInit || !ctx.initializing) {
+                            await this.doUpdate(matchingElement, uow);
+                        }
                         this.#matchingElements.push(new WeakRef(matchingElement));
-                        await transformer.doEnhance(matchingElement, 'onMount', uow, ctx, stage);
+                        await transformer.engage(matchingElement, 'onMount', uow, observer, ctx);
                         const { a, m } = uow;
                         if (a !== undefined) {
                             let transpiledActions;
@@ -328,14 +333,14 @@ export class MountOrchestrator extends EventTarget {
                 onDismount: async (matchingElement, ctx, stage) => {
                     for (const uow of this.#unitsOfWork) {
                         this.#cleanUp(matchingElement);
-                        await transformer.doEnhance(matchingElement, 'onDismount', uow, ctx, stage);
+                        await transformer.engage(matchingElement, 'onDismount', uow, ctx, stage);
                     }
                     //TODO remove weak ref from matching elements;
                 },
                 onDisconnect: async (matchingElement, ctx, stage) => {
                     for (const uow of this.#unitsOfWork) {
                         this.#cleanUp(matchingElement);
-                        await transformer.doEnhance(matchingElement, 'onDisconnect', uow, ctx, stage);
+                        await transformer.engage(matchingElement, 'onDisconnect', uow, ctx, stage);
                     }
                 }
             }

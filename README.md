@@ -925,7 +925,7 @@ Transform<Props, Methods>(form, model, {
 
 ## Modifying the host or model
 
-To support our holy quest for doing as much as possible declaratively, we provide for some ways of modifying the host without requiring writing code in an event handler, to account for a significant number of use cases.
+To support our holy quest for doing as much as possible declaratively, we provide for some ways of **m**odifying the host without requiring writing code in an event handler, to account for a significant number of use cases.
 
 ### Example 8a Incrementing a counter
 
@@ -1098,7 +1098,7 @@ This results in the span being kept in sync with model.address.zipCode.
 
 ## Part 10 - Updating the model
 
-We've seen examples where we update individual properties/fields of the model, using standard JS field assignments.  But what if we make a back-end call, nd retrieve another model, where most of the data is different?
+We've seen examples where we update individual properties/fields of the model, using standard JS field assignments.  But what if we make a back-end call, and retrieve another model, where most of the data is different?
 
 The Transform function returns a class that provides a method for this purpose:
 
@@ -1133,7 +1133,7 @@ So the trans-render web component tag provides the equivalent of the style tag.
 
 Use of this tag makes most sense as **a substitute** for [be-hive](https://github.com/bahrus/be-hive).
 
-In this development philosophy, be-hive is best for progressive enhancement of (non repeating) HTML, including within Shadow scopes. But if we let server streamed HTML be used as the basis of a repeating web component, avoiding the use of be-hive altogether, in lieu of this web component, appears to me to be the better option. (TODO, allow be-hive to inherit from root regardless of parent).
+In this development philosophy, be-hive is best for progressive enhancement of (non repeating) HTML, including within Shadow scopes. But if we let server streamed HTML be used as the basis of a repeating web component, avoiding the use of be-hive altogether, and exclusively using this web component, appears to me to be the better option.
 
 ## Option 1 -- pure declarative json inline source
 
@@ -1161,7 +1161,7 @@ In this development philosophy, be-hive is best for progressive enhancement of (
 <trans-render src=https://example.com/transform.json></trans-render>
 ```
 
-## Option 4 -- eval (within realm, in the fure), external source
+## Option 4 -- eval (within realm, in the future), external source
 
 ```html
 <trans-render onload=doEval src=https://example.com/transform.js></trans-render>
@@ -1171,7 +1171,7 @@ For now this uses fetch, until all browsers support [JSON modules](https://devel
 
 This would allow for inline JS expressions, as we've provided examples for above.  Of course, without TypeScript support [for now](https://github.com/tc39/proposal-type-annotations).
 
-The default "scope" for each instance of the tag is the parent element (but other options can be specified via the scope attribute/property).  If no parent element is found, then the Shadow Root. [Untested]
+The default "scope" for each instance of the tag is the parent element (but other options can be specified via the scope attribute/property).  If no parent element is found, then it defaults to the the Shadow Root.
 
 The default "model" is the web component "host", but we can also specify a (relative) scope indicator, so that the source of the model can come from a peer element inside the Shadow Root.  
 
