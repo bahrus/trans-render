@@ -4,7 +4,6 @@ export {LocalizerProps, LocalizerMethods} from './types';
 
 export const Localizer = (superclass: LocalizerType) => class extends superclass implements LocalizerMethods{
     localize(model: any, transformer: ITransformer<any, any>, uow: UnitOfWork<any, any>, matchingElement: Element){
-        console.log({matchingElement});
         const {o} = uow;
         const a = o as string[];
         if(a.length !== 1) throw 'NI';

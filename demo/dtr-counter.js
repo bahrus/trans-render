@@ -12,13 +12,13 @@ const ce = new CE({
             count: 30,
             xform: {
                 '% count': 'localize',
-                // "button": {
-                //     m: {
-                //         on: 'click',
-                //         inc: 'count',
-                //         byAmt: '.dataset.d',
-                //     },
-                // }
+                "button": {
+                    m: {
+                        on: 'click',
+                        inc: 'count',
+                        byAmt: '.dataset.d',
+                    },
+                }
             },
             shadowRootMode: 'open',
             styles: String.raw `
