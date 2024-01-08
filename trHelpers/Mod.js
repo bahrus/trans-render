@@ -4,7 +4,8 @@ export class Mod {
         const { on } = m;
         matchingElement.addEventListener(on, async (e) => {
             const { inc, byAmt, s, toggle } = m;
-            const { model, propagator } = transformer;
+            const { model, options } = transformer;
+            const { propagator } = options;
             const isPropagating = !(model instanceof EventTarget) && propagator !== undefined;
             if (inc !== undefined) {
                 let valToIncBy = 0;

@@ -251,7 +251,8 @@ export interface ITransformer<TProps, TMethods>{
     target: TransformerTarget,
     model: TProps & TMethods,
     xform: XForm<TProps, TMethods>,
-    propagator?: EventTarget,
+    options: TransformOptions,
+    //propagator?: EventTarget,
 }
 
 export type ToTransformer<TProps, TMethods> = (

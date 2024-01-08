@@ -11,8 +11,9 @@ export class Mod<TProps, TMethods>{
         const {on} = m;
         matchingElement.addEventListener(on, async e => {
             const {inc, byAmt, s, toggle} = m;
-            const {model, propagator} = transformer;
-            const isPropagating = !(model instanceof EventTarget) && propagator !== undefined
+            const {model, options} = transformer;
+            const {propagator} = options;
+            const isPropagating = !(model instanceof EventTarget) && propagator !== undefined;
             if(inc !== undefined){
                 let valToIncBy = 0;
                 switch(typeof byAmt){
