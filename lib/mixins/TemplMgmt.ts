@@ -27,7 +27,13 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         new DoStyles(this, base, root, compiledStyleMap, modernBrowser);
             
     }
-    async cloneTemplate({shadowRootMode, shadowRoot, mainTemplate}: TemplMgmtBase){
+    async cloneTemplate(self: TemplMgmtBase){
+        const {shadowRootMode, shadowRoot, mainTemplate, skipTemplateClone} = self;
+        if(skipTemplateClone){
+            this.#repeatVisit = true;
+            self.skipTemplateClone = false;
+            return;
+        }
         let root = this as any;
         if(shadowRootMode){
             if(shadowRoot === null){
@@ -133,6 +139,9 @@ export const propInfo: Partial<{[key in keyof TemplMgmtProps]: PropInfo}> = {
         parse: false,
     },
     styles: {
+        parse: false,
+    },
+    skipTemplateClone:{
         parse: false,
     }
 }
