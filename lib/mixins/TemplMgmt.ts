@@ -129,9 +129,6 @@ export const propInfo: Partial<{[key in keyof TemplMgmtProps]: PropInfo}> = {
     clonedTemplate:{
         parse: false,
     },
-    mntCnt:{
-        parse: false,
-    },
     xform:{
         parse: false,
     },
@@ -143,7 +140,6 @@ export const propInfo: Partial<{[key in keyof TemplMgmtProps]: PropInfo}> = {
 export const beMounted = {
     doTemplMount: {
         ifAllOf: ['clonedTemplate'],
-        ifNoneOf: ['mntCnt'],
         ifKeyIn: ['xform'],
         async: true,
     } as Action<TemplMgmtProps>,

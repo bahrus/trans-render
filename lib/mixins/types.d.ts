@@ -8,7 +8,6 @@ export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLEleme
     shadowRootMode?: 'open' | 'closed' | undefined | false;
     xform: Partial<{[key: string]: RHS<any, any>}>,
     xformImpl?: () => Promise<ToTransformer<MCProps, MCMethods>>,
-    mntCnt?: number;
     skipTemplateClone?: boolean;
     homeInOn?: Partial<{[key in keyof MCProps]: Partial<{[key: string]: RHS<MCProps, MCMethods>}>}>;
 }
