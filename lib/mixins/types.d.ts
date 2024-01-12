@@ -9,7 +9,7 @@ export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLEleme
     xform: Partial<{[key: string]: RHS<any, any>}>,
     xformImpl?: () => Promise<ToTransformer<MCProps, MCMethods>>,
     skipTemplateClone?: boolean;
-    homeInOn?: Partial<{[key in keyof MCProps]: Partial<{[key: string]: RHS<MCProps, MCMethods>}>}>;
+    //homeInOn?: Partial<{[key in keyof MCProps]: Partial<{[key: string]: RHS<MCProps, MCMethods>}>}>;
 }
 
 

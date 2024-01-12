@@ -28,12 +28,8 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
             
     }
     async cloneTemplate(self: TemplMgmtBase){
-        const {shadowRootMode, shadowRoot, mainTemplate, skipTemplateClone} = self;
-        if(skipTemplateClone){
-            this.#repeatVisit = true;
-            self.skipTemplateClone = false;
-            return;
-        }
+        const {shadowRootMode, shadowRoot, mainTemplate, skipTemplateClone, xform} = self;
+
         let root = this as any;
         if(shadowRootMode){
             if(shadowRoot === null){
@@ -59,28 +55,36 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
             root.innerHTML = '';
             this.#needToAppendClone = true;
         }
-        switch(typeof mainTemplate){
-            case 'string':
-                //const isReally = (<any>this.constructor).isReally as string;
-                let templ: HTMLTemplateElement | undefined = compiledTemplateMap.get(mainTemplate)!
-                if(templ === undefined){
-                    templ = document.createElement('template');
-                    templ.innerHTML = mainTemplate;
-                    compiledTemplateMap.set(mainTemplate, templ);
-                }
-                this.clonedTemplate = templ.content.cloneNode(true);
-                break;
-            default:
-                this.clonedTemplate = mainTemplate!.content.cloneNode(true);
-        }
-        
         this.#repeatVisit = true;
+        if(skipTemplateClone){
+            this.#needToAppendClone = false;
+            this.clonedTemplate = this.shadowRoot || this;
+            this.skipTemplateClone = false;
+        }else{
+            switch(typeof mainTemplate){
+                case 'string':
+                    //const isReally = (<any>this.constructor).isReally as string;
+                    let templ: HTMLTemplateElement | undefined = compiledTemplateMap.get(mainTemplate)!
+                    if(templ === undefined){
+                        templ = document.createElement('template');
+                        templ.innerHTML = mainTemplate;
+                        compiledTemplateMap.set(mainTemplate, templ);
+                    }
+                    this.clonedTemplate = templ.content.cloneNode(true);
+                    break;
+                default:
+                    this.clonedTemplate = mainTemplate!.content.cloneNode(true);
+            }
+        }
+
+        
+        
     }
     #mounted = false;
     async doTemplMount(base: TemplMgmtBase){
         if(this.#mounted) return;
         this.#mounted = true;
-        const {xform, xformImpl, clonedTemplate, shadowRootMode, homeInOn} = base;
+        const {xform, xformImpl, clonedTemplate, shadowRootMode} = base;
         const fragment = clonedTemplate === undefined ? 
             !shadowRootMode ? this : this.shadowRoot!
             : clonedTemplate as DocumentFragment;
@@ -99,11 +103,6 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
             }
 
             //await MainTransforms(this as any as TemplMgmtBaseMixin & HTMLElement, base, fragment as DocumentFragment);
-        }
-        if(homeInOn){
-            throw 'NI';
-            //const {HomeIn} = await import('./HomeIn.js');
-            //TODO
         }
         if(this.#needToAppendClone){
             const root = !shadowRootMode ? this : this.shadowRoot!;
@@ -126,7 +125,7 @@ export const beCloned = {
     cloneTemplate: {
         ifAllOf: ['mainTemplate'],
         ifKeyIn: ['shadowRootMode', 'waitToInit'],
-        ifNoneOf: ['skipTemplateClone']
+        //ifNoneOf: ['skipTemplateClone']
     } as Action<TemplMgmtProps>,
 }
 
