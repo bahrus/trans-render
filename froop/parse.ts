@@ -36,7 +36,12 @@ export async function parse(accb: IAttrChgCB, propInfos: {[key: string]: PropInf
                             // }
                             
                             try{
-                                val = JSON.parse(val);
+                                if(aThis.getAttribute('onload') === 'doEval'){
+                                    val = eval(`(${val})`);
+                                }else{
+                                    val = JSON.parse(val);
+                                }
+                                
                             }catch(e){
                                 console.error({val, e});
                             }

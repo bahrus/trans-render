@@ -1,4 +1,4 @@
-# trans-render [WIP]
+# trans-render
 
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/trans-render)
 [![NPM version](https://badge.fury.io/js/trans-render.png)](http://badge.fury.io/js/trans-render)

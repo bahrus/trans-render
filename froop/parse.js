@@ -30,7 +30,12 @@ export async function parse(accb, propInfos, defaults) {
                             //     val = sanitizer.sanitizeFor('template', val);
                             // }
                             try {
-                                val = JSON.parse(val);
+                                if (aThis.getAttribute('onload') === 'doEval') {
+                                    val = eval(`(${val})`);
+                                }
+                                else {
+                                    val = JSON.parse(val);
+                                }
                             }
                             catch (e) {
                                 console.error({ val, e });

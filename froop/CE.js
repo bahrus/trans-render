@@ -85,7 +85,8 @@ export class CE extends Svc {
                 else {
                     filteredAttrs[name] = newVal;
                 }
-                if (this.attributes.length === Object.keys(filteredAttrs).length) {
+                //TODO:  optimize this
+                if (Array.from(this.attributes).filter(x => observedAttributes?.includes(x.name)).length === Object.keys(filteredAttrs).length) {
                     services.definer.dispatchEvent(new CustomEvent(acb, {
                         detail: {
                             instance: this,

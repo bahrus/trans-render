@@ -93,8 +93,8 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
                 }else{
                     filteredAttrs[name] =newVal;
                 }
-                
-                if(this.attributes.length === Object.keys(filteredAttrs).length){
+                //TODO:  optimize this
+                if(Array.from((this as any as Element).attributes).filter(x => observedAttributes?.includes(x.name)).length === Object.keys(filteredAttrs).length){
                     services!.definer.dispatchEvent(new CustomEvent(acb, {
                         detail: {
                             instance: this as any as HTMLElement,
