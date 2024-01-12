@@ -23,7 +23,6 @@
     "./lib/bePropagating2.js": "./lib/bePropagating2.js",
     "./lib/birtualize.js": "./lib/birtualize.js",
     "./lib/brace.js": "./lib/brace.js",
-    "./lib/cache.js": "./lib/cache.js",
     "./lib/camelToLisp.js": "./lib/camelToLisp.js",
     "./lib/convert.js": "./lib/convert.js",
     "./lib/def.js": "./lib/def.js",

@@ -53,7 +53,6 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
             root.innerHTML = '';
             this.#needToAppendClone = true;
         }
-        const {cache} = await import('../cache.js');
         switch(typeof mainTemplate){
             case 'string':
                 //const isReally = (<any>this.constructor).isReally as string;
@@ -63,11 +62,9 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
                     templ.innerHTML = mainTemplate;
                     compiledTemplateMap.set(mainTemplate, templ);
                 }
-                cache(templ);
                 this.clonedTemplate = templ.content.cloneNode(true);
                 break;
             default:
-                cache(mainTemplate!);
                 this.clonedTemplate = mainTemplate!.content.cloneNode(true);
         }
         
@@ -81,12 +78,10 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         const fragment = clonedTemplate === undefined ? 
             !shadowRootMode ? this : this.shadowRoot!
             : clonedTemplate as DocumentFragment;
-        const {restore} = await import('../cache.js');
         if(!(fragment instanceof ShadowRoot)){
             (<any>fragment).host = this;
         }
         
-        await restore(fragment as DocumentFragment);
         if(xform){
             if(xformImpl !== undefined){
                 (await xformImpl())(fragment, this, xform as Partial<{[key: string]: RHS<HTMLElement, HTMLElement>}>, (<any>this).xtalState);
