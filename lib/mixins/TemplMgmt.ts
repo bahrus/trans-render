@@ -109,7 +109,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
             root.appendChild(fragment);
             this.#needToAppendClone = false;
         }
-        this.removeAttribute('defer-rendering');
+        //this.removeAttribute('defer-rendering');
         const states = (<any>base)._internals_?.states;
         if(states !== undefined){ //Safari <= 16.4
             states.add('--mounted');
