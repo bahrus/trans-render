@@ -14,7 +14,7 @@ export function trigger(instance: EventTarget, propagator: IPropagator, args: CE
         const chg = (e as CustomEvent).detail as IPropChg;
         const {key, oldVal, newVal} = chg;
         //console.debug({key, oldVal, newVal});
-        const {services} = args;
+        const {services, asides} = args;
         const {itemizer: createPropInfos} = services!;
         //await createPropInfos.resolve();
         const {nonDryProps} = createPropInfos;
@@ -49,6 +49,13 @@ export function trigger(instance: EventTarget, propagator: IPropagator, args: CE
             const typedAction = (typeof action === 'string') ? {ifAllOf:[action]} as Action : action as Action;
             if(pq(typedAction, instance)){
                 filteredActions[methodName] = action;
+                if(asides !== undefined){
+                    const aside = asides[methodName];
+                    if(aside !== undefined){
+                        //do asynchronous side effect
+                        aside(instance, methodName, key);
+                    }
+                }
                 foundAction = true;
             }
         }

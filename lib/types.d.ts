@@ -201,7 +201,7 @@ export interface DefineArgs<MixinCompositeProps = any, MixinCompositeActions = M
      * Side effects tied to actions, mostly used to load enhancement dependencies tied to 
      * enhancements
      */
-    asides?: Partial<{[key in keyof MixinCompositeActions & string]: () => Promise<void> }>
+    asides?: Partial<{[key in keyof MixinCompositeActions & string]: (instance: EventTarget, methodName: string, key: string) => Promise<void> }>
 }
 
 export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction = Action>{

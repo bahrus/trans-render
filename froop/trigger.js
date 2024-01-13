@@ -9,7 +9,7 @@ export function trigger(instance, propagator, args) {
         const chg = e.detail;
         const { key, oldVal, newVal } = chg;
         //console.debug({key, oldVal, newVal});
-        const { services } = args;
+        const { services, asides } = args;
         const { itemizer: createPropInfos } = services;
         //await createPropInfos.resolve();
         const { nonDryProps } = createPropInfos;
@@ -46,6 +46,13 @@ export function trigger(instance, propagator, args) {
             const typedAction = (typeof action === 'string') ? { ifAllOf: [action] } : action;
             if (pq(typedAction, instance)) {
                 filteredActions[methodName] = action;
+                if (asides !== undefined) {
+                    const aside = asides[methodName];
+                    if (aside !== undefined) {
+                        //do asynchronous side effect
+                        aside(instance, methodName, key);
+                    }
+                }
                 foundAction = true;
             }
         }
