@@ -1,3 +1,4 @@
+import { assign } from './act.js';
 export class PE {
     #abortControllers = new Map();
     async do(instance, originMethodName, vals) {
@@ -6,7 +7,7 @@ export class PE {
             this.disconnectAll();
         }, { once: true });
         if (vals[0] !== undefined) {
-            Object.assign(instance, vals[0]);
+            assign(instance, vals[0]);
         }
         if (vals[1] !== undefined) {
             //TODO map abort controllers first off of "of"

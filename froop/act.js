@@ -31,14 +31,14 @@ export async function apply(instance, ret, methodName) {
                 }
                 await pe.do(instance, methodName, ret);
                 break;
-            case 3:
-                let pet = PETLookup.get(instance);
-                if (pet === undefined) {
-                    const { PET } = await import('./PET.js');
-                    pet = new PET();
-                    PETLookup.set(instance, pet);
-                }
-                await pet.re(instance, methodName, ret);
+            // case 3:
+            //     let pet = PETLookup.get(instance);
+            //     if(pet === undefined){
+            //         const {PET} = await import('./PET.js');
+            //         pet = new PET();
+            //         PETLookup.set(instance, pet);
+            //     }
+            //     await pet.re(instance, methodName, ret as [any, ActionOnEventConfigs, DynamicTransform]);
         }
     }
     else {
@@ -49,30 +49,41 @@ export async function apply(instance, ret, methodName) {
 export function assign(instance, ret) {
     for (const key in ret) {
         const val = ret[key];
-        if (instance instanceof Element && key.startsWith('* ')) {
-            //untested
-            const matches = Array.from((instance.shadowRoot || instance).querySelectorAll(key.substring(2)));
-            for (const match of matches) {
-                assign(match, ret);
+        const isElement = instance instanceof Element;
+        if (isElement) {
+            if (key.startsWith('* ')) {
+                //untested
+                const matches = Array.from((instance.shadowRoot || instance).querySelectorAll(key.substring(2)));
+                for (const match of matches) {
+                    assign(match, ret);
+                }
+                continue;
             }
-            continue;
+            if (key.startsWith(' ')) {
+                //set attribute
+                const attr = key.substring(1);
+                if (val === null || val === undefined || val === false) {
+                    instance.removeAttribute(attr);
+                    continue;
+                }
+                instance.setAttribute(attr, val.toString());
+            }
+            if (key.startsWith('+')) {
+                //untested
+                if (instance.beEnhanced === undefined) {
+                    instance.beEnhanced = {};
+                }
+                const { beEnhanced } = instance;
+                const path = key.substring(1);
+                if (beEnhanced[path] === undefined) {
+                    beEnhanced[path] = {};
+                }
+                const enhancement = beEnhanced[path];
+                assign(enhancement, ret);
+                continue;
+            }
         }
-        else if (key.startsWith('+')) {
-            //untested
-            if (instance.beEnhanced === undefined) {
-                instance.beEnhanced = {};
-            }
-            const { beEnhanced } = instance;
-            const path = key.substring(1);
-            if (beEnhanced[path] === undefined) {
-                beEnhanced[path] = {};
-            }
-            const enhancement = beEnhanced[path];
-            assign(enhancement, ret);
-            throw 'NI';
-            continue;
-        }
-        else if (instance instanceof HTMLElement) {
+        if (instance instanceof HTMLElement) {
             switch (key) {
                 case 'style':
                 case 'dataset':

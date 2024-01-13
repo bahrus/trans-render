@@ -1,4 +1,5 @@
 import {ActionOnEventConfigs, IPE} from './types';
+import {assign} from './act.js';
 
 export class PE implements IPE{
     #abortControllers = new Map<string, AbortController[]>();
@@ -9,7 +10,7 @@ export class PE implements IPE{
             this.disconnectAll();
         }, {once: true});
         if(vals[0] !== undefined){
-            Object.assign(instance, vals[0]);
+            assign(instance, vals[0]);
         }
         if(vals[1] !== undefined){
             //TODO map abort controllers first off of "of"
