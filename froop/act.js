@@ -13,7 +13,7 @@ export async function act(instance, actions) {
             };
         const isAsync = method.constructor.name === 'AsyncFunction';
         const ret = isAsync ? await instance[methodName](instance, secondArg) : instance[methodName](instance, secondArg);
-        if (ret === undefined)
+        if (typeof ret !== 'object')
             continue;
         await apply(instance, ret, methodName);
     }
@@ -42,6 +42,28 @@ export async function apply(instance, ret, methodName) {
         }
     }
     else {
-        Object.assign(instance, ret);
+        //Object.assign(instance, ret);
+        assign(instance, ret);
+    }
+}
+export function assign(instance, ret) {
+    for (const key in ret) {
+        const val = ret[key];
+        if (instance instanceof Element && key.startsWith('* ')) {
+            throw 'NI';
+            continue;
+        }
+        else if (key.startsWith('+')) {
+            throw 'NI';
+            continue;
+        }
+        switch (key) {
+            case 'style':
+            case 'dataset':
+                assign(instance[key], val);
+                break;
+            default:
+                instance[key] = val;
+        }
     }
 }
