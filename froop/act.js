@@ -50,6 +50,7 @@ export function assign(instance, ret) {
     for (const key in ret) {
         const val = ret[key];
         if (instance instanceof Element && key.startsWith('* ')) {
+            //untested
             const matches = Array.from(instance.querySelectorAll(key.substring(2)));
             for (const match of matches) {
                 assign(match, ret);
@@ -57,16 +58,28 @@ export function assign(instance, ret) {
             continue;
         }
         else if (key.startsWith('+')) {
+            //untested
+            if (instance.beEnhanced === undefined) {
+                instance.beEnhanced = {};
+            }
+            const { beEnhanced } = instance;
+            const path = key.substring(1);
+            if (beEnhanced[path] === undefined) {
+                beEnhanced[path] = {};
+            }
+            const enhancement = beEnhanced[path];
+            assign(enhancement, ret);
             throw 'NI';
             continue;
         }
-        switch (key) {
-            case 'style':
-            case 'dataset':
-                assign(instance[key], val);
-                break;
-            default:
-                instance[key] = val;
+        else if (instance instanceof HTMLElement) {
+            switch (key) {
+                case 'style':
+                case 'dataset':
+                    assign(instance[key], val);
+                    continue;
+            }
         }
+        instance[key] = val;
     }
 }
