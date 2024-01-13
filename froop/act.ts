@@ -52,7 +52,7 @@ export function assign(instance: any, ret: any){
         const val = ret[key];
         if(instance instanceof Element && key.startsWith('* ')){
             //untested
-            const matches = Array.from(instance.querySelectorAll(key.substring(2)));
+            const matches = Array.from((instance.shadowRoot || instance).querySelectorAll(key.substring(2)));
             for(const match of matches){
                 assign(match, ret);
             }
