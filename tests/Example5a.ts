@@ -9,7 +9,7 @@ interface Actions {
 }
 const model: Props & Actions = {
     isHappy: false,
-    handleChange: (e: Event, {model, propagator}) => {
+    handleChange: (e: Event, {model}) => {
         model.isHappy = !model.isHappy;
         
     }

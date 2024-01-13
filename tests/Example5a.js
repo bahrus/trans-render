@@ -1,7 +1,7 @@
 import { Transform } from '../Transform.js';
 const model = {
     isHappy: false,
-    handleChange: (e, { model, propagator }) => {
+    handleChange: (e, { model }) => {
         model.isHappy = !model.isHappy;
     }
 };
