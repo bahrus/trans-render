@@ -14,8 +14,14 @@ export async function findRealm(self: Element, scope: Scope){
             case 'previousElementSibling':
                 return self.previousElementSibling;
             case 'porn':
-            case 'parentOrRootNode':
-                return self.parentElement || self.getRootNode();
+            case 'parentOrRootNode':{
+                const test = self.parentElement || self.getRootNode();
+                if(test instanceof Element && test.classList.contains('stream-orator-wrapper')) {
+                    return findRealm(test, scope);
+                }
+                return test;
+            }
+                
             case 'hostish':{
                 const {getHost} = await import('./getHost.js');
                 return await getHost(self, false, true);

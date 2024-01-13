@@ -256,13 +256,20 @@ export class Transformer extends EventTarget {
             // const keys = Object.keys(val);
             // if(keys[0] in matchingElement){
             Object.assign(matchingElement, val);
+            return;
             // }else{
             //     (<any>matchingElement)[this.getDefaultProp(matchingElement)] = val;
             // }
         }
-        else {
-            matchingElement[this.getDefaultProp(matchingElement)] = val;
+        const defaultProp = this.getDefaultProp(matchingElement);
+        switch (defaultProp) {
+            case 'href':
+                if (matchingElement instanceof HTMLLinkElement && typeof val === 'boolean') {
+                    matchingElement.href = 'https://schema.org/' + (val ? 'True' : 'False');
+                    return;
+                }
         }
+        matchingElement[defaultProp] = val;
     }
     getDefaultProp(matchingElement) {
         if ('href' in matchingElement)

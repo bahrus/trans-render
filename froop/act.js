@@ -53,7 +53,7 @@ export function assign(instance, ret) {
         if (isElement) {
             if (key.startsWith('* ')) {
                 //untested
-                const matches = Array.from((instance.shadowRoot || instance).querySelectorAll(key.substring(2)));
+                const matches = Array.from((instance.clonedTemplate || instance.shadowRoot || instance).querySelectorAll(key.substring(2)));
                 for (const match of matches) {
                     assign(match, ret);
                 }
