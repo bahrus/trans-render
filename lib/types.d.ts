@@ -197,7 +197,11 @@ export interface DefineArgs<MixinCompositeProps = any, MixinCompositeActions = M
     complexPropDefaults?: Partial<MixinCompositeProps>;
     /** Config should be 100% JSON serializable, or a JSON import, or an id of an be-exportable script tag */
     config: WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo, TAction> | (() => Promise<{default: WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo, TAction>}>) | string;
-     
+    /**
+     * Side effects tied to actions, mostly used to load enhancement dependencies tied to 
+     * enhancements
+     */
+    asides?: Partial<{[key in keyof MixinCompositeActions & string]: () => Promise<void> }>
 }
 
 export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction = Action>{
