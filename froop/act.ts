@@ -51,7 +51,10 @@ export function assign(instance: any, ret: any){
     for(const key in ret){
         const val = ret[key];
         if(instance instanceof Element && key.startsWith('* ')){
-            throw 'NI';
+            const matches = Array.from(instance.querySelectorAll(key.substring(2)));
+            for(const match of matches){
+                assign(match, ret);
+            }
             continue;
         }else if(key.startsWith('+')){
             throw 'NI';
