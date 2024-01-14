@@ -190,7 +190,7 @@ export class Transformer extends EventTarget {
                 return `${ln}[itemscope][itemprop~="${prop}"] ${c}`.trimEnd();
         }
     }
-    async doUpdate(matchingElement, uow, d) {
+    async doUpdate(matchingElement, uow) {
         const { doUpdate } = await import('./trHelpers/doUpdate.js');
         await doUpdate(this, matchingElement, uow);
     }
@@ -398,12 +398,12 @@ export class MountOrchestrator extends EventTarget {
         return all;
     }
     async doUpdate(matchingElement, uow) {
-        const { d } = uow;
+        const { d, s } = uow;
         // if(i !== undefined){
         //     await this.transformer.doIfs(matchingElement, uow, i);
         // }
-        if (d !== undefined) {
-            await this.transformer.doUpdate(matchingElement, uow, d);
+        if ((d || s) !== undefined) {
+            await this.transformer.doUpdate(matchingElement, uow);
         }
     }
     toStdEvt(a, matchingElement) {

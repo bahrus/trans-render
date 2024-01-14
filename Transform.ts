@@ -206,7 +206,7 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
         }
     }
 
-    async doUpdate(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>, d: Derivative<TProps, TMethods>){
+    async doUpdate(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>){
         const {doUpdate} = await import('./trHelpers/doUpdate.js');
         await doUpdate(this, matchingElement, uow);
     }
@@ -436,12 +436,12 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends Eve
         return all;
     }
     async doUpdate(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>){
-        const {d} = uow;
+        const {d, s} = uow;
         // if(i !== undefined){
         //     await this.transformer.doIfs(matchingElement, uow, i);
         // }
-        if(d !== undefined){
-            await this.transformer.doUpdate(matchingElement, uow, d);
+        if((d || s) !== undefined){
+            await this.transformer.doUpdate(matchingElement, uow);
         }
         
     }
