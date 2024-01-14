@@ -228,10 +228,10 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
         return await getDerivedVal(this, uow, d, matchingElement);
     }
 
-    async getNestedObjVal(uow: UnitOfWork<TProps, TMethods>, u: ObjectExpression<TProps, TMethods>){
-        const {getNestedObjVal} = await import('./trHelpers/getNestedObjVal.js');
-        return await getNestedObjVal(this, uow, u);
-    }
+    // async getNestedObjVal(uow: UnitOfWork<TProps, TMethods>, u: ObjectExpression<TProps, TMethods>){
+    //     const {getNestedObjVal} = await import('./trHelpers/getNestedObjVal.js');
+    //     return await getNestedObjVal(this, uow, u);
+    // }
 
     getArrayVal(uow: UnitOfWork<TProps, TMethods>, u: NumberExpression | InterpolatingExpression){
         if(u.length === 1 && typeof u[0] === 'number') return u[0];

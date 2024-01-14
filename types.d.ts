@@ -29,7 +29,8 @@ export type Expr12 = [...Expr11, number];
 export type InterpolatingExpression = Expr0 | Expr1 | Expr2 | Expr3 | Expr4 | Expr5 | Expr6 | Expr7 | Expr8 | Expr9 | Expr10 | Expr11 | Expr12;
 export type NumberExpression = [number];
 export type ObjectExpression<TProps, TMethods> = {
-    [key: string]: Derivative<TProps, TMethods>;
+    //[key: string]: Derivative<TProps, TMethods>;
+    path: string,
 };
 
 export interface TransformOptions{
