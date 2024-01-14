@@ -22,9 +22,10 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
     #isDeclarativeShadowDOM = false;
     #needToAppendClone = false;
     async #adopt(base: TemplMgmtBase, root: ShadowRoot){
-        if(base.styles === undefined) return;
+        const styles = (<any>base.constructor).ceDef.config.propDefaults.styles;
+        if(styles === undefined) return;
         const {DoStyles} = await import('./DoStyles.js');
-        new DoStyles(this, base, root, compiledStyleMap, modernBrowser);
+        new DoStyles(this, styles, root, compiledStyleMap, modernBrowser);
             
     }
     async cloneTemplate(self: TemplMgmtBase){
