@@ -44,15 +44,17 @@ export async function Engage<TProps extends {}, TMethods = TProps>(
             if(dep !== undefined) dep();
             if(be !== undefined){
                 const prop = 'be' + be[0].toUpperCase() + be.substring(1);
+                const {camelToLisp} = await import('../lib/camelToLisp.js');
+                const localName = 'be-' + camelToLisp(be);
                 await customElements.whenDefined('be-enhanced');
                 const obj = (<any>matchingElement).beEnhanced.by[prop];
                 if(w !== undefined){
                     Object.assign(obj, w);
                 }
                 if(waitForResolved){
-                    await (<any>matchingElement).beEnhanced.whenResolved(prop);
+                    await (<any>matchingElement).beEnhanced.whenResolved(localName);
                 }else{
-                    (<any>matchingElement).beEnhanced.whenAttached(prop);
+                    (<any>matchingElement).beEnhanced.whenAttached(localName);
                 }
                                 
             }

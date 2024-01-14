@@ -37,16 +37,18 @@ export async function Engage(transformer, matchingElement, type, uow, mountOberv
                 dep();
             if (be !== undefined) {
                 const prop = 'be' + be[0].toUpperCase() + be.substring(1);
+                const { camelToLisp } = await import('../lib/camelToLisp.js');
+                const localName = 'be-' + camelToLisp(be);
                 await customElements.whenDefined('be-enhanced');
                 const obj = matchingElement.beEnhanced.by[prop];
                 if (w !== undefined) {
                     Object.assign(obj, w);
                 }
                 if (waitForResolved) {
-                    await matchingElement.beEnhanced.whenResolved(prop);
+                    await matchingElement.beEnhanced.whenResolved(localName);
                 }
                 else {
-                    matchingElement.beEnhanced.whenAttached(prop);
+                    matchingElement.beEnhanced.whenAttached(localName);
                 }
             }
         }
