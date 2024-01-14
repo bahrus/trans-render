@@ -436,8 +436,8 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends Eve
         return all;
     }
     async doUpdate(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>){
-        const {d, s} = uow;
-        if((d || s) !== undefined){
+        const {d, s, sa, ss} = uow;
+        if((d || s || sa || ss) !== undefined){
             await this.transformer.doUpdate(matchingElement, uow);
         }
         
