@@ -55,7 +55,7 @@ export function assign(instance, ret) {
                 //untested
                 const matches = Array.from((instance.clonedTemplate || instance.shadowRoot || instance).querySelectorAll(key.substring(2)));
                 for (const match of matches) {
-                    assign(match, ret);
+                    assign(match, val);
                 }
                 continue;
             }
