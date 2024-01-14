@@ -438,6 +438,8 @@ setTimeout(() => {
 }, 2000);
 ```
 
+In example 3b and 3c, we will see how we can write free form JavaScript to calculate our derivation, but for coming back to the tight constraints of JSON-serializable declarative derivation.
+
 ## Example 3b Declarative, computed derivations
 
 ```TypeScript
@@ -480,6 +482,43 @@ Transform<Model>(div, model, {
     }
 });
 ```
+
+### Example 3d:  JSON-serializable declarative advanced derivations [TODO]
+
+Let's now examine the declarative syntax that trans-render supports, "stretched to the limit" of what we think makes sense without inducing a gag reflex.  The advantage of supporting this is simply we so can "execute" such code more safely in more trust scenarios, with less risk.  Another way of saying this: the moment we need to execute code with full access to the JavaScript run time engine, we need to "shift" gears in some way, and do so in a way that doesn't allow fo xss scripting attacks.
+
+```TypeScript
+const div = document.querySelector('div')!;
+const myTemplate = document.createElement('template');
+templ.innerHTML = html `
+<div>
+    <span>Some Template Content</span>
+</div>
+`;
+const model: Model = {
+    myDate: new Date(),
+    myTemplate
+};
+
+
+Transform<Model>(div, model, {
+    span: {
+        o: 'myDate',
+        d: {
+            path: '.getTime|.toPrecision|2'
+        }
+    },
+    section: {
+        o: 'myTemplate',
+        d: {
+            path: '.content.cloneNode|true',
+        },
+        invoke: 'appendChild'
+    }
+});
+```
+
+Think of the pipe delimiter as an open parenthesis that automatically closes before the next period (".") or at the end of the statement, thus allowing us to invoke a chain of methods (like querySelector).  It allows for one parameter to be passed in to the method. 
 
 ## Example 4 Setting props of the element
 
