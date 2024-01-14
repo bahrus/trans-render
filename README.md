@@ -505,13 +505,13 @@ Transform<Model>(div, model, {
     span: {
         o: 'myDate',
         d: {
-            path: '.getTime|.toPrecision|2'
+            path: 'getTime|.toPrecision|2'
         }
     },
     section: {
         o: 'myTemplate',
         d: {
-            path: '.content.cloneNode|true',
+            path: 'content.cloneNode|true',
         },
         invoke: 'appendChild'
     }

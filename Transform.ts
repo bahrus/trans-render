@@ -2,7 +2,7 @@ import {MountObserver} from 'mount-observer/MountObserver.js';
 import {
     PropAttrQueryType, QuenitOfWork, Derivative, 
     IMountOrchestrator, NumberExpression, InterpolatingExpression,
-    ObjectExpression,
+    DerivationCriteria,
     TransformerTarget, 
     onMountStatusChange, RHS, AddEventListener,
     IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget, TransformOptions
@@ -228,24 +228,14 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
         return await getDerivedVal(this, uow, d, matchingElement);
     }
 
-    // async getNestedObjVal(uow: UnitOfWork<TProps, TMethods>, u: ObjectExpression<TProps, TMethods>){
-    //     const {getNestedObjVal} = await import('./trHelpers/getNestedObjVal.js');
-    //     return await getNestedObjVal(this, uow, u);
-    // }
 
-    getArrayVal(uow: UnitOfWork<TProps, TMethods>, u: NumberExpression | InterpolatingExpression){
-        if(u.length === 1 && typeof u[0] === 'number') return u[0];
-        const mapped = u.map(x => {
-            switch(typeof x){
-                case 'number':
-                    return this.getNumberUVal(uow, x);
-                case 'string':
-                    return x;
-                default:
-                    throw 'NI';
-            }
-        });
-        return mapped.join('');
+    async getArrayVal(uow: UnitOfWork<TProps, TMethods>, u: NumberExpression | InterpolatingExpression){
+        const {getArrayVal} = await import('./trHelpers/getArrayVal.js');
+        return getArrayVal(this, uow, u);
+    }
+
+    async getComplexDerivedVal(uow: UnitOfWork<TProps, TMethods>, dc: DerivationCriteria<TProps, TMethods>){
+        
     }
 
     getNumberUVal(uow: UnitOfWork<TProps, TMethods>, d: number){

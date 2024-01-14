@@ -16,14 +16,11 @@ export async function getDerivedVal<TProps extends {}, TMethods>(
         }
         case 'object': {
             if(Array.isArray(d)){
-                return transformer.getArrayVal(uow, d);
+                return await transformer.getArrayVal(uow, d);
                 
             }else{
-                throw 'NI';
-                // const val = await transformer.getNestedObjVal(uow, d);
-                // Object.assign(matchingElement, val);
+                return await transformer.getComplexDerivedVal(uow, d);
             }
-            break;
         }
         case 'string': {
             const {model} = transformer;

@@ -209,24 +209,11 @@ export class Transformer extends EventTarget {
         const { getDerivedVal } = await import('./trHelpers/getDerivedVal.js');
         return await getDerivedVal(this, uow, d, matchingElement);
     }
-    // async getNestedObjVal(uow: UnitOfWork<TProps, TMethods>, u: ObjectExpression<TProps, TMethods>){
-    //     const {getNestedObjVal} = await import('./trHelpers/getNestedObjVal.js');
-    //     return await getNestedObjVal(this, uow, u);
-    // }
-    getArrayVal(uow, u) {
-        if (u.length === 1 && typeof u[0] === 'number')
-            return u[0];
-        const mapped = u.map(x => {
-            switch (typeof x) {
-                case 'number':
-                    return this.getNumberUVal(uow, x);
-                case 'string':
-                    return x;
-                default:
-                    throw 'NI';
-            }
-        });
-        return mapped.join('');
+    async getArrayVal(uow, u) {
+        const { getArrayVal } = await import('./trHelpers/getArrayVal.js');
+        return getArrayVal(this, uow, u);
+    }
+    async getComplexDerivedVal(uow, dc) {
     }
     getNumberUVal(uow, d) {
         const { o } = uow;

@@ -28,9 +28,13 @@ export type Expr12 = [...Expr11, number];
 //export type Action<TProps> = (matchingElement: Element, pique: IMountOrchestrator<TProps>) => Promise<Derivative<TProps>> | Promise<void>;
 export type InterpolatingExpression = Expr0 | Expr1 | Expr2 | Expr3 | Expr4 | Expr5 | Expr6 | Expr7 | Expr8 | Expr9 | Expr10 | Expr11 | Expr12;
 export type NumberExpression = [number];
-export type ObjectExpression<TProps, TMethods> = {
+export type DerivationCriteria<TProps, TMethods> = {
     //[key: string]: Derivative<TProps, TMethods>;
+    //TODO
     path: string,
+    from?: number,
+    //TODO
+    as?: 'number' | 'string' | 'object' 
 };
 
 export interface TransformOptions{
@@ -43,7 +47,7 @@ export type Derivative<TProps, TMethods> =
     | InterpolatingExpression 
     | ((model: TProps & TMethods, transform: ITransformer<TProps, TMethods>, uow: UnitOfWork<TProps, TMethods>, matchingElement: Element) => any)
     | NumberExpression 
-    | ObjectExpression<TProps, TMethods>
+    | DerivationCriteria<TProps, TMethods>
     // only works if lhs has field/property
     | keyof TMethods & string 
     // combined observe an 0
@@ -160,6 +164,12 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
      * modify the host in a (mostly) declarative  way
      */
     m?: ModificationUnitOfWork<TProps, TMethods> | Array<ModificationUnitOfWork<TProps, TMethods>>
+
+    /**
+     * method of matching element to pass derived value into
+     * [TODO]
+     */
+    invoke?: string
 }
 export type ValueFromElement<TProps, TMethods> = 
     (
