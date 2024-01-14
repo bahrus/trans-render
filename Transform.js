@@ -399,9 +399,6 @@ export class MountOrchestrator extends EventTarget {
     }
     async doUpdate(matchingElement, uow) {
         const { d, s } = uow;
-        // if(i !== undefined){
-        //     await this.transformer.doIfs(matchingElement, uow, i);
-        // }
         if ((d || s) !== undefined) {
             await this.transformer.doUpdate(matchingElement, uow);
         }
