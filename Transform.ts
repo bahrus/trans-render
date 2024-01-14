@@ -235,7 +235,8 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
     }
 
     async getComplexDerivedVal(uow: UnitOfWork<TProps, TMethods>, dc: DerivationCriteria<TProps, TMethods>){
-        
+        const {getComplexDerivedVal} = await import('./trHelpers/getComplexDerivedVal.js');
+        return await getComplexDerivedVal(this, uow, dc);
     }
 
     getNumberUVal(uow: UnitOfWork<TProps, TMethods>, d: number){

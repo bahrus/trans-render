@@ -649,5 +649,7 @@ export type StringOrProp = ConstString | [NameOfProp, PropInfo];
 
 export type Parts = Array<StringOrProp>;
 
+export type ConvertOptions = 'bool' | 'int' | 'float' | 'date' | 'truthy' | 'falsy' | 'string' | 'object' | 'regExp' | 'number';
+
 
 

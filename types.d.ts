@@ -1,5 +1,5 @@
 import { MountContext, PipelineStage } from "mount-observer/types";
-import { Scope } from "./lib/types";
+import { ConvertOptions, Scope } from "./lib/types";
 
 export type PropAttrQueryType = 
     | '|' //microdata itemprop
@@ -34,7 +34,7 @@ export type DerivationCriteria<TProps, TMethods> = {
     path: string,
     from?: number,
     //TODO
-    as?: 'number' | 'string' | 'object' 
+    as?: ConvertOptions 
 };
 
 export interface TransformOptions{

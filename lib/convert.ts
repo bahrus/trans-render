@@ -1,4 +1,6 @@
-export function convert(val: any, parseValAs: string | null){
+import { ConvertOptions } from "./types";
+
+export function convert(val: any, parseValAs: ConvertOptions | null){
     if(parseValAs === null) return val;
     let ret  = val as any;
     switch(parseValAs){

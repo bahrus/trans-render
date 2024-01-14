@@ -214,6 +214,8 @@ export class Transformer extends EventTarget {
         return getArrayVal(this, uow, u);
     }
     async getComplexDerivedVal(uow, dc) {
+        const { getComplexDerivedVal } = await import('./trHelpers/getComplexDerivedVal.js');
+        return await getComplexDerivedVal(this, uow, dc);
     }
     getNumberUVal(uow, d) {
         const { o } = uow;
