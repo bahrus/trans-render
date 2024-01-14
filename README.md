@@ -483,7 +483,7 @@ Transform<Model>(div, model, {
 });
 ```
 
-### Example 3d:  JSON-serializable declarative advanced derivations [TODO]
+### Example 3d:  JSON-serializable declarative advanced derivations [Untested]
 
 Let's now examine the declarative syntax that trans-render supports, "stretched to the limit" of what we think makes sense without inducing a gag reflex.  The advantage of supporting this is simply we so can "execute" such code more safely in more trust scenarios, with less risk.  Another way of saying this: the moment we need to execute code with full access to the JavaScript run time engine, we need to "shift" gears in some way, and do so in a way that doesn't allow fo xss scripting attacks.
 

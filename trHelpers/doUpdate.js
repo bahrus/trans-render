@@ -1,5 +1,5 @@
 export async function doUpdate(transformer, matchingElement, uow) {
-    const { d, o, s, sa, i, ss } = uow;
+    const { d, o, s, sa, i, ss, invoke } = uow;
     if (i !== undefined) {
         const valOfIf = await transformer.doIfs(matchingElement, uow, i);
         if (!valOfIf)
@@ -42,6 +42,9 @@ export async function doUpdate(transformer, matchingElement, uow) {
         const { setProp } = await import('../lib/setProp.js');
         setProp(matchingElement.style, ss, val);
         //A({[ss]: val}, (matchingElement as HTMLElement).style);
+    }
+    else if (invoke !== undefined) {
+        await matchingElement[invoke](val);
     }
     else {
         transformer.setPrimeValue(matchingElement, val);
