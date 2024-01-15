@@ -350,7 +350,7 @@ export class MountOrchestrator extends EventTarget {
                 throw 'NI';
             }
             else {
-                this.#mountObserver.observe(target);
+                this.#mountObserver?.observe(target);
             }
         }
     }

@@ -385,7 +385,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends Eve
             if(Array.isArray(target)){
                 throw 'NI';
             }else{
-                this.#mountObserver!.observe(target);
+                this.#mountObserver?.observe(target);
             }
         }
     }
