@@ -229,6 +229,7 @@ export type UnitOfWorkRHS<TProps, TMethods> =
 export type RHS<TProps, TMethods> = UnitOfWorkRHS<TProps, TMethods> | Array<UnitOfWork<TProps, TMethods>>;
 
 export interface QueryInfo{
+    isRootQry?: boolean,
     cssQuery?: string,
     localName?: string,
     propAttrType?: PropAttrQueryType

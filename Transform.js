@@ -141,12 +141,17 @@ export class Transformer extends EventTarget {
             if (qi === undefined)
                 qi = this.calcQI(q);
             const newProcessor = new MountOrchestrator(this, uow, qi);
+            await newProcessor.do();
             this.#mountOrchestrators.push(newProcessor);
             await newProcessor.subscribe();
         }
     }
     calcQI(pqe) {
         const qi = {};
+        if (pqe === ':root') {
+            qi.isRootQry = true;
+            return qi;
+        }
         const asterSplit = pqe.split('*');
         if (asterSplit.length === 2) {
             qi.cssQuery = asterSplit[1].trim();
@@ -283,9 +288,20 @@ export class MountOrchestrator extends EventTarget {
         this.transformer = transformer;
         this.queryInfo = queryInfo;
         this.#unitsOfWork = arr(uows);
-        const match = transformer.calcCSS(queryInfo);
+    }
+    async do() {
+        const { transformer, queryInfo } = this;
         const { options } = transformer;
         const { skipInit } = options;
+        const { isRootQry } = queryInfo;
+        if (isRootQry) {
+            // const {onMount} = await import('./trHelpers/onMount.js');
+            // await onMount(
+            //     transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, observer, 
+            //     this.#mountObserver, this.#matchingElements
+            // )
+        }
+        const match = transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
             match,
             do: {

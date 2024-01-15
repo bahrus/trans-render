@@ -154,12 +154,18 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
             let {q, qi} = uow;
             if(qi === undefined) qi = this.calcQI(q);
             const newProcessor = new MountOrchestrator(this, uow, qi);
+            await newProcessor.do();
             this.#mountOrchestrators.push(newProcessor);
             await newProcessor.subscribe();
         }
     }
     calcQI(pqe: string){
+        
         const qi: QueryInfo = {};
+        if(pqe === ':root'){
+            qi.isRootQry = true;
+            return qi;
+        }
         const asterSplit = pqe.split('*');
         if(asterSplit.length === 2){
             qi.cssQuery = asterSplit[1].trim();
@@ -302,7 +308,7 @@ export function arr<T = any>(inp: T | T[] | undefined) : T[] {
 }
 
 export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends EventTarget implements IMountOrchestrator<TProps, TMethods> {
-    #mountObserver: MountObserver;
+    #mountObserver: MountObserver | undefined;
     #matchingElements: WeakRef<Element>[] = [];
     #unitsOfWork: Array<QuenitOfWork<TProps, TMethods>>
     constructor(
@@ -311,9 +317,20 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends Eve
         public queryInfo: QueryInfo){
         super();
         this.#unitsOfWork = arr(uows);
-        const match = transformer.calcCSS(queryInfo);
+    }
+    async do(){
+        const {transformer, queryInfo} = this;   
         const {options} = transformer;
         const {skipInit} = options;
+        const {isRootQry} = queryInfo;
+        if(isRootQry){
+            // const {onMount} = await import('./trHelpers/onMount.js');
+            // await onMount(
+            //     transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, observer, 
+            //     this.#mountObserver, this.#matchingElements
+            // )
+        }
+        const match = transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
             match,
             do:{
@@ -321,7 +338,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends Eve
                     const {onMount} = await import('./trHelpers/onMount.js');
                     await onMount(
                         transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, observer, 
-                        this.#mountObserver, this.#matchingElements
+                        this.#mountObserver!, this.#matchingElements
                     )
 
 
@@ -341,8 +358,6 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends Eve
                 }
             }
         });
-
-        
     }
     async subscribe(){
         for(const uow of this.#unitsOfWork){
@@ -370,7 +385,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends Eve
             if(Array.isArray(target)){
                 throw 'NI';
             }else{
-                this.#mountObserver.observe(target);
+                this.#mountObserver!.observe(target);
             }
         }
     }
