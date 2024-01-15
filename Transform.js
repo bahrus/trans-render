@@ -308,7 +308,6 @@ export class MountOrchestrator extends EventTarget {
                 }
             }
         });
-        //this.#subscribe();
     }
     async subscribe() {
         for (const uow of this.#unitsOfWork) {
