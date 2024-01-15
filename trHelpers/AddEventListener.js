@@ -16,7 +16,7 @@ export class AddEventListener {
         matchingElement.addEventListener(type, e => {
             transpiledAction(e, transformer, uow);
         }, options);
-        mountObserver.addEventListener('disconnect', e => {
+        mountObserver?.addEventListener('disconnect', e => {
             this.#abortController.abort();
         });
     }

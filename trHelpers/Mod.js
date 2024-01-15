@@ -68,7 +68,7 @@ export class Mod {
         }, {
             signal: this.#abortController.signal
         });
-        mountObserver.addEventListener('disconnect', e => {
+        mountObserver?.addEventListener('disconnect', e => {
             this.#abortController.abort();
         });
     }

@@ -222,11 +222,11 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
         return await doIfs(this, matchingElement, uow, i);
     }
 
-    async engage(matchingElement: Element, type: onMountStatusChange, uow: UnitOfWork<TProps, TMethods>, observer: IMountObserver, mountContext: MountContext){
+    async engage(matchingElement: Element, type: onMountStatusChange, uow: UnitOfWork<TProps, TMethods>, observer: IMountObserver | undefined, mountContext: MountContext){
         const {e} = uow;
         if(e === undefined) return
         const {Engage} = await import('./trHelpers/Engage.js');
-        await Engage(this, matchingElement, type, uow, observer, mountContext);
+        await Engage(this, matchingElement, type, uow, mountContext);
     }
 
     async getDerivedVal(uow: UnitOfWork<TProps, TMethods>, d: Derivative<TProps, TMethods>, matchingElement: Element){
@@ -324,11 +324,11 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends Eve
         const {skipInit} = options;
         const {isRootQry} = queryInfo;
         if(isRootQry){
-            // const {onMount} = await import('./trHelpers/onMount.js');
-            // await onMount(
-            //     transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, observer, 
-            //     this.#mountObserver, this.#matchingElements
-            // )
+            const {onMount} = await import('./trHelpers/onMount.js');
+            await onMount(
+                transformer, this, transformer.target as Element, this.#unitsOfWork, !!skipInit, {initializing: true}, this.#matchingElements 
+            )
+            return;
         }
         const match = transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
@@ -337,8 +337,8 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends Eve
                 onMount: async (matchingElement, observer, ctx) => {
                     const {onMount} = await import('./trHelpers/onMount.js');
                     await onMount(
-                        transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, observer, 
-                        this.#mountObserver!, this.#matchingElements
+                        transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, this.#matchingElements, observer, 
+                        this.#mountObserver!, 
                     )
 
 

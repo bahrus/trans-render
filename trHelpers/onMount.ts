@@ -6,8 +6,7 @@ import {QuenitOfWork, AddEventListener} from '../types.js';
 export async function onMount<TProps extends {}, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>,
     mo: MountOrchestrator<TProps, TMethods>, matchingElement: Element, uows: Array<QuenitOfWork<TProps, TMethods>>,
-    skipInit: boolean, ctx: MountContext, observer: IMountObserver, mountObserver: MountObserver, 
-    matchingElements: WeakRef<Element>[],
+    skipInit: boolean, ctx: MountContext,matchingElements: WeakRef<Element>[],  observer?: IMountObserver, mountObserver?: MountObserver
     ){
     if(mo.queryInfo.propAttrType === '$'){
         const {doNestedTransforms} = await import('./doNestedTransforms.js');

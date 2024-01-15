@@ -208,7 +208,7 @@ export class Transformer extends EventTarget {
         if (e === undefined)
             return;
         const { Engage } = await import('./trHelpers/Engage.js');
-        await Engage(this, matchingElement, type, uow, observer, mountContext);
+        await Engage(this, matchingElement, type, uow, mountContext);
     }
     async getDerivedVal(uow, d, matchingElement) {
         const { getDerivedVal } = await import('./trHelpers/getDerivedVal.js');
@@ -295,11 +295,9 @@ export class MountOrchestrator extends EventTarget {
         const { skipInit } = options;
         const { isRootQry } = queryInfo;
         if (isRootQry) {
-            // const {onMount} = await import('./trHelpers/onMount.js');
-            // await onMount(
-            //     transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, observer, 
-            //     this.#mountObserver, this.#matchingElements
-            // )
+            const { onMount } = await import('./trHelpers/onMount.js');
+            await onMount(transformer, this, transformer.target, this.#unitsOfWork, !!skipInit, { initializing: true }, this.#matchingElements);
+            return;
         }
         const match = transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
@@ -307,7 +305,7 @@ export class MountOrchestrator extends EventTarget {
             do: {
                 onMount: async (matchingElement, observer, ctx) => {
                     const { onMount } = await import('./trHelpers/onMount.js');
-                    await onMount(transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, observer, this.#mountObserver, this.#matchingElements);
+                    await onMount(transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, this.#matchingElements, observer, this.#mountObserver);
                 },
                 onDismount: async (matchingElement, ctx, stage) => {
                     for (const uow of this.#unitsOfWork) {

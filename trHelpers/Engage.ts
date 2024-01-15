@@ -6,7 +6,7 @@ export async function Engage<TProps extends {}, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>,
     matchingElement: Element,
     type: onMountStatusChange,
-    uow: UnitOfWork<TProps, TMethods>, mountOberver: IMountObserver, mountContext: MountContext) {
+    uow: UnitOfWork<TProps, TMethods>, mountContext: MountContext) {
     const { e } = uow;
     const methodArg: EngagementCtx<TMethods> = {
         mountContext,

@@ -3,7 +3,7 @@ import {MountObserver} from 'mount-observer/MountObserver.js';
 export class AddEventListener<TProps, TMethods>{
     #abortController = new AbortController();
     constructor(
-        mountObserver: MountObserver,
+        mountObserver: MountObserver | undefined,
         transformer: ITransformer<TProps, TMethods>,
         uow: UnitOfWork<TProps, TMethods>,
         matchingElement: Element,
@@ -27,7 +27,7 @@ export class AddEventListener<TProps, TMethods>{
         matchingElement.addEventListener(type, e => {
             (<any>transpiledAction)(e, transformer, uow);
         }, options);
-        mountObserver.addEventListener('disconnect', e => {
+        mountObserver?.addEventListener('disconnect', e => {
             this.#abortController.abort();
         });
     }

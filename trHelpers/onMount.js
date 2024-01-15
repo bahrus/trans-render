@@ -1,5 +1,5 @@
 import { arr } from '../Transform.js';
-export async function onMount(transformer, mo, matchingElement, uows, skipInit, ctx, observer, mountObserver, matchingElements) {
+export async function onMount(transformer, mo, matchingElement, uows, skipInit, ctx, matchingElements, observer, mountObserver) {
     if (mo.queryInfo.propAttrType === '$') {
         const { doNestedTransforms } = await import('./doNestedTransforms.js');
         await doNestedTransforms(matchingElement, uows, mo);

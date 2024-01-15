@@ -3,7 +3,7 @@ import {ModificationUnitOfWork, ITransformer} from '../types';
 export class Mod<TProps, TMethods>{
     #abortController = new AbortController();
     constructor(
-        mountObserver: MountObserver,
+        mountObserver: MountObserver | undefined,
         transformer: ITransformer<TProps, TMethods>,
         matchingElement: Element,
         m: ModificationUnitOfWork<TProps, TMethods>
@@ -73,7 +73,7 @@ export class Mod<TProps, TMethods>{
         }, {
             signal: this.#abortController.signal
         });
-        mountObserver.addEventListener('disconnect', e => {
+        mountObserver?.addEventListener('disconnect', e => {
             this.#abortController.abort();
         });
     }
