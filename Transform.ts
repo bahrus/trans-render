@@ -323,51 +323,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends Eve
                         transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, observer, 
                         this.#mountObserver, this.#matchingElements
                     )
-                    // if(this.queryInfo.propAttrType === '$'){
-                    //     const {doNestedTransforms} = await import('./trHelpers/doNestedTransforms.js');
-                    //     await doNestedTransforms(matchingElement, this.#unitsOfWork, this);
-                    //     return;
-                    // }
-                        
-                    // for(const uow of this.#unitsOfWork){
-                    //     //this is where we could look to see if we need to do update if already updated by server
-                    //     if(!skipInit || !ctx.initializing){
-                    //         await this.doUpdate(matchingElement, uow);
-                    //     }
-                        
-                    //     this.#matchingElements.push(new WeakRef(matchingElement));
-                    //     await transformer.engage(matchingElement, 'onMount', uow, observer, ctx);
-                    //     const {a, m} = uow;
-                    //     if(a !== undefined){
-                    //         let transpiledActions: Array<AddEventListener<TProps, TMethods>> | undefined;
-                    //         if(typeof a === 'string'){
-                    //             transpiledActions = [this.toStdEvt(a, matchingElement)];
-                    //         }else{
-                    //             transpiledActions = arr(a).map(ai => typeof ai === 'string' ? this.toStdEvt(ai, matchingElement) : ai);
-                    //         }
-                    //         const {AddEventListener} = await import('./trHelpers/AddEventListener.js')
-                    //         for(const ap of transpiledActions!){
-                    //             const {on, do: action, options} = ap;
-                    //             new AddEventListener<TProps, TMethods>(
-                    //                 this.#mountObserver, 
-                    //                 transformer,
-                    //                 uow,
-                    //                 matchingElement,
-                    //                 on,
-                    //                 action,
-                    //             );
-                    //         }
-                    //     }
-                    //     if(m !== undefined){
-                    //         const transpiledMs = arr(m);
-                    //         const {Mod} = await import('./trHelpers/Mod.js');
-                    //         for(const mi of transpiledMs){
-                    //             new Mod(this.#mountObserver, transformer, matchingElement, mi);
-                    //         }
-                            
-                    //     }
-                    // }
-                    
+
 
                 },
                 onDismount: async(matchingElement, ctx, stage) => {
