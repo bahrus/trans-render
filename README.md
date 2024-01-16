@@ -801,7 +801,7 @@ We can also specify an array of engagements:
 }
 ```
 
-### Example 6d - beEnhanced enhancements, part 1 [Untested]
+### Example 6d - beEnhanced enhancements, part 1
 
 *trans-render* plays favorites with be-enhanced enhancements, for obvious reasons. 
 
@@ -815,7 +815,7 @@ Transform<Model>(div, model, {
 
 The key is the beginning of the string ('+').
 
-This automatically cases the beSearching to become attached (assuming some other process imports the JS reference).  Support for loading also provided.
+This automatically causes the beSearching enhancement to become attached (assuming some other process imports the JS reference).  Support for loading is also provided.
 
 2.  Attach be-enhanced enhancement (during engagement, one time only, constant values)
 
