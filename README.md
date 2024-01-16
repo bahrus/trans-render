@@ -438,7 +438,7 @@ setTimeout(() => {
 }, 2000);
 ```
 
-In example 3b and 3c, we will see how we can write free form JavaScript to calculate our derivation, but for coming back to the tight constraints of JSON-serializable declarative derivation.
+In example 3b and 3c, we will see how we can write free form JavaScript to calculate our derivation, before coming back to the tight constraints of JSON-serializable declarative derivation.
 
 ## Example 3b Declarative, computed derivations
 
