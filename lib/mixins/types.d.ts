@@ -7,7 +7,14 @@ export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLEleme
     clonedTemplate?: Node | undefined;
     shadowRootMode?: 'open' | 'closed' | undefined | false;
     //xform: Partial<{[key: string]: RHS<any, any>}>,
+    /**
+     * transform within ShadowRoot if applicable
+     */
     xform: XForm<any, any>,
+    /**
+     * transform applied to light children, if applicable
+     * Use ":root" to match on the root element
+     */
     lcXform: XForm<any, any>,
     xformImpl?: () => Promise<ToTransformer<MCProps, MCMethods>>,
     skipTemplateClone?: boolean;
