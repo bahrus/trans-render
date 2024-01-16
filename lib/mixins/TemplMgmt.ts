@@ -105,7 +105,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
 
             //await MainTransforms(this as any as TemplMgmtBaseMixin & HTMLElement, base, fragment as DocumentFragment);
         }
-        if(!shadowRootMode && lcXform){
+        if(shadowRootMode && lcXform){
             const {Transform} = await import('../../Transform.js');
             await Transform(this, this, lcXform, {
                 propagator: (<any>this).xtalState
