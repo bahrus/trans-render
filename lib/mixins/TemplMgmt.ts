@@ -85,7 +85,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
     async doTemplMount(base: TemplMgmtBase){
         if(this.#mounted) return;
         this.#mounted = true;
-        const {xform, xformImpl, clonedTemplate, shadowRootMode} = base;
+        const {xform, xformImpl, clonedTemplate, shadowRootMode, lcXform} = base;
         const fragment = clonedTemplate === undefined ? 
             !shadowRootMode ? this : this.shadowRoot!
             : clonedTemplate as DocumentFragment;
@@ -104,6 +104,12 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
             }
 
             //await MainTransforms(this as any as TemplMgmtBaseMixin & HTMLElement, base, fragment as DocumentFragment);
+        }
+        if(!shadowRootMode && lcXform){
+            const {Transform} = await import('../../Transform.js');
+            await Transform(this, this, lcXform, {
+                propagator: (<any>this).xtalState
+            });
         }
         if(this.#needToAppendClone){
             const root = !shadowRootMode ? this : this.shadowRoot!;
@@ -136,6 +142,9 @@ export const propInfo: Partial<{[key in keyof TemplMgmtProps]: PropInfo}> = {
         parse: false,
     },
     xform:{
+        parse: false,
+    },
+    lcXform:{
         parse: false,
     },
     styles: {

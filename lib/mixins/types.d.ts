@@ -1,4 +1,4 @@
-import {UnitOfWork, ITransformer, RHS, ToTransformer} from '../../types';
+import {UnitOfWork, ITransformer, RHS, ToTransformer, XForm} from '../../types';
 
 export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLElement, MCMethods = MCProps>{
     mainTemplate?: HTMLTemplateElement | string;
@@ -6,7 +6,9 @@ export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLEleme
     styles?: CSSStyleSheet[] | string;
     clonedTemplate?: Node | undefined;
     shadowRootMode?: 'open' | 'closed' | undefined | false;
-    xform: Partial<{[key: string]: RHS<any, any>}>,
+    //xform: Partial<{[key: string]: RHS<any, any>}>,
+    xform: XForm<any, any>,
+    lcXform: XForm<any, any>,
     xformImpl?: () => Promise<ToTransformer<MCProps, MCMethods>>,
     skipTemplateClone?: boolean;
     //homeInOn?: Partial<{[key in keyof MCProps]: Partial<{[key: string]: RHS<MCProps, MCMethods>}>}>;
