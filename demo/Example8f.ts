@@ -1,12 +1,13 @@
 import {Transform} from '../Transform.js';
 
 interface Props {
-    greeting?: string,
+    greeting: string,
 }
 interface Methods{
     
 }
 const model: Props & Methods = {
+    greeting: ''
 }
 
 const div = document.querySelector('div')!;

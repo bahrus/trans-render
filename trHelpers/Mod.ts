@@ -9,6 +9,7 @@ export class Mod<TProps, TMethods>{
         m: ModificationUnitOfWork<TProps, TMethods>
     ){
         const {on} = m;
+        const once = on === 'load';
         matchingElement.addEventListener(on, async e => {
             const {inc, byAmt, s, toggle} = m;
             const {model, options} = transformer;
@@ -71,8 +72,12 @@ export class Mod<TProps, TMethods>{
                 }
             }
         }, {
-            signal: this.#abortController.signal
+            signal: this.#abortController.signal,
+            once
         });
+        if(on === 'load'){
+            matchingElement.dispatchEvent(new Event('load'));
+        }
         mountObserver?.addEventListener('disconnect', e => {
             this.#abortController.abort();
         });
