@@ -687,13 +687,13 @@ Traditionally, inline binding libraries have supported this, often as add-on's. 
 
 However, this library has been designed so that the various settings (a, e, i, o, s, etc) can be overridden for more powerful functionality, or extended to support additional functionality, perhaps keyed from new letters / words.  
 
-But more importantly, the Transform function / Transformer class provides a clean way of hooking up DOM elements to [custom enhancements](https://github.com/WICG/webcomponents/issues/1000), that can certainly include support for conditional loading and repeating DOM structures.  For such enhancements to work well with this library, they need to provide a formal api for getting "attached" to the element, not dependent on an inline attribute (which would be clunky, frankly).  
+But more importantly, as we will see below, the Transform function / Transformer class provides a clean way of hooking up DOM elements to [custom enhancements](https://github.com/WICG/webcomponents/issues/1000), that can certainly include support for conditional loading and repeating DOM structures.  For such enhancements to work well with this library, they need to provide a formal api for getting "attached" to the element, not dependent on an inline attribute (which would be clunky, frankly).  
 
-So *trans-render* views the best value-add as being able to specify, during initialization / hydration, a method that can be called, and where we can specify values to pass into that method.  This makes the trans-render extremely loosely coupled / un-opinionated.  
+So *trans-render* views the best value-add as being able to specify, during initialization / hydration, a method that can be called, and where we can specify values to pass into that method.  This makes the trans-render extremely loosely coupled / un-opinionated. Or more declaratively, it provides the ability to attach an infinite variety of enhancements.  Think of this as our plug-in, or "hook" mechanism. 
 
 So what follows below, examples 6*, extends example 4 above (just to give a bird's eye view of how this would look in context).
 
-What has been added is the "e" section, which kind of vaguely stands for "engagement" callbacks.
+What has been added is the "e" section, which kind of vaguely stands for "engagement/enhancement attaching" callbacks.
 
 Other things we can do in addition to enhancing the matched elements:
 
@@ -802,9 +802,11 @@ We can also specify an array of engagements:
 
 ### Example 6d - beEnhanced enhancements, part 1
 
-*trans-render* plays favorites with be-enhanced enhancements, for obvious reasons. 
+*trans-render* plays favorites with [be-enhanced](https://github.com/bahrus/be-enhanced) enhancements, for obvious reasons. 
 
-1.  Set beEnhanced enhancement property value for dynamic values:
+This package support such enhancements in two related ways, and both can be employed at the same time for the same enhancement:
+
+1.  We can set beEnhanced enhancement property values from our model:
 
 ```TypeScript
 Transform<Model>(div, model, {
@@ -812,14 +814,14 @@ Transform<Model>(div, model, {
 });
 ```
 
-The key is the beginning of the string ('+').
+The key is the beginning of the string ('+').  "+" feels like we are "supplementing/enhancing" the built in element (or third party custom element).
 
-This automatically causes the beSearching enhancement to become attached (assuming some other process imports the JS reference).  Support for loading is also provided.
+This automatically causes the beSearching enhancement to become attached (assuming some other process imports the JS reference, or we use "dep" to do so, as described below).
 
-2.  Attach be-enhanced enhancement (during engagement, one time only, constant values)
+2.  Attach be-enhanced enhancement (during engagement, one time only, constant values, no updates when the model changes)
 
 
-### Example 6e - beEnhanced enhancements, part 2 [Untested]
+### Example 6e - beEnhanced enhancements, part 2
 
 ```TypeScript
 Transform<Model>(div, model, {
@@ -838,7 +840,7 @@ Transform<Model>(div, model, {
 });
 ```
 
-Due to the way everything works, the s: property will automatically attach the beSearching enhancement anyway.  But this allows for setting static properties once, if applicable
+Due to the way everything works, the s: property will automatically attach the beSearching enhancement anyway.  But the e: setting allows for setting static properties once, if applicable.
 
 [TODO]  Do only if a strong use case:  Infer engagement based on the name of the method.  For example, suppose the model looks like:
 
@@ -870,7 +872,7 @@ One approach to accomplishing this is by adding a "computed property" to the hos
 
 ### On to business
 
-For conditional statements, we use the letter "i" for if.  It supports various different types of RHS's, in order to ramp up to more complex scenarios.
+For conditional statements, we use the letter "i" for "if".  It supports various different types of RHS's, in order to ramp up to more complex scenarios.
 
 ### Example 7a - Switch statement for string property:
 
