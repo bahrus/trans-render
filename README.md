@@ -311,7 +311,7 @@ Transform<Model>(form, model, {
 </form>
 ```
 
-Note that the trans-render library only provides one-way binding support (but more on that in a bit).
+Note that the trans-render library only provides one-way binding support via a single "unit of work" binding (but more on that in a bit).
 
 The relationship between "@" and the name attribute is a bit weak, but here it is:  It looks like the second letter of the word "name", and also in github and many social media sites, to refer to a person "by name" the character that is typed, in order to get autocomplete suggestions of names, is the @ symbol.  
 
@@ -446,10 +446,8 @@ In example 3b and 3c, we will see how we can write free form JavaScript to calcu
 const div = document.querySelector('div')!;
 const model: Model = {
     msg1: 'hello',
-    msg2: 'world'
-    computeMessage: ({msg1, msg2}: Model, uow: UnitOfWorkCtx) => {
-        return `msg1: ${msg1}, msg2: ${msg2}`
-    }
+    msg2: 'world',
+    computeMessage: ({msg1, msg2}: Model, uow: UnitOfWorkCtx) => `msg1: ${msg1}, msg2: ${msg2}`
 };
 
 
@@ -518,7 +516,7 @@ Transform<Model>(div, model, {
 });
 ```
 
-Think of the pipe delimiter as an open parenthesis that automatically closes before the next period (".") or at the end of the statement, thus allowing us to invoke a chain of methods (like querySelector).  It allows for one parameter to be passed in to the method. 
+Think of the pipe delimiter as an open parenthesis that automatically closes before the next period (".") or at the end of the statement, thus allowing us to invoke a chain of methods (like querySelector).  It allows for one parameter to be passed in to the method. "invoke" means rather than setting a property to the derived value, pass the derived value to the specified method of the target (matching) element, "section" in this case.
 
 ## Example 4 Setting props of the element
 
@@ -608,9 +606,11 @@ Transform<Props, Actions>(form, model, {
 });
 ```
 
+So now we use the letter "a", short for **a**ddEventListener.
+
 ## Example 5b - Adding a single event listener, the most standard one
 
-There are some elements where the most common event we attach is pretty clear - for the button it is click, for the input element it is the input event.
+There are some elements where the most common event we typically attach is pretty clear - for the button it is click, for the input element it is the input event.
 
 So to make such scenarios simple, we adopt the following rules:
 
@@ -642,9 +642,8 @@ Transform<Props, Actions>(form, model, {
     input: {
         a: {
             on: 'change',
-            do: (e: Event, {model, propagator}) => {
+            do: (e: Event, {model}) => {
                 model.isHappy = !model.isHappy;
-                
             }
         }
     },
@@ -654,7 +653,7 @@ Transform<Props, Actions>(form, model, {
 
 ## Example 5d -- Multiple Event Handlers
 
-"a" can also be an array:
+"a" can also be an array of event bindings:
 
 ```TypeScript
 const model: Props & Actions = {
@@ -670,7 +669,7 @@ Transform<Props, Actions>(form, model, {
     input: {
         a: ['handleInput', {
             on: 'change',
-            do: (e, {model, propagator}) => {
+            do: (e, {model}) => {
                 model.isHappy = !model.isHappy;
             }
         }]
