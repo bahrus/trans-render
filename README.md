@@ -1094,9 +1094,9 @@ The "toValFrom" parameter can be a function:
 toValFrom: (matchingElement, transformer, modUOW) =>  (matchingElement as HTMLInputElement).value.length.toString()
 ``` 
 
-## Example 8h Hydrating with "load" event [TODO]
+## Example 8f Hydrating with "load" event [TODO]
 
-A special event name -- "load" -- is reserved for setting host properties one time only based on server rendered HTML.  It is expected that once the "ownership" of the value is passed from the server rendered HTML to the host model, other binding instructions will continue to keep them in sync via one-way binding down from the host/model to the UI.
+A special pseudo event name -- "load" -- is reserved for setting host properties one time only based on server rendered HTML.  It is expected that once the "ownership" of the value is passed from the server rendered HTML to the host model, other binding instructions will continue to keep them in sync via one-way binding down from the host/model to the UI.
 
 ## Part 9 - Nested Objects => Nested Transforms
 
