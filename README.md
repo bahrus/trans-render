@@ -1094,9 +1094,42 @@ The "toValFrom" parameter can be a function:
 toValFrom: (matchingElement, transformer, modUOW) =>  (matchingElement as HTMLInputElement).value.length.toString()
 ``` 
 
-## Example 8f Hydrating with "load" event [TODO]
+## Example 8f Hydrating with "load" event
 
 A special pseudo event name -- "load" -- is reserved for setting host properties one time only based on server rendered HTML.  It is expected that once the "ownership" of the value is passed from the server rendered HTML to the host model, other binding instructions will continue to keep them in sync via one-way binding down from the host/model to the UI.
+
+```html
+<div itemscope>
+    <span>hello</span>
+    <label itemprop=greeting></label>
+</div>
+```
+
+```Typescript
+interface Props {
+    greeting: string,
+}
+interface Methods{
+    
+}
+const model: Props & Methods = {
+    greeting: ''
+}
+
+const div = document.querySelector('div')!;
+
+
+Transform<Props, Methods>(div, model, {
+    span: {
+        m:{
+            on: 'load',
+            s: 'greeting',
+            toValFrom: 'textContent'
+        }
+    },
+    "! greeting": 0
+});
+```
 
 ## Part 9 - Nested Objects => Nested Transforms
 
