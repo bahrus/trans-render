@@ -96,7 +96,7 @@ All the examples described below can [be seen fully here](https://github.com/bah
 
    b. [Custom method for evaluating boolean condition](#example-7b---custom-method-to-check-boolean-condition)
 
-8.  [Part 8 Modifying the host or model](#modifying-the-host-or-model)
+8. [Part 8 Modifying the host or model](#modifying-the-host-or-model)
 
    a. [Incrementing a counter](#example-8a-incrementing-a-counter)
 
@@ -107,6 +107,12 @@ All the examples described below can [be seen fully here](https://github.com/bah
    d. [Multiple modifications](#example-8d-multiple-modifications)
 
    e. [Computed value](#example-8e---computed-value)
+
+   f. [Hydrating with load event](#example-8f-hydrating-with-load-event)
+
+9.  [Part 9 - Nested Objects => Nested Transforms](#part-9---nested-objects--nested-transforms)
+
+   a. [Example 9a - itemscope, itemprop explicitly spelled out](#example-9a---itemscope-itemprop-explicitly-spelled-out)
 
 10. [Part 10 - trans-render the web component](#part-10----trans-render-the-web-component)
 
@@ -1137,7 +1143,7 @@ Up until now, the only way we can bind an HTML element to nested sub properties 
 
 For true nested binding, we leverage the microdata itemscope attribute, combined with the itemprop attribute on the same element
 
-## Example 9a itemscope/itemprop explicitly spelled out.
+## Example 9a - itemscope, itemprop explicitly spelled out.
 
 ```html
 <div>
