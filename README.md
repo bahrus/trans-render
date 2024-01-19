@@ -765,9 +765,7 @@ Transform<Props, Methods>(div, model, {
 });
 ```
 
-The method hydrateInputElement gets called once and only once per input element that gets added or found in the DOM fragment.  It is also called when the input elements are are disconnected from the DOM fragment (with a different argument):
-
-The MethodInvocationCallback interface can be seen [here](https://github.com/bahrus/trans-render/blob/baseline/types.d.ts).
+The method hydrateInputElement gets called once and only once per input element that gets added or found in the DOM fragment.
 
 ### Example 6b Enhancement / Engagement / Hydration shortcut
 
