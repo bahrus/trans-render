@@ -391,7 +391,7 @@ What follows is admittedly a bit of a brain twister, but no pain, no gain, as th
 Let's say we define a custom element with name "my-custom-element", and that custom element supports a property, "myLocalProp", and we want to pass to that property the host property "greeting".  In the spirit of KISS, the most natural way seems to be something like:
 
 ```html
-<my-custom-element -my-local-prop=greeting></my-custom-element>
+<my-custom-element -greeting=:my-local-prop></my-custom-element>
 ```
 
 So we want a way to train our transform to support this natural syntax, with as little boilerplate as possible.  
