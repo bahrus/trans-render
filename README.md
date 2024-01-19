@@ -522,7 +522,7 @@ const model: Model = {
 Transform<Model>(div, model, {
     span: {
         o: ['msg1', 'msg2'],
-        d: ({msg1, msg2}: Model, uow: UnitOfWorkCtx) => `msg1: ${msg1}, msg2: ${msg2}`
+        d: ({msg1, msg2}: Model/**, uow: UnitOfWorkCtx**/) => `msg1: ${msg1}, msg2: ${msg2}`
     }
 });
 ```
@@ -1216,6 +1216,7 @@ This results in the span being kept in sync with model.address.zipCode.
 ## Part 9 3/4 Parameterized matches [TODO]
 
 
+## Example 9 3/4 part a - bulk distribution of the model values
 
 Say there's lots of elements matching a pattern:
 
@@ -1225,7 +1226,7 @@ Say there's lots of elements matching a pattern:
     <div itemprop=prop2></div>
     <div itemprop=prop3></div>
     ...
-    <div itemprop=propn></div>
+    <div itemprop=prop17></div>
 </div>
 ```
 
@@ -1234,7 +1235,7 @@ Writing one match per property would be quite redundant.  So we can use a parame
 ```TypeScript
 Transform<Props & Methods>(div, model, {
     '| :prop': {
-        w: //where clause, can filter via css filtering so we don't bind to everything,
+        w: //where clause, can filter via css filtering so we don't bind to everything by accident,
         d: 0
     },
 });
