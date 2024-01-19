@@ -319,6 +319,8 @@ Transform<Model>(form, model, {
 
 Note that the trans-render library only provides one-way binding support via a single "unit of work" binding (but more on that in a bit).
 
+If using TypeScript, you will receive compile time errors if trying to bind to a non existent field/property, in case you wee wondering.
+
 The relationship between "@" and the name attribute is a bit weak, but here it is:  It looks like the second letter of the word "name", and also in github and many social media sites, to refer to a person "by name" the character that is typed, in order to get autocomplete suggestions of names, is the @ symbol.  
 
 Why the space between @ and greeting?  The extra work necessary to type the space is there to make it clear that this is *not* a css selector, but a convenient shortcut that essentially maps to [name='greeting']
