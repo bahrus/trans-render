@@ -64,23 +64,20 @@ export class Transformer extends EventTarget {
         if (propagator.___props === undefined) {
             propagator.___props = new Set();
         }
-        let prevKey;
         const uows = [];
         for (const key in xform) {
-            const newKey = key[0] === '^' ? prevKey : key;
-            prevKey = newKey;
-            const rhs = (xform)[newKey];
+            const rhs = xform[key];
             switch (typeof rhs) {
                 case 'number': {
                     if (rhs !== 0)
                         throw 'NI';
-                    const qi = this.calcQI(newKey);
+                    const qi = this.calcQI(key);
                     const { prop } = qi;
                     const uow = {
                         o: [prop],
                         d: 0,
                         qi,
-                        q: newKey
+                        q: key
                     };
                     uows.push(uow);
                     break;
@@ -88,13 +85,13 @@ export class Transformer extends EventTarget {
                 case 'string':
                     {
                         if (typeof model[rhs] === 'function') {
-                            const qi = this.calcQI(newKey);
+                            const qi = this.calcQI(key);
                             const { prop } = qi;
                             const uow = {
                                 o: [prop],
                                 d: rhs,
                                 qi,
-                                q: newKey
+                                q: key
                             };
                             uows.push(uow);
                         }
@@ -102,7 +99,7 @@ export class Transformer extends EventTarget {
                             const uow = {
                                 o: [rhs],
                                 d: 0,
-                                q: newKey
+                                q: key
                             };
                             uows.push(uow);
                         }
@@ -115,7 +112,7 @@ export class Transformer extends EventTarget {
                                 const uow = {
                                     //d: 0,
                                     ...rhsPart,
-                                    q: newKey
+                                    q: key
                                 };
                                 if (uow.o !== undefined && uow.d === undefined)
                                     uow.d = 0;
@@ -126,7 +123,7 @@ export class Transformer extends EventTarget {
                             const uow = {
                                 //d: 0,
                                 ...rhs,
-                                q: newKey
+                                q: key
                             };
                             if (uow.o !== undefined && uow.d === undefined)
                                 uow.d = 0;

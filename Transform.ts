@@ -5,7 +5,7 @@ import {
     DerivationCriteria,
     TransformerTarget, 
     onMountStatusChange, RHS, AddEventListener,
-    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget, TransformOptions
+    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget, TransformOptions, LHS
 } from './types.js';
 import { IMountObserver, MountContext, PipelineStage } from 'mount-observer/types';
 export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './types';
@@ -78,22 +78,19 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
         if(propagator.___props === undefined){
             propagator.___props = new Set();
         }
-        let prevKey: string | undefined;
         const uows : Array<QuenitOfWork<TProps, TMethods>> = [];
         for(const key in xform){
-            const newKey = key[0] ==='^' ? prevKey : key;
-            prevKey = newKey;
-            const rhs = (xform)[newKey as string];
+            const rhs = xform[key as LHS<TProps>] as RHS<TProps, TMethods>;
             switch(typeof rhs){
                 case 'number': {
                     if(rhs !== 0) throw 'NI';
-                    const qi = this.calcQI(newKey!);
+                    const qi = this.calcQI(key);
                     const {prop} = qi;
                     const uow: QuenitOfWork<TProps, TMethods> = {
                         o: [prop! as keyof TProps & string],
                         d: 0,
                         qi,
-                        q: newKey!
+                        q: key
                     };
                     uows.push(uow);
                     break;
@@ -102,20 +99,20 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
                 case 'string':
                     {
                         if(typeof model[rhs] === 'function'){
-                            const qi = this.calcQI(newKey!);
+                            const qi = this.calcQI(key);
                             const {prop} = qi;
                             const uow: QuenitOfWork<TProps, TMethods> = {
                                 o: [prop! as keyof TProps & string],
                                 d: rhs as keyof TMethods & string,
                                 qi,
-                                q: newKey!
+                                q: key
                             };
                             uows.push(uow);
                         }else{
                             const uow: QuenitOfWork<TProps, TMethods> = {
                                 o: [rhs as keyof TProps & string],
                                 d: 0,
-                                q: newKey!
+                                q: key
                             };
                             uows.push(uow);
                         }
@@ -129,7 +126,7 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
                                 const uow: QuenitOfWork<TProps, TMethods> = {
                                     //d: 0,
                                     ...rhsPart!,
-                                    q: newKey!
+                                    q: key
                                 };
                                 if(uow.o !== undefined && uow.d === undefined) uow.d = 0;
                                 uows.push(uow);
@@ -138,8 +135,8 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
                             const uow: QuenitOfWork<TProps, TMethods> = {
                                 //d: 0,
                                 ...rhs!,
-                                q: newKey!
-                            };
+                                q: key
+                            } as QuenitOfWork<TProps, TMethods>;
                             if(uow.o !== undefined && uow.d === undefined) uow.d = 0;
                             uows.push(uow);
                         }
