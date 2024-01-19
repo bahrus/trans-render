@@ -134,9 +134,10 @@ export class Transformer extends EventTarget {
             }
         }
         for (const uow of uows) {
-            let { q, qi } = uow;
+            let { q, qi, w } = uow;
             if (qi === undefined)
                 qi = this.calcQI(q);
+            qi.w = w;
             const newProcessor = new MountOrchestrator(this, uow, qi);
             await newProcessor.do();
             this.#mountOrchestrators.push(newProcessor);
@@ -169,7 +170,7 @@ export class Transformer extends EventTarget {
     }
     calcCSS(qi) {
         const { cssQuery, localName, prop, propAttrType } = qi;
-        const ln = localName || '';
+        const ln = (localName || '') + (qi.w || '');
         const c = cssQuery || '';
         if (propAttrType === undefined) {
             return `${ln} ${c}`.trimEnd();

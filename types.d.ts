@@ -243,6 +243,7 @@ export interface QueryInfo{
     localName?: string,
     propAttrType?: PropAttrQueryType
     prop?: string,
+    w?: WhereConditions,
 }
 
 export type TransformerTarget = Element | DocumentFragment | Element[] | ShadowRoot | Document;

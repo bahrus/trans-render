@@ -148,8 +148,9 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
         }
 
         for(const uow of uows){
-            let {q, qi} = uow;
+            let {q, qi, w} = uow;
             if(qi === undefined) qi = this.calcQI(q);
+            qi.w = w;
             const newProcessor = new MountOrchestrator(this, uow, qi);
             await newProcessor.do();
             this.#mountOrchestrators.push(newProcessor);
@@ -184,7 +185,7 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
 
     calcCSS(qi: QueryInfo){
         const {cssQuery, localName, prop, propAttrType} = qi;
-        const ln = localName || '';
+        const ln = (localName || '') + (qi.w || '' );
         const c = cssQuery || '';
         if(propAttrType === undefined){
             return `${ln} ${c}`.trimEnd();

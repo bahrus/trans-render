@@ -370,7 +370,7 @@ Transform<Props & Methods>(form, model, {
 });
 ```
 
-## Example 2c  Imposing additional constraints on our matches [TODO]
+## Example 2c  Imposing additional constraints on our matches
 
 We mentioned earlier that we can do free form matching by beginning our LhS with the asterisk (*).  But as we are seeing in the preceding examples, we can reduce repetitive boilerplate by using some special selectors, assuming an attribute or class or part matches the name of one of our properties.  But what if we want to add some extra checks to make sure we don't bind to some other elements where the name of the attribute also matches our property?
 
