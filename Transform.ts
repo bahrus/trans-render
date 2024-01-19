@@ -56,7 +56,7 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
     constructor(
         public target: TransformerTarget,
         model: TProps & TMethods,
-        public xform: Partial<{[key: string]: RHS<TProps, TMethods>}>,
+        public xform: XForm<TProps, TMethods>,
         public options: TransformOptions, 
     ){
         super();
