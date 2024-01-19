@@ -119,6 +119,14 @@ export interface ConditionGate<TProps, TMethods>{
 
 }
 
+export type WhereConditions = 
+    | string //css matches
+    | {
+        matches: string,
+        mediaMatches: string,
+        containerQuery: string,
+    }
+
 export type IfInstructions<TProps, TMethods> = string | boolean | number | [number] | ConditionGate<TProps, TMethods> ;
 
 export type PropOrComputedProp<TProps, TMethods = TProps> = 
@@ -141,7 +149,11 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
      */
     d?: Derivative<TProps, TMethods>,
     /**
-     * ifs ands or buts
+     * 
+     */
+    w?: WhereConditions
+    /**
+     * ifs ands or buts -- conditions on the model
      */
     i?: IfInstructions<TProps, TMethods>,
     /**
