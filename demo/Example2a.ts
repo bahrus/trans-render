@@ -9,10 +9,9 @@ const form = document.querySelector('form')!;
 const model: Model = {
     greeting: 'hello'
 };
-const lhs: LHS<Model>[] = ['@ greeting'];
 
 Transform<Model>(form, model, {
-    [lhs[0]]: 0
+    '@ greeting': 0
 });
 setTimeout(() => {
     const section = document.createElement('input');

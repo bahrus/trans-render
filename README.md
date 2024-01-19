@@ -351,21 +351,6 @@ export type PropAttrQueryType =
 
 We will see examples of these in use (especially in the Examples8*).
 
-<details>
-    <summary>For the Typescipt absolutists</summary>
-
-One of the exciting recent developments of Typescript is the ability to define template literal types.  In theory, this means we can make the LHS expression type safe.  However, due to some apparent Typescript compiling issues, this is currently problematic to use in this case, as it causes Typescript to go into an infinite loop.
-
-So to benefit from type safety for the LHS, the best I could come up with is:
-
-```Typescript
-const lhs: LHS<Model>[] = ['@ greeting'];
-
-Transform<Model>(form, model, {
-    [lhs[0]]: 0
-});
-```
-</details>
 
 ## Example 2b Shortcut, but deriving value from method
 

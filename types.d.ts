@@ -101,6 +101,7 @@ export type PropQueryExpression<TProps> =
     | `* ${CSSQuery}` 
     | `${keyof HTMLElementTagNameMap}`
     | `${PropAttrQueryType} ${keyof TProps & string}`
+    | `:root`
 ;
 
 export type LHS<TProps> = PropQueryExpression<TProps>;
@@ -262,10 +263,10 @@ export interface AddEventListener<TProps, TMethods>{
     options?: boolean | EventListenerOptions, 
 }
 
-export type XForm<TProps, TMethods> = Partial<{[key: string]: RHS<TProps, TMethods>}>
-// export type XForm<TProps, TMethods> = Partial<{
-//     [key in LHS<TProps>]: RHS<TProps, TMethods>;
-// }>;
+//export type XForm<TProps, TMethods> = Partial<{[key: string]: RHS<TProps, TMethods>}>
+export type XForm<TProps, TMethods> = Partial<{
+    [key in LHS<TProps>]: RHS<TProps, TMethods>;
+}>;
 
 export interface ITransformer<TProps, TMethods>{
     target: TransformerTarget,
