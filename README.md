@@ -401,9 +401,15 @@ Transform<Model>(form, model, {
 
 What follows is admittedly a bit of a brain twister, but no pain, no gain, as they say.
 
+Let's say we define a custom element with name "my-custom-element", and that custom element supports a property, "myLocalProp", and we want to pass to that property the host property "greeting".  In the spirit of KISS, the most natural way seems to be something like:
+
 ```html
 <my-custom-element -my-local-prop=greeting></my-custom-element>
 ```
+
+So we want a way to train our transform to support this natural syntax, with as little boilerplate as possible.  
+
+Because css doesn't currently allow pattern matching on the attribute name structure, we do need to list each property binding separately.  But maybe we have different instances of the custom element, and these instances may bind to different properties from the host.  The following syntax allows us to do that with a single statement.
 
 ```Typescript
 Transform<Model>(form, model, {
@@ -411,6 +417,11 @@ Transform<Model>(form, model, {
 });
 ```
 
+This same syntax will also match:
+
+```html
+<my-custom-element data-my-local-prop=greeting></my-custom-element>
+```
 
 ## Part 3 - Derived values in depth
 
