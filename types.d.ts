@@ -100,11 +100,7 @@ export interface IMountOrchestrator<TProps, TMethods = TProps>{
 export type PropQueryExpression<TProps> =
     | `* ${CSSQuery}` 
     | `${keyof HTMLElementTagNameMap}`
-    | `${keyof HTMLElementTagNameMap} * ${CSSQuery}` 
-    | `${keyof HTMLElementTagNameMap} ${PropAttrQueryType} ${keyof TProps & string}` 
-    | `${keyof HTMLElementTagNameMap} ${PropAttrQueryType} ${keyof TProps & string} * ${CSSQuery}`
     | `${PropAttrQueryType} ${keyof TProps & string}`
-    | `${PropAttrQueryType} ${keyof TProps & string} * ${CSSQuery}`
 ;
 
 export type LHS<TProps> = PropQueryExpression<TProps>;
