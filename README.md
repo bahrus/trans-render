@@ -1175,6 +1175,58 @@ setTimeout(() => {
 
 This results in the span being kept in sync with model.address.zipCode.
 
+## Part 9 3/4 Parameterized matches
+
+Say there's lots of elements matching a pattern:
+
+```html
+<div itemscope>
+    <div itemprop=prop1></div>
+    <div itemprop=prop2></div>
+    <div itemprop=prop3></div>
+    ...
+    <div itemprop=propn></div>
+</div>
+```
+
+Writing one match per property would be quite redundant.  So we can use a parameterized match:
+
+```TypeScript
+Transform<Props & Methods>(div, model, {
+    '| :prop': {
+        w: //where clause, can filter via css filtering so we don't bind to everything,
+        d: 0
+    },
+});
+```
+
+Nested transforms, binding to a loop with aria-index:
+
+I'm not sure if this is the most optimal way of binding to a loop, but where it works okay:
+
+```html
+<div>
+<table itemscope itemprop=list>
+    <tr itemscope itemtype=https://schema.org/ListItem aria-index=1>
+        <td itemprop=prop1></td>
+    </tr>
+    
+</table>
+</div>
+```
+
+```TypeScript
+Transform<Props & Methods>(div, model, {
+    '$ list': {
+        '$ :[aria-index]':{
+            '| prop1': 0
+        }
+    }
+})
+
+```
+
+
 ## Part 10 - Updating the model
 
 We've seen examples where we update individual properties/fields of the model, using standard JS field assignments.  But what if we make a back-end call, and retrieve another model, where most of the data is different?
