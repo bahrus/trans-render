@@ -165,7 +165,7 @@ The "span" css-selector is saying "watch for any span tags within the observed f
 
 The "o" parameter is specifying the list of properties to **o**bserve from the model.  The order is important, as the rest of the transform manifest will frequently reference these observed properties via the index of this array.  
 
-And in fact in this example the "d" parameter is saying "**d**erive the span's textContent property from the value of the 0th observed property".  "0" is basically our "identity" derivation, and can actually be dropped, because it is the assumed default derivation.
+And in fact in this example the "d" parameter is saying "**d**erive the value we want to use to set the span's textContent property, from the value of the 0th observed property".  "0" is basically our "identity" derivation, and can actually be dropped, because it is the assumed default derivation.
 
 The result is:
 
@@ -382,6 +382,35 @@ Transform<Props & Methods>(form, model, {
     '@ greeting': 'appendWorld',
 });
 ```
+
+## Example 2c  Imposing additional constraints on our matches [TODO]
+
+We mentioned earlier that we can do free form matching by beginning our LhS with the asterisk (*).  But as we are seeing in the preceding examples, we can reduce repetitive boilerplate by using some special selectors, assuming an attribute or class or part matches the name of one of our properties.  But what if we want to add some extra checks to make sure we don't bind to some other elements where the name of the attribute also matches our property?
+
+We can sneak back in some free form css matching expressions by adding a "w" parameter, which stands for "where":
+
+```Typescript
+Transform<Model>(form, model, {
+    '@ greeting': {
+        w: '.isASalutation'
+    },
+});
+```
+
+## Example 2d Special Markers with parameterized query [TODO]
+
+What follows is admittedly a bit of a brain twister, but no pain, no gain, as they say.
+
+```html
+<my-custom-element -my-local-prop=greeting></my-custom-element>
+```
+
+```Typescript
+Transform<Model>(form, model, {
+    '- myLocalProp:hostProp': 0
+});
+```
+
 
 ## Part 3 - Derived values in depth
 
