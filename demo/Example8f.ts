@@ -21,5 +21,5 @@ Transform<Props, Methods>(div, model, {
             toValFrom: 'textContent'
         }
     },
-    "! greeting": 0
+    "| greeting": 0
 });
