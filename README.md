@@ -1355,12 +1355,8 @@ I'm not sure if this is the most optimal way of binding to a loop, but where it 
 ```TypeScript
 Transform<Props & Methods>(div, model, {
     '$ list': {
-        '$ itemListElement':{
-            '| prop1 [aria-index=:idx]': {
-                o: {
-                    path: 'list[:idx].prop1',
-                }
-            }
+        '$ itemListElement [aria-index=:idx]':{
+            '| prop1': 0
         }
     }
 })
