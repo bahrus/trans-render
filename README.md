@@ -632,41 +632,51 @@ Transform<Model>(form, model, {
 });
 ```
 
-This "transpiles" anytime a match is found to (in this particular example):
+This "transpiles" to:
 
 ```Typescript
 Transform<Model>(form, model, { 
     '* [-my-local-prop,data-my-local-prop]': {
-        o: 'greeting', //for this particular HTML match, but these rules are dynamically established
+        o: 'greeting',
         s: 'myLocalProp'
     }
 });
 ```
 
-
-### Example 4c - Broad scope - Parameterized host/model prop [TODO]
-
-```Typescript
-Transform<Model>(form, model, { 
-    '- -my-local-prop=:x': {
-        o: ':x'
-    } 
-});
-```
-
-(but not really, this is just to help understand what is happening.  The point is we can start to leverage the RHS syntax described above and below by providing this mental model.  We are not hardcoding all such bindings to the greeting property)
-
-This would allow for fully HTML5 compatible markup to work without adjusting the transform:
+The syntax above also will work with the following HTML5 markup
 
 ```html
 <my-custom-element data-my-local-prop=greeting></my-custom-element>
 ```
 
+If we have no interest in supporting HTML5 compliant attributes, drop the dash in the transform:
+
+```Typescript
+Transform<Model>(form, model, { 
+    '- my-local-prop=greeting': 0
+});
+```
+
+
+### Example 4c - Medium amount of scope - Parameterized props [TODO]
+
+The syntax above requires a 1-1 mapping between each pair of local prop names and host names.  This can result in a fairly hefty transform for large swaths of dynamic HTML.  We can reduce the size (and maintenance headaches) of the transform by utilizing "parameterized bindings".
+
+```Typescript
+Transform<Model>(form, model, { 
+    '- -:x=:y': {
+        foreach: {x:'my-local-prop', y: 'greeting' }
+    } 
+});
+```
+
+foreach can be single object (as shown above), or an array.  x can be single string (as shown above) or an array.  Likewise with y.  All matching combinations are added.
+
 If one looks at this simple example, the benefits we obtain from the "transpiling" may not seem significant enough to warrant the learning curve (not to mention the implementation).  However, we may have multiple custom elements, say in a family of custom elements, all of which share a property called myLocalProp.  We can accommodate binding to all of them with this single transform!
 
 This may become more apparent with the example below:
 
-### Example 4e - aria-* binding [TODO]
+### Example 4d - aria-* binding [TODO]
 
 ```html
 <div -aria-checked=isVegetarian></div>
@@ -1343,10 +1353,13 @@ Writing one match per property would be quite redundant.  So we can use a parame
 ```TypeScript
 Transform<Props & Methods>(div, model, {
     '| :prop': {
-        o: ':prop'
+        o: ':prop',
+        foreach: {prop: ['prop1', 'prop2', ..., 'prop17']}
     },
 });
 ```
+
+Does this really save that much?  Yes, if there are some additional instructions (like enhancements).
 
 ## Example 9b Nested transforms, binding to a loop with aria-index [TODO]
 
