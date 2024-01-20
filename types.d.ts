@@ -126,10 +126,14 @@ export type WhereConditions =
 
 export type IfInstructions<TProps, TMethods> = string | boolean | number | [number] | ConditionGate<TProps, TMethods> ;
 
+export interface ObservePropParams {
+    derivePropFrom?: string,
+}
 export type PropOrComputedProp<TProps, TMethods = TProps> = 
     | keyof TProps & string
     | [keyof TProps & string, (val: any) => any]
     | [keyof TProps & string, keyof TMethods & string]
+    | ObservePropParams
 
 export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**

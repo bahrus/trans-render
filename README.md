@@ -580,7 +580,7 @@ Note the (discouraged) extra property: "sa" which means "set attribute" rather t
 
 "ss" is used for setting a style property.
 
-## Accommodating minimalist custom inline binding [TODO]
+## Accommodating minimalist custom inline binding with parameterized transforms [TODO]
 
 Warning, the rest of part 4 is probably better to skip at first, until feeling comfortable with other aspects, as it is a bit subtle.
 
@@ -596,7 +596,7 @@ The extra dash in front is to avoid clashing with attributes we are likely to se
 
 So we want a way to train our transform to support this natural syntax, with as little boilerplate as possible.  
 
-We run into a bit of a conundrum here with what the syntax should look like.  If we think of the LHS as a css selector, we run into trouble if we blindly follow the previous examples.  Unlike xpath (which has its own apparent limitations when it comes to querying within shadow roots, unfortunately), there is no css selector that can match on the value of the attribute, without specifying the name of the attribute to search for.  So the following notation, which would be ideal if css did support such a query, doesn't provide enough information to go on: 
+We run into a bit of a conundrum here with what the syntax of our transform from a distance should look like.  If we think of the LHS as a css selector, we run into trouble if we blindly follow the previous examples.  Unlike xpath (which has its own apparent limitations when it comes to querying within shadow roots, unfortunately), there is no css selector that can match on the value of the attribute, without specifying the name of the attribute to search for.  So the following notation, which would be ideal if css did support such a query, doesn't provide enough information to go on: 
 
 ```Typescript
 Transform<Model>(form, model, { 
