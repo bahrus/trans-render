@@ -582,6 +582,8 @@ Note the (discouraged) extra property: "sa" which means "set attribute" rather t
 
 ## Accommodating minimalist custom inline binding [TODO]
 
+Warning, the rest of part 4 is probably better to skip at first, until feeling comfortable with other aspects, as it is a bit subtle.
+
 Let's say we define a custom element with name "my-custom-element", and that custom element supports a property, "myLocalProp", and we want to pass to that property the host/model property "greeting".  
 
 If we want to adopt "locality of behavior" principles, and introduce a minimalist vocabulary of binding inline, in the spirit of KISS, the most natural way seems to be something like:
@@ -635,13 +637,13 @@ This "transpiles" anytime a match is found to (in this particular example):
 ```Typescript
 Transform<Model>(form, model, { 
     '* [-my-local-prop,data-my-local-prop]': {
-        o: 'greeting',
+        o: 'greeting', //for this particular HTML match, but these rules are dynamically established
         s: 'myLocalProp'
     }
 });
 ```
 
-(but not really, this is just to help understand what is happening.  The point is we can start to leverage the syntax described above and below by providing this mental model)
+(but not really, this is just to help understand what is happening.  The point is we can start to leverage the RHS syntax described above and below by providing this mental model.  We are not hardcoding all such bindings to the greeting property)
 
 This would allow for fully HTML5 compatible markup to work without adjusting the transform:
 
@@ -1311,7 +1313,7 @@ This results in the span being kept in sync with model.address.zipCode.
 ## Part 9 3/4 Parameterized matches [TODO]
 
 
-## Example 9 3/4 part a - bulk distribution of the model values
+## Example 9 3/4 part a - bulk distribution of the model values [TODO]
 
 Say there's lots of elements matching a pattern:
 
@@ -1325,25 +1327,24 @@ Say there's lots of elements matching a pattern:
 </div>
 ```
 
-Writing one match per property would be quite redundant.  So we can use a parameterized match:
+Writing one match per property would be quite redundant.  So we can use a parameterized match, similar to Examples 4*:
 
 ```TypeScript
 Transform<Props & Methods>(div, model, {
     '| :prop': {
-        w: //where clause, can filter via css filtering so we don't bind to everything by accident,
-        d: 0
+        o: ':prop'
     },
 });
 ```
 
-Nested transforms, binding to a loop with aria-index:
+## Example 9b Nested transforms, binding to a loop with aria-index:
 
 I'm not sure if this is the most optimal way of binding to a loop, but where it works okay:
 
 ```html
 <div>
 <table itemscope itemprop=list>
-    <tr itemscope itemtype=https://schema.org/ListItem aria-index=1>
+    <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-index=1>
         <td itemprop=prop1></td>
     </tr>
     
@@ -1354,8 +1355,13 @@ I'm not sure if this is the most optimal way of binding to a loop, but where it 
 ```TypeScript
 Transform<Props & Methods>(div, model, {
     '$ list': {
-        '$ :[aria-index]':{
-            '| prop1': 0
+        '$ itemListElement':{
+            '| prop1': {
+                o: {
+                    path: 'prop1',
+                    from: 
+                }
+            }
         }
     }
 })
