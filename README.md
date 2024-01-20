@@ -682,7 +682,7 @@ Note that here we drop the dash in front of the aria-* attribute, to indicate no
 
 Now there are a lot of aria attributes, but I suspect in any given application, we would only want to bind a small number of them to host properties, so the amount of boilerplate necessary to overcome the limitation css has, that [xpath doesn't have](https://stackoverflow.com/questions/35927864/xpath-for-all-elements-with-any-attribute-with-specific-value) to be something we can live with (sigh).
 
-### Example 2d option 2
+### Example 4d Inline binding hints
 
 ```html
 <my-custom-element -my-local-prop></my-custom-element>
@@ -691,7 +691,19 @@ Now there are a lot of aria attributes, but I suspect in any given application, 
 ```Typescript
 Transform<Model>(form, model, { 
     '- my-local-prop': {
+        w: 'my-custom-element' //optional
         o: 'greeting'
+    }
+});
+```
+
+"Transpiles" to the equivalent of:
+
+```Typescript
+Transform<Model>(form, model, { 
+    '* my-custom-element[-my-local-prop]': {
+        o: 'greeting',
+        s: 'myLocalProp'
     }
 });
 ```
