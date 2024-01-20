@@ -386,25 +386,47 @@ Transform<Model>(form, model, {
 
 ## Example 2d Special Markers that specifies local property to set [TODO]
 
-What follows is admittedly a bit of a brain twister, but no pain, no gain, as they say.
-
-Let's say we define a custom element with name "my-custom-element", and that custom element supports a property, "myLocalProp", and we want to pass to that property the host property "greeting".  In the spirit of KISS, the most natural way seems to be something like:
+Let's say we define a custom element with name "my-custom-element", and that custom element supports a property, "myLocalProp", and we want to pass to that property the host/model property "greeting".  In the spirit of KISS, the most natural way seems to be something like:
 
 ```html
-<my-custom-element -greeting=:my-local-prop></my-custom-element>
+<my-custom-element -my-local-prop=greeting></my-custom-element>
 ```
 
 So we want a way to train our transform to support this natural syntax, with as little boilerplate as possible.  
 
-The following syntax allows us to do that with a single statement.
+We run into a bit of a conundrum here with what the syntax should look like.  If we think of the LHS as a css selector, we run into trouble if we blindly follow the previous examples.  There is no css selector that can match on the value of the attribute, without specifying the name of the attribute to search for.  So the following notation, which would be ideal if css did support such a query, doesn't provide enough information to go on: 
 
 ```Typescript
-Transform<Model>(form, model, {
-    '- greeting': 0
+Transform<Model>(form, model, { 
+    '- greeting': 0 //not the right solution!
 });
 ```
 
-This fully HTML5 compatible markup will also work:
+So we need to match on the local property name, not the host name:
+
+```Typescript
+Transform<Model>(form, model, { 
+    '- my-local-prop': 0 //not the right solution!
+});
+```
+
+If we use 0 on the RHS, this would be quite confusing.  I think we need to be more explicit.  But I still think it would be beneficial to see if we can avoid repeating ourselves by specifying the name of the host property to observe.  So I think maybe we should support two alternatives:
+
+### Example 2d option 1
+
+```html
+<my-custom-element -my-local-prop=greeting></my-custom-element>
+```
+
+```Typescript
+Transform<Model>(form, model, { 
+    '- my-local-prop': {
+        o: [':hostProp']
+    }
+});
+```
+
+This fully HTML5 compatible markup must also work without altering the transform:
 
 ```html
 <my-custom-element data-my-local-prop=greeting></my-custom-element>
