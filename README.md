@@ -410,7 +410,7 @@ Transform<Model>(form, model, {
 });
 ```
 
-If we use 0 on the RHS, this would be quite confusing.  I think we need to be more explicit.  But I still think it would be beneficial to see if we can avoid repeating ourselves by specifying the name of the host property to observe.  So I think maybe we should support two alternatives:
+If we use 0 on the RHS, this would be quite confusing, because what is 0 referring to exactly?.  I think we need to be more explicit.  But I still think it would be beneficial to see if we can avoid repeating ourselves by specifying the name of the host property to observe.  So I think maybe we should support two alternatives:
 
 ### Example 2d option 1
 
@@ -420,9 +420,7 @@ If we use 0 on the RHS, this would be quite confusing.  I think we need to be mo
 
 ```Typescript
 Transform<Model>(form, model, { 
-    '- my-local-prop': {
-        o: [':hostProp']
-    }
+    '- my-local-prop=0': 0 //hopefully this is right?
 });
 ```
 
@@ -430,6 +428,20 @@ This fully HTML5 compatible markup must also work without altering the transform
 
 ```html
 <my-custom-element data-my-local-prop=greeting></my-custom-element>
+```
+
+### Example 2d option 2
+
+```html
+<my-custom-element -my-local-prop></my-custom-element>
+```
+
+```Typescript
+Transform<Model>(form, model, { 
+    '- my-local-prop': {
+        o: 'greeting'
+    }
+});
 ```
 
 ## Part 3 - Derived values in depth
