@@ -5,7 +5,7 @@ interface Props {
 interface Actions {
 }
 const model: Props & Actions = {
-    isHappy: false,
+    isHappy: true,
 }
 const div = document.querySelector('div')!;
 

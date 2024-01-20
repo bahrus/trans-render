@@ -618,7 +618,7 @@ Another feature: We want this solution to be compatible with aria attributes, as
 
 So this is how we can support -my-local-prop as well as the HTML5 compliant data-my-local-prop at the same time:
 
-### Example 4b - Limited scope - Hardcoded host/model prop [TODO]
+### Example 4b - Limited scope - Hardcoded host/model props
 
 ```html
 <my-custom-element -my-local-prop=greeting></my-custom-element>

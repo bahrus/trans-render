@@ -71,13 +71,14 @@ export class Transformer extends EventTarget {
                 case 'number': {
                     if (rhs !== 0)
                         throw 'NI';
-                    const qi = this.calcQI(key);
-                    const { prop } = qi;
+                    const qi = await this.calcQI(key);
+                    const { prop, localPropCamelCase } = qi;
                     const uow = {
                         o: [prop],
                         d: 0,
                         qi,
-                        q: key
+                        q: key,
+                        s: localPropCamelCase
                     };
                     uows.push(uow);
                     break;
@@ -85,7 +86,7 @@ export class Transformer extends EventTarget {
                 case 'string':
                     {
                         if (typeof model[rhs] === 'function') {
-                            const qi = this.calcQI(key);
+                            const qi = await this.calcQI(key);
                             const { prop } = qi;
                             const uow = {
                                 o: [prop],
@@ -136,7 +137,7 @@ export class Transformer extends EventTarget {
         for (const uow of uows) {
             let { q, qi, w } = uow;
             if (qi === undefined)
-                qi = this.calcQI(q);
+                qi = await this.calcQI(q);
             qi.w = w;
             const newProcessor = new MountOrchestrator(this, uow, qi);
             await newProcessor.do();
@@ -144,7 +145,7 @@ export class Transformer extends EventTarget {
             await newProcessor.subscribe();
         }
     }
-    calcQI(pqe) {
+    async calcQI(pqe) {
         const qi = {};
         if (pqe === ':root') {
             qi.isRootQry = true;
@@ -166,10 +167,10 @@ export class Transformer extends EventTarget {
             qi.propAttrType = first;
             qi.prop = second;
         }
-        qi.css = this.#calcCSS(qi);
+        qi.css = await this.#calcCSS(qi);
         return qi;
     }
-    #calcCSS(qi) {
+    async #calcCSS(qi) {
         const { cssQuery, localName, prop, propAttrType } = qi;
         const ln = (localName || '') + (qi.w || '');
         const c = cssQuery || '';
@@ -198,7 +199,8 @@ export class Transformer extends EventTarget {
                 if (localPropKebabCase[0] === ':')
                     throw 'NI';
                 qi.localPropKebabCase = localPropKebabCase;
-                //qi.prop = 
+                const { lispToCamel } = await import('./lib/lispToCamel.js');
+                qi.localPropCamelCase = lispToCamel(qi.localPropKebabCase);
                 if (split.length > 0) {
                     const hostProp = split[1];
                     if (hostProp[0] === ':')
@@ -208,7 +210,7 @@ export class Transformer extends EventTarget {
                 else {
                     throw 'NI';
                 }
-                const qry = `-${localPropKebabCase},data-${localPropKebabCase}`;
+                const qry = `[-${localPropKebabCase}],[data-${localPropKebabCase}]`;
                 return qry;
             // throw 'NI';
             // return `${ln}-${prop} ${c}`.trimEnd() + ',' + `${ln}data-${prop} ${c}`.trimEnd();
