@@ -594,7 +594,7 @@ The extra dash in front is to avoid clashing with attributes we are likely to se
 
 So we want a way to train our transform to support this natural syntax, with as little boilerplate as possible.  
 
-We run into a bit of a conundrum here with what the syntax should look like.  If we think of the LHS as a css selector, we run into trouble if we blindly follow the previous examples.  There is no css selector that can match on the value of the attribute, without specifying the name of the attribute to search for.  So the following notation, which would be ideal if css did support such a query, doesn't provide enough information to go on: 
+We run into a bit of a conundrum here with what the syntax should look like.  If we think of the LHS as a css selector, we run into trouble if we blindly follow the previous examples.  Unlike xpath (which has its own apparent limitations when it comes to querying within shadow roots, unfortunately), there is no css selector that can match on the value of the attribute, without specifying the name of the attribute to search for.  So the following notation, which would be ideal if css did support such a query, doesn't provide enough information to go on: 
 
 ```Typescript
 Transform<Model>(form, model, { 
@@ -614,9 +614,9 @@ If we use 0 on the RHS, this would be quite confusing, because what is 0 referri
 
 Another constraint: I want this solution to be compatible with aria attributes, as well as data- attributes.  For that reason I think we need to stick with the extra - in front of my-local-prop
 
-So I think maybe we should support two alternatives:
+So this is how we can support -my-local-prop as well as the HTML5 compliant data-my-local-prop at the same time:
 
-### Example 4b
+### Example 4b [TODO]
 
 ```html
 <my-custom-element -my-local-prop=greeting></my-custom-element>
@@ -626,18 +626,18 @@ So I think maybe we should support two alternatives:
 Transform<Model>(form, model, { 
     '- -my-local-prop=:x': {
         o: ':x'
-    } //hopefully this is right?
+    } 
 });
 ```
 
-This would "transpile" to:
+This "transpiles" any time a match is found to:
 
 ```Typescript
 Transform<Model>(form, model, { 
     '* [-my-local-prop,data-my-local-prop]': {
         o: 'greeting',
         s: 'myLocalProp'
-    } //hopefully this is right?
+    }
 });
 ```
 
@@ -647,11 +647,11 @@ This would allow for fully HTML5 compatible markup to work without adjusting the
 <my-custom-element data-my-local-prop=greeting></my-custom-element>
 ```
 
-If one looks at this simple example, the benefits we obtain from the "transpiling" may not seem significant enough to warrant the learning curve.  However, we may have multiple custom elements, say in a family of custom elements, all of which share a property called myLocalProp.  We can accommodate binding to all of them with this single transform!
+If one looks at this simple example, the benefits we obtain from the "transpiling" may not seem significant enough to warrant the learning curve (not to mention the implementation).  However, we may have multiple custom elements, say in a family of custom elements, all of which share a property called myLocalProp.  We can accommodate binding to all of them with this single transform!
 
 This may become more apparent with the example below:
 
-### Example 4c - aria-* binding
+### Example 4c - aria-* binding [TODO]
 
 ```html
 <div -aria-checked=isVegetarian></div>
@@ -661,11 +661,11 @@ This may become more apparent with the example below:
 Transform<Model>(form, model, { 
     '- aria-checked=:x': {
         o: ':x'
-    } //hopefully this is right?
+    }
 });
 ```
 
-would transpile to:
+transpiles to:
 
 ```Typescript
 Transform<Model>(form, model, { 
@@ -677,6 +677,8 @@ Transform<Model>(form, model, {
 ```
 
 Note that here we drop the dash in front of the aria-* attribute, to indicate not to add the data- option.  Going back to example 4b, we could also drop the dash in from of my-local-prop, which would result in not fishing for data-my-local-prop attributes.
+
+Now there are alot of aria attributes, but I suspect in any given application, we would only want to bind a small number of them to host properties, so the amount of boilerplate necessary to overcome the limitation css has, that [xpath doesn't have](https://stackoverflow.com/questions/35927864/xpath-for-all-elements-with-any-attribute-with-specific-value) to be something we can live with (sigh).
 
 ### Example 2d option 2
 
