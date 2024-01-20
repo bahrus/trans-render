@@ -1363,6 +1363,8 @@ Transform<Props & Methods>(div, model, {
 
 ```
 
+I think this really requires the @scope [css donut capability](https://caniuse.com/css-cascade-scope) to allow for nested loops.
+
 
 ## Part 10 - Updating the model
 
