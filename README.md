@@ -592,11 +592,13 @@ If we want to adopt "locality of behavior" principles, and introduce a minimalis
 <my-custom-element -my-local-prop=greeting></my-custom-element>
 ```
 
+In what follows the goal is for our transform to be able to take this minimal binding, and "run with it", to be able to specify, when applicable, extra frills "from a distance".
+
 The extra dash in front is to avoid clashing with attributes we are likely to see that my-custom-element recognizes.
 
 So we want a way to train our transform to support this natural syntax, with as little boilerplate as possible.  
 
-We run into a bit of a conundrum here with what the syntax of our transform from a distance should look like.  If we think of the LHS as a css selector, we run into trouble if we blindly follow the previous examples.  Unlike xpath (which has its own apparent limitations when it comes to querying within shadow roots, unfortunately), there is no css selector that can match on the value of the attribute, without specifying the name of the attribute to search for.  So the following notation, which would be ideal if css did support such a query, doesn't provide enough information to go on: 
+<!--We run into a bit of a conundrum here with what the syntax of our transform from a distance should look like.  If we think of the LHS as a css selector, we run into trouble if we blindly follow the previous examples.  Unlike xpath (which has its own apparent limitations when it comes to querying within shadow roots, unfortunately), there is no css selector that can match on the value of the attribute, without specifying the name of the attribute to search for.  So the following notation, which would be ideal if css did support such a query, doesn't provide enough information to go on: 
 
 ```Typescript
 Transform<Model>(form, model, { 
@@ -612,9 +614,9 @@ Transform<Model>(form, model, {
 });
 ```
 
-If we use 0 on the RHS, this would be quite confusing, because what is 0 referring to exactly?.  I think we need to be more explicit.  But I still think it would be beneficial to see if we can avoid repeating ourselves by specifying the name of the host property to observe. 
+If we use 0 on the RHS, this would be quite confusing, because what is 0 referring to exactly?.  I think we need to be more explicit.  But I still think it would be beneficial to see if we can avoid repeating ourselves by specifying the name of the host property to observe.--> 
 
-Another feature: We want this solution to be compatible with aria attributes, as well as data- attributes.  To specify we want that option available, start my-local-prop with an extra dash.
+Another goal: We want this solution to be compatible with aria attributes, as well as data- attributes.  
 
 So this is how we can support -my-local-prop as well as the HTML5 compliant data-my-local-prop at the same time:
 
@@ -642,7 +644,7 @@ Transform<Model>(form, model, {
 ```
 
 
-### Example 4c - Broad scope - Parameterized host/model prop
+### Example 4c - Broad scope - Parameterized host/model prop [TODO]
 
 ```Typescript
 Transform<Model>(form, model, { 
@@ -664,7 +666,7 @@ If one looks at this simple example, the benefits we obtain from the "transpilin
 
 This may become more apparent with the example below:
 
-### Example 4c - aria-* binding [TODO]
+### Example 4e - aria-* binding [TODO]
 
 ```html
 <div -aria-checked=isVegetarian></div>
