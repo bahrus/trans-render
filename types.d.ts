@@ -1,6 +1,7 @@
 import { MountContext, PipelineStage } from "mount-observer/types";
 import { ConvertOptions, Scope } from "./lib/types";
 
+
 export type PropAttrQueryType = 
     | '|' //microdata itemprop
     | '@' //form element name
@@ -102,6 +103,8 @@ export type PropQueryExpression<TProps> =
     | `${keyof HTMLElementTagNameMap}`
     | `${PropAttrQueryType} ${keyof TProps & string}`
     | `:root`
+    | `- :${string}`
+    | `- ${string}=${keyof TProps & string}`
 ;
 
 export type LHS<TProps> = PropQueryExpression<TProps>;
@@ -134,6 +137,7 @@ export type PropOrComputedProp<TProps, TMethods = TProps> =
     | [keyof TProps & string, (val: any) => any]
     | [keyof TProps & string, keyof TMethods & string]
     | ObservePropParams
+    | `:${string}`
 
 export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**
@@ -143,7 +147,7 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**
      * observed props
      */
-    o?: keyof TProps & string | PropOrComputedProp<TProps, TMethods>[],
+    o?: keyof TProps & string | PropOrComputedProp<TProps, TMethods> | PropOrComputedProp<TProps, TMethods>[],
 
     /**
      * derived value from observed props
@@ -243,6 +247,9 @@ export type RHS<TProps, TMethods> = UnitOfWorkRHS<TProps, TMethods> | Array<Unit
 
 export interface QueryInfo{
     isRootQry?: boolean,
+    isParametrizedQry?: boolean,
+    localPropKebabCase?: string,
+    localPropCamelCase?: string,
     cssQuery?: string,
     localName?: string,
     propAttrType?: PropAttrQueryType

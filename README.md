@@ -614,11 +614,11 @@ Transform<Model>(form, model, {
 
 If we use 0 on the RHS, this would be quite confusing, because what is 0 referring to exactly?.  I think we need to be more explicit.  But I still think it would be beneficial to see if we can avoid repeating ourselves by specifying the name of the host property to observe. 
 
-Another constraint: I want this solution to be compatible with aria attributes, as well as data- attributes.  For that reason I think we need to stick with the extra - in front of my-local-prop
+Another feature: We want this solution to be compatible with aria attributes, as well as data- attributes.  To specify we want that option available, start my-local-prop with an extra dash.
 
 So this is how we can support -my-local-prop as well as the HTML5 compliant data-my-local-prop at the same time:
 
-### Example 4b [TODO]
+### Example 4b - Limited scope - Hardcoded host/model prop [TODO]
 
 ```html
 <my-custom-element -my-local-prop=greeting></my-custom-element>
@@ -626,9 +626,7 @@ So this is how we can support -my-local-prop as well as the HTML5 compliant data
 
 ```Typescript
 Transform<Model>(form, model, { 
-    '- -my-local-prop=:x': {
-        o: ':x'
-    } 
+    '- -my-local-prop=greeting': 0
 });
 ```
 
@@ -640,6 +638,17 @@ Transform<Model>(form, model, {
         o: 'greeting', //for this particular HTML match, but these rules are dynamically established
         s: 'myLocalProp'
     }
+});
+```
+
+
+### Example 4c - Broad scope - Parameterized host/model prop
+
+```Typescript
+Transform<Model>(form, model, { 
+    '- -my-local-prop=:x': {
+        o: ':x'
+    } 
 });
 ```
 

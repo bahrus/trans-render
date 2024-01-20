@@ -203,7 +203,21 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
             case '.':
                 return `${ln}.${prop} ${c}`.trimEnd();
             case '-':
-                return `${ln}-${prop} ${c}`.trimEnd() + ',' + `${ln}data-${prop} ${c}`.trimEnd();
+                if(!prop) throw 'NI';
+                const split = prop.split('=');
+                let localPropKebabCase = split[0];
+                if(localPropKebabCase[0] === '-') localPropKebabCase = localPropKebabCase.substring(1);
+                qi.localPropKebabCase = localPropKebabCase;
+                //qi.prop = 
+                if(split.length > 0){
+                    const hostProp = split[1];
+                    if()
+                }else{
+                    throw 'NI';
+                }
+                return `-${localPropKebabCase},data-${localPropKebabCase}`;
+                // throw 'NI';
+                // return `${ln}-${prop} ${c}`.trimEnd() + ',' + `${ln}data-${prop} ${c}`.trimEnd();
             case '$':
                 return `${ln}[itemscope][itemprop~="${prop}"] ${c}`.trimEnd();
 
@@ -245,8 +259,9 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
 
     getNumberUVal(uow: UnitOfWork<TProps, TMethods>, d: number){
         const {o} = uow;
-        const propName = this.#getPropName(arr(o), d);
-        const pOrC = o![d];
+        const arrO = arr(o);
+        const propName = this.#getPropName(arrO, d);
+        const pOrC = arrO[d];
         const model = this.model as any;
         let val = model[propName as keyof TProps];
         if(Array.isArray(pOrC)){
