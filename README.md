@@ -630,7 +630,7 @@ Transform<Model>(form, model, {
 });
 ```
 
-This "transpiles" any time a match is found to:
+This "transpiles" anytime a match is found to (in this particular example):
 
 ```Typescript
 Transform<Model>(form, model, { 
@@ -640,6 +640,8 @@ Transform<Model>(form, model, {
     }
 });
 ```
+
+(but not really, this is just to help understand what is happening.  The point is we can start to leverage the syntax described above and below by providing this mental model)
 
 This would allow for fully HTML5 compatible markup to work without adjusting the transform:
 
@@ -665,20 +667,20 @@ Transform<Model>(form, model, {
 });
 ```
 
-transpiles to:
+... kind of transpiles, on encountering the tag above, to:
 
 ```Typescript
 Transform<Model>(form, model, { 
     '* [aria-checked]': {
         o: 'isVegetarian',
         s: 'ariaChecked'
-    } //hopefully this is right?
+    }
 });
 ```
 
 Note that here we drop the dash in front of the aria-* attribute, to indicate not to add the data- option.  Going back to example 4b, we could also drop the dash in from of my-local-prop, which would result in not fishing for data-my-local-prop attributes.
 
-Now there are alot of aria attributes, but I suspect in any given application, we would only want to bind a small number of them to host properties, so the amount of boilerplate necessary to overcome the limitation css has, that [xpath doesn't have](https://stackoverflow.com/questions/35927864/xpath-for-all-elements-with-any-attribute-with-specific-value) to be something we can live with (sigh).
+Now there are a lot of aria attributes, but I suspect in any given application, we would only want to bind a small number of them to host properties, so the amount of boilerplate necessary to overcome the limitation css has, that [xpath doesn't have](https://stackoverflow.com/questions/35927864/xpath-for-all-elements-with-any-attribute-with-specific-value) to be something we can live with (sigh).
 
 ### Example 2d option 2
 
