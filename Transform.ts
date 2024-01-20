@@ -180,10 +180,11 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
             qi.propAttrType = first as PropAttrQueryType;
             qi.prop = second;
         }
+        qi.css = this.#calcCSS(qi);
         return qi;
     }
 
-    calcCSS(qi: QueryInfo){
+    #calcCSS(qi: QueryInfo){
         const {cssQuery, localName, prop, propAttrType} = qi;
         const ln = (localName || '') + (qi.w || '' );
         const c = cssQuery || '';
@@ -207,15 +208,18 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
                 const split = prop.split('=');
                 let localPropKebabCase = split[0];
                 if(localPropKebabCase[0] === '-') localPropKebabCase = localPropKebabCase.substring(1);
+                if(localPropKebabCase[0] === ':') throw 'NI';
                 qi.localPropKebabCase = localPropKebabCase;
                 //qi.prop = 
                 if(split.length > 0){
                     const hostProp = split[1];
-                    if()
+                    if(hostProp[0] === ':') throw 'NI';
+                    qi.prop = hostProp;
                 }else{
                     throw 'NI';
                 }
-                return `-${localPropKebabCase},data-${localPropKebabCase}`;
+                const qry = `-${localPropKebabCase},data-${localPropKebabCase}`;
+                return qry;
                 // throw 'NI';
                 // return `${ln}-${prop} ${c}`.trimEnd() + ',' + `${ln}data-${prop} ${c}`.trimEnd();
             case '$':
@@ -343,7 +347,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends Eve
             )
             return;
         }
-        const match = transformer.calcCSS(queryInfo);
+        const match = queryInfo.css;// transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
             match,
             do:{

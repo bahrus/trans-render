@@ -255,6 +255,7 @@ export interface QueryInfo{
     propAttrType?: PropAttrQueryType
     prop?: string,
     w?: WhereConditions,
+    css?: string,
 }
 
 export type TransformerTarget = Element | DocumentFragment | Element[] | ShadowRoot | Document;

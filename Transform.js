@@ -166,9 +166,10 @@ export class Transformer extends EventTarget {
             qi.propAttrType = first;
             qi.prop = second;
         }
+        qi.css = this.#calcCSS(qi);
         return qi;
     }
-    calcCSS(qi) {
+    #calcCSS(qi) {
         const { cssQuery, localName, prop, propAttrType } = qi;
         const ln = (localName || '') + (qi.w || '');
         const c = cssQuery || '';
@@ -194,17 +195,21 @@ export class Transformer extends EventTarget {
                 let localPropKebabCase = split[0];
                 if (localPropKebabCase[0] === '-')
                     localPropKebabCase = localPropKebabCase.substring(1);
+                if (localPropKebabCase[0] === ':')
+                    throw 'NI';
                 qi.localPropKebabCase = localPropKebabCase;
                 //qi.prop = 
                 if (split.length > 0) {
                     const hostProp = split[1];
-                    if ()
-                        ;
+                    if (hostProp[0] === ':')
+                        throw 'NI';
+                    qi.prop = hostProp;
                 }
                 else {
                     throw 'NI';
                 }
-                return `-${localPropKebabCase},data-${localPropKebabCase}`;
+                const qry = `-${localPropKebabCase},data-${localPropKebabCase}`;
+                return qry;
             // throw 'NI';
             // return `${ln}-${prop} ${c}`.trimEnd() + ',' + `${ln}data-${prop} ${c}`.trimEnd();
             case '$':
@@ -316,7 +321,7 @@ export class MountOrchestrator extends EventTarget {
             await onMount(transformer, this, transformer.target, this.#unitsOfWork, !!skipInit, { initializing: true }, this.#matchingElements);
             return;
         }
-        const match = transformer.calcCSS(queryInfo);
+        const match = queryInfo.css; // transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
             match,
             do: {
