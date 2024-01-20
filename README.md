@@ -384,66 +384,6 @@ Transform<Model>(form, model, {
 });
 ```
 
-## Example 2d Special Markers that specifies local property to set [TODO]
-
-Let's say we define a custom element with name "my-custom-element", and that custom element supports a property, "myLocalProp", and we want to pass to that property the host/model property "greeting".  In the spirit of KISS, the most natural way seems to be something like:
-
-```html
-<my-custom-element -my-local-prop=greeting></my-custom-element>
-```
-
-So we want a way to train our transform to support this natural syntax, with as little boilerplate as possible.  
-
-We run into a bit of a conundrum here with what the syntax should look like.  If we think of the LHS as a css selector, we run into trouble if we blindly follow the previous examples.  There is no css selector that can match on the value of the attribute, without specifying the name of the attribute to search for.  So the following notation, which would be ideal if css did support such a query, doesn't provide enough information to go on: 
-
-```Typescript
-Transform<Model>(form, model, { 
-    '- greeting': 0 //not the right solution!
-});
-```
-
-So we need to match on the local property name, not the host name:
-
-```Typescript
-Transform<Model>(form, model, { 
-    '- my-local-prop': 0 //not the right solution!
-});
-```
-
-If we use 0 on the RHS, this would be quite confusing, because what is 0 referring to exactly?.  I think we need to be more explicit.  But I still think it would be beneficial to see if we can avoid repeating ourselves by specifying the name of the host property to observe.  So I think maybe we should support two alternatives:
-
-### Example 2d option 1
-
-```html
-<my-custom-element -my-local-prop=greeting></my-custom-element>
-```
-
-```Typescript
-Transform<Model>(form, model, { 
-    '- my-local-prop=0': 0 //hopefully this is right?
-});
-```
-
-This fully HTML5 compatible markup must also work without altering the transform:
-
-```html
-<my-custom-element data-my-local-prop=greeting></my-custom-element>
-```
-
-### Example 2d option 2
-
-```html
-<my-custom-element -my-local-prop></my-custom-element>
-```
-
-```Typescript
-Transform<Model>(form, model, { 
-    '- my-local-prop': {
-        o: 'greeting'
-    }
-});
-```
-
 ## Part 3 - Derived values in depth
 
 ## Example 3a Declarative Interpolation
@@ -585,13 +525,19 @@ Transform<Model>(div, model, {
 
 Think of the pipe delimiter as an open parenthesis that automatically closes before the next period (".") or at the end of the statement, thus allowing us to invoke a chain of methods (like querySelector).  It allows for one parameter to be passed in to the method. "invoke" means rather than setting a property to the derived value, pass the derived value to the specified method of the target (matching) element, "section" in this case.
 
-## Example 4 Setting props of the element
+## Part 4 Setting props of the element
 
 We glossed over a subtlety in our examples above.  Without specifying to do so, we are automatically setting the span's text content, the input's value, based on a single binding.  The property we are setting is assumed based on context.  In the case of the hyperlink (a), we set the href for example.  This decision is inspired by how [microdata works](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/itemprop#values).
 
 But in many cases we need to specify exactly which property we want to set.  We do this using the "s" field value.
 
-For example:
+## Example 4a - Setting props from a distance:
+
+```html
+<div>
+    <input>
+</div>
+```
 
 ```TypeScript
 interface Model{
@@ -633,6 +579,118 @@ This will set the input's readOnly property from the r0 field from the model.  L
 Note the (discouraged) extra property: "sa" which means "set attribute" rather than setting the property.
 
 "ss" is used for setting a style property.
+
+## Accommodating minimalist custom inline binding [TODO]
+
+Let's say we define a custom element with name "my-custom-element", and that custom element supports a property, "myLocalProp", and we want to pass to that property the host/model property "greeting".  
+
+If we want to adopt "locality of behavior" principles, and introduce a minimalist vocabulary of binding inline, in the spirit of KISS, the most natural way seems to be something like:
+
+```html
+<my-custom-element -my-local-prop=greeting></my-custom-element>
+```
+
+The extra dash in front is to avoid clashing with attributes we are likely to see that my-custom-element recognizes.
+
+So we want a way to train our transform to support this natural syntax, with as little boilerplate as possible.  
+
+We run into a bit of a conundrum here with what the syntax should look like.  If we think of the LHS as a css selector, we run into trouble if we blindly follow the previous examples.  There is no css selector that can match on the value of the attribute, without specifying the name of the attribute to search for.  So the following notation, which would be ideal if css did support such a query, doesn't provide enough information to go on: 
+
+```Typescript
+Transform<Model>(form, model, { 
+    '- greeting': 0 //not the right solution!
+});
+```
+
+So we need to match on the local property name, not the host name:
+
+```Typescript
+Transform<Model>(form, model, { 
+    '- my-local-prop': 0 //not the right solution!
+});
+```
+
+If we use 0 on the RHS, this would be quite confusing, because what is 0 referring to exactly?.  I think we need to be more explicit.  But I still think it would be beneficial to see if we can avoid repeating ourselves by specifying the name of the host property to observe. 
+
+Another constraint: I want this solution to be compatible with aria attributes, as well as data- attributes.  For that reason I think we need to stick with the extra - in front of my-local-prop
+
+So I think maybe we should support two alternatives:
+
+### Example 4b
+
+```html
+<my-custom-element -my-local-prop=greeting></my-custom-element>
+```
+
+```Typescript
+Transform<Model>(form, model, { 
+    '- -my-local-prop=:x': {
+        o: ':x'
+    } //hopefully this is right?
+});
+```
+
+This would "transpile" to:
+
+```Typescript
+Transform<Model>(form, model, { 
+    '* [-my-local-prop,data-my-local-prop]': {
+        o: 'greeting',
+        s: 'myLocalProp'
+    } //hopefully this is right?
+});
+```
+
+This would allow for fully HTML5 compatible markup to work without adjusting the transform:
+
+```html
+<my-custom-element data-my-local-prop=greeting></my-custom-element>
+```
+
+If one looks at this simple example, the benefits we obtain from the "transpiling" may not seem significant enough to warrant the learning curve.  However, we may have multiple custom elements, say in a family of custom elements, all of which share a property called myLocalProp.  We can accommodate binding to all of them with this single transform!
+
+This may become more apparent with the example below:
+
+### Example 4c - aria-* binding
+
+```html
+<div -aria-checked=isVegetarian></div>
+```
+
+```Typescript
+Transform<Model>(form, model, { 
+    '- aria-checked=:x': {
+        o: ':x'
+    } //hopefully this is right?
+});
+```
+
+would transpile to:
+
+```Typescript
+Transform<Model>(form, model, { 
+    '* [aria-checked]': {
+        o: 'isVegetarian',
+        s: 'ariaChecked'
+    } //hopefully this is right?
+});
+```
+
+Note that here we drop the dash in front of the aria-* attribute, to indicate not to add the data- option.  Going back to example 4b, we could also drop the dash in from of my-local-prop, which would result in not fishing for data-my-local-prop attributes.
+
+### Example 2d option 2
+
+```html
+<my-custom-element -my-local-prop></my-custom-element>
+```
+
+```Typescript
+Transform<Model>(form, model, { 
+    '- my-local-prop': {
+        o: 'greeting'
+    }
+});
+```
 
 ## Part 5 - Event handling
 
