@@ -1337,7 +1337,7 @@ Transform<Props & Methods>(div, model, {
 });
 ```
 
-## Example 9b Nested transforms, binding to a loop with aria-index:
+## Example 9b Nested transforms, binding to a loop with aria-index [TODO]
 
 I'm not sure if this is the most optimal way of binding to a loop, but where it works okay:
 
