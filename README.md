@@ -601,7 +601,7 @@ So we want a way to train our transform to be able to support and supplement thi
 Another goal: We want this solution to be compatible with aria attributes, as well as data- attributes.  
 
 
-### Example 4b - Limited scope - Hardcoded host/model props
+## Example 4b - Limited scope - Hardcoded host/model props
 
 ```html
 <my-custom-element -my-local-prop=greeting></my-custom-element>
@@ -639,7 +639,7 @@ Transform<Model>(form, model, {
 ```
 
 
-### Example 4c - Medium amount of scope - Parameterized props [TODO]
+## Example 4c - Medium amount of scope - Parameterized props [TODO]
 
 The syntax above requires a 1-1 mapping between each pair of local prop names and host names.  This can result in a fairly hefty transform for large swaths of dynamic HTML.  We can reduce the size (and maintenance headaches) of the transform by utilizing "parameterized bindings".
 
@@ -683,9 +683,9 @@ Now there are a lot of aria attributes, but I suspect in any given application, 
 
 ### Example 4e Dynamic Transforms - Maximum Scope [TODO]
 
-One can argue that the examples we've seen with 4b, 4c, 4d violate some concept of DRY -- to take the last example, we are repeating ourselves when mention "isVegetarian" twice -- once in the HTML markup, once in the transform.
+One can argue that the examples we've seen with 4b, 4c, 4d violate some concept of DRY -- to take the last example, we are repeating ourselves when we mention "isVegetarian" twice -- once in the HTML markup, once in the transform.
 
-To avoid dry, this library supports another function DynamicTransform:
+To avoid violating the DRY principle, this library supports another function, DynamicTransform:
 
 ```Typescript
 DynamicTransform<Model>(form, model, {
