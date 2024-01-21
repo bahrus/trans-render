@@ -709,7 +709,10 @@ What the DyanamicTransform does, behind the scenes, is
 
 1.  Take an initial snapshot of the DOM within the form element, searching for all attributes of the form -aria-checked.
 2.  Creates a single transform, using the syntax of example 4d above.
-3.  Monitors for new elements being added with -aria-checked attribute, and if not encountered the value of the attribute before (corresponding to a host/model property), dynamically creates another transform with just that new host/model property to bind to.
+3.  Monitors for new elements being added with -aria-checked attribute.
+    1.  When a new element with attribute -aria-check is encountered, check if the the value of the attribute was ever encountered before (corresponding to a host/model property)
+        1.  If not, dynamically creates another transform with just that new host/model property to bind to.
+        2.  If so, do nothing.
 
 
 ## Example 4f -- Mega Dynamic Transforms Maximum Scope [TODO]
