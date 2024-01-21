@@ -141,6 +141,10 @@ export type PropOrComputedProp<TProps, TMethods = TProps> =
     | ObservePropParams
     | `:${string}`
 
+export interface CrossProduct<TProps, TMethods> {
+    x: string | Array<string>,
+    y: (keyof TProps & TMethods & string) | Array<keyof TProps & TMethods & string>
+}
 export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**
      * add event listener
@@ -156,6 +160,8 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
      * enhance / engage with element, or register the found element in some way
      */
     e?:  Engagements<TMethods>,
+
+    foreach?: CrossProduct<TProps, TMethods> | Array<CrossProduct<TProps, TMethods>>
 
     /**
      * ifs ands or buts -- conditions on the model
