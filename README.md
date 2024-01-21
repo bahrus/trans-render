@@ -755,9 +755,8 @@ interface Actions {
 }
 const model: Props & Actions = {
     isHappy: false,
-    handleChange: (e: Event, {model, propagator}) => {
+    handleChange: (e: Event, {model}) => {
         model.isHappy = !model.isHappy;
-        
     }
 }
 const form = document.querySelector('form')!;
@@ -826,7 +825,7 @@ Transform<Props, Actions>(form, model, {
 ```TypeScript
 const model: Props & Actions = {
     isHappy: false,
-    handleInput: (e: Event, {model, propagator}) => {
+    handleInput: (e: Event, {model}) => {
         model.isHappy = !model.isHappy;
     }
 }
