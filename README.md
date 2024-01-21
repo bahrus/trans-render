@@ -720,16 +720,18 @@ What the DyanamicTransform does, behind the scenes, is
 In example 4e above, we still needed to list every aria- attribute we want to bind to (in addition to every other property we want to bind to).  To enable all attributes for an element to be inspected for marker attributes, use the following:
 
 ```html
-<div - -aria-checked=isVegetarian></div>
-<div - -aria-checked=isHappy></div>
-<div - -aria-disabled=isSad></div>
-<section - -aria-disabled=isNeutral></section>
+<div -o -aria-checked=isVegetarian></div>
+<div -o -aria-checked=isHappy></div>
+<div -o -aria-disabled=isSad></div>
+<section -o -aria-disabled=isNeutral></section>
 ```
+
+Note the addition of the dangling -o within each tag.  This is the best we can do to overcome the fundamental limitation css has that xpath doesn't have.  Our dynamic transform should look as follows:
 
 
 ```Typescript
 DynamicTransform<Model>(form, model, {
-    '-': 0
+    '-o': 0
 })
 ```
 
