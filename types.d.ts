@@ -105,6 +105,8 @@ export type PropQueryExpression<TProps> =
     | `:root`
     | `- :${string}`
     | `- ${string}=${keyof TProps & string}`
+    | `- :x=:y`
+    | `- -:x=:y`
 ;
 
 export type LHS<TProps> = PropQueryExpression<TProps>;
@@ -143,28 +145,39 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**
      * add event listener
      */
-    a?:  AddEventListenerType<TProps, TMethods> | Array<AddEventListenerType<TProps, TMethods>>
-    /**
-     * observed props
-     */
-    o?: keyof TProps & string | PropOrComputedProp<TProps, TMethods> | PropOrComputedProp<TProps, TMethods>[],
+    a?:  AddEventListenerType<TProps, TMethods> | Array<AddEventListenerType<TProps, TMethods>>,
 
     /**
      * derived value from observed props
      */
     d?: Derivative<TProps, TMethods>,
-    /**
-     * 
-     */
-    w?: WhereConditions
-    /**
-     * ifs ands or buts -- conditions on the model
-     */
-    i?: IfInstructions<TProps, TMethods>,
+
     /**
      * enhance / engage with element, or register the found element in some way
      */
     e?:  Engagements<TMethods>,
+
+    /**
+     * ifs ands or buts -- conditions on the model
+     */
+    i?: IfInstructions<TProps, TMethods>,
+
+    /**
+     * method of matching element to pass derived value into
+     * [TODO]
+     */
+    invoke?: string,
+
+    /**
+     * modify the host in a (mostly) declarative  way
+     */
+    m?: ModificationUnitOfWork<TProps, TMethods> | Array<ModificationUnitOfWork<TProps, TMethods>>,
+
+    /**
+     * observed props
+     */
+    o?: keyof TProps & string | PropOrComputedProp<TProps, TMethods> | PropOrComputedProp<TProps, TMethods>[],
+
     /**
      * set specified property of the matching element to the (derived) value
      */
@@ -177,17 +190,15 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
      * set specified style of the matching element to the (derived) value
      */
     ss?: string,
-    /**
-     * modify the host in a (mostly) declarative  way
-     */
-    m?: ModificationUnitOfWork<TProps, TMethods> | Array<ModificationUnitOfWork<TProps, TMethods>>
 
     /**
-     * method of matching element to pass derived value into
-     * [TODO]
+     * 
      */
-    invoke?: string
+    w?: WhereConditions
+
+
 }
+
 export type ValueFromElement<TProps, TMethods> = 
     (
         matchingElement: Element, 
