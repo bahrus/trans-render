@@ -601,10 +601,14 @@ So we want a way to train our transform to be able to support and supplement thi
 Another goal: We want this solution to be compatible with aria attributes, as well as data- attributes.  
 
 
-## Example 4b - Limited scope - Hardcoded host/model props
+## Example 4b - Minimal scope - Hardcoded host/model props
 
 ```html
 <my-custom-element -my-local-prop=greeting></my-custom-element>
+
+...
+
+<some-other-custom-element -my-local-prop=greeting></some-other-custom-prop>
 ```
 
 ```Typescript
