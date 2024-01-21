@@ -681,7 +681,7 @@ Transform<Model>(form, model, {
 
 Now there are a lot of aria attributes, but I suspect in any given application, we would only want to bind a small number of them to host properties, so the amount of boilerplate necessary to overcome the limitation css has, that [xpath doesn't have](https://stackoverflow.com/questions/35927864/xpath-for-all-elements-with-any-attribute-with-specific-value) to be something we can live with (sigh).
 
-### Example 4e Dynamic Transforms [TODO]
+### Example 4e Dynamic Transforms - Maximum Scope [TODO]
 
 One can argue that the examples we've seen with 4b, 4c, 4d violate some concept of DRY -- to take the last example, we are repeating ourselves when mention "isVegetarian" twice -- once in the HTML markup, once in the transform.
 
@@ -689,7 +689,7 @@ To avoid dry, this library supports another function DynamicTransform:
 
 ```Typescript
 DynamicTransform<Model>(form, model, {
-    '-aria-checked': 0
+    'aria-checked': 0
 })
 ```
 
@@ -698,6 +698,12 @@ This will by default create simple transforms based on the value of the attribut
 We can replace the 0 by an object, based on the syntax described above and below, in order to add more nuance to what extra binding instructions we want to employ beyond a simple property setting (of ariaChecked in this case).
 
 This will only create a single transform for each unique value of the attribute it encounters.
+
+What the DyanamicTransform does, behind the scenes, is
+
+1.  Take an initial snapshot of the DOM within the form element, searching for all attributes of the form -aria-checked.
+2.  Creates a single transform, using the syntax of example 4d above.
+3.  Monitors for new elements being added with -aria-checked attribute, and if not encountered the value of the attribute before (corresponding to a host/model property), dynamically creates another transform with just that new host/model property to bind to.
 
 ## Part 5 - Event handling
 
