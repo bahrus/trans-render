@@ -124,14 +124,19 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
                     {
                         if(Array.isArray(rhs)){
                             for(const rhsPart of rhs){
-                                const {foreach} = rhsPart;
-                                const uow: QuenitOfWork<TProps, TMethods> = {
-                                    //d: 0,
-                                    ...rhsPart!,
-                                    q: key
-                                };
-                                if(uow.o !== undefined && uow.d === undefined) uow.d = 0;
-                                uows.push(uow);
+                                const {forEachComboIn} = rhsPart;
+                                if(forEachComboIn !== undefined){
+                                    throw 'NI';
+                                }else{
+                                    const uow: QuenitOfWork<TProps, TMethods> = {
+                                        //d: 0,
+                                        ...rhsPart!,
+                                        q: key
+                                    };
+                                    if(uow.o !== undefined && uow.d === undefined) uow.d = 0;
+                                    uows.push(uow);
+                                }
+
                             }
                         }else{
                             const uow: QuenitOfWork<TProps, TMethods> = {
