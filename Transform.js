@@ -66,7 +66,7 @@ export class Transformer extends EventTarget {
         }
         const uows = [];
         for (const key in xform) {
-            const rhs = xform[key];
+            let rhs = xform[key];
             switch (typeof rhs) {
                 case 'number': {
                     if (rhs !== 0)
@@ -110,6 +110,7 @@ export class Transformer extends EventTarget {
                     {
                         if (Array.isArray(rhs)) {
                             for (const rhsPart of rhs) {
+                                const { foreach } = rhsPart;
                                 const uow = {
                                     //d: 0,
                                     ...rhsPart,

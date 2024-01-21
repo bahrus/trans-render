@@ -80,7 +80,7 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
         }
         const uows : Array<QuenitOfWork<TProps, TMethods>> = [];
         for(const key in xform){
-            const rhs = xform[key as LHS<TProps>] as RHS<TProps, TMethods>;
+            let rhs = xform[key as LHS<TProps>] as RHS<TProps, TMethods>;
             switch(typeof rhs){
                 case 'number': {
                     if(rhs !== 0) throw 'NI';
@@ -124,6 +124,7 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
                     {
                         if(Array.isArray(rhs)){
                             for(const rhsPart of rhs){
+                                const {foreach} = rhsPart;
                                 const uow: QuenitOfWork<TProps, TMethods> = {
                                     //d: 0,
                                     ...rhsPart!,

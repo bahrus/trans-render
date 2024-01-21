@@ -161,7 +161,7 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
      */
     e?:  Engagements<TMethods>,
 
-    foreach?: CrossProduct<TProps, TMethods> | Array<CrossProduct<TProps, TMethods>>
+    forEachComboIn?: CrossProduct<TProps, TMethods> | Array<CrossProduct<TProps, TMethods>>
 
     /**
      * ifs ands or buts -- conditions on the model

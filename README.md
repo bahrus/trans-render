@@ -580,7 +580,7 @@ Note the (discouraged) extra property: "sa" which means "set attribute" rather t
 
 "ss" is used for setting a style property.
 
-## Accommodating minimalist custom inline binding with parameterized transforms [TODO]
+## Accommodating minimalist custom inline binding with markers and parameterized transforms [TODO]
 
 Warning, the rest of part 4 is probably better to skip at first, until feeling comfortable with other aspects, as it is a bit subtle.
 
@@ -594,31 +594,12 @@ If we want to adopt "locality of behavior" principles, and introduce a minimalis
 
 In what follows the goal is for our transform to be able to take this minimal binding, and "run with it", to be able to specify, when applicable, extra frills "from a distance".
 
-The extra dash in front is to avoid clashing with attributes we are likely to see that my-custom-element recognizes.
+The extra dash in front of my-local-prop is there in order to avoid clashing with attributes we are likely to see that my-custom-element recognizes.
 
-So we want a way to train our transform to support this natural syntax, with as little boilerplate as possible.  
-
-<!--We run into a bit of a conundrum here with what the syntax of our transform from a distance should look like.  If we think of the LHS as a css selector, we run into trouble if we blindly follow the previous examples.  Unlike xpath (which has its own apparent limitations when it comes to querying within shadow roots, unfortunately), there is no css selector that can match on the value of the attribute, without specifying the name of the attribute to search for.  So the following notation, which would be ideal if css did support such a query, doesn't provide enough information to go on: 
-
-```Typescript
-Transform<Model>(form, model, { 
-    '- greeting': 0 //not the right solution!
-});
-```
-
-So we need to match on the local property name, not the host name:
-
-```Typescript
-Transform<Model>(form, model, { 
-    '- my-local-prop': 0 //not the right solution!
-});
-```
-
-If we use 0 on the RHS, this would be quite confusing, because what is 0 referring to exactly?.  I think we need to be more explicit.  But I still think it would be beneficial to see if we can avoid repeating ourselves by specifying the name of the host property to observe.--> 
+So we want a way to train our transform to be able to support and supplement this natural, minimal syntax, with as little boilerplate as possible.  
 
 Another goal: We want this solution to be compatible with aria attributes, as well as data- attributes.  
 
-So this is how we can support -my-local-prop as well as the HTML5 compliant data-my-local-prop at the same time:
 
 ### Example 4b - Limited scope - Hardcoded host/model props
 
@@ -632,7 +613,7 @@ Transform<Model>(form, model, {
 });
 ```
 
-This "transpiles" to:
+This transform "transpiles" to:
 
 ```Typescript
 Transform<Model>(form, model, { 
@@ -643,7 +624,7 @@ Transform<Model>(form, model, {
 });
 ```
 
-The syntax above also will work with the following HTML5 markup
+The transform above also will work with the following HTML5 markup
 
 ```html
 <my-custom-element data-my-local-prop=greeting></my-custom-element>
@@ -665,14 +646,14 @@ The syntax above requires a 1-1 mapping between each pair of local prop names an
 ```Typescript
 Transform<Model>(form, model, { 
     '- -:x=:y': {
-        foreach: {x:'my-local-prop', y: 'greeting' }
+        forEachComboIn: {x:'my-local-prop', y: 'greeting' }
     } 
 });
 ```
 
-foreach can be single object (as shown above), or an array.  x can be single string (as shown above) or an array.  Likewise with y.  All matching combinations are added.
+The value of forEachComboIn can be a single object (as shown above), or an array.  x can be a single string (as shown above) or an array.  Likewise with y.  All matching combinations are added.  
 
-If one looks at this simple example, the benefits we obtain from the "transpiling" may not seem significant enough to warrant the learning curve (not to mention the implementation).  However, we may have multiple custom elements, say in a family of custom elements, all of which share a property called myLocalProp.  We can accommodate binding to all of them with this single transform!
+If one looks at this simple example, the benefits we obtain from the "transpiling" may not seem significant enough to warrant the learning curve (not to mention the implementation).  The example above is the simplest example, and only obfuscates what is happening compared to example 4b, but one can imagine complex HTML markups where this syntax would provide a significant benefit.  For example, say we have multiple custom elements, say in a family of custom elements, all of which share a property called myLocalProp.  We can accommodate binding to all of them with this single transform!
 
 This may become more apparent with the example below:
 
@@ -680,56 +661,43 @@ This may become more apparent with the example below:
 
 ```html
 <div -aria-checked=isVegetarian></div>
+<div -aria-checked=isHappy></div>
+<div -aria-disabled=isSad></div>
+<section -aria-disabled=isNeutral></section>
 ```
 
 ```Typescript
 Transform<Model>(form, model, { 
-    '- aria-checked=:x': {
-        o: ':x'
+    '- :x=:y': {
+        forEachComboIn: [
+            {x: 'aria-checked', y: ['isVegetarian', 'isHappy']},
+            {y: 'aria-disabled', y: ['isSad', 'isNeutral']}
+        ]
     }
 });
 ```
 
-... kind of transpiles, on encountering the tag above, to:
 
-```Typescript
-Transform<Model>(form, model, { 
-    '* [aria-checked]': {
-        o: 'isVegetarian',
-        s: 'ariaChecked'
-    }
-});
-```
-
-Note that here we drop the dash in front of the aria-* attribute, to indicate not to add the data- option.  Going back to example 4b, we could also drop the dash in from of my-local-prop, which would result in not fishing for data-my-local-prop attributes.
 
 Now there are a lot of aria attributes, but I suspect in any given application, we would only want to bind a small number of them to host properties, so the amount of boilerplate necessary to overcome the limitation css has, that [xpath doesn't have](https://stackoverflow.com/questions/35927864/xpath-for-all-elements-with-any-attribute-with-specific-value) to be something we can live with (sigh).
 
-### Example 4d Inline binding hints
+### Example 4e Dynamic Transforms [TODO]
 
-```html
-<my-custom-element -my-local-prop></my-custom-element>
-```
+One can argue that the examples we've seen with 4b, 4c, 4d violate some concept of DRY -- to take the last example, we are repeating ourselves when mention "isVegetarian" twice -- once in the HTML markup, once in the transform.
 
-```Typescript
-Transform<Model>(form, model, { 
-    '- my-local-prop': {
-        w: 'my-custom-element' //optional
-        o: 'greeting'
-    }
-});
-```
-
-"Transpiles" to the equivalent of:
+To avoid dry, this library supports another function DynamicTransform:
 
 ```Typescript
-Transform<Model>(form, model, { 
-    '* my-custom-element[-my-local-prop]': {
-        o: 'greeting',
-        s: 'myLocalProp'
-    }
-});
+DynamicTransform<Model>(form, model, {
+    '-aria-checked': 0
+})
 ```
+
+This will by default create simple transforms based on the value of the attribute.
+
+We can replace the 0 by an object, based on the syntax described above and below, in order to add more nuance to what extra binding instructions we want to employ beyond a simple property setting (of ariaChecked in this case).
+
+This will only create a single transform for each unique value of the attribute it encounters.
 
 ## Part 5 - Event handling
 
