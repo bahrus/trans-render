@@ -592,7 +592,7 @@ If we want to adopt "locality of behavior" principles, and introduce a minimalis
 <my-custom-element -my-local-prop=greeting></my-custom-element>
 ```
 
-In what follows the goal is for our transform to be able to take this minimal binding, and "run with it", to be able to specify, when applicable, extra frills "from a distance".
+In what follows, the goal is for our transform to be able to take this minimal binding, and "run with it", to be able to specify, when applicable, extra frills "from a distance" beyond the most obvious binding (setting myLocalProp to the value of the host/model's greeting property).
 
 The extra dash in front of my-local-prop is there in order to avoid clashing with attributes we are likely to see that my-custom-element recognizes.
 
