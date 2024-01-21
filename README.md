@@ -596,6 +596,8 @@ In what follows, the goal is for our transform to be able to take this minimal b
 
 The extra dash in front of my-local-prop is there in order to avoid clashing with attributes we are likely to see that my-custom-element recognizes.
 
+We will refer to these "special attributes" that start with a dash (or data-) as "marker" attributes.
+
 So we want a way to train our transform to be able to support and supplement this natural, minimal syntax, with as little boilerplate as possible.  
 
 Another goal: We want this solution to be compatible with aria attributes, as well as data- attributes.  
@@ -661,7 +663,7 @@ If one looks at this simple example, the benefits we obtain from the "transpilin
 
 This may become more apparent with the example below:
 
-### Example 4d - aria-* binding [TODO]
+## Example 4d - aria-* binding [TODO]
 
 ```html
 <div -aria-checked=isVegetarian></div>
@@ -685,7 +687,7 @@ Transform<Model>(form, model, {
 
 Now there are a lot of aria attributes, but I suspect in any given application, we would only want to bind a small number of them to host properties, so the amount of boilerplate necessary to overcome the limitation css has, that [xpath doesn't have](https://stackoverflow.com/questions/35927864/xpath-for-all-elements-with-any-attribute-with-specific-value) to be something we can live with (sigh).
 
-### Example 4e Dynamic Transforms - Maximum Scope [TODO]
+## Example 4e Dynamic Transforms - Massive Scope [TODO]
 
 One can argue that the examples we've seen with 4b, 4c, 4d violate some concept of DRY -- to take the last example, we are repeating ourselves when we mention "isVegetarian" twice -- once in the HTML markup, once in the transform.
 
@@ -708,6 +710,25 @@ What the DyanamicTransform does, behind the scenes, is
 1.  Take an initial snapshot of the DOM within the form element, searching for all attributes of the form -aria-checked.
 2.  Creates a single transform, using the syntax of example 4d above.
 3.  Monitors for new elements being added with -aria-checked attribute, and if not encountered the value of the attribute before (corresponding to a host/model property), dynamically creates another transform with just that new host/model property to bind to.
+
+
+## Example 4f -- Mega Dynamic Transforms Maximum Scope [TODO]
+
+In example 4e above, we still needed to list every aria- attribute we want to bind to (in addition to every other property we want to bind to).  To enable all attributes for an element to be inspected for marker attributes, use the following:
+
+```html
+<div - -aria-checked=isVegetarian></div>
+<div - -aria-checked=isHappy></div>
+<div - -aria-disabled=isSad></div>
+<section - -aria-disabled=isNeutral></section>
+```
+
+
+```Typescript
+DynamicTransform<Model>(form, model, {
+    '-': 0
+})
+```
 
 ## Part 5 - Event handling
 
