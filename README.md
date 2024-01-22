@@ -645,7 +645,7 @@ Transform<Model>(form, model, {
 ```
 
 
-## Example 4c - Medium amount of scope - Parameterized props [TODO]
+## Example 4c - Medium amount of scope - Parameterized props
 
 The syntax above requires a 1-1 mapping between each pair of local prop names and host names.  This can result in a fairly hefty transform for large swaths of dynamic HTML.  We can reduce the size (and maintenance headaches) of the transform by utilizing "parameterized bindings".
 
