@@ -108,34 +108,32 @@ export class Transformer extends EventTarget {
                     break;
                 case 'object':
                     {
-                        if (Array.isArray(rhs)) {
-                            for (const rhsPart of rhs) {
-                                const { forEachComboIn } = rhsPart;
-                                if (forEachComboIn !== undefined) {
-                                    throw 'NI';
-                                }
-                                else {
-                                    const uow = {
-                                        //d: 0,
-                                        ...rhsPart,
-                                        q: key
-                                    };
-                                    if (uow.o !== undefined && uow.d === undefined)
-                                        uow.d = 0;
-                                    uows.push(uow);
-                                }
-                            }
-                        }
-                        else {
+                        const rhses = arr(rhs);
+                        //if(Array.isArray(rhs)){
+                        for (const rhsPart of rhses) {
+                            // const {forEachComboIn} = rhsPart;
+                            // if(forEachComboIn !== undefined){
+                            //     throw 'NI';
+                            // }else{
                             const uow = {
                                 //d: 0,
-                                ...rhs,
+                                ...rhsPart,
                                 q: key
                             };
                             if (uow.o !== undefined && uow.d === undefined)
                                 uow.d = 0;
                             uows.push(uow);
+                            //}
                         }
+                        // }else{
+                        //     const uow: QuenitOfWork<TProps, TMethods> = {
+                        //         //d: 0,
+                        //         ...rhs!,
+                        //         q: key
+                        //     } as QuenitOfWork<TProps, TMethods>;
+                        //     if(uow.o !== undefined && uow.d === undefined) uow.d = 0;
+                        //     uows.push(uow);
+                        // }
                     }
                     break;
             }
