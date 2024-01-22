@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 2c</title>
+    <script type=importmap>
+        {
+            "imports": {
+                "mount-observer/": "../node_modules/mount-observer/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <form>
+        <input class=test1 name=greeting>
+        <input class=test2 name=greeting>
+    </form>
+    <div id=target></div>
+    <script type=module>
+        import './Example2c.js';
+    </script>
+    <script>
+        function runTest(){
+            if(document.querySelector('.test1').value === 'hello, world' && document.querySelector('.test2').value === ''){
+                target.setAttribute('mark', 'good');
+            }
+        }
+        setTimeout(() => {
+            runTest();
+        }, 1000);
+    </script>
+</body>
+</html>

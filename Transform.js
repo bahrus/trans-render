@@ -71,7 +71,7 @@ export class Transformer extends EventTarget {
                 case 'number': {
                     if (rhs !== 0)
                         throw 'NI';
-                    const qi = await this.calcQI(key);
+                    const qi = await this.calcQI(key, undefined);
                     const { prop, localPropCamelCase } = qi;
                     const uow = {
                         o: [prop],
@@ -86,7 +86,7 @@ export class Transformer extends EventTarget {
                 case 'string':
                     {
                         if (typeof model[rhs] === 'function') {
-                            const qi = await this.calcQI(key);
+                            const qi = await this.calcQI(key, undefined);
                             const { prop } = qi;
                             const uow = {
                                 o: [prop],
@@ -122,7 +122,7 @@ export class Transformer extends EventTarget {
                                         for (const yy of ys) {
                                             //debugger;
                                             const q = `- ${xx}=${yy}`;
-                                            const qi = await this.calcQI(q);
+                                            const qi = await this.calcQI(q, undefined);
                                             const { prop, localPropCamelCase } = qi;
                                             const uow = {
                                                 o: [prop],
@@ -156,7 +156,7 @@ export class Transformer extends EventTarget {
         for (const uow of uows) {
             let { q, qi, w } = uow;
             if (qi === undefined)
-                qi = await this.calcQI(q);
+                qi = await this.calcQI(q, w);
             qi.w = w;
             const newProcessor = new MountOrchestrator(this, uow, qi);
             await newProcessor.do();
@@ -164,7 +164,7 @@ export class Transformer extends EventTarget {
             await newProcessor.subscribe();
         }
     }
-    async calcQI(pqe) {
+    async calcQI(pqe, w) {
         const qi = {};
         if (pqe === ':root') {
             qi.isRootQry = true;
@@ -186,12 +186,12 @@ export class Transformer extends EventTarget {
             qi.propAttrType = first;
             qi.prop = second;
         }
-        qi.css = await this.#calcCSS(qi);
+        qi.css = await this.#calcCSS(qi, w);
         return qi;
     }
-    async #calcCSS(qi) {
+    async #calcCSS(qi, w) {
         const { cssQuery, localName, prop, propAttrType } = qi;
-        const ln = (localName || '') + (qi.w || '');
+        const ln = (localName || '') + (w || '');
         const c = cssQuery || '';
         if (propAttrType === undefined) {
             return `${ln} ${c}`.trimEnd();

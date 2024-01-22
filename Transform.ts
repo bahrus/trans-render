@@ -5,7 +5,7 @@ import {
     DerivationCriteria,
     TransformerTarget, 
     onMountStatusChange, RHS, AddEventListener,
-    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget, TransformOptions, LHS
+    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget, TransformOptions, LHS, WhereConditions
 } from './types.js';
 import { IMountObserver, MountContext, PipelineStage } from 'mount-observer/types';
 export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './types';
@@ -84,7 +84,7 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
             switch(typeof rhs){
                 case 'number': {
                     if(rhs !== 0) throw 'NI';
-                    const qi = await this.calcQI(key);
+                    const qi = await this.calcQI(key, undefined);
                     const {prop, localPropCamelCase} = qi;
                     const uow: QuenitOfWork<TProps, TMethods> = {
                         o: [prop! as keyof TProps & string],
@@ -100,7 +100,7 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
                 case 'string':
                     {
                         if(typeof model[rhs] === 'function'){
-                            const qi = await this.calcQI(key);
+                            const qi = await this.calcQI(key, undefined);
                             const {prop} = qi;
                             const uow: QuenitOfWork<TProps, TMethods> = {
                                 o: [prop! as keyof TProps & string],
@@ -136,7 +136,7 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
                                         for(const yy of ys){
                                             //debugger;
                                             const q = `- ${xx}=${yy}`;
-                                            const qi = await this.calcQI(q);
+                                            const qi = await this.calcQI(q, undefined);
                                             const {prop, localPropCamelCase} = qi;
                                             const uow: QuenitOfWork<TProps, TMethods> = {
                                                 o: [prop! as keyof TProps & string],
@@ -172,7 +172,7 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
 
         for(const uow of uows){
             let {q, qi, w} = uow;
-            if(qi === undefined) qi = await this.calcQI(q);
+            if(qi === undefined) qi = await this.calcQI(q, w);
             qi.w = w;
             const newProcessor = new MountOrchestrator(this, uow, qi);
             await newProcessor.do();
@@ -180,7 +180,7 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
             await newProcessor.subscribe();
         }
     }
-    async calcQI(pqe: string){
+    async calcQI(pqe: string, w: WhereConditions | undefined){
         
         const qi: QueryInfo = {};
         if(pqe === ':root'){
@@ -203,13 +203,13 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
             qi.propAttrType = first as PropAttrQueryType;
             qi.prop = second;
         }
-        qi.css = await this.#calcCSS(qi);
+        qi.css = await this.#calcCSS(qi, w);
         return qi;
     }
 
-    async #calcCSS(qi: QueryInfo){
+    async #calcCSS(qi: QueryInfo, w: WhereConditions | undefined){
         const {cssQuery, localName, prop, propAttrType} = qi;
-        const ln = (localName || '') + (qi.w || '' );
+        const ln = (localName || '') + (w || '' );
         const c = cssQuery || '';
         if(propAttrType === undefined){
             return `${ln} ${c}`.trimEnd();
