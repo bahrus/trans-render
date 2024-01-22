@@ -663,7 +663,7 @@ If one looks at this simple example, the benefits we obtain from the "transpilin
 
 This may become more apparent with the example below:
 
-## Example 4d - aria-* binding [TODO]
+## Example 4d - aria-* binding
 
 ```html
 <div -aria-checked=isVegetarian></div>
@@ -677,7 +677,7 @@ Transform<Model>(form, model, {
     '- :x=:y': {
         forEachComboIn: [
             {x: 'aria-checked', y: ['isVegetarian', 'isHappy']},
-            {y: 'aria-disabled', y: ['isSad', 'isNeutral']}
+            {x: 'aria-disabled', y: ['isSad', 'isNeutral']}
         ]
     }
 });

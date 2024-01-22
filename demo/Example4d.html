@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 4d</title>
+    <script type=importmap>
+        {
+            "imports": {
+                "mount-observer/": "../../node_modules/mount-observer/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <div -aria-checked=isVegetarian></div>
+        <div -aria-checked=isHappy></div>
+        <div -aria-disabled=isSad></div>
+        <section -aria-disabled=isNeutral></section>
+    </div>
+
+    <script type=module>
+        import './Example4d.js';
+    </script>
+</body>
+</html>
