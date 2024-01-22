@@ -80,7 +80,7 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
         }
         const uows : Array<QuenitOfWork<TProps, TMethods>> = [];
         for(const key in xform){
-            let rhs = xform[key as LHS<TProps>] as RHS<TProps, TMethods>;
+            let rhs = (xform[key as LHS<TProps>]) as RHS<TProps, TMethods>;
             switch(typeof rhs){
                 case 'number': {
                     if(rhs !== 0) throw 'NI';
@@ -122,32 +122,47 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
                     break;
                 case 'object':
                     {
-                        const rhses = arr(rhs);
-                        //if(Array.isArray(rhs)){
-                            for(const rhsPart of rhses){
-                                // const {forEachComboIn} = rhsPart;
-                                // if(forEachComboIn !== undefined){
-                                //     throw 'NI';
-                                // }else{
-                                    const uow: QuenitOfWork<TProps, TMethods> = {
-                                        //d: 0,
-                                        ...rhsPart!,
-                                        q: key
-                                    };
-                                    if(uow.o !== undefined && uow.d === undefined) uow.d = 0;
-                                    uows.push(uow);
-                                //}
-
+                        const rhses = arr(rhs) as Array<UnitOfWork<TProps, TMethods>>;
+                        for(const rhsPart of rhses){
+                            const {forEachComboIn} = rhsPart;
+                            if(forEachComboIn !== undefined){
+                                //TODO:  move this to a separate file
+                                const cps = arr(forEachComboIn);
+                                for(const cp of cps){
+                                    const {x, y} = cp;
+                                    const xs = arr(x);
+                                    const ys = arr(y);
+                                    for(const xx of xs){
+                                        for(const yy of ys){
+                                            //debugger;
+                                            const q = `- ${xx}=${yy}`;
+                                            const qi = await this.calcQI(q);
+                                            const {prop, localPropCamelCase} = qi;
+                                            const uow: QuenitOfWork<TProps, TMethods> = {
+                                                o: [prop! as keyof TProps & string],
+                                                q,
+                                                d: 0,
+                                                qi,
+                                                s: localPropCamelCase,
+                                                ...rhsPart!,
+                                                
+                                            };
+                                            //if(uow.o !== undefined && uow.d === undefined) uow.d = 0;
+                                            uows.push(uow);
+                                        }
+                                    }
+                                }
+                            }else{
+                                const uow: QuenitOfWork<TProps, TMethods> = {
+                                    //d: 0,
+                                    ...rhsPart!,
+                                    q: key
+                                };
+                                if(uow.o !== undefined && uow.d === undefined) uow.d = 0;
+                                uows.push(uow);
                             }
-                        // }else{
-                        //     const uow: QuenitOfWork<TProps, TMethods> = {
-                        //         //d: 0,
-                        //         ...rhs!,
-                        //         q: key
-                        //     } as QuenitOfWork<TProps, TMethods>;
-                        //     if(uow.o !== undefined && uow.d === undefined) uow.d = 0;
-                        //     uows.push(uow);
-                        // }
+
+                        }
 
                     }
                     break;
