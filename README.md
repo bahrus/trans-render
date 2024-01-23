@@ -580,7 +580,7 @@ Note the (discouraged) extra property: "sa" which means "set attribute" rather t
 
 "ss" is used for setting a style property.
 
-## Accommodating minimalist custom inline binding with markers and parameterized transforms [TODO]
+## Accommodating minimalist custom inline binding with markers and parameterized transforms [WIP]
 
 Warning, the rest of part 4 is probably better to skip at first, until feeling comfortable with other aspects, as it is a bit subtle.
 
@@ -623,7 +623,7 @@ This transform "transpiles" to:
 
 ```Typescript
 Transform<Model>(form, model, { 
-    '* [-my-local-prop,data-my-local-prop]': {
+    '* [-my-local-prop=greeting,data-my-local-prop=greeting]': {
         o: 'greeting',
         s: 'myLocalProp'
     }
@@ -705,9 +705,9 @@ We can replace the 0 by an object, based on the syntax described above and below
 
 This will only create a single transform for each unique value of the attribute it encounters.
 
-What the DyanamicTransform does, behind the scenes, is
+What the DynamicTransform does, behind the scenes, is
 
-1.  Take an initial snapshot of the DOM within the form element, searching for all attributes of the form -aria-checked.
+1.  Takes an initial snapshot of the DOM within the form element, searching for all attributes of the form -aria-checked.
 2.  Creates a single transform, using the syntax of example 4d above.
 3.  Monitors for new elements being added with -aria-checked attribute.
     1.  When a new element with attribute -aria-check is encountered, check if the the value of the attribute was ever encountered before (corresponding to a host/model property)
