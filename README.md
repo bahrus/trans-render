@@ -580,7 +580,7 @@ Note the (discouraged) extra property: "sa" which means "set attribute" rather t
 
 "ss" is used for setting a style property.
 
-## Accommodating minimalist custom inline binding with markers and parameterized transforms [WIP]
+## Accommodating minimalist custom inline binding with markers and parameterized transforms [TODO]
 
 Warning, the rest of part 4 is probably better to skip at first, until feeling comfortable with other aspects, as it is a bit subtle.
 
@@ -592,30 +592,38 @@ If we want to adopt "locality of behavior" principles, and introduce a minimalis
 <my-custom-element -my-local-prop=greeting></my-custom-element>
 ```
 
+However, css doesn't have [enough power to make this work](https://stackoverflow.com/questions/35927864/xpath-for-all-elements-with-any-attribute-with-specific-value) to my satisfaction.
+
+So instead, we will adopt syntax that should look a bit familiar at this point if we squint our eyes  bit:
+
+```html
+<my-custom-element -my-local-prop -o=greeting></my-custom-element>
+```
+
 In what follows, the goal is for our transform to be able to take this minimal binding, and "run with it", to be able to specify, when applicable, extra frills "from a distance" beyond the most obvious binding (setting myLocalProp to the value of the host/model's greeting property).
 
-The extra dash in front of my-local-prop is there in order to avoid clashing with attributes we are likely to see that my-custom-element recognizes.
+The extra dash in front of my-local-prop and "o" is there in order to avoid clashing with attributes we are likely to see that my-custom-element recognizes.
 
 We will refer to these "special attributes" that start with a dash (or data-) as "marker" attributes.
 
-So we want a way to train our transform to be able to support and supplement this natural, minimal syntax, with as little boilerplate as possible.  
+So we want a way to train our transform to be able to support and supplement this natural-ish, minimal syntax, with as little boilerplate as possible.  
 
 Another goal: We want this solution to be compatible with aria attributes, as well as data- attributes.  
 
 
-## Example 4b - Minimal scope - Hardcoded host/model props
+## Example 4b 
 
 ```html
-<my-custom-element -my-local-prop=greeting></my-custom-element>
+<my-custom-element -my-local-prop -o=greeting></my-custom-element>
 
 ...
 
-<some-other-custom-element -my-local-prop=greeting></some-other-custom-prop>
+<some-other-custom-element -my-other-local-prop=greeting></some-other-custom-prop>
 ```
 
 ```Typescript
 Transform<Model>(form, model, { 
-    '- -my-local-prop=greeting': 0
+    '- greeting': 0
 });
 ```
 
