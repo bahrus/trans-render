@@ -597,7 +597,7 @@ However, css doesn't have [enough power to make this work](https://stackoverflow
 So instead, we will adopt syntax that should look a bit familiar at this point if we squint our eyes  bit:
 
 ```html
-<my-custom-element -my-local-prop -o=greeting></my-custom-element>
+<my-custom-element -my-local-prop=0 -o=greeting></my-custom-element>
 ```
 
 In what follows, the goal is for our transform to be able to take this minimal binding, and "run with it", to be able to specify, when applicable, extra frills "from a distance" beyond the most obvious binding (setting myLocalProp to the value of the host/model's greeting property).
@@ -611,19 +611,19 @@ So we want a way to train our transform to be able to support and supplement thi
 Another goal: We want this solution to be compatible with aria attributes, as well as data- attributes.  
 
 
-## Example 4b 
+## Example 4b [TODO]
 
 ```html
-<my-custom-element -my-local-prop -o=greeting></my-custom-element>
+<my-custom-element -my-local-prop=0 -o=greeting></my-custom-element>
 
 ...
 
-<some-other-custom-element -my-other-local-prop=greeting></some-other-custom-prop>
+<some-other-custom-element -my-other-local-prop=0 -o=greeting></some-other-custom-prop>
 ```
 
 ```Typescript
 Transform<Model>(form, model, { 
-    '- greeting': 0
+    '- -o': 0
 });
 ```
 
@@ -631,9 +631,9 @@ This transform "transpiles" to:
 
 ```Typescript
 Transform<Model>(form, model, { 
-    '* [-my-local-prop=greeting,data-my-local-prop=greeting]': {
+    '* [-o=greeting,data-o=greeting]': {
         o: 'greeting',
-        s: 'myLocalProp'
+        w: '- *=0'
     }
 });
 ```
@@ -641,17 +641,11 @@ Transform<Model>(form, model, {
 The transform above also will work with the following HTML5 markup
 
 ```html
-<my-custom-element data-my-local-prop=greeting></my-custom-element>
+<my-custom-element data-my-local-prop=0 data-o=greeting></my-custom-element>
 ```
 
-If we have no interest in supporting HTML5 compliant attributes, drop the dash in the transform:
 
-```Typescript
-Transform<Model>(form, model, { 
-    '- my-local-prop=greeting': 0
-});
-```
-
+<!--
 
 ## Example 4c - Medium amount of scope - Parameterized props
 
@@ -671,77 +665,31 @@ If one looks at this simple example, the benefits we obtain from the "transpilin
 
 This may become more apparent with the example below:
 
-## Example 4d - aria-* binding
+-->
+
+## Example 4c - aria-* binding [TODO]
 
 ```html
-<div -aria-checked=isVegetarian></div>
-<div -aria-checked=isHappy></div>
-<div -aria-disabled=isSad></div>
-<section -aria-disabled=isNeutral></section>
+<div -aria-checked=0 -aria-disabled=1 -o=isVegetarian,isHappy></div>
 ```
 
 ```Typescript
 Transform<Model>(form, model, { 
-    '- :x=:y': {
-        forEachComboIn: [
-            {x: 'aria-checked', y: ['isVegetarian', 'isHappy']},
-            {x: 'aria-disabled', y: ['isSad', 'isNeutral']}
-        ]
-    }
+    '- -o': 0
 });
 ```
 
-
-
-Now there are a lot of aria attributes, but I suspect in any given application, we would only want to bind a small number of them to host properties, so the amount of boilerplate necessary to overcome the limitation css has, that [xpath doesn't have](https://stackoverflow.com/questions/35927864/xpath-for-all-elements-with-any-attribute-with-specific-value) to be something we can live with (sigh).
-
-## Example 4e Dynamic Transforms - Massive Scope [TODO]
-
-One can argue that the examples we've seen with 4b, 4c, 4d violate some concept of DRY -- to take the last example, we are repeating ourselves when we mention "isVegetarian" twice -- once in the HTML markup, once in the transform.
-
-To avoid violating the DRY principle, this library supports another function, DynamicTransform:
-
-```Typescript
-DynamicTransform<Model>(form, model, {
-    'aria-checked': 0
-})
-```
-
-This will by default create simple transforms based on the value of the attribute.
-
-We can replace the 0 by an object, based on the syntax described above and below, in order to add more nuance to what extra binding instructions we want to employ beyond a simple property setting (of ariaChecked in this case).
-
-This will only create a single transform for each unique value of the attribute it encounters.
-
-What the DynamicTransform does, behind the scenes, is
-
-1.  Takes an initial snapshot of the DOM within the form element, searching for all attributes of the form -aria-checked.
-2.  Creates a single transform, using the syntax of example 4d above.
-3.  Monitors for new elements being added with -aria-checked attribute.
-    1.  When a new element with attribute -aria-check is encountered, check if the the value of the attribute was ever encountered before (corresponding to a host/model property)
-        1.  If not, dynamically creates another transform with just that new host/model property to bind to.
-        2.  If so, do nothing.
-
-
-## Example 4f -- Mega Dynamic Transforms Maximum Scope [TODO]
-
-In example 4e above, we still needed to list every aria- attribute we want to bind to (in addition to every other property we want to bind to).  To enable all attributes for an element to be inspected for marker attributes, use the following:
-
 ```html
-<div -o -aria-checked=isVegetarian></div>
-<div -o -aria-checked=isHappy></div>
-<div -o -aria-disabled=isSad></div>
-<section -o -aria-disabled=isNeutral></section>
+<div -aria-label='[0,1]' -o=greeting,name></div>
 ```
-
-Note the addition of the dangling -o within each tag.  This is the best we can do to overcome the fundamental limitation css has that xpath doesn't have.  Our dynamic transform should look as follows:
-
 
 ```Typescript
-DynamicTransform<Model>(form, model, {
-    '-o': 0
-})
+Transform<Model>(form, model, { 
+    '- -o': 0
+});
 ```
+
+## Example 4d - fine tunin [TODO]
 
 ## Part 5 - Event handling
 
