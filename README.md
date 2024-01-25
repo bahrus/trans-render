@@ -602,6 +602,8 @@ So instead, we will adopt syntax that should look a bit familiar at this point i
 
 In what follows, the goal is for our transform to be able to take this minimal binding, and "run with it", to be able to specify, when applicable, extra frills "from a distance" beyond the most obvious binding (setting myLocalProp to the value of the host/model's greeting property).
 
+The problem is that one of the goals 
+
 The extra dash in front of my-local-prop and "o" is there in order to avoid clashing with attributes we are likely to see that my-custom-element recognizes.
 
 We will refer to these "special attributes" that start with a dash (or data-) as "marker" attributes.
@@ -614,16 +616,21 @@ Another goal: We want this solution to be compatible with aria attributes, as we
 ## Example 4b [TODO]
 
 ```html
-<my-custom-element -my-local-prop=0 -o=greeting></my-custom-element>
+<my-custom-element -my-local-prop -o=greeting></my-custom-element>
 
 ...
 
-<some-other-custom-element -my-other-local-prop=0 -o=greeting></some-other-custom-prop>
+<some-other-custom-element -my-other-local-prop -o=greeting></some-other-custom-prop>
 ```
 
 ```Typescript
 Transform<Model>(form, model, { 
-    '- -o': 0
+    '- greeting': {
+        propMap:[
+            {myLocalProp: 0},
+            {myOtherLocalProp: 0}
+        ]
+    }
 });
 ```
 
