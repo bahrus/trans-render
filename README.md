@@ -582,7 +582,7 @@ Note the (discouraged) extra property: "sa" which means "set attribute" rather t
 
 ## Accommodating minimalist custom inline binding with markers and parameterized transforms [TODO]
 
-Warning, the rest of part 4 is probably better to skip at first, until feeling comfortable with other aspects, as it is a bit subtle.
+Warning: the rest of part 4 is probably better to skip at first, until feeling comfortable with other aspects, as it is a bit subtle.
 
 Let's say we define a custom element with name "my-custom-element", and that custom element supports a property, "myLocalProp", and we want to pass to that property the host/model property "greeting".  
 
@@ -597,18 +597,18 @@ However, css doesn't have [enough power to make this work](https://stackoverflow
 So instead, we will adopt syntax that should look a bit familiar at this point if we squint our eyes  bit:
 
 ```html
-<my-custom-element -my-local-prop=0 -o=greeting></my-custom-element>
+<my-custom-element -my-local-prop -o=greeting;></my-custom-element>
 ```
 
 In what follows, the goal is for our transform to be able to take this minimal binding, and "run with it", to be able to specify, when applicable, extra frills "from a distance" beyond the most obvious binding (setting myLocalProp to the value of the host/model's greeting property).
 
-The problem is that one of the goals 
+One of the limiting principles shaping how we approach this is we want to avoid overloading the HTML markup with heavy syntax in the attributes that needs to be parsed every time we clone the template.
 
-The extra dash in front of my-local-prop and "o" is there in order to avoid clashing with attributes we are likely to see that my-custom-element recognizes.
+The extra dash in front of my-local-prop and "o" is there in order to avoid clashing with attributes we are likely to see that my-custom-element recognizes (especially the former).
 
 We will refer to these "special attributes" that start with a dash (or data-) as "marker" attributes.
 
-So we want a way to train our transform to be able to support and supplement this natural-ish, minimal syntax, with as little boilerplate as possible.  
+So we want a way to train our transform to be able to support and supplement this natural-ish, minimalist syntax, with as little boilerplate as possible.  
 
 Another goal: We want this solution to be compatible with aria attributes, as well as data- attributes.  
 
@@ -616,23 +616,37 @@ Another goal: We want this solution to be compatible with aria attributes, as we
 ## Example 4b [TODO]
 
 ```html
-<my-custom-element -my-local-prop -o=greeting></my-custom-element>
+<my-custom-element -my-local-prop -o=greeting;></my-custom-element>
 
 ...
 
-<some-other-custom-element -my-other-local-prop -o=greeting></some-other-custom-prop>
+<some-other-custom-element -my-other-local-prop -o=greeting;></some-other-custom-prop>
 ```
 
 ```Typescript
 Transform<Model>(form, model, { 
     '- greeting': {
-        propMap:[
+        bindsTo:[
             {myLocalProp: 0},
             {myOtherLocalProp: 0}
         ]
     }
 });
 ```
+
+or more simply
+
+```Typescript
+Transform<Model>(form, model, { 
+    '- greeting': {
+        bindsTo: ['myLocalProp', 'myOtherLocalProp']
+    }
+});
+```
+
+### How is this better than example 4a?
+
+It's not necessarily better, just different.  4b involves more "opt-in" from the HTML markup, a little more transparency,  a little more "locality of behavior", perhaps a little more (type) safety.  It allows us to use more of the power of css in a meaningfu way.  But it suffers from a bit more repetition, a bit more fragility if the custom element's property names change.
 
 <!--
 This transform "transpiles" to:
@@ -648,10 +662,10 @@ Transform<Model>(form, model, {
 
 -->
 
-The transform above also will work with the following HTML5 markup
+The transform above will also work with the following HTML5 markup
 
 ```html
-<my-custom-element data-my-local-prop=0 data-o=greeting></my-custom-element>
+<my-custom-element data-my-local-prop data-o=greeting;></my-custom-element>
 ```
 
 
@@ -680,30 +694,32 @@ This may become more apparent with the example below:
 ## Example 4c - aria-* binding [TODO]
 
 ```html
-<div -aria-checked -aria-disabled -o=isVegetarian,isHappy></div>
+<div -aria-checked -aria-disabled -o=isVegetarian;isHappy;></div>
 ```
 
 ```Typescript
 Transform<Model>(form, model, { 
     '- isVegetarian': {
-        propMap:[{ariaChecked}]
+        bindsTo:'ariaChecked'
     },
     '- isHappy':{
-        propMap: [{ariaDisbled}]
+        bindsTo: 'ariaDisabled'
     }
 });
 ```
 
+It's suggested that the HTML markup be arranged so the order of the bindings match the order of the attributes, but that style is only "suggestive" and not really binding in any way.
+
 ## Example 4d - fine tuning [TODO]
 
 ```html
-<div -aria-label -o=greeting,name></div>
+<div -aria-label -o=greeting;name;></div>
 ```
 
 ```Typescript
 Transform<Model>(form, model, { 
-    '- greeting,name':{
-        propMap:[{ariaLabel: {
+    '- greeting;name;':{
+        bindsTo:[{ariaLabel: {
             d: [0, ', ', 1],
         }}]
     } 
