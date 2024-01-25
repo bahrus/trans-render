@@ -634,6 +634,7 @@ Transform<Model>(form, model, {
 });
 ```
 
+<!--
 This transform "transpiles" to:
 
 ```Typescript
@@ -644,6 +645,8 @@ Transform<Model>(form, model, {
     }
 });
 ```
+
+-->
 
 The transform above also will work with the following HTML5 markup
 
@@ -677,24 +680,33 @@ This may become more apparent with the example below:
 ## Example 4c - aria-* binding [TODO]
 
 ```html
-<div -aria-checked=0 -aria-disabled=1 -o=isVegetarian,isHappy></div>
+<div -aria-checked -aria-disabled -o=isVegetarian,isHappy></div>
 ```
 
 ```Typescript
 Transform<Model>(form, model, { 
-    '- -o': 0
+    '- isVegetarian': {
+        propMap:[{ariaChecked}]
+    },
+    '- isHappy':{
+        propMap: [{ariaDisbled}]
+    }
 });
 ```
 
 ## Example 4d - fine tuning [TODO]
 
 ```html
-<div -aria-label='{"d": [0, ", ", 1]}' -o=greeting,name></div>
+<div -aria-label -o=greeting,name></div>
 ```
 
 ```Typescript
 Transform<Model>(form, model, { 
-    '- -o': 
+    '- greeting,name':{
+        propMap:[{ariaLabel: {
+            d: [0, ', ', 1],
+        }}]
+    } 
 });
 ```
 
