@@ -686,17 +686,23 @@ Transform<Model>(form, model, {
 });
 ```
 
+## Example 4d - fine tuning [TODO]
+
 ```html
-<div -aria-label='[0,1]' -o=greeting,name></div>
+<div -aria-label='{"d": [0, ", ", 1]}' -o=greeting,name></div>
 ```
 
 ```Typescript
 Transform<Model>(form, model, { 
-    '- -o': 0
+    '- -o': 
 });
 ```
 
-## Example 4d - fine tunin [TODO]
+
+
+
+
+
 
 ## Part 5 - Event handling
 
