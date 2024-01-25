@@ -103,10 +103,10 @@ export type PropQueryExpression<TProps> =
     | `${keyof HTMLElementTagNameMap}`
     | `${PropAttrQueryType} ${keyof TProps & string}`
     | `:root`
-    | `- :${string}`
-    | `- ${string}=${keyof TProps & string}`
-    | `- :x=:y`
-    | `- -:x=:y`
+    // | `- :${string}`
+    // | `- ${string}=${keyof TProps & string}`
+    // | `- :x=:y`
+    // | `- -:x=:y`
 ;
 
 export type LHS<TProps> = PropQueryExpression<TProps>;
@@ -161,7 +161,7 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
      */
     e?:  Engagements<TMethods>,
 
-    forEachComboIn?: CrossProduct<TProps, TMethods> | Array<CrossProduct<TProps, TMethods>>
+    //forEachComboIn?: CrossProduct<TProps, TMethods> | Array<CrossProduct<TProps, TMethods>>
 
     /**
      * ifs ands or buts -- conditions on the model

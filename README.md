@@ -646,7 +646,7 @@ Transform<Model>(form, model, {
 
 ### How is this better than example 4a?
 
-It's not necessarily better, just different.  4b involves more "opt-in" from the HTML markup, a little more transparency,  a little more "locality of behavior", perhaps a little more (type) safety.  It allows us to use more of the power of css in a meaningfu way.  But it suffers from a bit more repetition, a bit more fragility if the custom element's property names change.
+It's not necessarily better, just different.  4b involves more "opt-in" from the HTML markup, a little more transparency,  a little more "locality of behavior", perhaps a little more (type) safety.  It allows us to use more of the power of css in a meaningful, semantic way.  But it suffers from a bit more repetition, a bit more fragility if the custom element's property names change.
 
 <!--
 This transform "transpiles" to:
