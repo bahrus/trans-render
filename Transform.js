@@ -1,7 +1,5 @@
 import { MountObserver } from 'mount-observer/MountObserver.js';
-export async function Transform(target, model, xform, options
-//propagator?: EventTarget, 
-) {
+export async function Transform(target, model, xform, options) {
     const xformer = new Transformer(target, model, xform, options);
     await xformer.do();
     return xformer;
@@ -110,34 +108,6 @@ export class Transformer extends EventTarget {
                     {
                         const rhses = arr(rhs);
                         for (const rhsPart of rhses) {
-                            // const {forEachComboIn} = rhsPart;
-                            // if(forEachComboIn !== undefined){
-                            //TODO:  move this to a separate file
-                            // const cps = arr(forEachComboIn);
-                            // for(const cp of cps){
-                            //     const {x, y} = cp;
-                            //     const xs = arr(x);
-                            //     const ys = arr(y);
-                            //     for(const xx of xs){
-                            //         for(const yy of ys){
-                            //             //debugger;
-                            //             const q = `- ${xx}=${yy}`;
-                            //             const qi = await this.calcQI(q, undefined);
-                            //             const {prop, localPropCamelCase} = qi;
-                            //             const uow: QuenitOfWork<TProps, TMethods> = {
-                            //                 o: [prop! as keyof TProps & string],
-                            //                 q,
-                            //                 d: 0,
-                            //                 qi,
-                            //                 s: localPropCamelCase,
-                            //                 ...rhsPart!,
-                            //             };
-                            //             //if(uow.o !== undefined && uow.d === undefined) uow.d = 0;
-                            //             uows.push(uow);
-                            //         }
-                            //     }
-                            // }
-                            //}else{
                             const uow = {
                                 //d: 0,
                                 ...rhsPart,
@@ -146,7 +116,6 @@ export class Transformer extends EventTarget {
                             if (uow.o !== undefined && uow.d === undefined)
                                 uow.d = 0;
                             uows.push(uow);
-                            //}
                         }
                     }
                     break;
@@ -208,25 +177,7 @@ export class Transformer extends EventTarget {
             case '.':
                 return `${ln}.${prop} ${c}`.trimEnd();
             case '-':
-                // if(!prop) throw 'NI';
-                // const split = prop.split('=');
-                // let localPropKebabCase = split[0];
-                // if(localPropKebabCase[0] === '-') localPropKebabCase = localPropKebabCase.substring(1);
-                // if(localPropKebabCase[0] === ':') throw 'NI';
-                // qi.localPropKebabCase = localPropKebabCase;
-                // const {lispToCamel} = await import('./lib/lispToCamel.js');
-                // qi.localPropCamelCase = lispToCamel(qi.localPropKebabCase); 
-                // if(split.length > 0){
-                //     const hostProp = split[1];
-                //     if(hostProp[0] === ':') throw 'NI';
-                //     qi.prop = hostProp;
-                // }else{
-                //     throw 'NI';
-                // }
-                // const qry = `[-${localPropKebabCase}],[data-${localPropKebabCase}]`;
-                // return qry;
                 throw 'NI';
-            // return `${ln}-${prop} ${c}`.trimEnd() + ',' + `${ln}data-${prop} ${c}`.trimEnd();
             case '$':
                 return `${ln}[itemscope][itemprop~="${prop}"] ${c}`.trimEnd();
         }
@@ -284,13 +235,8 @@ export class Transformer extends EventTarget {
     }
     setPrimeValue(matchingElement, val) {
         if (typeof val === 'object' && !Array.isArray(val)) {
-            // const keys = Object.keys(val);
-            // if(keys[0] in matchingElement){
             Object.assign(matchingElement, val);
             return;
-            // }else{
-            //     (<any>matchingElement)[this.getDefaultProp(matchingElement)] = val;
-            // }
         }
         const defaultProp = this.getDefaultProp(matchingElement);
         switch (defaultProp) {
