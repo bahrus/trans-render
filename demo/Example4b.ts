@@ -9,10 +9,10 @@ const model: Props & Actions = {
     greeting: 'hello',
     msg1: 'thi is a test'
 }
-const div = document.querySelector('div') as HTMLDivElement;
+const form = document.querySelector('form') as HTMLFormElement;
 
 
-Transform<Props, Actions, HTMLDivElement>(div, model, {
+Transform<Props, Actions, HTMLFormElement>(form, model, {
     '-o greeting -s ariaLabel': 0,
     '-o msg1 -s ariaRoleDescription': 0
 });

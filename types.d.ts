@@ -209,10 +209,10 @@ export type ValueFromElement<TProps, TMethods, TElement = Element> =
     (
         matchingElement: Element, 
         transformer: ITransformer<TProps, TMethods, TElement>, 
-        mod: ModificationUnitOfWork<TProps, TMethods>
+        mod: ModificationUnitOfWork<TProps, TMethods, TElement>
     ) => any
 
-export interface ModificationUnitOfWork<TProps, TMethods, TElement=Element>{
+export interface ModificationUnitOfWork<TProps, TMethods, TElement = Element>{
     on: string,
     /**
      * Increment
@@ -268,6 +268,8 @@ export interface QueryInfo{
     localPropKebabCase?: string,
     localPropCamelCase?: string,
     cssQuery?: string,
+    o?: string[],
+    s?: string[],
     localName?: string,
     propAttrType?: PropAttrQueryType
     prop?: string,

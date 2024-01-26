@@ -589,10 +589,10 @@ Let's say we want to set property aria-label from host property greeting, and we
 ```html
 <input -o=greeting -s=ariaLabel>
 
-<div -o=msg1 -s=ariaDescription >
+<div -o=msg1 -s=ariaDescription ></div>
 ```
 
-Our goal is for our transform to be able to take this minimal binding, and "run with it", to be able to specify, when applicable, extra frills "from a distance" beyond the most obvious binding (setting ariaLabe to the value of the host/model's greeting property).  But here's the simplest, no frills binding that is required for the markup above to do anything:
+Our goal is for our transform to be able to take this minimal binding, and "run with it", to be able to specify, when applicable, extra frills "from a distance" beyond the most obvious binding (setting ariaLabel to the value of the host/model's greeting property).  But here's the simplest, no frills binding that is required for the markup above to do anything:
 
 ```TypeScript
 Transform<Model>(form, model, { 

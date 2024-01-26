@@ -13,9 +13,12 @@
     </script>
 </head>
 <body>
-    <div>
-        <my-peer-element -some-bool-prop=isHappy></my-peer-element>
-    </div>
+    <form>
+        <input -o=greeting -s=ariaLabel>
+
+        <div -o=msg1 -s=ariaDescription></div>
+    </form>
+
 
     <script type=module>
         import './Example4b.js';

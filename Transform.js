@@ -133,6 +133,7 @@ export class Transformer extends EventTarget {
         }
     }
     async calcQI(pqe, w) {
+        //debugger;
         const qi = {};
         if (pqe === ':root') {
             qi.isRootQry = true;
@@ -143,19 +144,66 @@ export class Transformer extends EventTarget {
             qi.cssQuery = asterSplit[1].trim();
         }
         const [beforeAsterisk] = asterSplit;
-        const tokens = beforeAsterisk.trim().split(' ');
-        let [first, second, third] = tokens;
+        let tokens = beforeAsterisk.trim().split(' ');
+        const [first, ...rest] = tokens;
         const firstChar = first[0];
         if (firstChar >= 'a' && firstChar <= 'z') {
             qi.localName = first;
-            [first, second] = [second, third];
+            tokens = rest;
         }
-        if (first !== undefined) {
-            qi.propAttrType = first;
-            qi.prop = second;
-        }
+        this.processHead(qi, tokens, 'start');
+        // if(first !== undefined){
+        //     qi.propAttrType = first as PropAttrQueryType;
+        //     qi.prop = second;
+        // }
         qi.css = await this.#calcCSS(qi, w);
         return qi;
+    }
+    processHead(qi, tokens, mode) {
+        if (tokens.length < 1)
+            return;
+        switch (mode) {
+            case 'inO': {
+                const [first, ...rest] = tokens;
+                if (first !== '-s') {
+                    qi.o.push(first);
+                    this.processHead(qi, rest, 'inO');
+                }
+                else {
+                    qi.s = [];
+                    this.processHead(qi, rest, 'inS');
+                }
+                return;
+            }
+            case 'inS': {
+                const [first, ...rest] = tokens;
+                qi.s.push(first);
+                this.processHead(qi, rest, 'inS');
+            }
+            case 'start': {
+                if (tokens.length < 2)
+                    return;
+                const [first, ...rest] = tokens;
+                const len = first.length;
+                if (len === 1) {
+                    qi.propAttrType = first;
+                    const [second, ...rest2] = rest;
+                    qi.prop = second;
+                    this.processHead(qi, rest2, 'start');
+                    return;
+                }
+                switch (first) {
+                    case '-o': {
+                        qi.o = [];
+                        this.processHead(qi, rest, 'inO');
+                        break;
+                    }
+                    case '-s': {
+                        throw 'NI';
+                    }
+                }
+            }
+        }
     }
     async #calcCSS(qi, w) {
         const { cssQuery, localName, prop, propAttrType } = qi;
