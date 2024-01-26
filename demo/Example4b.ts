@@ -7,7 +7,7 @@ interface Actions {
 }
 const model: Props & Actions = {
     greeting: 'hello',
-    msg1: 'thi is a test'
+    msg1: 'this is a test'
 }
 const form = document.querySelector('form') as HTMLFormElement;
 

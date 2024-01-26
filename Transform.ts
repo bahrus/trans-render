@@ -149,7 +149,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = Elemen
                 uow.o = o as PropOrComputedProp<TProps, TMethods>[];
             }
             if(s !== undefined){
-                uow.s = s;
+                uow.s = s[0];
             }
             const newProcessor = new MountOrchestrator(this, uow, qi);
             await newProcessor.do();
