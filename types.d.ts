@@ -205,14 +205,14 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
 
 }
 
-export type ValueFromElement<TProps, TMethods> = 
+export type ValueFromElement<TProps, TMethods, TElement = Element> = 
     (
         matchingElement: Element, 
-        transformer: ITransformer<TProps, TMethods>, 
+        transformer: ITransformer<TProps, TMethods, TElement>, 
         mod: ModificationUnitOfWork<TProps, TMethods>
     ) => any
 
-export interface ModificationUnitOfWork<TProps, TMethods>{
+export interface ModificationUnitOfWork<TProps, TMethods, TElement=Element>{
     on: string,
     /**
      * Increment
@@ -243,7 +243,7 @@ export interface ModificationUnitOfWork<TProps, TMethods>{
      * [TODO]  Set hardcoded value
      */
     to?: any,
-    toValFrom?: string | ValueFromElement<TProps, TMethods>;
+    toValFrom?: string | ValueFromElement<TProps, TMethods, TElement>;
     toggle?: keyof TProps & string,
 }
 
