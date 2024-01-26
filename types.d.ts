@@ -200,6 +200,7 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
      */
     w?: WhereConditions
 
+    bindsTo?: keyof TElement & string,
 
 }
 
@@ -250,15 +251,15 @@ export interface QuenitOfWork<TProps, TMethods> extends UnitOfWork<TProps, TMeth
     qi?: QueryInfo,
 }
 
-export type UnitOfWorkRHS<TProps, TMethods> = 
+export type UnitOfWorkRHS<TProps, TMethods, TElements = Element> = 
     | 0 
     | keyof TMethods & string 
     | keyof TProps & string
-    | UnitOfWork<TProps, TMethods>
+    | UnitOfWork<TProps, TMethods, TElements>
     | XForm<any, any> //unclear if this is necessary
 ;
 
-export type RHS<TProps, TMethods> = UnitOfWorkRHS<TProps, TMethods> | Array<UnitOfWork<TProps, TMethods>>;
+export type RHS<TProps, TMethods, TElements = Element> = UnitOfWorkRHS<TProps, TMethods, TElements> | Array<UnitOfWork<TProps, TMethods, TElements>>;
 
 export interface QueryInfo{
     isRootQry?: boolean,
@@ -292,14 +293,14 @@ export interface AddEventListener<TProps, TMethods>{
 }
 
 //export type XForm<TProps, TMethods> = Partial<{[key: string]: RHS<TProps, TMethods>}>
-export type XForm<TProps, TMethods> = Partial<{
-    [key in LHS<TProps>]: RHS<TProps, TMethods>;
+export type XForm<TProps, TMethods, TElements = Element> = Partial<{
+    [key in LHS<TProps>]: RHS<TProps, TMethods, TElements>;
 }>;
 
-export interface ITransformer<TProps, TMethods>{
+export interface ITransformer<TProps, TMethods, TElements = Element>{
     target: TransformerTarget,
     model: TProps & TMethods,
-    xform: XForm<TProps, TMethods>,
+    xform: XForm<TProps, TMethods, TElements>,
     options: TransformOptions,
     //propagator?: EventTarget,
 }

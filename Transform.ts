@@ -10,10 +10,10 @@ import {
 import { IMountObserver, MountContext, PipelineStage } from 'mount-observer/types';
 export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './types';
 
-export async function Transform<TProps extends {}, TMethods = TProps>(
+export async function Transform<TProps extends {}, TMethods = TProps, TElement = Element>(
     target: TransformerTarget,
     model: TProps & TMethods,
-    xform: XForm<TProps, TMethods>,
+    xform: XForm<TProps, TMethods, TElement>,
     options?: TransformOptions
 ){
     const xformer =  new Transformer<TProps, TMethods>(target, model, xform, options!);

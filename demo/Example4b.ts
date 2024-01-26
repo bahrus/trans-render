@@ -9,6 +9,8 @@ const model: Props & Actions = {
 }
 const div = document.querySelector('div')!;
 
-Transform<Props, Actions>(div, model, {
-    '- -some-bool-prop=isHappy': 0
+Transform<Props, Actions, Element>(div, model, {
+    '- isHappy': {
+        bindsTo: 'ariaChecked'
+    }
 });

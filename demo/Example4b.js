@@ -4,5 +4,7 @@ const model = {
 };
 const div = document.querySelector('div');
 Transform(div, model, {
-    '- -some-bool-prop=isHappy': 0
+    '- isHappy': {
+        bindsTo: 'ariaChecked'
+    }
 });

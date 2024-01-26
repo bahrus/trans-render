@@ -580,47 +580,38 @@ Note the (discouraged) extra property: "sa" which means "set attribute" rather t
 
 "ss" is used for setting a style property.
 
-## Accommodating minimalist custom inline binding with markers and parameterized transforms [TODO]
+## Accommodating minimalist custom inline binding with observer and setter markers [TODO]
 
-Warning: the rest of part 4 is probably better to skip at first, until feeling comfortable with other aspects, as it is a bit subtle.
+Let's say we want to set property aria-label from host property greeting, and we want to adopt a bit of the "locality of behavior" philosophy, and introduce a minimalist vocabulary of binding inline. We can do this via:
 
-Let's say we define a custom element with name "my-custom-element", and that custom element supports a property, "myLocalProp", and we want to pass to that property the host/model property "greeting".  
-
-If we want to adopt "locality of behavior" principles, and introduce a minimalist vocabulary of binding inline, in the spirit of KISS, the most natural way seems to be something like:
+## Example 4b
 
 ```html
-<my-custom-element -my-local-prop=greeting></my-custom-element>
+<input -o=greeting -s=ariaLabel>
+
+<div -o=msg1 -s=ariaDescription >
 ```
 
-However, css doesn't have [enough power to make this work](https://stackoverflow.com/questions/35927864/xpath-for-all-elements-with-any-attribute-with-specific-value) to my satisfaction.
+Our goal is for our transform to be able to take this minimal binding, and "run with it", to be able to specify, when applicable, extra frills "from a distance" beyond the most obvious binding (setting ariaLabe to the value of the host/model's greeting property).  But here's the simplest, no frills binding that is required for the markup above to do anything:
 
-So instead, we will adopt syntax that should look a bit familiar at this point if we squint our eyes  bit:
-
-```html
-<my-custom-element -my-local-prop -o=greeting;></my-custom-element>
+```TypeScript
+Transform<Model>(form, model, { 
+    '-o greeting -s ariaLabel': 0,
+    '-o msg1 -s ariaDescription': 0,
+});
 ```
 
-In what follows, the goal is for our transform to be able to take this minimal binding, and "run with it", to be able to specify, when applicable, extra frills "from a distance" beyond the most obvious binding (setting myLocalProp to the value of the host/model's greeting property).
-
-One of the limiting principles shaping how we approach this is we want to avoid overloading the HTML markup with heavy syntax in the attributes that needs to be parsed every time we clone the template.
-
-The extra dash in front of my-local-prop and "o" is there in order to avoid clashing with attributes we are likely to see that my-custom-element recognizes (especially the former).
-
-We will refer to these "special attributes" that start with a dash (or data-) as "marker" attributes.
-
-So we want a way to train our transform to be able to support and supplement this natural-ish, minimalist syntax, with as little boilerplate as possible.  
-
-Another goal: We want this solution to be compatible with aria attributes, as well as data- attributes.  
 
 
-## Example 4b [TODO]
+
+## Example 4c [TODO]
 
 ```html
-<my-custom-element -my-local-prop -o=greeting;></my-custom-element>
+<my-custom-element -o=greeting;></my-custom-element>
 
 ...
 
-<some-other-custom-element -my-other-local-prop -o=greeting;></some-other-custom-prop>
+<some-other-custom-element -o=greeting;></some-other-custom-prop>
 ```
 
 ```Typescript
