@@ -3,8 +3,8 @@ import { IMountObserver, MountContext } from '../../mount-observer/types.js';
 import {Transformer, MountOrchestrator, arr} from '../Transform.js';
 import {QuenitOfWork, AddEventListener} from '../types.js';
 
-export async function onMount<TProps extends {}, TMethods = TProps>(
-    transformer: Transformer<TProps, TMethods>,
+export async function onMount<TProps extends {}, TMethods = TProps, TElement = Element>(
+    transformer: Transformer<TProps, TMethods, TElement>,
     mo: MountOrchestrator<TProps, TMethods>, matchingElement: Element, uows: Array<QuenitOfWork<TProps, TMethods>>,
     skipInit: boolean, ctx: MountContext,matchingElements: WeakRef<Element>[],  observer?: IMountObserver, mountObserver?: MountObserver
     ){
@@ -33,7 +33,7 @@ export async function onMount<TProps extends {}, TMethods = TProps>(
             const {AddEventListener} = await import('./AddEventListener.js')
             for(const ap of transpiledActions!){
                 const {on, do: action, options} = ap;
-                new AddEventListener<TProps, TMethods>(
+                new AddEventListener<TProps, TMethods, TElement>(
                     mountObserver, 
                     transformer,
                     uow,

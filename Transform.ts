@@ -16,12 +16,12 @@ export async function Transform<TProps extends {}, TMethods = TProps, TElement =
     xform: XForm<TProps, TMethods, TElement>,
     options?: TransformOptions
 ){
-    const xformer =  new Transformer<TProps, TMethods>(target, model, xform, options!);
+    const xformer =  new Transformer<TProps, TMethods, TElement>(target, model, xform, options!);
     await xformer.do();
     return xformer;
 }
 
-export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarget implements ITransformer<TProps, TMethods>{
+export class Transformer<TProps extends {}, TMethods = TProps, TElement = Element> extends EventTarget implements ITransformer<TProps, TMethods, TElement>{
     #mountOrchestrators: Array<MountOrchestrator<TProps, TMethods>> = [];
     #model: TProps & TMethods;
     get model(){
@@ -55,7 +55,7 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
     constructor(
         public target: TransformerTarget,
         model: TProps & TMethods,
-        public xform: XForm<TProps, TMethods>,
+        public xform: XForm<TProps, TMethods, TElement>,
         public options: TransformOptions, 
     ){
         super();
@@ -196,8 +196,8 @@ export class Transformer<TProps extends {}, TMethods = TProps> extends EventTarg
                 return `${ln}[name="${prop}"] ${c}`.trimEnd();
             case '.':
                 return `${ln}.${prop} ${c}`.trimEnd();
-            case '-':
-                throw 'NI';
+            // case '-':
+            //     throw 'NI';
             case '$':
                 return `${ln}[itemscope][itemprop~="${prop}"] ${c}`.trimEnd();
 
@@ -291,12 +291,12 @@ export function arr<T = any>(inp: T | T[] | undefined) : T[] {
         : Array.isArray(inp) ? inp : [inp];
 }
 
-export class MountOrchestrator<TProps extends {}, TMethods = TProps> extends EventTarget implements IMountOrchestrator<TProps, TMethods> {
+export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = Element> extends EventTarget implements IMountOrchestrator<TProps, TMethods> {
     #mountObserver: MountObserver | undefined;
     #matchingElements: WeakRef<Element>[] = [];
     #unitsOfWork: Array<QuenitOfWork<TProps, TMethods>>
     constructor(
-        public transformer: Transformer<TProps, TMethods>, 
+        public transformer: Transformer<TProps, TMethods, TElement>, 
         uows: QuenitOfWork<TProps, TMethods>, 
         public queryInfo: QueryInfo){
         super();

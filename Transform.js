@@ -176,8 +176,8 @@ export class Transformer extends EventTarget {
                 return `${ln}[name="${prop}"] ${c}`.trimEnd();
             case '.':
                 return `${ln}.${prop} ${c}`.trimEnd();
-            case '-':
-                throw 'NI';
+            // case '-':
+            //     throw 'NI';
             case '$':
                 return `${ln}[itemscope][itemprop~="${prop}"] ${c}`.trimEnd();
         }

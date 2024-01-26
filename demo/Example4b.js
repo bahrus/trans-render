@@ -1,10 +1,10 @@
 import { Transform } from '../Transform.js';
 const model = {
-    isHappy: true,
+    greeting: 'hello',
+    msg1: 'thi is a test'
 };
 const div = document.querySelector('div');
 Transform(div, model, {
-    '- isHappy': {
-        bindsTo: 'ariaChecked'
-    }
+    '-o greeting -s ariaLabel': 0,
+    '-o msg1 -s ariaRoleDescription': 0
 });

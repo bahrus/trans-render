@@ -1,16 +1,19 @@
 import {Transform} from '../Transform.js';
 interface Props {
-    isHappy: boolean,
+    greeting: string,
+    msg1: string,
 }
 interface Actions {
 }
 const model: Props & Actions = {
-    isHappy: true,
+    greeting: 'hello',
+    msg1: 'thi is a test'
 }
-const div = document.querySelector('div')!;
+const div = document.querySelector('div') as HTMLDivElement;
 
-Transform<Props, Actions, Element>(div, model, {
-    '- isHappy': {
-        bindsTo: 'ariaChecked'
-    }
+
+Transform<Props, Actions, HTMLDivElement>(div, model, {
+    '-o greeting -s ariaLabel': 0,
+    '-o msg1 -s ariaRoleDescription': 0
 });
+

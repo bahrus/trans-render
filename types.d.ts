@@ -8,7 +8,7 @@ export type PropAttrQueryType =
     | '#' //id
     | '%' //part
     | '.' //class
-    | '-' //marker
+    //| '-' //marker
     | '$' //microdata itemprop + itemscope attributes (nested)
 
 //#region derived expressions
@@ -96,11 +96,12 @@ export interface IMountOrchestrator<TProps, TMethods = TProps>{
     //TODO add all the methods
 }
 
-export type PropQueryExpression<TProps> =
+export type PropQueryExpression<TProps, TElement = Element> =
     | `* ${CSSQuery}` 
     | `${keyof HTMLElementTagNameMap}`
     | `${PropAttrQueryType} ${keyof TProps & string}`
     | `:root`
+    | `-o ${keyof TProps & string} -s ${keyof TElement & string}`
     // | `- :${string}`
     // | `- ${string}=${keyof TProps & string}`
     // | `- :x=:y`
@@ -251,12 +252,12 @@ export interface QuenitOfWork<TProps, TMethods> extends UnitOfWork<TProps, TMeth
     qi?: QueryInfo,
 }
 
-export type UnitOfWorkRHS<TProps, TMethods, TElements = Element> = 
+export type UnitOfWorkRHS<TProps, TMethods, TElement = Element> = 
     | 0 
     | keyof TMethods & string 
     | keyof TProps & string
-    | UnitOfWork<TProps, TMethods, TElements>
-    | XForm<any, any> //unclear if this is necessary
+    | UnitOfWork<TProps, TMethods, TElement>
+    | XForm<any, any, any> //unclear if this is necessary
 ;
 
 export type RHS<TProps, TMethods, TElements = Element> = UnitOfWorkRHS<TProps, TMethods, TElements> | Array<UnitOfWork<TProps, TMethods, TElements>>;
@@ -293,14 +294,14 @@ export interface AddEventListener<TProps, TMethods>{
 }
 
 //export type XForm<TProps, TMethods> = Partial<{[key: string]: RHS<TProps, TMethods>}>
-export type XForm<TProps, TMethods, TElements = Element> = Partial<{
-    [key in LHS<TProps>]: RHS<TProps, TMethods, TElements>;
+export type XForm<TProps, TMethods, TElement = Element> = Partial<{
+    [key in LHS<TProps>]: RHS<TProps, TMethods, TElement>;
 }>;
 
-export interface ITransformer<TProps, TMethods, TElements = Element>{
+export interface ITransformer<TProps, TMethods, TElement = Element>{
     target: TransformerTarget,
     model: TProps & TMethods,
-    xform: XForm<TProps, TMethods, TElements>,
+    xform: XForm<TProps, TMethods, TElement>,
     options: TransformOptions,
     //propagator?: EventTarget,
 }
