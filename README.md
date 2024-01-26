@@ -604,54 +604,20 @@ Transform<Model>(form, model, {
 
 
 
-## Example 4c [TODO]
+## Example 4c Interpolation with observer and setter markers [TODO]
 
 ```html
-<my-custom-element -o=greeting;></my-custom-element>
-
-...
-
-<some-other-custom-element -o=greeting;></some-other-custom-prop>
+<div -o="msg1 msg2" -s=textContent></div>
 ```
 
 ```Typescript
 Transform<Model>(form, model, { 
-    '- greeting': {
-        bindsTo:[
-            {myLocalProp: 0},
-            {myOtherLocalProp: 0}
-        ]
+    '-o msg1 msg2 -s textContent': {
+        d: ['msg1: ', 0, 'msg2: ', 1]
     }
 });
 ```
 
-or more simply
-
-```Typescript
-Transform<Model>(form, model, { 
-    '- greeting': {
-        bindsTo: ['myLocalProp', 'myOtherLocalProp']
-    }
-});
-```
-
-### How is this better than example 4a?
-
-It's not necessarily better, just different.  4b involves more "opt-in" from the HTML markup, a little more transparency,  a little more "locality of behavior", perhaps a little more (type) safety.  It allows us to use more of the power of css in a meaningful, semantic way.  But it suffers from a bit more repetition, a bit more fragility if the custom element's property names change.
-
-<!--
-This transform "transpiles" to:
-
-```Typescript
-Transform<Model>(form, model, { 
-    '* [-o=greeting,data-o=greeting]': {
-        o: 'greeting',
-        w: '- *=0'
-    }
-});
-```
-
--->
 
 The transform above will also work with the following HTML5 markup
 
@@ -660,68 +626,18 @@ The transform above will also work with the following HTML5 markup
 ```
 
 
-<!--
-
-## Example 4c - Medium amount of scope - Parameterized props
-
-The syntax above requires a 1-1 mapping between each pair of local prop names and host names.  This can result in a fairly hefty transform for large swaths of dynamic HTML.  We can reduce the size (and maintenance headaches) of the transform by utilizing "parameterized bindings".
-
-```Typescript
-Transform<Model>(form, model, { 
-    '- -:x=:y': {
-        forEachComboIn: {x:'my-local-prop', y: 'greeting' }
-    } 
-});
-```
-
-The value of forEachComboIn can be a single object (as shown above), or an array.  x can be a single string (as shown above) or an array.  Likewise with y.  All matching combinations are added.  
-
-If one looks at this simple example, the benefits we obtain from the "transpiling" may not seem significant enough to warrant the learning curve (not to mention the implementation).  The example above is the simplest example, and only obfuscates what is happening compared to example 4b, but one can imagine complex HTML markups where this syntax would provide a significant benefit.  For example, say we have multiple custom elements, say in a family of custom elements, all of which share a property called myLocalProp.  We can accommodate binding to all of them with this single transform!
-
-This may become more apparent with the example below:
-
--->
-
-## Example 4c - aria-* binding [TODO]
+## Example 4d plucking single pairs [TODO]
 
 ```html
-<div -aria-checked -aria-disabled -o=isVegetarian;isHappy;></div>
+<div -o="isVegetarian isHappy" -s="ariaChecked ariaDisabled"></div>
 ```
 
 ```Typescript
 Transform<Model>(form, model, { 
-    '- isVegetarian': {
-        bindsTo:'ariaChecked'
-    },
-    '- isHappy':{
-        bindsTo: 'ariaDisabled'
-    }
+    '-o isVegetarian -s ariaChecked': 0,
+    '-o isHappy -s ariaDisabed': 0
 });
 ```
-
-It's suggested that the HTML markup be arranged so the order of the bindings match the order of the attributes, but that style is only "suggestive" and not really binding in any way.
-
-## Example 4d - fine tuning [TODO]
-
-```html
-<div -aria-label -o=greeting;name;></div>
-```
-
-```Typescript
-Transform<Model>(form, model, { 
-    '- greeting;name;':{
-        bindsTo:[{ariaLabel: {
-            d: [0, ', ', 1],
-        }}]
-    } 
-});
-```
-
-
-
-
-
-
 
 ## Part 5 - Event handling
 
