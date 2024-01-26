@@ -144,6 +144,13 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = Elemen
             let {q, qi, w} = uow;
             if(qi === undefined) qi = await this.calcQI(q, w);
             qi.w = w;
+            const {o, s} = qi;
+            if(o!== undefined){
+                uow.o = o as PropOrComputedProp<TProps, TMethods>[];
+            }
+            if(s !== undefined){
+                uow.s = s;
+            }
             const newProcessor = new MountOrchestrator(this, uow, qi);
             await newProcessor.do();
             this.#mountOrchestrators.push(newProcessor);
@@ -151,7 +158,6 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = Elemen
         }
     }
     async calcQI(pqe: string, w: WhereConditions | undefined){
-        //debugger;
         const qi: QueryInfo = {};
         if(pqe === ':root'){
             qi.isRootQry = true;
@@ -391,7 +397,16 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
     }
     async subscribe(){
         for(const uow of this.#unitsOfWork){
-            const {o} = uow;
+            
+            let {o} = uow;
+            // if(o === undefined && qi !== undefined){
+            //     const {o: o2} = qi;
+            //     if(o2 !== undefined){
+            //         uow.o = o2 as PropOrComputedProp<TProps, TMethods>[];
+            //         o = o2 as PropOrComputedProp<TProps, TMethods>[];
+            //     }
+                
+            // }
             const p = arr(o) as string[];
 
             const {target, options, model} = this.transformer;
