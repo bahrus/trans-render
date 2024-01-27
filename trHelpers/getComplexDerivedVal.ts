@@ -3,7 +3,7 @@ import {Transformer} from '../Transform.js';
 import { DerivationCriteria } from '../types.js';
 import { } from '../lib/convert.js';
 
-export async function getComplexDerivedVal<TProps extends {}, TMethods, TElement = Element>(
+export async function getComplexDerivedVal<TProps extends {}, TMethods, TElement = {}>(
 transformer: Transformer<TProps, TMethods, TElement>, uow: UnitOfWork<TProps, TMethods, TElement>, 
 dc: DerivationCriteria<TProps, TMethods>){
     const {from, path, as} = dc;

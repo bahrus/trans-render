@@ -1,6 +1,6 @@
 import {MountObserver} from 'mount-observer/MountObserver.js';
 import {ModificationUnitOfWork, ITransformer} from '../types';
-export class Mod<TProps, TMethods, TElement = Element>{
+export class Mod<TProps, TMethods, TElement = {}>{
     #abortController = new AbortController();
     constructor(
         mountObserver: MountObserver | undefined,
