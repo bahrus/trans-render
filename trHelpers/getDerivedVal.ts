@@ -1,6 +1,6 @@
 import {MountOrchestrator, Transformer, arr} from '../Transform.js';
 import { Derivative, UnitOfWork } from '../types.js';
-export async function getDerivedVal<TProps extends {}, TMethods, TElement = {}>(
+export async function getDerivedVal<TProps extends {}, TMethods, TElement = Element>(
     transformer: Transformer<TProps, TMethods, TElement>, 
     uow: UnitOfWork<TProps, TMethods, TElement>, 
     d: Derivative<TProps, TMethods, TElement>,

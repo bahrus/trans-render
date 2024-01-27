@@ -95,7 +95,7 @@ export const TemplMgmt = (superclass: TemplMgmtBaseMixin) => class extends super
         
         if(xform){
             if(xformImpl !== undefined){
-                (await xformImpl())(fragment, this, xform as any, (<any>this).xtalState);
+                (<any>await xformImpl())(fragment, this, xform as any, (<any>this).xtalState);
             }else{
                 const {Transform} = await import('../../Transform.js');
                 await Transform(fragment, this, xform, {

@@ -10,7 +10,7 @@ import {
 import { IMountObserver, MountContext, PipelineStage } from 'mount-observer/types';
 export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './types';
 
-export async function Transform<TProps extends {}, TMethods = TProps, TElement = {}>(
+export async function Transform<TProps extends {}, TMethods = TProps, TElement = Element>(
     target: TransformerTarget,
     model: TProps & TMethods,
     xform: XForm<TProps, TMethods, TElement>,
@@ -21,7 +21,7 @@ export async function Transform<TProps extends {}, TMethods = TProps, TElement =
     return xformer;
 }
 
-export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> extends EventTarget implements ITransformer<TProps, TMethods, TElement>{
+export class Transformer<TProps extends {}, TMethods = TProps, TElement = Element> extends EventTarget implements ITransformer<TProps, TMethods, TElement>{
     #mountOrchestrators: Array<MountOrchestrator<TProps, TMethods, TElement>> = [];
     #model: TProps & TMethods;
     get model(){
@@ -358,7 +358,7 @@ export function arr<T = any>(inp: T | T[] | undefined) : T[] {
         : Array.isArray(inp) ? inp : [inp];
 }
 
-export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = {}> extends EventTarget implements IMountOrchestrator<TProps, TMethods> {
+export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = Element> extends EventTarget implements IMountOrchestrator<TProps, TMethods> {
     #mountObserver: MountObserver | undefined;
     #matchingElements: WeakRef<Element>[] = [];
     #unitsOfWork: Array<QuenitOfWork<TProps, TMethods, TElement>>
