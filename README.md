@@ -591,7 +591,7 @@ Note the (discouraged) extra property: "sa" which means "set attribute" rather t
 
 ## Accommodating minimalist custom inline binding with observer and setter markers [WIP]
 
-At the top of this document, we suggested that with highly semantic HTML, there is enough information contained in the semantic HTML that the need for additional inline binding instructions becomes superfluous when employing trans-rendering.  But sometimes that ideal may fall short, even if it will become less and less likely going forward.
+At the top of this document, we suggested that with highly semantic HTML, there is often enough information contained in the semantic HTML that the need for additional inline binding instructions becomes superfluous when employing trans-rendering.  But sometimes that ideal may fall short, even if it will become less and less likely going forward.
 
 In what follows, we suggest/provide for some semantic hints that we think can fill in such gaps most effectively, so that we can efficiently target elements we want to affect, without accidentally affecting others.
 
@@ -615,7 +615,7 @@ Transform<Model>(form, model, {
 ```
 
 
-## Example 4c Interpolation with observer and setter markers [TODO]
+## Example 4c Interpolation with observer and setter markers
 
 ```html
 <div -o="msg1 msg2" -s=textContent></div>

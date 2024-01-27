@@ -96,16 +96,20 @@ export interface IMountOrchestrator<TProps, TMethods = TProps>{
     //TODO add all the methods
 }
 
+// export type OneOrMore<TProps> = 
+//     | keyof TProps & string
+//     | `${keyof TProps & string} ${keyof TProps & string}`
+
+
 export type PropQueryExpression<TProps, TElement = Element> =
     | `* ${CSSQuery}` 
     | `${keyof HTMLElementTagNameMap}`
     | `${PropAttrQueryType} ${keyof TProps & string}`
     | `:root`
-    | `-o ${keyof TProps & string} -s ${keyof TElement & string}`
-    // | `- :${string}`
-    // | `- ${string}=${keyof TProps & string}`
-    // | `- :x=:y`
-    // | `- -:x=:y`
+    //| `-o ${keyof TProps & string} -s ${keyof TElement & string}`
+    | `-o ${string} -s ${keyof TElement & string}`
+    //| `-o ${keyof TProps & string} ${keyof TProps & string} -s ${string}` //-- causes infinite loop
+    
 ;
 
 export type LHS<TProps> = PropQueryExpression<TProps>;

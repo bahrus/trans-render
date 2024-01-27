@@ -1,10 +1,11 @@
 import { Transform } from '../Transform.js';
 const model = {
-    isHappy: true,
+    msg1: 'this is a test',
+    msg2: 'this is another test'
 };
-const div = document.querySelector('div');
-Transform(div, model, {
-    '- -:x=:y': {
-        forEachComboIn: { x: 'some-bool-prop', y: 'isHappy' }
+const form = document.querySelector('form');
+Transform(form, model, {
+    '-o msg1 msg2 -s textContent': {
+        d: ['msg1: ', 0, 'msg2: ', 1]
     }
 });
