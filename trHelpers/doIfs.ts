@@ -4,9 +4,9 @@ export async function doIfs<TProps extends {}, TMethods = TProps, TElement = Ele
     transformer: Transformer<TProps, TMethods, TElement>, 
     matchingElement: Element, 
     uow: UnitOfWork<TProps, TMethods>, 
-    i: IfInstructions<TProps, TMethods>
+    i: IfInstructions<TProps, TMethods, TElement>
 ) : Promise<boolean>{
-    let transpiledIf: ConditionGate<TProps, TMethods> | undefined;
+    let transpiledIf: ConditionGate<TProps, TMethods, TElement> | undefined;
     switch(typeof i){
         case 'string':
             transpiledIf = {

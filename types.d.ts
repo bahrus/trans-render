@@ -128,7 +128,7 @@ export type WhereConditions =
         containerQuery: string,
     }
 
-export type IfInstructions<TProps, TMethods> = string | boolean | number | [number] | ConditionGate<TProps, TMethods> ;
+export type IfInstructions<TProps, TMethods, TElement = Element> = string | boolean | number | [number] | ConditionGate<TProps, TMethods, TElement> ;
 
 export interface ObservePropParams {
     derivePropFrom?: string,
