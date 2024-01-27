@@ -288,7 +288,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = Elemen
         await Engage(this, matchingElement, type, uow, mountContext);
     }
 
-    async getDerivedVal(uow: UnitOfWork<TProps, TMethods>, d: Derivative<TProps, TMethods>, matchingElement: Element){
+    async getDerivedVal(uow: UnitOfWork<TProps, TMethods>, d: Derivative<TProps, TMethods, TElement>, matchingElement: Element){
         const {getDerivedVal} = await import('./trHelpers/getDerivedVal.js');
         return await getDerivedVal(this, uow, d, matchingElement);
     }
