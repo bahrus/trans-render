@@ -271,7 +271,6 @@ export type RHS<TProps, TMethods, TElements = Element> = UnitOfWorkRHS<TProps, T
 export interface QueryInfo{
     isRootQry?: boolean,
     isParametrizedQry?: boolean,
-    localPropKebabCase?: string,
     localPropCamelCase?: string,
     cssQuery?: string,
     o?: string[],
