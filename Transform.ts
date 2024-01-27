@@ -211,8 +211,40 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
     }
 
     async #calcCSS(qi: QueryInfo, w: WhereConditions | undefined): Promise<string>{
-        throw 'NI';
-        // const {cssQuery, localName, prop, propAttrType, o, s} = qi;
+        const {cssQuery} = qi;
+        if(cssQuery !== undefined) return cssQuery;
+        const {localName} = qi;
+        if(localName !== undefined) return localName;
+        const {hostPropToAttrMap, localPropCamelCase} = qi;;
+        if(hostPropToAttrMap === undefined) throw 'NI';
+        qi.o = hostPropToAttrMap.map(x => x.name);
+        if(localPropCamelCase !== undefined){
+            qi.s = [localPropCamelCase];
+        }
+        let returnStr = hostPropToAttrMap.map(x => {
+            const {name, type} = x;
+            switch(name){
+                case '#':
+                    return `#${name}`;
+                case '|':
+                    return `[itemprop~="${name}"]`;
+                case '%':
+                    return `[part~="${name}"]`;
+                case '@':
+                    return `[name="${name}"]`;
+                case '.':
+                    return `.${name}`;
+                case '$':
+                    return `[itemscope][itemprop~="${name}"]`;
+                case '-o':
+                    return `[-o~="${name}"]`;
+            }
+        }).join('');
+        if(localPropCamelCase !== undefined){
+            returnStr += `[-s~="${name}"]`
+        }
+        return returnStr + (w || '' );
+        //const {cssQuery, localName, prop, propAttrType, o, s} = qi;
         // const ln = (localName || '') + (w || '' );
         // const c = cssQuery || '';
         // let returnStr: string;
