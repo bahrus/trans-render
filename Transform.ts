@@ -180,65 +180,33 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
         if(asterSplit.length === 2){
             qi.cssQuery = asterSplit[1].trim();
         }
-        const [beforeAsterisk] = asterSplit;
-        let tokens = beforeAsterisk.trim().split(' ');
-        const [first, ...rest] = tokens;
-        const firstChar = first[0];
-        if(firstChar >= 'a' && firstChar <= 'z'){
-            qi.localName = first;
-            tokens = rest
-        }
-        this.processHead(qi, tokens, 'start');
-        // if(first !== undefined){
-        //     qi.propAttrType = first as PropAttrQueryType;
-        //     qi.prop = second;
-        // }
+        const tokens = pqe.split(' ');
+        this.processHead(qi, tokens);
         qi.css = await this.#calcCSS(qi, w);
         return qi;
     }
 
-    processHead(qi: QueryInfo, tokens: string[], mode: 'inO' | 'start' | 'inS'){
-        if(tokens.length < 1) return;
-        switch(mode){
-            case 'inO':{
-                const [first, ...rest] = tokens;
-                if(first !== '-s'){
-                    qi.o!.push(first);
-                    this.processHead(qi, rest, 'inO');
-                }else{
-                    qi.s = [];
-                    this.processHead(qi, rest, 'inS');
-                }
-                return;
+    processHead(qi: QueryInfo, tokens: string[]){
+        if(tokens.length === 1) throw 'NI';
+        if(tokens.length === 0) return;
+        //TODO make non recursive
+        const [first, second, ...rest] = tokens;
+        switch(first){
+            case '-s': {
+                qi.localPropCamelCase = second;
             }
-            case 'inS':{
-                const [first, ...rest] = tokens;
-                qi.s!.push(first);
-                this.processHead(qi, rest, 'inS');
-            }
-            case 'start':{
-                if(tokens.length < 2) return;
-                const [first, ...rest] = tokens;
-                const len = first.length;
-                if(len === 1){
-                    qi.propAttrType = first as PropAttrQueryType;
-                    const [second, ...rest2] = rest;
-                    qi.prop = second;
-                    this.processHead(qi, rest2, 'start');
-                    return;
+            default:{
+                if(qi.hostPropToAttrMap === undefined){
+                    qi.hostPropToAttrMap = [];
                 }
-                switch(first){
-                    case '-o': {
-                        qi.o = [];
-                        this.processHead(qi, rest, 'inO');
-                        break;
-                    }
-                    case '-s':{
-                        throw 'NI';
-                    }
-                }
+                qi.hostPropToAttrMap.push({
+                    type: first as PropAttrQueryType,
+                    name: second,
+                })
             }
         }
+        this.processHead(qi, rest);
+
         
     }
 
