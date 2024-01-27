@@ -163,12 +163,18 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
                 cssQuery: pqe.substring(2),
             } as QueryInfo
         }
-        //TODO:  dynamic import of the rest of this method, including other methods it calls.
+        
         if(pqe === ':root'){
             return {
                 isRootQry: true
             } as QueryInfo
         }
+        if(!pqe.includes(' ')){
+            return {
+                localName: pqe
+            } as QueryInfo;
+        }
+        //TODO:  dynamic import of the rest of this method, including other methods it calls.
         const qi: QueryInfo = {};
         const asterSplit = pqe.split('*');
         if(asterSplit.length === 2){

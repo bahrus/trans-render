@@ -145,12 +145,17 @@ export class Transformer extends EventTarget {
                 cssQuery: pqe.substring(2),
             };
         }
-        //TODO:  dynamic import of the rest of this method, including other methods it calls.
         if (pqe === ':root') {
             return {
                 isRootQry: true
             };
         }
+        if (!pqe.includes(' ')) {
+            return {
+                localName: pqe
+            };
+        }
+        //TODO:  dynamic import of the rest of this method, including other methods it calls.
         const qi = {};
         const asterSplit = pqe.split('*');
         if (asterSplit.length === 2) {
