@@ -268,6 +268,7 @@ export type UnitOfWorkRHS<TProps, TMethods, TElement = Element> =
 
 export type RHS<TProps, TMethods, TElements = Element> = UnitOfWorkRHS<TProps, TMethods, TElements> | Array<UnitOfWork<TProps, TMethods, TElements>>;
 
+
 export interface QueryInfo{
     isRootQry?: boolean,
     isParametrizedQry?: boolean,
@@ -280,6 +281,7 @@ export interface QueryInfo{
     prop?: string,
     w?: WhereConditions,
     css?: string,
+    props?: {[key in PropAttrQueryType]: string[]}
 }
 
 export type TransformerTarget = Element | DocumentFragment | Element[] | ShadowRoot | Document;
