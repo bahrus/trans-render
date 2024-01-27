@@ -13,7 +13,7 @@ const form = document.querySelector('form') as HTMLElement;
 
 
 Transform<Props, Actions, ARIAMixin>(form, model, {
-    '-o msg1 -s ariaLabel': 0,
+    '-o greeting -s ariaLabel': 0,
     '-o msg1 -s ariaRoleDescription': 0
 });
 

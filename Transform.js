@@ -208,7 +208,7 @@ export class Transformer extends EventTarget {
         }
         let returnStr = hostPropToAttrMap.map(x => {
             const { name, type } = x;
-            switch (name) {
+            switch (type) {
                 case '#':
                     return `#${name}`;
                 case '|':

@@ -5,6 +5,6 @@ const model = {
 };
 const form = document.querySelector('form');
 Transform(form, model, {
-    '-o msg1 -s ariaLabel': 0,
+    '-o greeting -s ariaLabel': 0,
     '-o msg1 -s ariaRoleDescription': 0
 });

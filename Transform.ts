@@ -225,7 +225,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
         }
         let returnStr = hostPropToAttrMap.map(x => {
             const {name, type} = x;
-            switch(name){
+            switch(type){
                 case '#':
                     return `#${name}`;
                 case '|':
