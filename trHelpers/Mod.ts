@@ -6,7 +6,7 @@ export class Mod<TProps, TMethods, TElement = Element>{
         mountObserver: MountObserver | undefined,
         transformer: ITransformer<TProps, TMethods, TElement>,
         matchingElement: Element,
-        m: ModificationUnitOfWork<TProps, TMethods>
+        m: ModificationUnitOfWork<TProps, TMethods, TElement>
     ){
         const {on} = m;
         const once = on === 'load';

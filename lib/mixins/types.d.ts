@@ -10,7 +10,7 @@ export interface TemplMgmtProps<MCProps extends Partial<HTMLElement> = HTMLEleme
     /**
      * transform within ShadowRoot if applicable
      */
-    xform: XForm<any, any>,
+    xform: XForm<any, any, any>,
     /**
      * transform applied to light children, if applicable
      * Use ":root" to match on the root element

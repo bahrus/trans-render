@@ -176,7 +176,7 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**
      * modify the host in a (mostly) declarative  way
      */
-    m?: ModificationUnitOfWork<TProps, TMethods> | Array<ModificationUnitOfWork<TProps, TMethods>>,
+    m?: ModificationUnitOfWork<TProps, TMethods, TElement> | Array<ModificationUnitOfWork<TProps, TMethods, TElement>>,
 
     /**
      * observed props
@@ -308,10 +308,10 @@ export interface ITransformer<TProps, TMethods, TElement = Element>{
     //propagator?: EventTarget,
 }
 
-export type ToTransformer<TProps, TMethods> = (
+export type ToTransformer<TProps, TMethods, TElement = Element> = (
     target: TransformerTarget, 
     model: TProps & TMethods,
-    xform: XForm<TProps, TMethods>,
+    xform: XForm<TProps, TMethods, TElement>,
     propagator?: EventTarget
 ) => ITransformer<TProps, TMethods>;
 
@@ -320,8 +320,8 @@ export interface MarkedUpEventTarget extends EventTarget{
     ___nestedProps?: Map<string, any>;
 }
 
-export interface TransRenderEndUserProps<ModelProps, ModelMethods = ModelProps>{
-    xform: XForm<ModelProps, ModelMethods>;
+export interface TransRenderEndUserProps<ModelProps, ModelMethods = ModelProps, TElement = Element>{
+    xform: XForm<ModelProps, ModelMethods, TElement>;
     scope: Scope;
     //model?: ModelProps & ModelMethods;
     options?: TransformOptions;
