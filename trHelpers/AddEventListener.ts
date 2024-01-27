@@ -1,6 +1,6 @@
 import {UnitOfWork, EventListenerAction, ITransformer} from '../types';
 import {MountObserver} from 'mount-observer/MountObserver.js';
-export class AddEventListener<TProps, TMethods, TElement = Element>{
+export class AddEventListener<TProps, TMethods, TElement = {}>{
     #abortController = new AbortController();
     constructor(
         mountObserver: MountObserver | undefined,

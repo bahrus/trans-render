@@ -3,7 +3,7 @@ import { IMountObserver, MountContext } from '../../mount-observer/types.js';
 import {Transformer, MountOrchestrator, arr} from '../Transform.js';
 import {QuenitOfWork, AddEventListener} from '../types.js';
 
-export async function onMount<TProps extends {}, TMethods = TProps, TElement = Element>(
+export async function onMount<TProps extends {}, TMethods = TProps, TElement = {}>(
     transformer: Transformer<TProps, TMethods, TElement>,
     mo: MountOrchestrator<TProps, TMethods, TElement>, matchingElement: Element, uows: Array<QuenitOfWork<TProps, TMethods, TElement>>,
     skipInit: boolean, ctx: MountContext,matchingElements: WeakRef<Element>[],  observer?: IMountObserver, mountObserver?: MountObserver

@@ -10,7 +10,7 @@ import {
 import { IMountObserver, MountContext, PipelineStage } from 'mount-observer/types';
 export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './types';
 
-export async function Transform<TProps extends {}, TMethods = TProps, TElement = Element>(
+export async function Transform<TProps extends {}, TMethods = TProps, TElement = {}>(
     target: TransformerTarget,
     model: TProps & TMethods,
     xform: XForm<TProps, TMethods, TElement>,
@@ -21,7 +21,7 @@ export async function Transform<TProps extends {}, TMethods = TProps, TElement =
     return xformer;
 }
 
-export class Transformer<TProps extends {}, TMethods = TProps, TElement = Element> extends EventTarget implements ITransformer<TProps, TMethods, TElement>{
+export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> extends EventTarget implements ITransformer<TProps, TMethods, TElement>{
     #mountOrchestrators: Array<MountOrchestrator<TProps, TMethods, TElement>> = [];
     #model: TProps & TMethods;
     get model(){
@@ -98,7 +98,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = Elemen
 
                 case 'string':
                     {
-                        if(typeof model[rhs] === 'function'){
+                        if(typeof model[rhs as keyof TProps] === 'function'){
                             const qi = await this.calcQI(key, undefined);
                             const {prop} = qi;
                             const uow: QuenitOfWork<TProps, TMethods, TElement> = {
@@ -358,7 +358,7 @@ export function arr<T = any>(inp: T | T[] | undefined) : T[] {
         : Array.isArray(inp) ? inp : [inp];
 }
 
-export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = Element> extends EventTarget implements IMountOrchestrator<TProps, TMethods> {
+export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = {}> extends EventTarget implements IMountOrchestrator<TProps, TMethods> {
     #mountObserver: MountObserver | undefined;
     #matchingElements: WeakRef<Element>[] = [];
     #unitsOfWork: Array<QuenitOfWork<TProps, TMethods, TElement>>

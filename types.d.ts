@@ -42,7 +42,7 @@ export interface TransformOptions{
     skipInit?: boolean,
 }
 
-export type Derivative<TProps, TMethods, TElement = Element> = 
+export type Derivative<TProps, TMethods, TElement = {}> = 
     | number 
     | InterpolatingExpression 
     | ((model: TProps & TMethods, transform: ITransformer<TProps, TMethods, TElement>, uow: UnitOfWork<TProps, TMethods, TElement>, matchingElement: Element) => any)
@@ -101,22 +101,24 @@ export interface IMountOrchestrator<TProps, TMethods = TProps>{
 //     | `${keyof TProps & string} ${keyof TProps & string}`
 
 
-export type PropQueryExpression<TProps, TElement = Element> =
+export type PropQueryExpression<TProps, TElement = {}> =
     | `* ${CSSQuery}` 
     | `${keyof HTMLElementTagNameMap}`
     | `${PropAttrQueryType} ${keyof TProps & string}`
+    | `${PropAttrQueryType} ${keyof TProps & string} ${keyof TProps & string}`
     | `:root`
-    //| `-o ${keyof TProps & string} -s ${keyof TElement & string}`
-    | `-o ${string} -s ${keyof TElement & string}`
+    | `-o ${keyof TProps & string} -s ${keyof TElement & string}`
+    // | `-s ${string} -o ${keyof TProps & string}`
+    | `-o ${keyof TProps & string} ${keyof TProps & string} -s ${keyof TElement & string}`
     //| `-o ${keyof TProps & string} ${keyof TProps & string} -s ${string}` //-- causes infinite loop
     
 ;
 
-export type LHS<TProps> = PropQueryExpression<TProps>;
+export type LHS<TProps, TElement={}> = PropQueryExpression<TProps, TElement>;
 
 export type CSSQuery = string;
 
-export interface ConditionGate<TProps, TMethods, TElement = Element>{
+export interface ConditionGate<TProps, TMethods, TElement = {}>{
     ifAllOf?: number[],
     ifNoneOf?: number[],
     ifEqual?: [number, number | [number] | string],
@@ -132,7 +134,7 @@ export type WhereConditions =
         containerQuery: string,
     }
 
-export type IfInstructions<TProps, TMethods, TElement = Element> = string | boolean | number | [number] | ConditionGate<TProps, TMethods, TElement> ;
+export type IfInstructions<TProps, TMethods, TElement = {}> = string | boolean | number | [number] | ConditionGate<TProps, TMethods, TElement> ;
 
 export interface ObservePropParams {
     derivePropFrom?: string,
@@ -148,7 +150,7 @@ export interface CrossProduct<TProps, TMethods> {
     x: string | Array<string>,
     y: (keyof TProps & TMethods & string) | Array<keyof TProps & TMethods & string>
 }
-export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
+export interface UnitOfWork<TProps, TMethods = TProps, TElement = {}>{
     /**
      * add event listener
      */
@@ -209,14 +211,14 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
 
 }
 
-export type ValueFromElement<TProps, TMethods, TElement = Element> = 
+export type ValueFromElement<TProps, TMethods, TElement = {}> = 
     (
         matchingElement: Element, 
         transformer: ITransformer<TProps, TMethods, TElement>, 
         mod: ModificationUnitOfWork<TProps, TMethods, TElement>
     ) => any
 
-export interface ModificationUnitOfWork<TProps, TMethods, TElement = Element>{
+export interface ModificationUnitOfWork<TProps, TMethods, TElement = {}>{
     on: string,
     /**
      * Increment
@@ -251,12 +253,12 @@ export interface ModificationUnitOfWork<TProps, TMethods, TElement = Element>{
     toggle?: keyof TProps & string,
 }
 
-export interface QuenitOfWork<TProps, TMethods, TElement = Element> extends UnitOfWork<TProps, TMethods, TElement>{
+export interface QuenitOfWork<TProps, TMethods, TElement = {}> extends UnitOfWork<TProps, TMethods, TElement>{
     q: string,
     qi?: QueryInfo,
 }
 
-export type UnitOfWorkRHS<TProps, TMethods, TElement = Element> = 
+export type UnitOfWorkRHS<TProps, TMethods, TElement = {}> = 
     | 0 
     | keyof TMethods & string 
     | keyof TProps & string
@@ -300,11 +302,11 @@ export interface AddEventListener<TProps, TMethods>{
 }
 
 //export type XForm<TProps, TMethods> = Partial<{[key: string]: RHS<TProps, TMethods>}>
-export type XForm<TProps, TMethods, TElement = Element> = Partial<{
-    [key in LHS<TProps>]: RHS<TProps, TMethods, TElement>;
+export type XForm<TProps, TMethods, TElement = {}> = Partial<{
+    [key in LHS<TProps, TElement>]: RHS<TProps, TMethods, TElement>;
 }>;
 
-export interface ITransformer<TProps, TMethods, TElement = Element>{
+export interface ITransformer<TProps, TMethods, TElement = {}>{
     target: TransformerTarget,
     model: TProps & TMethods,
     xform: XForm<TProps, TMethods, TElement>,
@@ -312,7 +314,7 @@ export interface ITransformer<TProps, TMethods, TElement = Element>{
     //propagator?: EventTarget,
 }
 
-export type ToTransformer<TProps, TMethods, TElement = Element> = (
+export type ToTransformer<TProps, TMethods, TElement = {}> = (
     target: TransformerTarget, 
     model: TProps & TMethods,
     xform: XForm<TProps, TMethods, TElement>,
@@ -324,7 +326,7 @@ export interface MarkedUpEventTarget extends EventTarget{
     ___nestedProps?: Map<string, any>;
 }
 
-export interface TransRenderEndUserProps<ModelProps, ModelMethods = ModelProps, TElement = Element>{
+export interface TransRenderEndUserProps<ModelProps, ModelMethods = ModelProps, TElement = {}>{
     xform: XForm<ModelProps, ModelMethods, TElement>;
     scope: Scope;
     //model?: ModelProps & ModelMethods;
