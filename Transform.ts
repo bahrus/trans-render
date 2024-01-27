@@ -194,6 +194,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
         switch(first){
             case '-s': {
                 qi.localPropCamelCase = second;
+                break;
             }
             default:{
                 if(qi.hostPropToAttrMap === undefined){
@@ -244,45 +245,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
             returnStr += `[-s~="${name}"]`
         }
         return returnStr + (w || '' );
-        //const {cssQuery, localName, prop, propAttrType, o, s} = qi;
-        // const ln = (localName || '') + (w || '' );
-        // const c = cssQuery || '';
-        // let returnStr: string;
-        // if(propAttrType === undefined){
-        //     returnStr = `${ln} ${c}`.trimEnd();
-        // }else{
-        //     switch(propAttrType){
-        //         case '#':
-        //             returnStr = `${ln}#${prop} ${c}`.trimEnd();
-        //             break;
-        //         case '|':
-        //             //TODO use scope donut
-        //             returnStr = `${ln}[itemprop~="${prop}"] ${c}`.trimEnd();
-        //             break;
-        //         case '%':
-        //             returnStr = `${ln}[part~="${prop}"] ${c}`.trimEnd();
-        //             break;
-        //         case '@':
-        //             returnStr = `${ln}[name="${prop}"] ${c}`.trimEnd();
-        //             break;
-        //         case '.':
-        //             returnStr = `${ln}.${prop} ${c}`.trimEnd();
-        //             break;
-        //         // case '-':
-        //         //     throw 'NI';
-        //         case '$':
-        //             returnStr = `${ln}[itemscope][itemprop~="${prop}"] ${c}`.trimEnd();
-        //             break;
-    
-        //     }
-        // }
-        // if(o !== undefined){
-        //     returnStr += o.map(x => `[-o~="${x}"]`).join('');
-        // }
-        // if(s !== undefined){
-        //     returnStr += s.map(x => `[-s~="${x}"]`).join('');
-        // }
-        // return returnStr;
+        
     }
 
     async doUpdate(matchingElement: Element, uow: UnitOfWork<TProps, TMethods, TElement>){
@@ -428,16 +391,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
         for(const uow of this.#unitsOfWork){
             
             let {o} = uow;
-            // if(o === undefined && qi !== undefined){
-            //     const {o: o2} = qi;
-            //     if(o2 !== undefined){
-            //         uow.o = o2 as PropOrComputedProp<TProps, TMethods>[];
-            //         o = o2 as PropOrComputedProp<TProps, TMethods>[];
-            //     }
-                
-            // }
             const p = arr(o) as string[];
-
             const {target, options, model} = this.transformer;
             const {propagator} = options;
             for(const propName of p){
