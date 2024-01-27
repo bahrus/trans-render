@@ -3,7 +3,7 @@ import {IfInstructions, ConditionGate, UnitOfWork} from '../types.js';
 export async function doIfs<TProps extends {}, TMethods = TProps, TElement = Element>(
     transformer: Transformer<TProps, TMethods, TElement>, 
     matchingElement: Element, 
-    uow: UnitOfWork<TProps, TMethods>, 
+    uow: UnitOfWork<TProps, TMethods, TElement>, 
     i: IfInstructions<TProps, TMethods, TElement>
 ) : Promise<boolean>{
     let transpiledIf: ConditionGate<TProps, TMethods, TElement> | undefined;

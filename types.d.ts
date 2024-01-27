@@ -45,7 +45,7 @@ export interface TransformOptions{
 export type Derivative<TProps, TMethods, TElement = Element> = 
     | number 
     | InterpolatingExpression 
-    | ((model: TProps & TMethods, transform: ITransformer<TProps, TMethods, TElement>, uow: UnitOfWork<TProps, TMethods>, matchingElement: Element) => any)
+    | ((model: TProps & TMethods, transform: ITransformer<TProps, TMethods, TElement>, uow: UnitOfWork<TProps, TMethods, TElement>, matchingElement: Element) => any)
     | NumberExpression 
     | DerivationCriteria<TProps, TMethods>
     // only works if lhs has field/property
@@ -153,7 +153,7 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**
      * derived value from observed props
      */
-    d?: Derivative<TProps, TMethods>,
+    d?: Derivative<TProps, TMethods, TElement>,
 
     /**
      * enhance / engage with element, or register the found element in some way
@@ -247,7 +247,7 @@ export interface ModificationUnitOfWork<TProps, TMethods, TElement = Element>{
     toggle?: keyof TProps & string,
 }
 
-export interface QuenitOfWork<TProps, TMethods> extends UnitOfWork<TProps, TMethods>{
+export interface QuenitOfWork<TProps, TMethods, TElement = Element> extends UnitOfWork<TProps, TMethods, TElement>{
     q: string,
     qi?: QueryInfo,
 }

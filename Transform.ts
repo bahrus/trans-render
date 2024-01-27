@@ -22,7 +22,7 @@ export async function Transform<TProps extends {}, TMethods = TProps, TElement =
 }
 
 export class Transformer<TProps extends {}, TMethods = TProps, TElement = Element> extends EventTarget implements ITransformer<TProps, TMethods, TElement>{
-    #mountOrchestrators: Array<MountOrchestrator<TProps, TMethods>> = [];
+    #mountOrchestrators: Array<MountOrchestrator<TProps, TMethods, TElement>> = [];
     #model: TProps & TMethods;
     get model(){
         return this.#model;
@@ -77,7 +77,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = Elemen
         if(propagator.___props === undefined){
             propagator.___props = new Set();
         }
-        const uows : Array<QuenitOfWork<TProps, TMethods>> = [];
+        const uows : Array<QuenitOfWork<TProps, TMethods, TElement>> = [];
         for(const key in xform){
             let rhs = (xform[key as LHS<TProps>]) as RHS<TProps, TMethods>;
             switch(typeof rhs){
@@ -85,7 +85,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = Elemen
                     if(rhs !== 0) throw 'NI';
                     const qi = await this.calcQI(key, undefined);
                     const {prop, localPropCamelCase} = qi;
-                    const uow: QuenitOfWork<TProps, TMethods> = {
+                    const uow: QuenitOfWork<TProps, TMethods, TElement> = {
                         o: [prop! as keyof TProps & string],
                         d: 0,
                         qi,
@@ -101,7 +101,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = Elemen
                         if(typeof model[rhs] === 'function'){
                             const qi = await this.calcQI(key, undefined);
                             const {prop} = qi;
-                            const uow: QuenitOfWork<TProps, TMethods> = {
+                            const uow: QuenitOfWork<TProps, TMethods, TElement> = {
                                 o: [prop! as keyof TProps & string],
                                 d: rhs as keyof TMethods & string,
                                 qi,
@@ -109,7 +109,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = Elemen
                             };
                             uows.push(uow);
                         }else{
-                            const uow: QuenitOfWork<TProps, TMethods> = {
+                            const uow: QuenitOfWork<TProps, TMethods, TElement> = {
                                 o: [rhs as keyof TProps & string],
                                 d: 0,
                                 q: key
@@ -121,10 +121,10 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = Elemen
                     break;
                 case 'object':
                     {
-                        const rhses = arr(rhs) as Array<UnitOfWork<TProps, TMethods>>;
+                        const rhses = arr(rhs) as Array<UnitOfWork<TProps, TMethods, TElement>>;
                         for(const rhsPart of rhses){
                             
-                            const uow: QuenitOfWork<TProps, TMethods> = {
+                            const uow: QuenitOfWork<TProps, TMethods, TElement> = {
                                 //d: 0,
                                 ...rhsPart!,
                                 q: key
@@ -271,30 +271,30 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = Elemen
         return returnStr;
     }
 
-    async doUpdate(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>){
+    async doUpdate(matchingElement: Element, uow: UnitOfWork<TProps, TMethods, TElement>){
         const {doUpdate} = await import('./trHelpers/doUpdate.js');
         await doUpdate(this, matchingElement, uow);
     }
 
-    async doIfs(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>, i: IfInstructions<TProps, TMethods>): Promise<boolean>{
+    async doIfs(matchingElement: Element, uow: UnitOfWork<TProps, TMethods, TElement>, i: IfInstructions<TProps, TMethods, TElement>): Promise<boolean>{
         const {doIfs} = await import('./trHelpers/doIfs.js');
         return await doIfs(this, matchingElement, uow, i);
     }
 
-    async engage(matchingElement: Element, type: onMountStatusChange, uow: UnitOfWork<TProps, TMethods>, observer: IMountObserver | undefined, mountContext: MountContext){
+    async engage(matchingElement: Element, type: onMountStatusChange, uow: UnitOfWork<TProps, TMethods, TElement>, observer: IMountObserver | undefined, mountContext: MountContext){
         const {e} = uow;
         if(e === undefined) return
         const {Engage} = await import('./trHelpers/Engage.js');
         await Engage(this, matchingElement, type, uow, mountContext);
     }
 
-    async getDerivedVal(uow: UnitOfWork<TProps, TMethods>, d: Derivative<TProps, TMethods, TElement>, matchingElement: Element){
+    async getDerivedVal(uow: UnitOfWork<TProps, TMethods, TElement>, d: Derivative<TProps, TMethods, TElement>, matchingElement: Element){
         const {getDerivedVal} = await import('./trHelpers/getDerivedVal.js');
         return await getDerivedVal(this, uow, d, matchingElement);
     }
 
 
-    async getArrayVal(uow: UnitOfWork<TProps, TMethods>, u: NumberExpression | InterpolatingExpression){
+    async getArrayVal(uow: UnitOfWork<TProps, TMethods, TElement>, u: NumberExpression | InterpolatingExpression){
         const {getArrayVal} = await import('./trHelpers/getArrayVal.js');
         return getArrayVal(this, uow, u);
     }
@@ -304,7 +304,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = Elemen
         return await getComplexDerivedVal(this, uow, dc);
     }
 
-    getNumberUVal(uow: UnitOfWork<TProps, TMethods>, d: number){
+    getNumberUVal(uow: UnitOfWork<TProps, TMethods, TElement>, d: number){
         const {o} = uow;
         const arrO = arr(o);
         const propName = this.#getPropName(arrO, d);
@@ -361,10 +361,10 @@ export function arr<T = any>(inp: T | T[] | undefined) : T[] {
 export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = Element> extends EventTarget implements IMountOrchestrator<TProps, TMethods> {
     #mountObserver: MountObserver | undefined;
     #matchingElements: WeakRef<Element>[] = [];
-    #unitsOfWork: Array<QuenitOfWork<TProps, TMethods>>
+    #unitsOfWork: Array<QuenitOfWork<TProps, TMethods, TElement>>
     constructor(
         public transformer: Transformer<TProps, TMethods, TElement>, 
-        uows: QuenitOfWork<TProps, TMethods>, 
+        uows: QuenitOfWork<TProps, TMethods, TElement>, 
         public queryInfo: QueryInfo){
         super();
         this.#unitsOfWork = arr(uows);
@@ -461,7 +461,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
         }
         return all;
     }
-    async doUpdate(matchingElement: Element, uow: UnitOfWork<TProps, TMethods>){
+    async doUpdate(matchingElement: Element, uow: UnitOfWork<TProps, TMethods, TElement>){
         const {d, s, sa, ss} = uow;
         if(d !== undefined || s !== undefined || sa !== undefined || ss !== undefined){
             await this.transformer.doUpdate(matchingElement, uow);

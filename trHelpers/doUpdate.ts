@@ -3,7 +3,7 @@ import { Derivative, UnitOfWork } from '../types.js';
 export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = Element>(
     transformer: Transformer<TProps, TMethods, TElement>,
     matchingElement: Element, 
-    uow: UnitOfWork<TProps, TMethods>,
+    uow: UnitOfWork<TProps, TMethods, TElement>,
 ){
     const {d, o, s, sa, i, ss, invoke} = uow;
     if(i !== undefined){
