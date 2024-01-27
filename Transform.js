@@ -70,9 +70,9 @@ export class Transformer extends EventTarget {
                     if (rhs !== 0)
                         throw 'NI';
                     const qi = await this.calcQI(key, undefined);
-                    const { prop, localPropCamelCase } = qi;
+                    const { hostPropToAttrMap, localPropCamelCase } = qi;
                     const uow = {
-                        o: [prop],
+                        o: hostPropToAttrMap.map(x => x.name),
                         d: 0,
                         qi,
                         q: key,
@@ -85,9 +85,9 @@ export class Transformer extends EventTarget {
                     {
                         if (typeof model[rhs] === 'function') {
                             const qi = await this.calcQI(key, undefined);
-                            const { prop } = qi;
+                            const { hostPropToAttrMap } = qi;
                             const uow = {
-                                o: [prop],
+                                o: hostPropToAttrMap.map(x => x.name),
                                 d: rhs,
                                 qi,
                                 q: key

@@ -84,9 +84,9 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
                 case 'number': {
                     if(rhs !== 0) throw 'NI';
                     const qi = await this.calcQI(key, undefined);
-                    const {prop, localPropCamelCase} = qi;
+                    const {hostPropToAttrMap, localPropCamelCase} = qi;
                     const uow: QuenitOfWork<TProps, TMethods, TElement> = {
-                        o: [prop! as keyof TProps & string],
+                        o: hostPropToAttrMap!.map(x => x.name) as Array<keyof TProps & string>, 
                         d: 0,
                         qi,
                         q: key,
@@ -100,9 +100,9 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
                     {
                         if(typeof model[rhs as keyof TProps] === 'function'){
                             const qi = await this.calcQI(key, undefined);
-                            const {prop} = qi;
+                            const {hostPropToAttrMap} = qi;
                             const uow: QuenitOfWork<TProps, TMethods, TElement> = {
-                                o: [prop! as keyof TProps & string],
+                                o: hostPropToAttrMap!.map(x => x.name) as Array<keyof TProps & string>,
                                 d: rhs as keyof TMethods & string,
                                 qi,
                                 q: key

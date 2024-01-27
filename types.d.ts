@@ -275,14 +275,14 @@ export type RHS<TProps, TMethods, TElements = Element> = UnitOfWorkRHS<TProps, T
 
 export interface QueryInfo{
     isRootQry?: boolean,
-    isParametrizedQry?: boolean,
+    //isParametrizedQry?: boolean,
     localPropCamelCase?: string,
     cssQuery?: string,
     o?: string[],
     s?: string[],
     localName?: string,
-    propAttrType?: PropAttrQueryType,
-    prop?: string,
+    // propAttrType?: PropAttrQueryType,
+    // prop?: string,
     w?: WhereConditions,
     css?: string,
     hostPropToAttrMap?: Array<{type: PropAttrQueryType, name: string}>

@@ -1,7 +1,10 @@
 import { Transform } from '../Transform.js';
 export async function doNestedTransforms(matchingElement, uows, mo) {
     const { queryInfo, transformer } = mo;
-    const { prop } = queryInfo;
+    const { hostPropToAttrMap } = queryInfo;
+    if (hostPropToAttrMap.length !== 1)
+        throw 'NI';
+    const prop = hostPropToAttrMap[0].name;
     const { model, options } = transformer;
     const { propagator } = options;
     const subModel = model[prop];

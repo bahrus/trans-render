@@ -8,7 +8,9 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
     mo: MountOrchestrator<TProps, TMethods, TElement>, matchingElement: Element, uows: Array<QuenitOfWork<TProps, TMethods, TElement>>,
     skipInit: boolean, ctx: MountContext,matchingElements: WeakRef<Element>[],  observer?: IMountObserver, mountObserver?: MountObserver
     ){
-    if(mo.queryInfo.propAttrType === '$'){
+    const {queryInfo} = mo;
+    const {hostPropToAttrMap} = queryInfo;
+    if(hostPropToAttrMap !== undefined && hostPropToAttrMap.length === 1 && hostPropToAttrMap[0].type === '$'){
         const {doNestedTransforms} = await import('./doNestedTransforms.js');
         await doNestedTransforms(matchingElement, uows, mo);
         return;
