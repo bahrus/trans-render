@@ -277,11 +277,11 @@ export interface QueryInfo{
     o?: string[],
     s?: string[],
     localName?: string,
-    propAttrType?: PropAttrQueryType
+    propAttrType?: PropAttrQueryType,
     prop?: string,
     w?: WhereConditions,
     css?: string,
-    props?: {[key in PropAttrQueryType]: string[]}
+    hostPropToAttrMap?: Array<{type: PropAttrQueryType, name: string}>
 }
 
 export type TransformerTarget = Element | DocumentFragment | Element[] | ShadowRoot | Document;

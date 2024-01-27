@@ -158,11 +158,18 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = Elemen
         }
     }
     async calcQI(pqe: string, w: WhereConditions | undefined){
-        const qi: QueryInfo = {};
-        if(pqe === ':root'){
-            qi.isRootQry = true;
-            return qi;
+        if(pqe.startsWith('* ')){
+            return {
+                cssQuery: pqe.substring(2),
+            } as QueryInfo
         }
+        //TODO:  dynamic import of the rest of this method, including other methods it calls.
+        if(pqe === ':root'){
+            return {
+                isRootQry: true
+            } as QueryInfo
+        }
+        const qi: QueryInfo = {};
         const asterSplit = pqe.split('*');
         if(asterSplit.length === 2){
             qi.cssQuery = asterSplit[1].trim();

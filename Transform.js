@@ -140,11 +140,18 @@ export class Transformer extends EventTarget {
         }
     }
     async calcQI(pqe, w) {
-        const qi = {};
-        if (pqe === ':root') {
-            qi.isRootQry = true;
-            return qi;
+        if (pqe.startsWith('* ')) {
+            return {
+                cssQuery: pqe.substring(2),
+            };
         }
+        //TODO:  dynamic import of the rest of this method, including other methods it calls.
+        if (pqe === ':root') {
+            return {
+                isRootQry: true
+            };
+        }
+        const qi = {};
         const asterSplit = pqe.split('*');
         if (asterSplit.length === 2) {
             qi.cssQuery = asterSplit[1].trim();
