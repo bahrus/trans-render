@@ -112,11 +112,11 @@ export type LHS<TProps> = PropQueryExpression<TProps>;
 
 export type CSSQuery = string;
 
-export interface ConditionGate<TProps, TMethods>{
+export interface ConditionGate<TProps, TMethods, TElement = Element>{
     ifAllOf?: number[],
     ifNoneOf?: number[],
     ifEqual?: [number, number | [number] | string],
-    d?: Derivative<TProps, TMethods>,
+    d?: Derivative<TProps, TMethods, TElement>,
 
 }
 
