@@ -165,7 +165,7 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = Element>{
     /**
      * ifs ands or buts -- conditions on the model
      */
-    i?: IfInstructions<TProps, TMethods>,
+    i?: IfInstructions<TProps, TMethods, TElement>,
 
     /**
      * method of matching element to pass derived value into

@@ -299,7 +299,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = Elemen
         return getArrayVal(this, uow, u);
     }
 
-    async getComplexDerivedVal(uow: UnitOfWork<TProps, TMethods>, dc: DerivationCriteria<TProps, TMethods>){
+    async getComplexDerivedVal(uow: UnitOfWork<TProps, TMethods, TElement>, dc: DerivationCriteria<TProps, TMethods>){
         const {getComplexDerivedVal} = await import('./trHelpers/getComplexDerivedVal.js');
         return await getComplexDerivedVal(this, uow, dc);
     }

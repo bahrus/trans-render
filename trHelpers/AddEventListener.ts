@@ -5,7 +5,7 @@ export class AddEventListener<TProps, TMethods, TElement = Element>{
     constructor(
         mountObserver: MountObserver | undefined,
         transformer: ITransformer<TProps, TMethods, TElement>,
-        uow: UnitOfWork<TProps, TMethods>,
+        uow: UnitOfWork<TProps, TMethods, TElement>,
         matchingElement: Element,
         type: string,
         action: EventListenerAction<TProps, TMethods>,
