@@ -236,46 +236,47 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = Elemen
         
     }
 
-    async #calcCSS(qi: QueryInfo, w: WhereConditions | undefined){
-        const {cssQuery, localName, prop, propAttrType, o, s} = qi;
-        const ln = (localName || '') + (w || '' );
-        const c = cssQuery || '';
-        let returnStr: string;
-        if(propAttrType === undefined){
-            returnStr = `${ln} ${c}`.trimEnd();
-        }else{
-            switch(propAttrType){
-                case '#':
-                    returnStr = `${ln}#${prop} ${c}`.trimEnd();
-                    break;
-                case '|':
-                    //TODO use scope donut
-                    returnStr = `${ln}[itemprop~="${prop}"] ${c}`.trimEnd();
-                    break;
-                case '%':
-                    returnStr = `${ln}[part~="${prop}"] ${c}`.trimEnd();
-                    break;
-                case '@':
-                    returnStr = `${ln}[name="${prop}"] ${c}`.trimEnd();
-                    break;
-                case '.':
-                    returnStr = `${ln}.${prop} ${c}`.trimEnd();
-                    break;
-                // case '-':
-                //     throw 'NI';
-                case '$':
-                    returnStr = `${ln}[itemscope][itemprop~="${prop}"] ${c}`.trimEnd();
-                    break;
+    async #calcCSS(qi: QueryInfo, w: WhereConditions | undefined): Promise<string>{
+        throw 'NI';
+        // const {cssQuery, localName, prop, propAttrType, o, s} = qi;
+        // const ln = (localName || '') + (w || '' );
+        // const c = cssQuery || '';
+        // let returnStr: string;
+        // if(propAttrType === undefined){
+        //     returnStr = `${ln} ${c}`.trimEnd();
+        // }else{
+        //     switch(propAttrType){
+        //         case '#':
+        //             returnStr = `${ln}#${prop} ${c}`.trimEnd();
+        //             break;
+        //         case '|':
+        //             //TODO use scope donut
+        //             returnStr = `${ln}[itemprop~="${prop}"] ${c}`.trimEnd();
+        //             break;
+        //         case '%':
+        //             returnStr = `${ln}[part~="${prop}"] ${c}`.trimEnd();
+        //             break;
+        //         case '@':
+        //             returnStr = `${ln}[name="${prop}"] ${c}`.trimEnd();
+        //             break;
+        //         case '.':
+        //             returnStr = `${ln}.${prop} ${c}`.trimEnd();
+        //             break;
+        //         // case '-':
+        //         //     throw 'NI';
+        //         case '$':
+        //             returnStr = `${ln}[itemscope][itemprop~="${prop}"] ${c}`.trimEnd();
+        //             break;
     
-            }
-        }
-        if(o !== undefined){
-            returnStr += o.map(x => `[-o~="${x}"]`).join('');
-        }
-        if(s !== undefined){
-            returnStr += s.map(x => `[-s~="${x}"]`).join('');
-        }
-        return returnStr;
+        //     }
+        // }
+        // if(o !== undefined){
+        //     returnStr += o.map(x => `[-o~="${x}"]`).join('');
+        // }
+        // if(s !== undefined){
+        //     returnStr += s.map(x => `[-s~="${x}"]`).join('');
+        // }
+        // return returnStr;
     }
 
     async doUpdate(matchingElement: Element, uow: UnitOfWork<TProps, TMethods, TElement>){

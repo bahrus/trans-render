@@ -10,6 +10,20 @@ export type PropAttrQueryType =
     | '.' //class
     //| '-' //marker
     | '$' //microdata itemprop + itemscope attributes (nested)
+    | '-o'
+
+export type PropAttrPair<TProps> = `${PropAttrQueryType} ${keyof TProps & string}`;
+
+export type PropQueryExpression<TProps, TElement = Element> =
+    | `* ${CSSQuery}`
+    | `:root`
+    | `${keyof HTMLElementTagNameMap}`
+    | `${PropAttrPair<TProps>}`
+    | `${PropAttrPair<TProps>} -s ${keyof TElement & string}`
+    //| `${PropAttrPair<TProps>} ${PropAttrPair<TProps>}`
+    //| `${PropAttrPair<TProps>} ${PropAttrPair<TProps>} -s ${keyof TElement & string}`
+    
+;
 
 //#region derived expressions
 export type Expr0 = [string, number];
@@ -101,18 +115,7 @@ export interface IMountOrchestrator<TProps, TMethods = TProps>{
 //     | `${keyof TProps & string} ${keyof TProps & string}`
 
 
-export type PropQueryExpression<TProps, TElement = Element> =
-    | `* ${CSSQuery}` 
-    | `${keyof HTMLElementTagNameMap}`
-    | `${PropAttrQueryType} ${keyof TProps & string}`
-    | `${PropAttrQueryType} ${keyof TProps & string} ${keyof TProps & string}`
-    | `:root`
-    | `-o ${keyof TProps & string} -s ${keyof TElement & string}`
-    // | `-s ${string} -o ${keyof TProps & string}`
-    | `-o ${keyof TProps & string} ${keyof TProps & string} -s ${keyof TElement & string}`
-    //| `-o ${keyof TProps & string} ${keyof TProps & string} -s ${string}` //-- causes infinite loop
-    
-;
+
 
 export type LHS<TProps, TElement={}> = PropQueryExpression<TProps, TElement>;
 

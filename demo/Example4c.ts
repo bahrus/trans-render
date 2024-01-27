@@ -12,9 +12,9 @@ const model: Props & Actions = {
 const form = document.querySelector('form') as HTMLFormElement;
 
 
-Transform<Props, Actions, Element>(form, model, {
-    '-o msg1 msg2 -s textContent': {
-        d: ['msg1: ', 0, 'msg2: ', 1]
-    }
-});
+// Transform<Props, Actions, Element>(form, model, {
+//     '-o msg1 -o msg2 -s textContent': {
+//         d: ['msg1: ', 0, 'msg2: ', 1]
+//     }
+// });
 
