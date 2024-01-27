@@ -176,6 +176,7 @@ export class Transformer extends EventTarget {
         switch (first) {
             case '-s': {
                 qi.localPropCamelCase = second;
+                //qi.s = [second];
                 break;
             }
             default: {
@@ -225,7 +226,7 @@ export class Transformer extends EventTarget {
             }
         }).join('');
         if (localPropCamelCase !== undefined) {
-            returnStr += `[-s~="${name}"]`;
+            returnStr += `[-s~="${localPropCamelCase}"]`;
         }
         return returnStr + (w || '');
     }
