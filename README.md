@@ -347,7 +347,6 @@ export type PropAttrQueryType =
     | '#' //id
     | '%' //part
     | '.' //class
-    | '-' //marker
     | '$' //microdata itemscope + itemprop (nested)
 ```
 
@@ -375,6 +374,16 @@ Transform<Props & Methods>(form, model, {
 We mentioned earlier that we can do free form matching by beginning our LhS with the asterisk (*).  But as we are seeing in the preceding examples, we can reduce repetitive boilerplate by using some special selectors, assuming an attribute or class or part matches the name of one of our properties.  But what if we want to add some extra checks to make sure we don't bind to some other elements where the name of the attribute also matches our property?
 
 We can sneak back in some free form css matching expressions by adding a "w" parameter, which stands for "where":
+
+```Typescript
+Transform<Model>(form, model, {
+    '@ greeting': {
+        w: '.isASalutation'
+    },
+});
+```
+
+We can also append the key with the asterisk:
 
 ```Typescript
 Transform<Model>(form, model, {
@@ -582,9 +591,9 @@ Note the (discouraged) extra property: "sa" which means "set attribute" rather t
 
 ## Accommodating minimalist custom inline binding with observer and setter markers [WIP]
 
-At the top of this document, we suggested that with highly semantic HTML, there is enough information contained in the semantic HTML that the need for inline binding instructions becomes superfluous.  But sometimes that ideal may fall short, even if it will become less and less likely going forward.
+At the top of this document, we suggested that with highly semantic HTML, there is enough information contained in the semantic HTML that the need for additional inline binding instructions becomes superfluous when employing trans-rendering.  But sometimes that ideal may fall short, even if it will become less and less likely going forward.
 
-In what follows, we suggest/provide for some semantic hints that we think can fill in such gaps most effectively.
+In what follows, we suggest/provide for some semantic hints that we think can fill in such gaps most effectively, so that we can efficiently target elements we want to affect, without accidentally affecting others.
 
 Let's say we want to set property aria-label from host property greeting, and we want to adopt a bit of the "locality of behavior" philosophy, and introduce a minimalist vocabulary of binding inline. We can do this via:
 
@@ -606,9 +615,6 @@ Transform<Model>(form, model, {
 ```
 
 
-
-
-
 ## Example 4c Interpolation with observer and setter markers [TODO]
 
 ```html
@@ -624,13 +630,6 @@ Transform<Model>(form, model, {
 ```
 
 
-The transform above will also work with the following HTML5 markup
-
-```html
-<my-custom-element data-my-local-prop data-o=greeting;></my-custom-element>
-```
-
-
 ## Example 4d plucking single pairs [TODO]
 
 ```html
@@ -640,7 +639,7 @@ The transform above will also work with the following HTML5 markup
 ```Typescript
 Transform<Model>(form, model, { 
     '-o isVegetarian -s ariaChecked': 0,
-    '-o isHappy -s ariaDisabed': 0
+    '-o isHappy -s ariaDisabled': 0
 });
 ```
 

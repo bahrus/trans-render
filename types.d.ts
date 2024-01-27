@@ -42,10 +42,10 @@ export interface TransformOptions{
     skipInit?: boolean,
 }
 
-export type Derivative<TProps, TMethods> = 
+export type Derivative<TProps, TMethods, TElement = Element> = 
     | number 
     | InterpolatingExpression 
-    | ((model: TProps & TMethods, transform: ITransformer<TProps, TMethods>, uow: UnitOfWork<TProps, TMethods>, matchingElement: Element) => any)
+    | ((model: TProps & TMethods, transform: ITransformer<TProps, TMethods, TElement>, uow: UnitOfWork<TProps, TMethods>, matchingElement: Element) => any)
     | NumberExpression 
     | DerivationCriteria<TProps, TMethods>
     // only works if lhs has field/property
