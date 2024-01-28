@@ -348,6 +348,8 @@ Another small timesaver:  As mentioned before, d: 0 is assumed if not specified 
 
 Other symbols for other attributes are specified below:
 
+## Table of shortcut attribute symbols
+
 ```TypeScript
 export type PropAttrQueryType = 
     | '|' //microdata itemprop
@@ -598,7 +600,7 @@ Note the (discouraged) extra property: "sa" which means "set attribute" rather t
 
 "ss" is used for setting a style property.
 
-## Accommodating minimalist custom inline binding with observer and setter markers [WIP]
+## Accommodating minimalist custom inline binding with observer and setter markers
 
 At the top of this document, we suggested that with highly semantic HTML, there is often enough information contained in the semantic HTML that the need for additional inline binding instructions becomes superfluous when employing trans-rendering.  But sometimes that ideal may fall short, even if it will become less and less likely going forward.
 
@@ -638,6 +640,32 @@ Transform<Model>(form, model, {
 });
 ```
 
+Another way of thinking about this -- we are gently moving some of the instructions out of the JSON, and into the HTML markup, but with contrived, proprietary attributes (-o and -s).  But going back to earlier examples, the -o, at least, can be "covered" by non-contrived attributes, the ones we listed in the [table above](#table-of-shortcut-attribute-symbols).
+
+Our "o" array can make use of a mixture of all these symbols.  The order of the array is dictated by the order they appear in the LHS string:
+
+```html
+<div -o="msg1 msg2" part="msg3 msg4" class="msg5 msg6" itemprop="msg7 msg8" id=msg9 -s=textContent></div>
+```
+
+```Typescript
+Transform<Model>(form, model, { 
+    '-o msg1 % msg3 . msg5 | msg7 # msg9 -o msg2 % msg4 . msg6 | msg8 -s textContent': {
+        d: ...
+    }
+});
+```
+
+"transpiles" to:
+
+```Typescript
+Transform<Model>(form, model, { 
+    '-o msg1 % msg3 . msg5 | msg7 # msg9 -o msg2 % msg4 . msg6 | msg8 -s textContent': {
+        o: ["msg1", "msg3", "msg5", "msg7", "msg9", "msg2", "msg4", "msg6", "msg8"],
+        d: ...
+    }
+});
+```
 
 ## Example 4d plucking single pairs
 
