@@ -1336,8 +1336,13 @@ I'm not sure if this is the most optimal way of binding to a loop, but where it 
 ```TypeScript
 Transform<Props & Methods>(div, model, {
     '$ list': {
-        '$ itemListElement [aria-rowindex=:idx]':{
-            '| prop1': 0
+        '$ itemListElement':{
+            '| prop1': {
+                d:{
+                    from: list,
+                    withIdx: 'ariaRowIndex'
+                }
+            }
         }
     }
 })
