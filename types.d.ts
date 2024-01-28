@@ -283,7 +283,7 @@ export interface QueryInfo{
     o?: string[],
     s?: string[],
     localName?: string,
-    w?: WhereConditions,
+    //w?: WhereConditions,
     css?: string,
     hostPropToAttrMap?: Array<{type: PropAttrQueryType, name: string}>
 }

@@ -83,7 +83,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
             switch(typeof rhs){
                 case 'number': {
                     if(rhs !== 0) throw 'NI';
-                    const qi = await this.calcQI(key, undefined);
+                    const qi = await this.calcQI(key);
                     const {hostPropToAttrMap, localPropCamelCase} = qi;
                     const uow: QuenitOfWork<TProps, TMethods, TElement> = {
                         o: hostPropToAttrMap!.map(x => x.name) as Array<keyof TProps & string>, 
@@ -99,7 +99,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
                 case 'string':
                     {
                         if(typeof model[rhs as keyof TProps] === 'function'){
-                            const qi = await this.calcQI(key, undefined);
+                            const qi = await this.calcQI(key);
                             const {hostPropToAttrMap} = qi;
                             const uow: QuenitOfWork<TProps, TMethods, TElement> = {
                                 o: hostPropToAttrMap!.map(x => x.name) as Array<keyof TProps & string>,
@@ -141,9 +141,9 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
         }
 
         for(const uow of uows){
-            let {q, qi, w} = uow;
-            if(qi === undefined) qi = await this.calcQI(q, w);
-            qi.w = w;
+            let {q, qi} = uow;
+            if(qi === undefined) qi = await this.calcQI(q);
+            //qi.w = w;
             const {o, s} = qi;
             if(o!== undefined){
                 uow.o = o as PropOrComputedProp<TProps, TMethods>[];
@@ -157,7 +157,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
             await newProcessor.subscribe();
         }
     }
-    async calcQI(pqe: string, w: WhereConditions | undefined){
+    async calcQI(pqe: string){
         if(pqe.startsWith('* ')){
             return {
                 cssQuery: pqe.substring(2),
@@ -203,13 +203,13 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
             }
             currentTokens = rest;
         }
-        qi.css = await this.#calcCSS(qi, w);
+        qi.css = await this.#calcCSS(qi);
         return qi;
     }
 
 
 
-    async #calcCSS(qi: QueryInfo, w: WhereConditions | undefined): Promise<string>{
+    async #calcCSS(qi: QueryInfo): Promise<string>{
         const {cssQuery} = qi;
         if(cssQuery !== undefined) return cssQuery;
         const {localName} = qi;
@@ -242,7 +242,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
         if(localPropCamelCase !== undefined){
             returnStr += `[-s~="${localPropCamelCase}"]`
         }
-        return returnStr + (w || '' );
+        return returnStr;
         
     }
 

@@ -8,6 +8,14 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
         return;
     }
     for (const uow of uows) {
+        const { w } = uow;
+        if (w !== undefined) {
+            switch (typeof w) {
+                case 'string':
+                    if (!matchingElement.matches(w))
+                        continue;
+            }
+        }
         //this is where we could look to see if we need to do update if already updated by server
         if (!skipInit || !ctx.initializing) {
             await mo.doUpdate(matchingElement, uow);

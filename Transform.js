@@ -69,7 +69,7 @@ export class Transformer extends EventTarget {
                 case 'number': {
                     if (rhs !== 0)
                         throw 'NI';
-                    const qi = await this.calcQI(key, undefined);
+                    const qi = await this.calcQI(key);
                     const { hostPropToAttrMap, localPropCamelCase } = qi;
                     const uow = {
                         o: hostPropToAttrMap.map(x => x.name),
@@ -84,7 +84,7 @@ export class Transformer extends EventTarget {
                 case 'string':
                     {
                         if (typeof model[rhs] === 'function') {
-                            const qi = await this.calcQI(key, undefined);
+                            const qi = await this.calcQI(key);
                             const { hostPropToAttrMap } = qi;
                             const uow = {
                                 o: hostPropToAttrMap.map(x => x.name),
@@ -122,10 +122,10 @@ export class Transformer extends EventTarget {
             }
         }
         for (const uow of uows) {
-            let { q, qi, w } = uow;
+            let { q, qi } = uow;
             if (qi === undefined)
-                qi = await this.calcQI(q, w);
-            qi.w = w;
+                qi = await this.calcQI(q);
+            //qi.w = w;
             const { o, s } = qi;
             if (o !== undefined) {
                 uow.o = o;
@@ -139,7 +139,7 @@ export class Transformer extends EventTarget {
             await newProcessor.subscribe();
         }
     }
-    async calcQI(pqe, w) {
+    async calcQI(pqe) {
         if (pqe.startsWith('* ')) {
             return {
                 cssQuery: pqe.substring(2),
@@ -185,10 +185,10 @@ export class Transformer extends EventTarget {
             }
             currentTokens = rest;
         }
-        qi.css = await this.#calcCSS(qi, w);
+        qi.css = await this.#calcCSS(qi);
         return qi;
     }
-    async #calcCSS(qi, w) {
+    async #calcCSS(qi) {
         const { cssQuery } = qi;
         if (cssQuery !== undefined)
             return cssQuery;
@@ -225,7 +225,7 @@ export class Transformer extends EventTarget {
         if (localPropCamelCase !== undefined) {
             returnStr += `[-s~="${localPropCamelCase}"]`;
         }
-        return returnStr + (w || '');
+        return returnStr;
     }
     async doUpdate(matchingElement, uow) {
         const { doUpdate } = await import('./trHelpers/doUpdate.js');
