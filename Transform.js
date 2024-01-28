@@ -162,34 +162,31 @@ export class Transformer extends EventTarget {
             qi.cssQuery = asterSplit[1].trim();
         }
         const tokens = pqe.split(' ');
-        this.processHead(qi, tokens);
-        qi.css = await this.#calcCSS(qi, w);
-        return qi;
-    }
-    processHead(qi, tokens) {
         if (tokens.length === 1)
             throw 'NI';
-        if (tokens.length === 0)
-            return;
-        //TODO make non recursive
-        const [first, second, ...rest] = tokens;
-        switch (first) {
-            case '-s': {
-                qi.localPropCamelCase = second;
-                //qi.s = [second];
-                break;
-            }
-            default: {
-                if (qi.hostPropToAttrMap === undefined) {
-                    qi.hostPropToAttrMap = [];
+        let currentTokens = tokens;
+        while (currentTokens.length > 0) {
+            const [first, second, ...rest] = currentTokens;
+            switch (first) {
+                case '-s': {
+                    qi.localPropCamelCase = second;
+                    //qi.s = [second];
+                    break;
                 }
-                qi.hostPropToAttrMap.push({
-                    type: first,
-                    name: second,
-                });
+                default: {
+                    if (qi.hostPropToAttrMap === undefined) {
+                        qi.hostPropToAttrMap = [];
+                    }
+                    qi.hostPropToAttrMap.push({
+                        type: first,
+                        name: second,
+                    });
+                }
             }
+            currentTokens = rest;
         }
-        this.processHead(qi, rest);
+        qi.css = await this.#calcCSS(qi, w);
+        return qi;
     }
     async #calcCSS(qi, w) {
         const { cssQuery } = qi;

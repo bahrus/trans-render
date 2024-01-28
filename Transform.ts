@@ -181,36 +181,33 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
             qi.cssQuery = asterSplit[1].trim();
         }
         const tokens = pqe.split(' ');
-        this.processHead(qi, tokens);
+        if(tokens.length === 1) throw 'NI';
+        let currentTokens = tokens;
+        while(currentTokens.length > 0){
+            const [first, second, ...rest] = currentTokens;
+            switch(first){
+                case '-s': {
+                    qi.localPropCamelCase = second;
+                    //qi.s = [second];
+                    break;
+                }
+                default:{
+                    if(qi.hostPropToAttrMap === undefined){
+                        qi.hostPropToAttrMap = [];
+                    }
+                    qi.hostPropToAttrMap.push({
+                        type: first as PropAttrQueryType,
+                        name: second,
+                    })
+                }
+            }
+            currentTokens = rest;
+        }
         qi.css = await this.#calcCSS(qi, w);
         return qi;
     }
 
-    processHead(qi: QueryInfo, tokens: string[]){
-        if(tokens.length === 1) throw 'NI';
-        if(tokens.length === 0) return;
-        //TODO make non recursive
-        const [first, second, ...rest] = tokens;
-        switch(first){
-            case '-s': {
-                qi.localPropCamelCase = second;
-                //qi.s = [second];
-                break;
-            }
-            default:{
-                if(qi.hostPropToAttrMap === undefined){
-                    qi.hostPropToAttrMap = [];
-                }
-                qi.hostPropToAttrMap.push({
-                    type: first as PropAttrQueryType,
-                    name: second,
-                })
-            }
-        }
-        this.processHead(qi, rest);
 
-        
-    }
 
     async #calcCSS(qi: QueryInfo, w: WhereConditions | undefined): Promise<string>{
         const {cssQuery} = qi;
