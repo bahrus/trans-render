@@ -501,7 +501,7 @@ const model: Model = {
 Transform<Model>(div, model, {
     span: {
         o: ['msg1', 'msg2'],
-        d: ({msg1, msg2}: Model/**, uow: UnitOfWorkCtx**/) => `msg1: ${msg1}, msg2: ${msg2}`
+        d: ({msg1, msg2}: Model) => `msg1: ${msg1}, msg2: ${msg2}`
     }
 });
 ```
