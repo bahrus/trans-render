@@ -70,7 +70,15 @@ All the examples described below can [be seen fully here](https://github.com/bah
 
    c.  [Inline computed derivatives with multiple prop dependencies](#example-3c-instant-gratification-for-computed-derivations)
 
-4. [Part 4 - Setting multiple props of the matching element](#example-4-setting-props-of-the-element)
+4. [Part 4 - Setting multiple props of the matching element](#part-4-setting-props-of-the-element)
+
+   a.  [Setting props from a distance](#example-4a---setting-props-from-a-distance)
+
+   b.  [Example 4b - Observer and Setter Markers](#example-4b-observer--o-and-setter--s-markers)
+
+   c.  [Example 4c - Interpolation with Observer and Setter Markers](#example-4c-interpolation-with-observer-and-setter-markers)
+
+   d.  [Example 4d - Plucking single pairs](#example-4d-plucking-single-pairs)
 
 5. [Part 5 - Event handling](#part-5---event-handling)
 
@@ -348,6 +356,7 @@ export type PropAttrQueryType =
     | '%' //part
     | '.' //class
     | '$' //microdata itemscope + itemprop (nested)
+    | '-o' //discussed in example 4b
 ```
 
 We will see examples of these in use (especially in the Examples8*).
@@ -597,7 +606,7 @@ In what follows, we suggest/provide for some semantic hints that we think can fi
 
 Let's say we want to set property aria-label from host property greeting, and we want to adopt a bit of the "locality of behavior" philosophy, and introduce a minimalist vocabulary of binding inline. We can do this via:
 
-## Example 4b
+## Example 4b observer (-o) and setter (-s) markers
 
 ```html
 <input -o=greeting -s=ariaLabel>
