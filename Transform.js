@@ -296,8 +296,16 @@ export class Transformer extends EventTarget {
     getDefaultProp(matchingElement) {
         if ('href' in matchingElement)
             return 'href';
-        if ('value' in matchingElement && !('button-li'.includes(matchingElement.localName)))
+        if ('value' in matchingElement && !('button-li'.includes(matchingElement.localName))) {
+            if (matchingElement instanceof HTMLInputElement) {
+                const { type } = matchingElement;
+                switch (type) {
+                    case 'checkbox':
+                        return 'checked';
+                }
+            }
             return 'value';
+        }
         return 'textContent';
     }
 }

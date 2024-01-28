@@ -322,7 +322,17 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
 
     getDefaultProp(matchingElement: Element){
         if('href' in matchingElement) return 'href';
-        if('value' in matchingElement && !('button-li'.includes(matchingElement.localName))) return 'value';
+        if('value' in matchingElement && !('button-li'.includes(matchingElement.localName))) {
+            if(matchingElement instanceof HTMLInputElement){
+                const {type} = matchingElement;
+                switch(type){
+                    case 'checkbox':
+                        return 'checked';
+                    
+                }
+            }
+            return 'value';
+        } 
         return 'textContent';
     }
 
