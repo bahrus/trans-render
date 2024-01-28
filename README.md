@@ -1131,7 +1131,7 @@ Transform<Props, Methods>(div, model, {
             toValFrom: '.dataset.val'
         }
     },
-    '$ selectedItem': 0
+    '| selectedItem': 0
 });
 ```
 
@@ -1303,14 +1303,11 @@ Writing one match per property would be quite redundant.  So we can use a parame
 
 ```TypeScript
 Transform<Props & Methods>(div, model, {
-    '| :prop': {
-        o: ':prop',
-        foreach: {prop: ['prop1', 'prop2', ..., 'prop17']}
+    '| prop:idx': {
+        forIdxInRange: [1, 17]
     },
 });
 ```
-
-Does this really save that much?  Yes, if there are some additional instructions (like enhancements).
 
 ## Example 9b Nested transforms, binding to a loop with aria-index [TODO]
 
@@ -1320,9 +1317,18 @@ I'm not sure if this is the most optimal way of binding to a loop, but where it 
 <div>
 <table itemscope itemprop=list>
     <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-index=1>
-        <td itemprop=prop1></td>
+        <td itemprop=myProp></td>
     </tr>
-    
+    <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-index=2>
+        <td itemprop=myProp></td>
+    </tr>
+    <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-index=3>
+        <td itemprop=myProp></td>
+    </tr>
+    ...
+    <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-index=1000>
+        <td itemprop=myProp></td>
+    </tr>    
 </table>
 </div>
 ```
