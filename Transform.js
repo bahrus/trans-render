@@ -49,6 +49,7 @@ export class Transformer extends EventTarget {
     }
     async do() {
         const { target, model, xform } = this;
+        const info = xform;
         let { options } = this;
         if (options === undefined) {
             options = {};
@@ -64,6 +65,8 @@ export class Transformer extends EventTarget {
         }
         const uows = [];
         for (const key in xform) {
+            if (key === '411')
+                continue;
             let rhs = (xform[key]);
             switch (typeof rhs) {
                 case 'number': {
@@ -141,8 +144,10 @@ export class Transformer extends EventTarget {
     }
     async calcQI(pqe) {
         if (pqe.startsWith('* ')) {
+            const cssQuery = pqe.substring(2);
             return {
-                cssQuery: pqe.substring(2),
+                css: cssQuery,
+                cssQuery
             };
         }
         if (pqe === ':root') {
@@ -152,6 +157,7 @@ export class Transformer extends EventTarget {
         }
         if (!pqe.includes(' ')) {
             return {
+                css: pqe,
                 localName: pqe
             };
         }
@@ -327,7 +333,7 @@ export class MountOrchestrator extends EventTarget {
     }
     async do() {
         const { transformer, queryInfo } = this;
-        const { options } = transformer;
+        const { options, xform } = transformer;
         const { skipInit } = options;
         const { isRootQry } = queryInfo;
         if (isRootQry) {
@@ -335,7 +341,10 @@ export class MountOrchestrator extends EventTarget {
             await onMount(transformer, this, transformer.target, this.#unitsOfWork, !!skipInit, { initializing: true }, this.#matchingElements);
             return;
         }
-        const match = queryInfo.css; // transformer.calcCSS(queryInfo);
+        const info = xform;
+        const w = info?.[411]?.w;
+        const x = w || '';
+        const match = queryInfo.css + x; // transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
             match,
             do: {

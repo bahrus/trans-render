@@ -17,7 +17,9 @@ Transform<Model>(div, model, {
         d: 0,
         
     },
-    411: {}
+    411: {
+        w: '[nyy]'
+    }
 });
 setTimeout(() => {
     const span = document.createElement('span');

@@ -55,7 +55,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
     constructor(
         public target: TransformerTarget,
         model: TProps & TMethods,
-        public xform: XForm<TProps, TMethods, TElement>,
+        public xform: XForm<TProps, TMethods, TElement> & Info,
         public options: TransformOptions, 
     ){
         super();
@@ -64,6 +64,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
     }
     async do(){
         const {target, model, xform} = this;
+        const info = xform as Info;
         let {options} = this;
         if(options === undefined){
             options = {};
@@ -79,6 +80,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
         }
         const uows : Array<QuenitOfWork<TProps, TMethods, TElement>> = [];
         for(const key in xform){
+            if(key as any === '411') continue;
             let rhs = (xform[key as LHS<TProps>]) as RHS<TProps, TMethods>;
             switch(typeof rhs){
                 case 'number': {
@@ -158,9 +160,12 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
         }
     }
     async calcQI(pqe: string){
+        
         if(pqe.startsWith('* ')){
+            const cssQuery = pqe.substring(2);
             return {
-                cssQuery: pqe.substring(2),
+                css: cssQuery,
+                cssQuery
             } as QueryInfo
         }
         
@@ -171,6 +176,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
         }
         if(!pqe.includes(' ')){
             return {
+                css: pqe,
                 localName: pqe
             } as QueryInfo;
         }
@@ -210,6 +216,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
 
 
     async #calcCSS(qi: QueryInfo): Promise<string>{
+        
         const {cssQuery} = qi;
         if(cssQuery !== undefined) return cssQuery;
         const {localName} = qi;
@@ -242,6 +249,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
         if(localPropCamelCase !== undefined){
             returnStr += `[-s~="${localPropCamelCase}"]`
         }
+
         return returnStr;
         
     }
@@ -356,7 +364,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
     }
     async do(){
         const {transformer, queryInfo} = this;   
-        const {options} = transformer;
+        const {options, xform} = transformer;
         const {skipInit} = options;
         const {isRootQry} = queryInfo;
         if(isRootQry){
@@ -366,7 +374,10 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
             )
             return;
         }
-        const match = queryInfo.css;// transformer.calcCSS(queryInfo);
+        const info = xform as Info;
+        const w = info?.[411]?.w;
+        const x = w || '';
+        const match = queryInfo.css + x;// transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
             match,
             do:{
