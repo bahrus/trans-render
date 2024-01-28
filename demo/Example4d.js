@@ -7,10 +7,6 @@ const model = {
 };
 const div = document.querySelector('div');
 Transform(div, model, {
-    '- -:x=:y': {
-        forEachComboIn: [
-            { x: 'aria-checked', y: ['isVegetarian', 'isHappy'] },
-            { x: 'aria-disabled', y: ['isSad', 'isNeutral'] }
-        ]
-    }
+    '-o isVegetarian -s ariaChecked': 0,
+    '-o isHappy -s ariaDisabled': 0
 });

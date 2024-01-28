@@ -15,11 +15,7 @@ const model: Props & Actions = {
 }
 const div = document.querySelector('div')!;
 
-Transform<Props, Actions>(div, model, {
-    '- -:x=:y': {
-        forEachComboIn: [
-            {x: 'aria-checked', y: ['isVegetarian', 'isHappy']},
-            {x: 'aria-disabled', y: ['isSad', 'isNeutral']}
-        ]
-    }
+Transform<Props, Actions, ARIAMixin>(div, model, {
+    '-o isVegetarian -s ariaChecked': 0,
+    '-o isHappy -s ariaDisabled': 0
 });

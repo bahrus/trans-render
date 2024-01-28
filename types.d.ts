@@ -15,13 +15,16 @@ export type PropAttrQueryType =
 export type PropAttrPair<TProps> = `${PropAttrQueryType} ${keyof TProps & string}`;
 
 export type PropQueryExpression<TProps, TElement = {}> =
-    | `${PropAttrPair<TProps>} ${PropAttrPair<TProps>} -s ${keyof TElement & string}`
+    
     | `* ${CSSQuery}`
     | `:root`
     | `${keyof HTMLElementTagNameMap}`
     | `${PropAttrPair<TProps>}`
     | `${PropAttrPair<TProps>} -s ${keyof TElement & string}`
     | `${PropAttrPair<TProps>} ${PropAttrPair<TProps>}`
+    | `${PropAttrPair<TProps>} ${PropAttrPair<TProps>} -s ${keyof TElement & string}`
+    // | `${PropAttrPair<TProps>} ${PropAttrPair<TProps>} ${PropAttrPair<TProps>}`
+    // | `${PropAttrPair<TProps>} ${PropAttrPair<TProps>} ${PropAttrPair<TProps>} -s ${keyof TElement & string}`
     //
     
 ;

@@ -14,10 +14,7 @@
 </head>
 <body>
     <div>
-        <div -aria-checked=isVegetarian></div>
-        <div -aria-checked=isHappy></div>
-        <div -aria-disabled=isSad></div>
-        <section -aria-disabled=isNeutral></section>
+        <div -o="isVegetarian isHappy" -s="ariaChecked ariaDisabled"></div>
     </div>
 
     <script type=module>
