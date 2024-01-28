@@ -718,7 +718,7 @@ Transform<Props, Actions>(form, model, {
 });
 ```
 
-So now we use the letter "a", short for **a**ddEventListener.
+So now we use the letter "a", short for **a**ddEventListener, or "user inter**a**ctions".
 
 ## Example 5b - Adding a single event listener, the most standard one
 
@@ -779,12 +779,15 @@ const form = document.querySelector('form')!;
 
 Transform<Props, Actions>(form, model, {
     input: {
-        a: ['handleInput', {
-            on: 'change',
-            do: (e, {model}) => {
-                model.isHappy = !model.isHappy;
+        a: [
+            'handleInput', 
+            {
+                on: 'change',
+                do: (e, {model}) => {
+                    model.isHappy = !model.isHappy;
+                }
             }
-        }]
+        ]
     },
     span: 'isHappy'
 });
@@ -914,7 +917,7 @@ We can also specify an array of engagements:
 
 *trans-render* plays favorites with [be-enhanced](https://github.com/bahrus/be-enhanced) enhancements, for obvious reasons. 
 
-This package support such enhancements in two related ways, and both can be employed at the same time for the same enhancement:
+This package supports such enhancements in two related ways, and both can be employed at the same time for the same enhancement:
 
 1.  We can set beEnhanced enhancement property values from our model:
 
@@ -928,7 +931,7 @@ The key is the beginning of the string ('+').  "+" feels like we are "supplement
 
 This automatically causes the beSearching enhancement to become attached (assuming some other process imports the JS reference, or we use "dep" to do so, as described below).
 
-2.  Attach be-enhanced enhancement (during engagement, one time only, constant values, no updates when the model changes)
+2.  We can attach be-enhanced enhancements (during engagement, one time only, constant values, no updates when the model changes)
 
 
 ### Example 6e - beEnhanced enhancements, part 2
@@ -950,7 +953,7 @@ Transform<Model>(div, model, {
 });
 ```
 
-Due to the way everything works, the s: property will automatically attach the beSearching enhancement anyway.  But the e: setting allows for setting static properties once, if applicable.
+Due to the way everything works, the s: property will automatically attach the beSearching enhancement anyway.  But the e: setting allows for setting static properties once, if applicable, including the dependency wherein the enhancement is defined.
 
 [TODO]  Do only if a strong use case:  Infer engagement based on the name of the method.  For example, suppose the model looks like:
 
