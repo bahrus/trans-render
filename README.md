@@ -623,17 +623,17 @@ Transform<Model>(form, model, {
 
 ```Typescript
 Transform<Model>(form, model, { 
-    '-o msg1 msg2 -s textContent': {
+    '-o msg1 -o msg2 -s textContent': {
         d: ['msg1: ', 0, 'msg2: ', 1]
     }
 });
 ```
 
 
-## Example 4d plucking single pairs [TODO]
+## Example 4d plucking single pairs
 
 ```html
-<div -o="isVegetarian isHappy" -s="ariaChecked ariaDisabled"></div>
+<div role="checkbox" title=test -o="isVegetarian isHappy" -s="ariaChecked ariaDisabled"></div>
 ```
 
 ```Typescript
