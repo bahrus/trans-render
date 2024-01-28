@@ -1316,17 +1316,17 @@ I'm not sure if this is the most optimal way of binding to a loop, but where it 
 ```html
 <div>
 <table itemscope itemprop=list>
-    <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-index=1>
+    <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=1>
         <td itemprop=myProp></td>
     </tr>
-    <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-index=2>
+    <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=2>
         <td itemprop=myProp></td>
     </tr>
-    <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-index=3>
+    <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=3>
         <td itemprop=myProp></td>
     </tr>
     ...
-    <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-index=1000>
+    <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=1000>
         <td itemprop=myProp></td>
     </tr>    
 </table>
@@ -1336,7 +1336,7 @@ I'm not sure if this is the most optimal way of binding to a loop, but where it 
 ```TypeScript
 Transform<Props & Methods>(div, model, {
     '$ list': {
-        '$ itemListElement [aria-index=:idx]':{
+        '$ itemListElement [aria-rowindex=:idx]':{
             '| prop1': 0
         }
     }
