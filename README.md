@@ -1309,13 +1309,16 @@ Transform<Props & Methods>(div, model, {
 });
 ```
 
-## Example 9b Nested transforms, binding to a loop with aria-index [TODO]
+## Example 9b Nested transforms, binding to a loop with aria-index, non optimized [TODO]
 
 I'm not sure if this is the most optimal way of binding to a loop, but where it works okay:
 
 ```html
 <div>
 <table itemscope itemprop=list>
+    <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=0>
+        <td itemprop=myProp></td>
+    </tr>
     <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=1>
         <td itemprop=myProp></td>
     </tr>
@@ -1342,7 +1345,8 @@ Transform<Props & Methods>(div, model, {
                     from: list,
                     withIdx: 'ariaRowIndex'
                 }
-            }
+            },
+            
         }
     }
 })
@@ -1350,6 +1354,13 @@ Transform<Props & Methods>(div, model, {
 ```
 
 I think this really requires the @scope [css donut capability](https://caniuse.com/css-cascade-scope) to allow for nested loops.
+
+What this does:  anytime there is a new list:
+
+1.  wipes out all the rows with aria-index!=0
+2.  clones the item with aria-index=0 n times (corresponding to length of list).
+3.  sets up transform on each "row"
+4.  appends
 
 
 ## Part 10 - Updating the model
