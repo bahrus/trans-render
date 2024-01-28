@@ -14,8 +14,10 @@ const model: Model = {
 Transform<Model>(div, model, {
     span: {
         o: ['greeting'],
-        d: 0
+        d: 0,
+        
     },
+    411: {}
 });
 setTimeout(() => {
     const span = document.createElement('span');

@@ -311,10 +311,14 @@ export type XForm<TProps, TMethods, TElement = {}> = Partial<{
     [key in LHS<TProps, TElement>]: RHS<TProps, TMethods, TElement>;
 }>;
 
+export type Info = {
+    411?: {}
+}
+
 export interface ITransformer<TProps, TMethods, TElement = {}>{
     target: TransformerTarget,
     model: TProps & TMethods,
-    xform: XForm<TProps, TMethods, TElement>,
+    xform: XForm<TProps, TMethods, TElement> & Info,
     options: TransformOptions,
     //propagator?: EventTarget,
 }

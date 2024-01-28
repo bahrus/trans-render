@@ -5,7 +5,7 @@ import {
     DerivationCriteria,
     TransformerTarget, 
     onMountStatusChange, RHS, AddEventListener,
-    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget, TransformOptions, LHS, WhereConditions
+    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget, TransformOptions, LHS, WhereConditions, Info
 } from './types.js';
 import { IMountObserver, MountContext, PipelineStage } from 'mount-observer/types';
 export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './types';
@@ -13,7 +13,7 @@ export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './types';
 export async function Transform<TProps extends {}, TMethods = TProps, TElement = {}>(
     target: TransformerTarget,
     model: TProps & TMethods,
-    xform: XForm<TProps, TMethods, TElement>,
+    xform: XForm<TProps, TMethods, TElement> & Info,
     options?: TransformOptions
 ){
     const xformer =  new Transformer<TProps, TMethods, TElement>(target, model, xform, options!);
