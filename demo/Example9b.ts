@@ -25,7 +25,16 @@ const model: Model = {
     ]
 };
 
-const div = document.querySelector('div');
+const div = document.querySelector('div')!;
 
-
+Transform<Props, Methods>(div, model, {
+    '$ list': {
+        '$ itemListElement':{
+            '| prop1': 0,
+            411:{
+                idxFrom: 'ariaRowIndex'
+            }
+        }
+    }
+});
 

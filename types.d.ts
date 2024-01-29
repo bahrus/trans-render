@@ -270,7 +270,7 @@ export type UnitOfWorkRHS<TProps, TMethods, TElement = {}> =
     | keyof TMethods & string 
     | keyof TProps & string
     | UnitOfWork<TProps, TMethods, TElement>
-    | XForm<any, any, any> //unclear if this is necessary
+    | XForm<any, any, any> & Info //unclear if this is necessary
 ;
 
 export type RHS<TProps, TMethods, TElements = Element> = UnitOfWorkRHS<TProps, TMethods, TElements> | Array<UnitOfWork<TProps, TMethods, TElements>>;
@@ -314,6 +314,7 @@ export type XForm<TProps, TMethods, TElement = {}> = Partial<{
 export interface Info  {
     411?: {
         w?: string,
+        idxFrom?: string
     }
 }
 
