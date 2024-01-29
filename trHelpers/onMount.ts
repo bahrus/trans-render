@@ -56,7 +56,7 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
             const transpiledMs = arr(m);
             const {Mod} = await import('./Mod.js');
             for(const mi of transpiledMs){
-                new Mod(mountObserver, transformer, matchingElement, mi);
+                new Mod<TProps, TMethods, TElement>(mountObserver, transformer, matchingElement, mi);
             }
             
         }
