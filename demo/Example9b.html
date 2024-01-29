@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 9b</title>
+    <script type=importmap>
+        {
+            "imports": {
+                "mount-observer/": "../node_modules/mount-observer/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div>
+        <table itemscope itemprop=list>
+            <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=0>
+                <td itemprop=myProp></td>
+            </tr>
+            <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=1>
+                <td itemprop=myProp></td>
+            </tr>
+            <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=2>
+                <td itemprop=myProp></td>
+            </tr>
+            <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=3>
+                <td itemprop=myProp></td>
+            </tr>
+            ...
+            <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=1000>
+                <td itemprop=myProp></td>
+            </tr>    
+        </table>
+    </div>
+
+    <script type=module>
+        import './Example9b.js';
+    </script>
+</body>
+</html>
