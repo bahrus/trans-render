@@ -1309,7 +1309,7 @@ Transform<Props & Methods>(div, model, {
 });
 ```
 
-## Example 9b Nested transforms, binding to a loop with aria-index, non optimized [TODO]
+## Example 9b Nested transforms, binding to a loop with aria-index, non optimized [WIP]
 
 I'm not sure if this is the most optimal way of binding to a loop, but where it works okay:
 
@@ -1343,7 +1343,7 @@ Transform<Props & Methods>(div, model, {
     '$ list': {
         f:{
             each: 0,
-            clone: '[aria-rowindex=0]',
+            clone: '[aria-rowindex="0"]',
             xform:{
                 '| myProp': 0
             },

@@ -1,0 +1,42 @@
+export class ForEachImpl {
+    subModel;
+    #ref;
+    #config;
+    #templ;
+    constructor(matchingElement, subModel, uows, mo) {
+        this.subModel = subModel;
+        this.#ref = new WeakRef(matchingElement);
+        const [first] = uows;
+        this.#config = first.f;
+    }
+    async init() {
+        const config = this.#config;
+        const { clone, xform, appendTo } = config;
+        const matchingElement = this.#ref.deref();
+        if (matchingElement === undefined)
+            return;
+        const elToClone = matchingElement.querySelector(clone);
+        if (elToClone instanceof HTMLTemplateElement) {
+            this.#templ = elToClone;
+        }
+        else {
+            const templ = document.createElement('template');
+            templ.innerHTML = elToClone?.outerHTML;
+            this.#templ = templ;
+        }
+        const templ = this.#templ;
+        const instances = [];
+        const { subModel } = this;
+        const { Transform } = await import('../Transform.js');
+        for (const item of subModel) {
+            const instance = templ.content.cloneNode(true);
+            instances.push(instance);
+            await Transform(instance, item, xform);
+        }
+        const elToAppendTo = matchingElement.querySelector(appendTo);
+        for (const instance of instances) {
+            elToAppendTo?.appendChild(instance);
+        }
+    }
+    async update() { }
+}

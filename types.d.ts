@@ -159,10 +159,16 @@ export interface CrossProduct<TProps, TMethods> {
 }
 
 export interface ForEach<TProps, TMethods, TElement = {}>{
-    each: 0,
-    clone: string,
+    each?: 0,
+    clone?: string,
     xform: XForm<TProps, TMethods, TElement> & Info,
-    appendTo: string,
+    appendTo?: string,
+    timestampProp?: string,
+}
+
+export interface ForEachInterface{
+    init(): Promise<void>;
+    update(): Promise<void>;
 }
 export interface UnitOfWork<TProps, TMethods = TProps, TElement = {}>{
     /**

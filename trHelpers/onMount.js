@@ -1,4 +1,5 @@
 import { arr } from '../Transform.js';
+const forEachImpls = new WeakMap();
 export async function onMount(transformer, mo, matchingElement, uows, skipInit, ctx, matchingElements, observer, mountObserver) {
     const { queryInfo } = mo;
     const { hostPropToAttrMap } = queryInfo;
@@ -9,7 +10,15 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
             const { model } = transformer;
             const subModel = model[name];
             if (Array.isArray(subModel)) {
-                throw 'NI';
+                let forEachImpl;
+                if (forEachImpls.has(matchingElement)) {
+                    throw 'NI';
+                }
+                else {
+                    const { ForEachImpl } = await import('./ForEachImpl.js');
+                    forEachImpl = new ForEachImpl(matchingElement, subModel, uows, mo);
+                    await forEachImpl.init();
+                }
             }
             else {
                 const { doNestedTransforms } = await import('./doNestedTransforms.js');
