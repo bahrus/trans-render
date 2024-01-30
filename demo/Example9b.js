@@ -12,11 +12,13 @@ const model = {
 const div = document.querySelector('div');
 Transform(div, model, {
     '$ list': {
-        '$ itemListElement': {
-            '| prop1': 0,
-            411: {
-                idxFrom: 'ariaRowIndex'
-            }
+        f: {
+            each: 0,
+            clone: '[aria-rowindex=0]',
+            xform: {
+                '| myProp': 0
+            },
+            appendTo: 'tbody'
         }
     }
 });

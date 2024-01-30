@@ -157,6 +157,13 @@ export interface CrossProduct<TProps, TMethods> {
     x: string | Array<string>,
     y: (keyof TProps & TMethods & string) | Array<keyof TProps & TMethods & string>
 }
+
+export interface ForEach<TProps, TMethods, TElement = {}>{
+    each: 0,
+    clone: string,
+    xform: XForm<TProps, TMethods, TElement> & Info,
+    appendTo: string,
+}
 export interface UnitOfWork<TProps, TMethods = TProps, TElement = {}>{
     /**
      * add event listener
@@ -172,6 +179,11 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = {}>{
      * enhance / engage with element, or register the found element in some way
      */
     e?:  Engagements<TMethods>,
+
+    /**
+     * for each
+     */
+    f?: ForEach<any, any, any>
 
     //forEachComboIn?: CrossProduct<TProps, TMethods> | Array<CrossProduct<TProps, TMethods>>
 
@@ -306,7 +318,6 @@ export interface AddEventListener<TProps, TMethods>{
     options?: boolean | EventListenerOptions, 
 }
 
-//export type XForm<TProps, TMethods> = Partial<{[key: string]: RHS<TProps, TMethods>}>
 export type XForm<TProps, TMethods, TElement = {}> = Partial<{
     [key in LHS<TProps, TElement>]: RHS<TProps, TMethods, TElement>;
 }>;
@@ -314,7 +325,7 @@ export type XForm<TProps, TMethods, TElement = {}> = Partial<{
 export interface Info  {
     411?: {
         w?: string,
-        idxFrom?: string
+        //idxFrom?: string
     }
 }
 
