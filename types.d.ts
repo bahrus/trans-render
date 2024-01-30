@@ -161,6 +161,7 @@ export interface CrossProduct<TProps, TMethods> {
 export interface ForEach<TProps, TMethods, TElement = {}>{
     each?: 0,
     clone?: string,
+    indexProp?: string,
     xform: XForm<TProps, TMethods, TElement> & Info,
     appendTo?: string,
     timestampProp?: string,

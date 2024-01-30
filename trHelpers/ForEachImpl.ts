@@ -18,7 +18,7 @@ export class ForEachImpl implements ForEachInterface{
     async init(){
         
         const config = this.#config;
-        const {clone, xform, appendTo} = config;
+        const {clone, xform, appendTo, indexProp} = config;
         const matchingElement = this.#ref.deref();
         if(matchingElement === undefined) return;
         const elToClone = matchingElement.querySelector(clone!);
@@ -33,10 +33,15 @@ export class ForEachImpl implements ForEachInterface{
         const instances: Array<Node> = [];
         const {subModel} = this;
         const {Transform} = await import('../Transform.js');
+        let cnt = 1;
         for(const item of subModel){
-            const instance = templ.content.cloneNode(true);
+            const instance = templ.content.cloneNode(true) as DocumentFragment;
+            for(const child of instance.children){
+                (<any>child)[indexProp!] = cnt;
+            }
             instances.push(instance);
             await Transform(instance as DocumentFragment, item, xform);
+            cnt++;
         }
         const elToAppendTo = matchingElement.querySelector(appendTo!);
         for(const instance of instances){

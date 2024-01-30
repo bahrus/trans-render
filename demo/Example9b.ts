@@ -35,7 +35,8 @@ Transform<Props, Methods>(div, model, {
             xform:{
                 '| myProp': 0
             },
-            appendTo: 'tbody'
+            appendTo: 'tbody',
+            indexProp: 'ariaRowIndex',
         }
     }
 });
