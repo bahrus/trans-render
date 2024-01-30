@@ -1316,22 +1316,24 @@ I'm not sure if this is the most optimal way of binding to a loop, but where it 
 ```html
 <div>
     <table itemscope itemprop=list>
-        <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=0>
-            <td itemprop=myProp></td>
-        </tr>
-        <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=1>
-            <td itemprop=myProp></td>
-        </tr>
-        <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=2>
-            <td itemprop=myProp></td>
-        </tr>
-        <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=3>
-            <td itemprop=myProp></td>
-        </tr>
-        ...
-        <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=1000>
-            <td itemprop=myProp></td>
-        </tr>    
+        <tbody>
+            <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=0>
+                <td itemprop=myProp></td>
+            </tr>
+            <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=1>
+                <td itemprop=myProp></td>
+            </tr>
+            <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=2>
+                <td itemprop=myProp></td>
+            </tr>
+            <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=3>
+                <td itemprop=myProp></td>
+            </tr>
+            ...
+            <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=1000>
+                <td itemprop=myProp></td>
+            </tr>
+        </tbody>    
     </table>
 </div>
 ```
@@ -1339,12 +1341,13 @@ I'm not sure if this is the most optimal way of binding to a loop, but where it 
 ```TypeScript
 Transform<Props & Methods>(div, model, {
     '$ list': {
-        '$ itemListElement':{
-            411:{
-                idxFrom: 'ariaRowIndex'
-            }
-            '| prop1': 0,
-
+        f:{
+            each: 0,
+            clone '[aria-rowindex=0]',
+            xform:{
+                '| myProp': 0
+            },
+            appendTo: 'tbody'
         }
     }
 })
