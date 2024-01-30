@@ -10,11 +10,20 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
     ){
     const {queryInfo} = mo;
     const {hostPropToAttrMap} = queryInfo;
-    if(hostPropToAttrMap !== undefined && hostPropToAttrMap.length === 1 && hostPropToAttrMap[0].type === '$'){
-        const {doNestedTransforms} = await import('./doNestedTransforms.js');
-        await doNestedTransforms(matchingElement, uows, mo);
-        return;
-    }
+    if(hostPropToAttrMap !== undefined && hostPropToAttrMap.length === 1){
+        const [first] = hostPropToAttrMap;
+        const {type, name} = first;
+        if(type === '$'){
+            const {model} = transformer;
+            if(Array.isArray((<any>model)[name])){
+                throw 'NI';
+            }else{
+                const {doNestedTransforms} = await import('./doNestedTransforms.js');
+                await doNestedTransforms(matchingElement, uows, mo);
+            }
+            return;
+        } 
+    } 
         
     for(const uow of uows){
         const {w} = uow;
