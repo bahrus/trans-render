@@ -1,3 +1,4 @@
+import { Transform } from '../Transform.js';
 const model = {
     list: [
         {
@@ -9,4 +10,13 @@ const model = {
     ]
 };
 const div = document.querySelector('div');
-export {};
+Transform(div, model, {
+    '$ list': {
+        '$ itemListElement': {
+            '| prop1': 0,
+            411: {
+                idxFrom: 'ariaRowIndex'
+            }
+        }
+    }
+});

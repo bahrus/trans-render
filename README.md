@@ -1340,13 +1340,11 @@ I'm not sure if this is the most optimal way of binding to a loop, but where it 
 Transform<Props & Methods>(div, model, {
     '$ list': {
         '$ itemListElement':{
-            '| prop1': {
-                d:{
-                    from: list,
-                    withIdx: 'ariaRowIndex'
-                }
-            },
-            
+            411:{
+                idxFrom: 'ariaRowIndex'
+            }
+            '| prop1': 0,
+
         }
     }
 })
