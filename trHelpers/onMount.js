@@ -7,12 +7,13 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
         const { type, name } = first;
         if (type === '$') {
             const { model } = transformer;
-            if (Array.isArray(model[name])) {
+            const subModel = model[name];
+            if (Array.isArray(subModel)) {
                 throw 'NI';
             }
             else {
                 const { doNestedTransforms } = await import('./doNestedTransforms.js');
-                await doNestedTransforms(matchingElement, uows, mo);
+                await doNestedTransforms(matchingElement, first, subModel, uows, mo);
             }
             return;
         }

@@ -1,13 +1,15 @@
-import {QuenitOfWork, XForm} from '../types';
+import {AttrMap, QuenitOfWork, XForm} from '../types';
 import {MountOrchestrator, Transform} from '../Transform.js';
-export async function doNestedTransforms(matchingElement: Element, uows: Array<QuenitOfWork<any, any, any>>, mo: MountOrchestrator<any, any, any>){
+export async function doNestedTransforms(
+    matchingElement: Element,
+    attrMap: AttrMap,
+    subModel: any,
+    uows: Array<QuenitOfWork<any, any, any>>, 
+    mo: MountOrchestrator<any, any, any>){
     const {queryInfo, transformer} = mo;
-    const {hostPropToAttrMap} = queryInfo;
-    if(hostPropToAttrMap!.length !== 1) throw 'NI';
-    const prop = hostPropToAttrMap![0].name;
-    const {model, options} = transformer;
+    const prop = attrMap.name;
+    const {options} = transformer;
     const {propagator} = options;
-    const subModel = model[prop];
     propagator!.___nestedProps = (propagator!.___nestedProps || new Map<string, any>()).set(prop, subModel);
     for(const uow of uows){
         const newUOW = {...uow};

@@ -287,6 +287,10 @@ export type UnitOfWorkRHS<TProps, TMethods, TElement = {}> =
 
 export type RHS<TProps, TMethods, TElements = Element> = UnitOfWorkRHS<TProps, TMethods, TElements> | Array<UnitOfWork<TProps, TMethods, TElements>>;
 
+export interface AttrMap{
+    type: PropAttrQueryType, 
+    name: string
+}
 
 export interface QueryInfo{
     isRootQry?: boolean,
@@ -297,7 +301,7 @@ export interface QueryInfo{
     localName?: string,
     //w?: WhereConditions,
     css?: string,
-    hostPropToAttrMap?: Array<{type: PropAttrQueryType, name: string}>
+    hostPropToAttrMap?: Array<AttrMap>
 }
 
 export type TransformerTarget = Element | DocumentFragment | Element[] | ShadowRoot | Document;

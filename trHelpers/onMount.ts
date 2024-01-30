@@ -15,11 +15,12 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
         const {type, name} = first;
         if(type === '$'){
             const {model} = transformer;
-            if(Array.isArray((<any>model)[name])){
+            const subModel = (<any>model)[name]
+            if(Array.isArray(subModel)){
                 throw 'NI';
             }else{
                 const {doNestedTransforms} = await import('./doNestedTransforms.js');
-                await doNestedTransforms(matchingElement, uows, mo);
+                await doNestedTransforms(matchingElement, first, subModel, uows, mo);
             }
             return;
         } 
