@@ -1,4 +1,4 @@
-import { MountOrchestrator } from '../Transform';
+import { MountOrchestrator, Transformer } from '../Transform';
 import { ForEach, ForEachInterface, QuenitOfWork } from '../types';
 
 export const forEachImpls = new WeakMap<Element, ForEachInterface>();
@@ -6,6 +6,7 @@ export class ForEachImpl implements ForEachInterface{
     #ref: WeakRef<Element>;
     #config: ForEach<any, any, any>;
     #templ: HTMLTemplateElement | undefined ;
+    #transforms: Map<number, IthTransform> = new Map();
     constructor(
         matchingElement: Element,
         //public subModel: any[],
@@ -17,7 +18,6 @@ export class ForEachImpl implements ForEachInterface{
         this.#config = first.f!;
     }
     async init(){
-        console.log('init');
         const config = this.#config;
         const {clone} = config;
         const matchingElement = this.#ref.deref();
@@ -44,12 +44,25 @@ export class ForEachImpl implements ForEachInterface{
         const {Transform} = await import('../Transform.js');
         let cnt = 1;
         for(const item of subModel){
+            const ithTransformer = this.#transforms.get(cnt - 1);
+            if(ithTransformer !== undefined){
+                
+                const {item} = ithTransformer;
+                if(item === item) {
+                    cnt++;
+                    continue;
+                }
+            }
             const instance = templ.content.cloneNode(true) as DocumentFragment;
             for(const child of instance.children){
                 (<any>child)[indexProp!] = cnt;
             }
             instances.push(instance);
-            await Transform(instance as DocumentFragment, item, xform);
+            const transformer = await Transform(instance as DocumentFragment, item, xform);
+            this.#transforms.set(cnt - 1, {
+                item,
+                transformer,
+            });
             cnt++;
         }
         const elToAppendTo = matchingElement.querySelector(appendTo!);
@@ -57,4 +70,10 @@ export class ForEachImpl implements ForEachInterface{
             elToAppendTo?.appendChild(instance);
         }
     }
+}
+
+export interface IthTransform{
+    item: any,
+    transformer: Transformer<any, any, any>,
+
 }

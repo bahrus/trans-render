@@ -3,6 +3,7 @@ export class ForEachImpl {
     #ref;
     #config;
     #templ;
+    #transforms = new Map();
     constructor(matchingElement, 
     //public subModel: any[],
     uows, mo) {
@@ -11,7 +12,6 @@ export class ForEachImpl {
         this.#config = first.f;
     }
     async init() {
-        console.log('init');
         const config = this.#config;
         const { clone } = config;
         const matchingElement = this.#ref.deref();
@@ -39,12 +39,24 @@ export class ForEachImpl {
         const { Transform } = await import('../Transform.js');
         let cnt = 1;
         for (const item of subModel) {
+            const ithTransformer = this.#transforms.get(cnt - 1);
+            if (ithTransformer !== undefined) {
+                const { item } = ithTransformer;
+                if (item === item) {
+                    cnt++;
+                    continue;
+                }
+            }
             const instance = templ.content.cloneNode(true);
             for (const child of instance.children) {
                 child[indexProp] = cnt;
             }
             instances.push(instance);
-            await Transform(instance, item, xform);
+            const transformer = await Transform(instance, item, xform);
+            this.#transforms.set(cnt - 1, {
+                item,
+                transformer,
+            });
             cnt++;
         }
         const elToAppendTo = matchingElement.querySelector(appendTo);
