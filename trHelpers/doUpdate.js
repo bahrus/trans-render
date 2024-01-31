@@ -1,5 +1,5 @@
 export async function doUpdate(transformer, matchingElement, uow) {
-    const { d, o, s, sa, i, ss, invoke } = uow;
+    const { d, o, s, sa, i, ss, invoke, f } = uow;
     if (i !== undefined) {
         const valOfIf = await transformer.doIfs(matchingElement, uow, i);
         if (!valOfIf)
@@ -15,6 +15,16 @@ export async function doUpdate(transformer, matchingElement, uow) {
         return;
     }
     ;
+    if (f !== undefined) {
+        const { forEachImpls } = await import('./ForEachImpl.js');
+        const forEachImpl = forEachImpls.get(matchingElement);
+        const { model } = transformer;
+        const subModel = model[o[0]];
+        if (forEachImpl !== undefined) {
+            await forEachImpl.update(subModel);
+        }
+        return;
+    }
     //let val: any;
     if (d === undefined)
         throw 'NI';

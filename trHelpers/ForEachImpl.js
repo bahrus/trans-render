@@ -1,17 +1,19 @@
+export const forEachImpls = new WeakMap();
 export class ForEachImpl {
-    subModel;
     #ref;
     #config;
     #templ;
-    constructor(matchingElement, subModel, uows, mo) {
-        this.subModel = subModel;
+    constructor(matchingElement, 
+    //public subModel: any[],
+    uows, mo) {
         this.#ref = new WeakRef(matchingElement);
         const [first] = uows;
         this.#config = first.f;
     }
     async init() {
+        console.log('init');
         const config = this.#config;
-        const { clone, xform, appendTo, indexProp } = config;
+        const { clone } = config;
         const matchingElement = this.#ref.deref();
         if (matchingElement === undefined)
             return;
@@ -24,9 +26,16 @@ export class ForEachImpl {
             templ.innerHTML = elToClone?.outerHTML;
             this.#templ = templ;
         }
+    }
+    async update(subModel) {
+        console.log('update');
         const templ = this.#templ;
+        const config = this.#config;
+        const matchingElement = this.#ref.deref();
+        if (matchingElement === undefined)
+            throw 'NI';
+        const { xform, appendTo, indexProp } = config;
         const instances = [];
-        const { subModel } = this;
         const { Transform } = await import('../Transform.js');
         let cnt = 1;
         for (const item of subModel) {
@@ -43,5 +52,4 @@ export class ForEachImpl {
             elToAppendTo?.appendChild(instance);
         }
     }
-    async update() { }
 }

@@ -169,7 +169,7 @@ export interface ForEach<TProps, TMethods, TElement = {}>{
 
 export interface ForEachInterface{
     init(): Promise<void>;
-    update(): Promise<void>;
+    update(model: any[]): Promise<void>;
 }
 export interface UnitOfWork<TProps, TMethods = TProps, TElement = {}>{
     /**

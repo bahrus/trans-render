@@ -385,7 +385,9 @@ export class MountOrchestrator extends EventTarget {
                     }
                 }
                 propagator.addEventListener(propName, e => {
+                    console.log('doUpdate');
                     const all = this.#cleanUp();
+                    console.log({ all });
                     for (const matchingElement of all) {
                         this.doUpdate(matchingElement, uow);
                     }
@@ -412,8 +414,8 @@ export class MountOrchestrator extends EventTarget {
         return all;
     }
     async doUpdate(matchingElement, uow) {
-        const { d, s, sa, ss } = uow;
-        if (d !== undefined || s !== undefined || sa !== undefined || ss !== undefined) {
+        const { d, s, sa, ss, f } = uow;
+        if (d !== undefined || s !== undefined || sa !== undefined || ss !== undefined || f !== undefined) {
             await this.transformer.doUpdate(matchingElement, uow);
         }
     }

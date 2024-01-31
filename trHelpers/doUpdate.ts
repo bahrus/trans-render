@@ -5,7 +5,7 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
     matchingElement: Element, 
     uow: UnitOfWork<TProps, TMethods, TElement>,
 ){
-    const {d, o, s, sa, i, ss, invoke} = uow;
+    const {d, o, s, sa, i, ss, invoke, f} = uow;
     if(i !== undefined){
         const valOfIf = await transformer.doIfs(matchingElement, uow, i);
         if(!valOfIf) return;
@@ -19,6 +19,17 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
         Object.assign(matchingElement, s);
         return;
     };
+    if(f !== undefined){
+        const {forEachImpls} = await import('./ForEachImpl.js');
+        const forEachImpl = forEachImpls.get(matchingElement);
+        const {model} = transformer;
+        const subModel = (<any>model)[(o as Array<string>)[0]];
+        if(forEachImpl !== undefined){
+            await forEachImpl.update(subModel);
+            
+        }
+        return;
+    }
     //let val: any;
     if(d === undefined) throw 'NI';
     const val = await transformer.getDerivedVal(uow, d, matchingElement);

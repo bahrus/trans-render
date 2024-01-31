@@ -41,3 +41,18 @@ Transform<Props, Methods>(div, model, {
     }
 });
 
+setTimeout(() => {
+    console.log('update model');
+    model.list = [
+        {
+            myProp: 'row 1'
+        },
+        {
+            myProp: 'row 2'
+        },
+        {
+            myProp: 'row 3'
+        }
+    ]
+}, 2000);
+

@@ -3,7 +3,7 @@ import { IMountObserver, MountContext } from '../../mount-observer/types.js';
 import {Transformer, MountOrchestrator, arr} from '../Transform.js';
 import {QuenitOfWork, AddEventListener, ForEachInterface} from '../types.js';
 
-const forEachImpls = new WeakMap<Element, ForEachInterface>();
+
 export async function onMount<TProps extends {}, TMethods = TProps, TElement = {}>(
     transformer: Transformer<TProps, TMethods, TElement>,
     mo: MountOrchestrator<TProps, TMethods, TElement>, matchingElement: Element, uows: Array<QuenitOfWork<TProps, TMethods, TElement>>,
@@ -18,13 +18,14 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
             const {model} = transformer;
             const subModel = (<any>model)[name]
             if(Array.isArray(subModel)){
+                const {ForEachImpl, forEachImpls} = await import('./ForEachImpl.js');
                 let forEachImpl: ForEachInterface | undefined;
                 if(forEachImpls.has(matchingElement)){
                     throw 'NI';
                 }else{
-                    const {ForEachImpl} = await import('./ForEachImpl.js');
                     forEachImpl = new ForEachImpl(
-                        matchingElement, subModel, uows, mo);
+                        matchingElement, uows, mo);
+                    forEachImpls.set(matchingElement, forEachImpl);
                     await forEachImpl.init();
                 }
                 
@@ -32,7 +33,7 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
                 const {doNestedTransforms} = await import('./doNestedTransforms.js');
                 await doNestedTransforms(matchingElement, first, subModel, uows, mo);
             }
-            return;
+            //return;
         } 
     } 
         

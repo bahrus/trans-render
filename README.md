@@ -327,7 +327,7 @@ Transform<Model>(form, model, {
 
 Note that the trans-render library only provides one-way binding support via a single "unit of work" binding (but more on that in a bit).
 
-If using TypeScript, you will receive compile time errors if trying to bind to a non existent field/property, in case you wee wondering.
+If using TypeScript, you will receive compile time errors if trying to bind to a non existent field/property, in case you were wondering.
 
 The relationship between "@" and the name attribute is a bit weak, but here it is:  It looks like the second letter of the word "name", and also in github and many social media sites, to refer to a person "by name" the character that is typed, in order to get autocomplete suggestions of names, is the @ symbol.  
 
@@ -394,15 +394,6 @@ Transform<Model>(form, model, {
 });
 ```
 
-We can also append the key with the asterisk:
-
-```Typescript
-Transform<Model>(form, model, {
-    '@ greeting': {
-        w: '.isASalutation'
-    },
-});
-```
 
 ## Part 3 - Derived values in depth
 
@@ -510,7 +501,7 @@ Transform<Model>(div, model, {
 
 ### Example 3d:  JSON-serializable declarative advanced derivations
 
-Let's now examine the declarative syntax that trans-render supports, "stretched to the limit" of what we think makes sense without inducing a gag reflex.  The advantage of supporting this is simply we so can "execute" such code more safely in more trust scenarios, with less risk.  Another way of saying this: the moment we need to execute code with full access to the JavaScript run time engine, we need to "shift" gears in some way, and do so in a way that doesn't allow fo xss scripting attacks.
+Let's now examine the declarative syntax that trans-render supports, "stretched to the limit" of what we think makes sense without inducing a gag reflex.  The advantage of supporting this is simply so we can "execute" such code more safely in more trusted scenarios, with less risk.  Another way of saying this: the moment we need to execute code with full access to the JavaScript run time engine, we need to "shift" gears in some way, and do so in a way that doesn't allow fo xss scripting attacks.
 
 ```TypeScript
 const div = document.querySelector('div')!;
@@ -1318,19 +1309,6 @@ I'm not sure if this is the most optimal way of binding to a loop, but where it 
     <table itemscope itemprop=list>
         <tbody>
             <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=0>
-                <td itemprop=myProp></td>
-            </tr>
-            <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=1>
-                <td itemprop=myProp></td>
-            </tr>
-            <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=2>
-                <td itemprop=myProp></td>
-            </tr>
-            <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=3>
-                <td itemprop=myProp></td>
-            </tr>
-            ...
-            <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=1000>
                 <td itemprop=myProp></td>
             </tr>
         </tbody>    
