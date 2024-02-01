@@ -44,7 +44,7 @@ The bottom line is that like with XSLT, it will be quite rare for this style of 
 
 This can leave the template markup quite pristine, but it does mean that the separation between the template and the binding instructions will tend to require looking in two places, rather than one.  And if the template document structure changes, separate adjustments may be needed to keep the binding rules in sync.  Much like how separate css style rules often need adjusting when the document structure changes.
 
-All the examples described below can [be seen fully here](https://github.com/bahrus/trans-render/tree/baseline/demo/transforms)
+All the examples described below can [be seen fully here](https://github.com/bahrus/trans-render/tree/baseline/demo)
 
 # Table of Contents
 
@@ -789,9 +789,11 @@ Transform<Props, Actions>(form, model, {
 
 What about conditionally loading blocks of HTML?  What about loops / repeating content?  
 
-Traditionally, inline binding libraries have supported this, often as add-on's.  The amount of finessing and tailoring for these solutions makes them an art form.  This library is choosing (for now) to steer away from diving into that thicket.
+Traditionally, inline binding libraries have supported this, often as add-on's.  The amount of finessing and tailoring for these solutions makes them an art form.  
 
-However, this library has been designed so that the various settings (a, e, i, o, s, etc) can be overridden for more powerful functionality, or extended to support additional functionality, perhaps keyed from new letters / words.  
+This library does provide obligatory support for loops, but endorses seeking alternatives for specialized looping (virtualized rendering, paging, lazy loading, keyed support, etc).
+
+This library has been designed so that the various settings (a, e, i, o, s, etc) can be overridden for more powerful functionality, or extended to support additional functionality, perhaps keyed from new letters / words.  
 
 But more importantly, as we will see below, the Transform function / Transformer class provides a clean way of hooking up DOM elements to [custom enhancements](https://github.com/WICG/webcomponents/issues/1000), that can certainly include support for conditional loading and repeating DOM structures.  For such enhancements to work well with this library, they need to provide a formal api for getting "attached" to the element, not dependent on an inline attribute (which would be clunky, frankly).  
 

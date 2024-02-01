@@ -48,16 +48,6 @@ setTimeout(() => {
         myProp: 'row 3'
     });
     model.list = list;
-    // model.list = [
-    //     {
-    //         myProp: 'row 1'
-    //     },
-    //     {
-    //         myProp: 'row 2'
-    //     },
-    //     {
-    //         myProp: 'row 3'
-    //     }
-    // ]
+    
 }, 2000);
 
