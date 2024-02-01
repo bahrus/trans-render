@@ -47,8 +47,8 @@ export class ForEachImpl implements ForEachInterface{
             const ithTransformer = this.#transforms.get(cnt - 1);
             if(ithTransformer !== undefined){
                 
-                const {item} = ithTransformer;
-                if(item === item) {
+                const {item: i} = ithTransformer;
+                if(i === item) {
                     cnt++;
                     continue;
                 }
