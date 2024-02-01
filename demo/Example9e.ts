@@ -55,3 +55,15 @@ setTimeout(() => {
     
 }, 2000);
 
+setTimeout(() => {
+    console.log('update model');
+    const list = [
+        ...model.list,
+        {
+            myProp: 'row 5'
+        },
+    ];
+    model.list = list;
+    
+}, 4000);
+

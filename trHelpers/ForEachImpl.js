@@ -44,6 +44,15 @@ export class ForEachImpl {
             if (ithTransformer !== undefined) {
                 cnt++;
                 const { item: i, timeStampVal } = ithTransformer;
+                if (outOfRangeProp) {
+                    const { isOutOfRange, transformers } = ithTransformer;
+                    if (isOutOfRange) {
+                        for (const transformer of transformers) {
+                            const { target } = transformer;
+                            target[outOfRangeProp] = false;
+                        }
+                    }
+                }
                 if (i === item) {
                     continue;
                 }
@@ -76,6 +85,7 @@ export class ForEachImpl {
         if (outOfRangeAction !== undefined || outOfRangeProp !== undefined) {
             let nextTransform = this.#transforms.get(cnt - 1);
             while (nextTransform) {
+                nextTransform.isOutOfRange = true;
                 const { transformers } = nextTransform;
                 for (const transformer of transformers) {
                     const { target } = transformer;

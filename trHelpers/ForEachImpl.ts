@@ -49,6 +49,15 @@ export class ForEachImpl implements ForEachInterface{
             if(ithTransformer !== undefined){
                 cnt++;
                 const {item: i, timeStampVal} = ithTransformer;
+                if(outOfRangeProp){
+                    const {isOutOfRange, transformers} = ithTransformer;
+                    if(isOutOfRange){
+                        for(const transformer of transformers){
+                            const {target} = transformer;
+                            (<any>target)[outOfRangeProp] = false;
+                        }
+                    }
+                }
                 if(i === item) {
                     continue;
                 }
@@ -84,6 +93,7 @@ export class ForEachImpl implements ForEachInterface{
             
             let nextTransform = this.#transforms.get(cnt - 1);
             while(nextTransform){
+                nextTransform.isOutOfRange = true;
                 const {transformers} = nextTransform;
                 for(const transformer of transformers){
                     const {target} = transformer;
@@ -114,4 +124,5 @@ export interface IthTransform{
     item: any,
     transformers: Array<Transformer<any>>,
     timeStampVal?: any,
+    isOutOfRange?: boolean,
 }
