@@ -30,7 +30,6 @@ const div = document.querySelector('div')!;
 Transform<Props, Methods>(div, model, {
     '$ list': {
         f:{
-            clone: 'template',
             xform:{
                 '| myProp': 0
             },

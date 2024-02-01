@@ -13,7 +13,6 @@ const div = document.querySelector('div');
 Transform(div, model, {
     '$ list': {
         f: {
-            clone: 'template',
             xform: {
                 '| myProp': 0
             },

@@ -22,7 +22,7 @@ export class ForEachImpl implements ForEachInterface{
         const {clone} = config;
         const matchingElement = this.#ref.deref();
         if(matchingElement === undefined) return;
-        const elToClone = matchingElement.querySelector(clone!);
+        const elToClone = matchingElement.querySelector(clone || 'template');
         if(elToClone instanceof HTMLTemplateElement){
             this.#templ = elToClone;
         }else{
