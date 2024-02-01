@@ -16,9 +16,12 @@
 
     <div>
         <table itemscope itemprop=list>
-            <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=0>
-                <td itemprop=myProp></td>
-            </tr>
+            <template>
+                <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem>
+                    <td itemprop=myProp></td>
+                </tr>
+            </template>
+            <tbody></tbody>
         </table>
     </div>
 
