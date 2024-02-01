@@ -34,17 +34,23 @@ export class ForEachImpl {
         const matchingElement = this.#ref.deref();
         if (matchingElement === undefined)
             throw 'NI';
-        const { xform, appendTo, indexProp } = config;
+        const { xform, appendTo, indexProp, timestampProp } = config;
         const instances = [];
         const { Transform } = await import('../Transform.js');
         let cnt = 1;
         for (const item of subModel) {
             const ithTransformer = this.#transforms.get(cnt - 1);
             if (ithTransformer !== undefined) {
-                const { item: i } = ithTransformer;
+                const { item: i, timeStampVal } = ithTransformer;
                 if (i === item) {
                     cnt++;
                     continue;
+                }
+                if (timestampProp !== undefined) {
+                    if (timeStampVal === item[timestampProp]) {
+                        cnt++;
+                        continue;
+                    }
                 }
             }
             const instance = templ.content.cloneNode(true);
@@ -56,6 +62,7 @@ export class ForEachImpl {
             this.#transforms.set(cnt - 1, {
                 item,
                 transformer,
+                timeStampVal: timestampProp !== undefined ? item[timestampProp] : undefined,
             });
             cnt++;
         }
