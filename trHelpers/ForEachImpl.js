@@ -41,17 +41,19 @@ export class ForEachImpl {
         for (const item of subModel) {
             const ithTransformer = this.#transforms.get(cnt - 1);
             if (ithTransformer !== undefined) {
+                cnt++;
                 const { item: i, timeStampVal } = ithTransformer;
                 if (i === item) {
-                    cnt++;
                     continue;
                 }
                 if (timestampProp !== undefined) {
                     if (timeStampVal === item[timestampProp]) {
-                        cnt++;
                         continue;
                     }
                 }
+                const { transformer } = ithTransformer;
+                await transformer.updateModel(item);
+                continue;
             }
             const instance = templ.content.cloneNode(true);
             for (const child of instance.children) {
