@@ -21,7 +21,8 @@ Transform(div, model, {
             appendTo: 'tbody',
             indexProp: 'ariaRowIndex',
             timestampProp: 'myProp',
-            outOfRangeAction: '.classList.add|out-of-range'
+            outOfRangeProp: 'hidden',
+            outOfRangeAction: '.classList.add|out-of-range',
         }
     }
 });

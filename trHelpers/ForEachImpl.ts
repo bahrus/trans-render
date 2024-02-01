@@ -39,7 +39,7 @@ export class ForEachImpl implements ForEachInterface{
         const config = this.#config;
         const matchingElement = this.#ref.deref();
         if(matchingElement === undefined) throw 'NI';
-        const {xform, appendTo, indexProp, timestampProp, outOfRangeAction} = config;
+        const {xform, appendTo, indexProp, timestampProp, outOfRangeAction, outOfRangeProp} = config;
         const instances: Array<Node> = [];
         const transformerLookup = new Map<Node, Transformer<any>>();
         const {Transform} = await import('../Transform.js');
@@ -80,21 +80,28 @@ export class ForEachImpl implements ForEachInterface{
             });
             cnt++;
         }
-        if(outOfRangeAction !== undefined){
-            const {getVal} = await import('../lib/getVal.js');
+        if(outOfRangeAction !== undefined || outOfRangeProp !== undefined){
+            
             let nextTransform = this.#transforms.get(cnt - 1);
             while(nextTransform){
                 const {transformers} = nextTransform;
                 for(const transformer of transformers){
                     const {target} = transformer;
                     //debugger;
-                    await getVal({host: target}, outOfRangeAction); 
+                    if(outOfRangeAction !== undefined){
+                        const {getVal} = await import('../lib/getVal.js');
+                        await getVal({host: target}, outOfRangeAction);
+                    }
+                    if(outOfRangeProp){
+                        (<any>target)[outOfRangeProp] = true;
+                    }
                 }
                  
                 cnt++;
                 nextTransform = this.#transforms.get(cnt - 1);
             }
         }
+        
         const elToAppendTo = matchingElement.querySelector(appendTo!);
         for(const instance of instances){
             elToAppendTo?.append(instance);

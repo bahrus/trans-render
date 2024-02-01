@@ -34,7 +34,7 @@ export class ForEachImpl {
         const matchingElement = this.#ref.deref();
         if (matchingElement === undefined)
             throw 'NI';
-        const { xform, appendTo, indexProp, timestampProp, outOfRangeAction } = config;
+        const { xform, appendTo, indexProp, timestampProp, outOfRangeAction, outOfRangeProp } = config;
         const instances = [];
         const transformerLookup = new Map();
         const { Transform } = await import('../Transform.js');
@@ -73,15 +73,20 @@ export class ForEachImpl {
             });
             cnt++;
         }
-        if (outOfRangeAction !== undefined) {
-            const { getVal } = await import('../lib/getVal.js');
+        if (outOfRangeAction !== undefined || outOfRangeProp !== undefined) {
             let nextTransform = this.#transforms.get(cnt - 1);
             while (nextTransform) {
                 const { transformers } = nextTransform;
                 for (const transformer of transformers) {
                     const { target } = transformer;
                     //debugger;
-                    await getVal({ host: target }, outOfRangeAction);
+                    if (outOfRangeAction !== undefined) {
+                        const { getVal } = await import('../lib/getVal.js');
+                        await getVal({ host: target }, outOfRangeAction);
+                    }
+                    if (outOfRangeProp) {
+                        target[outOfRangeProp] = true;
+                    }
                 }
                 cnt++;
                 nextTransform = this.#transforms.get(cnt - 1);

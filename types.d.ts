@@ -166,6 +166,7 @@ export interface ForEach<TProps, TMethods, TElement = {}>{
     appendTo?: string,
     timestampProp?: string,
     outOfRangeAction?: string,
+    outOfRangeProp?: string,
 }
 
 export interface ForEachInterface{
