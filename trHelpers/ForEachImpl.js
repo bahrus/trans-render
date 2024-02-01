@@ -34,8 +34,9 @@ export class ForEachImpl {
         const matchingElement = this.#ref.deref();
         if (matchingElement === undefined)
             throw 'NI';
-        const { xform, appendTo, indexProp, timestampProp } = config;
+        const { xform, appendTo, indexProp, timestampProp, outOfRangeAction } = config;
         const instances = [];
+        const transformerLookup = new Map();
         const { Transform } = await import('../Transform.js');
         let cnt = 1;
         for (const item of subModel) {
@@ -51,26 +52,45 @@ export class ForEachImpl {
                         continue;
                     }
                 }
-                const { transformer } = ithTransformer;
-                await transformer.updateModel(item);
+                const { transformers } = ithTransformer;
+                for (const transformer of transformers) {
+                    await transformer.updateModel(item);
+                }
                 continue;
             }
             const instance = templ.content.cloneNode(true);
+            const transformers = [];
             for (const child of instance.children) {
                 child[indexProp] = cnt;
+                const transformer = await Transform(child, item, xform);
+                transformers.push(transformer);
             }
             instances.push(instance);
-            const transformer = await Transform(instance, item, xform);
             this.#transforms.set(cnt - 1, {
                 item,
-                transformer,
+                transformers,
                 timeStampVal: timestampProp !== undefined ? item[timestampProp] : undefined,
             });
             cnt++;
         }
+        if (outOfRangeAction !== undefined) {
+            const { getVal } = await import('../lib/getVal.js');
+            let nextTransform = this.#transforms.get(cnt - 1);
+            while (nextTransform) {
+                const { transformers } = nextTransform;
+                for (const transformer of transformers) {
+                    const { target } = transformer;
+                    //debugger;
+                    await getVal({ host: target }, outOfRangeAction);
+                }
+                cnt++;
+                nextTransform = this.#transforms.get(cnt - 1);
+            }
+        }
         const elToAppendTo = matchingElement.querySelector(appendTo);
         for (const instance of instances) {
-            elToAppendTo?.appendChild(instance);
+            elToAppendTo?.append(instance);
+            //debugger;
         }
     }
 }

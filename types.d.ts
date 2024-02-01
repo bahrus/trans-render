@@ -165,6 +165,7 @@ export interface ForEach<TProps, TMethods, TElement = {}>{
     xform: XForm<TProps, TMethods, TElement> & Info,
     appendTo?: string,
     timestampProp?: string,
+    outOfRangeAction?: string,
 }
 
 export interface ForEachInterface{
