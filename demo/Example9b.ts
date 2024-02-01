@@ -30,13 +30,11 @@ const div = document.querySelector('div')!;
 Transform<Props, Methods>(div, model, {
     '$ list': {
         f:{
-            each: 0,
-            clone: '[aria-rowindex="0"]',
+            clone: 'template',
             xform:{
                 '| myProp': 0
             },
             appendTo: 'tbody',
-            indexProp: 'ariaRowIndex',
         }
     }
 });

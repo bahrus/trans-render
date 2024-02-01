@@ -1302,35 +1302,45 @@ Transform<Props & Methods>(div, model, {
 });
 ```
 
-## Example 9b Nested transforms, binding to a loop with aria-index, non optimized [WIP]
+## Example 9b Rudimentary support for loops
 
 I'm not sure if this is the most optimal way of binding to a loop, but where it works okay:
 
 ```html
 <div>
     <table itemscope itemprop=list>
-        <tbody>
-            <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem aria-rowindex=0>
+        <template>
+            <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem>
                 <td itemprop=myProp></td>
             </tr>
-        </tbody>    
+        </template>
+        <tbody></tbody>
     </table>
 </div>
 ```
 
 ```TypeScript
-Transform<Props & Methods>(div, model, {
+Transform<Props, Methods>(div, model, {
     '$ list': {
         f:{
-            each: 0,
-            clone: '[aria-rowindex="0"]',
+            clone: 'template',
             xform:{
                 '| myProp': 0
             },
-            appendTo: 'tbody'
+            appendTo: 'tbody',
         }
     }
-})
+});
+
+setTimeout(() => {
+    console.log('update model');
+    const list = [...model.list];
+    list.push({
+        myProp: 'row 3'
+    });
+    model.list = list;
+    
+}, 2000);
 
 ```
 
