@@ -1314,7 +1314,6 @@ I'm not sure if this is the most optimal way of binding to a loop, but where it 
                 <td itemprop=myProp></td>
             </tr>
         </template>
-        <tbody></tbody>
     </table>
 </div>
 ```
@@ -1325,8 +1324,7 @@ Transform<Props, Methods>(div, model, {
         f:{
             xform:{
                 '| myProp': 0
-            },
-            appendTo: 'tbody',
+            }
         }
     }
 });
@@ -1343,14 +1341,11 @@ setTimeout(() => {
 
 ```
 
-I think this really requires the @scope [css donut capability](https://caniuse.com/css-cascade-scope) to allow for nested loops.
+"f" stand for "foreach".
 
-What this does:  anytime there is a new list:
+Note that al the attributes of tr are optional.
 
-1.  wipes out all the rows with aria-index!=0
-2.  clones the item with aria-index=0 n times (corresponding to length of list).
-3.  sets up transform on each "row"
-4.  appends
+
 
 
 ## Part 10 - Updating the model

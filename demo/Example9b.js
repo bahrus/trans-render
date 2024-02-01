@@ -16,7 +16,6 @@ Transform(div, model, {
             xform: {
                 '| myProp': 0
             },
-            appendTo: 'tbody',
         }
     }
 });

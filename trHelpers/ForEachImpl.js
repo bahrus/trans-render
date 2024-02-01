@@ -28,7 +28,7 @@ export class ForEachImpl {
         }
     }
     async update(subModel) {
-        console.log('update');
+        //console.log('update');
         const templ = this.#templ;
         const config = this.#config;
         const matchingElement = this.#ref.deref();
@@ -102,7 +102,7 @@ export class ForEachImpl {
                 nextTransform = this.#transforms.get(cnt - 1);
             }
         }
-        const elToAppendTo = matchingElement.querySelector(appendTo);
+        const elToAppendTo = appendTo !== undefined ? matchingElement.querySelector(appendTo) : matchingElement;
         for (const instance of instances) {
             elToAppendTo?.append(instance);
             //debugger;
