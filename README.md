@@ -1069,6 +1069,41 @@ Transform<Props, Methods>(form, model, {
 });
 ```
 
+### Example 7d:  Lazy (conditionally) loading / hiding a significant chunk of HTML from a template
+
+In some scenarios, the cost of loading the HTML into memory (including binding instructions), before it is actually viewable and/or useful to the end user, may lead to the conclusion that it would be better to load the HTML from an inert template on demand.
+
+This library provides support for this, by "overloading" the act of setting the hidden property of the template.
+
+So for example:
+
+```html
+<div>
+    <template>
+        <heavy-lifting-boolean-editor></heavy-lifting-boolean-editor>
+    </template>
+</div>
+```
+
+```Typescript
+const model = {
+    typeToEdit: 'boolean'
+}
+Transform<Props, Methods>(form, model, {
+    template: [
+        {o: 'typeToEdit', i: 'boolean', s: {hidden: false}},
+        {o: 'typeToEdit', i: 'number',  s: {hidden: true}},
+        {o: 'typeToEdit', i: 'object',  s: {hidden: true}}
+    ]
+});
+```
+
+This library will not take the instruction literally, and set the template's hidden property, which wouldn't do anything perceptible to the user.
+
+Instead, it will instantiate the template when .hidden is "set" to false, and then hide the instantiated children when/if .hidden is "set" to true.
+
+This is one of many possible ways we can load content lazily.  For other approaches, consider using or creating a custom enhancement, and attaching said enhancement, that precisely matches your needs.  This package's support for lazy/conditional loading is only imported on demand, so no harm done.
+
 ## Modifying the host or model
 
 To support our holy quest for doing as much as possible declaratively, we provide for some ways of **m**odifying the host without requiring writing code in an event handler, to account for a significant number of use cases.
