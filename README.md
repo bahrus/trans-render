@@ -791,7 +791,7 @@ What about conditionally loading blocks of HTML?  What about loops / repeating c
 
 Traditionally, inline binding libraries have supported this, often as add-on's.  The amount of finessing and tailoring for these solutions makes them an art form.  
 
-This library does provide obligatory support for loops, but endorses seeking alternatives for specialized looping (virtualized rendering, paging, lazy loading, keyed support, etc).
+This library does provide obligatory support for loops, but endorses seeking alternatives for specialized looping (virtualized rendering, paging, lazy loading, keyed support, etc).  The dependencies for the loop support is only loaded on demand, so no harm done if you chose to forgo the rudimentary support.
 
 This library has been designed so that the various settings (a, e, i, o, s, etc) can be overridden for more powerful functionality, or extended to support additional functionality, perhaps keyed from new letters / words.  
 
@@ -1344,8 +1344,6 @@ setTimeout(() => {
 "f" stand for "foreach".
 
 Note that al the attributes of tr are optional.
-
-
 
 
 ## Part 10 - Updating the model
