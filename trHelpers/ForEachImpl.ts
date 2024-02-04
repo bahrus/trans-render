@@ -73,7 +73,9 @@ export class ForEachImpl implements ForEachInterface{
                 
                 continue;
             }
-            const instance = templ.content.cloneNode(true) as DocumentFragment;
+            const {getBlowDriedTempl} = await import('../lib/getBlowDriedTempl.js');
+            const blowDriedTempl = getBlowDriedTempl(templ);
+            const instance = blowDriedTempl.content.cloneNode(true) as DocumentFragment;
             const transformers: Array<Transformer<any>> = [];
             for(const child of instance.children){
                 (<any>child)[indexProp!] = cnt;

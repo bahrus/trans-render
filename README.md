@@ -359,6 +359,7 @@ export type PropAttrQueryType =
     | '.' //class
     | '$' //microdata itemscope + itemprop (nested)
     | '-o' //discussed in example 4b
+    | '-s' //discussed in example 4b
 ```
 
 We will see examples of these in use (especially in the Examples8*).
@@ -791,7 +792,7 @@ What about conditionally loading blocks of HTML?  What about loops / repeating c
 
 Traditionally, inline binding libraries have supported this, often as add-on's.  The amount of finessing and tailoring for these solutions makes them an art form.  
 
-This library does provide [obligatory support for loops](#example-9b-rudimentary-support-for-loops), but endorses seeking alternatives for specialized looping (virtualized rendering, paging, lazy loading, keyed support, resuming/suspending/hydrating server-rendered loops, etc).  The dependencies for the loop support in this package is only loaded on demand, so there is little to no harm done if you chose to forgo the rudimentary support in favor of alternative enhancements.
+This library does provide obligatory support for [conditionally lazy loading](#example-7d-lazy-conditionally-loading--hiding-a-significant-chunk-of-html-from-a-template) and [loops](#example-9b-rudimentary-support-for-loops), but endorses seeking alternatives for specialized scenarios (virtualized rendering, paging, lazy loading, keyed support, resuming/suspending/hydrating server-rendered loops, etc).  The dependencies for the loop and conditional loading support in this package is only loaded on demand, so there is little to no harm done if you chose to forgo the rudimentary support in favor of alternative enhancements.
 
 This library has been designed so that the various settings (a, e, i, o, s, etc) can be overridden for more powerful functionality, or extended to support additional functionality, perhaps keyed from new letters / words.  
 

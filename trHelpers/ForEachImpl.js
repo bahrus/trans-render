@@ -67,7 +67,9 @@ export class ForEachImpl {
                 }
                 continue;
             }
-            const instance = templ.content.cloneNode(true);
+            const { getBlowDriedTempl } = await import('../lib/getBlowDriedTempl.js');
+            const blowDriedTempl = getBlowDriedTempl(templ);
+            const instance = blowDriedTempl.content.cloneNode(true);
             const transformers = [];
             for (const child of instance.children) {
                 child[indexProp] = cnt;
