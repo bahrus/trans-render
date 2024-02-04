@@ -1,4 +1,4 @@
-export async function hatchOrFind(templ: HTMLTemplateElement) : Promise<hatchOrFindResponse>{
+export function hatchOrFind(templ: HTMLTemplateElement) : hatchOrFindResponse{
     //TODO: add caching if it helps performance, starting with the split itemref attribute
     const itemref= templ.getAttribute('itemref');
     if(itemref === null){

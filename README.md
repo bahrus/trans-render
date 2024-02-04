@@ -1081,6 +1081,7 @@ So for example:
 <div>
     <template>
         <heavy-lifting-boolean-editor></heavy-lifting-boolean-editor>
+        <div>hello</div>
     </template>
 </div>
 ```
