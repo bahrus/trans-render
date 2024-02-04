@@ -1099,11 +1099,30 @@ Transform<Props, Methods>(form, model, {
 });
 ```
 
-This library will not take the instruction literally, and set the template's hidden property, which wouldn't do anything perceptible to the user.
+This library will not take the instruction literally -- it will **not** set the template's hidden property, which wouldn't do anything perceptible to the user.
 
-Instead, it will instantiate the template when .hidden is "set" to false, and then hide the instantiated children when/if .hidden is "set" to true.
+Instead, it will instantiate the template when .hidden is "set" (virtually) to false, and then hide the instantiated children when/if .hidden is "set" to true.
 
 This is one of many possible ways we can load content lazily.  For other approaches, consider using or creating a custom enhancement, and attaching said enhancement, that precisely matches your needs.  This package's support for lazy/conditional loading is only imported on demand, so no harm done.
+
+### Optimizing Example 7d
+
+At the beginning of this document, one of the key goals that has been set out for trans-render is that we can reuse the streamed HTML, not only as our first instance of the web component, but we can take a snapshot of the HTML, turn it into a template, and that template can serve as the mold for all other instances of the web component, either already present on the page, or that we anticipate will be lazy loaded later.
+
+But in the example above, imagine that the HTML that we streamed from the server had a template contained inside, used for lazy loading content, as shown above.  Tests reveal that it is faster to move that template out, and reference it, so that with each web component instance, we aren't repetitively cloning the template contained within.
+
+This song and dance is performed not by this core package, but by some other packages, that build on trans-rendering -- namely, [xtal-element](https://github.com/bahrus/xtal-element) and [blow-dry](https://github.com/bahrus/blow-dry).  This is all done "behind the scenes", so nothing we said above would stop working.  But to opt-in to this enhancement, you need to "take the red pill" by simply setting attribute "blow-dry":
+
+```html
+<div>
+    <template blow-dry>
+        <heavy-lifting-boolean-editor></heavy-lifting-boolean-editor>
+        <div>hello</div>
+    </template>
+</div>
+```
+
+data-blow-dry also works.
 
 ## Modifying the host or model
 
