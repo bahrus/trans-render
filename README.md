@@ -1111,7 +1111,7 @@ At the beginning of this document, one of the key goals that has been set out fo
 
 But in the example above, imagine that the HTML that we streamed from the server had a template contained inside, used for lazy loading content, as shown above.  Tests reveal that it is faster to move that template out, and reference it, so that with each web component instance, we aren't repetitively cloning the template contained within.
 
-This song and dance is performed not by this core package, but by some other packages, that build on trans-rendering -- namely, [xtal-element](https://github.com/bahrus/xtal-element) and [blow-dry](https://github.com/bahrus/blow-dry).  This is all done "behind the scenes", so nothing we said above would stop working.  But to opt-in to this enhancement, you need to "take the red pill" by simply setting attribute "blow-dry":
+This song and dance is performed not by this core package, but by some other packages, that build on trans-rendering -- namely, [xtal-element](https://github.com/bahrus/xtal-element) and [blow-dry](https://github.com/bahrus/blow-dry).  This is all done "behind the scenes", so nothing we said above would stop working.  But to opt-in to this performance optimization, you need to "take the red pill" by simply setting attribute "blow-dry":
 
 ```html
 <div>
@@ -1123,6 +1123,8 @@ This song and dance is performed not by this core package, but by some other pac
 ```
 
 data-blow-dry also works.
+
+Of course, no harm done if this template isn't used in the context described above, so I recommend doing it in case it is used in that context.
 
 ## Modifying the host or model
 
