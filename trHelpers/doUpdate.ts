@@ -49,9 +49,10 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
                         break;
                     }
             }
-            
-            
-            //throw 'NI';
+            const withoutHidden = {...s};
+            delete withoutHidden.hidden;
+            Object.assign(matchingElement, withoutHidden);
+            return;
         }
         Object.assign(matchingElement, s);
         return;

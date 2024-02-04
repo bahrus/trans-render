@@ -45,7 +45,10 @@ export async function doUpdate(transformer, matchingElement, uow) {
                         break;
                     }
             }
-            //throw 'NI';
+            const withoutHidden = { ...s };
+            delete withoutHidden.hidden;
+            Object.assign(matchingElement, withoutHidden);
+            return;
         }
         Object.assign(matchingElement, s);
         return;
