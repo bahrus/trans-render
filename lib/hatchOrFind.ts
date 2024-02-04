@@ -1,9 +1,11 @@
-export function hatchOrFind(templ: HTMLTemplateElement) : hatchOrFindResponse{
+export async function hatchOrFind(templ: HTMLTemplateElement) : Promise<hatchOrFindResponse>{
     //TODO: add caching if it helps performance, starting with the split itemref attribute
     const itemref= templ.getAttribute('itemref');
     if(itemref === null){
         const keys : string[] = [];
-        const clone = templ.content.cloneNode(true) as DocumentFragment;
+        const {getBlowDriedTempl} = await import('./getBlowDriedTempl.js');
+        const blowDriedTempl = getBlowDriedTempl(templ);
+        const clone = blowDriedTempl.content.cloneNode(true) as DocumentFragment;
         const elements = Array.from(clone.children);
         templ.after(clone);
 

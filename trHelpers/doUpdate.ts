@@ -22,7 +22,7 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
             switch(val){
                 case false:
                     const {hatchOrFind} = await import('../lib/hatchOrFind.js');
-                    const response = hatchOrFind(matchingElement);
+                    const response = await hatchOrFind(matchingElement);
                     const {elements, state} = response;
                     if(state === 'found'){
                         for(const element of elements){
@@ -37,7 +37,7 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
                 case true:
                     if(matchingElement.hasAttribute('itemref')){
                         const {hatchOrFind} = await import('../lib/hatchOrFind.js');
-                        const response = hatchOrFind(matchingElement);
+                        const response = await hatchOrFind(matchingElement);
                         const {elements, state} = response;
                         for(const element of elements){
                             if(element instanceof HTMLElement){
