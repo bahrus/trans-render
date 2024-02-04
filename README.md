@@ -1366,7 +1366,7 @@ I'm not sure if this is the most optimal way of binding to a loop, but where it 
 ```html
 <div>
     <table itemscope itemprop=list>
-        <template>
+        <template blow-dry>
             <tr itemscope itemprop=itemListElement itemtype=https://schema.org/ListItem>
                 <td itemprop=myProp></td>
             </tr>
@@ -1427,7 +1427,7 @@ setTimeout(() => {
 
 "f" stands for "foreach".
 
-Note that all the attributes of tr are optional.
+Note that all the attributes of the template and tr elements are optional. (The purpose of the blow-dry attribute was discussed earlier.)
 
 
 ## Part 10 - Updating the model
