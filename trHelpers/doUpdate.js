@@ -31,6 +31,8 @@ export async function doUpdate(transformer, matchingElement, uow) {
     const val = await transformer.getDerivedVal(uow, d, matchingElement);
     if (s !== undefined) {
         const path = s;
+        if (path === 'hidden' && matchingElement instanceof HTMLTemplateElement) {
+        }
         switch (path[0]) {
             case '.':
                 const { setProp } = await import('../lib/setProp.js');

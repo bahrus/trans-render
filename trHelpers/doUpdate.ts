@@ -1,4 +1,5 @@
 import {MountOrchestrator, Transformer} from '../Transform.js';
+import { match } from '../lib/specialKeys.js';
 import { Derivative, UnitOfWork } from '../types.js';
 export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = {}>(
     transformer: Transformer<TProps, TMethods, TElement>,
@@ -36,6 +37,9 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
 
     if(s !== undefined){
         const path = s as string;
+        if(path === 'hidden' && matchingElement instanceof HTMLTemplateElement){
+            
+        }
         switch(path[0]){
             case '.':
                 const {setProp} = await import('../lib/setProp.js');
