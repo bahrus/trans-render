@@ -17,6 +17,42 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
     //     return;
     // }
     if(typeof s === 'object'){
+        if('hidden' in s && matchingElement instanceof HTMLTemplateElement){
+            const val = s['hidden'];
+            switch(val){
+                case false:
+                    const {hatchOrFind} = await import('../lib/hatchOrFind.js');
+                    const response = await hatchOrFind(matchingElement);
+                    const {elements, state} = response;
+                    if(state === 'found'){
+                        for(const element of elements){
+                            if(element instanceof HTMLElement){
+                                element.hidden = false;
+                            }else{
+                                throw 'NI';
+                            }
+                        }
+                    }
+                    break;
+                case true:
+                    if(matchingElement.hasAttribute('itemref')){
+                        const {hatchOrFind} = await import('../lib/hatchOrFind.js');
+                        const response = await hatchOrFind(matchingElement);
+                        const {elements, state} = response;
+                        for(const element of elements){
+                            if(element instanceof HTMLElement){
+                                element.hidden = true;
+                            }else{
+                                throw 'NI';
+                            }
+                        }
+                        break;
+                    }
+            }
+            
+            
+            //throw 'NI';
+        }
         Object.assign(matchingElement, s);
         return;
     };
@@ -37,9 +73,7 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
 
     if(s !== undefined){
         const path = s as string;
-        if(path === 'hidden' && matchingElement instanceof HTMLTemplateElement){
-            
-        }
+
         switch(path[0]){
             case '.':
                 const {setProp} = await import('../lib/setProp.js');

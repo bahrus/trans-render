@@ -11,6 +11,42 @@ export async function doUpdate(transformer, matchingElement, uow) {
     //     return;
     // }
     if (typeof s === 'object') {
+        if ('hidden' in s && matchingElement instanceof HTMLTemplateElement) {
+            const val = s['hidden'];
+            switch (val) {
+                case false:
+                    const { hatchOrFind } = await import('../lib/hatchOrFind.js');
+                    const response = await hatchOrFind(matchingElement);
+                    const { elements, state } = response;
+                    if (state === 'found') {
+                        for (const element of elements) {
+                            if (element instanceof HTMLElement) {
+                                element.hidden = false;
+                            }
+                            else {
+                                throw 'NI';
+                            }
+                        }
+                    }
+                    break;
+                case true:
+                    if (matchingElement.hasAttribute('itemref')) {
+                        const { hatchOrFind } = await import('../lib/hatchOrFind.js');
+                        const response = await hatchOrFind(matchingElement);
+                        const { elements, state } = response;
+                        for (const element of elements) {
+                            if (element instanceof HTMLElement) {
+                                element.hidden = true;
+                            }
+                            else {
+                                throw 'NI';
+                            }
+                        }
+                        break;
+                    }
+            }
+            //throw 'NI';
+        }
         Object.assign(matchingElement, s);
         return;
     }
@@ -31,8 +67,6 @@ export async function doUpdate(transformer, matchingElement, uow) {
     const val = await transformer.getDerivedVal(uow, d, matchingElement);
     if (s !== undefined) {
         const path = s;
-        if (path === 'hidden' && matchingElement instanceof HTMLTemplateElement) {
-        }
         switch (path[0]) {
             case '.':
                 const { setProp } = await import('../lib/setProp.js');

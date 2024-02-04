@@ -423,9 +423,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
                     }
                 }
                 propagator!.addEventListener(propName, e => {
-                    console.log('doUpdate');
                     const all = this.#cleanUp();
-                    console.log({all});
                     for(const matchingElement of all){
                         
                         this.doUpdate(matchingElement, uow);
