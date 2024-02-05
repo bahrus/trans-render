@@ -176,6 +176,10 @@ export interface ForEachInterface{
 export interface UnitOfWork<TProps, TMethods = TProps, TElement = {}>{
     /**
      * add event listener
+     */   
+    addEventListener?: AddEventListenerType<TProps, TMethods> | Array<AddEventListenerType<TProps, TMethods>>,
+    /**
+     * abbrev. for addEventListener
      */
     a?:  AddEventListenerType<TProps, TMethods> | Array<AddEventListenerType<TProps, TMethods>>,
 
