@@ -1002,6 +1002,10 @@ Transform<Props, Methods>(form, model, {
 });
 ```
 
+Why not burden the developer with adding the extra letter, f so that it says if?  Isn't that more readable?
+
+The thinking is by spelling it out, it might give the impression it is expecting an JavaScript expression, so better to err on the side of "hinting" rather than giving a false impression.
+
 ### Example 7b - Custom method to check boolean condition
 
 ```html
