@@ -186,6 +186,11 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = {}>{
     /**
      * derived value from observed props
      */
+    derivedValToApply?: Derivative<TProps, TMethods, TElement>,
+    /**
+     * derived value from observed props
+     * abbrev. for derivedValToApply
+     */
     d?: Derivative<TProps, TMethods, TElement>,
 
     /**
