@@ -184,29 +184,43 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = {}>{
     a?:  AddEventListenerType<TProps, TMethods> | Array<AddEventListenerType<TProps, TMethods>>,
 
     /**
+     * Specify how the value we want to apply to the target element should be derived from the observed props.
      * derived value from observed props
      */
-    derivedValToApply?: Derivative<TProps, TMethods, TElement>,
+    derivedValFromModel?: Derivative<TProps, TMethods, TElement>,
     /**
-     * derived value from observed props
-     * abbrev. for derivedValToApply
+     * Specify how the value we want to apply to the target element should be derived from the observed props.
+     * abbrev. for derivedValSpecs
      */
     d?: Derivative<TProps, TMethods, TElement>,
 
     /**
-     * enhance / engage with element, or register the found element in some way
+     * Specify what to do when the element is encountered, and/or when it goes out of scope.
+     * Register the found element in some way.
+     * Actions not tied to observed props or user actions.
+     */
+    engage?: Engagements<TMethods>
+    /**
+     * Specify what to do when the element is encountered, and/or when it goes out of scope.
+     * Register the found element in some way.
+     * Actions not tied to observed props or user actions.
+     * Abbrev. for engagementActions
      */
     e?:  Engagements<TMethods>,
 
+    forEachBinding?: ForEach<any, any, any>
     /**
      * for each
      */
-    f?: ForEach<any, any, any>
-
-    //forEachComboIn?: CrossProduct<TProps, TMethods> | Array<CrossProduct<TProps, TMethods>>
+    f?: ForEach<any, any, any>,
 
     /**
      * ifs ands or buts -- conditions on the model
+     */
+    ifs?: IfInstructions<TProps, TMethods, TElement>,
+    /**
+     * ifs ands or buts -- conditions on the model
+     * abbrev for ifs
      */
     i?: IfInstructions<TProps, TMethods, TElement>,
 
@@ -217,21 +231,42 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = {}>{
     invoke?: string,
 
     /**
-     * modify the host in a (mostly) declarative  way
+     * modify the model in a (mostly) declarative  way
+     */
+    modifyModel?: ModificationUnitOfWork<TProps, TMethods, TElement> | Array<ModificationUnitOfWork<TProps, TMethods, TElement>>,
+    /**
+     * modify the model in a (mostly) declarative  way
+     * abbreviation for modifyModel
      */
     m?: ModificationUnitOfWork<TProps, TMethods, TElement> | Array<ModificationUnitOfWork<TProps, TMethods, TElement>>,
 
     /**
-     * observed props
+     * List of props to observe from the model
+     */
+    observedProps?: keyof TProps & string | PropOrComputedProp<TProps, TMethods> | PropOrComputedProp<TProps, TMethods>[],
+    /**
+     * List of props to observe from the model
+     * abbrev. for observedProps
      */
     o?: keyof TProps & string | PropOrComputedProp<TProps, TMethods> | PropOrComputedProp<TProps, TMethods>[],
 
     /**
      * set specified property of the matching element to the (derived) value
      */
+    setProp?: (keyof TElement & string) | {},
+    /**
+     * set specified property of the matching element to the (derived) value
+     * abbrev of setProp
+     */
     s?: (keyof TElement & string) | {},
     /**
-     * set specified attribute of the matching element to the (derived) value 
+     * set specified attribute of the matching element to the (derived) value
+     *  
+     */
+    setAttr?: string,
+    /**
+     * set specified attribute of the matching element to the (derived) value
+     * abbrev of setAttr
      */
     sa?: string,
     /**
@@ -240,11 +275,15 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = {}>{
     ss?: string,
 
     /**
-     * 
+     * Where condition for selecting the target elements.
+     */
+    whereConditions?: WhereConditions
+    /**
+     * Where conditions for selecting the target elements
+     * abbrev. for whereConditions
      */
     w?: WhereConditions
 
-    bindsTo?: keyof TElement & string,
 
 }
 

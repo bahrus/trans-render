@@ -229,6 +229,7 @@ It is also quite easy to create an ES Proxy that serves as a propagator.  This p
 This way we can set model.greeting = 'bye', and the model will emit the event with matching name.  (There is possibly a slight performance hit with this approach, but it is unlikely to be the bottleneck for your application.)
 </details>
 
+
 ## The 80% rule.
 
 Is the syntax above the most readable thing you have ever seen?  Probably not.  This library is striving to balance a number of goals:  
@@ -236,6 +237,28 @@ Is the syntax above the most readable thing you have ever seen?  Probably not.  
 1.  Minimizing unnecessary renders by being precise about what needs to be re-rendered, and when.
 2.  Keeping repetitive syntax small.  Potentially, it could serve as a compile-time target to a more verbose, expressive syntax.  But even without such a verbose pre-compiled syntax, is it that bad? Like css, we believe the syntax can be "gotten used to", and we remember having a similar reaction when encountering some aspects of css for the first time.
 3.  It should be JSON serializable as much as possible.
+
+There are two directions we can go with that syntax:
+
+1.  Make it more verbose
+2.  Make it more succinct
+
+### The more verbose direction  [TODO]
+
+The verbose way has to do with the use of the short letters, which is good once the developer passes the learning curve for rapid development.
+
+However, there are some environments where using more verbose syntax is better, maybe because it is used sparingly, so we want the syntax to be self explanatory. That is supported (referencing TransformVerbose.js rather than Transform.js):
+
+```TypeScript
+{
+    span: {
+        observedProps: ['greeting'],
+        derivationFromObservedProps: int `${greeting}`
+    },
+}
+```
+
+###  The more succinct
 
 In fact, the syntax above is so likely to appear repeatedly, that we provide the following shortcut for it:
 
@@ -1365,8 +1388,6 @@ Transform<Props & Methods>(div, model, {
 ```
 
 ## Example 9b Rudimentary support for loops
-
-I'm not sure if this is the most optimal way of binding to a loop, but where it works okay:
 
 ```html
 <div>
