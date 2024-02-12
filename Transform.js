@@ -344,22 +344,22 @@ export class MountOrchestrator extends EventTarget {
         const info = xform;
         const w = info?.[411]?.w;
         const x = w || '';
-        const match = queryInfo.css + x; // transformer.calcCSS(queryInfo);
+        const on = queryInfo.css + x; // transformer.calcCSS(queryInfo);
         this.#mountObserver = new MountObserver({
-            match,
+            on,
             do: {
-                onMount: async (matchingElement, observer, ctx) => {
+                mount: async (matchingElement, observer, ctx) => {
                     const { onMount } = await import('./trHelpers/onMount.js');
                     await onMount(transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, this.#matchingElements, observer, this.#mountObserver);
                 },
-                onDismount: async (matchingElement, ctx, stage) => {
+                dismount: async (matchingElement, ctx, stage) => {
                     for (const uow of this.#unitsOfWork) {
                         this.#cleanUp(matchingElement);
                         await transformer.engage(matchingElement, 'onDismount', uow, ctx, stage);
                     }
                     //TODO remove weak ref from matching elements;
                 },
-                onDisconnect: async (matchingElement, ctx, stage) => {
+                disconnect: async (matchingElement, ctx, stage) => {
                     for (const uow of this.#unitsOfWork) {
                         this.#cleanUp(matchingElement);
                         await transformer.engage(matchingElement, 'onDisconnect', uow, ctx, stage);

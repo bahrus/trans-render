@@ -87,10 +87,10 @@
     "*.d.ts"
   ],
   "dependencies": {
-    "mount-observer": "0.0.6"
+    "mount-observer": "0.0.7"
   },
   "devDependencies": {
-    "@playwright/test": "1.41.1",
+    "@playwright/test": "1.41.2",
     "may-it-serve": "0.0.6",
     "xtal-shell": "0.0.27"
   },
