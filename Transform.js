@@ -377,6 +377,8 @@ export class MountOrchestrator extends EventTarget {
             for (const propName of p) {
                 if (typeof propName !== 'string')
                     throw 'NI';
+                if (!(propName in model))
+                    continue;
                 const propsSet = propagator.___props;
                 if (propsSet instanceof Set) {
                     if (!propsSet.has(propName)) {

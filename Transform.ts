@@ -415,6 +415,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
             const {propagator} = options;
             for(const propName of p){
                 if(typeof propName !== 'string') throw 'NI';
+                if(!(propName in (model as any))) continue;
                 const propsSet = propagator!.___props;
                 if(propsSet instanceof Set){
                     if(!propsSet.has(propName)){

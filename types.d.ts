@@ -284,7 +284,7 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = {}>{
      */
     w?: WhereConditions
 
-
+    
 }
 
 export type ValueFromElement<TProps, TMethods, TElement = {}> = 
