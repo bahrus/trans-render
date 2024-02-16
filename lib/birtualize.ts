@@ -52,7 +52,7 @@ export function birtualize(
         //     if(name === 'bi') continue;
         //     hintTempl.setAttribute(name, bi.getAttribute(name)!)
         // }
-        const hasSibling = bi.nextElementSibling !== null;
+        //const hasSibling = bi.nextElementSibling !== null;
         if(shadowrootmode !== null){
             if(bi.shadowRoot === null){
                 bi.attachShadow({mode: shadowrootmode as ShadowRootMode});
@@ -60,13 +60,7 @@ export function birtualize(
                 rootNode.appendChild(clone);
             }
         }else{
-            //bi.insertAdjacentElement('afterend', hintTempl);
-            if(parentElement !== null && !hasSibling){
-                parentElement.append(clone);
-            }else{
-                //const {insertAdjacentClone} = await import('./insertAdjacentClone.js');
-                insertAdjacentClone(clone, bi, 'afterend');
-            }
+            bi.after(clone);
             bi.remove();
         }
         
