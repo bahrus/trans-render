@@ -75,8 +75,10 @@ export class Mod<TProps, TMethods, TElement = {}>{
             signal: this.#abortController.signal,
             once
         });
-        if(on === 'load'){
+        if(on === 'load' && !transformer.initializedMods.has(m)){
+            //only do one time per selector
             matchingElement.dispatchEvent(new Event('load'));
+            transformer.initializedMods.add(m);
         }
         mountObserver?.addEventListener('disconnect', e => {
             this.#abortController.abort();

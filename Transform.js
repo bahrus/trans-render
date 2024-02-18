@@ -10,6 +10,7 @@ export class Transformer extends EventTarget {
     options;
     #mountOrchestrators = [];
     #model;
+    initializedMods = new Set();
     get model() {
         return this.#model;
     }

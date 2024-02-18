@@ -5,7 +5,7 @@ import {
     DerivationCriteria,
     TransformerTarget, 
     onMountStatusChange, RHS, AddEventListener,
-    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget, TransformOptions, LHS, WhereConditions, Info
+    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget, TransformOptions, LHS, WhereConditions, Info, ModificationUnitOfWork
 } from './types.js';
 import { IMountObserver, MountContext, PipelineStage } from 'mount-observer/types';
 export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './types';
@@ -24,6 +24,7 @@ export async function Transform<TProps extends {}, TMethods = TProps, TElement =
 export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> extends EventTarget implements ITransformer<TProps, TMethods, TElement>{
     #mountOrchestrators: Array<MountOrchestrator<TProps, TMethods, TElement>> = [];
     #model: TProps & TMethods;
+    initializedMods: Set<ModificationUnitOfWork<TProps, TMethods, TElement>> = new Set();
     get model(){
         return this.#model;
     }
@@ -60,6 +61,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
     ){
         super();
         this.#model = model;
+        
         
     }
     async do(){

@@ -1322,7 +1322,7 @@ Transform<Props, Methods>(div, model, {
 });
 ```
 
-## Example 8g Entrusting the server rendered value to the host [TODO]
+## Example 8g Entrusting the server rendered value to the host [TOD]
 
 Example 8f is such a common/usesful combination, we need a way of collapsing it to something simpler
 

@@ -397,6 +397,7 @@ export interface ITransformer<TProps, TMethods, TElement = {}>{
     model: TProps & TMethods,
     xform: XForm<TProps, TMethods, TElement> & Info,
     options: TransformOptions,
+    initializedMods: Set<ModificationUnitOfWork<TProps, TMethods, TElement>>
     //propagator?: EventTarget,
 }
 
