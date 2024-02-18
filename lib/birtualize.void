@@ -1,4 +1,3 @@
-import {insertAdjacentClone} from './insertAdjacentClone.js';
 /**
  * "Expand" HTMLTemplateElement by replacing special tags with referenced templates
  * @param templ 

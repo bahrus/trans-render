@@ -1318,9 +1318,22 @@ Transform<Props, Methods>(div, model, {
             toValFrom: 'textContent'
         }
     },
-    "! greeting": 0
+    "| greeting": 0
 });
 ```
+
+## Example 8g Entrusting the server rendered value to the host [TODO]
+
+Example 8f is such a common/usesful combination, we need a way of collapsing it to something simpler
+
+```Typescript
+Transform<Props, Methods>(div, model, {
+    "| greeting": {
+        entrust: 0
+    }
+});
+```
+
 
 ## Part 9 - Nested Objects => Nested Transforms
 
