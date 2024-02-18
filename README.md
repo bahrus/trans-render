@@ -1322,9 +1322,11 @@ Transform<Props, Methods>(div, model, {
 });
 ```
 
-## Example 8g Entrusting the server rendered value to the host [TOD]
+Each such "unit of work" modification only gets executed once, no matter how many matches (span in this case) there are.
 
-Example 8f is such a common/usesful combination, we need a way of collapsing it to something simpler
+## Example 8g Entrusting the server rendered value to the host [TODO]
+
+Example 8f is such a common/useful combination, we need a way of collapsing it to something simpler:
 
 ```Typescript
 Transform<Props, Methods>(div, model, {
