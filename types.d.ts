@@ -277,14 +277,18 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = {}>{
     /**
      * Where condition for selecting the target elements.
      */
-    whereConditions?: WhereConditions
+    whereConditions?: WhereConditions,
     /**
      * Where conditions for selecting the target elements
      * abbrev. for whereConditions
      */
-    w?: WhereConditions
+    w?: WhereConditions,
 
-    
+    y?: number | YieldSettings
+}
+
+export interface YieldSettings{
+    to?: string,
 }
 
 export type ValueFromElement<TProps, TMethods, TElement = {}> = 
