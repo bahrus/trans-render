@@ -126,7 +126,8 @@ export class Transformer extends EventTarget {
             }
         }
         for (const uow of uows) {
-            let { q, qi } = uow;
+            console.log({ uow });
+            let { q, qi, y } = uow;
             if (qi === undefined)
                 qi = await this.calcQI(q);
             //qi.w = w;
@@ -242,6 +243,10 @@ export class Transformer extends EventTarget {
         const { doIfs } = await import('./trHelpers/doIfs.js');
         return await doIfs(this, matchingElement, uow, i);
     }
+    // async doYield(matchingElement: Element, uow: UnitOfWork<TProps, TMethods, TElement>, y: YieldSettings<TProps>){
+    //     const {doYield} = await import('./trHelpers/doYield.js');
+    //     return await doYield(this, matchingElement, uow, y);
+    // }
     async engage(matchingElement, type, uow, observer, mountContext) {
         const { e } = uow;
         if (e === undefined)

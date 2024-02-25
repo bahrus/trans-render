@@ -42,7 +42,7 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
         }
         matchingElements.push(new WeakRef(matchingElement));
         await transformer.engage(matchingElement, 'onMount', uow, observer, ctx);
-        const { a, m } = uow;
+        const { a, m, y } = uow;
         if (a !== undefined) {
             let transpiledActions;
             if (typeof a === 'string') {
@@ -63,6 +63,10 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
             for (const mi of transpiledMs) {
                 new Mod(mountObserver, transformer, matchingElement, mi);
             }
+        }
+        if (y !== undefined) {
+            const { doYield } = await import('./doYield.js');
+            await doYield(transformer, matchingElement, uow, y);
         }
     }
 }

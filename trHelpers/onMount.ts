@@ -52,7 +52,7 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
         
         matchingElements.push(new WeakRef(matchingElement));
         await transformer.engage(matchingElement, 'onMount', uow, observer, ctx);
-        const {a, m} = uow;
+        const {a, m, y} = uow;
         if(a !== undefined){
             let transpiledActions: Array<AddEventListener<TProps, TMethods>> | undefined;
             if(typeof a === 'string'){
@@ -80,6 +80,10 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
                 new Mod<TProps, TMethods, TElement>(mountObserver, transformer, matchingElement, mi);
             }
             
+        }
+        if(y !== undefined){
+            const {doYield} = await import('./doYield.js');
+            await doYield(transformer, matchingElement, uow, y);
         }
     }
     

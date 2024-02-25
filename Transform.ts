@@ -5,7 +5,7 @@ import {
     DerivationCriteria,
     TransformerTarget, 
     onMountStatusChange, RHS, AddEventListener,
-    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget, TransformOptions, LHS, WhereConditions, Info, ModificationUnitOfWork
+    IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget, TransformOptions, LHS, WhereConditions, Info, ModificationUnitOfWork, YieldSettings
 } from './types.js';
 import { IMountObserver, MountContext, PipelineStage } from 'mount-observer/types';
 export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './types';
@@ -145,7 +145,8 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
         }
 
         for(const uow of uows){
-            let {q, qi} = uow;
+            console.log({uow});
+            let {q, qi, y} = uow;
             if(qi === undefined) qi = await this.calcQI(q);
             //qi.w = w;
             const {o, s} = qi;
@@ -265,6 +266,11 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
         const {doIfs} = await import('./trHelpers/doIfs.js');
         return await doIfs(this, matchingElement, uow, i);
     }
+
+    // async doYield(matchingElement: Element, uow: UnitOfWork<TProps, TMethods, TElement>, y: YieldSettings<TProps>){
+    //     const {doYield} = await import('./trHelpers/doYield.js');
+    //     return await doYield(this, matchingElement, uow, y);
+    // }
 
     async engage(matchingElement: Element, type: onMountStatusChange, uow: UnitOfWork<TProps, TMethods, TElement>, observer: IMountObserver | undefined, mountContext: MountContext){
         const {e} = uow;
@@ -410,7 +416,6 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
     }
     async subscribe(){
         for(const uow of this.#unitsOfWork){
-            
             let {o} = uow;
             const p = arr(o) as string[];
             const {target, options, model} = this.transformer;

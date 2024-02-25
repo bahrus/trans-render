@@ -284,11 +284,12 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = {}>{
      */
     w?: WhereConditions,
 
-    y?: number | YieldSettings
+    y?: number | YieldSettings<TProps>
 }
 
-export interface YieldSettings{
-    to?: string,
+export interface YieldSettings<TProps>{
+    to?: keyof TProps,
+    as?: 'string' | 'number'
 }
 
 export type ValueFromElement<TProps, TMethods, TElement = {}> = 
