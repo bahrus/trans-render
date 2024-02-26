@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example 8f</title>
+    <title>Example 8g</title>
     <script type=importmap>
         {
             "imports": {
@@ -14,23 +14,22 @@
 </head>
 <body>
     <div itemscope>
-        <span>hello</span>
-        <span>goodbye</span>
-        <label itemprop=greeting></label>
+        <span itemprop=greeting>hello</span>
     </div>
     <div id=target></div>
     <script type=module>
-        import './Example8f.js';
+        import './Example8g.js';
     </script>
-    <script>
-        function runTest(){
-            if(document.querySelector('label').textContent === 'hello'){
-                target.setAttribute('mark', 'good');
-            }
+
+<script>
+    function runTest(){
+        if(document.querySelector('[itemprop]').textContent === 'hello'){
+            target.setAttribute('mark', 'good');
         }
-        setTimeout(() => {
-            runTest();
-        }, 1000);
-    </script>
+    }
+    setTimeout(() => {
+        runTest();
+    }, 500);
+</script>
 </body>
 </html>
