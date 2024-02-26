@@ -240,6 +240,8 @@ Is the syntax above the most readable thing you have ever seen?  Probably not.  
 2.  Keeping repetitive syntax small.  Potentially, it could serve as a compile-time target to a more verbose, expressive syntax.  But even without such a verbose pre-compiled syntax, is it that bad? Like css, we believe the syntax can be "gotten used to", and we remember having a similar reaction when encountering some aspects of css for the first time.
 3.  It should be JSON serializable as much as possible.
 
+<!--
+
 There are two directions we can go with that syntax:
 
 1.  Make it more verbose
@@ -261,6 +263,8 @@ However, there are some environments where using more verbose syntax is better, 
 ```
 
 ###  The more succinct
+
+-->
 
 In fact, the syntax above is so likely to appear repeatedly, that we provide the following shortcut for it:
 
