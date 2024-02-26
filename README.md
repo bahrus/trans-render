@@ -1359,6 +1359,8 @@ Transform<Props, Methods>(div, model, {
 
 y stands for "yield".
 
+So what this does is the model's greeting value is initialized to "hello" based on the content of the span.  No more data flow in that direction will occur (from the HTML span tag to the host).  Only changes to the model's greeting field will propagate down to the span going forward.
+
 
 ## Part 9 - Nested Objects => Nested Transforms
 
