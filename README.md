@@ -118,6 +118,8 @@ All the examples described below can [be seen fully here](https://github.com/bah
 
    f. [Hydrating with load event](#example-8f-hydrating-with-load-event)
 
+   g. [Entrust a server rendered value to the host](#example-8g-entrusting-a-server-rendered-value-to-the-host)
+
 9.  [Part 9 - Nested Objects => Nested Transforms](#part-9---nested-objects--nested-transforms)
 
    a. [Example 9a - itemscope, itemprop explicitly spelled out](#example-9a---itemscope-itemprop-explicitly-spelled-out)
