@@ -38,21 +38,27 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
     } 
         
     for(const uow of uows){
-        const {w} = uow;
+        const {w, y} = uow;
         if(w !== undefined){
             switch(typeof w){
                 case 'string':
                     if(!matchingElement.matches(w)) continue;
             }
         }
-        //this is where we could look to see if we need to do update if already updated by server
-        if(!skipInit || !ctx.initializing){
-            await mo.doUpdate(matchingElement, uow);
+        if(y !== undefined){
+            const {doYield} = await import('./doYield.js');
+            await doYield(transformer, matchingElement, uow, y);
+        }else{
+            //this is where we could look to see if we need to do update if already updated by server
+            if(!skipInit || !ctx.initializing){
+                await mo.doUpdate(matchingElement, uow);
+            }
         }
+
         
         matchingElements.push(new WeakRef(matchingElement));
         await transformer.engage(matchingElement, 'onMount', uow, observer, ctx);
-        const {a, m, y} = uow;
+        const {a, m} = uow;
         if(a !== undefined){
             let transpiledActions: Array<AddEventListener<TProps, TMethods>> | undefined;
             if(typeof a === 'string'){
@@ -81,10 +87,7 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
             }
             
         }
-        if(y !== undefined){
-            const {doYield} = await import('./doYield.js');
-            await doYield(transformer, matchingElement, uow, y);
-        }
+
     }
     
 }
