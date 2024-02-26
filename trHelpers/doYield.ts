@@ -6,5 +6,10 @@ export async function doYield<TProps extends {}, TMethods = TProps, TElement = {
     uow: UnitOfWork<TProps, TMethods, TElement>, 
     y: YieldSettings<TProps> | number
 ){
+    const {model} = transformer;
+    const {o} = uow;
+    const observeArr = arr(o);
+    const to = typeof y === 'number' ? observeArr![y] : y.to;
+    console.log({to});
     throw 'NI';
 }
