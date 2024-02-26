@@ -5,5 +5,6 @@ export async function doYield(transformer, matchingElement, uow, y) {
     const observeArr = arr(o);
     const to = typeof y === 'number' ? observeArr[y] : y.to;
     console.log({ to });
-    throw 'NI';
+    model[to] = matchingElement.textContent;
+    //throw 'NI';
 }

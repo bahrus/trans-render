@@ -8,3 +8,6 @@ Transform(div, model, {
         y: 0
     }
 });
+setTimeout(() => {
+    console.log({ model });
+}, 100);
