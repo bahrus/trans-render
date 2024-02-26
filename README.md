@@ -1324,11 +1324,11 @@ Transform<Props, Methods>(div, model, {
 
 Each such "unit of work" modification only gets executed once, no matter how many matches (span in this case) there are.
 
-## Example 8g Entrusting a server rendered value to the host [TODO]
+## Example 8g Entrusting a server rendered value to the host
 
 A common pattern seems likely to emerge with server-rendered web components:  
 
-The server streams some web components as HTML, and that HTML contains some pertinent information that the web component host needs to know about.  Once that "transfer" of data takes hold, the element that contains the information "yields" the ownership to the host, and the host will pass updates back down to the element.  It's kind of like two-way binding, only one direction only lasts for the initialization of the component.
+The server streams some web components as already rendered HTML, and that HTML contains some pertinent information that the web component host needs to know about.  Once that "transfer" of data takes hold, the element that contains the information "yields" the ownership to the host, and the host will pass updates back down to the element.  It's kind of like two-way binding, only one direction only lasts for the initialization of the component.
 
 ```html
 <div itemscope>
