@@ -10,7 +10,5 @@ export async function doYield<TProps extends {}, TMethods = TProps, TElement = {
     const {o} = uow;
     const observeArr = arr(o);
     const to = typeof y === 'number' ? observeArr![y] : y.to;
-    console.log({to});
     (<any>model)[to] = matchingElement.textContent;
-    //throw 'NI';
 }

@@ -126,7 +126,6 @@ export class Transformer extends EventTarget {
             }
         }
         for (const uow of uows) {
-            console.log({ uow });
             let { q, qi, y } = uow;
             if (qi === undefined)
                 qi = await this.calcQI(q);

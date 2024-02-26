@@ -11,7 +11,6 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
         const valOfIf = await transformer.doIfs(matchingElement, uow, i);
         if(!valOfIf) return;
     }
-    console.log('doUpdate');
     if(typeof s === 'object'){
         if('hidden' in s && matchingElement instanceof HTMLTemplateElement){
             const val = s['hidden'];
