@@ -9,5 +9,6 @@ Transform(div, model, {
     }
 });
 setTimeout(() => {
-    console.log({ model });
-}, 100);
+    console.log(model.greeting);
+    model.greeting = 'bye';
+}, 2000);

@@ -138,6 +138,9 @@ export class Transformer extends EventTarget {
             if (s !== undefined) {
                 uow.s = s[0];
             }
+            if (y !== undefined) {
+                uow.d = 0;
+            }
             const newProcessor = new MountOrchestrator(this, uow, qi);
             await newProcessor.do();
             this.#mountOrchestrators.push(newProcessor);
