@@ -289,7 +289,7 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = {}>{
 
 export interface YieldSettings<TProps>{
     to?: keyof TProps,
-    as?: 'string' | 'number'
+    as?: 'date' | 'number'
 }
 
 export type ValueFromElement<TProps, TMethods, TElement = {}> = 

@@ -10,6 +10,23 @@ export async function doYield<TProps extends {}, TMethods = TProps, TElement = {
     const {model} = transformer;
     const {o} = uow;
     const observeArr = arr(o);
-    const to = typeof y === 'number' ? observeArr![y] : y.to;
-    (<any>model)[to] = getUIVal(matchingElement);
+    const yIsNum = typeof y === 'number';
+    const to = yIsNum ? observeArr![y] : y.to;
+    let val = getUIVal(matchingElement);
+    if(typeof val === 'string' && !yIsNum){
+        const {as} = y;
+        if(as !== undefined){
+            switch(as){
+                case 'number':
+                    val = Number(val);
+                    break;
+                case 'date':
+                    val = new Date(val);
+                    break;
+                default:
+                    throw 'NI';
+            }
+        }
+    }
+    (<any>model)[to] = val;
 }
