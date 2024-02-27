@@ -6,7 +6,7 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
     matchingElement: Element, 
     uow: UnitOfWork<TProps, TMethods, TElement>,
 ){
-    const {d, o, s, sa, i, ss, invoke, f} = uow;
+    const {d, o, s, sa, i, ss, invoke, f, negTo} = uow;
     if(i !== undefined){
         const valOfIf = await transformer.doIfs(matchingElement, uow, i);
         if(!valOfIf) return;
@@ -66,24 +66,12 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
     //let val: any;
     if(d === undefined) throw 'NI';
     const val = await transformer.getDerivedVal(uow, d, matchingElement);
-
-    if(s !== undefined){
+    if(negTo !== undefined){
+        const path = negTo as string;
+        await setPath(matchingElement, path, !val);
+    }else if(s !== undefined){
         const path = s as string;
-
-        switch(path[0]){
-            case '.':
-                const {setProp} = await import('../lib/setProp.js');
-                setProp(matchingElement, path, val);
-                break;
-            case '+':
-                const {setEnhProp} = await import('../lib/setEnhProp.js');
-                setEnhProp(matchingElement, path, val);
-                break;
-            default:
-                (<any>matchingElement)[s as string] = val;
-        }
-        
-        
+        await setPath(matchingElement, path, val);
     }else if(sa !== undefined){
         const {A} = await import('../froop/A.js');
         A({[sa]: val}, matchingElement);
@@ -95,5 +83,20 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
         await (<any>matchingElement)[invoke](val);
     }else{
         transformer.setPrimeValue(matchingElement, val);
+    }
+}
+
+async function setPath(matchingElement: Element, path: string, val: any){
+    switch(path[0]){
+        case '.':
+            const {setProp} = await import('../lib/setProp.js');
+            setProp(matchingElement, path, val);
+            break;
+        case '+':
+            const {setEnhProp} = await import('../lib/setEnhProp.js');
+            setEnhProp(matchingElement, path, val);
+            break;
+        default:
+            (<any>matchingElement)[path] = val;
     }
 }

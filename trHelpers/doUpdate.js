@@ -1,5 +1,5 @@
 export async function doUpdate(transformer, matchingElement, uow) {
-    const { d, o, s, sa, i, ss, invoke, f } = uow;
+    const { d, o, s, sa, i, ss, invoke, f, negTo } = uow;
     if (i !== undefined) {
         const valOfIf = await transformer.doIfs(matchingElement, uow, i);
         if (!valOfIf)
@@ -63,20 +63,13 @@ export async function doUpdate(transformer, matchingElement, uow) {
     if (d === undefined)
         throw 'NI';
     const val = await transformer.getDerivedVal(uow, d, matchingElement);
-    if (s !== undefined) {
+    if (negTo !== undefined) {
+        const path = negTo;
+        await setPath(matchingElement, path, !val);
+    }
+    else if (s !== undefined) {
         const path = s;
-        switch (path[0]) {
-            case '.':
-                const { setProp } = await import('../lib/setProp.js');
-                setProp(matchingElement, path, val);
-                break;
-            case '+':
-                const { setEnhProp } = await import('../lib/setEnhProp.js');
-                setEnhProp(matchingElement, path, val);
-                break;
-            default:
-                matchingElement[s] = val;
-        }
+        await setPath(matchingElement, path, val);
     }
     else if (sa !== undefined) {
         const { A } = await import('../froop/A.js');
@@ -92,5 +85,19 @@ export async function doUpdate(transformer, matchingElement, uow) {
     }
     else {
         transformer.setPrimeValue(matchingElement, val);
+    }
+}
+async function setPath(matchingElement, path, val) {
+    switch (path[0]) {
+        case '.':
+            const { setProp } = await import('../lib/setProp.js');
+            setProp(matchingElement, path, val);
+            break;
+        case '+':
+            const { setEnhProp } = await import('../lib/setEnhProp.js');
+            setEnhProp(matchingElement, path, val);
+            break;
+        default:
+            matchingElement[path] = val;
     }
 }

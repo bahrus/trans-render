@@ -117,6 +117,13 @@ export class Transformer extends EventTarget {
                                 ...rhsPart,
                                 q: key
                             };
+                            if (uow.o === undefined) {
+                                const qi = await this.calcQI(key);
+                                const { hostPropToAttrMap } = qi;
+                                if (hostPropToAttrMap !== undefined) {
+                                    uow.o = hostPropToAttrMap.map(x => x.name);
+                                }
+                            }
                             if (uow.o !== undefined && uow.d === undefined)
                                 uow.d = 0;
                             uows.push(uow);

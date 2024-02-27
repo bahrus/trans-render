@@ -275,6 +275,11 @@ export interface UnitOfWork<TProps, TMethods = TProps, TElement = {}>{
     ss?: string,
 
     /**
+     * negate to
+     */
+    negTo?: string,
+
+    /**
      * Where condition for selecting the target elements.
      */
     whereConditions?: WhereConditions,
