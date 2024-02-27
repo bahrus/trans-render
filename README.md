@@ -601,6 +601,7 @@ Transform<Model>(div, model, {
     input: [
         {s: 'value', o: 'msg1'},
         {s: 'readOnly', o: 'rO'},
+        {negTo: 'checked', o: 'r0'},
         {s: 'tabIndex', o: 'num'},
         {s: '.dataset.num', o: 'num'},
         {sa: 'itemprop', o: 'prop'},
