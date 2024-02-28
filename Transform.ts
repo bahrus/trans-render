@@ -133,15 +133,18 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
                                 ...rhsPart!,
                                 q: key
                             };
-                            if(uow.o === undefined){
-                                const qi = await this.calcQI(key);
-                                const {hostPropToAttrMap} = qi;
-                                if(hostPropToAttrMap !== undefined){
-                                    uow.o = hostPropToAttrMap.filter(x => x.name in (model as any)).map(x => x.name) as Array<keyof TProps & string>;
+                            const {m, e, a, f} = uow;
+                            if((m || e || a || f) === undefined){
+                                if(uow.o === undefined){
+                                    const qi = await this.calcQI(key);
+                                    const {hostPropToAttrMap} = qi;
+                                    if(hostPropToAttrMap !== undefined){
+                                        uow.o = hostPropToAttrMap.filter(x => x.name in (model as any)).map(x => x.name) as Array<keyof TProps & string>;
+                                    }
                                 }
+                                const {o} = uow;
+                                if(o !== undefined && !(Array.isArray(o) && o.length === 0) && uow.d === undefined) uow.d = 0;
                             }
-                            const {o} = uow;
-                            if(o !== undefined && !(Array.isArray(o) && o.length === 0) && uow.d === undefined) uow.d = 0;
                             uows.push(uow);
 
                         }
