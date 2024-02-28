@@ -137,10 +137,11 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
                                 const qi = await this.calcQI(key);
                                 const {hostPropToAttrMap} = qi;
                                 if(hostPropToAttrMap !== undefined){
-                                    uow.o = hostPropToAttrMap!.map(x => x.name) as Array<keyof TProps & string>;
+                                    uow.o = hostPropToAttrMap.filter(x => x.name in (model as any)).map(x => x.name) as Array<keyof TProps & string>;
                                 }
                             }
-                            if(uow.o !== undefined && uow.d === undefined) uow.d = 0;
+                            const {o} = uow;
+                            if(o !== undefined && !(Array.isArray(o) && o.length === 0) && uow.d === undefined) uow.d = 0;
                             uows.push(uow);
 
                         }
