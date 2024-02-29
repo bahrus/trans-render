@@ -566,7 +566,7 @@ Transform<Model>(div, model, {
 
 Think of the pipe delimiter as an open parenthesis that automatically closes before the next period (".") or at the end of the statement, thus allowing us to invoke a chain of methods (like querySelector).  It allows for one parameter to be passed in to the method. "invoke" means rather than setting a property to the derived value, pass the derived value to the specified method of the target (matching) element, "section" in this case.
 
-## Part 4 Setting props of the element
+## Part 4 Setting props / attributes / styles of the element
 
 We glossed over a subtlety in our examples above.  Without specifying to do so, we are automatically setting the span's text content, the input's value, based on a single binding.  The property we are setting is assumed based on context.  In the case of the hyperlink (a), we set the href for example.  This decision is inspired by how [microdata works](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/itemprop#values).
 
@@ -701,6 +701,26 @@ Transform<Model>(form, model, {
     '-o isHappy -s ariaDisabled': 0
 });
 ```
+
+## Example 4e Centralizing the hacking [TODO]
+
+Many web sites are far, far  away from providing any kind of semantic HTML, let's be honest.
+
+Take the domain x.com. Please!
+
+So the first thing we want to do is centralize the hackery, and plant seeds of semantic-ness and let the desert bloom.
+
+To do that:
+
+```TypeScript
+Transform<IModel>(div, model, {
+    '* div > p + p ~ span[class~="css-1qaijid"]': {
+        l: ['greeting', '|#@.%']
+    },
+});
+```
+
+Here we are using the lower case L, which stands for "label", and it will set itemprop, id, name, and add class part "greeting" to that DOM element.  The second element of the array, of course if our list of special symbols.
 
 ## Part 5 - Event handling
 
