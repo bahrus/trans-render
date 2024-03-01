@@ -622,6 +622,8 @@ Note the (discouraged) extra property: "sa" which means "set attribute" rather t
 
 "ss" is used for setting a style property.
 
+[TODO]:  Support "append attribute" for things like class, part, output's for.
+
 ## Accommodating minimalist custom inline binding with observer and setter markers
 
 At the top of this document, we suggested that with highly semantic HTML, there is often enough information contained in the semantic HTML that the need for additional inline binding instructions becomes superfluous when employing trans-rendering.  But sometimes that ideal may fall short, even if it will become less and less likely going forward.
@@ -722,7 +724,7 @@ Transform<IModel>(div, model, {
 
 Here we are using the lower case L, which stands for "label", and it will, in this example, set itemprop, id, name, and add part and class "greeting" to that DOM element.  The first part of the string, before the space, is a list of special symbols we've been reference repeatedly above, all of which are optional.  If non are provided, it would simply add attribute "greeting".
 
-## Example 4f Supporting DRY
+## Example 4f Supporting DRY [TODO]
 
 Suppose we want to only define an attribute once, and allow the power of css to distribute that attribute elsewhere.
 
