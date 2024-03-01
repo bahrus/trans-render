@@ -704,7 +704,7 @@ Transform<Model>(form, model, {
 
 ## Example 4e Centralizing the hacking [TODO]
 
-Many web sites are far, far  away from providing any kind of semantic HTML, let's be honest.
+Many web sites are far, far away from providing any kind of semantic HTML, let's be honest.
 
 Take the domain x.com. Please!
 
@@ -715,12 +715,73 @@ To do that:
 ```TypeScript
 Transform<IModel>(div, model, {
     '* div > p + p ~ span[class~="css-1qaijid"]': {
-        l: ['greeting', '|#@.%']
+        l: '|#@.% greeting'
     },
 });
 ```
 
-Here we are using the lower case L, which stands for "label", and it will set itemprop, id, name, and add class part "greeting" to that DOM element.  The second element of the array, of course if our list of special symbols.
+Here we are using the lower case L, which stands for "label", and it will, in this example, set itemprop, id, name, and add part and class "greeting" to that DOM element.  The first part of the string, before the space, is a list of special symbols we've been reference repeatedly above, all of which are optional.  If non are provided, it would simply add attribute "greeting".
+
+## Example 4f Supporting DRY
+
+Suppose we want to only define an attribute once, and allow the power of css to distribute that attribute elsewhere.
+
+For example, how often have you seen something like this?:
+
+```html
+<label for=email>
+<input type=email id=email name=email part=email class=email value={email}>
+```
+
+???
+
+We can reduce this repetition (at the expense of delaying the point of time in which the HTML is semantic, which may be just fine during template instantiation):
+
+```html
+<label>
+<input type=email name=email>
+```
+
+```TypeScript
+Transform<IModel>(form, model, {
+    '@ greeting': {
+        d: 0
+        l: '#.% 0',
+        ul: {
+            us: 'label',
+            s: 'for'
+        }
+    }
+});
+```
+
+This could be a pattern for multiple properties:
+
+```html
+<label>
+<input name=name>
+<label>
+<input type=email name=email>
+<label>
+<input name=address>
+```
+
+```TypeScript
+const standardUOW = {
+    d: 0
+    l: '#.% 0',
+    ul: {
+        us: 'label',
+        s: 'for'
+    }
+};
+const s = standardUOW;
+Transform<IModel>(form, model, {
+    '@ name': {...s},
+    '@ email': {...s},
+    '@ address': {...s}
+});
+```
 
 ## Part 5 - Event handling
 
