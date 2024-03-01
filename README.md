@@ -755,6 +755,8 @@ Transform<IModel>(form, model, {
 });
 ```
 
+"ul" stands for "up label" and "us" stands for "up search."
+
 This could be a pattern for multiple properties:
 
 ```html
