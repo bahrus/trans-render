@@ -789,11 +789,11 @@ Transform<Model>(form, model, {
 
 ## Example 4g - sub property to custom element mapping [TODO]
 
-How many times in typescript or c# or host of other languages have you seen a class wiith sub properties that looks like:
+How many times in typescript or c# or a host of other languages have you seen a class with sub properties that looks like:
 
 ```TypeScript
-class MyCompositionalElement extends HTMLElement{
-    subObject: SubObject
+class MyCompositionalCustomElement extends HTMLElement{
+    subObject: Partial<SubObject>
 }
 
 class SubObject extends HTMLElement{
@@ -813,14 +813,14 @@ To support this:
 
 ```TypeScript
 Transform<Model>(div, model, {
-    '` subObject': 0
+    '~ subObject': 0
 });
 ```
 
 What this does:
 
 1.  Matches on sub-object element.
-2.  Does Object.assign of subObject property applied to sub-object.
+2.  Does Object.assign of subObject property applied to sub-object web component instance.
 3.  Reactively redoes Object.assign when subObject property changes.
 
 ## Part 5 - Event handling
