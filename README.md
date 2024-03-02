@@ -722,7 +722,7 @@ Transform<IModel>(div, model, {
 });
 ```
 
-Here we are using the lower case L, which stands for "label", and it will, in this example, set itemprop, id, name, and add part and class "greeting" to that DOM element.  The first part of the string, before the space, is a list of special symbols we've been reference repeatedly above, all of which are optional.  If non are provided, it would simply add attribute "greeting".
+Here we are using the lower case L, which stands for "label", and it will, in this example, set itemprop, id, name, and add part and class "greeting" to that DOM element.  The first part of the string, before the space, is a list of special symbols we've been referencing repeatedly above, all of which are optional.  If none are provided, it would simply add attribute "greeting".
 
 ## Example 4f Supporting DRY [TODO]
 
