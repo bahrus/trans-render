@@ -822,6 +822,7 @@ What this does:
 1.  Matches on sub-object element.
 2.  Does Object.assign of subObject property applied to sub-object web component instance.
 3.  Reactively redoes Object.assign when subObject property changes.
+4.  Adds attribute itemscope, sets attribute itemprop=subObject.
 
 ## Part 5 - Event handling
 
