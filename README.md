@@ -807,7 +807,7 @@ To support this:
 
 ```html
 <div>
-    <sub-object>
+    <sub-object></sub-object>
 </div>
 ```
 
@@ -819,7 +819,7 @@ Transform<Model>(div, model, {
 
 What this does:
 
-1.  Matches on sub-object.
+1.  Matches on sub-object element.
 2.  Does Object.assign of subObject property applied to sub-object.
 3.  Reactively redoes Object.assign when subObject property changes.
 
