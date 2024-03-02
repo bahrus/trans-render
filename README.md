@@ -715,7 +715,7 @@ So the first thing we want to do is centralize the hackery, and plant seeds of s
 To do that:
 
 ```TypeScript
-Transform<IModel>(div, model, {
+Transform<Model>(div, model, {
     '* div > p + p ~ span[class~="css-1qaijid"]': {
         l: '|#@.% greeting'
     },
@@ -745,7 +745,7 @@ We can reduce this repetition (at the expense of delaying the point of time in w
 ```
 
 ```TypeScript
-Transform<IModel>(form, model, {
+Transform<Model>(form, model, {
     '@ greeting': {
         d: 0
         l: '#.% 0',
@@ -780,12 +780,48 @@ const standardUOW = {
     }
 };
 const s = standardUOW;
-Transform<IModel>(form, model, {
+Transform<Model>(form, model, {
     '@ name': {...s},
     '@ email': {...s},
     '@ address': {...s}
 });
 ```
+
+## Example 4g - sub property to custom element mapping [TODO]
+
+How many times in typescript or c# or host of other languages have you seen a class wiith sub properties that looks like:
+
+```TypeScript
+class MyCompositionalElement extends HTMLElement{
+    subObject: SubObject
+}
+
+class SubObject extends HTMLElement{
+
+}
+```
+
+Basically, the property/field matches the name of the interface/class that it is an instance of???
+
+To support this:
+
+```html
+<div>
+    <sub-object>
+</div>
+```
+
+```TypeScript
+Transform<Model>(div, model, {
+    '` subObject': 0
+});
+```
+
+What this does:
+
+1.  Matches on sub-object.
+2.  Does Object.assign of subObject property applied to sub-object.
+3.  Reactively redoes Object.assign when subObject property changes.
 
 ## Part 5 - Event handling
 
