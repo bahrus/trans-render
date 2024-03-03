@@ -339,11 +339,11 @@ export type TargetTuple =
     /**
      * Find first element matching string within itemscope.
      */
-    | ['withinItemScope', string]
+    | ['withinItemScope', string, boolean?]
     /**
      * abbrev for within item scope
      */
-    | ['wis', string]
+    | ['wis', string, boolean?]
     /**
      * First first element matching string within form.
      */
