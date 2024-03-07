@@ -88,7 +88,7 @@ export async function findRealm(self: Element, scope: Scope){
         case 'wis':
         case 'withinItemScope':{
             const isFreeForm = scope[2] === true;
-            const closest = self.closest('[itemscope]' || self.getRootNode());
+            const closest = self.closest('[itemscope]') || (self.getRootNode() as DocumentFragment);
             if(closest === null) return null;
             //TODO use @scope donut hole.
             return isFreeForm ? closest.querySelector(scope[1]) : closest.querySelector(`[itemprop="${scope[1]}"]`);
