@@ -120,7 +120,7 @@ As mentioned above, what we want to do is allow developers to easily emit the na
 | %      | part                  | Starts with p, percent is used for indicating what proportion something is.                                                                      |
 | .      | class                 | css selector                                                                                                                                     |
 | ^      | "upsearch"            | Points upward.  Look to previous siblings, then parent, then previous siblings of parent until a match is found.  Stops at first match.          |
-| v or ¥ | "downsearch"          | Point downward.  Look for downstream sibling.  The Yen symbol seems oddly fitting for this scenario (their money always seems to be deflationary no matter how much debt they go into), but could run into issues as it is a unicode character, so perhaps v is better, even if it breaks the pattern of using special, non alpha numeric characters.  The other downside of "v" is it will be natural to ask what it stands for.  We can say it stands for [vaedik](https://www.mentalfloss.com/article/71753/40-vibrant-v-words-revamp-your-vocabulary).  Stops at first match.   |
+| Y      | "downsearch"          | Point downward.  Look for downstream sibling.  Stands for Yertdrift.  Stops at first match.   |
 | *      | free form css match   | Used in css, regular expressions for roughly this purpose.  Searches everywhere within the helper block of markup i.e. within each {{#each}} or {{#if}}                                                                 |
 
 Let's see some examples of this in action:
@@ -212,7 +212,7 @@ To help with this, I propose:
         role="checkbox"
         aria-checked="false"
         tabindex="0"
-        aria-labelledby="{{idref(v)}}"></span>
+        aria-labelledby="{{idref(Y)}}"></span>
         <span id="terms_and_conditions_{{item_id}}">I agree to the Terms and Conditions.</span>
     {{/each}}
 </template>
@@ -229,7 +229,7 @@ To help with this, I propose:
 <span id="terms_and_conditions_17811">I agree to the Terms and Conditions.</span>
 ```
 
-Maybe the v (or ¥?) symbol should be followed by a \*, but the point is, what follows the v or ¥ symbol, if anything, could be a css query to match for everything *below* the adorned element.  To reference the previous element, use ^, followed by a css query if applicable.  In either case, stop at the first match.  
+Maybe the Y symbol should be followed by a \*, but the point is, what follows the v or ¥ symbol, if anything, could be a css query to match for everything *below* the adorned element.  To reference the previous element, use ^, followed by a css query if applicable.  In either case, stop at the first match.  
 
 We could also perform a general css search inside the idref function, that would need to be done carefully within the #each block, so that if multiple elements are found matching the css query within that block, then the attribute is a space delimited list of all the id's of matching elements. In this case, instead of using ^ or v, the tentative recommendation is to start with query with a * followed by a space.  If we want to specify a query based on one of the special symbols listed in the table at the top of this document, this could be done as well. Examples of such rules are spelled out in more detail [here (WIP)](https://github.com/bahrus/be-switched), where we are trying to make that userland library conform with this proposal, basically a POC of sorts.
 
@@ -242,7 +242,7 @@ We could also perform a general css search inside the idref function, that would
         role="checkbox"
         aria-checked="false"
         tabindex="0"
-        aria-labelledby="{{idref(v)}}"></span>
+        aria-labelledby="{{idref(Y)}}"></span>
         <span id={{generate-id()}}>I agree to the Terms and Conditions.</span>
     {{/each}}
 </template>
