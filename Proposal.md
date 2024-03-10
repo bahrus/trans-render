@@ -111,16 +111,17 @@ I don't think template instantiation needs to care which scenario the developer 
 
 As mentioned above, what we want to do is allow developers to easily emit the name of the property they are binding to to various attributes of the element.  Each attribute binding would be specified by a single character in the binding instruction, to keep this added support light and small.  Suggested symbols are below:
 
-| Symbol | Translates to         | Connection / meaning                                                                                                       |
-|--------|-----------------------|---------------------------------------------------------------------------------------------------------------------------|
-| #      | id                    | # used by css for id, also bookmarks in urls that points to id's                                                          |
-| \|     | itemprop              | "Pipe" is kind of close to itemprop, and is half of a dollar sign, and it kind of looks like an I                         |
-| @      | name                  | Second letter of name. Also, common in social media sites/github to type this letter in order to select someone's name.   |
-| $      | itemscope + itemprop  | Combination of S for Scope and Pipe which resembles itemprop a bit                                                        |
-| %      | part                  | Starts with p, percent is used for indicating what proportion something is.                                               |
-| .      | class                 | css selector                                                                                                              |
-| ^      | "upsearch"            | Points upward.  Look to previous siblings, then parent, then previous siblings of parent until a match is found.          |
-| ¥      | "downsearch"          | Point downward.  Looking for downstream sibling.
+| Symbol | Translates to         | Connection / meaning                                                                                                                             |
+|--------|-----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| #      | id                    | # used by css for id, also bookmarks in urls that points to id's                                                                                 |
+| \|     | itemprop              | "Pipe" is kind of close to itemprop, and is half of a dollar sign, and it kind of looks like an I                                                |
+| @      | name                  | Second letter of name. Also, common in social media sites/github to type this letter in order to select someone's name.                          |
+| $      | itemscope + itemprop  | Combination of S for Scope and Pipe which resembles itemprop a bit                                                                               |
+| %      | part                  | Starts with p, percent is used for indicating what proportion something is.                                                                      |
+| .      | class                 | css selector                                                                                                                                     |
+| ^      | "upsearch"            | Points upward.  Look to previous siblings, then parent, then previous siblings of parent until a match is found.  Stops at first match.          |
+| v or ¥ | "downsearch"          | Point downward.  Look for downstream sibling.  The Yen symbol seems oddly fitting for this scenario (their money always seems to be deflationary no matter how much debt they go into), but could run into issues as it is a unicode character, so perhaps v is better, even if it breaks the pattern of using special, non alpha numeric characters.  The other downside of "v" is it will be natural to ask what it stands for.  We can say it stands for [vaedik](https://www.mentalfloss.com/article/71753/40-vibrant-v-words-revamp-your-vocabulary).  Stops at first match.   |
+| *      | free form css match   | Used in css, regular expressions for roughly this purpose.  Searches everywhere within the helper block of markup i.e. within each {{#each}} or {{#if}}                                                                 |
 
 Let's see some examples of this in action:
 
@@ -206,14 +207,14 @@ To help with this, I propose:
 
 ```html
 <template>
-    {{foreach items}}
+    {{#each items}}
         <span
         role="checkbox"
         aria-checked="false"
         tabindex="0"
-        aria-labelledby="{{¥}}"></span>
-        <span class=my-class id="terms_and_conditions_{{item_id}}">I agree to the Terms and Conditions.</span>
-    {{/foreach}}
+        aria-labelledby="{{idref(v)}}"></span>
+        <span id="terms_and_conditions_{{item_id}}">I agree to the Terms and Conditions.</span>
+    {{/each}}
 </template>
 ```
 
@@ -225,23 +226,27 @@ To help with this, I propose:
     aria-checked="false"
     tabindex="0"
     aria-labelledby="terms_and_conditions_17811"></span>
-<span class=my-class id="terms_and_conditions_17811">I agree to the Terms and Conditions.</span>
+<span id="terms_and_conditions_17811">I agree to the Terms and Conditions.</span>
 ```
 
-So the css query must be carefully performed within the foreach block of tags.  If multiple elements are found matching the css query within that block, then the attribute is a space delimited list of all the id's of matching elements.
+Maybe the v (or ¥?) symbol should be followed by a \*, but the point is, what follows the v or ¥ symbol, if anything, could be a css query to match for everything *below* the adorned element.  To reference the previous element, use ^, followed by a css query if applicable.  In either case, stop at the first match.  
+
+We could also perform a general css inside the idref function, that would need to be done carefully within the #each block, so that if multiple elements are found matching the css query within that block, then the attribute is a space delimited list of all the id's of matching elements. In this case, instead of using ^ or v, use *.
+
+Examples of such rules are spelled out in more detail [here (WIP)](https://github.com/bahrus/be-switched).
 
 ### Referential support with auto-generated id's.
 
 ```html
 <template>
-    {{foreach items}}
+    {{#each items}}
         <span
         role="checkbox"
         aria-checked="false"
         tabindex="0"
-        aria-labelledby="{{idref(.my-class)}}"></span>
-        <span class=my-class id={{generate-id()}}>I agree to the Terms and Conditions.</span>
-    {{/foreach }}
+        aria-labelledby="{{idref(v)}}"></span>
+        <span id={{generate-id()}}>I agree to the Terms and Conditions.</span>
+    {{/each}}
 </template>
 ```
 
@@ -255,7 +260,7 @@ If no such markers are needed, then it seems to me there will be some inevitable
 ```html
 <template>
     <ul>
-        {{if | isUSAddress $ USAddress}}
+        {{#if | isUSAddress $ USAddress}}
             <li>{{| addresseeName}}</li>
             <ul {{$ Address}}>
                 <li>{{| StreetAddress}}</li>
