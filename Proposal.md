@@ -229,7 +229,7 @@ To help with this, I propose:
 <span id="terms_and_conditions_17811">I agree to the Terms and Conditions.</span>
 ```
 
-Maybe the Y symbol should be followed by a \*, but the point is, what follows the v or ¥ symbol, if anything, could be a css query to match for everything *below* the adorned element.  To reference the previous element, use ^, followed by a css query if applicable.  In either case, stop at the first match.  
+Maybe the Y symbol should be followed by a \*, but the point is, what follows the Y symbol, if anything, could be a css query to match for everything *below* the adorned element.  To reference the previous element, use ^, followed by a css query if applicable.  In either case, stop at the first match.  
 
 We could also perform a general css search inside the idref function, that would need to be done carefully within the #each block, so that if multiple elements are found matching the css query within that block, then the attribute is a space delimited list of all the id's of matching elements. In this case, instead of using ^ or v, the tentative recommendation is to start with query with a * followed by a space.  If we want to specify a query based on one of the special symbols listed in the table at the top of this document, this could be done as well. Examples of such rules are spelled out in more detail [here (WIP)](https://github.com/bahrus/be-switched), where we are trying to make that userland library conform with this proposal, basically a POC of sorts.
 
