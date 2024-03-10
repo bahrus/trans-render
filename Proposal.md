@@ -1,7 +1,7 @@
 # Template Instantiation Developer Productivity Proposal
 
 Author:  Bruce B. Anderson
-Last Updated: 2023-9-24
+Last Updated: 2024-3-10
 
 The following outlines some productivity, and higher reliability enhancement proposals, that would make template instantiation more effective.
 
@@ -111,12 +111,16 @@ I don't think template instantiation needs to care which scenario the developer 
 
 As mentioned above, what we want to do is allow developers to easily emit the name of the property they are binding to to various attributes of the element.  Each attribute binding would be specified by a single character in the binding instruction, to keep this added support light and small.  Suggested symbols are below:
 
-| Symbol | Attribute             | Connection                                                                                                                |
+| Symbol | Translates to         | Connection / meaning                                                                                                       |
 |--------|-----------------------|---------------------------------------------------------------------------------------------------------------------------|
 | #      | id                    | # used by css for id, also bookmarks in urls that points to id's                                                          |
 | \|     | itemprop              | "Pipe" is kind of close to itemprop, and is half of a dollar sign, and it kind of looks like an I                         |
 | @      | name                  | Second letter of name. Also, common in social media sites/github to type this letter in order to select someone's name.   |
 | $      | itemscope + itemprop  | Combination of S for Scope and Pipe which resembles itemprop a bit                                                        |
+| %      | part                  | Starts with p, percent is used for indicating what proportion something is.                                               |
+| .      | class                 | css selector                                                                                                              |
+| ^      | "upsearch"            | Points upward.  Look to previous siblings, then parent, then previous siblings of parent until a match is found.          |
+| ¥      | "downsearch"          | Point downward.  Looking for downstream sibling.
 
 Let's see some examples of this in action:
 
@@ -128,7 +132,7 @@ Let's apply the following template:
 <template>
     <span>{{| name}}</span>
     <span>{{#| name}}</span>
-    <input value="{{@ name}}">
+    <input part=my-input class=my-input value="{{@#%. name}}">
     <meta content="{{| name}}">
     <span>{{| eventDate.toLocaleDate|ar-EG, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }}}</span>
     <span>{{| secondsSinceBirth}}</span>
@@ -149,13 +153,13 @@ Let's apply the following template:
 ```html
 <span itemprop=name>Bob</span>
 <span id=name itemprop=name>Bob</span>
-<input name=name value=Bob>
+<input id=name name=name part="my-input name" class="my-input name" value=Bob>
 <meta itemprop=name content=Bob>
 <span><time itemprop=eventDate datetime=2011-11-18T14:54:39.929Z>الجمعة، ١٢ مايو ٢٠٢٣</time></span>
-<span><data itemprop=secondsSinceBirth value="1166832000">1,166,832,000</span>
+<span><data itemprop=secondsSinceBirth value="1166832000">1,166,832,000</data></span>
 <span aria-checked=true><data itemprop=isVegetarian value=true>Is vegetarian</data></span>
 <link itemprop=isVegetarian href=https://schema.org/True>
-<span><data itemprop=isVegetarian value=true>true</span>
+<span><data itemprop=isVegetarian value=true>true</data></span>
 <div itemscope itemprop=address>
     <span itemprop=street>123 Penny Lane</span>
 </div>
@@ -194,7 +198,7 @@ What this example demonstrates is we apparently don't need the use of ranges, wh
 
 ### Referential support with user specified reference id.
 
-It often arises that the id for one element should be dynamic, and another element needs to reference this dynamic value.
+It [often arises](https://github.com/whatwg/html/issues/10143) that the id for one element should be dynamic, and another element needs to reference this dynamic value.
 
 Examples are the label's for attribute, numerous aria- attributes, and microdata's itemref attributes.  In many cases (itemref, output's for attribute) we allow for a space delimited list of id's.
 
@@ -207,7 +211,7 @@ To help with this, I propose:
         role="checkbox"
         aria-checked="false"
         tabindex="0"
-        aria-labelledby="{{idref(.my-class)}}"></span>
+        aria-labelledby="{{¥}}"></span>
         <span class=my-class id="terms_and_conditions_{{item_id}}">I agree to the Terms and Conditions.</span>
     {{/foreach}}
 </template>
