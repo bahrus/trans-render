@@ -344,6 +344,8 @@ export type TargetTuple =
      * abbrev for within item scope
      */
     | ['wis', string, boolean?]
+    | ['within', string, string]
+    | ['wi', string, string]
     /**
      * First first element matching string within form.
      */

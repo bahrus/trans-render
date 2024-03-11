@@ -85,6 +85,15 @@ export async function findRealm(self: Element, scope: Scope){
         case 'wrn':
         case 'withinRootNode':
             return (self.getRootNode() as DocumentFragment).querySelector(scope[1]);
+        case 'wi':
+        case 'within':{
+            const css = scope[1];
+            const {upSearch} = await import('./upSearch.js');
+            const perimeter = upSearch(self, css);
+            const subCss = scope[2];
+            return perimeter?.querySelector(subCss);
+        }
+
         case 'wis':
         case 'withinItemScope':{
             const isFreeForm = scope[2] === true;
