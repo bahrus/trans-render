@@ -10,6 +10,7 @@
 	"include": [
 		"Transform.ts",
 		"lib/*",
+		"lib/prs/*",
 		"demo/*",
 		"tests/*",
 		"lib/mixins/*",

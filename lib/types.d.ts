@@ -496,11 +496,6 @@ export interface IActionProcessor{
     postHoc(self: this, action: Action, target: any, returnVal: any, proxy?: any): void;
 }
 
-
-//export type AffectOptions = 'host' | 'beScoped' | '$' | '$.beScoped' | `.${string}`;
-
-
-
 export type keyOfCtxNavElement = keyof ICTXNavElement & string;
 
 export type keyofICTXCamelQryPrompt = `${keyof ICTXCamelQryPrompt & string}.${camelQry}`;
@@ -518,95 +513,7 @@ export type AffectOptions =
 
 ;
 
-// export interface HydrateAction {
-//     affect?: AffectOptions,
-//     set?: SetTransform,
-//     inc?: string | IncTransform,
-//     toggle: string | ToggleTransform,
-//     /**
-//      * method on affected entity
-//      * pass in affected entity, event object
-//      */
-//     invoke: string,
-//     /**
-//      * export function defined from script tag
-//      * pass in affected entity, event object
-//      */
-//     handler: string,
-// }
 
-// export type MethodParam = 'event' | 'invokee' | 'invoker' 
-
-// export interface SetTransform {
-//     eq: [lhs: string, rhs: string | string [] | JSONObject],
-//     affect?: AffectOptions,
-// }
-
-// export interface IncTransform {
-//     inc: [lhs: string, rhs: string | number],
-//     affect?: AffectOptions,
-// }
-
-// export interface ToggleTransform {
-//     prop: string,
-//     affect?: AffectOptions,
-// }
-
-// export interface InvokeTransform {
-//     method: string,
-//     params?: MethodParam[],
-//     affect?: AffectOptions,
-// }
-
-
-// export interface HydrateOptions {
-//     onSet?: string,
-//     /**
-//      * EventName to CSS Query to select event to listen for and  element to observe 
-//      * 
-//      * */
-//     [key: `on${string}Of`]: string,
-//     /**
-//      * Select the target to affect
-//      */
-//     affect?: AffectOptions,
-//     do: HydrateAction[]
-// }
-
-// export interface IsletEndUserProps {
-//     debug?: boolean,
-//     transform?: Matches,
-//     //hydrate : string | HydrateOptions | HydrateOptions[],
-//     hydratingTransform?: Matches,
-//     /**
-//      * If not specified, will default to .
-//      * 
-//      */
-//     observe?: 'beScoped' | 'xtalState' | '.',
-//     /**
-//      * Defaults to beScoped
-//      */
-//     of?: '.' | 'host' | 'beScoped',
-//     /**
-//      * CtxNav query to specify the **default** target which will be affected during event handling.
-//      * There are many opportunities to override this default.
-//      * If not specified, will default to host.
-//      * 
-//     **/
-//     affect?: AffectOptions,
-// }
-// export interface Islet extends IsletEndUserProps {
-    
-//     islet: (inp: any, ctxNav: ICtxNav) => any,
-//     isletDependencies?: string[],
-//     transformDependencies?: Set<string>,
-//     transformer?: Transformer
-// }
-
-// export interface TransformJoinEvent {
-//     match?: Matches,
-//     acknowledged?: boolean,
-// }
 
 export interface ICTXNavRecursive<T = any>{
     $?: T;
