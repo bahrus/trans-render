@@ -7,6 +7,8 @@ export interface ElO {
     elType?: ElTypes,
     perimeter?: string,
     event?: string,
+    //TODO
+    floor?: string,
 }
 
 export interface RegExpExt<TStatementGroup = any>{
