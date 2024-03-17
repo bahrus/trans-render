@@ -32,5 +32,8 @@ export function prsElO(str: string) : ElO{
     }
     const test = tryParse<ElO>(nonEventPart, reDependencyStatements);
     if(test === null) throw 'PE'; //Parsing error
+    for(const field of ['prop', 'event']){
+        (<any>test)[field] = (<any>test)[field]?.replaceAll('\\', '');
+    }
     return test;
 }
