@@ -23,7 +23,7 @@ const reDependencyStatements: RegExpOrRegExpExt<ElO>[] = [
     }
 ];
 
-export function prsElO(str: string) : ElO{
+export function prsElO(str: string, splitProp = true) : ElO{
     const returnObj: ElO = {};
     const eventSplit = str.split('::');
     let nonEventPart = eventSplit[0];
@@ -34,6 +34,14 @@ export function prsElO(str: string) : ElO{
     if(test === null) throw 'PE'; //Parsing error
     for(const field of ['prop', 'event']){
         (<any>test)[field] = (<any>test)[field]?.replaceAll('\\', '');
+    }
+    if(splitProp){
+        const {prop} = test;
+        if(prop?.includes(':')){
+            const split = prop.split(':');
+            test.prop = split[0];
+            test.subProp = '.' + split.slice(1).join('.');
+        }
     }
     return test;
 }

@@ -3,6 +3,7 @@ export type ElTypes = '$' | '#' | '@' | '/' | '-' | '|' | '%' | '~';
 
 export interface ElO {
     prop?: string,
+    subProp?: string,
     elType?: ElTypes,
     perimeter?: string,
     event?: string,
@@ -10,7 +11,7 @@ export interface ElO {
 
 export interface RegExpExt<TStatementGroup = any>{
     regExp: RegExp,
-    defaultVals: TStatementGroup,
+    defaultVals: Partial<TStatementGroup>,
 }
 
 export type RegExpOrRegExpExt<TStatementGroup = any> = RegExp | RegExpExt<TStatementGroup>;

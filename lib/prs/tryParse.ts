@@ -5,7 +5,7 @@ export function tryParse<TParsedObj = any>(s: string, regExpOrRegExpExt: RegExpO
     const reArr = arr(regExpOrRegExpExt);
     for(const reOrRegExt of reArr){
         let re: RegExp | undefined;
-        let def: TParsedObj | undefined;
+        let def: Partial<TParsedObj> | undefined;
         if(reOrRegExt instanceof RegExp){
             re = reOrRegExt;
         }else{
