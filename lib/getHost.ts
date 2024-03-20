@@ -7,7 +7,10 @@ export function getHost(self:Element, tocoho: boolean | string = false, ish: boo
             const scope = (<any>host)?.beDecorated?.scoped?.scope as EventTarget;
             if(scope != undefined) return scope;
             if(host.localName.includes('-')) return host;
-            return host;
+            //return host;
+        }
+        if(host && host.parentElement){
+            return getHost(host.parentElement, tocoho, ish);
         }
     }
     if(ish){
