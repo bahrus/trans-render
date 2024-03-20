@@ -17,7 +17,7 @@ export async function findRealm(self: Element, scope: Scope){
             case 'parentOrRootNode':{
                 const test = self.parentElement || self.getRootNode();
                 if(test instanceof Element && test.matches('.stream-orator-wrapper,[be-written]')) {
-                    return findRealm(test, scope);
+                    return await findRealm(test, scope);
                 }
                 return test;
             }
