@@ -63,6 +63,9 @@ export async function findRealm(self: Element, scope: Scope){
             const {upSearch} = await import('./upSearch.js');
             return upSearch(self, css);
         }
+        case 'h':
+            const {getHost} = await import('./getHost.js');
+            return await getHost(self, scope[1], scope[2]);
         case 'coh':
         case 'closestOrHost':{
             const closest = self.closest(scope[1]);

@@ -337,6 +337,11 @@ export type TargetTuple =
      */
     | ['wrn', string]
     /**
+     * hostish
+     */
+    | ['h', (boolean | string)?, boolean?]
+    | ['hostish', (boolean | string)?, boolean?]
+    /**
      * Find first element matching string within itemscope.
      */
     | ['withinItemScope', string, boolean?]
