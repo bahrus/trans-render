@@ -1,7 +1,8 @@
 import { ElO, RegExpOrRegExpExt } from './types';
 import { tryParse } from './tryParse.js';
+import {lispToCamel} from '../lispToCamel.js';
 
-export const strType = String.raw `\||\#|\@|\/|\%|\~`;
+export const strType = String.raw `\||\#|\@|\/|\%|\~|\-`;
 
 const perimeter = String.raw `\^(?<perimeter>.*)`;
 const prop = String.raw `(?<prop>[\w\-\:\|]+)`;
@@ -32,6 +33,11 @@ export function prsElO(str: string, splitProp = true) : ElO{
     }
     const test = tryParse<ElO>(nonEventPart, reDependencyStatements);
     if(test === null) throw 'PE'; //Parsing error
+    if(test.elType === '-'){
+        test.marker = `-${test.prop}`
+        test.prop = lispToCamel(test.prop!);
+        
+    }
     for(const field of ['prop', 'event']){
         (<any>test)[field] = (<any>test)[field]?.replaceAll('\\', '');
     }

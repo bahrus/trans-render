@@ -9,6 +9,7 @@ export interface ElO {
     event?: string,
     //TODO
     floor?: string,
+    marker?: string,
 }
 
 export interface RegExpExt<TStatementGroup = any>{
