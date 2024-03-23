@@ -46,7 +46,9 @@ export function prsElO(str: string, splitProp = true) : ElO{
         if(prop?.includes(':')){
             const split = prop.split(':');
             test.prop = split[0];
-            test.subProp = '.' + split.slice(1).join('.');
+            const rest =  split.slice(1).join('.');
+            const headChar = (split.length > 2 || rest.includes('|')) ? '.' : '';
+            test.subProp = `${headChar}${rest}`;
         }
     }
     return test;
