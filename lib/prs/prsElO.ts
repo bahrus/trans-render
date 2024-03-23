@@ -53,3 +53,8 @@ export function prsElO(str: string, splitProp = true) : ElO{
     }
     return test;
 }
+
+export function getSubProp(elo: ElO, el: HTMLElement){
+    const {subProp} = elo;
+    return subProp || el.getAttribute('itemprop') || (<HTMLInputElement>el).name || el.id;
+}
