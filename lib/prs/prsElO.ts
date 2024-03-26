@@ -65,11 +65,11 @@ export function prsElO(str: string, splitProp = true) : ElO{
             break;
         case '#':
             test.scope = ['wrn', '#' + prop!];
+            break;
         case '-':{
             const qry = `[${marker}]`;
             test.scope = perimeter !== undefined ? ['wi', perimeter, qry] : ['wis', qry, true];
         }
-            
             break;
         case '~':{
             const localName = camelToLisp(prop!);
