@@ -28,12 +28,9 @@ const reDependencyStatements: RegExpOrRegExpExt<ElO>[] = [
 ];
 
 export function prsElO(str: string, splitProp = true) : ElO{
-    const returnObj: ElO = {};
+    //const returnObj: ElO = {};
     const eventSplit = str.split('::');
     let nonEventPart = eventSplit[0];
-    if(eventSplit.length > 1){
-        returnObj.event = eventSplit[1];
-    }
     const test = tryParse<ElO>(nonEventPart, reDependencyStatements);
     if(test === null) throw 'PE'; //Parsing error
     if(test.elType === '-'){
@@ -41,9 +38,7 @@ export function prsElO(str: string, splitProp = true) : ElO{
         test.prop = lispToCamel(test.prop!);
         
     }
-    for(const field of ['prop', 'event']){
-        (<any>test)[field] = (<any>test)[field]?.replaceAll('\\', '');
-    }
+    test.prop = test.prop?.replaceAll('\\', '');
     if(splitProp){
         const {prop} = test;
         if(prop?.includes(':')){
@@ -85,6 +80,9 @@ export function prsElO(str: string, splitProp = true) : ElO{
                 test.scope = perimeter !== undefined ? ['wi', perimeter, qry] : ['wis', qry, true];
             }
             break;
+    }
+    if(eventSplit.length > 1){
+        test.event = eventSplit[1].replaceAll('\\', '');
     }
     return test;
 }
