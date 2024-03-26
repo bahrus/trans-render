@@ -1,6 +1,8 @@
-import { ElO, RegExpOrRegExpExt } from './types';
+import { ElO, ElTypes, RegExpOrRegExpExt } from './types';
 import { tryParse } from './tryParse.js';
 import {lispToCamel} from '../lispToCamel.js';
+import { camelToLisp } from '../camelToLisp.js';
+import { Scope } from '../types';
 
 export const strType = String.raw `\||\#|\@|\/|\%|\~|\-`;
 
@@ -8,6 +10,7 @@ const perimeter = String.raw `\^(?<perimeter>.*)`;
 const prop = String.raw `(?<prop>[\w\-\:\|]+)`;
 const typeProp = String.raw `(?<elType>${strType})${prop}`;
 const perimeterTypeProp = String.raw `${perimeter}${typeProp}`;
+
 
 const reDependencyStatements: RegExpOrRegExpExt<ElO>[] = [
     {
@@ -50,6 +53,38 @@ export function prsElO(str: string, splitProp = true) : ElO{
             const headChar = (split.length > 2 || rest.includes('|')) ? '.' : '';
             test.subProp = `${headChar}${rest}`;
         }
+    }
+    const {elType, prop, perimeter, marker} = test;
+    switch(elType){
+        case '$':
+        case '|':
+            test.scope = perimeter !== undefined ? ['wi', perimeter, `[itemprop="${prop}"]`] : ['wis', prop!];
+            break;
+        case '@':
+            test.scope = perimeter !== undefined ? ['wi', perimeter, `[name="${prop}"]`] : ['wf', prop!];
+            break;
+        case '#':
+            test.scope = ['wrn', '#' + prop!];
+        case '-':{
+            const qry = `[${marker}]`;
+            test.scope = perimeter !== undefined ? ['wi', perimeter, qry] : ['wis', qry, true];
+        }
+            
+            break;
+        case '~':{
+            const localName = camelToLisp(prop!);
+            test.scope = perimeter !== undefined ? ['wi', perimeter, localName] : ['wis', localName, true];
+        }
+            break;
+        case '/':
+            test.scope = ['h', true];
+            break;
+        case '%':
+            {
+                const qry = `[part~="${prop!}]`;
+                test.scope = perimeter !== undefined ? ['wi', perimeter, qry] : ['wis', qry, true];
+            }
+            break;
     }
     return test;
 }
