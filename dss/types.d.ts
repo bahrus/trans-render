@@ -10,10 +10,6 @@ export type DirectionalScopeSigils =
      */
     'Y' |
     /**
-     * recursive upward direction
-     */
-    '^^' |
-    /**
      * IdRef query
      * 
      */ 
@@ -23,16 +19,21 @@ export type AttrSigils = '$0' | '#' | '@' |  '-' | '|' | '%';
 
 export type ElementSigils = '/' | '~';
 
+export type Sigils = AttrSigils | ElementSigils;
+
 export interface Specifier {
     /** Directional Scope Sigil */
     dss?: DirectionalScopeSigils,
+    rec?: boolean,
     /**
      * root node fallback
      */
     rnf?: boolean,
+    
     scopeS?: CSSSelector,
+    elS?: CSSSelector,
     idRefS?: string,
-    s?: AttrSigils | ElementSigils,
+    s?: Sigils,
     // /**
     //  * Attribute Sigil
     //  */
