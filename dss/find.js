@@ -9,3 +9,7 @@ export async function find(element, specifier) {
     const { findR } = await import('./findR.js');
     return await findR(element, specifier);
 }
+export function getSubProp(specifier, el) {
+    const { path } = specifier;
+    return path || el.getAttribute('itemprop') || el.name || el.id;
+}

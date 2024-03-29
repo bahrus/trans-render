@@ -11,3 +11,8 @@ export async function find(element: Element, specifier: Specifier){
     return await findR(element, specifier);
 }
 
+export function getSubProp(specifier: Specifier, el: HTMLElement){
+    const {path} = specifier;
+    return path || el.getAttribute('itemprop') || (<HTMLInputElement>el).name || el.id;
+}
+
