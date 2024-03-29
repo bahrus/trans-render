@@ -9,13 +9,13 @@
     <script type=module>
         import {parse} from '/dss/parse.js';
         const test1 = await parse('$0');
-        console.log({test1});
+        console.log('$0', test1);
         const test2 = await parse('/myProp');
-        console.log({test2});
+        console.log('/myProp',  test2);
         const test3 = await parse('|myProp');
-        console.log({test3});
+        console.log('|myProp', test3);
         const test4 = await parse('%myProp');
-        console.log({test4});
+        console.log('%myProp', test4);
         const test5 = await parse('@myProp');
         console.log({test5});
         const test6 = await parse('-my-prop');

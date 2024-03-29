@@ -44,6 +44,10 @@ export interface Specifier {
     evt?: EventName;
     ms?: MarkerString;
     self?: boolean;
+    /**
+     * must have a dash in the localName
+     * wait for whenDefined in find
+     */
     host?: boolean;
     /**
      * host prop

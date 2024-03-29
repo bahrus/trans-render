@@ -23,6 +23,14 @@ export async function parse(s: string) : Promise<Specifier>{
             specifier.rec = true;
             tailStart = 2;
             break;
+        case 'Y*':
+            specifier.dss = 'Y';
+            specifier.rec = true;
+            tailStart = 2;
+        case '?':{
+            //TODO
+            throw 'NI';
+        }
         default: 
             const head0 = head2[0];
             switch(head0){
@@ -70,18 +78,23 @@ async function parseProp(
 
     switch(s){
         case '#':
-            specifier.elS = `#${propInference}`;
+            specifier.elS = `${propInference}`;
             break;
         case '|':
         case '%':
         case '-':
         case '~':
+        case '/':
             if(scopeS === undefined){
                 specifier.scopeS = '[itemscope]';
                 specifier.rec = true;
                 specifier.rnf = true;
             }
             switch(s){
+                case '/':
+                    specifier.elS = '*';
+                    specifier.host = true;
+                    break;
                 case '|':
                     specifier.elS = `[itemprop~="${propInference}"]`;
                     break;
@@ -111,9 +124,9 @@ async function parseProp(
                 specifier.rnf = true;
             }
             break;
-        case '/':
-            specifier.host = true;
-            break;
+        // case '/':
+        //     specifier.host = true;
+        //     break; 
         case ':':
             //specifier.prop = propInference;
             break;
