@@ -46,6 +46,7 @@ async function parseProp(nonEventPart, tailStart, specifier) {
         specifier.prop = propInference = nonEventPart.substring(tailStart, iPosOfSC);
         throw 'need to set subprop';
     }
+    specifier.s = s;
     switch (s) {
         case '#':
             specifier.elS = `#${propInference}`;
@@ -53,6 +54,7 @@ async function parseProp(nonEventPart, tailStart, specifier) {
         case '|':
         case '%':
         case '-':
+        case '~':
             if (scopeS === undefined) {
                 specifier.scopeS = '[itemscope]';
                 specifier.rec = true;
@@ -66,11 +68,20 @@ async function parseProp(nonEventPart, tailStart, specifier) {
                     specifier.elS = `[part~="${propInference}"]`;
                     break;
                 case '-':
-                    const { lispToCamel } = await import('../lib/lispToCamel.js');
-                    const ms = specifier.ms = propInference;
-                    specifier.prop = propInference = lispToCamel(propInference);
-                    specifier.elS = `[-${ms}]`;
+                    {
+                        const { lispToCamel } = await import('../lib/lispToCamel.js');
+                        const ms = specifier.ms = propInference;
+                        specifier.prop = propInference = lispToCamel(propInference);
+                        specifier.elS = `[-${ms}]`;
+                    }
                     break;
+                case '~': {
+                    specifier.hpf = propInference;
+                    const { camelToLisp } = await import('../lib/camelToLisp.js');
+                    specifier.el = specifier.elS = camelToLisp(propInference);
+                    delete specifier.prop;
+                    break;
+                }
             }
             break;
         case '@':
@@ -84,7 +95,6 @@ async function parseProp(nonEventPart, tailStart, specifier) {
             specifier.host = true;
             break;
         default:
-        //throw 'NI';
+            throw 'NI';
     }
-    specifier.s = s;
 }

@@ -32,16 +32,10 @@ export interface Specifier {
     
     scopeS?: CSSSelector,
     elS?: CSSSelector,
+    el?: string,
     idRefS?: string,
     s?: Sigils,
-    // /**
-    //  * Attribute Sigil
-    //  */
-    // as?: AttrSigils,
-    // /**
-    //  * Element Sigil
-    //  */
-    // es?: ElementSigils,
+
     /**
      * Inferred prop name
      */
@@ -51,6 +45,14 @@ export interface Specifier {
     ms?: MarkerString;
     self?: boolean;
     host?: boolean;
+    /**
+     * host prop
+     */
+    hp?: string;
+    /**
+     * host prop fallback
+     */
+    hpf?: string;
 }
 
 export type InferredPropName = string;
