@@ -29,11 +29,11 @@ export async function parse(s) {
             }
     }
     if (specifier.dss === undefined && tailStart < lenNonEventPart) {
-        parseProp(nonEventPart, tailStart, specifier);
+        await parseProp(nonEventPart, tailStart, specifier);
     }
     return specifier;
 }
-function parseProp(nonEventPart, tailStart, specifier) {
+async function parseProp(nonEventPart, tailStart, specifier) {
     const s = nonEventPart.substring(tailStart, 1);
     const { scopeS } = specifier;
     tailStart++;
@@ -52,6 +52,7 @@ function parseProp(nonEventPart, tailStart, specifier) {
             break;
         case '|':
         case '%':
+        case '-':
             if (scopeS === undefined) {
                 specifier.scopeS = '[itemscope]';
                 specifier.rec = true;
@@ -63,6 +64,13 @@ function parseProp(nonEventPart, tailStart, specifier) {
                     break;
                 case '%':
                     specifier.elS = `[part~="${propInference}"]`;
+                    break;
+                case '-':
+                    const { lispToCamel } = await import('../lib/lispToCamel.js');
+                    const ms = specifier.ms = propInference;
+                    specifier.prop = propInference = lispToCamel(propInference);
+                    specifier.elS = `[-${ms}]`;
+                    break;
             }
             break;
         case '@':

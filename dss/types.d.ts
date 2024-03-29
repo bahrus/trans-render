@@ -48,7 +48,7 @@ export interface Specifier {
     prop?: InferredPropName,
     path?: SubPropPath;
     evt?: EventName;
-    kBop?: MarkerString;
+    ms?: MarkerString;
     self?: boolean;
     host?: boolean;
 }
