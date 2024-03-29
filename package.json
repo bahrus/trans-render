@@ -17,6 +17,8 @@
   "exports": {
     ".": "./Transform.js",
     "./trans-render.js": "./trans-render.js",
+    "./dss/parse.js": "./dss/parse.js",
+    "./dss/find.js": "./dss/find.js",
     "./froop/CE.js": "./froop/CE.js",
     "./lib/arr.js": "./lib/arr.js",
     "./lib/beBeckoned.js": "./lib/beBeckoned.js",
@@ -79,6 +81,8 @@
     "./xslt/swap.js": "./xslt/swap.js"
   },
   "files": [
+    "dss/*.js",
+    "dss/*.d.ts",
     "lib/*.js",
     "lib/mixins/*.js",
     "lib/mixins/*.d.ts",
