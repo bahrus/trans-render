@@ -15,7 +15,15 @@ export type DirectionalScopeSigils =
      */ 
     '?';
 
-export type AttrSigils = '$0' | '#' | '@' |  '-' | '|' | '%';
+export type AttrSigils =
+    /**
+     * Reference to self / local element
+     */
+    '$0' |
+    /**
+     * Reference by ID
+     */
+    '#' | '@' |  '-' | '|' | '%';
 
 export type ElementSigils = '/' | '~';
 
