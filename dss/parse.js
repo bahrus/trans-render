@@ -34,19 +34,26 @@ export async function parse(s) {
     return specifier;
 }
 async function parseProp(nonEventPart, tailStart, specifier) {
-    const s = nonEventPart.substring(tailStart, 1);
+    const s = nonEventPart.substring(tailStart, tailStart + 1);
     const { scopeS } = specifier;
     tailStart++;
     const iPosOfSC = nonEventPart.indexOf(':', tailStart);
     let propInference;
+    let subProp;
+    let subPropIsComplex = false;
     if (iPosOfSC === -1) {
         specifier.prop = propInference = nonEventPart.substring(tailStart);
     }
     else {
         specifier.prop = propInference = nonEventPart.substring(tailStart, iPosOfSC);
-        throw 'need to set subprop';
+        subProp = nonEventPart.substring(iPosOfSC + 1);
+        if (subProp.includes(':') || subProp.includes('|')) {
+            subProp = '.' + subProp.replaceAll(':', '.');
+        }
     }
-    specifier.s = s;
+    if (s !== ':') {
+        specifier.s = s;
+    }
     switch (s) {
         case '#':
             specifier.elS = `#${propInference}`;
@@ -94,7 +101,25 @@ async function parseProp(nonEventPart, tailStart, specifier) {
         case '/':
             specifier.host = true;
             break;
+        case ':':
+            //specifier.prop = propInference;
+            break;
         default:
             throw 'NI';
+    }
+    if (subProp !== undefined) {
+        switch (s) {
+            case '#':
+            case '%':
+            case '@':
+            case '-':
+            case '|':
+            case '/':
+                specifier.path = subProp;
+                break;
+            case '~':
+                specifier.prop = subProp;
+                break;
+        }
     }
 }

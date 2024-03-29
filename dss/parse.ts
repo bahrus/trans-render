@@ -43,19 +43,27 @@ export async function parse(s: string) : Promise<Specifier>{
 async function parseProp(
     nonEventPart: string, tailStart: number, specifier: Specifier
 ){
-    const s = nonEventPart.substring(tailStart, 1) as Sigils;
+    const s = nonEventPart.substring(tailStart, tailStart + 1) as Sigils | ':';
     const {scopeS} = specifier;
     tailStart++;
     const iPosOfSC = nonEventPart.indexOf(':', tailStart);
     let propInference: string;
+    let subProp: string | undefined;
+    let subPropIsComplex = false;
     if(iPosOfSC === -1){
         specifier.prop = propInference = nonEventPart.substring(tailStart);
     }else{
         specifier.prop = propInference = nonEventPart.substring(tailStart, iPosOfSC);
-        throw 'need to set subprop'
+        subProp = nonEventPart.substring(iPosOfSC + 1);
+        if(subProp.includes(':') || subProp.includes('|')){
+            subProp = '.' + subProp.replaceAll(':', '.');
+        }
+        
     }
-    
-    specifier.s = s;
+    if(s !== ':'){
+        specifier.s = s;
+    }
+
     switch(s){
         case '#':
             specifier.elS = `#${propInference}`;
@@ -102,10 +110,29 @@ async function parseProp(
         case '/':
             specifier.host = true;
             break;
+        case ':':
+            //specifier.prop = propInference;
+            break;
         default:
             throw 'NI';
 
     }
+    if(subProp !== undefined){
+        switch(s){
+            case '#':
+            case '%':
+            case '@':
+            case '-':
+            case '|':
+            case '/':
+                specifier.path = subProp;
+                break;
+            case '~':
+              specifier.prop = subProp;
+              break;
+        }
+    }
+
     
     
 }
