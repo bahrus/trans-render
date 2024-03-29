@@ -6,7 +6,7 @@ export type DirectionalScopeSigils =
      */
     '^' | 
     /**
-     * downard direction, next element siblings only
+     * downward direction, next element siblings only
      */
     'Y' |
     /**
@@ -50,6 +50,7 @@ export interface Specifier {
     evt?: EventName;
     kBop?: MarkerString;
     self?: boolean;
+    host?: boolean;
 }
 
 export type InferredPropName = string;

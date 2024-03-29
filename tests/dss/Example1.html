@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script type=module>
+        import {parse} from '/dss/parse.js';
+        const test1 = await parse('$0');
+        console.log({test1});
+        const test2 = await parse('/myProp');
+        console.log({test2});
+    </script>
+</body>
+</html>
