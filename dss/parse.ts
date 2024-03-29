@@ -60,13 +60,22 @@ function parseProp(
         case '#':
             specifier.elS = `#${propInference}`;
             break;
+        case '|':
         case '%':
-            specifier.elS = `[part~="${propInference}"]`;
             if(scopeS === undefined){
                 specifier.scopeS = '[itemscope]';
                 specifier.rec = true;
                 specifier.rnf = true;
             }
+            switch(s){
+                case '|':
+                    specifier.elS = `[itemprop~="${propInference}"]`;
+                    break;
+                case '%':
+                    specifier.elS = `[part~="${propInference}"]`;
+            }
+            
+            
             break;
         case '@':
             specifier.elS = `[name="${propInference}"]`;
