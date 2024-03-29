@@ -76,6 +76,8 @@ async function parseProp(nonEventPart, tailStart, specifier) {
         case '~':
         case '/':
             if (scopeS === undefined) {
+                if (specifier.dss === undefined)
+                    specifier.dss = '^';
                 specifier.scopeS = '[itemscope]';
                 specifier.rec = true;
                 specifier.rnf = true;
@@ -111,6 +113,8 @@ async function parseProp(nonEventPart, tailStart, specifier) {
         case '@':
             specifier.elS = `[name="${propInference}"]`;
             if (scopeS === undefined) {
+                if (specifier.dss === undefined)
+                    specifier.dss = '^';
                 specifier.scopeS = 'form';
                 specifier.rnf = true;
             }
