@@ -33,7 +33,11 @@ export async function parse(s: string) : Promise<Specifier>{
             }
 
     }
-    if(specifier.dss === undefined && tailStart < lenNonEventPart){
+    if(specifier.dss !== undefined){
+        const result = parseScope(nonEventPart, tailStart, specifier);
+        tailStart = result.tailStart;
+    }
+    if(tailStart < lenNonEventPart){
         await parseProp(nonEventPart, tailStart, specifier);
 
     }
@@ -140,4 +144,16 @@ async function parseProp(
 
     
     
+}
+
+function parseScope(
+    nonEventPart: string, tailStart: number, specifier: Specifier
+) : {tailStart: number}{
+    if(nonEventPart.substring(tailStart, tailStart + 1) !== '{') throw 'PE' //parsing error
+    const iPosOfClosedBrace = nonEventPart.indexOf('}', tailStart + 2);
+    if(iPosOfClosedBrace === -1) throw 'PE'; // parsing error
+    specifier.scopeS = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace);
+    return {
+        tailStart: iPosOfClosedBrace + 1
+    }
 }
