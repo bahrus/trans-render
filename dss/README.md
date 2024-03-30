@@ -112,7 +112,22 @@ These should be active:
 | ^^           | Recursive closest match        |                                                                                                   |
 | ^*           | UpSearch                       | Checks previous siblings as well as parent, previous elements of parent, etc. [TODO]              |
 | Y            | Single downward match.         | Doesn't check inside each downward element [TODO]                                                 |
-| Y*           | Thorough downward match.       | Checks stuff inside each downard element [TODO]                                                   |
+| Y*           | Thorough downward match.       | Checks stuff inside each downward element [TODO]                                                   |
 
 
+## Specifying events
 
+be-bound has an example where we specify the property name, and the  event name to listen for:
+
+```html
+<input id=alternativeRating type=number>
+<form be-bound='between rating:value::change and #alternativeRating.'>
+    <div part=rating-stars class="rating__stars">
+        <input id="rating-1" class="rating__input rating__input-1" type="radio" name="rating" value="1">
+        <input id="rating-2" class="rating__input rating__input-2" type="radio" name="rating" value="2">
+        <input id="rating-3" class="rating__input rating__input-3" type="radio" name="rating" value="3">
+        <input id="rating-4" class="rating__input rating__input-4" type="radio" name="rating" value="4">
+        <input id="rating-5" class="rating__input rating__input-5" type="radio" name="rating" value="5">
+    </div>  
+</form>
+```
