@@ -77,3 +77,42 @@ Likewise, the marker "-object" is saying "find element with attribute -object" a
 </template>
 ```
 
+To specify more nuanced locations, use the "upstream" ^ operator:
+
+```html
+These should be ignored:
+<div>
+    <label for=lhs>LHS:</label>
+    <input name=lhs>
+    <label for=rhs>RHS:</label>
+    <input name=rhs>
+</div>
+These should be active:
+<section>
+    <label>
+        LHS:
+        <input name=lhs>
+    </label>
+    
+    <label>RHS:
+        <input name=rhs>
+    </label>
+    
+    <template be-switched='on when ^section@lhs eq ^section@rhs.'>
+        <div>LHS === RHS</div>
+    </template>
+</section>
+```
+
+## Directional Symbols
+
+| Symbol       | Meaning                        | Notes                                                                                             |
+|--------------|--------------------------------|---------------------------------------------------------------------------------------------------|
+| ^            | Single closest match           |                                                                                                   |
+| ^^           | Recursive closest match        |                                                                                                   |
+| ^*           | UpSearch                       | Checks previous siblings as well as parent, previous elements of parent, etc. [TODO]              |
+| Y            | Single downward match.         | Doesn't check inside each downward element [TODO]                                                 |
+| Y*           | Thorough downward match.       | Checks stuff inside each downard element [TODO]                                                   |
+
+
+
