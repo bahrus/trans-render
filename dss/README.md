@@ -34,3 +34,31 @@ We are often (but not always in the case of 2. below) making some assumptions ab
 1.  The value of the elements we are comparing are primitive JS types that are either inferrable, or specified by a property path.
 2.  The values of the elements we are comparing change in conjunction with a (user-initiated) event. 
 
+## By Example
+
+DSS is used throughout many of the components / enhancements built upon this package.  The best way to explain this *lingua franca* is by example
+
+## fetch-for
+
+The *fetch-for* [web-component](https://github.com/bahrus/fetch-for) uses DSS extensively:
+
+```html
+<input name=op value=integrate>
+<input name=expr value=x^2>
+<fetch-for
+    for="@op @expr"
+    oninput="
+        event.href=`https://newton.now.sh/api/v2/${event.forData.op.value}/${event.forData.expr.value}`
+    "
+    target=-object
+    onerror=console.error(href)
+>
+</fetch-for>
+...
+<json-viewer -object></json-viewer>
+```
+
+@op and @expr is saying "find elements within the nearest form or root note with attributes op and expr.  Use whatever default events and methods of extracting the value from these elements up to the individual library to determine, that is outside the scope of DSS".
+
+Likewise, the marker "-object" is saying "find element with attribute -object" and pass whatever this library wants to pass to it (say myStuff), via the local property oJsonViewer.object = myStuff".
+
