@@ -1,8 +1,9 @@
 # Directed Scoped Specifiers (DSS)
 
-"Directed Scoped Specifiers" (DSS) is a string pattern specification that is inspired by CSS, but whose goal is far more limited and specialized:  It provides a syntax to:
+"Directed Scoped Specifiers" (DSS) is a string pattern specification that is inspired by CSS selectors, but whose goal is far more targeted:  It provides a syntax to:
 
 1.  Make it easy to describe a relationship to another DOM element "in its vicinity", including the (custom element) host containing the element.
+2.  Included in that information can be highly useful information including the name of the property to bind to, and the event name to listen for.
 2.  It is compatible with HTML that could be emitted from template instantiation built into the browser, that adopts [this proposal](https://github.com/WICG/webcomponents/issues/1013).
 3.  It nudges the developer to name things in a way that will be semantically meaningful.
 
@@ -61,4 +62,18 @@ The *fetch-for* [web-component](https://github.com/bahrus/fetch-for) uses DSS ex
 @op and @expr is saying "find elements within the nearest form or root note with attributes op and expr.  Use whatever default events and methods of extracting the value from these elements up to the individual library to determine, that is outside the scope of DSS".
 
 Likewise, the marker "-object" is saying "find element with attribute -object" and pass whatever this library wants to pass to it (say myStuff), via the local property oJsonViewer.object = myStuff".
+
+## Conditional display with *be-switched*
+
+[*be-switched*](https://github.com/bahrus/be-switched#readme) is a custom enhancement that can lazy load HTML content when conditions are met.  It uses DSS syntax to specify dependencies on nearby elements (or the host).  For example:
+
+```html
+<label for=lhs>LHS:</label>
+<input id=lhs>
+<label for=rhs>RHS:</label>
+<input id=rhs>
+<template be-switched='on when #lhs equals #rhs.'>
+    <div>LHS === RHS</div>
+</template>
+```
 
