@@ -38,7 +38,7 @@ We are often (but not always in the case of 2. below) making some assumptions ab
 
 DSS is used throughout many of the components / enhancements built upon this package.  The best way to explain this *lingua franca* is by example
 
-## fetch-for
+## *fetch-for*
 
 The *fetch-for* [web-component](https://github.com/bahrus/fetch-for) uses DSS extensively:
 
