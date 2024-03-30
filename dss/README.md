@@ -117,7 +117,7 @@ These should be active:
 
 ## Specifying events
 
-be-bound has an example where we specify the property name, and the  event name to listen for:
+[*be-bound*](https://github.com/bahrus/be-bound?tab=readme-ov-file#special-logic-for-forms) has an example where we specify the property name, and the  event name to listen for:
 
 ```html
 <input id=alternativeRating type=number>
