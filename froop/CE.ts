@@ -83,6 +83,10 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
             }
             #newAttrs: {[key: string]: {oldVal: string | null, newVal: string | null}} = {};
             #filteredAttrs: {[key: string]: string | null} = {};
+            #checkIfAttrsAreParsed(){
+                const filteredAttrs = this.#filteredAttrs;
+                return Array.from((this as any as Element).attributes).filter(x => observedAttributes?.includes(x.name)).length === Object.keys(filteredAttrs).length
+            }
             attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null){
                 if(super.attributeChangedCallback) super.attributeChangedCallback(name, oldVal, newVal);
                 const newAttrs = this.#newAttrs;
@@ -94,7 +98,7 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
                     filteredAttrs[name] =newVal;
                 }
                 //TODO:  optimize this
-                if(Array.from((this as any as Element).attributes).filter(x => observedAttributes?.includes(x.name)).length === Object.keys(filteredAttrs).length){
+                if(this.#checkIfAttrsAreParsed()){
                     services!.definer.dispatchEvent(new CustomEvent(acb, {
                         detail: {
                             instance: this as any as HTMLElement,
@@ -120,7 +124,7 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
                         const {wfac} = await import('../lib/wfac.js');
                         await wfac(this as any as HTMLElement, dh, (s: string | null) => s === null);
                     }
-                    if(this.attributes.length === 0){
+                    if(this.#checkIfAttrsAreParsed()){
                         this.isAttrParsed = true;
                     }
                 }

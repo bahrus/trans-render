@@ -73,6 +73,10 @@ export class CE extends Svc {
             }
             #newAttrs = {};
             #filteredAttrs = {};
+            #checkIfAttrsAreParsed() {
+                const filteredAttrs = this.#filteredAttrs;
+                return Array.from(this.attributes).filter(x => observedAttributes?.includes(x.name)).length === Object.keys(filteredAttrs).length;
+            }
             attributeChangedCallback(name, oldVal, newVal) {
                 if (super.attributeChangedCallback)
                     super.attributeChangedCallback(name, oldVal, newVal);
@@ -86,7 +90,7 @@ export class CE extends Svc {
                     filteredAttrs[name] = newVal;
                 }
                 //TODO:  optimize this
-                if (Array.from(this.attributes).filter(x => observedAttributes?.includes(x.name)).length === Object.keys(filteredAttrs).length) {
+                if (this.#checkIfAttrsAreParsed()) {
                     services.definer.dispatchEvent(new CustomEvent(acb, {
                         detail: {
                             instance: this,
@@ -110,7 +114,7 @@ export class CE extends Svc {
                         const { wfac } = await import('../lib/wfac.js');
                         await wfac(this, dh, (s) => s === null);
                     }
-                    if (this.attributes.length === 0) {
+                    if (this.#checkIfAttrsAreParsed()) {
                         this.isAttrParsed = true;
                     }
                 }
