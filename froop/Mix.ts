@@ -1,4 +1,4 @@
-import {DefineArgs} from '../lib/types';
+import {DefineArgs} from './types';
 import { IMix} from './types';
 import { Svc } from './Svc.js';
 

@@ -1,4 +1,4 @@
-import {WCConfig} from '../lib/types';
+import {WCConfig} from './types';
 import { InstSvc } from "./InstSvc.js";
 import {xsr, mse, acb} from './const.js';
 import { CEArgs, IHookup, INewPropagator, IAttrChgCB } from './types';

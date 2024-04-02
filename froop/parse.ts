@@ -1,5 +1,5 @@
 import {IAttrChgCB} from './types';
-import {PropInfo} from '../lib/types';
+import {PropInfo} from './types';
 declare const Sanitizer: any;
 
 

@@ -1,4 +1,4 @@
-import { PropInfo, DefineArgs } from "../lib/types";
+import { PropInfo, DefineArgs } from "./types";
 import { pc, xsr, ccb, dcb, r, mse} from './const.js';
 import { Svc } from "./Svc.js";
 import { IPropagator, IPropSvc, CEArgs, INewPropagator, IConnectedCB, IDisconnectedCB, IPropChg } from './types';

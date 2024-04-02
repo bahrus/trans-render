@@ -189,81 +189,20 @@ export interface TRElementActions{
 
 
 
-export interface DefineArgs<MixinCompositeProps = any, MixinCompositeActions = MixinCompositeProps, TPropInfo = PropInfo, TAction extends Action = Action<MixinCompositeProps>>{
-    superclass?: {new(): HTMLElement} | string,
-    mixins?: any[],
-    mainTemplate?: HTMLTemplateElement;
-    /** use this only for defaults that can't be JSON serialized in config */
-    complexPropDefaults?: Partial<MixinCompositeProps>;
-    /** Config should be 100% JSON serializable, or a JSON import, or an id of an be-exportable script tag */
-    config: WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo, TAction> | (() => Promise<{default: WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo, TAction>}>) | string;
-    /**
-     * Side effects tied to actions, mostly used to load enhancement dependencies tied to 
-     * enhancements
-     */
-    asides?: Partial<{[key in keyof MixinCompositeActions & string]: (instance: EventTarget, methodName: string, key: string) => Promise<void> }>
-}
-
-export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction = Action>{
-    tagName?: string;
-    isEnh?: boolean;
-    propDefaults?: Partial<{[key in keyof MCProps]: MCProps[key]}>;
-    propInfo?: Partial<{[key in keyof MCProps]: TPropInfo}>
-    derivedProps?: (keyof MCProps & string)[];
-    actions?: Partial<{[key in keyof MCActions & string]: TAction | keyof MCProps}> 
-    propChangeMethod?: keyof MCActions;
-    style?: Partial<CSSStyleDeclaration>;
-    /**
-     * Used for providing hints to server side processing what css queries should be observed if using HTMLRewriter.
-     */
-    keyQueries?: string[];
-    formAss?: boolean;
-}
-
-export type ListOfLogicalExpressions<MCProps = any> = (keyof MCProps | LogicOp<MCProps>)[];
-
-export type LogicOpProp<MCProps = any> = LogicOp<MCProps> | (keyof MCProps | LogicOp<MCProps>)[];
-
-export interface LogicOp<MCProps = any>{
-    /**
-     * Supported by trans-render
-     */
-    ifAllOf?: LogicOpProp<MCProps>,
-
-    ifKeyIn?: (keyof MCProps & string)[],  
-
-    ifNoneOf?: LogicOpProp<MCProps>,
-
-    ifEquals?: LogicOpProp<MCProps>,
-
-    ifAtLeastOneOf?: LogicOpProp<MCProps>,
-
-
-
-}
 
 
 
 
-export interface Transform<TMixinComposite = any> extends LogicOp<TMixinComposite>{
-    match: {[key: string]: MatchRHS<TMixinComposite>}
-}
 
-export interface Action<MCProps = any, MCActions = MCProps> extends LogicOp<MCProps>{
-    target?: keyof MCProps; 
-    debug?: boolean;
-    secondArg?: any;
-    //setFree?: (keyof MCProps & string)[],
-}
+// export interface Transform<TMixinComposite = any> extends LogicOp<TMixinComposite>{
+//     match: {[key: string]: MatchRHS<TMixinComposite>}
+// }
+
+
 
 export type MatchRHS<TMixinComposite = any> = string;
 
-type PropInfoTypes = "String" | "Number" | "Boolean" | "Object" | "RegExp";
-export interface PropInfo{
-    type?: PropInfoTypes;
-    dry?: boolean;
-    parse?: boolean;
-}
+
 
 
 export interface HasPropChangeQueue{
@@ -271,23 +210,13 @@ export interface HasPropChangeQueue{
     QR: undefined | ((name: string, self: HasPropChangeQueue) => void);
 }
 
-export interface PropChangeInfo<TPropInfo = PropInfo> {
-    key: string,
-    ov: any,
-    nv: any,
-    prop: TPropInfo,
-    pcm: PropChangeMethod | undefined;
-}
+
 
 export interface ProxyPropChangeInfo{
     oldVal: any,
     newVal: any,
     prop: string
 }
-
-export type PropChangeMoment = 'v' | '-a' | '+a' | '+qr' | '+qm';
-
-export type PropChangeMethod = (self: EventTarget, pci: PropChangeInfo, moment: PropChangeMoment) => boolean;
 
 
 
@@ -496,10 +425,7 @@ export interface getValArg {
     host?: any;
 }
 
-export interface IActionProcessor{
-    doActions(self: IActionProcessor, actions: {[methodName: string]: Action}, target: any, proxy?: any): void;
-    postHoc(self: this, action: Action, target: any, returnVal: any, proxy?: any): void;
-}
+
 
 export type keyOfCtxNavElement = keyof ICTXNavElement & string;
 
@@ -555,13 +481,7 @@ export interface ICtxNav<T = any> extends ICTXNavRecursive<T>, ICTXNavElement, I
     xtalState(): Promise<EventTarget | undefined>;
 }
 
-export type ConstString = String;
 
-export type NameOfProp = string;
-
-export type StringOrProp = ConstString | [NameOfProp, PropInfo];
-
-export type Parts = Array<StringOrProp>;
 
 export type ConvertOptions = 'bool' | 'int' | 'float' | 'date' | 'truthy' | 'falsy' | 'string' | 'object' | 'regExp' | 'number';
 

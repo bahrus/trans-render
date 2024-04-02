@@ -1,4 +1,4 @@
-import {PropInfo, Action, DefineArgs, Scope} from '../lib/types';
+import { Scope} from '../lib/types';
 
 export interface IEventConfig<MCProps = any, MCActions = MCProps, TAction = Action>{
     on?: string,
@@ -122,6 +122,8 @@ export interface CEServices {
     hooker?: IHookup,
 }
 
+
+
 export interface CEArgs<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction extends Action<TProps> = Action<TProps>> extends DefineArgs<TProps, TActions, TPropInfo, TAction>{
     definer?: IDefine,
     servers?: CEServiceClasses
@@ -140,3 +142,97 @@ export interface IPE {
 export interface IPET extends IPE{
     re(instance: EventTarget, originMethodName: string, vals: [any, ActionOnEventConfigs, DynamicTransform] ): Promise<void>,
 }
+
+export interface DefineArgs<MixinCompositeProps = any, MixinCompositeActions = MixinCompositeProps, TPropInfo = PropInfo, TAction extends Action = Action<MixinCompositeProps>>{
+    superclass?: {new(): HTMLElement} | string,
+    mixins?: any[],
+    mainTemplate?: HTMLTemplateElement;
+    /** use this only for defaults that can't be JSON serialized in config */
+    complexPropDefaults?: Partial<MixinCompositeProps>;
+    /** Config should be 100% JSON serializable, or a JSON import, or an id of an be-exportable script tag */
+    config: WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo, TAction> | (() => Promise<{default: WCConfig<MixinCompositeProps, MixinCompositeActions, TPropInfo, TAction>}>) | string;
+    /**
+     * Side effects tied to actions, mostly used to load enhancement dependencies tied to 
+     * enhancements
+     */
+    asides?: Partial<{[key in keyof MixinCompositeActions & string]: (instance: EventTarget, methodName: string, key: string) => Promise<void> }>
+}
+
+export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction = Action>{
+    tagName?: string;
+    isEnh?: boolean;
+    propDefaults?: Partial<{[key in keyof MCProps]: MCProps[key]}>;
+    propInfo?: Partial<{[key in keyof MCProps]: TPropInfo}>
+    derivedProps?: (keyof MCProps & string)[];
+    actions?: Partial<{[key in keyof MCActions & string]: TAction | keyof MCProps}> 
+    propChangeMethod?: keyof MCActions;
+    style?: Partial<CSSStyleDeclaration>;
+    /**
+     * Used for providing hints to server side processing what css queries should be observed if using HTMLRewriter.
+     */
+    keyQueries?: string[];
+    formAss?: boolean;
+}
+
+export type ListOfLogicalExpressions<MCProps = any> = (keyof MCProps | LogicOp<MCProps>)[];
+
+export type LogicOpProp<MCProps = any> = LogicOp<MCProps> | (keyof MCProps | LogicOp<MCProps>)[];
+
+export interface LogicOp<MCProps = any>{
+    /**
+     * Supported by trans-render
+     */
+    ifAllOf?: LogicOpProp<MCProps>,
+
+    ifKeyIn?: (keyof MCProps & string)[],  
+
+    ifNoneOf?: LogicOpProp<MCProps>,
+
+    ifEquals?: LogicOpProp<MCProps>,
+
+    ifAtLeastOneOf?: LogicOpProp<MCProps>,
+
+
+
+}
+
+export interface Action<MCProps = any, MCActions = MCProps> extends LogicOp<MCProps>{
+    target?: keyof MCProps; 
+    debug?: boolean;
+    secondArg?: any;
+    //setFree?: (keyof MCProps & string)[],
+}
+
+export interface IActionProcessor{
+    doActions(self: IActionProcessor, actions: {[methodName: string]: Action}, target: any, proxy?: any): void;
+    postHoc(self: this, action: Action, target: any, returnVal: any, proxy?: any): void;
+}
+
+type PropInfoTypes = "String" | "Number" | "Boolean" | "Object" | "RegExp";
+export interface PropInfo{
+    type?: PropInfoTypes;
+    dry?: boolean;
+    parse?: boolean;
+}
+
+export type ConstString = String;
+
+export type NameOfProp = string;
+
+export type StringOrProp = ConstString | [NameOfProp, PropInfo];
+
+export type Parts = Array<StringOrProp>;
+
+export interface PropChangeInfo<TPropInfo = PropInfo> {
+    key: string,
+    ov: any,
+    nv: any,
+    prop: TPropInfo,
+    pcm: PropChangeMethod | undefined;
+}
+
+//are these still really used?
+export type PropChangeMoment = 'v' | '-a' | '+a' | '+qr' | '+qm';
+
+export type PropChangeMethod = (self: EventTarget, pci: PropChangeInfo, moment: PropChangeMoment) => boolean;
+

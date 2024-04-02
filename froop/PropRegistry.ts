@@ -1,4 +1,4 @@
-import {PropInfo, WCConfig, Action, PropInfoTypes} from '../lib/types';
+import {PropInfo, WCConfig, Action, PropInfoTypes} from './types';
 import {CEArgs, IPropRegistrar as IPropRegistrar, IAttrChgCB, INewPropagator} from './types';
 import { xsr, r, mse} from './const.js';
 import { Svc } from './Svc.js';

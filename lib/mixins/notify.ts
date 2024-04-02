@@ -1,5 +1,5 @@
 import {camelToLisp} from '../camelToLisp.js';
-import {PropChangeInfo, PropChangeMoment, PropInfo} from '../types.d.js';
+import {PropChangeInfo, PropChangeMoment, PropInfo} from '../../froop//types.d.js';
 export const NotifyMixin = (superclass: {new(): any}) => class extends superclass{
     onPropChange(self: EventTarget, propChange: PropChangeInfo<INotifyPropInfo>, moment: PropChangeMoment){
         if(super.onPropChange) super.onPropChange(self, propChange, moment);

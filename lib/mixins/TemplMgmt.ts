@@ -1,6 +1,6 @@
 import { RHS } from '../../types.js';
-import { Action, PropInfo } from '../types.js';
-export { Action, PropInfo } from '../types.js';
+import { Action, PropInfo } from '../../froop/types.js';
+export { Action, PropInfo } from '../../froop/types.js';
 
 export {XForm} from '../../types.js'
 

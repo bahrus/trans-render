@@ -1,7 +1,7 @@
-import {Action, IActionProcessor, WCConfig} from '../lib/types';
+import {Action, IActionProcessor, WCConfig} from '../froop/types';
 import {pc} from './const.js';
 import {CEArgs, IPropagator, IPropChg} from './types';
-import {pq} from '../lib/pq.js';
+import {pq} from './pq.js';
 import {intersects} from '../lib/intersects.js';
 import {act} from './act.js';
 

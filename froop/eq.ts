@@ -1,4 +1,4 @@
-import {ListOfLogicalExpressions} from './types';
+import {ListOfLogicalExpressions} from '../froop/types';
 export function eq<MCProps = any>(expr: ListOfLogicalExpressions,  src: MCProps): boolean{
     let firstVal = undefined;
     let first = true;

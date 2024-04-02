@@ -1,4 +1,4 @@
-import {Parts, PropInfo} from './types';
+import {Parts, PropInfo} from '../froop/types';
 
 export function toParts(expr: string){
     const closedBraceSplit = expr.split('}');
