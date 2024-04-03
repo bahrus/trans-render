@@ -36,7 +36,7 @@ Fewer (nested) parenthesis.
 Lower learning curve?
 Froop also doesn't execute code if the field value is unchanged.
 No pub/sub required!
-No creation of getters/setters required!
+No creation of getters/setters required (other than count)!
 
 What standard would help?
 
@@ -45,7 +45,10 @@ Being able to publish the dependencies in a uniform way:
 ```JavaScript
 const parity = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
 parity.do = {
-    on: 'isEven'
+    on: 'isEven'.
+    if: [],
+    ifOneOf:[],
+    ifEquals:[]
 }
 ```
 
