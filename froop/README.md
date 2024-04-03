@@ -1,6 +1,32 @@
+Froop vs Signals:
 
+Signals:
 
+```JavaScript
+const counter = new Signal.State(0);
+const isEven = new Signal.Computed(() => (counter.get() & 1) == 0);
+const parity = new Signal.Computed(() => isEven.get() ? "even" : "odd");
 
+effect(() => element.innerText = parity.get());
+
+// Simulate external updates to counter...
+setInterval(() => counter.set(counter.get() + 1), 1000);
+```
+
+Froop:
+
+```JavaScript
+const evenIs = ({counter}) => ({isEven: counter & 1 === 0});
+const parityIs = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
+const innerTextIs = ({parity, element}) => {
+    element.innerText = parity;
+}
+froop({count: 0, element, evenIs, parityIs, innerTextIs}, {
+    evenIs: {on: 'counter'},
+    parityIs: {on: 'isEven'},
+    innerTextIs: {on: 'parity'}
+})
+```
 ...
 
 
