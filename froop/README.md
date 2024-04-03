@@ -38,7 +38,20 @@ All the functions are side effect free and don't do any state mutation at all!  
 
 roundabout can JSON serialize one of the arguments, making parsing the instructions easier on the browser.
 
-roundabout does require manually figuring out the dependencies ("sources"), but kind of gives the user more transparent power, especially as they can direct traffic based on truthy conditions.
+roundabout does require manually figuring out the dependencies ("sources"), but the silver lining is it gives the user more transparent power, especially as they can direct traffic based on truthy conditions.  For example:
+
+```JavaScript
+const [vm, propagator] = await roundabout(
+    {element, checkIfEven, determineParity, innerText}, 
+    {   
+        propagate: {count: 0},
+        do_checkIfEven_on: 'count', do_determineParity_on: 'isEven',
+        setInnerText: {
+            ifAllOf: ['count', 'isEven', 'parity']
+        }
+    }
+);
+```
 
 That manual calculation could be done during compile time.
 
