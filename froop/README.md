@@ -16,11 +16,11 @@ setInterval(() => counter.set(counter.get() + 1), 1000);
 Froop:
 
 ```JavaScript
-const isEven = ({counter}) => ({isEven: counter & 1 === 0});
-const parity = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
-const innerText = ({parity, element}) => ({'?.element?.innerText': parity}
-const [vm] = await froop(
-    {count: 0, element, isEven, parity, innerText}, 
+const checkIfEven = ({counter}) => ({isEven: counter & 1 === 0});
+const determineParity = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
+const innerText = ({parity, element}) => ({'?.element?.innerText': parity};
+const [vm, propagator] = await froop(
+    {count: 0, element, checkIfEven, determineParity, innerText}, 
     {do_isEven_on: 'counter', do_parity_on: 'isEven', do_innerText_on: 'parity'}
 );
 
@@ -51,6 +51,8 @@ parity.do = {
     ifEquals:[]
 }
 ```
+
+NVM -- just use decorators.
 
 
 froop doesn't yet support memoization (parity), which seems like a good idea
