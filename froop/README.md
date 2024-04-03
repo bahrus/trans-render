@@ -15,7 +15,7 @@ setInterval(() => counter.set(counter.get() + 1), 1000);
 
 Roundabouts:
 
-![](https://www.trafficdepot.ca/wp-content/uploads/2020/08/reg6bb.png)
+![](https://www.trafficdepot.ca/wp-content/uploads/2020/08/reg6bb.png 250x)
 
 ```JavaScript
 const checkIfEven = ({counter}) => ({isEven: counter & 1 === 0});
