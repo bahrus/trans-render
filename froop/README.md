@@ -18,11 +18,9 @@ Froop:
 ```JavaScript
 const isEven = ({counter}) => ({isEven: counter & 1 === 0});
 const parity = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
-const innerText = ({parity, element}) => {
-    element.innerText = parity;
-}
+const innerText = ({parity, element}) => {element.innerText = parity;}
 const vm = await froop(
-    {count: 0, element, evenIs, parityIs, innerTextIs}, 
+    {count: 0, element, isEven, parity, innerText}, 
     {do_isEven_on: 'counter', do_parity_on: 'isEven', do_innerText_on: 'parity'}
 );
 
