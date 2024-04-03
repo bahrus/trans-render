@@ -34,7 +34,7 @@ Froop can JSON serialize one of the arguments.
 Froop requires manually figuring out the dependencies ("sources"), but kind of gives the user more transparent power.
 That manual calculation could be done during compile time.
 Less run time analysis?
-Fewer parenthesis.
+Fewer (nested) parenthesis.
 
 
 
