@@ -71,9 +71,13 @@ No pub/sub required!
 
 No creation of getters/setters required (other than count)!
 
+Basically, what round about does is looks at what subset of properties of the view model is returned, and directs traffic accordingly after doing an Object.assignGingerly.
+
 What standard would help?
 
-Being able to publish the dependencies in a uniform way:
+1.  Object.assignGingerly.
+
+2.  Being able to publish the dependencies in a uniform way:
 
 ```JavaScript
 const parity = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
@@ -85,10 +89,13 @@ parity.do = {
 }
 ```
 
-NVM -- just use decorators, maybe?
+3.  Reducing the footprint
 
+Maybe this could be done with decorators
 
-roundabout doesn't yet support memoization (parity), which seems like a good idea
+<!--
+roundabout could support deep memoization (parity), which seems like a good idea
+-->
 
 
 
