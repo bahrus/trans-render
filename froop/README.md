@@ -73,6 +73,8 @@ No creation of getters/setters required (other than count)!
 
 Basically, what round about does is looks at what subset of properties of the view model is returned from the action methods (checkIfEven, determineParity, setInnerText), and directs traffic accordingly after doing an Object.assignGingerly.
 
+propagator is an EventTarget, that publishes events when the propagate properties are changed (just count).
+
 What standard would help?
 
 1.  Object.assignGingerly.
