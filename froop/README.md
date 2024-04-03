@@ -44,7 +44,7 @@ roundabout does require manually figuring out the dependencies ("sources"), but 
 
 ```JavaScript
 const [vm, propagator] = await roundabout(
-    {element, checkIfEven, determineParity, innerText}, 
+    {element, checkIfEven, determineParity, setInnerText}, 
     {   
         propagate: {count: 0},
         do_checkIfEven_on: 'count', do_determineParity_on: 'isEven',
@@ -71,7 +71,7 @@ No pub/sub required!
 
 No creation of getters/setters required (other than count)!
 
-Basically, what round about does is looks at what subset of properties of the view model is returned, and directs traffic accordingly after doing an Object.assignGingerly.
+Basically, what round about does is looks at what subset of properties of the view model is returned from the action methods (checkIfEven, determineParity, setInnerText), and directs traffic accordingly after doing an Object.assignGingerly.
 
 What standard would help?
 
@@ -85,9 +85,12 @@ parity.do = {
     on: 'isEven'.
     if: [],
     ifOneOf:[],
-    ifEquals:[]
+    ifEquals:[],
+    etc.
 }
 ```
+
+which must be JSON serializable.
 
 3.  Reducing the footprint
 
