@@ -4,7 +4,7 @@ The world needs both traffic signals and roundabouts.  This shouldn't be an eith
 
 Signals:
 
-<img align="right" src="https://github.com/proposal-signals/proposal-signals/proposal-signals/raw/main/signals-logo.png" alt="Signals logo" width="100" style="max-width: 100%;">
+<img align="right" src="https://github.com/proposal-signals/raw/main/signals-logo.png" alt="Signals logo" width="100" style="max-width: 100%;">
 
 ```JavaScript
 const counter = new Signal.State(0);
