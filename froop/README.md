@@ -20,12 +20,12 @@ Roundabouts:
 ```JavaScript
 const checkIfEven = ({counter}) => ({isEven: counter & 1 === 0});
 const determineParity = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
-const innerText = ({parity, element}) => ({'?.element?.innerText': parity};
+const setInnerText = ({parity, element}) => ({'?.element?.innerText': parity};
 const [vm, propagator] = await roundabout(
     {element, checkIfEven, determineParity, innerText}, 
     {   
         propagate: {count: 0},
-        do_isEven_on: 'count', do_parity_on: 'isEven', do_innerText_on: 'parity'
+        do_checkIfEven_on: 'count', do_determineParity_on: 'isEven', do_setInnerText_on: 'parity'
     }
 );
 
