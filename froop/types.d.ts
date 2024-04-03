@@ -236,3 +236,12 @@ export type PropChangeMoment = 'v' | '-a' | '+a' | '+qr' | '+qm';
 
 export type PropChangeMethod = (self: EventTarget, pci: PropChangeInfo, moment: PropChangeMoment) => boolean;
 
+export type roundaboutOptions<TProps = any, TActions = TProps> = {
+    propagate: keyof TProps & string | Array<keyof TProps & string>,
+    actions?: 
+        | Partial<{[key in keyof TActions & string]: any}>
+        | Partial<{[key in `do_${keyof TActions & string}_on`]: Key<TActions> | Array<Key<TActions>> }> 
+}
+
+export type Key<T = any> = keyof T & string;
+

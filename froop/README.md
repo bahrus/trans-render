@@ -26,44 +26,42 @@ const checkIfEven = ({counter}) => ({isEven: counter & 1 === 0});
 const determineParity = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
 const setInnerText = ({parity}) => ({'?.element?.innerText': parity};
 const [vm, propagator] = await roundabout(
-    {element, checkIfEven, determineParity, innerText}, 
-    {   
-        propagate: {count: 0},
-        do_checkIfEven_on: 'count', do_determineParity_on: 'isEven', do_setInnerText_on: 'parity'
-    }
+    {element, checkIfEven, determineParity, setInnerText}, 
+    { propagate: {count: 0}}
 );
 
 setInterval(() => vm.count++, 1000);
 ```
 
-Same number of statements, but for roundabout, one of the statements is admittedly long.
+Same number of statements.
 
-All the functions are side effect free and don't do any state mutation at all!  Purely functional.
+All the functions are side effect free and don't do any state mutation at all.  Purely functional.
 
 roundabout can JSON serialize one of the arguments, making parsing the instructions easier on the browser.
 
-roundabout does require manually figuring out the dependencies ("sources"), but the silver lining is it gives the user more transparent power, especially as they can direct traffic based on truthy conditions.  For example:
+roundabout "guesses" when the developer wants to call the functions to compute new values, if not specified, based on the lhs of the arrow expression.  But developers can take hold of the reigns, and decide for themselves:
 
 ```JavaScript
 const [vm, propagator] = await roundabout(
     {element, checkIfEven, determineParity, setInnerText}, 
     {   
         propagate: {count: 0},
-        do_checkIfEven_on: 'count', do_determineParity_on: 'isEven',
-        setInnerText: {
-            ifAllOf: ['count', 'isEven', 'parity']
+        actions:{
+            do_checkIfEven_on: 'count', do_determineParity_on: 'isEven',
+            setInnerText: {
+                ifAllOf: ['count', 'isEven', 'parity']
+            }
         }
+        
     }
 );
 ```
 
-That manual calculation could be done during compile time.
+I suspect this will require less run time analysis?
 
-Less run time analysis?
+It certainly benefits from fewer (nested) parenthesis.
 
-Fewer (nested) parenthesis.
-
-State is all in one place -- the vm, which could also be the custom element class.
+State is all in one place -- the vm, which could also be the custom element class instance.
 
 Lower learning curve?
 
@@ -73,7 +71,7 @@ No pub/sub required!
 
 No creation of getters/setters required (other than count)!
 
-Basically, what round about does is looks at what subset of properties of the view model is returned from the action methods (checkIfEven, determineParity, setInnerText), and directs traffic accordingly after doing an Object.assignGingerly.
+Basically, what round about does is it looks at what subset of properties of the view model is returned from the action methods (checkIfEven, determineParity, setInnerText), and directs traffic accordingly after doing an Object.assignGingerly.
 
 propagator is an EventTarget, that publishes events when the propagate properties are changed (just count).
 
@@ -98,7 +96,6 @@ which must be JSON serializable.
 
 3.  Reducing the footprint
 
-Maybe this could be done with decorators
 
 <!--
 roundabout could support deep memoization (parity), which seems like a good idea
