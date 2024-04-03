@@ -21,14 +21,9 @@ const parityIs = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
 const innerTextIs = ({parity, element}) => {
     element.innerText = parity;
 }
-const vm = {count: 0, element, evenIs, parityIs, innerTextIs};
-froop(vm, {
-    evenIsOn: 'counter',
-    parityIsOn: 'isEven',
-    innerTextIsOn: 'parity'
-})
+const vm = await froop({count: 0, element, evenIs, parityIs, innerTextIs}, {evenIsOn: 'counter', parityIsOn: 'isEven', innerTextIsOn: 'parity'})
 
-setInterval(() => model.count++, 1000);
+setInterval(() => vm.count++, 1000);
 ```
 
 
