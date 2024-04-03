@@ -21,13 +21,16 @@ const parityIs = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
 const innerTextIs = ({parity, element}) => {
     element.innerText = parity;
 }
-froop({count: 0, element, evenIs, parityIs, innerTextIs}, {
-    evenIs: {on: 'counter'},
-    parityIs: {on: 'isEven'},
-    innerTextIs: {on: 'parity'}
+const vm = {count: 0, element, evenIs, parityIs, innerTextIs};
+froop(vm, {
+    evenIsOn: 'counter',
+    parityIsOn: 'isEven',
+    innerTextIsOn: 'parity'
 })
+
+setInterval(() => model.count++, 1000);
 ```
-...
+
 
 
 What about pulling data in lazily [TODO]
