@@ -1,4 +1,6 @@
-# Roundabouts vs Signals:
+# Roundabouts vs Signals
+
+The world needs both traffic signals and roundabouts.  This shouldn't be an either or.
 
 Signals:
 
