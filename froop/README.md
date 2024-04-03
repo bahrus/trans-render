@@ -36,7 +36,7 @@ Same number of statements, but for roundabout, one of the statements is admitted
 
 roundabout can JSON serialize one of the arguments.
 
-roundabout requires manually figuring out the dependencies ("sources"), but kind of gives the user more transparent power.
+roundabout does require manually figuring out the dependencies ("sources"), but kind of gives the user more transparent power, especially as they can direct traffic based on truthy conditions.
 
 That manual calculation could be done during compile time.
 
