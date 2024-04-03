@@ -44,6 +44,8 @@ Less run time analysis?
 
 Fewer (nested) parenthesis.
 
+State is all in one place -- the vm, which could also be the custom element class.
+
 Lower learning curve?
 
 roundabout also doesn't execute code if the field value is unchanged.
