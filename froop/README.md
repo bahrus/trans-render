@@ -16,15 +16,25 @@ setInterval(() => counter.set(counter.get() + 1), 1000);
 Froop:
 
 ```JavaScript
-const evenIs = ({counter}) => ({isEven: counter & 1 === 0});
-const parityIs = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
-const innerTextIs = ({parity, element}) => {
+const isEven = ({counter}) => ({isEven: counter & 1 === 0});
+const parity = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
+const innerText = ({parity, element}) => {
     element.innerText = parity;
 }
-const vm = await froop({count: 0, element, evenIs, parityIs, innerTextIs}, {evenIsOn: 'counter', parityIsOn: 'isEven', innerTextIsOn: 'parity'})
+const vm = await froop(
+    {count: 0, element, evenIs, parityIs, innerTextIs}, 
+    {do_isEven_on: 'counter', do_parity_on: 'isEven', do_innerText_on: 'parity'}
+);
 
 setInterval(() => vm.count++, 1000);
 ```
+
+Same number of lines of code, but froop has one long line.
+Froop can JSON serialize one of the arguments.
+Froop requires manually figuring out the dependencies ("sources"), but kind of gives the user more transparent power.
+That manual calculation could be done during compile time.
+Less run time analysis?
+Fewer parenthesis.
 
 
 
