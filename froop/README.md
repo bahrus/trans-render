@@ -22,7 +22,7 @@ Roundabouts:
 ```JavaScript
 const checkIfEven = ({counter}) => ({isEven: counter & 1 === 0});
 const determineParity = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
-const setInnerText = ({parity, element}) => ({'?.element?.innerText': parity};
+const setInnerText = ({parity}) => ({'?.element?.innerText': parity};
 const [vm, propagator] = await roundabout(
     {element, checkIfEven, determineParity, innerText}, 
     {   
