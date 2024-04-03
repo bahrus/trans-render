@@ -19,7 +19,7 @@ Froop:
 const isEven = ({counter}) => ({isEven: counter & 1 === 0});
 const parity = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
 const innerText = ({parity, element}) => ({'?.element?.innerText': parity}
-const vm = await froop(
+const [vm] = await froop(
     {count: 0, element, isEven, parity, innerText}, 
     {do_isEven_on: 'counter', do_parity_on: 'isEven', do_innerText_on: 'parity'}
 );
@@ -35,6 +35,8 @@ Less run time analysis?
 Fewer (nested) parenthesis.
 Lower learning curve?
 Froop also doesn't execute code if the field value is unchanged.
+No pub/sub required!
+No creation of getters/setters required!
 
 froop doesn't yet support memoization (parity), which seems like a good idea
 
