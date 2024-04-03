@@ -35,6 +35,10 @@ Froop requires manually figuring out the dependencies ("sources"), but kind of g
 That manual calculation could be done during compile time.
 Less run time analysis?
 Fewer (nested) parenthesis.
+Lower learning curve?
+Froop also doesn't execute code if the field value is unchanged.
+
+froop doesn't yet support memoization (parity), which seems like a good idea
 
 
 
