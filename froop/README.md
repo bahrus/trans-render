@@ -4,7 +4,7 @@ The world needs both traffic signals and roundabouts.  This shouldn't be an eith
 
 Signals:
 
-<img align="right" src="/proposal-signals/proposal-signals/raw/main/signals-logo.png" alt="Signals logo" width="100" style="max-width: 100%;">
+<img align="right" src="https://github.com/proposal-signals/proposal-signals/proposal-signals/raw/main/signals-logo.png" alt="Signals logo" width="100" style="max-width: 100%;">
 
 ```JavaScript
 const counter = new Signal.State(0);
@@ -19,7 +19,7 @@ setInterval(() => counter.set(counter.get() + 1), 1000);
 
 Roundabouts:
 
-<img src="https://www.trafficdepot.ca/wp-content/uploads/2020/08/reg6bb.png" width="100px">
+<img align="right" src="https://www.trafficdepot.ca/wp-content/uploads/2020/08/reg6bb.png" width="100px">
 
 ```JavaScript
 const checkIfEven = ({counter}) => ({isEven: counter & 1 === 0});
