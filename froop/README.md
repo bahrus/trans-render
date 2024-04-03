@@ -22,14 +22,17 @@ const checkIfEven = ({counter}) => ({isEven: counter & 1 === 0});
 const determineParity = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
 const innerText = ({parity, element}) => ({'?.element?.innerText': parity};
 const [vm, propagator] = await roundabout(
-    {count: 0, element, checkIfEven, determineParity, innerText}, 
-    {do_isEven_on: 'counter', do_parity_on: 'isEven', do_innerText_on: 'parity'}
+    {element, checkIfEven, determineParity, innerText}, 
+    {   
+        propagate: {count: 0},
+        do_isEven_on: 'count', do_parity_on: 'isEven', do_innerText_on: 'parity'
+    }
 );
 
 setInterval(() => vm.count++, 1000);
 ```
 
-Same number of lines of code, but roundabout has one long line.
+Same number of statements, but for roundabout, one of the statements is admittedly long.
 
 roundabout can JSON serialize one of the arguments.
 
