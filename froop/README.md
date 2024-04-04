@@ -101,12 +101,12 @@ which must be JSON serializable.
 roundabout could support deep memoization (parity), which seems like a good idea
 -->
 
-## Opting in to roundabout prerequisites:
+## How to be roundabout ready
 
-Class must implement interface:
+For a class to be optimized to work most effectively with roundabouts, it should implement interface RoundaboutReady:
 
 ```TypeScript
-interface UnderCurrents{
+interface RoundaboutReady{
     /**
      * Allow for assigning to read only props via the "backdoor"
      * Bypasses getters / setters, sets directly to (private memory slots)
