@@ -117,7 +117,7 @@ interface TBD{
 
     /**
      * fires event with name matching the name of the property when the value changes (but not via covertAssignment)
-     *
+     * when property is set via public interface
      */
     get propagator() : EventTarget;
 }
