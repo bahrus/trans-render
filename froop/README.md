@@ -101,5 +101,27 @@ which must be JSON serializable.
 roundabout could support deep memoization (parity), which seems like a good idea
 -->
 
+## Opting in to roundabout prerequisites:
+
+Class must implement interface:
+
+```TypeScript
+interface TBD{
+    /**
+     * Allow for assigning to read only props via the "backdoor"
+     * Bypasses getters / setters, sets directly to (private memory slots)
+     * Doesn't do any notification
+     * Allows for nested property setting
+    */
+    covertAssignment(obj: any): void;
+
+    /**
+     * fires event with name matching the name of the property when the value changes (but not via covertAssignment)
+     *
+     */
+    get propagator() : EventTarget;
+}
+```
+
 
 
