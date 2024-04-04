@@ -106,7 +106,7 @@ roundabout could support deep memoization (parity), which seems like a good idea
 Class must implement interface:
 
 ```TypeScript
-interface TBD{
+interface UnderCurrents{
     /**
      * Allow for assigning to read only props via the "backdoor"
      * Bypasses getters / setters, sets directly to (private memory slots)
