@@ -159,12 +159,14 @@ export interface DefineArgs<MixinCompositeProps = any, MixinCompositeActions = M
 }
 
 export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction = Action>{
-    tagName?: string;
+    name?: string;
     isEnh?: boolean;
     propDefaults?: Partial<{[key in keyof MCProps]: MCProps[key]}>;
     propInfo?: Partial<{[key in keyof MCProps]: TPropInfo}>
     derivedProps?: (keyof MCProps & string)[];
-    actions?: Partial<{[key in keyof MCActions & string]: TAction | keyof MCProps}> 
+    // actions?: 
+    //     Partial<{[key in keyof MCActions & string]: TAction | keyof MCProps}> 
+    actions: Actions<MCProps, MCActions>;
     propChangeMethod?: keyof MCActions;
     style?: Partial<CSSStyleDeclaration>;
     /**
@@ -213,6 +215,9 @@ export interface PropInfo{
     type?: PropInfoTypes;
     dry?: boolean;
     parse?: boolean;
+    ro?: boolean;
+    def?: any;
+    attrName?: string;
 }
 
 export type ConstString = String;
@@ -236,12 +241,41 @@ export type PropChangeMoment = 'v' | '-a' | '+a' | '+qr' | '+qm';
 
 export type PropChangeMethod = (self: EventTarget, pci: PropChangeInfo, moment: PropChangeMoment) => boolean;
 
+export type Actions<TProps = any, TActions = TProps> = 
+    Partial<{[key in keyof TActions & string]: LogicOp<TProps>}>
+    & Partial<{[key in `do_${keyof TActions & string}_on`]: Key<TActions> | Array<Key<TActions>> }> 
+;
+
 export type roundaboutOptions<TProps = any, TActions = TProps> = {
-    propagate: keyof TProps & string | Array<keyof TProps & string>,
-    actions?: 
-        | Partial<{[key in keyof TActions & string]: any}>
-        | Partial<{[key in `do_${keyof TActions & string}_on`]: Key<TActions> | Array<Key<TActions>> }> 
+    propagate?: keyof TProps & string | Array<keyof TProps & string>,
+    //propagator?: EventTarget,
+    actions: Actions<TProps,TActions>,
+        
 }
 
+export type Busses = {[key: string]: Set<string>};
+
 export type Key<T = any> = keyof T & string;
+
+export interface RoundaboutReady{
+    /**
+     * Allow for assigning to read only props via the "backdoor"
+     * Bypasses getters / setters, sets directly to (private) memory slots
+     * Doesn't do any notification
+     * Allows for nested property setting
+    */
+    covertAssignment(obj: any): void;
+
+    /**
+     * fires event with name matching the name of the property when the value changes (but not via covertAssignment)
+     * when property is set via public interface, not via an action method's return object
+     */
+    get propagator() : EventTarget;
+}
+
+export interface BaseProps{
+    proppedUp: boolean,
+}
+
+
 

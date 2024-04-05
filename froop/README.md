@@ -109,7 +109,7 @@ For a class to be optimized to work most effectively with roundabouts, it should
 interface RoundaboutReady{
     /**
      * Allow for assigning to read only props via the "backdoor"
-     * Bypasses getters / setters, sets directly to (private memory slots)
+     * Bypasses getters / setters, sets directly to (private) memory slots
      * Doesn't do any notification
      * Allows for nested property setting
     */
@@ -117,7 +117,7 @@ interface RoundaboutReady{
 
     /**
      * fires event with name matching the name of the property when the value changes (but not via covertAssignment)
-     * when property is set via public interface
+     * when property is set via public interface, not via an action method's return object
      */
     get propagator() : EventTarget;
 }
