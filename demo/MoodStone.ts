@@ -7,8 +7,11 @@ interface IMoodStoneProps{
 export class MoodStone extends O {
     static override config: WCConfig<IMoodStoneProps> = {
         name: 'mood-stone',
-        propDefaults: {
-            isHappy: true
+        propInfo:{
+            isHappy: {
+                def: true,
+                ro: true,
+            }
         }
     }
 }

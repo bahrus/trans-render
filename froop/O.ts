@@ -80,7 +80,8 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                 if (this.hasOwnProperty(key)) {
                     delete (<any>this)[key];
                 }
-                (<any>this)[key] = value;
+                (<any>this[publicPrivateStore])[key] = value;
+                //(<any>this)[key] = value;
             }
 
         }
@@ -120,37 +121,15 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null){
         if(!this.proppedUp) return;
         const config = (<any>this.constructor).config as WCConfig;
-        // const newAttrs = this.#newAttrs;
-        // const filteredAttrs = this.#filteredAttrs;
-        // newAttrs[name] = {oldVal, newVal};
-        // if(newVal === null){
-        //     delete filteredAttrs[name];
-        // }else{
-        //     filteredAttrs[name] =newVal;
-        // }
-        // //TODO:  optimize this
-        // if(this.#checkIfAttrsAreParsed()){
-        //     services!.definer.dispatchEvent(new CustomEvent(acb, {
-        //         detail: {
-        //             instance: this as any as HTMLElement,
-        //             newAttrs,
-        //             filteredAttrs
-        //         }  as IAttrChgCB
-                
-        //     }));
-        //     this.#newAttrs = {};
-        // }else{
-        //     this.isAttrParsed = false;
-        // }
         
-
     }
     static config: WCConfig | undefined;
     static async bootUp(){
         const config = this.config!;
-        const {propDefaults} = config;
+        const {propDefaults, propInfo} = config;
+        const props = this.props;
+        Object.assign(props, propInfo);
         if(propDefaults !== undefined){
-            const props = this.props;
             for(const key in propDefaults){
                 const def = propDefaults[key];
                 const propInfo = {
@@ -160,8 +139,9 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                 this.setType(propInfo, def);
                 props[key] = propInfo;
             }
-            this.addProps(this, props);
+            
         }
+        this.addProps(this, props);
     }
 
     static setType(prop: PropInfo, val: any){

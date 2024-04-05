@@ -70,7 +70,8 @@ export class O extends HTMLElement {
                 if (this.hasOwnProperty(key)) {
                     delete this[key];
                 }
-                this[key] = value;
+                this[publicPrivateStore][key] = value;
+                //(<any>this)[key] = value;
             }
         }
         this.proppedUp = true;
@@ -112,34 +113,14 @@ export class O extends HTMLElement {
         if (!this.proppedUp)
             return;
         const config = this.constructor.config;
-        // const newAttrs = this.#newAttrs;
-        // const filteredAttrs = this.#filteredAttrs;
-        // newAttrs[name] = {oldVal, newVal};
-        // if(newVal === null){
-        //     delete filteredAttrs[name];
-        // }else{
-        //     filteredAttrs[name] =newVal;
-        // }
-        // //TODO:  optimize this
-        // if(this.#checkIfAttrsAreParsed()){
-        //     services!.definer.dispatchEvent(new CustomEvent(acb, {
-        //         detail: {
-        //             instance: this as any as HTMLElement,
-        //             newAttrs,
-        //             filteredAttrs
-        //         }  as IAttrChgCB
-        //     }));
-        //     this.#newAttrs = {};
-        // }else{
-        //     this.isAttrParsed = false;
-        // }
     }
     static config;
     static async bootUp() {
         const config = this.config;
-        const { propDefaults } = config;
+        const { propDefaults, propInfo } = config;
+        const props = this.props;
+        Object.assign(props, propInfo);
         if (propDefaults !== undefined) {
-            const props = this.props;
             for (const key in propDefaults) {
                 const def = propDefaults[key];
                 const propInfo = {
@@ -149,8 +130,8 @@ export class O extends HTMLElement {
                 this.setType(propInfo, def);
                 props[key] = propInfo;
             }
-            this.addProps(this, props);
         }
+        this.addProps(this, props);
     }
     static setType(prop, val) {
         if (val !== undefined) {
