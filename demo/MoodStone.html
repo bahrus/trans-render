@@ -11,11 +11,14 @@
             }
         }
     </script>
-    <script type=module>
-        import './MoodStone.js'
-    </script>
+
 </head>
 <body>
     <mood-stone></mood-stone>
+
+    <script type=module>
+        document.querySelector('mood-stone').isHappy = false;
+        import './MoodStone.js'
+    </script>
 </body>
 </html>
