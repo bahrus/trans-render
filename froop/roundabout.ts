@@ -1,4 +1,4 @@
-import {roundaboutOptions, RoundaboutReady, Busses} from './types';
+import {roundaboutOptions, RoundaboutReady, Busses, SetLogicOps, Checks, Keysh} from './types';
 
 export async function roundabout<TProps = any, TActions = TProps>(
     vm: TProps & TActions & RoundaboutReady, options: roundaboutOptions<TProps, TActions>){
@@ -7,14 +7,28 @@ export async function roundabout<TProps = any, TActions = TProps>(
 }
 
 export class RoundAbout{
+    #checks: Checks;
     #busses: Busses;
+    #toSet(k: Keysh){
+        if(Array.isArray(k)) return new Set(k);
+        return new Set([k]);
+    }
     constructor(public vm: RoundaboutReady, public options: roundaboutOptions){
         const newBusses : Busses = {}
+        const checks: Checks = {};
+        this.#checks = checks;
         this.#busses = newBusses;
         const {actions} = options;
         for(const key in actions){
             newBusses[key] = new Set();
-            
+            const val = actions[key];
+            if(val === undefined) continue;
+            const {ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf} = val;
+            const check: SetLogicOps = {}
+            if(ifAllOf) check.ifAllOf = this.#toSet(ifAllOf);
+            if(ifAtLeastOneOf) check.ifAtLeastOneOf = this.#toSet(ifAtLeastOneOf);
+            if(ifEquals) check.ifEquals = this.#toSet(ifEquals);
+            if(ifNoneOf) check.ifNoneOf = this.#toSet(ifNoneOf);
         }
     }
 
@@ -29,6 +43,10 @@ export class RoundAbout{
         const busses = this.#busses;
         for(const key in busses){
             busses[key] = (<any>busses[key]).union(members);
+        }
+        const {propagator} = vm;
+        if(propagator !== undefined){
+            propagator
         }
     }
 }

@@ -166,7 +166,7 @@ export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropIn
     derivedProps?: (keyof MCProps & string)[];
     // actions?: 
     //     Partial<{[key in keyof MCActions & string]: TAction | keyof MCProps}> 
-    actions: Actions<MCProps, MCActions>;
+    actions?: Actions<MCProps, MCActions>;
     propChangeMethod?: keyof MCActions;
     style?: Partial<CSSStyleDeclaration>;
     /**
@@ -178,24 +178,35 @@ export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropIn
 
 export type ListOfLogicalExpressions<MCProps = any> = (keyof MCProps | LogicOp<MCProps>)[];
 
-export type LogicOpProp<MCProps = any> = LogicOp<MCProps> | (keyof MCProps | LogicOp<MCProps>)[];
+export type LogicOpProp<MCProps = any> = 
+    |LogicOp<MCProps> | (keyof MCProps & string)[];
 
-export interface LogicOp<MCProps = any>{
+export interface LogicOp<Props = any>{
     /**
      * Supported by trans-render
      */
-    ifAllOf?: LogicOpProp<MCProps>,
+    ifAllOf?: Keysh<Props>,
 
-    ifKeyIn?: (keyof MCProps & string)[],  
+    ifKeyIn?: Keysh<Props>,  
 
-    ifNoneOf?: LogicOpProp<MCProps>,
+    ifNoneOf?: Keysh<Props>,
 
-    ifEquals?: LogicOpProp<MCProps>,
+    ifEquals?: Array<Key<Props>>,
 
-    ifAtLeastOneOf?: LogicOpProp<MCProps>,
+    ifAtLeastOneOf?: Keysh<Props>,
 
+}
 
+export interface SetLogicOps<Props = any>{
+    ifAllOf?: Set<Key<Props>>,
 
+    ifKeyIn?: Set<Key<Props>>,  
+
+    ifNoneOf?: Set<Key<Props>>,
+
+    ifEquals?: Set<Key<Props>>,
+
+    ifAtLeastOneOf?: Set<Key<Props>>,
 }
 
 export interface Action<MCProps = any, MCActions = MCProps> extends LogicOp<MCProps>{
@@ -243,19 +254,24 @@ export type PropChangeMethod = (self: EventTarget, pci: PropChangeInfo, moment: 
 
 export type Actions<TProps = any, TActions = TProps> = 
     Partial<{[key in keyof TActions & string]: LogicOp<TProps>}>
-    & Partial<{[key in `do_${keyof TActions & string}_on`]: Key<TActions> | Array<Key<TActions>> }> 
+    //& Partial<{[key in `do_${keyof TActions & string}_on`]: Key<TActions> | Array<Key<TActions>> }> 
 ;
+
+export type Checks<TProps = any, TActions = TProps> = 
+    Partial<{[key in keyof TActions & string]: SetLogicOps<TProps>}>
 
 export type roundaboutOptions<TProps = any, TActions = TProps> = {
     propagate?: keyof TProps & string | Array<keyof TProps & string>,
     //propagator?: EventTarget,
     actions: Actions<TProps,TActions>,
-        
+    do:  Partial<{[key in `${keyof TActions & string}_on`]: Keysh<TProps> }>
 }
 
 export type Busses = {[key: string]: Set<string>};
 
 export type Key<T = any> = keyof T & string;
+
+export type Keysh<T = any> = Key<T> | Array<Key<T>>;
 
 export interface RoundaboutReady{
     /**
@@ -270,7 +286,7 @@ export interface RoundaboutReady{
      * fires event with name matching the name of the property when the value changes (but not via covertAssignment)
      * when property is set via public interface, not via an action method's return object
      */
-    get propagator() : EventTarget;
+    readonly propagator : EventTarget | undefined;
 }
 
 export interface BaseProps{
