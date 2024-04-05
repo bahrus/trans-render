@@ -1,4 +1,4 @@
-import {RoundaboutReady, WCConfig, BaseProps, PropInfo} from './types';
+import {RoundaboutReady, WCConfig, BaseProps, PropInfo, PropInfoTypes} from './types';
 
 
 const publicPrivateStore = Symbol();
@@ -21,11 +21,17 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     }
 
     async mount(){
-        const {roundabout} = await import('./roundabout.js');
-        await roundabout(this, {
-            propagator: this.propagator,
-            actions: ((<any>this.constructor).config as WCConfig).actions
-        });
+        
+        const config = (<any>this.constructor).config as WCConfig;
+        const {actions} = config;
+        if(actions !== undefined){
+            const {roundabout} = await import('./roundabout.js');
+            await roundabout(this, {
+                //propagator: this.propagator,
+                actions
+            });
+        }
+
     }
     
     
@@ -70,14 +76,17 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                 }
                 
             }
-            if (this.hasOwnProperty(key)) {
-                delete (<any>this)[key];
+            if(value !== undefined){
+                if (this.hasOwnProperty(key)) {
+                    delete (<any>this)[key];
+                }
                 (<any>this)[key] = value;
             }
+
         }
         this.proppedUp = true;
     }
-    static #addProps(newClass: {new(): O}, props: {[key: string]: PropInfo}){
+    static addProps(newClass: {new(): O}, props: {[key: string]: PropInfo}){
         const proto = newClass.prototype;
         for(const key in props){
             if(key in proto) continue;
@@ -137,15 +146,47 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
 
     }
     static config: WCConfig | undefined;
-    static async bootUP(config: WCConfig){
-        O.config = config;
+    static async bootUp(){
+        const config = this.config!;
+        const {propDefaults} = config;
+        if(propDefaults !== undefined){
+            const props = this.props;
+            for(const key in propDefaults){
+                const def = propDefaults[key];
+                const propInfo = {
+                    ...defaultProp,
+                    def 
+                };
+                this.setType(propInfo, def);
+                props[key] = propInfo;
+            }
+            this.addProps(this, props);
+        }
     }
-    static props: {[key: string]: PropInfo};
+
+    static setType(prop: PropInfo, val: any){
+        if(val !== undefined){
+            if(val instanceof RegExp){
+                prop.type = 'RegExp';
+            }else{
+                let t: string = typeof(val);
+                t = t[0].toUpperCase() + t.substr(1);
+                prop.type = t as PropInfoTypes;
+            }
+
+        }
+    }
+    static props: {[key: string]: PropInfo} = {};
 }
 
 export interface O extends BaseProps{}
 
 
+const defaultProp: PropInfo = {
+    type: 'Object',
+    dry: true,
+    parse: true,
+};
 
 const baseConfig: WCConfig<BaseProps> = {
     propDefaults:{

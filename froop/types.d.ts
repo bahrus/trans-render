@@ -263,8 +263,8 @@ export type Checks<TProps = any, TActions = TProps> =
 export type roundaboutOptions<TProps = any, TActions = TProps> = {
     propagate?: keyof TProps & string | Array<keyof TProps & string>,
     //propagator?: EventTarget,
-    actions: Actions<TProps,TActions>,
-    do:  Partial<{[key in `${keyof TActions & string}_on`]: Keysh<TProps> }>
+    actions?: Actions<TProps,TActions>,
+    do?:  Partial<{[key in `${keyof TActions & string}_on`]: Keysh<TProps> }>
 }
 
 export type Busses = {[key: string]: Set<string>};

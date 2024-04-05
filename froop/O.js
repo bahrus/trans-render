@@ -14,11 +14,15 @@ export class O extends HTMLElement {
         await this.mount();
     }
     async mount() {
-        const { roundabout } = await import('./roundabout.js');
-        await roundabout(this, {
-            propagator: this.propagator,
-            actions: this.constructor.config.actions
-        });
+        const config = this.constructor.config;
+        const { actions } = config;
+        if (actions !== undefined) {
+            const { roundabout } = await import('./roundabout.js');
+            await roundabout(this, {
+                //propagator: this.propagator,
+                actions
+            });
+        }
     }
     #parseAttr(propInfo, name, ov, nv) {
         //TODO support memoized parse
@@ -62,14 +66,16 @@ export class O extends HTMLElement {
                     continue;
                 }
             }
-            if (this.hasOwnProperty(key)) {
-                delete this[key];
+            if (value !== undefined) {
+                if (this.hasOwnProperty(key)) {
+                    delete this[key];
+                }
                 this[key] = value;
             }
         }
         this.proppedUp = true;
     }
-    static #addProps(newClass, props) {
+    static addProps(newClass, props) {
         const proto = newClass.prototype;
         for (const key in props) {
             if (key in proto)
@@ -129,11 +135,42 @@ export class O extends HTMLElement {
         // }
     }
     static config;
-    static async bootUP(config) {
-        O.config = config;
+    static async bootUp() {
+        const config = this.config;
+        const { propDefaults } = config;
+        if (propDefaults !== undefined) {
+            const props = this.props;
+            for (const key in propDefaults) {
+                const def = propDefaults[key];
+                const propInfo = {
+                    ...defaultProp,
+                    def
+                };
+                this.setType(propInfo, def);
+                props[key] = propInfo;
+            }
+            this.addProps(this, props);
+        }
     }
-    static props;
+    static setType(prop, val) {
+        if (val !== undefined) {
+            if (val instanceof RegExp) {
+                prop.type = 'RegExp';
+            }
+            else {
+                let t = typeof (val);
+                t = t[0].toUpperCase() + t.substr(1);
+                prop.type = t;
+            }
+        }
+    }
+    static props = {};
 }
+const defaultProp = {
+    type: 'Object',
+    dry: true,
+    parse: true,
+};
 const baseConfig = {
     propDefaults: {
         proppedUp: false,
