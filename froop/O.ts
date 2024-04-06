@@ -1,5 +1,5 @@
 import {RoundaboutReady, WCConfig, BaseProps, PropInfo, PropInfoTypes, PropLookup, ICustomState} from './types';
-import {camelToLisp} from '../lib/camelToLisp.js';
+//import {camelToLisp} from '../lib/camelToLisp.js';
 
 const publicPrivateStore = Symbol();
 
@@ -19,6 +19,11 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         const props = (<any>this.constructor).props as PropLookup;
         this.#propUp(props);
         await this.#mount();
+        const states = (<any>this.constructor).props as PropLookup;
+        if(Object.keys(states).length > 0){
+            const {CustStSvc} = await import('./CustStSvc.js');
+            new CustStSvc(states, this);
+        }
     }
 
     disconnectedCallback(): any {
@@ -121,29 +126,6 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                         const ov = this[publicPrivateStore][key];
                         if(prop.dry && ov === nv) return;
                         this[publicPrivateStore][key] = nv;
-                        const customState = prop.css;
-                        if(customState !== undefined){
-                            //wrong!  we cannot do any special logic inside the setter because being roundabout ready means 
-                            //setters avoided often in favor of just dispatching events.
-                            const customStateObj: ICustomState = typeof customState === 'string' ? {
-                                nameValue: customState,
-                            } : customState;
-                            const {nameValue, falsy, truthy} = customStateObj;
-                            const internals = this.#internals;
-                            if(nameValue !== undefined && nv !== undefined){
-                                const valAsLisp = camelToLisp(nv.toString());
-                                internals.states.add(`--${nameValue}-${valAsLisp}`);
-                            }
-                            if(truthy){
-                                const verb = nv ? 'add' : 'remove';
-                                internals.states[verb](`--${truthy}`);
-                            }
-                            if(falsy){
-                                const verb = nv ? 'remove' : 'add';
-                                internals.states[verb](`--${falsy}`);
-                            }
-                        }
-
                         (this as O).propagator.dispatchEvent(new Event(key));
                     },
                     enumerable: true,
@@ -171,6 +153,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         const {propDefaults, propInfo} = config;
         const props = {...this.props, ...propInfo as PropLookup};
         const attrs = this.attrs;
+        const states = this.states;
         Object.assign(props, propInfo);
         if(propDefaults !== undefined){
             for(const key in propDefaults){
@@ -183,7 +166,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                 this.setType(propInfo, def);
                 if(propInfo.type !== 'Object'){
                     propInfo.parse = true;
-                    //const {camelToLisp} = await import('../lib/camelToLisp.js');
+                    const {camelToLisp} = await import('../lib/camelToLisp.js');
                     propInfo.attrName = camelToLisp(key);
                 }
                 props[key] = propInfo;
@@ -194,12 +177,15 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
             
         }
         if(propInfo !== undefined){
-            for(const key in propInfo as PropLookup){
+            for(const key in propInfo){
                 const prop = propInfo[key]!;
                 prop.propName = key;
-                const {parse, attrName} = prop;
+                const {parse, attrName, css} = prop;
                 if(parse && attrName){
                     attrs[attrName] = prop;
+                }
+                if(css !== undefined){
+                    states[key] = prop;
                 }
             }
         }
@@ -222,6 +208,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     }
     static props: PropLookup = {};
     static attrs: PropLookup = {};
+    static states: PropLookup = {};
 }
 
 export interface O extends BaseProps{}

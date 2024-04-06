@@ -1,4 +1,4 @@
-import { camelToLisp } from '../lib/camelToLisp.js';
+//import {camelToLisp} from '../lib/camelToLisp.js';
 const publicPrivateStore = Symbol();
 export class O extends HTMLElement {
     propagator = new EventTarget();
@@ -15,6 +15,11 @@ export class O extends HTMLElement {
         const props = this.constructor.props;
         this.#propUp(props);
         await this.#mount();
+        const states = this.constructor.props;
+        if (Object.keys(states).length > 0) {
+            const { CustStSvc } = await import('./CustStSvc.js');
+            new CustStSvc(states, this);
+        }
     }
     disconnectedCallback() {
         this.propagator.dispatchEvent(new Event('unload'));
@@ -112,28 +117,6 @@ export class O extends HTMLElement {
                         if (prop.dry && ov === nv)
                             return;
                         this[publicPrivateStore][key] = nv;
-                        const customState = prop.css;
-                        if (customState !== undefined) {
-                            //wrong!  we cannot do any special logic inside the setter because being roundabout ready means 
-                            //setters avoided often in favor of just dispatching events.
-                            const customStateObj = typeof customState === 'string' ? {
-                                nameValue: customState,
-                            } : customState;
-                            const { nameValue, falsy, truthy } = customStateObj;
-                            const internals = this.#internals;
-                            if (nameValue !== undefined && nv !== undefined) {
-                                const valAsLisp = camelToLisp(nv.toString());
-                                internals.states.add(`--${nameValue}-${valAsLisp}`);
-                            }
-                            if (truthy) {
-                                const verb = nv ? 'add' : 'remove';
-                                internals.states[verb](`--${truthy}`);
-                            }
-                            if (falsy) {
-                                const verb = nv ? 'remove' : 'add';
-                                internals.states[verb](`--${falsy}`);
-                            }
-                        }
                         this.propagator.dispatchEvent(new Event(key));
                     },
                     enumerable: true,
@@ -159,6 +142,7 @@ export class O extends HTMLElement {
         const { propDefaults, propInfo } = config;
         const props = { ...this.props, ...propInfo };
         const attrs = this.attrs;
+        const states = this.states;
         Object.assign(props, propInfo);
         if (propDefaults !== undefined) {
             for (const key in propDefaults) {
@@ -171,7 +155,7 @@ export class O extends HTMLElement {
                 this.setType(propInfo, def);
                 if (propInfo.type !== 'Object') {
                     propInfo.parse = true;
-                    //const {camelToLisp} = await import('../lib/camelToLisp.js');
+                    const { camelToLisp } = await import('../lib/camelToLisp.js');
                     propInfo.attrName = camelToLisp(key);
                 }
                 props[key] = propInfo;
@@ -184,9 +168,12 @@ export class O extends HTMLElement {
             for (const key in propInfo) {
                 const prop = propInfo[key];
                 prop.propName = key;
-                const { parse, attrName } = prop;
+                const { parse, attrName, css } = prop;
                 if (parse && attrName) {
                     attrs[attrName] = prop;
+                }
+                if (css !== undefined) {
+                    states[key] = prop;
                 }
             }
         }
@@ -207,6 +194,7 @@ export class O extends HTMLElement {
     }
     static props = {};
     static attrs = {};
+    static states = {};
 }
 const defaultProp = {
     type: 'Object',
