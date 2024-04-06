@@ -4,6 +4,7 @@ import { WCConfig, PropInfo, Action } from '../froop/types.js';
 interface IMoodStoneProps{
     isHappy: boolean,
     age: number,
+    isNotHappy: boolean,
 }
 
 interface IMoodStoneActions{
@@ -20,12 +21,18 @@ export class MoodStone extends O implements IMoodStoneActions {
                 def: true,
                 attrName: 'is-happy',
                 parse: true,
+            },
+            isNotHappy: {
+                def: false,
             }
         },
         actions:{
             incAge: {
                 ifAllOf: 'isHappy'
             }
+        },
+        comps:{
+            isHappy_to_isNotHappy: 'negate'
         }
     }
     incAge({age}: this): Partial<IMoodStoneProps> {

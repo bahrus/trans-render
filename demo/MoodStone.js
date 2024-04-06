@@ -10,12 +10,18 @@ export class MoodStone extends O {
                 def: true,
                 attrName: 'is-happy',
                 parse: true,
+            },
+            isNotHappy: {
+                def: false,
             }
         },
         actions: {
             incAge: {
                 ifAllOf: 'isHappy'
             }
+        },
+        comps: {
+            isHappy_to_isNotHappy: 'negate'
         }
     };
     incAge({ age }) {

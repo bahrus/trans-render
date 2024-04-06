@@ -158,15 +158,15 @@ export interface DefineArgs<MixinCompositeProps = any, MixinCompositeActions = M
     // asides?: Partial<{[key in keyof MixinCompositeActions & string]: (instance: EventTarget, methodName: string, key: string) => Promise<void> }>
 }
 
-export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropInfo, TAction = Action>{
+export interface WCConfig<TProps = any, MCActions = TProps, TPropInfo = PropInfo, TAction = Action>{
     name?: string;
     isEnh?: boolean;
-    propDefaults?: Partial<{[key in keyof MCProps]: MCProps[key]}>;
-    propInfo?: Partial<{[key in keyof MCProps]: TPropInfo}>;
-    derivedProps?: (keyof MCProps & string)[];
+    propDefaults?: Partial<{[key in keyof TProps]: TProps[key]}>;
+    propInfo?: Partial<{[key in keyof TProps]: TPropInfo}>;
+    derivedProps?: (keyof TProps & string)[];
     // actions?: 
     //     Partial<{[key in keyof MCActions & string]: TAction | keyof MCProps}> 
-    actions?: Actions<MCProps, MCActions>;
+    actions?: Actions<TProps, MCActions>;
     propChangeMethod?: keyof MCActions;
     style?: Partial<CSSStyleDeclaration>;
     /**
@@ -174,7 +174,10 @@ export interface WCConfig<MCProps = any, MCActions = MCProps, TPropInfo = PropIn
      */
     keyQueries?: string[];
     formAss?: boolean;
+    comps?: Partial<{[key in `${keyof TProps & string}_to_${keyof TProps & string}`]: op }>
 }
+
+export type op = 'length' | 'inc' | 'negate' | 'toggle'
 
 export type ListOfLogicalExpressions<MCProps = any> = (keyof MCProps | LogicOp<MCProps>)[];
 
