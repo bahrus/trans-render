@@ -107,7 +107,7 @@ So yes, we are still "clinging" to the notion that EventTargets are useful, desp
 
 > Unfortunately, not only has our boilerplate code exploded, but we're stuck with a ton of bookkeeping of subscriptions, and a potential memory leak disaster if we don't properly clean everything up in the right way.
 
-So to make this concern seem, perhaps, overly alarmist, we add one more "soft" requirement to make the view model be roundabout ready -- the propagator should emit event named ['abort'](https://github.com/whatwg/dom/issues/784) exclusively when all listeners should be aborted. So emitting this event name in the disconnectedCallback lifecycle event is hightly encouraged. 
+So to make this concern seem, perhaps, overly alarmist, we add one more "soft" requirement to make the view model be roundabout ready -- the propagator should emit event named ~['abort'](https://github.com/whatwg/dom/issues/784)~ "unload" exclusively when all listeners should be aborted. So emitting this event name in the disconnectedCallback lifecycle event is highly encouraged. 
 
 ## Busses and compacts
 
