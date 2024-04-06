@@ -8,6 +8,7 @@ export class O extends HTMLElement {
     constructor() {
         super();
     }
+    static observedAttributes = [];
     async connectedCallback() {
         const props = this.constructor.props;
         this.#propUp(props);
@@ -82,7 +83,8 @@ export class O extends HTMLElement {
             if (key in proto)
                 continue;
             const prop = props[key];
-            if (prop.ro) {
+            const { ro, parse, attrName } = prop;
+            if (ro) {
                 Object.defineProperty(proto, key, {
                     get() {
                         return this[publicPrivateStore][key];
@@ -107,18 +109,22 @@ export class O extends HTMLElement {
                     configurable: true,
                 });
             }
+            if (parse && attrName) {
+                this.observedAttributes.push(attrName);
+            }
         }
     }
     attributeChangedCallback(name, oldVal, newVal) {
         if (!this.proppedUp)
             return;
-        const config = this.constructor.config;
+        const props = this.constructor.props;
     }
     static config;
     static async bootUp() {
         const config = this.config;
         const { propDefaults, propInfo } = config;
-        const props = this.props;
+        const props = { ...this.props, ...propInfo };
+        const attrs = this.attrs;
         Object.assign(props, propInfo);
         if (propDefaults !== undefined) {
             for (const key in propDefaults) {
@@ -128,9 +134,18 @@ export class O extends HTMLElement {
                     def
                 };
                 this.setType(propInfo, def);
+                if (propInfo.type !== 'Object') {
+                    propInfo.parse = true;
+                    const { camelToLisp } = await import('../lib/camelToLisp.js');
+                    propInfo.attrName = camelToLisp(key);
+                }
                 props[key] = propInfo;
+                if (propInfo.parse && propInfo.attrName) {
+                    attrs[key] = propInfo;
+                }
             }
         }
+        this.props = props;
         this.addProps(this, props);
     }
     static setType(prop, val) {
@@ -146,11 +161,12 @@ export class O extends HTMLElement {
         }
     }
     static props = {};
+    static attrs = {};
 }
 const defaultProp = {
     type: 'Object',
     dry: true,
-    parse: true,
+    parse: false,
 };
 const baseConfig = {
     propDefaults: {
