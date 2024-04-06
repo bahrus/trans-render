@@ -125,7 +125,9 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null){
         if(!this.proppedUp) return;
         const attrs = (<any>this.constructor).attrs as PropLookup;
-        console.log({attrs});
+        const propInfo = attrs[name];
+        const val = this.#parseAttr(propInfo, name, oldVal, newVal);
+        (<any>this)[propInfo.propName!] = val;
         
     }
     static config: WCConfig | undefined;

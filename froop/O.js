@@ -118,7 +118,9 @@ export class O extends HTMLElement {
         if (!this.proppedUp)
             return;
         const attrs = this.constructor.attrs;
-        console.log({ attrs });
+        const propInfo = attrs[name];
+        const val = this.#parseAttr(propInfo, name, oldVal, newVal);
+        this[propInfo.propName] = val;
     }
     static config;
     static async bootUp() {
