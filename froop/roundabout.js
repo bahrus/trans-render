@@ -115,7 +115,7 @@ export class RoundAbout {
                 if (e instanceof RoundAboutEvent)
                     return;
                 this.#extEvtCount++;
-                this.handleEvent(this.#extEvtCount);
+                this.handleEvent(key, this.#extEvtCount);
             }, { signal });
         }
     }
@@ -124,10 +124,17 @@ export class RoundAbout {
             ac.abort();
         }
     }
-    async handleEvent(evtCount) {
+    async handleEvent(key, evtCount) {
+        const busses = this.#busses;
+        for (const busKey in busses) {
+            const bus = busses[busKey];
+            bus.add(key);
+        }
         if (evtCount !== this.#extEvtCount)
             return;
-        throw 'NI';
+        this.#extEvtCount++;
+        const keysToPropagate = new Set();
+        await this.checkQ(keysToPropagate);
     }
     async #checkSubscriptions(check, bus) {
         const { ifAllOf, ifKeyIn, ifAtLeastOneOf, ifEquals, ifNoneOf } = check;

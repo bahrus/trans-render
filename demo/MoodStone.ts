@@ -24,7 +24,7 @@ export class MoodStone extends O implements IMoodStoneActions {
         },
         actions:{
             incAge: {
-                ifKeyIn: 'isHappy'
+                ifAllOf: 'isHappy'
             }
         }
     }

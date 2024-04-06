@@ -109,7 +109,7 @@ export class RoundAbout{
             propagator.addEventListener(key, e => {
                 if(e instanceof RoundAboutEvent) return;
                 this.#extEvtCount++;
-                this.handleEvent(this.#extEvtCount);
+                this.handleEvent(key, this.#extEvtCount);
             }, {signal});
         }
     }
@@ -120,9 +120,16 @@ export class RoundAbout{
         }
     }
 
-    async handleEvent(evtCount: number){
+    async handleEvent(key: string, evtCount: number){
+        const busses = this.#busses;
+        for(const busKey in busses){
+            const bus = busses[busKey];
+            bus.add(key);
+        }
         if(evtCount !== this.#extEvtCount) return;
-        throw 'NI'
+        this.#extEvtCount++;
+        const keysToPropagate = new Set<string>();
+        await this.checkQ(keysToPropagate);
     }
 
     async #checkSubscriptions(check: SetLogicOps, bus: any): Promise<boolean>{
