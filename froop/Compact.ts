@@ -1,4 +1,4 @@
-import {Busses, Compacts, ICompact, Operation} from './types';
+import {Busses, Compacts, ICompact, Operation, RoundaboutReady} from './types';
 
 export class Compact implements ICompact{
     #compactions : Compactions = {};
@@ -22,8 +22,22 @@ export class Compact implements ICompact{
             }
         }
     }
-    async assignCovertly(obj: any, keysToPropagate: Set<string>, busses: Busses) {
-        throw 'NI'
+    async assignCovertly(vm: RoundaboutReady, keysToPropagate: Set<string>, busses: Busses) {
+        const compactions = this.#compactions;
+        for(const vmKey in vm){
+            if(vmKey in compactions){
+                const compaction = compactions[vmKey];
+                const result = compaction.fn(vm);
+                vm.covertAssignment(result);
+                for(const resultKey in result){
+                    keysToPropagate.add(resultKey);
+                    for(const busKey in busses){
+                        const bus = busses[busKey];
+                        bus.add(resultKey);
+                    }
+                }
+            }
+        }
     }
 }
 

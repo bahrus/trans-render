@@ -322,7 +322,7 @@ export interface BaseProps{
 
 export interface ICompact{
     compacts: Compacts,
-    assignCovertly(obj: any, keysToPropagate: Set<string>, busses: Busses): Promise<void>,
+    assignCovertly(vm: RoundaboutReady, keysToPropagate: Set<string>, busses: Busses): Promise<void>,
 }
 
 

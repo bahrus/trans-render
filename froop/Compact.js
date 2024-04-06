@@ -22,7 +22,21 @@ export class Compact {
             }
         }
     }
-    async assignCovertly(obj, keysToPropagate, busses) {
-        throw 'NI';
+    async assignCovertly(vm, keysToPropagate, busses) {
+        const compactions = this.#compactions;
+        for (const vmKey in vm) {
+            if (vmKey in compactions) {
+                const compaction = compactions[vmKey];
+                const result = compaction.fn(vm);
+                vm.covertAssignment(result);
+                for (const resultKey in result) {
+                    keysToPropagate.add(resultKey);
+                    for (const busKey in busses) {
+                        const bus = busses[busKey];
+                        bus.add(resultKey);
+                    }
+                }
+            }
+        }
     }
 }
