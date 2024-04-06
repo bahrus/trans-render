@@ -24,11 +24,12 @@ export class MoodStone extends O implements IMoodStoneActions {
             },
             isNotHappy: {
                 type: 'Boolean',
+                ro: true,
             }
         },
         actions:{
             incAge: {
-                ifAllOf: 'isHappy'
+                ifAllOf: 'isHappy',
             }
         },
         compacts:{

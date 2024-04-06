@@ -13,11 +13,12 @@ export class MoodStone extends O {
             },
             isNotHappy: {
                 type: 'Boolean',
+                ro: true,
             }
         },
         actions: {
             incAge: {
-                ifAllOf: 'isHappy'
+                ifAllOf: 'isHappy',
             }
         },
         compacts: {
