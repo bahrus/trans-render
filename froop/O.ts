@@ -123,6 +123,8 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                         this[publicPrivateStore][key] = nv;
                         const customState = prop.css;
                         if(customState !== undefined){
+                            //wrong!  we cannot do any special logic inside the setter because being roundabout ready means 
+                            //setters avoided often in favor of just dispatching events.
                             const customStateObj: ICustomState = typeof customState === 'string' ? {
                                 nameValue: customState,
                             } : customState;
