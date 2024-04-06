@@ -8,7 +8,6 @@ export class MoodStone extends O {
         propInfo: {
             isHappy: {
                 def: true,
-                ro: true,
                 attrName: 'is-happy',
                 parse: true,
             }

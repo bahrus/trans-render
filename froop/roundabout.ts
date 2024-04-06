@@ -108,8 +108,8 @@ export class RoundAbout{
             console.log({key});
             propagator.addEventListener(key, e => {
                 if(e instanceof RoundAboutEvent) return;
-                const count = this.#extEvtCount++;
-                this.handleEvent(count);
+                this.#extEvtCount++;
+                this.handleEvent(this.#extEvtCount);
             }, {signal});
         }
     }

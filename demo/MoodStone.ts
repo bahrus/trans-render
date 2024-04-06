@@ -18,7 +18,6 @@ export class MoodStone extends O implements IMoodStoneActions {
         propInfo:{
             isHappy: {
                 def: true,
-                ro: true,
                 attrName: 'is-happy',
                 parse: true,
             }
