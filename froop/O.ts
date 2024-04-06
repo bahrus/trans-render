@@ -21,6 +21,10 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         await this.#mount();
     }
 
+    disconnectedCallback(): any {
+        this.propagator.dispatchEvent(new Event('unload'));
+    }
+
     #internals: ElementInternals;
     // get internals(){
 

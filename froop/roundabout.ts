@@ -105,6 +105,9 @@ export class RoundAbout{
         const {vm} = this;
         const {propagator} = vm;
         if(!(propagator instanceof EventTarget)) return;
+        propagator.addEventListener('unload', e => {
+            this.#unsubscribe()
+        }, {once: true});
         const checks = this.#checks;
         let keys = new Set<string>()
         for(const checkKey in checks){
@@ -125,7 +128,7 @@ export class RoundAbout{
         }
     }
 
-    async unsubscribe(){
+    async #unsubscribe(){
         for(const ac of this.#controllers){
             ac.abort();
         }

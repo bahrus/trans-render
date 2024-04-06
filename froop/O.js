@@ -16,6 +16,9 @@ export class O extends HTMLElement {
         this.#propUp(props);
         await this.#mount();
     }
+    disconnectedCallback() {
+        this.propagator.dispatchEvent(new Event('unload'));
+    }
     #internals;
     // get internals(){
     // }
