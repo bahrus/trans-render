@@ -1,3 +1,4 @@
+import { camelToLisp } from '../lib/camelToLisp.js';
 const publicPrivateStore = Symbol();
 export class O extends HTMLElement {
     propagator = new EventTarget();
@@ -7,14 +8,18 @@ export class O extends HTMLElement {
     }
     constructor() {
         super();
+        this.#internals = this.attachInternals();
     }
     static observedAttributes = [];
     async connectedCallback() {
         const props = this.constructor.props;
         this.#propUp(props);
-        await this.mount();
+        await this.#mount();
     }
-    async mount() {
+    #internals;
+    // get internals(){
+    // }
+    async #mount() {
         const config = this.constructor.config;
         const { actions, compacts } = config;
         if (actions !== undefined) {
@@ -104,6 +109,26 @@ export class O extends HTMLElement {
                         if (prop.dry && ov === nv)
                             return;
                         this[publicPrivateStore][key] = nv;
+                        const customState = prop.css;
+                        if (customState !== undefined) {
+                            const customStateObj = typeof customState === 'string' ? {
+                                nameValue: customState,
+                            } : customState;
+                            const { nameValue, falsy, truthy } = customStateObj;
+                            const internals = this.#internals;
+                            if (nameValue !== undefined && nv !== undefined) {
+                                const valAsLisp = camelToLisp(nv.toString());
+                                internals.states.add(`--${nameValue}-${valAsLisp}`);
+                            }
+                            if (truthy) {
+                                const verb = nv ? 'add' : 'remove';
+                                internals.states[verb](`--${truthy}`);
+                            }
+                            if (falsy) {
+                                const verb = nv ? 'remove' : 'add';
+                                internals.states[verb](`--${falsy}`);
+                            }
+                        }
                         this.propagator.dispatchEvent(new Event(key));
                     },
                     enumerable: true,
@@ -141,7 +166,7 @@ export class O extends HTMLElement {
                 this.setType(propInfo, def);
                 if (propInfo.type !== 'Object') {
                     propInfo.parse = true;
-                    const { camelToLisp } = await import('../lib/camelToLisp.js');
+                    //const {camelToLisp} = await import('../lib/camelToLisp.js');
                     propInfo.attrName = camelToLisp(key);
                 }
                 props[key] = propInfo;

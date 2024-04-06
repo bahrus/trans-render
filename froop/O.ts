@@ -1,5 +1,5 @@
-import {RoundaboutReady, WCConfig, BaseProps, PropInfo, PropInfoTypes, PropLookup} from './types';
-
+import {RoundaboutReady, WCConfig, BaseProps, PropInfo, PropInfoTypes, PropLookup, ICustomState} from './types';
+import {camelToLisp} from '../lib/camelToLisp.js';
 
 const publicPrivateStore = Symbol();
 
@@ -12,15 +12,21 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     }
     constructor(){
         super();
+        this.#internals = this.attachInternals();
     }
     static observedAttributes: Array<string> = [];
     async connectedCallback(){
         const props = (<any>this.constructor).props as PropLookup;
         this.#propUp(props);
-        await this.mount();
+        await this.#mount();
     }
 
-    async mount(){
+    #internals: ElementInternals;
+    // get internals(){
+
+    // }
+
+    async #mount(){
         
         const config = (<any>this.constructor).config as WCConfig;
         const {actions, compacts} = config;
@@ -32,7 +38,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                 compacts
             });
         }
-
+        
     }
     
     
@@ -111,6 +117,27 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                         const ov = this[publicPrivateStore][key];
                         if(prop.dry && ov === nv) return;
                         this[publicPrivateStore][key] = nv;
+                        const customState = prop.css;
+                        if(customState !== undefined){
+                            const customStateObj: ICustomState = typeof customState === 'string' ? {
+                                nameValue: customState,
+                            } : customState;
+                            const {nameValue, falsy, truthy} = customStateObj;
+                            const internals = this.#internals;
+                            if(nameValue !== undefined && nv !== undefined){
+                                const valAsLisp = camelToLisp(nv.toString());
+                                internals.states.add(`--${nameValue}-${valAsLisp}`);
+                            }
+                            if(truthy){
+                                const verb = nv ? 'add' : 'remove';
+                                internals.states[verb](`--${truthy}`);
+                            }
+                            if(falsy){
+                                const verb = nv ? 'remove' : 'add';
+                                internals.states[verb](`--${falsy}`);
+                            }
+                        }
+
                         (this as O).propagator.dispatchEvent(new Event(key));
                     },
                     enumerable: true,
@@ -150,7 +177,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                 this.setType(propInfo, def);
                 if(propInfo.type !== 'Object'){
                     propInfo.parse = true;
-                    const {camelToLisp} = await import('../lib/camelToLisp.js');
+                    //const {camelToLisp} = await import('../lib/camelToLisp.js');
                     propInfo.attrName = camelToLisp(key);
                 }
                 props[key] = propInfo;

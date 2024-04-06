@@ -186,6 +186,12 @@ export interface EchoBy<TProps = any>{
     by: number | keyof TProps,
 }
 
+export interface ICustomState<MCProps = any>{
+    truthy?: string,
+    falsy?: string,
+    nameValue: string
+}
+
 export type Operation<TProps = any> = 
     | op
     | EchoBy<TProps> 
@@ -244,6 +250,7 @@ export interface PropInfo{
     def?: any;
     attrName?: string;
     propName?: string;
+    css?: ICustomState;
 }
 
 export type ConstString = String;
