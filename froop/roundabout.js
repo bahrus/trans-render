@@ -35,7 +35,9 @@ export class RoundAbout {
                 check.ifEquals = this.#toSet(ifEquals);
             if (ifNoneOf)
                 check.ifNoneOf = this.#toSet(ifNoneOf);
+            checks[key] = check;
         }
+        console.log({ checks: this.#checks, busses: this.#busses });
     }
     async init() {
         const members = new Set();

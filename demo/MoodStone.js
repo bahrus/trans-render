@@ -12,8 +12,18 @@ export class MoodStone extends O {
                 attrName: 'is-happy',
                 parse: true,
             }
+        },
+        actions: {
+            incAge: {
+                ifKeyIn: 'isHappy'
+            }
         }
     };
+    incAge({ age }) {
+        return {
+            age: age + 1
+        };
+    }
 }
 await MoodStone.bootUp();
 customElements.define(MoodStone.config.name, MoodStone);

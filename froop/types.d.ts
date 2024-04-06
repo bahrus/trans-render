@@ -265,8 +265,17 @@ export type roundaboutOptions<TProps = any, TActions = TProps> = {
     propagate?: keyof TProps & string | Array<keyof TProps & string>,
     //propagator?: EventTarget,
     actions?: Actions<TProps,TActions>,
+    infractions?: Infractions<TProps>,
     do?:  Partial<{[key in `${keyof TActions & string}_on`]: Keysh<TProps> }>
 }
+
+export type PropsToPartialProps<TProps = any> = 
+ | ((self: TProps) => Promise<Partial<TProps>>) 
+ | ((self: TProps) => Partial<TProps>);
+
+export type Infractions<TProps = any> = 
+    | PropsToPartialProps<TProps> 
+    | Array<PropsToPartialProps<TProps>> 
 
 export type Busses = {[key: string]: Set<string>};
 
