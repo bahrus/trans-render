@@ -110,7 +110,6 @@ export class RoundAbout {
             const ac = new AbortController();
             controllers.push(ac);
             const signal = ac.signal;
-            console.log({ key });
             propagator.addEventListener(key, e => {
                 if (e instanceof RoundAboutEvent)
                     return;
