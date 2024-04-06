@@ -1,6 +1,8 @@
 export async function roundabout(vm, options) {
     const ra = new RoundAbout(vm, options);
-    await ra.init();
+    const keysToPropagate = new Set();
+    await ra.init(keysToPropagate);
+    await ra.checkQ(keysToPropagate);
 }
 export class RoundAbout {
     vm;
@@ -39,38 +41,75 @@ export class RoundAbout {
         }
         console.log({ checks: this.#checks, busses: this.#busses });
     }
-    async init() {
-        // const members = new Set<string>();
-        // const{vm} = this;
-        // for(const key in vm){
-        //     if((<any>vm)[key] !== undefined){
-        //         members.add(key);
-        //     }
-        // }
-        // const busses = this.#busses;
-        // for(const key in busses){
-        //     busses[key] = (<any>busses[key]).union(members);
-        // }
-        // const {propagator} = vm;
-        // if(propagator !== undefined){
-        //     propagator
-        // }
+    async init(keysToPropagate) {
         const checks = this.#checks;
         const { vm } = this;
         for (const key in checks) {
             const check = checks[key];
-            const checkVal = await this.doChecks(check, true);
+            const checkVal = await this.#doChecks(check, true);
             console.log({ checkVal });
             if (checkVal) {
-                const method = vm[key];
-                const isAsync = method.constructor.name === 'AsyncFunction';
-                const ret = isAsync ? await vm[key](vm) : vm[key](vm);
-                vm.covertAssignment(ret);
-                console.log({ ret });
+                await this.#doKey(key, vm, keysToPropagate);
             }
         }
     }
-    async doChecks(check, initCheck) {
+    async checkQ(keysToPropagate) {
+        const busses = this.#busses;
+        const checks = this.#checks;
+        const { vm } = this;
+        let didNothing = true;
+        for (const busKey in busses) {
+            const bus = busses[busKey];
+            for (const checkKey in checks) {
+                const check = checks[checkKey];
+                const isOfInterest = await this.#checkSubscriptions(check, bus);
+                if (!isOfInterest) {
+                    busses[busKey] = new Set();
+                    continue;
+                }
+                const passesChecks = await this.#doChecks(check, false);
+                if (!passesChecks) {
+                    busses[busKey] = new Set();
+                    continue;
+                }
+                didNothing = false;
+                busses[busKey] = new Set();
+                await this.#doKey(checkKey, vm, keysToPropagate);
+            }
+        }
+        if (didNothing) {
+            //time to propagate and call it a day
+            throw 'NI';
+        }
+        else {
+            this.checkQ(keysToPropagate);
+        }
+    }
+    async #checkSubscriptions(check, bus) {
+        const { ifAllOf, ifKeyIn, ifAtLeastOneOf, ifEquals, ifNoneOf } = check;
+        if (ifAllOf !== undefined) {
+            if (!bus.isDisjointFrom(ifAllOf))
+                return true;
+        }
+        if (ifKeyIn !== undefined) {
+            if (!bus.isDisjointFrom(ifKeyIn))
+                return true;
+        }
+        if (ifAtLeastOneOf !== undefined) {
+            if (!bus.isDisjointFrom(ifAtLeastOneOf))
+                return true;
+        }
+        if (ifEquals !== undefined) {
+            if (!bus.isDisjointFrom(ifEquals))
+                return true;
+        }
+        if (ifNoneOf) {
+            if (!bus.isDisjointFrom(ifNoneOf))
+                return true;
+        }
+        return false;
+    }
+    async #doChecks(check, initCheck) {
         const { ifAllOf, ifKeyIn, ifAtLeastOneOf, ifEquals, ifNoneOf } = check;
         const { vm } = this;
         if (ifAllOf !== undefined) {
@@ -122,6 +161,22 @@ export class RoundAbout {
             }
         }
         return true;
+    }
+    async #doKey(key, vm, keysToPropagate) {
+        const method = vm[key];
+        const isAsync = method.constructor.name === 'AsyncFunction';
+        const ret = isAsync ? await vm[key](vm) : vm[key](vm);
+        vm.covertAssignment(ret);
+        const keys = Object.keys(ret);
+        const busses = this.#busses;
+        keys.forEach(key => {
+            keysToPropagate.add(key);
+            for (const busKey in busses) {
+                const bus = busses[busKey];
+                bus.add(key);
+            }
+        });
+        console.log({ ret });
     }
 }
 export class ActionBus {
