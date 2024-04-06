@@ -1,3 +1,4 @@
+import { none } from './none';
 import {roundaboutOptions, RoundaboutReady, Busses, SetLogicOps, Checks, Keysh} from './types';
 
 export async function roundabout<TProps = any, TActions = TProps>(
@@ -35,21 +36,85 @@ export class RoundAbout{
     }
 
     async init(){
-        const members = new Set<string>();
-        const{vm} = this;
-        for(const key in vm){
-            if((<any>vm)[key] !== undefined){
-                members.add(key);
+        // const members = new Set<string>();
+        // const{vm} = this;
+        // for(const key in vm){
+        //     if((<any>vm)[key] !== undefined){
+        //         members.add(key);
+        //     }
+        // }
+        // const busses = this.#busses;
+        // for(const key in busses){
+        //     busses[key] = (<any>busses[key]).union(members);
+        // }
+        // const {propagator} = vm;
+        // if(propagator !== undefined){
+        //     propagator
+        // }
+        const checks = this.#checks;
+        const {vm} = this;
+        for(const key in checks){
+            const check = checks[key];
+            const checkVal = await this.doChecks(check!, true);
+            console.log({checkVal})
+            if(checkVal){
+                const method = (vm as any)[key];
+                const isAsync = method.constructor.name === 'AsyncFunction';
+                const ret = isAsync ? await (<any>vm)[key](vm) : (<any>vm)[key](vm);
+                vm.covertAssignment(ret);
+                
+                console.log({ret});
             }
         }
-        const busses = this.#busses;
-        for(const key in busses){
-            busses[key] = (<any>busses[key]).union(members);
+
+    }
+
+    async doChecks(check: SetLogicOps, initCheck: boolean){
+        const {ifAllOf, ifKeyIn, ifAtLeastOneOf, ifEquals, ifNoneOf} = check;
+        const {vm} = this;
+        if(ifAllOf !== undefined){
+            for(const prop of ifAllOf){
+                if(!(vm as any)[prop]) return false;
+            }
         }
-        const {propagator} = vm;
-        if(propagator !== undefined){
-            propagator
+        if(ifKeyIn !== undefined && initCheck){
+            let passed = false;
+            for(const prop of ifKeyIn){
+                if((vm as any)[prop] !== undefined){
+                    passed = true;
+                    break;
+                }
+            }
+            if(!passed) return false;
         }
+        if(ifAtLeastOneOf !== undefined){
+            let passed = false;
+            for(const prop of ifAtLeastOneOf){
+                if((vm as any)[prop]){
+                    passed = true;
+                    break;
+                }
+            }
+            if(!passed) return false;
+        }
+        if(ifEquals !== undefined){
+            let isFirst = true;
+            let firstVal: any;
+            for(const prop of ifEquals){
+                const val = (vm as any)[prop];
+                if(isFirst){
+                    firstVal = val;
+                }else{
+                    if(val !== firstVal) return false;
+                }
+            }
+        }
+        if(ifNoneOf !== undefined){
+            for(const prop of ifNoneOf){
+                if((vm as any)[prop]) return false;
+            }
+        }
+        return true;
     }
 }
 
