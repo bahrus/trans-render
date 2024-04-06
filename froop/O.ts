@@ -124,7 +124,8 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     }
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null){
         if(!this.proppedUp) return;
-        const props = (<any>this.constructor).props as PropLookup;
+        const attrs = (<any>this.constructor).attrs as PropLookup;
+        console.log({attrs});
         
     }
     static config: WCConfig | undefined;
@@ -154,6 +155,14 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                 }
             }
             
+        }
+        if(propInfo !== undefined){
+            for(const key in propInfo){
+                const prop = propInfo[key];
+                if(prop?.parse && prop.attrName){
+                    attrs[key] = prop;
+                }
+            }
         }
         this.props = props;
         this.addProps(this, props);

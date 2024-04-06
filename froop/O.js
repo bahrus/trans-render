@@ -117,7 +117,8 @@ export class O extends HTMLElement {
     attributeChangedCallback(name, oldVal, newVal) {
         if (!this.proppedUp)
             return;
-        const props = this.constructor.props;
+        const attrs = this.constructor.attrs;
+        console.log({ attrs });
     }
     static config;
     static async bootUp() {
@@ -142,6 +143,14 @@ export class O extends HTMLElement {
                 props[key] = propInfo;
                 if (propInfo.parse && propInfo.attrName) {
                     attrs[key] = propInfo;
+                }
+            }
+        }
+        if (propInfo !== undefined) {
+            for (const key in propInfo) {
+                const prop = propInfo[key];
+                if (prop?.parse && prop.attrName) {
+                    attrs[key] = prop;
                 }
             }
         }

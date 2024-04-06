@@ -9,6 +9,8 @@ export class MoodStone extends O {
             isHappy: {
                 def: true,
                 ro: true,
+                attrName: 'is-happy',
+                parse: true,
             }
         }
     };
