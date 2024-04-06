@@ -75,26 +75,6 @@ Basically, what round about does is it looks at what subset of properties of the
 
 propagator is an EventTarget, that publishes events when the propagate properties are changed (just count).
 
-What standard would help?
-
-1.  Object.assignGingerly.
-
-2.  Being able to publish the dependencies in a uniform way:
-
-```JavaScript
-const parity = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
-parity.do = {
-    on: 'isEven'.
-    if: [],
-    ifOneOf:[],
-    ifEquals:[],
-    etc.
-}
-```
-
-which must be JSON serializable.
-
-3.  Reducing the footprint
 
 
 <!--
@@ -122,6 +102,10 @@ interface RoundaboutReady{
     get propagator() : EventTarget;
 }
 ```
+
+## Busses and compacts
+
+Being designed to reduce its carbon footprint, roundabouts has first-class support for both busses and compacts.
 
 
 

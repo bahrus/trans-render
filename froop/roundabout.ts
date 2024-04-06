@@ -1,5 +1,5 @@
 import { none } from './none';
-import {roundaboutOptions, RoundaboutReady, Busses, SetLogicOps, Checks, Keysh} from './types';
+import {roundaboutOptions, RoundaboutReady, Busses, SetLogicOps, Checks, Keysh, ICompact} from './types';
 
 export async function roundabout<TProps = any, TActions = TProps>(
     vm: TProps & TActions & RoundaboutReady, options: roundaboutOptions<TProps, TActions>){
@@ -13,6 +13,7 @@ export async function roundabout<TProps = any, TActions = TProps>(
 export class RoundAbout{
     #checks: Checks;
     #busses: Busses;
+    #compact?: ICompact;
     #toSet(k: Keysh){
         if(Array.isArray(k)) return new Set(k);
         return new Set([k]);
@@ -39,8 +40,14 @@ export class RoundAbout{
     }
 
     async init(keysToPropagate: Set<string>){
+        const {vm, options} = this;
+        const {compacts} = options;
+        if(compacts !== undefined){
+            const {Compact} = await import('./Compact.js');
+            this.#compact = new Compact(compacts);
+            this.#compact.assignCovertly(vm, keysToPropagate, this.#busses);
+        }
         const checks = this.#checks;
-        const {vm} = this;
         for(const key in checks){
             const check = checks[key];
             const checkVal = await this.#doChecks(check!, true);

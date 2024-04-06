@@ -12,7 +12,7 @@ export class MoodStone extends O {
                 parse: true,
             },
             isNotHappy: {
-                def: false,
+                type: 'Boolean',
             }
         },
         actions: {
@@ -20,7 +20,7 @@ export class MoodStone extends O {
                 ifAllOf: 'isHappy'
             }
         },
-        comps: {
+        compacts: {
             isHappy_to_isNotHappy: 'negate'
         }
     };

@@ -10,6 +10,7 @@ export class RoundAbout {
     options;
     #checks;
     #busses;
+    #compact;
     #toSet(k) {
         if (Array.isArray(k))
             return new Set(k);
@@ -44,8 +45,14 @@ export class RoundAbout {
         }
     }
     async init(keysToPropagate) {
+        const { vm, options } = this;
+        const { compacts } = options;
+        if (compacts !== undefined) {
+            const { Compact } = await import('./Compact.js');
+            this.#compact = new Compact(compacts);
+            this.#compact.assignCovertly(vm, keysToPropagate, this.#busses);
+        }
         const checks = this.#checks;
-        const { vm } = this;
         for (const key in checks) {
             const check = checks[key];
             const checkVal = await this.#doChecks(check, true);

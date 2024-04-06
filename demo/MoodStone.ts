@@ -23,7 +23,7 @@ export class MoodStone extends O implements IMoodStoneActions {
                 parse: true,
             },
             isNotHappy: {
-                def: false,
+                type: 'Boolean',
             }
         },
         actions:{
@@ -31,7 +31,7 @@ export class MoodStone extends O implements IMoodStoneActions {
                 ifAllOf: 'isHappy'
             }
         },
-        comps:{
+        compacts:{
             isHappy_to_isNotHappy: 'negate'
         }
     }

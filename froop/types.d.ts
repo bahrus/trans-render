@@ -174,10 +174,21 @@ export interface WCConfig<TProps = any, MCActions = TProps, TPropInfo = PropInfo
      */
     keyQueries?: string[];
     formAss?: boolean;
-    comps?: Partial<{[key in `${keyof TProps & string}_to_${keyof TProps & string}`]: op }>
+    compacts?: Compacts<TProps>;
 }
 
-export type op = 'length' | 'inc' | 'negate' | 'toggle'
+export type Compacts<TProps = any> = Partial<{[key in `${keyof TProps & string}_to_${keyof TProps & string}` & string]: Operation<TProps> }>
+
+export type op = 'length' | 'inc' | 'negate' | 'toggle' | 'echo' | 'toLocale';
+
+export interface EchoBy<TProps = any>{
+    op: 'echo',
+    by: number | keyof TProps,
+}
+
+export type Operation<TProps = any> = 
+    | op
+    | EchoBy<TProps> 
 
 export type ListOfLogicalExpressions<MCProps = any> = (keyof MCProps | LogicOp<MCProps>)[];
 
@@ -268,6 +279,7 @@ export type roundaboutOptions<TProps = any, TActions = TProps> = {
     propagate?: keyof TProps & string | Array<keyof TProps & string>,
     //propagator?: EventTarget,
     actions?: Actions<TProps,TActions>,
+    compacts?: Compacts<TProps>,
     infractions?: Infractions<TProps>,
     do?:  Partial<{[key in `${keyof TActions & string}_on`]: Keysh<TProps> }>
 }
@@ -297,7 +309,7 @@ export interface RoundaboutReady{
 
     /**
      * fires event with name matching the name of the property when the value changes (but not via covertAssignment)
-     * when property is set via public interface, not via an action method's return object
+     * when property is set via public interface, not (immediately) via an action method's return object
      */
     readonly propagator : EventTarget | undefined;
 }
@@ -306,6 +318,11 @@ export type PropLookup = {[key: string]: PropInfo}
 
 export interface BaseProps{
     proppedUp: boolean,
+}
+
+export interface ICompact{
+    compacts: Compacts,
+    assignCovertly(obj: any, keysToPropagate: Set<string>, busses: Busses): Promise<void>,
 }
 
 

@@ -23,12 +23,13 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     async mount(){
         
         const config = (<any>this.constructor).config as WCConfig;
-        const {actions} = config;
+        const {actions, compacts} = config;
         if(actions !== undefined){
             const {roundabout} = await import('./roundabout.js');
             await roundabout(this, {
                 //propagator: this.propagator,
-                actions
+                actions,
+                compacts
             });
         }
 
