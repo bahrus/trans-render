@@ -229,6 +229,7 @@ export interface PropInfo{
     ro?: boolean;
     def?: any;
     attrName?: string;
+    propName?: string;
 }
 
 export type ConstString = String;

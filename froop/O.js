@@ -132,7 +132,8 @@ export class O extends HTMLElement {
                 const def = propDefaults[key];
                 const propInfo = {
                     ...defaultProp,
-                    def
+                    def,
+                    propName: key
                 };
                 this.setType(propInfo, def);
                 if (propInfo.type !== 'Object') {
@@ -149,8 +150,10 @@ export class O extends HTMLElement {
         if (propInfo !== undefined) {
             for (const key in propInfo) {
                 const prop = propInfo[key];
-                if (prop?.parse && prop.attrName) {
-                    attrs[key] = prop;
+                prop.propName = key;
+                const { parse, attrName } = prop;
+                if (parse && attrName) {
+                    attrs[attrName] = prop;
                 }
             }
         }

@@ -141,8 +141,9 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                 const def = propDefaults[key];
                 const propInfo = {
                     ...defaultProp,
-                    def 
-                };
+                    def,
+                    propName: key
+                } as PropInfo;
                 this.setType(propInfo, def);
                 if(propInfo.type !== 'Object'){
                     propInfo.parse = true;
@@ -157,10 +158,12 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
             
         }
         if(propInfo !== undefined){
-            for(const key in propInfo){
-                const prop = propInfo[key];
-                if(prop?.parse && prop.attrName){
-                    attrs[key] = prop;
+            for(const key in propInfo as PropLookup){
+                const prop = propInfo[key]!;
+                prop.propName = key;
+                const {parse, attrName} = prop;
+                if(parse && attrName){
+                    attrs[attrName] = prop;
                 }
             }
         }
