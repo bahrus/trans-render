@@ -1,6 +1,7 @@
 export async function roundabout(vm, options) {
     const ra = new RoundAbout(vm, options);
     const keysToPropagate = new Set();
+    await ra.subscribe();
     await ra.init(keysToPropagate);
     await ra.checkQ(keysToPropagate);
 }
@@ -37,9 +38,10 @@ export class RoundAbout {
                 check.ifEquals = this.#toSet(ifEquals);
             if (ifNoneOf)
                 check.ifNoneOf = this.#toSet(ifNoneOf);
+            if (ifKeyIn)
+                check.ifKeyIn = this.#toSet(ifKeyIn);
             checks[key] = check;
         }
-        console.log({ checks: this.#checks, busses: this.#busses });
     }
     async init(keysToPropagate) {
         const checks = this.#checks;
@@ -47,7 +49,6 @@ export class RoundAbout {
         for (const key in checks) {
             const check = checks[key];
             const checkVal = await this.#doChecks(check, true);
-            console.log({ checkVal });
             if (checkVal) {
                 await this.#doKey(key, vm, keysToPropagate);
             }
@@ -78,12 +79,55 @@ export class RoundAbout {
             }
         }
         if (didNothing) {
-            //time to propagate and call it a day
-            throw 'NI';
+            const propagator = vm.propagator;
+            if (propagator instanceof EventTarget) {
+                for (const key of keysToPropagate) {
+                    const re = new RoundAboutEvent(key);
+                    propagator.dispatchEvent(re);
+                }
+            }
         }
         else {
             this.checkQ(keysToPropagate);
         }
+    }
+    #controllers = [];
+    #extEvtCount = 0;
+    async subscribe() {
+        const { vm } = this;
+        const { propagator } = vm;
+        if (!(propagator instanceof EventTarget))
+            return;
+        const checks = this.#checks;
+        let keys = new Set();
+        for (const checkKey in checks) {
+            const check = checks[checkKey];
+            const { ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf } = check;
+            keys = new Set([...keys, ...ifAllOf || [], ...ifAtLeastOneOf || [], ...ifEquals || [], ...ifKeyIn || [], ...ifNoneOf || []]);
+        }
+        const controllers = this.#controllers;
+        for (const key of keys) {
+            const ac = new AbortController();
+            controllers.push(ac);
+            const signal = ac.signal;
+            console.log({ key });
+            propagator.addEventListener(key, e => {
+                if (e instanceof RoundAboutEvent)
+                    return;
+                const count = this.#extEvtCount++;
+                this.handleEvent(count);
+            }, { signal });
+        }
+    }
+    async unsubscribe() {
+        for (const ac of this.#controllers) {
+            ac.abort();
+        }
+    }
+    async handleEvent(evtCount) {
+        if (evtCount !== this.#extEvtCount)
+            return;
+        throw 'NI';
     }
     async #checkSubscriptions(check, bus) {
         const { ifAllOf, ifKeyIn, ifAtLeastOneOf, ifEquals, ifNoneOf } = check;
@@ -176,9 +220,10 @@ export class RoundAbout {
                 bus.add(key);
             }
         });
-        console.log({ ret });
     }
 }
-export class ActionBus {
-    bus = new Set();
+export class RoundAboutEvent extends Event {
 }
+// export class ActionBus{
+//     bus = new Set<string>();
+// }
