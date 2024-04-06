@@ -1,8 +1,10 @@
 export class Compact {
     compacts;
+    vm;
     #compactions = {};
-    constructor(compacts) {
+    constructor(compacts, vm) {
         this.compacts = compacts;
+        this.vm = vm;
         const compactions = this.#compactions;
         for (const key in compacts) {
             const split = key.split('_to_');
@@ -41,6 +43,7 @@ export class Compact {
                                     [dest]: vm[src] + 1
                                 })
                             };
+                            break;
                         case 'toggle':
                             compactions[src] = {
                                 fn: vm => {
@@ -57,18 +60,21 @@ export class Compact {
                                     }
                                 }
                             };
+                            break;
                         case 'dec':
                             compactions[src] = {
                                 fn: vm => ({
                                     [dest]: vm[src] - 1
                                 })
                             };
+                            break;
                         case 'length':
                             compactions[src] = {
                                 fn: vm => ({
                                     [dest]: vm[src]?.length() || 0
                                 })
                             };
+                            break;
                         case 'toLocale':
                             compactions[src] = {
                                 fn: vm => {
@@ -85,12 +91,26 @@ export class Compact {
                                     }
                                 }
                             };
+                            break;
                     }
                     break;
+                case 'object': {
+                    this.#doComplexCompact(rhs, vm);
+                }
             }
         }
     }
-    async assignCovertly(obj, vm, keysToPropagate, busses) {
+    async #doComplexCompact(compact, vm) {
+        const { op } = compact;
+        switch (op) {
+            case 'echo':
+                const { EchoCompact } = await import('./EchoCompact.js');
+                //TODO work out aborting the listeners on disconnect
+                //propagator needs a dispose event
+                const echoCompact = new EchoCompact(compact, vm);
+        }
+    }
+    async covertAssignment(obj, vm, keysToPropagate, busses) {
         const compactions = this.#compactions;
         for (const vmKey in obj) {
             if (vmKey in compactions) {

@@ -44,8 +44,8 @@ export class RoundAbout{
         const {compacts} = options;
         if(compacts !== undefined){
             const {Compact} = await import('./Compact.js');
-            this.#compact = new Compact(compacts);
-            this.#compact.assignCovertly(vm, vm, keysToPropagate, this.#busses);
+            this.#compact = new Compact(compacts, vm);
+            this.#compact.covertAssignment(vm, vm, keysToPropagate, this.#busses);
         }
         const checks = this.#checks;
         for(const key in checks){
@@ -136,7 +136,7 @@ export class RoundAbout{
         if(this.#compact){
             const {vm} = this;
             const compactKeysToPropagate = new Set<string>();
-            this.#compact.assignCovertly({[key]: (<any>vm)[key]}, vm, compactKeysToPropagate, this.#busses);
+            this.#compact.covertAssignment({[key]: (<any>vm)[key]}, vm, compactKeysToPropagate, this.#busses);
         }
         const busses = this.#busses;
         for(const busKey in busses){
@@ -229,7 +229,7 @@ export class RoundAbout{
         const isAsync = method.constructor.name === 'AsyncFunction';
         const ret = isAsync ? await vm[key](vm) : vm[key](vm);
         if(this.#compact){
-            this.#compact.assignCovertly(ret, vm as RoundaboutReady, keysToPropagate, this.#busses);
+            this.#compact.covertAssignment(ret, vm as RoundaboutReady, keysToPropagate, this.#busses);
         }
         vm.covertAssignment(ret);
         const keys = Object.keys(ret);

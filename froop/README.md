@@ -103,6 +103,12 @@ interface RoundaboutReady{
 }
 ```
 
+So yes, we are still "clinging" to the notion that EventTargets are useful, despite the [forewarning](https://github.com/proposal-signals/proposal-signals?tab=readme-ov-file#example---a-vanillajs-counter):
+
+> Unfortunately, not only has our boilerplate code exploded, but we're stuck with a ton of bookkeeping of subscriptions, and a potential memory leak disaster if we don't properly clean everything up in the right way.
+
+So to make this concern seem, perhaps, overly alarmist, is to add one more "soft" requirement to make the view model be roundabout ready -- the propagator should emit event named ['abort'](https://github.com/whatwg/dom/issues/784) exclusively when all listeners should be aborted.
+
 ## Busses and compacts
 
 Being designed to reduce its carbon footprint, roundabouts has first-class support for both busses and compacts.

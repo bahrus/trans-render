@@ -181,7 +181,10 @@ export type Compacts<TProps = any> = Partial<{[key in `${keyof TProps & string}_
 
 export type op = 'length' | 'inc' | 'negate' | 'toggle' | 'echo' | 'toLocale' | 'dec';
 
-export interface EchoBy<TProps = any>{
+export interface ComplexCompact<TProps = any> {
+    op: 'echo'
+}
+export interface EchoBy<TProps = any> extends ComplexCompact{
     op: 'echo',
     by: number | keyof TProps,
 }
@@ -329,7 +332,7 @@ export interface BaseProps{
 
 export interface ICompact{
     compacts: Compacts,
-    assignCovertly(obj: any, vm: RoundaboutReady, keysToPropagate: Set<string>, busses: Busses): Promise<void>,
+    covertAssignment(obj: any, vm: RoundaboutReady, keysToPropagate: Set<string>, busses: Busses): Promise<void>,
 }
 
 
