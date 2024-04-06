@@ -179,7 +179,7 @@ export interface WCConfig<TProps = any, MCActions = TProps, TPropInfo = PropInfo
 
 export type Compacts<TProps = any> = Partial<{[key in `${keyof TProps & string}_to_${keyof TProps & string}` & string]: Operation<TProps> }>
 
-export type op = 'length' | 'inc' | 'negate' | 'toggle' | 'echo' | 'toLocale';
+export type op = 'length' | 'inc' | 'negate' | 'toggle' | 'echo' | 'toLocale' | 'dec';
 
 export interface EchoBy<TProps = any>{
     op: 'echo',
