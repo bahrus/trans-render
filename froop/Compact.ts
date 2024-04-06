@@ -22,12 +22,12 @@ export class Compact implements ICompact{
             }
         }
     }
-    async assignCovertly(vm: RoundaboutReady, keysToPropagate: Set<string>, busses: Busses) {
+    async assignCovertly(obj: any, vm: RoundaboutReady, keysToPropagate: Set<string>, busses: Busses) {
         const compactions = this.#compactions;
-        for(const vmKey in vm){
+        for(const vmKey in obj){
             if(vmKey in compactions){
                 const compaction = compactions[vmKey];
-                const result = compaction.fn(vm);
+                const result = compaction.fn(obj);
                 vm.covertAssignment(result);
                 for(const resultKey in result){
                     keysToPropagate.add(resultKey);

@@ -22,12 +22,12 @@ export class Compact {
             }
         }
     }
-    async assignCovertly(vm, keysToPropagate, busses) {
+    async assignCovertly(obj, vm, keysToPropagate, busses) {
         const compactions = this.#compactions;
-        for (const vmKey in vm) {
+        for (const vmKey in obj) {
             if (vmKey in compactions) {
                 const compaction = compactions[vmKey];
-                const result = compaction.fn(vm);
+                const result = compaction.fn(obj);
                 vm.covertAssignment(result);
                 for (const resultKey in result) {
                     keysToPropagate.add(resultKey);

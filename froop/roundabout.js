@@ -50,7 +50,7 @@ export class RoundAbout {
         if (compacts !== undefined) {
             const { Compact } = await import('./Compact.js');
             this.#compact = new Compact(compacts);
-            this.#compact.assignCovertly(vm, keysToPropagate, this.#busses);
+            this.#compact.assignCovertly(vm, vm, keysToPropagate, this.#busses);
         }
         const checks = this.#checks;
         for (const key in checks) {
@@ -86,16 +86,20 @@ export class RoundAbout {
             }
         }
         if (didNothing) {
-            const propagator = vm.propagator;
-            if (propagator instanceof EventTarget) {
-                for (const key of keysToPropagate) {
-                    const re = new RoundAboutEvent(key);
-                    propagator.dispatchEvent(re);
-                }
-            }
+            this.#propagate(keysToPropagate);
         }
         else {
             this.checkQ(keysToPropagate);
+        }
+    }
+    #propagate(keysToPropagate) {
+        const { vm } = this;
+        const propagator = vm.propagator;
+        if (propagator instanceof EventTarget) {
+            for (const key of keysToPropagate) {
+                const re = new RoundAboutEvent(key);
+                propagator.dispatchEvent(re);
+            }
         }
     }
     #controllers = [];
@@ -131,15 +135,25 @@ export class RoundAbout {
         }
     }
     async handleEvent(key, evtCount) {
+        let compactKeysToPropagate;
+        if (this.#compact) {
+            const { vm } = this;
+            const compactKeysToPropagate = new Set();
+            this.#compact.assignCovertly({ [key]: vm[key] }, vm, compactKeysToPropagate, this.#busses);
+        }
         const busses = this.#busses;
         for (const busKey in busses) {
             const bus = busses[busKey];
             bus.add(key);
         }
-        if (evtCount !== this.#extEvtCount)
+        if (evtCount !== this.#extEvtCount) {
+            if (compactKeysToPropagate !== undefined) {
+                this.#propagate(compactKeysToPropagate);
+            }
             return;
+        }
         this.#extEvtCount++;
-        const keysToPropagate = new Set();
+        const keysToPropagate = compactKeysToPropagate || new Set();
         await this.checkQ(keysToPropagate);
     }
     async #checkSubscriptions(check, bus) {
@@ -223,6 +237,9 @@ export class RoundAbout {
         const method = vm[key];
         const isAsync = method.constructor.name === 'AsyncFunction';
         const ret = isAsync ? await vm[key](vm) : vm[key](vm);
+        if (this.#compact) {
+            this.#compact.assignCovertly(ret, vm, keysToPropagate, this.#busses);
+        }
         vm.covertAssignment(ret);
         const keys = Object.keys(ret);
         const busses = this.#busses;
