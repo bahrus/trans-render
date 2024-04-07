@@ -132,6 +132,16 @@ export class RoundAbout{
                 await this.#doKey(key, vm, keysToPropagate);
             }
         }
+        const routers = this.#routers;
+        for(const routerKey in routers){
+            const router = routers[routerKey];
+            const evtTarget = vm[routerKey];
+            debugger;
+            for(const route of router){
+                const {do: d, full, on} = route;
+                console.log({evtTarget, d, full, on});
+            }
+        }
     }
 
     async checkQ(keysToPropagate: Set<string>){
@@ -203,8 +213,17 @@ export class RoundAbout{
             propagator.addEventListener(key, e => {
                 if(e instanceof RoundAboutEvent) return;
                 this.#extEvtCount++;
-                this.handleEvent(key, this.#extEvtCount);
+                this.doCoreEvt(key, this.#extEvtCount);
             }, {signal});
+        }
+        const routers = this.#routers;
+        const handlerControllers = this.#handlerControllers;
+        for(const routerKey in routers){
+            const ac = new AbortController();
+            handlerControllers[routerKey] = ac;
+            propagator.addEventListener(routerKey, e => {
+                debugger;
+            }, {signal: ac.signal});
         }
     }
 
@@ -219,7 +238,7 @@ export class RoundAbout{
         }
     }
 
-    async handleEvent(key: string, evtCount: number){
+    async doCoreEvt(key: string, evtCount: number){
         let compactKeysToPropagate: Set<string> | undefined;
         if(this.#compact){
             const {options} = this;
@@ -241,6 +260,7 @@ export class RoundAbout{
         this.#extEvtCount++;
         const keysToPropagate = compactKeysToPropagate || new Set<string>();
         await this.checkQ(keysToPropagate);
+        console.log('key');
         const routes = this.#routers[key];
         if(routes !== undefined){
             throw 'NI';

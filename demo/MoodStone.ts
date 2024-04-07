@@ -68,9 +68,16 @@ export class MoodStone extends O implements IMoodStoneActions {
             age: age + (target as HTMLInputElement).value.length
         }
     }
+
+    override async connectedCallback(): Promise<void> {
+        await super.connectedCallback();
+        this.myInput = this.querySelector('input') as HTMLInputElement;
+    }
 }
 
 export interface MoodStone extends IMoodStoneProps{}
+
+export interface MoodStone extends IMoodStoneETs{}
 
 await MoodStone.bootUp();
 

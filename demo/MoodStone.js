@@ -50,6 +50,10 @@ export class MoodStone extends O {
             age: age + target.value.length
         };
     }
+    async connectedCallback() {
+        await super.connectedCallback();
+        this.myInput = this.querySelector('input');
+    }
 }
 await MoodStone.bootUp();
 customElements.define(MoodStone.config.name, MoodStone);
