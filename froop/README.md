@@ -113,5 +113,164 @@ So to make this concern seem, perhaps, overly alarmist, we add one more "soft" r
 
 Being designed to reduce its carbon footprint, roundabouts has first-class support for both busses and compacts.
 
+compacts is a portmanteau of computed actions, and the fully qualified name is really "declarative, computed actions between two members of the view model".
+
+The simples compacts look as follows:
+
+```TypeScript
+export class MoodStone extends O implements IMoodStoneActions {
+    static override config: WCConfig<IMoodStoneProps, IMoodStoneActions> = {
+        name: 'mood-stone',
+        propDefaults:{
+            age: 22,
+        },
+        propInfo:{
+            isHappy: {
+                def: true,
+                attrName: 'is-happy',
+                parse: true,
+            },
+            isNotHappy: {
+                type: 'Boolean',
+                ro: true,
+            }
+        },
+        actions:{
+            incAge: {
+                ifAllOf: 'isHappy',
+            }
+        },
+        compacts:{
+            isHappy_to_isNotHappy: 'negate'
+        }
+    }
+    incAge({age}: this): Partial<IMoodStoneProps> {
+        return {
+            age: age + 1
+        } as Partial<IMoodStoneProps>
+    }
+}
+```
+
+So here, the compact is saying "bind the isHappy property of the custom element view model to the isNotHappy, by negating the former and setting that value to the latter.
+
+They can get considerably more complicated.
+
+One example of the kind of complexity they can handle cleanly is creating subscriptions between one property that is an eventTarget, and a method of the class we want to call when that eventTarget changes.  Once again, the [signals](https://github.com/proposal-signals) proposal warns us about the complexity and danger of using pub/sub (such as EventTargets).  This library sees it as a challenge that using declarative syntax can rise to, because it will be sure to do what is needed to avoid the disaster that that proposal warns us about.
+
+How would this look?  Let's take a look at an example:
+
+```TypeScript
+export class TimeTicker extends HTMLElement implements Actions{
+
+    config:{
+        name: 'time-ticker',
+        propDefaults: {
+            ticks: 0,
+            idx: -1,
+            duration: 1_000,
+            repeat: Infinity,
+            enabled: true,
+            disabled: false,
+            loop: false,
+            wait: true,
+        },
+        propInfo:{
+            enabled:{
+                dry: false,
+            },
+            repeat: {
+                dry: false,
+            },
+            value: {
+                type: 'Object'
+            },
+            items: {
+                notify:{
+                    lengthTo:'repeat'
+                }
+            },
+            ticks: {
+                notify: {
+                    incTo: {
+                        key: 'idx',
+                        lt: 'repeat',
+                        loop: 'loop',
+                        notifyWhenMax: {
+                            setTo: {
+                                key: 'disabled',
+                                val: true,
+                            },
+                        }
+                    }
+                }
+            }
+        },
+        actions: {
+            stop:{
+                ifAllOf: ['disabled', 'controller']
+            },
+            start:{
+                ifAllOf: ['duration'],
+                ifNoneOf: ['disabled'],
+            },
+            rotateItem: {
+                ifKeyIn: ['repeat', 'loop', 'idx'],
+                ifNoneOf: ['disabled'],
+            }
+        },
+        compacts: {
+            enabled_to_disabled: 'negate',
+            timeEmitter_to_incTicks_on: 'value-changed'
+        }
+    }
+
+    async start({duration, ticks, wait, controller}: this) {
+        if(controller !== undefined){
+            ticks = 0;
+            controller.abort();
+        }
+        const newController = new AbortController();
+        const {TimeEmitter} = await import('./TimeEmitter.js');
+        const timeEmitter = new TimeEmitter(duration, newController.signal);
+        return {
+            controller: newController,
+            ticks: wait ? ticks : ticks + 1,
+            timeEmitter
+        } 
+            {
+                incTicks: {on: 'value-changed', of: timeEmitter}
+            }
+        ] as PPE;
+    }
+
+    incTicks({ticks}: this){
+        return {
+            ticks: ticks + 1
+        }
+    }
+
+    stop({controller}: this) {
+        controller.abort();
+        return {
+            controller: undefined,
+        };
+    }
+
+
+    rotateItem({idx, items}: this){
+        return {
+            value: {
+                idx,
+                item: (items && items.length > idx) ? items[idx] : undefined,
+            }
+        };
+    }
+}
+
+export interface TimeTicker extends AllProps{}
+
+```
+
 
 
