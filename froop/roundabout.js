@@ -240,6 +240,10 @@ export class RoundAbout {
         this.#extEvtCount++;
         const keysToPropagate = compactKeysToPropagate || new Set();
         await this.checkQ(keysToPropagate);
+        const routes = this.#routers[key];
+        if (routes !== undefined) {
+            throw 'NI';
+        }
     }
     async #checkSubscriptions(check, bus) {
         const { ifAllOf, ifKeyIn, ifAtLeastOneOf, ifEquals, ifNoneOf } = check;

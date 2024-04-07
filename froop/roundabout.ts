@@ -241,6 +241,10 @@ export class RoundAbout{
         this.#extEvtCount++;
         const keysToPropagate = compactKeysToPropagate || new Set<string>();
         await this.checkQ(keysToPropagate);
+        const routes = this.#routers[key];
+        if(routes !== undefined){
+            throw 'NI';
+        }
     }
 
     async #checkSubscriptions(check: SetLogicOps, bus: any): Promise<boolean>{
