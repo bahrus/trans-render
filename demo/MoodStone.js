@@ -1,4 +1,5 @@
 import { O } from '../froop/O.js';
+const calcAgePlus10 = ({ age }) => ({ agePlus10: age + 10 });
 export class MoodStone extends O {
     static config = {
         name: 'mood-stone',
@@ -14,11 +15,16 @@ export class MoodStone extends O {
             isNotHappy: {
                 type: 'Boolean',
                 ro: true,
+            },
+            agePlus10: {
+                type: 'Number',
+                ro: true,
             }
         },
         onsets: {
             isHappy_to_incAge: 1
         },
+        infractions: [calcAgePlus10],
         actions: {
         // incAge: {
         //     ifAllOf: 'isHappy',

@@ -29,7 +29,7 @@ export class O extends HTMLElement {
     // }
     async #mount() {
         const config = this.constructor.config;
-        const { actions, compacts, onsets } = config;
+        const { actions, compacts, onsets, infractions } = config;
         if (actions !== undefined) {
             const { roundabout } = await import('./roundabout.js');
             await roundabout({
@@ -38,7 +38,7 @@ export class O extends HTMLElement {
                 actions,
                 compacts,
                 onsets
-            });
+            }, infractions);
         }
     }
     #parseAttr(propInfo, name, ov, nv) {

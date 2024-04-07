@@ -328,8 +328,10 @@ export type PropsToPartialProps<TProps = any> =
  | ((self: TProps) => Partial<TProps>);
 
 export type Infractions<TProps = any> = 
-    | PropsToPartialProps<TProps> 
+    //| PropsToPartialProps<TProps> 
     | Array<PropsToPartialProps<TProps>> 
+
+
 
 export type Busses = {[key: string]: Set<string>};
 

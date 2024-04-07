@@ -1,23 +1,28 @@
-export async function roundabout(options) {
-    const ra = new RoundAbout(options);
+export async function roundabout(options, infractions) {
+    const ra = new RoundAbout(options, infractions);
     const keysToPropagate = new Set();
     await ra.subscribe();
-    await ra.init();
+    if (infractions) {
+        await ra.init();
+    }
     await ra.hydrate(keysToPropagate);
     await ra.checkQ(keysToPropagate);
 }
 export class RoundAbout {
     options;
+    infractions;
     #checks;
     #busses;
     #compact;
+    #infractionsLookup = {};
     #toSet(k) {
         if (Array.isArray(k))
             return new Set(k);
         return new Set([k]);
     }
-    constructor(options) {
+    constructor(options, infractions) {
         this.options = options;
+        this.infractions = infractions;
         const newBusses = {};
         const checks = {};
         this.#checks = checks;
@@ -70,6 +75,25 @@ export class RoundAbout {
         //do optional stuff to improve the developer experience,
         // that involves importing references dynamically, like parsing arrow functions
         // create propagator, etc
+        const checks = this.#checks;
+        const busses = this.#busses;
+        const { infractions, options } = this;
+        const { vm } = options;
+        if (infractions !== undefined) {
+            const { getDestructArgs } = await import('../lib/getDestructArgs.js');
+            for (const infraction of infractions) {
+                let name = infraction.name;
+                while (name in vm) {
+                    name += '_';
+                }
+                this.#infractionsLookup[name] = infraction;
+                const args = getDestructArgs(infraction);
+                busses[name] = new Set();
+                checks[name] = {
+                    ifKeyIn: new Set(args),
+                };
+            }
+        }
     }
     async hydrate(keysToPropagate) {
         const { options } = this;
@@ -269,9 +293,9 @@ export class RoundAbout {
         return true;
     }
     async #doKey(key, vm, keysToPropagate) {
-        const method = vm[key];
+        const method = vm[key] || this.#infractionsLookup[key];
         const isAsync = method.constructor.name === 'AsyncFunction';
-        const ret = isAsync ? await vm[key](vm) : vm[key](vm);
+        const ret = isAsync ? await method(vm) : method(vm);
         if (this.#compact) {
             this.#compact.covertAssignment(ret, vm, keysToPropagate, this.#busses);
         }

@@ -1,12 +1,17 @@
 import { none } from './none';
-import {roundaboutOptions, RoundaboutReady, Busses, SetLogicOps, Checks, Keysh, ICompact} from './types';
+import {roundaboutOptions, RoundaboutReady, Busses, SetLogicOps, Checks, Keysh, ICompact, Infractions, PropsToPartialProps} from './types';
 
 export async function roundabout<TProps = any, TActions = TProps>(
-    options: roundaboutOptions<TProps, TActions>){
-    const ra = new RoundAbout(options);
+    options: roundaboutOptions<TProps, TActions>,
+    infractions?: Infractions<TProps>
+    ){
+    const ra = new RoundAbout(options, infractions);
     const keysToPropagate = new Set<string>();
     await ra.subscribe();
-    await ra.init();
+    if(infractions){
+        await ra.init();
+    }
+    
     await ra.hydrate(keysToPropagate);
     await ra.checkQ(keysToPropagate);
 }
@@ -15,11 +20,12 @@ export class RoundAbout{
     #checks: Checks;
     #busses: Busses;
     #compact?: ICompact;
+    #infractionsLookup: {[key: string]: PropsToPartialProps} = {};
     #toSet(k: Keysh){
         if(Array.isArray(k)) return new Set(k);
         return new Set([k]);
     }
-    constructor(public options: roundaboutOptions){
+    constructor(public options: roundaboutOptions, public infractions?: Infractions){
         const newBusses : Busses = {}
         const checks: Checks = {};
         this.#checks = checks;
@@ -67,6 +73,25 @@ export class RoundAbout{
         //do optional stuff to improve the developer experience,
         // that involves importing references dynamically, like parsing arrow functions
         // create propagator, etc
+        const checks = this.#checks;
+        const busses = this.#busses;
+        const {infractions, options} = this;
+        const {vm} = options;
+        if(infractions !== undefined){
+            const {getDestructArgs} = await import('../lib/getDestructArgs.js');
+            for(const infraction of infractions){
+                let name = infraction.name;
+                while(name in vm){
+                    name+= '_';
+                }
+                this.#infractionsLookup[name] = infraction;
+                const args = getDestructArgs(infraction);
+                busses[name] = new Set();
+                checks[name] = {
+                    ifKeyIn: new Set(args),
+                }
+            }
+        }
     }
 
     async hydrate(keysToPropagate: Set<string>){
@@ -263,9 +288,9 @@ export class RoundAbout{
     }
 
     async #doKey(key: string, vm: any, keysToPropagate: Set<string>){
-        const method = vm[key];
+        const method = vm[key] || this.#infractionsLookup[key];
         const isAsync = method.constructor.name === 'AsyncFunction';
-        const ret = isAsync ? await vm[key](vm) : vm[key](vm);
+        const ret = isAsync ? await method(vm) : method(vm);
         if(this.#compact){
             this.#compact.covertAssignment(ret, vm as RoundaboutReady, keysToPropagate, this.#busses);
         }

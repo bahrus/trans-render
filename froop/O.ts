@@ -38,7 +38,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     async #mount(){
         
         const config = (<any>this.constructor).config as OConfig;
-        const {actions, compacts, onsets} = config;
+        const {actions, compacts, onsets, infractions} = config;
         if(actions !== undefined){
             const {roundabout} = await import('./roundabout.js');
             await roundabout({
@@ -47,7 +47,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                 actions,
                 compacts,
                 onsets
-            });
+            }, infractions);
         }
         
     }
