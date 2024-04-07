@@ -2,7 +2,7 @@ export class CustStSvc {
     states;
     vm;
     internals;
-    #abortController = [];
+    #abortControllers = [];
     constructor(states, vm, internals) {
         this.states = states;
         this.vm = vm;
@@ -46,7 +46,7 @@ export class CustStSvc {
         }
     }
     disconnect() {
-        for (const ac of this.#abortController) {
+        for (const ac of this.#abortControllers) {
             ac.abort();
         }
     }

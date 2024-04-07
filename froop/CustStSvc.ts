@@ -1,7 +1,7 @@
 import { ICustomState, PropLookup, RoundaboutReady } from "./types";
 
 export class CustStSvc{
-    #abortController: Array<AbortController> = [];
+    #abortControllers: Array<AbortController> = [];
     constructor(public states: PropLookup, public vm: RoundaboutReady, public internals: ElementInternals){
         this.#do();
     }
@@ -43,7 +43,7 @@ export class CustStSvc{
     }
 
     disconnect(){
-        for(const ac of this.#abortController){
+        for(const ac of this.#abortControllers){
             ac.abort();
         }
     }

@@ -186,7 +186,7 @@ export interface ComplexCompact<TProps = any> {
 }
 export interface EchoBy<TProps = any> extends ComplexCompact{
     op: 'echo',
-    by: number | keyof TProps,
+    delay: number | keyof TProps,
 }
 
 export interface ICustomState<MCProps = any>{
