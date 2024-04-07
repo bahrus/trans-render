@@ -18,7 +18,7 @@ export class O extends HTMLElement {
         const states = this.constructor.props;
         if (Object.keys(states).length > 0) {
             const { CustStSvc } = await import('./CustStSvc.js');
-            new CustStSvc(states, this);
+            new CustStSvc(states, this, this.#internals);
         }
     }
     disconnectedCallback() {
