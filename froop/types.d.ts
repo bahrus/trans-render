@@ -322,13 +322,13 @@ export type Actions<TProps = any, TActions = TProps> =
 export type Checks<TProps = any, TActions = TProps> = 
     Partial<{[key in keyof TActions & string]: SetLogicOps<TProps>}>
 
-export type roundaboutOptions<TProps = any, TActions = TProps> = {
+export type roundaboutOptions<TProps = any, TActions = TProps, ETProps = TProps> = {
     vm?: TProps & TActions & RoundaboutReady,
     propagate?: keyof TProps & string | Array<keyof TProps & string>,
-    //propagator?: EventTarget,
     actions?: Actions<TProps,TActions>,
     compacts?: Compacts<TProps>,
     onsets?: Onsets<TProps, TActions>,
+    handlers?: Handlers<ETProps, TActions>,
     do?:  Partial<{[key in `${keyof TActions & string}_on`]: Keysh<TProps> }>
 }
 
