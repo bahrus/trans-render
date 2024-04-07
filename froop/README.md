@@ -157,9 +157,9 @@ export class MoodStone extends O implements IMoodStoneActions {
 
 So here, the compact is saying "bind the isHappy property of the custom element view model to the isNotHappy, by negating the former and setting that value to the latter.
 
-They can get considerably more complicated.
+## Wiring up EventTarget properties to other methods based on an event.
 
-One example of the kind of complexity they can handle cleanly is creating subscriptions between one property that is an eventTarget (or a weak reference to said eventTarget), and a method of the class we want to call when that eventTarget changes.  Once again, the [signals](https://github.com/proposal-signals) proposal warns us about the complexity and danger of using pub/sub (such as EventTargets).  This library sees it as a challenge that using declarative syntax can rise to, because it will be sure to do what is needed to avoid the disaster that that proposal warns us about.
+One example of the kind of complexity that roundabouts can handle cleanly is creating subscriptions between one property that is an eventTarget (or a weak reference to said eventTarget), and a method of the class we want to call when that eventTarget changes.  Once again, the [signals](https://github.com/proposal-signals) proposal warns us about the complexity and danger of using pub/sub (such as EventTargets).  This library sees it as a challenge that using declarative syntax can rise to, because it will be sure to do what is needed to avoid the disaster that that proposal warns us about.
 
 How would this look?  Let's take a look at an example:
 
@@ -222,8 +222,7 @@ export class TimeTicker extends HTMLElement implements Actions{
                 ifNoneOf: ['disabled'],
             }
         },
-        compacts: {
-            enabled_to_disabled: 'negate',
+        handlers: {
             timeEmitter_to_incTicks_on: 'value-changed'
         }
     }
