@@ -238,7 +238,8 @@ export class RoundAbout {
                 ac = new AbortController();
                 handlerControllers[full] = ac;
                 evtTarget.addEventListener(on, e => {
-                    debugger;
+                    const keysToPropage = new Set();
+                    this.#doKey(d, vm, keysToPropage, e);
                 }, { signal: ac.signal });
             }
         }
@@ -359,10 +360,10 @@ export class RoundAbout {
         }
         return true;
     }
-    async #doKey(key, vm, keysToPropagate) {
+    async #doKey(key, vm, keysToPropagate, e) {
         const method = vm[key] || this.#infractionsLookup[key];
         const isAsync = method.constructor.name === 'AsyncFunction';
-        const ret = isAsync ? await method(vm) : method(vm);
+        const ret = isAsync ? await method(vm, e) : method(vm, e);
         if (this.#compact) {
             this.#compact.covertAssignment(ret, vm, keysToPropagate, this.#busses);
         }
