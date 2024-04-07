@@ -1,5 +1,5 @@
 import {O} from '../froop/O.js';
-import { WCConfig, PropInfo, Action } from '../froop/types.js';
+import { OConfig } from '../froop/types.js';
 
 interface IMoodStoneProps{
     isHappy: boolean,
@@ -11,7 +11,7 @@ interface IMoodStoneActions{
     incAge(self: this): Partial<IMoodStoneProps>
 }
 export class MoodStone extends O implements IMoodStoneActions {
-    static override config: WCConfig<IMoodStoneProps, IMoodStoneActions> = {
+    static override config: OConfig<IMoodStoneProps, IMoodStoneActions> = {
         name: 'mood-stone',
         propDefaults:{
             age: 22,
@@ -27,6 +27,9 @@ export class MoodStone extends O implements IMoodStoneActions {
                 ro: true,
             }
         },
+        onsets:{
+            isHappy_to_incAge: 1
+        },
         actions:{
             // incAge: {
             //     ifAllOf: 'isHappy',
@@ -34,7 +37,7 @@ export class MoodStone extends O implements IMoodStoneActions {
         },
         compacts:{
             isHappy_to_isNotHappy: 'negate',
-            
+
         }
     }
     incAge({age}: this): Partial<IMoodStoneProps> {

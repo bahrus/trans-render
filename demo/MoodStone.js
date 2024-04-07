@@ -16,6 +16,9 @@ export class MoodStone extends O {
                 ro: true,
             }
         },
+        onsets: {
+            isHappy_to_incAge: 1
+        },
         actions: {
         // incAge: {
         //     ifAllOf: 'isHappy',

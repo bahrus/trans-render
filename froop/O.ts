@@ -1,4 +1,4 @@
-import {RoundaboutReady, WCConfig, BaseProps, PropInfo, PropInfoTypes, PropLookup, ICustomState} from './types';
+import {RoundaboutReady, BaseProps, PropInfo, PropInfoTypes, PropLookup, OConfig} from './types';
 //import {camelToLisp} from '../lib/camelToLisp.js';
 
 const publicPrivateStore = Symbol();
@@ -37,7 +37,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
 
     async #mount(){
         
-        const config = (<any>this.constructor).config as WCConfig;
+        const config = (<any>this.constructor).config as OConfig;
         const {actions, compacts} = config;
         if(actions !== undefined){
             const {roundabout} = await import('./roundabout.js');
@@ -146,7 +146,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         (<any>this)[propInfo.propName!] = val;
         
     }
-    static config: WCConfig | undefined;
+    static config: OConfig | undefined;
     
     static async bootUp(){
         const config = this.config!;
@@ -220,7 +220,7 @@ const defaultProp: PropInfo = {
     parse: false,
 };
 
-const baseConfig: WCConfig<BaseProps> = {
+const baseConfig: OConfig<BaseProps> = {
     propDefaults:{
         proppedUp: false,
     }

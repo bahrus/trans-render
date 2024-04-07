@@ -182,12 +182,25 @@ export interface OConfig<TProps = any, TActions = TProps, ETProps = TProps>{
     isEnh?: boolean;
     propDefaults?: Partial<{[key in keyof TProps]: TProps[key]}>;
     propInfo?: Partial<{[key in keyof TProps]: PropInfo}>;
-    derivedProps?: (keyof TProps & string)[];
+    //derivedProps?: (keyof TProps & string)[];
+    onsets?: Onsets<TProps, TActions>;
     actions?: Actions<TProps, TActions>;
     propChangeMethod?: keyof TActions;
     //style?: Partial<CSSStyleDeclaration>;
     compacts?: Compacts<TProps, TActions, ETProps>;
 }
+
+export type Onsets<TProps = any, TActions = TProps> = 
+    | Partial<{[key in `${keyof TProps & string}_to_${keyof TActions & string}` & string]: 
+        /**
+         * Call the method anytime the property is set
+         */
+        | 0 
+        /**
+         * Call the method if the property is truthy
+         */
+        | 1 
+}>
 
 export type Compacts<TProps = any, TActions = TProps, ETProps = TProps> = 
     | Partial<{[key in `${keyof TProps & string}_to_${keyof TProps & string}` & string]: Operation<TProps> }>

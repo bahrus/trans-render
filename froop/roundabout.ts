@@ -6,7 +6,8 @@ export async function roundabout<TProps = any, TActions = TProps>(
     const ra = new RoundAbout(vm, options);
     const keysToPropagate = new Set<string>();
     await ra.subscribe();
-    await ra.init(keysToPropagate);
+    await ra.init();
+    await ra.hydrate(keysToPropagate);
     await ra.checkQ(keysToPropagate);
 }
 
@@ -21,8 +22,8 @@ export class RoundAbout{
     constructor(public vm: RoundaboutReady, public options: roundaboutOptions){
         const newBusses : Busses = {}
         const checks: Checks = {};
-        this.#checks = checks;
-        this.#busses = newBusses;
+        this.#checks = {};
+        this.#busses = {};
         const {actions} = options;
         for(const key in actions){
             newBusses[key] = new Set();
@@ -39,7 +40,13 @@ export class RoundAbout{
         }
     }
 
-    async init(keysToPropagate: Set<string>){
+    async init(){
+        //do optional stuff to improve the developer experience,
+        // that involves importing references dynamically, like parsing arrow functions
+        // and 
+    }
+
+    async hydrate(keysToPropagate: Set<string>){
         const {vm, options} = this;
         const {compacts} = options;
         if(compacts !== undefined){

@@ -39,19 +39,22 @@ All the functions are side effect free and don't do any state mutation at all.  
 
 roundabout can JSON serialize one of the arguments, making parsing the instructions easier on the browser.
 
-roundabout "guesses" when the developer wants to call the functions to compute new values, if not specified, based on the lhs of the arrow expression.  But developers can take hold of the reigns, and decide for themselves:
+roundabout "guesses" when the developer wants to call the functions to compute new values, if not specified, based on the lhs of the arrow expressions.  But developers can take hold of the reigns, and be more explicit:
 
 ```JavaScript
 const [vm, propagator] = await roundabout(
     {element, checkIfEven, determineParity, setInnerText}, 
     {   
         propagate: {count: 0},
+        onset:{
+            count_to_checkIfEven: 0 //call whenever count changes
+            isEven_to_determineParity: 1 //only call if isEven is truthy
+        },
         actions:{
-            do_checkIfEven_on: 'count', do_determineParity_on: 'isEven',
             setInnerText: {
                 ifAllOf: ['count', 'isEven', 'parity']
             }
-        }
+        },
         
     }
 );
@@ -71,7 +74,7 @@ No pub/sub required!
 
 No creation of getters/setters required (other than count)!
 
-Basically, what round about does is it looks at what subset of properties of the view model is returned from the action methods (checkIfEven, determineParity, setInnerText), and directs traffic accordingly after doing an Object.assignGingerly.
+Basically, what roundabout does is it looks at what subset of properties of the view model is returned from the action methods (checkIfEven, determineParity, setInnerText), and directs traffic accordingly after doing an Object.assignGingerly.
 
 propagator is an EventTarget, that publishes events when the propagate properties are changed (just count).
 
@@ -156,7 +159,7 @@ So here, the compact is saying "bind the isHappy property of the custom element 
 
 They can get considerably more complicated.
 
-One example of the kind of complexity they can handle cleanly is creating subscriptions between one property that is an eventTarget, and a method of the class we want to call when that eventTarget changes.  Once again, the [signals](https://github.com/proposal-signals) proposal warns us about the complexity and danger of using pub/sub (such as EventTargets).  This library sees it as a challenge that using declarative syntax can rise to, because it will be sure to do what is needed to avoid the disaster that that proposal warns us about.
+One example of the kind of complexity they can handle cleanly is creating subscriptions between one property that is an eventTarget (or a weak reference to said eventTarget), and a method of the class we want to call when that eventTarget changes.  Once again, the [signals](https://github.com/proposal-signals) proposal warns us about the complexity and danger of using pub/sub (such as EventTargets).  This library sees it as a challenge that using declarative syntax can rise to, because it will be sure to do what is needed to avoid the disaster that that proposal warns us about.
 
 How would this look?  Let's take a look at an example:
 
@@ -238,10 +241,6 @@ export class TimeTicker extends HTMLElement implements Actions{
             ticks: wait ? ticks : ticks + 1,
             timeEmitter
         } 
-            {
-                incTicks: {on: 'value-changed', of: timeEmitter}
-            }
-        ] as PPE;
     }
 
     incTicks({ticks}: this){
