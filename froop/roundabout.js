@@ -24,7 +24,7 @@ export class RoundAbout {
         const checks = {};
         this.#checks = {};
         this.#busses = {};
-        const { actions } = options;
+        const { actions, } = options;
         for (const key in actions) {
             newBusses[key] = new Set();
             const val = actions[key];
@@ -48,7 +48,7 @@ export class RoundAbout {
     async init() {
         //do optional stuff to improve the developer experience,
         // that involves importing references dynamically, like parsing arrow functions
-        // and 
+        // create propagator, etc
     }
     async hydrate(keysToPropagate) {
         const { vm, options } = this;
