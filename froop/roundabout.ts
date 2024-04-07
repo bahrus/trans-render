@@ -22,9 +22,9 @@ export class RoundAbout{
     constructor(public vm: RoundaboutReady, public options: roundaboutOptions){
         const newBusses : Busses = {}
         const checks: Checks = {};
-        this.#checks = {};
-        this.#busses = {};
-        const {actions, onset} = options;
+        this.#checks = checks;
+        this.#busses = newBusses;
+        const {actions, onsets} = options;
         for(const key in actions){
             newBusses[key] = new Set();
             const val = actions[key];
@@ -38,23 +38,26 @@ export class RoundAbout{
             if(ifKeyIn) check.ifKeyIn = this.#toSet(ifKeyIn);
             checks[key] = check;
         }
-        for(const onsetKey in onset){
-            const split = onsetKey.split('_on_');
-            const val = (<any>onset)[onsetKey] as 0 | 1;
-            const [lhs, rhs] = split;
-            if(checks[lhs] !== undefined){
+        for(const onsetKey in onsets){
+            const split = onsetKey.split('_to_');
+            const val = (<any>onsets)[onsetKey] as 0 | 1;
+            const [prop, action] = split;
+            if(checks[action] !== undefined){
                 //need to put in the right bucket
                 throw 'NI'
             }else{
                 const check: SetLogicOps = {};
+                const s = new Set([prop]);
                 switch(val){
                     case 0:
-                        check.ifEquals = new Set([rhs]);
+                        check.ifEquals = s;
                         break;
                     case 1:
-                        check.ifAllOf = new Set([rhs]);
+                        check.ifAllOf = s;
                         break;
                 }
+                newBusses[action] = new Set();
+                checks[action] = check;
             }
 
         }

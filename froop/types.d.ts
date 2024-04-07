@@ -318,7 +318,7 @@ export type roundaboutOptions<TProps = any, TActions = TProps> = {
     //propagator?: EventTarget,
     actions?: Actions<TProps,TActions>,
     compacts?: Compacts<TProps>,
-    onset?: Onsets<TProps, TActions>,
+    onsets?: Onsets<TProps, TActions>,
     do?:  Partial<{[key in `${keyof TActions & string}_on`]: Keysh<TProps> }>
 }
 

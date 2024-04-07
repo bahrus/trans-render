@@ -19,7 +19,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         const props = (<any>this.constructor).props as PropLookup;
         this.#propUp(props);
         await this.#mount();
-        const states = (<any>this.constructor).props as PropLookup;
+        const states = (<any>this.constructor).states as PropLookup;
         if(Object.keys(states).length > 0){
             const {CustStSvc} = await import('./CustStSvc.js');
             new CustStSvc(states, this, this.#internals);
@@ -38,13 +38,14 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     async #mount(){
         
         const config = (<any>this.constructor).config as OConfig;
-        const {actions, compacts} = config;
+        const {actions, compacts, onsets} = config;
         if(actions !== undefined){
             const {roundabout} = await import('./roundabout.js');
             await roundabout(this, {
                 //propagator: this.propagator,
                 actions,
-                compacts
+                compacts,
+                onsets
             });
         }
         
