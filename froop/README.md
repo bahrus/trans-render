@@ -43,9 +43,9 @@ roundabout "guesses" when the developer wants to call the functions to compute n
 
 ```JavaScript
 const [vm, propagator] = await roundabout(
-    {element, checkIfEven, determineParity, setInnerText}, 
     {   
-        propagate: {count: 0},
+        vm: {element, checkIfEven, determineParity, setInnerText},
+        propagator,
         onset:{
             count_to_checkIfEven: 0, //call whenever count changes
             isEven_to_determineParity: 1 //only call if isEven is truthy
