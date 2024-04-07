@@ -135,13 +135,8 @@ export class RoundAbout {
         }
         const routers = this.#routers;
         for (const routerKey in routers) {
-            const router = routers[routerKey];
-            const evtTarget = vm[routerKey];
-            debugger;
-            for (const route of router) {
-                const { do: d, full, on } = route;
-                console.log({ evtTarget, d, full, on });
-            }
+            // 
+            this.#wireUpRouter(routerKey);
         }
     }
     async checkQ(keysToPropagate) {
@@ -218,13 +213,34 @@ export class RoundAbout {
             }, { signal });
         }
         const routers = this.#routers;
-        const handlerControllers = this.#handlerControllers;
         for (const routerKey in routers) {
             const ac = new AbortController();
-            handlerControllers[routerKey] = ac;
+            controllers.push(ac);
             propagator.addEventListener(routerKey, e => {
-                debugger;
+                //const evtTarget = vm[routerKey];
+                this.#wireUpRouter(routerKey);
             }, { signal: ac.signal });
+        }
+    }
+    #wireUpRouter(routerKey) {
+        const routers = this.#routers;
+        const handlerControllers = this.#handlerControllers;
+        const { options } = this;
+        const { vm } = options;
+        const router = routers[routerKey];
+        for (const route of router) {
+            const { do: d, full, on } = route;
+            let ac = handlerControllers[full];
+            if (ac !== undefined)
+                ac.abort();
+            const evtTarget = vm[routerKey];
+            if (evtTarget instanceof EventTarget) {
+                ac = new AbortController();
+                handlerControllers[full] = ac;
+                evtTarget.addEventListener(on, e => {
+                    debugger;
+                }, { signal: ac.signal });
+            }
         }
     }
     async #unsubscribe() {
