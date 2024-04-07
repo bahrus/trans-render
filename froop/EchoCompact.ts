@@ -10,7 +10,7 @@ export class EchoCompact{
         const {propagator} = vm;
         if(!(propagator instanceof EventTarget)) return;
         propagator.addEventListener('unload', e => {
-            this.disconnect();
+            this.#disconnect();
         }, {once: true});
         propagator.addEventListener(srcProp, e => {
             this.#doEcho();
@@ -28,7 +28,7 @@ export class EchoCompact{
         }, echoDelayNum);
     }
 
-    disconnect(){
+    #disconnect(){
         this.#abortController.abort();
     }
 }
