@@ -186,6 +186,7 @@ export interface OConfig<TProps = any, TActions = TProps, ETProps = TProps>{
     onsets?: Onsets<TProps, TActions>;
     actions?: Actions<TProps, TActions>;
     propChangeMethod?: keyof TActions;
+    infractions?: Infractions<TProps>,
     //style?: Partial<CSSStyleDeclaration>;
     compacts?: Compacts<TProps, TActions, ETProps>;
 }

@@ -24,7 +24,7 @@ export class RoundAbout{
         const checks: Checks = {};
         this.#checks = {};
         this.#busses = {};
-        const {actions, } = options;
+        const {actions, onset} = options;
         for(const key in actions){
             newBusses[key] = new Set();
             const val = actions[key];
@@ -37,6 +37,26 @@ export class RoundAbout{
             if(ifNoneOf) check.ifNoneOf = this.#toSet(ifNoneOf);
             if(ifKeyIn) check.ifKeyIn = this.#toSet(ifKeyIn);
             checks[key] = check;
+        }
+        for(const onsetKey in onset){
+            const split = onsetKey.split('_on_');
+            const val = (<any>onset)[onsetKey] as 0 | 1;
+            const [lhs, rhs] = split;
+            if(checks[lhs] !== undefined){
+                //need to put in the right bucket
+                throw 'NI'
+            }else{
+                const check: SetLogicOps = {};
+                switch(val){
+                    case 0:
+                        check.ifEquals = new Set([rhs]);
+                        break;
+                    case 1:
+                        check.ifAllOf = new Set([rhs]);
+                        break;
+                }
+            }
+
         }
     }
 
