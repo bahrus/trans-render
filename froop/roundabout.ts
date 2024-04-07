@@ -2,8 +2,8 @@ import { none } from './none';
 import {roundaboutOptions, RoundaboutReady, Busses, SetLogicOps, Checks, Keysh, ICompact} from './types';
 
 export async function roundabout<TProps = any, TActions = TProps>(
-    vm: TProps & TActions & RoundaboutReady, options: roundaboutOptions<TProps, TActions>){
-    const ra = new RoundAbout(vm, options);
+    options: roundaboutOptions<TProps, TActions>){
+    const ra = new RoundAbout(options);
     const keysToPropagate = new Set<string>();
     await ra.subscribe();
     await ra.init();
@@ -19,7 +19,7 @@ export class RoundAbout{
         if(Array.isArray(k)) return new Set(k);
         return new Set([k]);
     }
-    constructor(public vm: RoundaboutReady, public options: roundaboutOptions){
+    constructor(public options: roundaboutOptions){
         const newBusses : Busses = {}
         const checks: Checks = {};
         this.#checks = checks;
@@ -70,8 +70,8 @@ export class RoundAbout{
     }
 
     async hydrate(keysToPropagate: Set<string>){
-        const {vm, options} = this;
-        const {compacts} = options;
+        const {options} = this;
+        const {compacts, vm} = options;
         if(compacts !== undefined){
             const {Compact} = await import('./Compact.js');
             this.#compact = new Compact(compacts, vm);
@@ -90,7 +90,8 @@ export class RoundAbout{
     async checkQ(keysToPropagate: Set<string>){
         const busses = this.#busses;
         const checks = this.#checks;
-        const {vm} = this;
+        const {options} = this;
+        const {vm} = options;
         let didNothing = true;
         for(const busKey in busses){
             const bus = busses[busKey];
@@ -119,7 +120,8 @@ export class RoundAbout{
     }
 
     #propagate(keysToPropagate: Set<string>){
-        const {vm} = this;
+        const {options} = this;
+        const {vm} = options;
         const propagator = vm.propagator;
         if(propagator instanceof EventTarget){
             for(const key of keysToPropagate){
@@ -132,7 +134,8 @@ export class RoundAbout{
     #controllers : Array<AbortController> = [];
     #extEvtCount = 0;
     async subscribe(){
-        const {vm} = this;
+        const {options} = this;
+        const {vm} = options;
         const {propagator} = vm;
         if(!(propagator instanceof EventTarget)) return;
         propagator.addEventListener('unload', e => {
@@ -167,7 +170,8 @@ export class RoundAbout{
     async handleEvent(key: string, evtCount: number){
         let compactKeysToPropagate: Set<string> | undefined;
         if(this.#compact){
-            const {vm} = this;
+            const {options} = this;
+            const {vm} = options;
             const compactKeysToPropagate = new Set<string>();
             this.#compact.covertAssignment({[key]: (<any>vm)[key]}, vm, compactKeysToPropagate, this.#busses);
         }
@@ -211,7 +215,8 @@ export class RoundAbout{
 
     async #doChecks(check: SetLogicOps, initCheck: boolean){
         const {ifAllOf, ifKeyIn, ifAtLeastOneOf, ifEquals, ifNoneOf} = check;
-        const {vm} = this;
+        const {options} = this;
+        const {vm} = options;
         if(ifAllOf !== undefined){
             for(const prop of ifAllOf){
                 if(!(vm as any)[prop]) return false;

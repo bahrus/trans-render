@@ -32,8 +32,9 @@ export class O extends HTMLElement {
         const { actions, compacts, onsets } = config;
         if (actions !== undefined) {
             const { roundabout } = await import('./roundabout.js');
-            await roundabout(this, {
+            await roundabout({
                 //propagator: this.propagator,
+                vm: this,
                 actions,
                 compacts,
                 onsets

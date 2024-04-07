@@ -41,8 +41,9 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         const {actions, compacts, onsets} = config;
         if(actions !== undefined){
             const {roundabout} = await import('./roundabout.js');
-            await roundabout(this, {
+            await roundabout({
                 //propagator: this.propagator,
+                vm: this,
                 actions,
                 compacts,
                 onsets
