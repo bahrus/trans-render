@@ -26,7 +26,6 @@ const checkIfEven = ({counter}) => ({isEven: counter & 1 === 0});
 const determineParity = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
 const setInnerText = ({parity}) => ({'?.element?.innerText': parity};
 const [vm, propagator] = await roundabout(
-    { element }, 
     { propagate: {count: 0} }
     [ checkIfEven, determineParity, setInnerText ],
 );
@@ -34,11 +33,11 @@ const [vm, propagator] = await roundabout(
 setInterval(() => vm.count++, 1000);
 ```
 
-Same number of statements.
+Same number of statements.  Most statements, where the developer spends more eyeball time, are smaller, easy to test.  One statement is admittedly larger.
 
 All the functions are side effect free and don't do any state mutation at all.  Purely functional.
 
-roundabout can JSON serialize one of the arguments, making parsing the instructions easier on the browser.
+roundabout can JSON serialize much of the arguments, making parsing the instructions easier on the browser.
 
 roundabout "guesses" when the developer wants to call the functions to compute new values, if not specified, based on the lhs of the arrow expressions.  But developers can take hold of the reigns, and be more explicit:
 
@@ -48,7 +47,7 @@ const [vm, propagator] = await roundabout(
     {   
         propagate: {count: 0},
         onset:{
-            count_to_checkIfEven: 0 //call whenever count changes
+            count_to_checkIfEven: 0, //call whenever count changes
             isEven_to_determineParity: 1 //only call if isEven is truthy
         },
         actions:{
