@@ -158,7 +158,7 @@ export interface DefineArgs<MixinCompositeProps = any, MixinCompositeActions = M
     // asides?: Partial<{[key in keyof MixinCompositeActions & string]: (instance: EventTarget, methodName: string, key: string) => Promise<void> }>
 }
 
-export interface WCConfig<TProps = any, MCActions = TProps, TPropInfo = PropInfo, TAction = Action>{
+export interface WCConfig<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction = Action>{
     name?: string;
     isEnh?: boolean;
     propDefaults?: Partial<{[key in keyof TProps]: TProps[key]}>;
@@ -166,18 +166,20 @@ export interface WCConfig<TProps = any, MCActions = TProps, TPropInfo = PropInfo
     derivedProps?: (keyof TProps & string)[];
     // actions?: 
     //     Partial<{[key in keyof MCActions & string]: TAction | keyof MCProps}> 
-    actions?: Actions<TProps, MCActions>;
-    propChangeMethod?: keyof MCActions;
+    actions?: Actions<TProps, TActions>;
+    propChangeMethod?: keyof TActions;
     style?: Partial<CSSStyleDeclaration>;
     /**
      * Used for providing hints to server side processing what css queries should be observed if using HTMLRewriter.
      */
     keyQueries?: string[];
     formAss?: boolean;
-    compacts?: Compacts<TProps>;
+    compacts?: Compacts<TProps, TActions>;
 }
 
-export type Compacts<TProps = any> = Partial<{[key in `${keyof TProps & string}_to_${keyof TProps & string}` & string]: Operation<TProps> }>
+export type Compacts<TProps = any, TActions = TProps> = 
+    | Partial<{[key in `${keyof TProps & string}_to_${keyof TProps & string}` & string]: Operation<TProps> }>
+    | Partial<{[key in `${keyof TProps & string}_to_${keyof TActions & string}_on` & string]: string }>
 
 export type op = 'length' | 'inc' | 'negate' | 'toggle' | 'echo' | 'toLocale' | 'dec';
 

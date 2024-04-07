@@ -22,7 +22,7 @@ export class MoodStone extends O {
             }
         },
         compacts: {
-            isHappy_to_isNotHappy: 'negate'
+            isHappy_to_isNotHappy: 'negate',
         }
     };
     incAge({ age }) {

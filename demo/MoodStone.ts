@@ -33,7 +33,8 @@ export class MoodStone extends O implements IMoodStoneActions {
             }
         },
         compacts:{
-            isHappy_to_isNotHappy: 'negate'
+            isHappy_to_isNotHappy: 'negate',
+            
         }
     }
     incAge({age}: this): Partial<IMoodStoneProps> {
