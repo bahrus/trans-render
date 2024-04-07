@@ -99,19 +99,19 @@ export class Compact implements ICompact{
                     }
                     break;
                 case 'object': {
-                    this.#doComplexCompact(rhs, vm);
+                    this.#doComplexCompact(rhs, vm, src, dest);
                 }
             }
         }
     }
-    async #doComplexCompact(compact: ComplexCompact, vm: RoundaboutReady){
+    async #doComplexCompact(compact: ComplexCompact, vm: RoundaboutReady, src: string, dest: string){
         const {op} = compact;
         switch(op){
             case 'echo':
                 const {EchoCompact} = await import('./EchoCompact.js');
                 //TODO work out aborting the listeners on disconnect
                 //propagator needs a dispose event
-                const echoCompact = new EchoCompact(compact as EchoBy, vm);
+                const echoCompact = new EchoCompact(src, dest, compact as EchoBy, vm);
         }
     }
     async covertAssignment(obj: any, vm: RoundaboutReady, keysToPropagate: Set<string>, busses: Busses) {
