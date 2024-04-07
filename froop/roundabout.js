@@ -233,7 +233,10 @@ export class RoundAbout {
             let ac = handlerControllers[full];
             if (ac !== undefined)
                 ac.abort();
-            const evtTarget = vm[routerKey];
+            let evtTarget = vm[routerKey];
+            if (evtTarget instanceof WeakRef) {
+                evtTarget = evtTarget.deref();
+            }
             if (evtTarget instanceof EventTarget) {
                 ac = new AbortController();
                 handlerControllers[full] = ac;
