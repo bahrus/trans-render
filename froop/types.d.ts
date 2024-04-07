@@ -174,10 +174,13 @@ export interface WCConfig<TProps = any, TActions = TProps, TPropInfo = PropInfo,
      */
     keyQueries?: string[];
     formAss?: boolean;
-    compacts?: Compacts<TProps, TActions>;
+    compacts?: Compacts<TProps>;
 }
 
 export interface OConfig<TProps = any, TActions = TProps, ETProps = TProps>{
+    /**
+     * canonical name
+     */
     name?: string;
     isEnh?: boolean;
     propDefaults?: Partial<{[key in keyof TProps]: TProps[key]}>;
@@ -191,7 +194,8 @@ export interface OConfig<TProps = any, TActions = TProps, ETProps = TProps>{
      */
     infractions?: Infractions<TProps>,
     //style?: Partial<CSSStyleDeclaration>;
-    compacts?: Compacts<TProps, TActions, ETProps>;
+    compacts?: Compacts<TProps>;
+    handlers?: Handlers<ETProps, TActions>
 }
 
 export type Onsets<TProps = any, TActions = TProps> = 
@@ -206,8 +210,10 @@ export type Onsets<TProps = any, TActions = TProps> =
         | 1 
 }>
 
-export type Compacts<TProps = any, TActions = TProps, ETProps = TProps> = 
+export type Compacts<TProps = any> = 
     | Partial<{[key in `${keyof TProps & string}_to_${keyof TProps & string}` & string]: Operation<TProps> }>
+
+export type Handlers<ETProps = any, TActions = ETProps> = 
     | Partial<{[key in `${keyof ETProps & string}_to_${keyof TActions & string}_on` & string]: string }>
 
 export type op = 'length' | 'inc' | 'negate' | 'toggle' | 'echo' | 'toLocale' | 'dec';

@@ -8,13 +8,18 @@ interface IMoodStoneProps{
     agePlus10: number,
 }
 
+interface IMoodStoneETs{
+    myInput: HTMLInputElement
+}
+
 interface IMoodStoneActions{
     incAge(self: this): Partial<IMoodStoneProps>
+    handleInput(self: this, e: Event): Partial<IMoodStoneProps>
 }
 const calcAgePlus10: PropsToPartialProps<IMoodStoneProps> = ({age}: IMoodStoneProps) => ({agePlus10: age + 10});
 
 export class MoodStone extends O implements IMoodStoneActions {
-    static override config: OConfig<IMoodStoneProps, IMoodStoneActions> = {
+    static override config: OConfig<IMoodStoneProps & IMoodStoneETs, IMoodStoneActions, IMoodStoneETs> = {
         name: 'mood-stone',
         propDefaults:{
             age: 22,
@@ -32,6 +37,9 @@ export class MoodStone extends O implements IMoodStoneActions {
             agePlus10: {
                 type: 'Number',
                 ro: true,
+            },
+            myInput: {
+                type: 'Object'
             }
         },
         onsets:{
@@ -45,13 +53,20 @@ export class MoodStone extends O implements IMoodStoneActions {
         },
         compacts:{
             isHappy_to_isNotHappy: 'negate',
-
+        },
+        handlers: {
+            myInput_to_handleInput_on: 'change'
         }
     }
     incAge({age}: this): Partial<IMoodStoneProps> {
         return {
             age: age + 1
         } as Partial<IMoodStoneProps>
+    }
+    handleInput({age}: this, {target}: Event): Partial<IMoodStoneProps> {
+        return {
+            age: age + (target as HTMLInputElement).value.length
+        }
     }
 }
 

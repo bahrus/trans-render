@@ -19,6 +19,9 @@ export class MoodStone extends O {
             agePlus10: {
                 type: 'Number',
                 ro: true,
+            },
+            myInput: {
+                type: 'Object'
             }
         },
         onsets: {
@@ -32,11 +35,19 @@ export class MoodStone extends O {
         },
         compacts: {
             isHappy_to_isNotHappy: 'negate',
+        },
+        handlers: {
+            myInput_to_handleInput_on: 'change'
         }
     };
     incAge({ age }) {
         return {
             age: age + 1
+        };
+    }
+    handleInput({ age }, { target }) {
+        return {
+            age: age + target.value.length
         };
     }
 }
