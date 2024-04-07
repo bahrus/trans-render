@@ -17,9 +17,9 @@ export class MoodStone extends O {
             }
         },
         actions: {
-            incAge: {
-                ifAllOf: 'isHappy',
-            }
+        // incAge: {
+        //     ifAllOf: 'isHappy',
+        // }
         },
         compacts: {
             isHappy_to_isNotHappy: 'negate',

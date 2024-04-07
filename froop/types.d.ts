@@ -177,9 +177,21 @@ export interface WCConfig<TProps = any, TActions = TProps, TPropInfo = PropInfo,
     compacts?: Compacts<TProps, TActions>;
 }
 
-export type Compacts<TProps = any, TActions = TProps> = 
+export interface OConfig<TProps = any, TActions = TProps, ETProps = TProps>{
+    name?: string;
+    isEnh?: boolean;
+    propDefaults?: Partial<{[key in keyof TProps]: TProps[key]}>;
+    propInfo?: Partial<{[key in keyof TProps]: PropInfo}>;
+    derivedProps?: (keyof TProps & string)[];
+    actions?: Actions<TProps, TActions>;
+    propChangeMethod?: keyof TActions;
+    //style?: Partial<CSSStyleDeclaration>;
+    compacts?: Compacts<TProps, TActions, ETProps>;
+}
+
+export type Compacts<TProps = any, TActions = TProps, ETProps = TProps> = 
     | Partial<{[key in `${keyof TProps & string}_to_${keyof TProps & string}` & string]: Operation<TProps> }>
-    | Partial<{[key in `${keyof TProps & string}_to_${keyof TActions & string}_on` & string]: string }>
+    | Partial<{[key in `${keyof ETProps & string}_to_${keyof TActions & string}_on` & string]: string }>
 
 export type op = 'length' | 'inc' | 'negate' | 'toggle' | 'echo' | 'toLocale' | 'dec';
 
