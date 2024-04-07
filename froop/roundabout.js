@@ -15,6 +15,7 @@ export class RoundAbout {
     #busses;
     #compact;
     #infractionsLookup = {};
+    #handlerControllers = {};
     #toSet(k) {
         if (Array.isArray(k))
             return new Set(k);
@@ -189,6 +190,11 @@ export class RoundAbout {
     async #unsubscribe() {
         for (const ac of this.#controllers) {
             ac.abort();
+        }
+        const handlerControllers = this.#handlerControllers;
+        for (const handlerKey in handlerControllers) {
+            const controller = handlerControllers[handlerKey];
+            controller.abort();
         }
     }
     async handleEvent(key, evtCount) {

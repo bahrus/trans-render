@@ -21,6 +21,7 @@ export class RoundAbout{
     #busses: Busses;
     #compact?: ICompact;
     #infractionsLookup: {[key: string]: PropsToPartialProps} = {};
+    #handlerControllers: {[key: string]: AbortController} = {};
     #toSet(k: Keysh){
         if(Array.isArray(k)) return new Set(k);
         return new Set([k]);
@@ -189,6 +190,11 @@ export class RoundAbout{
     async #unsubscribe(){
         for(const ac of this.#controllers){
             ac.abort();
+        }
+        const handlerControllers = this.#handlerControllers;
+        for(const handlerKey in handlerControllers){
+            const controller = handlerControllers[handlerKey];
+            controller.abort();
         }
     }
 
