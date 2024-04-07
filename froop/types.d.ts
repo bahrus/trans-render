@@ -344,6 +344,12 @@ export type Infractions<TProps = any> =
 
 export type Busses = {[key: string]: Set<string>};
 
+export type Routers = {[key: string]: Array<{
+    on: string,
+    do: string,
+    full: string,
+}>}
+
 export type Key<T = any> = keyof T & string;
 
 export type Keysh<T = any> = Key<T> | Array<Key<T>>;

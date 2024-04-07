@@ -14,6 +14,7 @@ export class RoundAbout {
     #checks;
     #busses;
     #compact;
+    #routers;
     #infractionsLookup = {};
     #handlerControllers = {};
     #toSet(k) {
@@ -25,10 +26,12 @@ export class RoundAbout {
         this.options = options;
         this.infractions = infractions;
         const newBusses = {};
+        const routers = {};
         const checks = {};
         this.#checks = checks;
         this.#busses = newBusses;
-        const { actions, onsets } = options;
+        this.#routers = routers;
+        const { actions, onsets, handlers } = options;
         for (const key in actions) {
             newBusses[key] = new Set();
             const val = actions[key];
@@ -69,6 +72,24 @@ export class RoundAbout {
                 }
                 newBusses[action] = new Set();
                 checks[action] = check;
+            }
+        }
+        if (handlers !== undefined) {
+            for (const handlerKey in handlers) {
+                const on = handlers[handlerKey];
+                const split = handlerKey.split('_to_');
+                const [prop, action_on] = split;
+                let router = this.#routers[prop];
+                if (router === undefined) {
+                    router = [];
+                    this.#routers[prop] = router;
+                }
+                const newRouter = {
+                    full: handlerKey,
+                    on,
+                    do: action_on.substring(0, action_on.length - 3)
+                };
+                router.push(newRouter);
             }
         }
     }

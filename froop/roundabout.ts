@@ -1,5 +1,5 @@
 import { none } from './none';
-import {roundaboutOptions, RoundaboutReady, Busses, SetLogicOps, Checks, Keysh, ICompact, Infractions, PropsToPartialProps} from './types';
+import {roundaboutOptions, RoundaboutReady, Busses, SetLogicOps, Checks, Keysh, ICompact, Infractions, PropsToPartialProps, Routers} from './types';
 
 export async function roundabout<TProps = any, TActions = TProps>(
     options: roundaboutOptions<TProps, TActions>,
@@ -20,6 +20,7 @@ export class RoundAbout{
     #checks: Checks;
     #busses: Busses;
     #compact?: ICompact;
+    #routers: Routers;
     #infractionsLookup: {[key: string]: PropsToPartialProps} = {};
     #handlerControllers: {[key: string]: AbortController} = {};
     #toSet(k: Keysh){
@@ -27,11 +28,13 @@ export class RoundAbout{
         return new Set([k]);
     }
     constructor(public options: roundaboutOptions, public infractions?: Infractions){
-        const newBusses : Busses = {}
+        const newBusses : Busses = {};
+        const routers: Routers = {};
         const checks: Checks = {};
         this.#checks = checks;
         this.#busses = newBusses;
-        const {actions, onsets} = options;
+        this.#routers = routers;
+        const {actions, onsets, handlers} = options;
         for(const key in actions){
             newBusses[key] = new Set();
             const val = actions[key];
@@ -67,6 +70,24 @@ export class RoundAbout{
                 checks[action] = check;
             }
 
+        }
+        if(handlers !== undefined){
+            for(const handlerKey in handlers){
+                const on = (<any>handlers)[handlerKey] as string;
+                const split = handlerKey.split('_to_');
+                const [prop, action_on] = split;
+                let router = this.#routers[prop];
+                if(router === undefined) {
+                    router = [];
+                    this.#routers[prop] = router;
+                }
+                const newRouter = {
+                    full: handlerKey,
+                    on,
+                    do: action_on.substring(0, action_on.length - 3)
+                };
+                router.push(newRouter);
+            }
         }
     }
 
