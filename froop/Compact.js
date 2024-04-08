@@ -53,7 +53,8 @@ export class Compact {
                                             return {
                                                 [dest]: -destVal,
                                             };
-                                        case 'boolean':
+                                        //case 'boolean':
+                                        default:
                                             return {
                                                 [dest]: !destVal
                                             };

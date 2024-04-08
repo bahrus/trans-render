@@ -9,6 +9,7 @@ interface IMoodStoneProps{
     data: Array<number>,
     dataLength: number,
     echoLength: number,
+    ageChangedToggle: boolean, 
 }
 
 interface IMoodStoneETs{
@@ -52,6 +53,10 @@ export class MoodStone extends O implements IMoodStoneActions {
             echoLength:  {
                 type: 'Number',
                 ro: true,
+            },
+            ageChangedToggle: {
+                type: 'Boolean',
+                ro: true,
             }
         },
         onsets:{
@@ -67,6 +72,7 @@ export class MoodStone extends O implements IMoodStoneActions {
             isHappy_to_isNotHappy: 'negate',
             data_to_dataLength: 'length',
             dataLength_to_echoLength: 'echo',
+            age_to_ageChangedToggle: 'toggle',
         },
         handlers: {
             myInput_to_handleInput_on: 'change'

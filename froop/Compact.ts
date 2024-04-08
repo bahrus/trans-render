@@ -53,7 +53,8 @@ export class Compact implements ICompact{
                                             return {
                                                 [dest]: -destVal,
                                             }
-                                        case 'boolean':
+                                        //case 'boolean':
+                                        default:
                                             return {
                                                 [dest]: !destVal
                                             }
