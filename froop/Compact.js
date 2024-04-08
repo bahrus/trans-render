@@ -116,7 +116,9 @@ export class Compact {
             if (vmKey in compactions) {
                 const compaction = compactions[vmKey];
                 const result = compaction.fn(obj);
+                //console.log({result});
                 vm.covertAssignment(result);
+                await this.covertAssignment(result, vm, keysToPropagate, busses);
                 for (const resultKey in result) {
                     keysToPropagate.add(resultKey);
                     for (const busKey in busses) {

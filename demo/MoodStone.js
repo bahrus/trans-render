@@ -27,6 +27,10 @@ export class MoodStone extends O {
             dataLength: {
                 type: 'Number',
                 ro: true,
+            },
+            echoLength: {
+                type: 'Number',
+                ro: true,
             }
         },
         onsets: {
@@ -41,6 +45,7 @@ export class MoodStone extends O {
         compacts: {
             isHappy_to_isNotHappy: 'negate',
             data_to_dataLength: 'length',
+            dataLength_to_echoLength: 'echo',
         },
         handlers: {
             myInput_to_handleInput_on: 'change'

@@ -8,6 +8,7 @@ interface IMoodStoneProps{
     agePlus10: number,
     data: Array<number>,
     dataLength: number,
+    echoLength: number,
 }
 
 interface IMoodStoneETs{
@@ -47,6 +48,10 @@ export class MoodStone extends O implements IMoodStoneActions {
             dataLength: {
                 type: 'Number',
                 ro: true,
+            },
+            echoLength:  {
+                type: 'Number',
+                ro: true,
             }
         },
         onsets:{
@@ -61,6 +66,7 @@ export class MoodStone extends O implements IMoodStoneActions {
         compacts:{
             isHappy_to_isNotHappy: 'negate',
             data_to_dataLength: 'length',
+            dataLength_to_echoLength: 'echo',
         },
         handlers: {
             myInput_to_handleInput_on: 'change'
