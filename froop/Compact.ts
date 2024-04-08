@@ -45,6 +45,13 @@ export class Compact implements ICompact{
 
                             }
                             break;
+                        case 'dec':
+                            compactions[src] = {
+                                fn: vm => ({
+                                    [dest]: (vm[dest] || 0) - 1
+                                })
+                            }
+                            break;
                         case 'toggle':
                             compactions[src] = {
                                 fn: vm => {
@@ -65,13 +72,7 @@ export class Compact implements ICompact{
                                 }
                             }
                             break;
-                        case 'dec':
-                            compactions[src] = {
-                                fn: vm => ({
-                                    [dest]: vm[src] - 1
-                                })
-                            }
-                            break;
+
                         case 'length':
                             compactions[src] = {
                                 fn: vm => ({
@@ -84,7 +85,9 @@ export class Compact implements ICompact{
                                 fn: vm => {
                                     const srcVal = vm[src];
                                     if(srcVal instanceof Date){
-                                        return srcVal.toLocaleDateString()
+                                        return {
+                                            [dest]: srcVal.toLocaleDateString()
+                                        }
                                     }
                                     switch(typeof srcVal){
                                         case 'bigint':
