@@ -23,6 +23,10 @@ export class MoodStone extends O {
             },
             myInput: {
                 type: 'Object'
+            },
+            dataLength: {
+                type: 'Number',
+                ro: true,
             }
         },
         onsets: {

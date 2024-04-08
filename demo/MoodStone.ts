@@ -43,6 +43,10 @@ export class MoodStone extends O implements IMoodStoneActions {
             },
             myInput: {
                 type: 'Object'
+            },
+            dataLength: {
+                type: 'Number',
+                ro: true,
             }
         },
         onsets:{
