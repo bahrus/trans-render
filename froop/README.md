@@ -118,7 +118,7 @@ Being designed to reduce its carbon footprint, roundabouts has first-class suppo
 
 compacts is a portmanteau of computed actions, and the fully qualified name is really "declarative, computed actions between two members of the view model".
 
-The simples compacts look as follows:
+The simplest compacts look as follows:
 
 ```TypeScript
 export class MoodStone extends O implements IMoodStoneActions {

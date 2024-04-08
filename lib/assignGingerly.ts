@@ -1,4 +1,4 @@
-export function assignGingerly(dest: any, src: any){
+export function assignGingerly(dest: any, src: any, allowedProps?: {[key: string]: any}){
     if(!src || typeof src !== 'object') return;
     const chainOps: any = {};
     const srcCopy = {...src};
@@ -8,6 +8,8 @@ export function assignGingerly(dest: any, src: any){
             doChains = true;
             chainOps[srcKey] = src[srcKey];
             delete srcCopy[srcKey]
+        }else{
+            if(allowedProps !== undefined && !(srcKey in allowedProps)) throw 401;
         }
     }
     Object.assign(dest, srcCopy);
