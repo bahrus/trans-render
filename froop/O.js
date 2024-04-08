@@ -4,7 +4,7 @@ export class O extends HTMLElement {
     propagator = new EventTarget();
     [publicPrivateStore] = {};
     covertAssignment(obj) {
-        assignGingerly(this[publicPrivateStore], obj);
+        assignGingerly(this[publicPrivateStore], obj, this.constructor.props);
     }
     constructor() {
         super();

@@ -6,6 +6,8 @@ interface IMoodStoneProps{
     age: number,
     isNotHappy: boolean,
     agePlus10: number,
+    data: Array<number>,
+    dataLength: number,
 }
 
 interface IMoodStoneETs{
@@ -23,6 +25,7 @@ export class MoodStone extends O implements IMoodStoneActions {
         name: 'mood-stone',
         propDefaults:{
             age: 22,
+            data: [1,2, 3, 4, 5]
         },
         propInfo:{
             isHappy: {
@@ -53,6 +56,7 @@ export class MoodStone extends O implements IMoodStoneActions {
         },
         compacts:{
             isHappy_to_isNotHappy: 'negate',
+            data_to_dataLength: 'length',
         },
         handlers: {
             myInput_to_handleInput_on: 'change'

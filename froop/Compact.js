@@ -71,7 +71,7 @@ export class Compact {
                         case 'length':
                             compactions[src] = {
                                 fn: vm => ({
-                                    [dest]: vm[src]?.length() || 0
+                                    [dest]: vm[src]?.length || 0,
                                 })
                             };
                             break;

@@ -7,7 +7,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     [publicPrivateStore]: Partial<TProps> = {};
 
     covertAssignment(obj: TProps): void {
-        assignGingerly(this[publicPrivateStore], obj);
+        assignGingerly(this[publicPrivateStore], obj, (<any>this.constructor).props);
     }
     constructor(){
         super();
