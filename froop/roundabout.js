@@ -190,7 +190,7 @@ export class RoundAbout {
         const { propagator } = vm;
         if (!(propagator instanceof EventTarget))
             return;
-        propagator.addEventListener('unload', e => {
+        propagator.addEventListener('disconnectedCallback', e => {
             this.#unsubscribe();
         }, { once: true });
         const checks = this.#checks;

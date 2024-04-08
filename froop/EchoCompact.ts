@@ -9,7 +9,7 @@ export class EchoCompact{
         const {vm, srcProp} = this;
         const {propagator} = vm;
         if(!(propagator instanceof EventTarget)) return;
-        propagator.addEventListener('unload', e => {
+        propagator.addEventListener('disconnectedCallback', e => {
             this.#disconnect();
         }, {once: true});
         propagator.addEventListener(srcProp, e => {

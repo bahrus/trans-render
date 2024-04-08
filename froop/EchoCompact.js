@@ -16,7 +16,7 @@ export class EchoCompact {
         const { propagator } = vm;
         if (!(propagator instanceof EventTarget))
             return;
-        propagator.addEventListener('unload', e => {
+        propagator.addEventListener('disconnectedCallback', e => {
             this.#disconnect();
         }, { once: true });
         propagator.addEventListener(srcProp, e => {

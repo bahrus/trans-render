@@ -14,7 +14,7 @@ export class CustStSvc {
         const { propagator } = vm;
         if (!(propagator instanceof EventTarget))
             return;
-        propagator.addEventListener('unload', e => {
+        propagator.addEventListener('disconnectedCallback', e => {
             this.#disconnect();
         }, { once: true });
         const { states } = this;

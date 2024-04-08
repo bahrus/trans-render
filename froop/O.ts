@@ -26,7 +26,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     }
 
     disconnectedCallback(): any {
-        this.propagator.dispatchEvent(new Event('unload'));
+        this.propagator.dispatchEvent(new Event('disconnectedCallback'));
     }
 
     #internals: ElementInternals;

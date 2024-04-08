@@ -22,7 +22,7 @@ export class O extends HTMLElement {
         }
     }
     disconnectedCallback() {
-        this.propagator.dispatchEvent(new Event('unload'));
+        this.propagator.dispatchEvent(new Event('disconnectedCallback'));
     }
     #internals;
     // get internals(){
