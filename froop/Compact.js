@@ -40,7 +40,7 @@ export class Compact {
                         case 'inc':
                             compactions[src] = {
                                 fn: vm => ({
-                                    [dest]: vm[src] + 1
+                                    [dest]: (vm[dest] || 0) + 1
                                 })
                             };
                             break;
@@ -116,7 +116,7 @@ export class Compact {
         for (const vmKey in obj) {
             if (vmKey in compactions) {
                 const compaction = compactions[vmKey];
-                const result = compaction.fn(obj);
+                const result = compaction.fn(vm);
                 //console.log({result});
                 vm.covertAssignment(result);
                 await this.covertAssignment(result, vm, keysToPropagate, busses);

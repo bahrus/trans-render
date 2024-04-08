@@ -35,6 +35,10 @@ export class MoodStone extends O {
             ageChangedToggle: {
                 type: 'Boolean',
                 ro: true,
+            },
+            ageChangeCount: {
+                type: 'Number',
+                ro: true,
             }
         },
         onsets: {
@@ -51,6 +55,7 @@ export class MoodStone extends O {
             data_to_dataLength: 'length',
             dataLength_to_echoLength: 'echo',
             age_to_ageChangedToggle: 'toggle',
+            age_to_ageChangeCount: 'inc',
         },
         handlers: {
             myInput_to_handleInput_on: 'change'
