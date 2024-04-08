@@ -1,6 +1,5 @@
 import {RoundaboutReady, BaseProps, PropInfo, PropInfoTypes, PropLookup, OConfig} from './types';
-//import {camelToLisp} from '../lib/camelToLisp.js';
-
+import {assignGingerly} from '../lib/assignGingerly.js';
 const publicPrivateStore = Symbol();
 
 export class O<TProps=any, TActions=TProps> extends HTMLElement implements RoundaboutReady{
@@ -8,7 +7,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     [publicPrivateStore]: Partial<TProps> = {};
 
     covertAssignment(obj: TProps): void {
-        Object.assign(this[publicPrivateStore], obj);
+        assignGingerly(this[publicPrivateStore], obj);
     }
     constructor(){
         super();

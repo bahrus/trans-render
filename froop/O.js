@@ -1,10 +1,10 @@
-//import {camelToLisp} from '../lib/camelToLisp.js';
+import { assignGingerly } from '../lib/assignGingerly.js';
 const publicPrivateStore = Symbol();
 export class O extends HTMLElement {
     propagator = new EventTarget();
     [publicPrivateStore] = {};
     covertAssignment(obj) {
-        Object.assign(this[publicPrivateStore], obj);
+        assignGingerly(this[publicPrivateStore], obj);
     }
     constructor() {
         super();
