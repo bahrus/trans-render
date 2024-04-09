@@ -39,6 +39,8 @@ All the functions are side effect free and don't do any state mutation at all.  
 
 roundabout can JSON serialize much of the arguments, making parsing the instructions easier on the browser.
 
+In general, signals involve "busier" syntax less declarative, especially less JSON serializable, but the developer be far less disciplined.  Roundabouts encourage small, loosely coupled functions, which are easy to test (but may suffer from more bouncing around), and the code is far more "clean."  It requires more disciplined patience from the developer, but it allows for a large solutions space of code-free declarative solutions. While the argument against signals weakens if it becomes part of the underlying platform (in particular, escaping the charge of getting stuck in proprietary vendor lock-in land), I still think the argument has some relevance.
+
 roundabout "guesses" when the developer wants to call the functions to compute new values, if not specified, based on the lhs of the arrow expressions.  But developers can take hold of the reigns, and be more explicit:
 
 ```JavaScript
