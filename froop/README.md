@@ -216,7 +216,7 @@ Once again, the problem here is we are trying to make  our config as JSON serial
 
 
 ```TypeScript
-const max = ([a, b] : [number, number]) => ([Math.max(a, b)]);
+const max = (a: number, b: number) => ([Math.max(a, b)]);
 
 export interface IMoodStoneProps{
     age: number,
@@ -245,10 +245,8 @@ export interface MoodStone extends IMoodStoneProps{}
 More complex example:  Looping counter
 
 ```TypeScript
-const getNextValOfLoop = ([
-        currentVal,         from,   to,     step=1,   loopIfMax=false
-    ]:  [
-        number | undefined | null, number, number, number, boolean]) => {
+const getNextValOfLoop = (currentVal: number, from: number,  to: number, step=1, loopIfMax=false)
+    : [number | undefined | null, number, number, number, boolean] => {
     let hitMax = false, nextVal = currentVal, startedLoop = false;
     if(currentVal === undefined || currentVal === null || currentVal < from){
         nextVal = from;
