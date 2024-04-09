@@ -84,7 +84,8 @@ export class MoodStone extends O implements IMoodStoneActions {
         },
         handlers: {
             myInput_to_handleInput_on: 'change'
-        }
+        },
+        
     }
     incAge({age}: this): Partial<IMoodStoneProps> {
         return {

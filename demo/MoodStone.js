@@ -60,7 +60,7 @@ export class MoodStone extends O {
         },
         handlers: {
             myInput_to_handleInput_on: 'change'
-        }
+        },
     };
     incAge({ age }) {
         return {

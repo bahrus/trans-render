@@ -123,35 +123,16 @@ The simplest compacts look as follows:
 ```TypeScript
 export class MoodStone extends O implements IMoodStoneActions {
     static override config: WCConfig<IMoodStoneProps, IMoodStoneActions> = {
-        name: 'mood-stone',
-        propDefaults:{
-            age: 22,
-        },
-        propInfo:{
-            isHappy: {
-                def: true,
-                attrName: 'is-happy',
-                parse: true,
-            },
-            isNotHappy: {
-                type: 'Boolean',
-                ro: true,
-            }
-        },
-        actions:{
-            incAge: {
-                ifAllOf: 'isHappy',
-            }
-        },
+        ...
         compacts:{
-            isHappy_to_isNotHappy: 'negate'
+            isHappy_to_isNotHappy: 'negate',
+            data_to_dataLength: 'length',
+            dataLength_to_echoLength: 'echo',
+            age_to_ageChangedToggle: 'toggle',
+            age_to_ageChangeCount: 'inc',
         }
     }
-    incAge({age}: this): Partial<IMoodStoneProps> {
-        return {
-            age: age + 1
-        } as Partial<IMoodStoneProps>
-    }
+    
 }
 ```
 
@@ -163,111 +144,22 @@ One example of the kind of complexity that roundabouts can handle cleanly is cre
 
 How would this look?  Let's take a look at an example:
 
+[TODO]
+
+## Infractions and Positractions
+
+### Infractions
+
+Infractions are inferred actions, where we "parse" the left hand side of the arrow function in order to determine which parameters it depends on
+
+### Positractions
+
+Another kind of arrow function roundabout recognizes are "positractions" -- a portmanteau of "positional" and "interactions".  The examples above have relied on linking to functionality that is intimately aware of the structure of the view model.
+
+But much functionality is much more generic.  For example, suppose we want to reuse a function that takes the maximum of two values and applies it to a third value?  We write such functions by way of tuples:
+
 ```TypeScript
-export class TimeTicker extends HTMLElement implements Actions{
-
-    config:{
-        name: 'time-ticker',
-        propDefaults: {
-            ticks: 0,
-            idx: -1,
-            duration: 1_000,
-            repeat: Infinity,
-            enabled: true,
-            disabled: false,
-            loop: false,
-            wait: true,
-        },
-        propInfo:{
-            enabled:{
-                dry: false,
-            },
-            repeat: {
-                dry: false,
-            },
-            value: {
-                type: 'Object'
-            },
-            items: {
-                notify:{
-                    lengthTo:'repeat'
-                }
-            },
-            ticks: {
-                notify: {
-                    incTo: {
-                        key: 'idx',
-                        lt: 'repeat',
-                        loop: 'loop',
-                        notifyWhenMax: {
-                            setTo: {
-                                key: 'disabled',
-                                val: true,
-                            },
-                        }
-                    }
-                }
-            }
-        },
-        actions: {
-            stop:{
-                ifAllOf: ['disabled', 'controller']
-            },
-            start:{
-                ifAllOf: ['duration'],
-                ifNoneOf: ['disabled'],
-            },
-            rotateItem: {
-                ifKeyIn: ['repeat', 'loop', 'idx'],
-                ifNoneOf: ['disabled'],
-            }
-        },
-        handlers: {
-            timeEmitter_to_incTicks_on: 'value-changed'
-        }
-    }
-
-    async start({duration, ticks, wait, controller}: this) {
-        if(controller !== undefined){
-            ticks = 0;
-            controller.abort();
-        }
-        const newController = new AbortController();
-        const {TimeEmitter} = await import('./TimeEmitter.js');
-        const timeEmitter = new TimeEmitter(duration, newController.signal);
-        return {
-            controller: newController,
-            ticks: wait ? ticks : ticks + 1,
-            timeEmitter
-        } 
-    }
-
-    incTicks({ticks}: this){
-        return {
-            ticks: ticks + 1
-        }
-    }
-
-    stop({controller}: this) {
-        controller.abort();
-        return {
-            controller: undefined,
-        };
-    }
-
-
-    rotateItem({idx, items}: this){
-        return {
-            value: {
-                idx,
-                item: (items && items.length > idx) ? items[idx] : undefined,
-            }
-        };
-    }
-}
-
-export interface TimeTicker extends AllProps{}
-
+const max = ([a, b] : [number, number]) => ([Math.max(a, b)]);
 ```
 
 
