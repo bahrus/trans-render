@@ -150,19 +150,36 @@ How would this look?  Let's take a look at an example:
 
 ### Infractions
 
-Infractions are inferred actions, where we "parse" the left hand side of the arrow function in order to determine which parameters it depends on
+Infractions are inferred actions, where we "parse" the left hand side of the arrow function in order to determine which parameters it depends on.
 
-[TODO] support infractions as class members with JSON serializable notation, can be set to 0 or 1
+```Typescript
+const calcAgePlus10: PropsToPartialProps<IMoodStoneProps> = ({age}: IMoodStoneProps) => ({agePlus10: age + 10});
+
+export class MoodStone extends O implements IMoodStoneActions {
+    static override config: OConfig<IMoodStoneProps> = {
+        infractions: [calcAgePlus10]
+    }
+}
+```
+
+It was briefly mentioned before that one of the goals of roundabouts is that they accept as much JSON serializable information as possible.  The config property above isn't serializable as it currently stands.  So to make it JSON serializable, we must burden the developer with an extra step:
+
+```Typescript
+const calcAgePlus10: PropsToPartialProps<IMoodStoneProps> = ({age}: IMoodStoneProps) => ({agePlus10: age + 10});
+
+export class MoodStone extends O implements IMoodStoneActions {
+    calcAgePlus10 = calcAgePlus10;
+    static override config: OConfig<IMoodStoneProps> = {
+        infractions: ['calcAgePlus10']
+    }
+}
+```
 
 ### Positractions [TODO]
 
 Another kind of arrow function roundabout recognizes are "positractions" -- a portmanteau of "positional" and "interactions".  The examples above have relied on linking to functionality that is intimately aware of the structure of the view model.
 
 But much functionality is much more generic.  For example, suppose we want to reuse a function that takes the maximum of two values and applies it to a third value?  We write such functions by way of tuples:
-
-```TypeScript
-
-```
 
 We then bind this generic function to our view model:
 
@@ -191,7 +208,33 @@ export class MoodStone extends O implements IMoodStoneActions {
 export interface MoodStone extends IMoodStoneProps{}
 ```
 
-If on parameters end with exclamation, make it only invoke if truthy
+Once again, the problem here is we are trying to make  our config as JSON serializable as possible.  To make it serializable, the developer must add a step:
 
+
+```TypeScript
+const max = ([a, b] : [number, number]) => ([Math.max(a, b)]);
+
+export interface IMoodStoneProps{
+    age: number,
+    heightInInches: number,
+    maxOfAgeAndHeightInInches: number,
+}
+export class MoodStone extends O implements IMoodStoneActions {
+    max = max;
+    static override config: OConfig<IMoodStoneProps, IMoodStoneActions> = {
+        positractions: [
+            {
+                do: 'max',
+                on: ['age', 'heightInInches'],
+                to: ['maxOfAgeAndHeightInInches']
+            }
+        ]
+
+        
+    }
+}
+
+export interface MoodStone extends IMoodStoneProps{}
+```
 
 
