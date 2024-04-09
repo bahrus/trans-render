@@ -122,7 +122,7 @@ The simplest compacts look as follows:
 
 ```TypeScript
 export class MoodStone extends O implements IMoodStoneActions {
-    static override config: WCConfig<IMoodStoneProps, IMoodStoneActions> = {
+    static override config: OConfig<IMoodStoneProps, IMoodStoneActions> = {
         ...
         compacts:{
             isHappy_to_isNotHappy: 'negate',
@@ -152,15 +152,46 @@ How would this look?  Let's take a look at an example:
 
 Infractions are inferred actions, where we "parse" the left hand side of the arrow function in order to determine which parameters it depends on
 
-### Positractions
+[TODO] support infractions as class members with JSON serializable notation, can be set to 0 or 1
+
+### Positractions [TODO]
 
 Another kind of arrow function roundabout recognizes are "positractions" -- a portmanteau of "positional" and "interactions".  The examples above have relied on linking to functionality that is intimately aware of the structure of the view model.
 
 But much functionality is much more generic.  For example, suppose we want to reuse a function that takes the maximum of two values and applies it to a third value?  We write such functions by way of tuples:
 
 ```TypeScript
-const max = ([a, b] : [number, number]) => ([Math.max(a, b)]);
+
 ```
+
+We then bind this generic function to our view model:
+
+```TypeScript
+const max = ([a, b] : [number, number]) => ([Math.max(a, b)]);
+
+export interface IMoodStoneProps{
+    age: number,
+    heightInInches: number,
+    maxOfAgeAndHeightInInches: number,
+}
+export class MoodStone extends O implements IMoodStoneActions {
+    static override config: OConfig<IMoodStoneProps, IMoodStoneActions> = {
+        positractions: [
+            {
+                do: max,
+                on: ['age', 'heightInInches'],
+                to: ['maxOfAgeAndHeightInInches']
+            }
+        ]
+
+        
+    }
+}
+
+export interface MoodStone extends IMoodStoneProps{}
+```
+
+If on parameters end with exclamation, make it only invoke if truthy
 
 
 
