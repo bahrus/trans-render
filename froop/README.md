@@ -177,6 +177,8 @@ export class MoodStone extends O implements IMoodStoneActions {
 
 ### Positractions [TODO]
 
+https://youtu.be/W7YoxrKa4f0?si=rRn05JEvWFVpKP7s
+
 Another kind of arrow function roundabout recognizes are "positractions" -- a portmanteau of "positional" and "interactions".  The examples above have relied on linking to functionality that is intimately aware of the structure of the view model.
 
 But much functionality is much more generic.  For example, suppose we want to reuse a function that takes the maximum of two values and applies it to a third value?  We write such functions by way of tuples:
@@ -226,7 +228,8 @@ export class MoodStone extends O implements IMoodStoneActions {
             {
                 do: 'max',
                 on: ['age', 'heightInInches'],
-                to: ['maxOfAgeAndHeightInInches']
+                pass: ['age', 'heightInInches'],
+                assignTo: ['maxOfAgeAndHeightInInches']
             }
         ]
 
@@ -236,5 +239,73 @@ export class MoodStone extends O implements IMoodStoneActions {
 
 export interface MoodStone extends IMoodStoneProps{}
 ```
+
+More complex example:  Looping counter
+
+```TypeScript
+const getNextValOfLoop = ([
+        currentVal,         from,   to,     step=1,   loopIfMax=false
+    ]:  [
+        number | undefined | null, number, number, number, boolean]) => {
+    let hitMax = false, nextVal = currentVal, startedLoop = false;
+    if(currentVal === undefined || currentVal === null || currentVal < from){
+        nextVal = from;
+        startedLoop = true;
+    }else{
+        const possibleNextVal = currentVal + step;
+        if(possibleNextVal > to){
+            
+            if(loopIfMax){
+                nextVal = from;
+            }else{
+                hitMax = true;
+            }
+        }else{
+            nextVal = possibleNextVal;
+        }
+    }
+    return [nextVal, hitMax, startedLoop];
+    
+}
+
+interface TimeTickerEndUserProps{
+    /**
+     * Loop the time ticker.
+     */
+    loop: boolean;
+    /**
+     * Upper bound for idx before being reset to 0
+     */
+    repeat: boolean;
+    enabled: boolean;
+    disabled: boolean;
+}
+
+interface TimeTickerAllProps extends TimeTickerEndUserProps{
+    ticks: number,
+    idx: number,
+}
+
+
+export class TimeTicker{
+    getNextValOfLoop = getNextValOfLoop;
+    static override config: OConfig<TimeTickerAllProps> = {
+        positractions: [
+            {
+                on: ['ticks'],
+                do: 'getNextValOfLoop',
+                pass: ['idx', 0, 'repeat', 1, true]
+                assignTo: ['idx', 'disabled', 'enabled']
+            }
+        ]
+
+        
+    }
+}
+```
+
+for string members of the pass array, if the string resolves to a member of the class, dynamically pass that value.  Otherwise, pass the sting literal.  To pass a string literal even if there is a member of the class with that name, wrap the string in a template literal:  '`hello`'
+
+To pass self, use '$0'.
 
 
