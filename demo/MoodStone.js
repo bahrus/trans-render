@@ -1,5 +1,6 @@
 import { O } from '../froop/O.js';
 const calcAgePlus10 = ({ age }) => ({ agePlus10: age + 10 });
+const max = ([a, b]) => ([a < b]);
 export class MoodStone extends O {
     static config = {
         name: 'mood-stone',

@@ -23,6 +23,8 @@ interface IMoodStoneActions{
 }
 const calcAgePlus10: PropsToPartialProps<IMoodStoneProps> = ({age}: IMoodStoneProps) => ({agePlus10: age + 10});
 
+const max = ([a, b] : [number, number]) => ([a < b]);
+
 export class MoodStone extends O implements IMoodStoneActions {
     static override config: OConfig<IMoodStoneProps & IMoodStoneETs, IMoodStoneActions, IMoodStoneETs> = {
         name: 'mood-stone',

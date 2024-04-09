@@ -226,6 +226,8 @@ export interface EchoBy<TProps = any> extends ComplexCompact{
     delay: number | keyof TProps,
 }
 
+
+
 export interface ICustomState<MCProps = any>{
     truthy?: string,
     falsy?: string,
