@@ -111,7 +111,8 @@ export class RoundAbout{
                         if(key.startsWith('`') && key.startsWith('`')){
                             return key.substring(1, key.length - 1);
                         }
-                        if(key in vm) return vm[key]
+                        if(key in vm) return vm[key];
+                        if(key === '$0') return vm;
                         return key;
                     });
 

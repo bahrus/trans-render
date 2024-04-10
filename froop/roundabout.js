@@ -115,6 +115,8 @@ export class RoundAbout {
                         }
                         if (key in vm)
                             return vm[key];
+                        if (key === '$0')
+                            return vm;
                         return key;
                     });
                     const result = fn.apply(null, args);
