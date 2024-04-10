@@ -94,6 +94,22 @@ export class RoundAbout{
                 router.push(newRouter);
             }
         }
+        if(positractions !== undefined){
+            for(const positraction of positractions){
+                const {on, pass, do: d, assignTo} = positraction;
+                const passR = pass || on;
+                const infraction = (vm: any) => {
+                    const args = passR.map(key => vm[key]);
+                    let fn: Function;
+                    if(typeof d === 'string'){
+                        fn = vm[d] as Function;
+                    }else{
+                        fn = d;
+                    }
+                    const result = fn.apply(null, args)
+                }
+            }
+        }
     }
 
     async init(){
