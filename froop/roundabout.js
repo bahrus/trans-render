@@ -109,7 +109,14 @@ export class RoundAbout {
                     fn = d;
                 }
                 const infraction = async (vm) => {
-                    const args = passR.map(key => vm[key]);
+                    const args = passR.map(key => {
+                        if (key.startsWith('`') && key.startsWith('`')) {
+                            return key.substring(1, key.length - 1);
+                        }
+                        if (key in vm)
+                            return vm[key];
+                        return key;
+                    });
                     const result = fn.apply(null, args);
                     const resultArr = Array.isArray(result) ? result : [result];
                     const returnObj = {};

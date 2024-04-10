@@ -346,7 +346,6 @@ export class TimeTicker{
 }
 ```
 
-For string members of the pass array, if the string resolves to a member of the class, it dynamically passes that value.  Otherwise, it passes the sting literal.  To pass a string literal even if there is a member of the class with that name, wrap the string in a template literal:  '`hello`' [TODO]
 
 To pass self, use '$0' [TODO].
 
