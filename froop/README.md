@@ -25,7 +25,7 @@ Roundabouts:
 const checkIfEven = ({counter}) => ({isEven: counter & 1 === 0});
 const determineParity = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
 const setInnerText = ({parity}) => ({'?.element?.innerText': parity};
-const [vm, propagator] = await roundabout(
+const vm = await roundabout(
     { propagate: {count: 0} }
     [ checkIfEven, determineParity, setInnerText ],
 );

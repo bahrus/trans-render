@@ -13,6 +13,7 @@ export async function roundabout<TProps = any, TActions = TProps>(
     
     await ra.hydrate(keysToPropagate);
     await ra.checkQ(keysToPropagate);
+    return options.vm;
 }
 
 export class RoundAbout{

@@ -7,6 +7,7 @@ export async function roundabout(options, infractions) {
     }
     await ra.hydrate(keysToPropagate);
     await ra.checkQ(keysToPropagate);
+    return options.vm;
 }
 export class RoundAbout {
     options;
