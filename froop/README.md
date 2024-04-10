@@ -185,6 +185,8 @@ How would this look?  Let's take a look at an example:
 
 ## Infractions and Positractions
 
+Infractions and Positractions don't open anything up that couldn't be done with the highly configurable but verbose Actions.  Infractions and Positractions just specialize in some common scenarios, and strive to eliminate boilerplate while continuing to encourage JSON driven configuration (easier to parse) and highly performant reactive analysis, without calling code unnecessarily.
+
 ### Infractions
 
 Infractions are inferred actions, where we "parse" the left hand side of the arrow function in order to determine which parameters it depends on.
