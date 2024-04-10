@@ -65,6 +65,10 @@ export class MoodStone extends O implements IMoodStoneActions {
             ageChangeCount: {
                 type: 'Number',
                 ro: true,
+            },
+            maxOfAgeAndAgeChangeCount:{
+                type: 'Number',
+                ro: true,
             }
         },
         onsets:{

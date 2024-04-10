@@ -120,11 +120,16 @@ export class RoundAbout {
                         return key;
                     });
                     const result = fn.apply(vm, args);
-                    const resultArr = Array.isArray(result) ? result : [result];
+                    if (!Array.isArray(result)) {
+                        return {
+                            [assignTo[0]]: result
+                        };
+                    }
                     const returnObj = {};
-                    for (let i = 0, ii = resultArr.length; i < ii; i++) {
+                    for (let i = 0, ii = result.length; i < ii; i++) {
                         returnObj[assignTo[i]] = result[i];
                     }
+                    return returnObj;
                 };
                 let name = fn.name;
                 while (name in vm) {
@@ -412,6 +417,8 @@ export class RoundAbout {
         const method = vm[key] || this.#infractionsLookup[key];
         const isAsync = method.constructor.name === 'AsyncFunction';
         const ret = isAsync ? await method(vm, e) : method(vm, e);
+        if (ret === undefined || ret === null)
+            return;
         if (this.#compact) {
             this.#compact.covertAssignment(ret, vm, keysToPropagate, this.#busses);
         }

@@ -214,7 +214,7 @@ export class MoodStone extends O implements IMoodStoneActions {
 }
 ```
 
-### Positractions [Untested]
+### Positractions
 
 https://youtu.be/W7YoxrKa4f0?si=rRn05JEvWFVpKP7s
 
