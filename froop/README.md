@@ -138,6 +138,43 @@ export class MoodStone extends O implements IMoodStoneActions {
 
 So here, the compact is saying "bind the isHappy property of the custom element view model to the isNotHappy, by negating the former and setting that value to the latter.
 
+## Onsets 
+
+Because roundabout creates getter/setters automatically (or more typically a web component library does the same and passes that in as a view model), the developer will find it somewhat inconvenient (but not impossible) to define their own getters and setters manually via the platform ([TODO]: document how).
+
+But the need to interject some calculating logic in the setters is quite common.  This is what "Onsets" provide:  A way of mapping a change of a property to an action method.  If the action method returns an object, that object is merged into the view model.
+
+```TypeScript
+interface IMoodStoneProps{
+    isHappy: boolean,
+    age: number,
+    
+}
+
+interface IMoodStoneActions{
+    incAge(self: this): Partial<IMoodStoneProps>
+}
+
+export class MoodStone extends O implements IMoodStoneActions {
+    static override config: OConfig<IMoodStoneProps & IMoodStoneETs, IMoodStoneActions, IMoodStoneETs> = {
+        ...
+        onsets:{
+            isHappy_to_incAge: 1
+        },
+    }
+
+    incAge({age}: this): Partial<IMoodStoneProps> {
+        return {
+            age: age + 1
+        } as Partial<IMoodStoneProps>
+    }
+}
+```
+
+If the RHS is the number "0", then the action method is called every time the watched property changes.  If the RHS is the number "1", then the action method is called only when the property is truthy.
+
+[TODO] Provide an example
+
 ## Wiring up EventTarget properties to other methods based on an event.
 
 One example of the kind of complexity that roundabouts can handle cleanly is creating subscriptions between one property that is an eventTarget (or a weak reference to said eventTarget), and a method of the class we want to call when that eventTarget changes, again merging in what the action method returns into the view model.  Once again, the [signals](https://github.com/proposal-signals) proposal warns us about the complexity and danger of using pub/sub (such as EventTargets).  This library sees it as a challenge that using declarative syntax can rise to, because it will be sure to do what is needed to avoid the disaster that that proposal warns us about.
