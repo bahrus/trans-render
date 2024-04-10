@@ -111,8 +111,9 @@ export class RoundAbout {
                 const infraction = async (vm) => {
                     const args = passR.map(key => vm[key]);
                     const result = fn.apply(null, args);
+                    const resultArr = Array.isArray(result) ? result : [result];
                     const returnObj = {};
-                    for (let i = 0, ii = result.length; i < ii; i++) {
+                    for (let i = 0, ii = resultArr.length; i < ii; i++) {
                         returnObj[assignTo[i]] = result[i];
                     }
                 };

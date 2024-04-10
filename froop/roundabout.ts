@@ -1,4 +1,3 @@
-import { none } from './none';
 import {roundaboutOptions, RoundaboutReady, Busses, SetLogicOps, Checks, Keysh, ICompact, Infractions, PropsToPartialProps, Routers, LogicOp} from './types';
 
 export async function roundabout<TProps = any, TActions = TProps>(
@@ -111,8 +110,9 @@ export class RoundAbout{
                     const args = passR.map(key => vm[key]);
 
                     const result = fn.apply(null, args);
+                    const resultArr = Array.isArray(result) ? result : [result];
                     const returnObj: any = {};
-                    for(let i = 0, ii = result.length; i < ii; i++){
+                    for(let i = 0, ii = resultArr.length; i < ii; i++){
                         returnObj[assignTo[i]] = result[i];
                     }
                 }
