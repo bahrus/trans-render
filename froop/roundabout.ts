@@ -116,7 +116,7 @@ export class RoundAbout{
                         return key;
                     });
 
-                    const result = fn.apply(null, args);
+                    const result = fn.apply(vm, args);
                     const resultArr = Array.isArray(result) ? result : [result];
                     const returnObj: any = {};
                     for(let i = 0, ii = resultArr.length; i < ii; i++){
