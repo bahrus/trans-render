@@ -95,18 +95,35 @@ export class RoundAbout{
             }
         }
         if(positractions !== undefined){
+            const {options} = this;
+            const {vm} = options;
             for(const positraction of positractions){
                 const {on, pass, do: d, assignTo} = positraction;
                 const passR = pass || on;
-                const infraction = (vm: any) => {
+                let fn: Function;
+                if(typeof d === 'string'){
+                    fn = vm[d] as Function;
+                }else{
+                    fn = d;
+                }
+                
+                const infraction = async (vm: any) => {
                     const args = passR.map(key => vm[key]);
-                    let fn: Function;
-                    if(typeof d === 'string'){
-                        fn = vm[d] as Function;
-                    }else{
-                        fn = d;
+
+                    const result = fn.apply(null, args);
+                    const returnObj: any = {};
+                    for(let i = 0, ii = result.length; i < ii; i++){
+                        returnObj[assignTo[i]] = result[i];
                     }
-                    const result = fn.apply(null, args)
+                }
+                let name = fn.name;
+                while(name in vm){
+                    name+= '_';
+                }
+                this.#infractionsLookup[name] = infraction;
+                newBusses[name] = new Set();
+                checks[name] = {
+                    ifKeyIn: new Set(on),
                 }
             }
         }
