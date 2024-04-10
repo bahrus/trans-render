@@ -1,6 +1,6 @@
 import { O } from '../froop/O.js';
 const calcAgePlus10 = ({ age }) => ({ agePlus10: age + 10 });
-const max = ([a, b]) => ([a < b]);
+const max = (a, b) => Math.max(a, b);
 export class MoodStone extends O {
     static config = {
         name: 'mood-stone',
@@ -61,6 +61,14 @@ export class MoodStone extends O {
         handlers: {
             myInput_to_handleInput_on: 'change'
         },
+        positractions: [
+            {
+                do: max,
+                on: ['age', 'ageChangeCount'],
+                //pass: ['age', 'ageChangeCount'],
+                assignTo: ['maxOfAgeAndAgeChangeCount']
+            }
+        ]
     };
     incAge({ age }) {
         return {

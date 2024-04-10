@@ -195,7 +195,18 @@ export interface OConfig<TProps = any, TActions = TProps, ETProps = TProps>{
     infractions?: Infractions<TProps>,
     //style?: Partial<CSSStyleDeclaration>;
     compacts?: Compacts<TProps>;
-    handlers?: Handlers<ETProps, TActions>
+    handlers?: Handlers<ETProps, TActions>;
+    positractions?: Positractions<TProps>;
+}
+
+export type Positractions<TProps = any> = 
+    | Array<Positraction<TProps>>;
+
+export interface Positraction<TProps = any> {
+    do: Function | string,
+    on: Array<keyof TProps & string>,
+    pass?: Array<keyof TProps & string>,
+    assignTo: Array<keyof TProps & string>
 }
 
 export type Onsets<TProps = any, TActions = TProps> = 
@@ -331,7 +342,8 @@ export type roundaboutOptions<TProps = any, TActions = TProps, ETProps = TProps>
     compacts?: Compacts<TProps>,
     onsets?: Onsets<TProps, TActions>,
     handlers?: Handlers<ETProps, TActions>,
-    do?:  Partial<{[key in `${keyof TActions & string}_on`]: Keysh<TProps> }>
+    positractions?: Positractions<TProps>
+    //do?:  Partial<{[key in `${keyof TActions & string}_on`]: Keysh<TProps> }>
 }
 
 export type PropsToPartialProps<TProps = any> = 

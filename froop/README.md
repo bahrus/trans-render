@@ -114,9 +114,7 @@ So yes, we are still "clinging" to the notion that EventTargets are useful, desp
 
 So to make this concern seem, perhaps, overly alarmist, we add one more "soft" requirement to make the view model be roundabout ready -- the propagator should emit event named ~['abort'](https://github.com/whatwg/dom/issues/784)~ "disconnectedCallback" exclusively when all listeners should be aborted. So emitting this event name in the disconnectedCallback lifecycle event is highly encouraged. 
 
-## Busses and compacts
-
-Being designed to reduce its carbon footprint, roundabouts has first-class support for both busses and compacts.
+## Compacts
 
 compacts is a portmanteau of computed actions, and the fully qualified name is really "declarative, computed actions between two members of the view model".
 
@@ -188,7 +186,7 @@ But much functionality is much more generic.  For example, suppose we want to re
 We then bind this generic function to our view model:
 
 ```TypeScript
-const max = ([a, b] : [number, number]) => ([Math.max(a, b)]);
+const max = (a: number, b: number) => Math.max(a, b);
 
 export interface IMoodStoneProps{
     age: number,
@@ -230,7 +228,7 @@ export class MoodStone extends O implements IMoodStoneActions {
             {
                 do: 'max',
                 on: ['age', 'heightInInches'],
-                pass: ['age', 'heightInInches'],
+                //pass: ['age', 'heightInInches'],
                 assignTo: ['maxOfAgeAndHeightInInches']
             }
         ]

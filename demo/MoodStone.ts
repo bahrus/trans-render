@@ -11,6 +11,7 @@ interface IMoodStoneProps{
     echoLength: number,
     ageChangedToggle: boolean,
     ageChangeCount: number,
+    maxOfAgeAndAgeChangeCount: number,
 }
 
 interface IMoodStoneETs{
@@ -23,7 +24,7 @@ interface IMoodStoneActions{
 }
 const calcAgePlus10: PropsToPartialProps<IMoodStoneProps> = ({age}: IMoodStoneProps) => ({agePlus10: age + 10});
 
-const max = ([a, b] : [number, number]) => ([a < b]);
+const max = (a: number, b : number) => Math.max(a, b);
 
 export class MoodStone extends O implements IMoodStoneActions {
     static override config: OConfig<IMoodStoneProps & IMoodStoneETs, IMoodStoneActions, IMoodStoneETs> = {
@@ -85,7 +86,15 @@ export class MoodStone extends O implements IMoodStoneActions {
         handlers: {
             myInput_to_handleInput_on: 'change'
         },
-        
+        positractions: [
+            {
+                do: max,
+                on: ['age', 'ageChangeCount'],
+                //pass: ['age', 'ageChangeCount'],
+                assignTo: ['maxOfAgeAndAgeChangeCount']
+            }
+        ]
+
     }
     incAge({age}: this): Partial<IMoodStoneProps> {
         return {

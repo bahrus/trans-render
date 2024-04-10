@@ -1,5 +1,5 @@
 import { none } from './none';
-import {roundaboutOptions, RoundaboutReady, Busses, SetLogicOps, Checks, Keysh, ICompact, Infractions, PropsToPartialProps, Routers} from './types';
+import {roundaboutOptions, RoundaboutReady, Busses, SetLogicOps, Checks, Keysh, ICompact, Infractions, PropsToPartialProps, Routers, LogicOp} from './types';
 
 export async function roundabout<TProps = any, TActions = TProps>(
     options: roundaboutOptions<TProps, TActions>,
@@ -27,6 +27,7 @@ export class RoundAbout{
         if(Array.isArray(k)) return new Set(k);
         return new Set([k]);
     }
+
     constructor(public options: roundaboutOptions, public infractions?: Infractions){
         const newBusses : Busses = {};
         const routers: Routers = {};
@@ -34,11 +35,13 @@ export class RoundAbout{
         this.#checks = checks;
         this.#busses = newBusses;
         this.#routers = routers;
-        const {actions, onsets, handlers} = options;
+        //TODO:  memoize this whole logic, keyed off of options
+        const {actions, onsets, handlers, positractions} = options;
         for(const key in actions){
             newBusses[key] = new Set();
             const val = actions[key];
             if(val === undefined) continue;
+            
             const {ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf} = val;
             const check: SetLogicOps = {}
             if(ifAllOf) check.ifAllOf = this.#toSet(ifAllOf);
@@ -72,6 +75,8 @@ export class RoundAbout{
 
         }
         if(handlers !== undefined){
+            //TODO:  maybe this could be done more globally on static properties, since it will 
+            //repeat per instance
             for(const handlerKey in handlers){
                 const on = (<any>handlers)[handlerKey] as string;
                 const split = handlerKey.split('_to_');
