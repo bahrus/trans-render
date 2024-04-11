@@ -126,7 +126,7 @@ export class RoundAbout{
                         }
                     }
                     const returnObj: any = {};
-                    for(let i = 0, ii = result.length; i < ii; i++){
+                    for(let i = 0, ii = Math.min(result.length, assignTo.length); i < ii; i++){
                         returnObj[assignTo[i]] = result[i];
                     }
                     return returnObj;
