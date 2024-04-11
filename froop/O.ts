@@ -1,5 +1,6 @@
 import {RoundaboutReady, BaseProps, PropInfo, PropInfoTypes, PropLookup, OConfig} from './types';
 import {assignGingerly} from '../lib/assignGingerly.js';
+export {OConfig} from './types';
 const publicPrivateStore = Symbol();
 
 export class O<TProps=any, TActions=TProps> extends HTMLElement implements RoundaboutReady{

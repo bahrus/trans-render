@@ -109,6 +109,7 @@ export class RoundAbout{
                 
                 const infraction = async (vm: any) => {
                     const args = passR.map(key => {
+                        if(typeof key !== 'string') return key;
                         if(key.startsWith('`') && key.startsWith('`')){
                             return key.substring(1, key.length - 1);
                         }
@@ -118,6 +119,7 @@ export class RoundAbout{
                     });
 
                     const result = fn.apply(vm, args);
+                    if(assignTo === undefined) return;
                     if(!Array.isArray(result)){
                         return {
                             [assignTo[0]]: result

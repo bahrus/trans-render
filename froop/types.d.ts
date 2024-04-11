@@ -205,8 +205,8 @@ export type Positractions<TProps = any> =
 export interface Positraction<TProps = any> {
     do: Function | string,
     on: Array<keyof TProps & string>,
-    pass?: Array<keyof TProps & string>,
-    assignTo: Array<keyof TProps & string>
+    pass?: Array<(keyof TProps & string) | number | boolean | `\`${string}\``>,
+    assignTo?: Array<keyof TProps & string>
 }
 
 export type Onsets<TProps = any, TActions = TProps> = 

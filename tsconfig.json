@@ -17,7 +17,8 @@
 		"lib/mixins/*",
 		"xslt/*",
 		"froop/*", 
-		"MyCustomElement/*"
+		"MyCustomElement/*",
+		"positractions/*"
 	],
 	"exclude":[
 		"node_modules"

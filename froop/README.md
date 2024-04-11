@@ -22,12 +22,12 @@ Roundabouts:
 <img align="right" src="https://www.trafficdepot.ca/wp-content/uploads/2020/08/reg6bb.png" width="100px">
 
 ```JavaScript
-const checkIfEven = ({counter}) => ({isEven: counter & 1 === 0});
-const determineParity = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
-const setInnerText = ({parity}) => ({'?.element?.innerText': parity};
+const isEven = ({counter}) => ({isEven: counter & 1 === 0});
+const parity = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
+const effect = ({parity}) => ({'?.element?.innerText': parity};
 const vm = await roundabout(
     { propagate: {count: 0} }
-    [ checkIfEven, determineParity, setInnerText ],
+    [ isEven, parity, effect ],
 );
 
 setInterval(() => vm.count++, 1000);
@@ -46,14 +46,14 @@ roundabout "guesses" when the developer wants to call the functions to compute n
 ```JavaScript
 const [vm, propagator] = await roundabout(
     {   
-        vm: {element, checkIfEven, determineParity, setInnerText},
+        vm: {element, isEven, parity, effect},
         propagator,
         onset:{
-            count_to_checkIfEven: 0, //call whenever count changes
-            isEven_to_determineParity: 1 //only call if isEven is truthy
+            count_to_isEven: 0, //call whenever count changes
+            isEven_to_parity: 1 //only call if isEven is truthy
         },
         actions:{
-            setInnerText: {
+            effect: {
                 ifAllOf: ['count', 'isEven', 'parity']
             }
         },
@@ -163,9 +163,9 @@ export class MoodStone extends O implements IMoodStoneActions {
         },
     }
 
-    incAge({age}: this): Partial<IMoodStoneProps> {
+    incAge({age: oldAge}: this): Partial<IMoodStoneProps> {
         return {
-            age: age + 1
+            age: oldAge + 1
         } as Partial<IMoodStoneProps>
     }
 }
@@ -201,6 +201,8 @@ export class MoodStone extends O implements IMoodStoneActions {
 }
 ```
 
+#### Making it JSON Serializable
+
 It was briefly mentioned before that one of the goals of roundabouts is that they accept as much JSON serializable information as possible.  The config property above isn't serializable as it currently stands.  So to make it JSON serializable, we must burden the developer with an extra step:
 
 ```Typescript
@@ -214,21 +216,28 @@ export class MoodStone extends O implements IMoodStoneActions {
 }
 ```
 
+#### Instant gratification
+
+We can go in the opposite direction, away from a disciplined approach of making things JSON serializable, but in the direction of "locality of behavior", and inline the infraction:
+
+```Typescript
+
+export class MoodStone extends O implements IMoodStoneActions {
+    calcAgePlus10 = calcAgePlus10;
+    static override config: OConfig<IMoodStoneProps> = {
+        infractions: [({age}: IMoodStoneProps) => ({agePlus10: age + 10})]
+    }
+}
+```
+
 ### Positractions
 
 https://youtu.be/W7YoxrKa4f0?si=rRn05JEvWFVpKP7s
 
 Another kind of arrow function roundabout recognizes are "positractions" -- a portmanteau of "positional" and "interactions".  The examples above have relied on linking to functionality that is intimately aware of the structure of the view model.
 
-But much functionality we want to reuse would be benefit if it could be written in a purely generic manner, completely view model neutral.  For example, suppose we want to reuse a function that takes the maximum of two values and applies it to a third value?  We write such functions this way:
+But much functionality we want to reuse would be benefit if it could be written in a purely generic manner, completely viewModel neutral.  For example, suppose we want to reuse a function that takes the maximum of two values and applies it to a third value?  We do so as follows:
 
-
-
-```TypeScript
-const max = (a: number, b: number) => Math.max(a, b);
-```
-
-We then bind this generic function to our view model:
 
 ```TypeScript
 
@@ -241,7 +250,7 @@ export class MoodStone extends O implements IMoodStoneActions {
     static override config: OConfig<IMoodStoneProps, IMoodStoneActions> = {
         positractions: [
             {
-                do: max,
+                do: Math.max,
                 on: ['age', 'heightInInches'],
                 to: ['maxOfAgeAndHeightInInches']
             }
@@ -254,11 +263,10 @@ export class MoodStone extends O implements IMoodStoneActions {
 export interface MoodStone extends IMoodStoneProps{}
 ```
 
-Once again, the problem here is we are trying to make  our config as JSON serializable as possible.  To make it serializable, the developer must add a step:
+Once again, the problem here is we are trying to make  our config as JSON serializable as possible.  To make it serializable, the developer must add a few steps:
 
 
 ```TypeScript
-const max = (a: number, b: number) => ([Math.max(a, b)]);
 
 export interface IMoodStoneProps{
     age: number,
@@ -266,7 +274,7 @@ export interface IMoodStoneProps{
     maxOfAgeAndHeightInInches: number,
 }
 export class MoodStone extends O implements IMoodStoneActions {
-    max = max;
+    max = Math.max;
     static override config: OConfig<IMoodStoneProps, IMoodStoneActions> = {
         positractions: [
             {
