@@ -25,15 +25,13 @@ Roundabouts:
 const isEven = ({counter}) => ({isEven: counter & 1 === 0});
 const parity = ({isEven}) => ({parity: isEven ? 'even' : 'odd'});
 const effect = ({parity}) => ({'?.element?.innerText': parity};
-const vm = await roundabout(
-    { propagate: {count: 0} }
-    [ isEven, parity, effect ],
-);
+
+const vm = await roundabout({propagate: {count: 0}}, [ isEven, parity, effect ]);
 
 setInterval(() => vm.count++, 1000);
 ```
 
-Same number of statements.  Most statements, where the developer spends more eyeball time, are smaller, easy to test, less distracting binding noise.  One statement is admittedly larger.
+Same number of statements.  Most statements, where the developer spends more eyeball time, are smaller, easy to test, less distracting binding noise.  One statement is admittedly a bit larger.
 
 All the functions are side effect free and don't do any state mutation at all.  Purely functional.
 
@@ -263,6 +261,8 @@ export class MoodStone extends O implements IMoodStoneActions {
 export interface MoodStone extends IMoodStoneProps{}
 ```
 
+#### Making it JSON serializable
+
 Once again, the problem here is we are trying to make  our config as JSON serializable as possible.  To make it serializable, the developer must add a few steps:
 
 
@@ -291,6 +291,8 @@ export class MoodStone extends O implements IMoodStoneActions {
 
 export interface MoodStone extends IMoodStoneProps{}
 ```
+
+
 
 More complex example:  Looping counter
 
