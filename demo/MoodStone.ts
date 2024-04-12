@@ -93,7 +93,7 @@ export class MoodStone extends O implements IMoodStoneActions {
         positractions: [
             {
                 do: max,
-                on: ['age', 'ageChangeCount'],
+                ifKeyIn: ['age', 'ageChangeCount'],
                 //pass: ['age', 'ageChangeCount'],
                 assignTo: ['maxOfAgeAndAgeChangeCount']
             }

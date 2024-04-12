@@ -98,8 +98,12 @@ export class RoundAbout{
             const {options} = this;
             const {vm} = options;
             for(const positraction of positractions){
-                const {on, pass, do: d, assignTo} = positraction;
-                const passR = pass || on;
+                const {
+                    ifKeyIn, ifAllOf, ifAtLeastOneOf, ifEquals, ifNoneOf,
+                    pass, do: d, 
+                    assignTo, debug} = positraction;
+                const passR = pass || ifKeyIn;
+                if(passR === undefined) throw 500;
                 let fn: Function;
                 if(typeof d === 'string'){
                     fn = vm[d] as Function;
@@ -137,9 +141,14 @@ export class RoundAbout{
                 }
                 this.#infractionsLookup[name] = infraction;
                 newBusses[name] = new Set();
-                checks[name] = {
-                    ifKeyIn: new Set(on),
-                }
+
+                const check: SetLogicOps = {debug}
+                if(ifAllOf) check.ifAllOf = this.#toSet(ifAllOf);
+                if(ifAtLeastOneOf) check.ifAtLeastOneOf = this.#toSet(ifAtLeastOneOf);
+                if(ifEquals) check.ifEquals = this.#toSet(ifEquals);
+                if(ifNoneOf) check.ifNoneOf = this.#toSet(ifNoneOf);
+                if(ifKeyIn) check.ifKeyIn = this.#toSet(ifKeyIn);
+                checks[name] = check;
             }
         }
     }
@@ -202,6 +211,7 @@ export class RoundAbout{
             const bus = busses[busKey];
             const check = checks[busKey];
             if(check !== undefined){
+                if(check.debug) debugger;
                 const isOfInterest = await this.#checkSubscriptions(check!, bus);
                 if(!isOfInterest) {
                     busses[busKey] = new Set<string>();

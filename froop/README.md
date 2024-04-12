@@ -31,13 +31,17 @@ const vm = await roundabout({propagate: {count: 0}}, [ isEven, parity, effect ])
 setInterval(() => vm.count++, 1000);
 ```
 
-Same number of statements.  Most statements, where the developer spends more eyeball time, are smaller, easy to test, less distracting binding noise.  One statement is admittedly a bit larger.
+## Somewhat biased(?) comparison
 
-All the functions are side effect free and don't do any state mutation at all.  Purely functional.
+Both examples above require the same number of statements.  But most statements, where the developer spends more eyeball time, are smaller with roundabouts, are easier to test, and involve less distracting binding noise.  One statement is admittedly a bit larger.
 
-roundabout can JSON serialize much of the arguments, making parsing the instructions easier on the browser.
+For both examples, all the functions are side effect free and don't do any state mutation at all.  They are purely functional.
 
-In general, signals involve "busier" syntax that seems to be less declarative, especially less JSON serializable.  On the plus side, the developer can be far less disciplined.  Roundabouts encourage small, loosely coupled functions, which are easy to test (but may suffer from more bouncing around), and the code is far more "clean."  It requires more disciplined patience from the developer, but it allows for a large solution space of code-free declarative solutions. While the argument against signals weakens if it becomes part of the underlying platform (in particular, escaping the charge of getting stuck in proprietary vendor lock-in land), I still think the argument has some relevance.
+roundabout can JSON serialize much of the logic, making parsing the instructions easier on the browser.
+
+In general, signals involve "busier" syntax that seems to be less declarative, especially less JSON serializable.  On the plus side, the developer can be far less disciplined.  
+
+Roundabouts encourage small, loosely coupled functions, which are easy to test (but may suffer from more bouncing around), and the code is far more "clean."  It requires more disciplined patience from the developer, but it allows for a large solution space of code-free declarative solutions. While the argument against signals weakens if it becomes part of the underlying platform (in particular, escaping the charge of getting stuck in proprietary vendor lock-in land), I still think the argument has some relevance.
 
 roundabout "guesses" when the developer wants to call the functions to compute new values, if not specified, based on the lhs of the arrow expressions.  But developers can take hold of the reigns, and be more explicit:
 
@@ -60,21 +64,21 @@ const [vm, propagator] = await roundabout(
 );
 ```
 
-I suspect this will require less run time analysis?
+I suspect roundabouts also require less run time analysis.
 
 It certainly benefits from fewer (nested) parenthesis.
 
-State is all in one place -- the vm, which could also be the custom element class instance.
+State is all in one place -- the vm (view model), which could also be the custom element class instance.
 
-Lower learning curve?
+In my view, roundabouts require a lower learning curve.
 
-roundabout also doesn't execute code if the field value is unchanged.
+For both roundabouts and signals, they don't execute code if the field value is unchanged, so they are on par as far as that concern goes.
 
-No pub/sub required.
+Neither requires pub/sub.
 
-No creation of getters/setters required (other than count).
+No creation of getters/setters required (other than count for roundabouts, so that count++ works).
 
-Basically, what roundabout does is it looks at what subset of properties of the view model is returned from the action methods (checkIfEven, determineParity, setInnerText), and directs traffic accordingly after doing an Object.assignGingerly.
+Basically, what roundabout does is it looks at what subset of properties of the view model is returned from the action methods (isEven, parity, effect), and directs traffic accordingly after doing an Object.assignGingerly.
 
 propagator is an EventTarget, that publishes events when the propagate properties are changed (just count).
 
@@ -175,7 +179,7 @@ If the RHS is the number "0", then the action method is called every time the wa
 
 ## Wiring up EventTarget properties to other methods based on an event.
 
-One example of the kind of complexity that roundabouts can handle cleanly is creating subscriptions between one property that is an eventTarget (or a weak reference to said eventTarget), and a method of the class we want to call when that eventTarget changes, again merging in what the action method returns into the view model.  Once again, the [signals](https://github.com/proposal-signals) proposal warns us about the complexity and danger of using pub/sub (such as EventTargets).  This library sees it as a challenge that using declarative syntax can rise to, because it will be sure to do what is needed to avoid the disaster that that proposal warns us about.
+One example of the kind of complexity that roundabouts can handle cleanly is creating subscriptions between one property that is an instance of an EventTarget (or a weak reference to said instance), and a method of the class we want to call when that eventTarget instance changes, again merging in what the action method returns into the view model.  Once again, the [signals](https://github.com/proposal-signals) proposal warns us about the complexity and danger of using pub/sub (such as EventTargets).  This library sees it as a challenge that using declarative syntax can rise to, because it will be sure to do what is needed to avoid the disaster that that proposal warns us about.
 
 How would this look?  Let's take a look at an example:
 
@@ -249,8 +253,8 @@ export class MoodStone extends O implements IMoodStoneActions {
         positractions: [
             {
                 do: Math.max,
-                on: ['age', 'heightInInches'],
-                to: ['maxOfAgeAndHeightInInches']
+                ifKeyIn: ['age', 'heightInInches'],
+                assignTo: ['maxOfAgeAndHeightInInches']
             }
         ]
 
@@ -344,7 +348,7 @@ export class TimeTicker{
     static override config: OConfig<TimeTickerAllProps> = {
         positractions: [
             {
-                on: ['ticks'],
+                ifAllOf: ['ticks'],
                 do: 'getNextValOfLoop',
                 pass: ['idx', 0, 'repeat', 1, true]
                 assignTo: ['idx', 'disabled', 'enabled']

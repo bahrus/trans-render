@@ -202,9 +202,12 @@ export interface OConfig<TProps = any, TActions = TProps, ETProps = TProps>{
 export type Positractions<TProps = any> = 
     | Array<Positraction<TProps>>;
 
-export interface Positraction<TProps = any> {
+export interface Positraction<TProps = any> extends LogicOp<TProps> {
     do: Function | string,
-    on: Array<keyof TProps & string>,
+    ifKeyIn?: Array<keyof TProps & string>,
+    ifAllOf?: Array<keyof TProps & string>,
+    //ifNoneOf: Array<keyof TProps & string>,
+    
     pass?: Array<(keyof TProps & string) | number | boolean | '$0' | `\`${string}\``>,
     assignTo?: Array<keyof TProps & string>
 }
@@ -268,6 +271,8 @@ export interface LogicOp<Props = any>{
 
     ifAtLeastOneOf?: Keysh<Props>,
 
+    debug?: boolean,
+
 }
 
 export interface SetLogicOps<Props = any>{
@@ -280,6 +285,8 @@ export interface SetLogicOps<Props = any>{
     ifEquals?: Set<Key<Props>>,
 
     ifAtLeastOneOf?: Set<Key<Props>>,
+
+    debug?: boolean,
 }
 
 export interface Action<MCProps = any, MCActions = MCProps> extends LogicOp<MCProps>{

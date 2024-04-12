@@ -68,7 +68,7 @@ export class MoodStone extends O {
         positractions: [
             {
                 do: max,
-                on: ['age', 'ageChangeCount'],
+                ifKeyIn: ['age', 'ageChangeCount'],
                 //pass: ['age', 'ageChangeCount'],
                 assignTo: ['maxOfAgeAndAgeChangeCount']
             }
