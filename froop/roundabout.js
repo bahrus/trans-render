@@ -202,8 +202,8 @@ export class RoundAbout {
         let didNothing = true;
         for (const busKey in busses) {
             const bus = busses[busKey];
-            for (const checkKey in checks) {
-                const check = checks[checkKey];
+            const check = checks[busKey];
+            if (check !== undefined) {
                 const isOfInterest = await this.#checkSubscriptions(check, bus);
                 if (!isOfInterest) {
                     busses[busKey] = new Set();
@@ -216,7 +216,7 @@ export class RoundAbout {
                 }
                 didNothing = false;
                 busses[busKey] = new Set();
-                await this.#doKey(checkKey, vm, keysToPropagate);
+                await this.#doKey(busKey, vm, keysToPropagate);
             }
         }
         if (didNothing) {
@@ -295,9 +295,10 @@ export class RoundAbout {
             if (evtTarget instanceof EventTarget) {
                 ac = new AbortController();
                 handlerControllers[full] = ac;
-                evtTarget.addEventListener(on, e => {
-                    const keysToPropage = new Set();
-                    this.#doKey(d, vm, keysToPropage, e);
+                evtTarget.addEventListener(on, async (e) => {
+                    const keysToPropagate = new Set();
+                    await this.#doKey(d, vm, keysToPropagate, e);
+                    await this.checkQ(keysToPropagate);
                 }, { signal: ac.signal });
             }
         }
