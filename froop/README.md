@@ -120,7 +120,7 @@ So to make this concern seem, perhaps, overly alarmist, we add one more "soft" r
 
 compacts is a portmanteau of computed actions, and the fully qualified name is really "declarative, computed actions between two members of the view model".
 
-The simplest compacts look as follows:
+"compacts" look as follows:
 
 ```TypeScript
 export class MoodStone extends O implements IMoodStoneActions {
@@ -138,7 +138,7 @@ export class MoodStone extends O implements IMoodStoneActions {
 }
 ```
 
-So here, the compact is saying "bind the isHappy property of the custom element view model to the isNotHappy, by negating the former and setting that value to the latter.
+So here, the compact is saying "bind the isHappy property of the custom element view model to the isNotHappy property, by negating the former and setting that value to the latter.
 
 ## Onsets 
 
@@ -183,7 +183,7 @@ One example of the kind of complexity that roundabouts can handle cleanly is cre
 
 How would this look?  Let's take a look at an example:
 
-[TODO]
+This is demonstrated by the [first web component in the universe to use roundabout](https://github.com/bahrus/time-ticker/blob/baseline/time-ticker.ts).
 
 ## Infractions and Positractions
 
@@ -264,6 +264,8 @@ export class MoodStone extends O implements IMoodStoneActions {
 
 export interface MoodStone extends IMoodStoneProps{}
 ```
+
+The "positional" part of the name comes from our mapping approach -- the function is expected to return an array of unnamed results (a "tuple"), which we then map to various properties of our view model to assign the result to, based on the position in the assignTo array.  If a returned element of the tuple can be ignored, simply place a null in that spot of the assignTo array.
 
 #### Making it JSON serializable
 

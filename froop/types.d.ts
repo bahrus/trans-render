@@ -203,13 +203,13 @@ export type Positractions<TProps = any, TActions = TProps> =
     | Array<Positraction<TProps, TActions>>;
 
 export interface Positraction<TProps = any, TActions = TProps> extends LogicOp<TProps> {
-    do: Function | keyof TActions,
+    do: Function | (keyof TActions & string),
     ifKeyIn?: Array<keyof TProps & string>,
     ifAllOf?: Array<keyof TProps & string>,
     //ifNoneOf: Array<keyof TProps & string>,
     
     pass?: Array<(keyof TProps & string) | number | boolean | '$0' | `\`${string}\``>,
-    assignTo?: Array<keyof TProps & string>
+    assignTo?: Array<null | (keyof TProps & string)>
 }
 
 export type Onsets<TProps = any, TActions = TProps> = 

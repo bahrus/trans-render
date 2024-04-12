@@ -126,12 +126,14 @@ export class RoundAbout{
                     if(assignTo === undefined) return;
                     if(!Array.isArray(result)){
                         return {
-                            [assignTo[0]]: result
+                            [assignTo[0]!]: result
                         }
                     }
                     const returnObj: any = {};
                     for(let i = 0, ii = Math.min(result.length, assignTo.length); i < ii; i++){
-                        returnObj[assignTo[i]] = result[i];
+                        const propToAssign = assignTo[i];
+                        if(propToAssign === null) continue;
+                        returnObj[propToAssign] = result[i];
                     }
                     return returnObj;
                 }
