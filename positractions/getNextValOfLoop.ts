@@ -1,6 +1,5 @@
 export const getNextValOfLoop = (currentVal: number, from: number,  to: number, step=1, loopIfMax=false)
-    : [number, boolean, boolean] => {
-        console.log('getNextValOfLoop');
+    : [nextVal: number, hitMax: boolean, startedLoop: boolean] => {
     let hitMax = false, nextVal = currentVal, startedLoop = false;
     if(currentVal === undefined || currentVal === null || currentVal < from){
         nextVal = from;

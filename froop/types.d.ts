@@ -196,14 +196,14 @@ export interface OConfig<TProps = any, TActions = TProps, ETProps = TProps>{
     //style?: Partial<CSSStyleDeclaration>;
     compacts?: Compacts<TProps>;
     handlers?: Handlers<ETProps, TActions>;
-    positractions?: Positractions<TProps>;
+    positractions?: Positractions<TProps, TActions>;
 }
 
-export type Positractions<TProps = any> = 
-    | Array<Positraction<TProps>>;
+export type Positractions<TProps = any, TActions = TProps> = 
+    | Array<Positraction<TProps, TActions>>;
 
-export interface Positraction<TProps = any> extends LogicOp<TProps> {
-    do: Function | string,
+export interface Positraction<TProps = any, TActions = TProps> extends LogicOp<TProps> {
+    do: Function | keyof TActions,
     ifKeyIn?: Array<keyof TProps & string>,
     ifAllOf?: Array<keyof TProps & string>,
     //ifNoneOf: Array<keyof TProps & string>,
