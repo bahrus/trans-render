@@ -90,6 +90,7 @@
     "lib/prs/*.js",
     "lib/prs/*.d.ts",
     "lib/*.d.ts",
+    "positractions/*.js",
     "trHelpers/*.js",
     "xslt/*.js",
     "froop/*.js",
