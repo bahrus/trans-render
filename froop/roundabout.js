@@ -134,7 +134,10 @@ export class RoundAbout {
                     }
                     const returnObj = {};
                     for (let i = 0, ii = Math.min(result.length, assignTo.length); i < ii; i++) {
-                        returnObj[assignTo[i]] = result[i];
+                        const propToAssign = assignTo[i];
+                        if (propToAssign === null)
+                            continue;
+                        returnObj[propToAssign] = result[i];
                     }
                     return returnObj;
                 };
@@ -435,7 +438,7 @@ export class RoundAbout {
     async #doKey(key, vm, keysToPropagate, e) {
         const method = vm[key] || this.#infractionsLookup[key];
         const isAsync = method.constructor.name === 'AsyncFunction';
-        const ret = isAsync ? await method(vm, e) : method(vm, e);
+        const ret = isAsync ? await method.apply(vm, [vm, e]) : method.apply(vm, [vm, e]);
         if (ret === undefined || ret === null)
             return;
         if (this.#compact) {

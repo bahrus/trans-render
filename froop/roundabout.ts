@@ -429,7 +429,7 @@ export class RoundAbout{
     async #doKey(key: string, vm: any, keysToPropagate: Set<string>, e?: Event){
         const method = vm[key] || this.#infractionsLookup[key];
         const isAsync = method.constructor.name === 'AsyncFunction';
-        const ret = isAsync ? await method(vm, e) : method(vm, e);
+        const ret = isAsync ? await method.apply(vm, [vm, e]) : method.apply(vm, [vm, e]);
         if(ret === undefined || ret === null) return;
         if(this.#compact){
             this.#compact.covertAssignment(ret, vm as RoundaboutReady, keysToPropagate, this.#busses);

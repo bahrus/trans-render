@@ -285,7 +285,7 @@ export class MoodStone extends O implements IMoodStoneActions {
         positractions: [
             {
                 do: 'max',
-                on: ['age', 'heightInInches'],
+                ifKeyIn: ['age', 'heightInInches'],
                 //pass: ['age', 'heightInInches'],
                 assignTo: ['maxOfAgeAndHeightInInches']
             }
