@@ -412,6 +412,7 @@ export class RoundAbout{
                 const val = (vm as any)[prop];
                 if(isFirst){
                     firstVal = val;
+                    isFirst = false;
                 }else{
                     if(val !== firstVal) return false;
                 }
