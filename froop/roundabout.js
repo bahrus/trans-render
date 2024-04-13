@@ -39,8 +39,8 @@ export class RoundAbout {
             const val = actions[key];
             if (val === undefined)
                 continue;
-            const { ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf } = val;
-            const check = {};
+            const { ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf, debug } = val;
+            const check = { debug };
             if (ifAllOf)
                 check.ifAllOf = this.#toSet(ifAllOf);
             if (ifAtLeastOneOf)
@@ -381,7 +381,9 @@ export class RoundAbout {
         return false;
     }
     async #doChecks(check, initCheck) {
-        const { ifAllOf, ifKeyIn, ifAtLeastOneOf, ifEquals, ifNoneOf } = check;
+        const { ifAllOf, ifKeyIn, ifAtLeastOneOf, ifEquals, ifNoneOf, debug } = check;
+        if (debug)
+            debugger;
         const { options } = this;
         const { vm } = options;
         if (ifAllOf !== undefined) {
