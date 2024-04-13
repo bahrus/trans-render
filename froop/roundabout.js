@@ -351,7 +351,6 @@ export class RoundAbout {
         this.#extEvtCount++;
         const keysToPropagate = compactKeysToPropagate || new Set();
         await this.checkQ(keysToPropagate);
-        console.log('key');
         const routes = this.#routers[key];
         if (routes !== undefined) {
             throw 'NI';
