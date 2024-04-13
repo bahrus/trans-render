@@ -25,14 +25,13 @@ export class O extends HTMLElement {
         this.propagator.dispatchEvent(new Event('disconnectedCallback'));
     }
     #internals;
-    // get internals(){
-    // }
+    #roundabout;
     async #mount() {
         const config = this.constructor.config;
         const { actions, compacts, onsets, infractions, handlers, positractions } = config;
-        if (actions !== undefined) {
+        if ((actions || compacts || onsets || infractions || handlers || positractions) !== undefined) {
             const { roundabout } = await import('./roundabout.js');
-            await roundabout({
+            const [vm, ra] = await roundabout({
                 //propagator: this.propagator,
                 vm: this,
                 actions,
@@ -41,6 +40,7 @@ export class O extends HTMLElement {
                 handlers,
                 positractions
             }, infractions);
+            this.#roundabout = ra;
         }
     }
     #parseAttr(propInfo, name, ov, nv) {

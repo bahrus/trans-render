@@ -13,7 +13,7 @@ export async function roundabout<TProps = any, TActions = TProps>(
     
     await ra.hydrate(keysToPropagate);
     await ra.checkQ(keysToPropagate);
-    return options.vm;
+    return [ra.options.vm, ra];
 }
 
 export class RoundAbout{
@@ -43,12 +43,13 @@ export class RoundAbout{
             if(val === undefined) continue;
             
             const {ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf, debug} = val;
-            const check: SetLogicOps = {debug}
+            const check: SetLogicOps = {}
             if(ifAllOf) check.ifAllOf = this.#toSet(ifAllOf);
             if(ifAtLeastOneOf) check.ifAtLeastOneOf = this.#toSet(ifAtLeastOneOf);
             if(ifEquals) check.ifEquals = this.#toSet(ifEquals);
             if(ifNoneOf) check.ifNoneOf = this.#toSet(ifNoneOf);
             if(ifKeyIn) check.ifKeyIn = this.#toSet(ifKeyIn);
+            if(debug) check.debug = true;
             checks[key] = check;
         }
         for(const onsetKey in onsets){
@@ -192,6 +193,7 @@ export class RoundAbout{
         for(const key in checks){
             const check = checks[key];
             const checkVal = await this.#doChecks(check!, true);
+            check!.a = checkVal;
             if(checkVal){
                 await this.#doKey(key, vm, keysToPropagate);
             }
@@ -220,6 +222,7 @@ export class RoundAbout{
                     continue;
                 }
                 const passesChecks = await this.#doChecks(check!, false);
+                check.a = passesChecks;
                 if(!passesChecks) {
                     busses[busKey] = new Set<string>();
                     continue;

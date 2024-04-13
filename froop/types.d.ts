@@ -276,6 +276,9 @@ export interface LogicOp<Props = any>{
 }
 
 export interface SetLogicOps<Props = any>{
+
+    a?: boolean,
+
     ifAllOf?: Set<Key<Props>>,
 
     ifKeyIn?: Set<Key<Props>>,  

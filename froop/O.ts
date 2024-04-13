@@ -1,5 +1,6 @@
 import {RoundaboutReady, BaseProps, PropInfo, PropInfoTypes, PropLookup, OConfig} from './types';
 import {assignGingerly} from '../lib/assignGingerly.js';
+import { RoundAbout } from './roundabout.js';
 export {OConfig} from './types';
 const publicPrivateStore = Symbol();
 
@@ -31,17 +32,16 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     }
 
     #internals: ElementInternals;
-    // get internals(){
 
-    // }
-
+    #roundabout: RoundAbout | undefined;
+    
     async #mount(){
         
         const config = (<any>this.constructor).config as OConfig;
         const {actions, compacts, onsets, infractions, handlers, positractions} = config;
-        if(actions !== undefined){
+        if((actions || compacts || onsets || infractions || handlers || positractions) !== undefined){
             const {roundabout} = await import('./roundabout.js');
-            await roundabout({
+            const [vm, ra] = await roundabout({
                 //propagator: this.propagator,
                 vm: this,
                 actions,
@@ -50,6 +50,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                 handlers,
                 positractions
             }, infractions);
+            this.#roundabout = ra;
         }
         
     }
