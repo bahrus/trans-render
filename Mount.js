@@ -8,9 +8,12 @@ export class Mount extends O {
             }
         },
         actions: {
-            mount: {
-                ifNoneOf: ['clonedTemplate']
+            cloneMT: {
+                ifAllOf: 'csr'
             }
+            // mount:{
+            //     ifNoneOf:['clonedTemplate']
+            // }
         }
     };
     #root;
@@ -32,37 +35,18 @@ export class Mount extends O {
             this.#root = this;
         }
     }
-    #needToAppendClone = true;
-    async #adopt(self, root) {
-        // const styles = ((<any>self.constructor).config as MntCfg).styles;
-        // if(styles === undefined) return;
-        // const {DoStyles} = await import('./lib/mixins/DoStyles.js');
-        // new DoStyles(this, styles, root, compiledStyleMap, modernBrowser);
-    }
-    inspect(self) {
-        return {};
-    }
-    async mount(self) {
-        const { shadowRoot, children } = self;
-        let root = self;
-        if (shadowRootMode) {
-            if (shadowRoot === null) {
-                root = this.attachShadow({ mode: shadowRootMode });
-                this.#needToAppendClone = true;
-                await this.#adopt(this, root);
-            }
-            else {
-                root = shadowRoot;
-            }
+    cloneMT(self) {
+        const config = this.constructor.MntCfgMxn;
+        let { mainTemplate } = config;
+        if (typeof mainTemplate === 'string') {
+            const templ = document.createElement('template');
+            templ.innerHTML = mainTemplate;
+            config.mainTemplate = templ;
+            mainTemplate = templ;
         }
-        else {
-            if (self.hasChildNodes()) {
-                this.#needToAppendClone = true;
-            }
-        }
-        return {};
-    }
-    hydrate(self) {
-        return {};
+        const clonedTemplate = mainTemplate.content.cloneNode(true);
+        return {
+            clonedTemplate
+        };
     }
 }

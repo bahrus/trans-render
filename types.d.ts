@@ -462,13 +462,15 @@ export interface MntCfg<TProps = any, TActions = TProps, ETProps = TProps> exten
 export interface MountProps{
     clonedTemplate?: DocumentFragment;
     skipTemplateClone?: boolean;
+    readonly csr?: boolean;
     
 }
 export type PMP = Partial<MountProps>;
 export type ProPMP = Promise<PMP>
 
 export interface MountActions{
-    inspect(self: this): PMP
-    mount(self: this): ProPMP
-    hydrate(self: this): Partial<MountProps>;
+    cloneMT(self: this): PMP;
+    // inspect(self: this): PMP
+    // mount(self: this): ProPMP
+    // hydrate(self: this): Partial<MountProps>;
 }
