@@ -9,6 +9,7 @@
 	},
 	"include": [
 		"Transform.ts",
+		"Mount.ts",
 		"dss/*",
 		"lib/*",
 		"lib/prs/*",

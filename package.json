@@ -20,6 +20,7 @@
     "./dss/parse.js": "./dss/parse.js",
     "./dss/find.js": "./dss/find.js",
     "./froop/CE.js": "./froop/CE.js",
+    "./froop/O.js": "./froop/O.js",
     "./lib/arr.js": "./lib/arr.js",
     "./lib/beBeckoned.js": "./lib/beBeckoned.js",
     "./lib/bePropagating.js": "./lib/bePropagating.js",

@@ -440,3 +440,35 @@ export interface TransRenderMethods{
     getModel(): Promise<any>,
     skipInit: boolean,
 }
+
+import {OConfig} from './froop/types';
+export interface MntCfg<TProps = any, TActions = TProps, ETProps = TProps> extends OConfig<TProps, TActions, ETProps>{
+    mainTemplate: string | HTMLTemplateElement,
+    /**
+     * transform within ShadowRoot if applicable
+     */
+    xform: XForm<TProps, TActions>,
+    /**
+     * transform applied to light children, if applicable
+     * Use ":root" to match on the root element
+     */
+    lcXform: XForm<TProps, TActions>,
+
+    styles?: /*CSSStyleSheet[] |*/ string;
+
+    shadowRootInit?: ShadowRootInit
+}
+
+export interface MountProps{
+    clonedTemplate?: DocumentFragment;
+    skipTemplateClone?: boolean;
+    
+}
+export type PMP = Partial<MountProps>;
+export type ProPMP = Promise<PMP>
+
+export interface MountActions{
+    inspect(self: this): PMP
+    mount(self: this): ProPMP
+    hydrate(self: this): Partial<MountProps>;
+}
