@@ -1,65 +1,38 @@
-import {
-    TemplMgmt, 
-    TemplMgmtProps, 
-    TemplMgmtActions, 
-    beTransformed, 
-    XForm
-} from '../lib/mixins/TemplMgmt.js';
-import { CE } from '../froop/CE.js';
-import {Localizer, LocalizerMethods} from '../lib/mixins/Localizer.js';
+import {MntCfg, Mount, MountActions, MountProps} from '../Mount.js';
+
 
 export interface DTRCounterProps {
     count: number;
 } 
-
-
-const ce = new CE<DTRCounterProps  & TemplMgmtProps, TemplMgmtActions>({
-    mixins: [TemplMgmt, Localizer],
-    config:  {
-        tagName:'dtr-counter',
-        actions:{
-            ...beTransformed,
+export class DTRCounter extends Mount{
+    static override config: MntCfg<DTRCounterProps & MountProps, MountActions> = {
+        name: 'dtr-counter',
+        shadowRootInit:{
+            mode: 'open'
         },
+        mainTemplate: String.raw `<button part=down data-d=-1>-</button><data part=count></data><button part=up data-d=1>+</button>`,
         propDefaults:{
             count: 30,
-            xform: {
-                '% count': 'localize',
-                "button": {
-                    m: {
-                        on: 'click',
-                        inc: 'count',
-                        byAmt: '.dataset.d',
-                    },
-                }
-            } as XForm<DTRCounterProps, LocalizerMethods>,
-            shadowRootMode: 'open',
-            styles: String.raw `
-<style>
-    :host{
-        display: block;
-    }
-    * {
-      font-size: 200%;
-    }
-
-    span {
-      width: 4rem;
-      display: inline-block;
-      text-align: center;
-    }
-
-    button {
-      width: 4rem;
-      height: 4rem;
-      border: none;
-      border-radius: 10px;
-      background-color: seagreen;
-      color: white;
-    }
-</style>
-`,
-            mainTemplate: String.raw `<button part=down data-d=-1>-</button><data part=count></data><button part=up data-d=1>+</button>`,
         },
-        
-    },
-});
+        propInfo: {
+            ...super.mntCfgMxn.propInfo,
+        },
+        actions:{
+            ...super.mntCfgMxn.actions
+        },
+        xform: {
+            '% count': 0,
+            button: {
+                m: {
+                    on: 'click',
+                    inc: 'count',
+                    byAmt: '.dataset.d',
+                },
+            }
+        }
+    } 
+}
+
+await DTRCounter.bootUp();
+
+customElements.define(DTRCounter.config.name!, DTRCounter);

@@ -1,12 +1,19 @@
 import {O, OConfig} from './froop/O.js';
-import { MntCfg, MountActions, MountProps, PPMP } from './types.js';
-export {MntCfg, MountProps} from './types';
+import { MntCfg, MountActions, MountProps, PPMP, ProPMP } from './types.js';
+export {MntCfg, MountProps, MountActions} from './types';
 
-export class Mount<TProps = any, TActions = TProps> extends O<TProps, TActions> implements MountActions{
-    static MntCfgMxn: OConfig<MountProps, MountActions> = {
+
+export class Mount<TProps = any, TActions = TProps, ETProps = TProps> 
+        extends O<TProps, TActions> 
+        implements MountActions<TProps, TActions, ETProps>{
+    static mntCfgMxn: OConfig<MountProps, MountActions> = {
         propInfo:{
             clonedTemplate: {
                 type: 'Object',
+                ro: true,
+            },
+            hydrated: {
+                type: 'Boolean',
                 ro: true,
             }
 
@@ -14,10 +21,17 @@ export class Mount<TProps = any, TActions = TProps> extends O<TProps, TActions> 
         actions:{
             cloneMT: {
                 ifAllOf: 'csr'
+            },
+            hydrateClone: {
+                ifAllOf: ['clonedTemplate', 'xform']
+            },
+            mountClone: {
+                ifAllOf: ['clonedTemplate', 'hydrated']
+            },
+            hydrateRoot: {
+                ifAllOf: ['xform'],
+                ifNoneOf: ['csr'],
             }
-            // mount:{
-            //     ifNoneOf:['clonedTemplate']
-            // }
         }
     }
 
@@ -26,12 +40,22 @@ export class Mount<TProps = any, TActions = TProps> extends O<TProps, TActions> 
     get csr(){
         return this.#csr || this.hasAttribute('csr');
     }
+    get config(){
+        return (<any>this.constructor).config as MntCfg;
+    }
+    // get mntConfig(){
+    //     return (<any>this.constructor).mntCfgMxn as OConfig;
+    // }
+    get xform(){
+        return this.config.xform;
+    }
     constructor(){
         super();
-        const config = (<any>this.constructor).MntCfgMxn as MntCfg;
+        const {config} = this;
         const {shadowRootInit} = config;
         if(shadowRootInit){
             if(this.shadowRoot === null){
+                this.attachShadow(shadowRootInit);
                 this.#csr = true;
             }
             this.#root = this.shadowRoot!;
@@ -42,7 +66,7 @@ export class Mount<TProps = any, TActions = TProps> extends O<TProps, TActions> 
     }
 
     cloneMT(self: this): Partial<MountProps> {
-        const config = (<any>this.constructor).MntCfgMxn as MntCfg;
+        const {config} = this;
         let {mainTemplate} = config;
         if(typeof mainTemplate === 'string'){
             const templ = document.createElement('template');
@@ -54,6 +78,34 @@ export class Mount<TProps = any, TActions = TProps> extends O<TProps, TActions> 
         return {
             clonedTemplate
         } as Partial<MountProps>
+    }
+    async hydrateClone(self: this): ProPMP<TProps, TActions, ETProps> {
+        const {clonedTemplate, xform, propagator} = self;
+        const {Transform} = await import('./Transform.js');
+        await Transform(clonedTemplate!, this, xform!, {
+            propagator
+        });
+        return {
+            hydrated: true,
+        }
+    }
+    mountClone(self: this): PPMP<TProps, TActions, ETProps> {
+        const {clonedTemplate} = self;
+        this.#root.appendChild(clonedTemplate!);
+        return {
+
+        }
+    }
+    async hydrateRoot(self: this): ProPMP<TProps, TActions, ETProps> {
+        const root = self.#root;
+        const {xform, propagator} = self;
+        const {Transform} = await import('./Transform.js');
+        await Transform(root, this, xform!, {
+            propagator
+        });
+        return {
+
+        }
     }
     // async #adopt(self: this, root: ShadowRoot){
     //     // const styles = ((<any>self.constructor).config as MntCfg).styles;

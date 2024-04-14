@@ -16,22 +16,13 @@
     <button onclick='changeTemplate()'>change template</button> -->
     <script type=importmap>{
         "imports":{
-            "xtal-element/": "../node_modules/xtal-element/",
-            "mount-observer/": "../node_modules/mount-observer/",
-            "trans-render/": "../node_modules/trans-render/"
+            "mount-observer/": "/node_modules/mount-observer/",
+            "trans-render/": "/node_modules/trans-render/"
         }
     }</script>
     <script type=module>
         import './dtr-counter.js';
     </script>
-    <script>
-        function changeTemplate(){
-            test.mainTemplate = String.raw `
-<div>I am here</div>           
-            `;
-            test.removeAttribute('defer-hydration');
 
-        }
-    </script>
 </body>
 </html>

@@ -447,30 +447,34 @@ export interface MntCfg<TProps = any, TActions = TProps, ETProps = TProps> exten
     /**
      * transform within ShadowRoot if applicable
      */
-    xform: XForm<TProps, TActions>,
+    xform?: XForm<TProps, TActions>,
     /**
      * transform applied to light children, if applicable
      * Use ":root" to match on the root element
      */
-    lcXform: XForm<TProps, TActions>,
+    lcXform?: XForm<TProps, TActions>,
 
     styles?: /*CSSStyleSheet[] |*/ string;
 
     shadowRootInit?: ShadowRootInit
 }
 
-export interface MountProps{
-    clonedTemplate?: DocumentFragment;
-    skipTemplateClone?: boolean;
+export interface MountProps<TProps = any, TActions = TProps, ETProps = TProps>{
+    readonly clonedTemplate?: DocumentFragment;
+    //skipTemplateClone?: boolean;
+    readonly hydrated?: boolean;
     readonly csr?: boolean;
+    readonly xform?: XForm<TProps, TActions>,
     
 }
-export type PMP = Partial<MountProps>;
-export type ProPMP = Promise<PMP>
+export type PMP<TProps = any, TActions = TProps, ETProps = TProps> = Partial<MountProps<TProps, TActions, ETProps>>;
+export type ProPMP<TProps = any, TActions = TProps, ETProps = TProps> = Promise<PMP<TProps, TActions, ETProps>>
 
-export interface MountActions{
+export interface MountActions<TProps = any, TActions = TProps, ETProps = TProps>{
     cloneMT(self: this): PMP;
     // inspect(self: this): PMP
     // mount(self: this): ProPMP
-    // hydrate(self: this): Partial<MountProps>;
+    hydrateClone(self: this): ProPMP<TProps, TActions, ETProps>;
+    hydrateRoot(self: this): ProPMP<TProps, TActions, ETProps>;
+    mountClone(self: this): Partial<MountProps<TProps, TActions, ETProps>>;
 }

@@ -1,19 +1,30 @@
 import { O } from './froop/O.js';
 export class Mount extends O {
-    static MntCfgMxn = {
+    static mntCfgMxn = {
         propInfo: {
             clonedTemplate: {
                 type: 'Object',
+                ro: true,
+            },
+            hydrated: {
+                type: 'Boolean',
                 ro: true,
             }
         },
         actions: {
             cloneMT: {
                 ifAllOf: 'csr'
+            },
+            hydrateClone: {
+                ifAllOf: ['clonedTemplate', 'xform']
+            },
+            mountClone: {
+                ifAllOf: ['clonedTemplate', 'hydrated']
+            },
+            hydrateRoot: {
+                ifAllOf: ['xform'],
+                ifNoneOf: ['csr'],
             }
-            // mount:{
-            //     ifNoneOf:['clonedTemplate']
-            // }
         }
     };
     #root;
@@ -21,12 +32,22 @@ export class Mount extends O {
     get csr() {
         return this.#csr || this.hasAttribute('csr');
     }
+    get config() {
+        return this.constructor.config;
+    }
+    // get mntConfig(){
+    //     return (<any>this.constructor).mntCfgMxn as OConfig;
+    // }
+    get xform() {
+        return this.config.xform;
+    }
     constructor() {
         super();
-        const config = this.constructor.MntCfgMxn;
+        const { config } = this;
         const { shadowRootInit } = config;
         if (shadowRootInit) {
             if (this.shadowRoot === null) {
+                this.attachShadow(shadowRootInit);
                 this.#csr = true;
             }
             this.#root = this.shadowRoot;
@@ -36,7 +57,7 @@ export class Mount extends O {
         }
     }
     cloneMT(self) {
-        const config = this.constructor.MntCfgMxn;
+        const { config } = this;
         let { mainTemplate } = config;
         if (typeof mainTemplate === 'string') {
             const templ = document.createElement('template');
@@ -48,5 +69,29 @@ export class Mount extends O {
         return {
             clonedTemplate
         };
+    }
+    async hydrateClone(self) {
+        const { clonedTemplate, xform, propagator } = self;
+        const { Transform } = await import('./Transform.js');
+        await Transform(clonedTemplate, this, xform, {
+            propagator
+        });
+        return {
+            hydrated: true,
+        };
+    }
+    mountClone(self) {
+        const { clonedTemplate } = self;
+        this.#root.appendChild(clonedTemplate);
+        return {};
+    }
+    async hydrateRoot(self) {
+        const root = self.#root;
+        const { xform, propagator } = self;
+        const { Transform } = await import('./Transform.js');
+        await Transform(root, this, xform, {
+            propagator
+        });
+        return {};
     }
 }
