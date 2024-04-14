@@ -22,16 +22,16 @@ const ce = new CE<DTRCounterProps  & TemplMgmtProps, TemplMgmtActions>({
         },
         propDefaults:{
             count: 30,
-            xform: {
-                '% count': 'localize',
-                "button": {
-                    m: {
-                        on: 'click',
-                        inc: 'count',
-                        byAmt: '.dataset.d',
-                    },
-                }
-            } as XForm<DTRCounterProps, LocalizerMethods>,
+            // xform: {
+            //     '% count': 'localize',
+            //     "button": {
+            //         m: {
+            //             on: 'click',
+            //             inc: 'count',
+            //             byAmt: '.dataset.d',
+            //         },
+            //     }
+            // } as XForm<DTRCounterProps, LocalizerMethods>,
             shadowRootMode: 'open',
             styles: String.raw `
 <style>

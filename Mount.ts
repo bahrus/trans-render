@@ -1,5 +1,5 @@
 import {O, OConfig} from './froop/O.js';
-import { MntCfg, MountActions, MountProps, PPMP, ProPMP } from './types.js';
+import { MntCfg, MountActions, MountProps, PMP, ProPMP } from './types.js';
 export {MntCfg, MountProps, MountActions} from './types';
 
 
@@ -22,15 +22,18 @@ export class Mount<TProps = any, TActions = TProps, ETProps = TProps>
             cloneMT: {
                 ifAllOf: 'csr'
             },
-            hydrateClone: {
+            initXform: {
                 ifAllOf: ['clonedTemplate', 'xform']
             },
             mountClone: {
                 ifAllOf: ['clonedTemplate', 'hydrated']
             },
-            hydrateRoot: {
+            initSSRXform: {
                 ifAllOf: ['xform'],
                 ifNoneOf: ['csr'],
+            },
+            onNoXForm:{
+                ifNoneOf: ['xform']
             }
         }
     }
@@ -79,7 +82,7 @@ export class Mount<TProps = any, TActions = TProps, ETProps = TProps>
             clonedTemplate
         } as Partial<MountProps>
     }
-    async hydrateClone(self: this): ProPMP<TProps, TActions, ETProps> {
+    async initXform(self: this): ProPMP<TProps, TActions, ETProps> {
         const {clonedTemplate, xform, propagator} = self;
         const {Transform} = await import('./Transform.js');
         await Transform(clonedTemplate!, this, xform!, {
@@ -89,14 +92,14 @@ export class Mount<TProps = any, TActions = TProps, ETProps = TProps>
             hydrated: true,
         }
     }
-    mountClone(self: this): PPMP<TProps, TActions, ETProps> {
+    mountClone(self: this): PMP<TProps, TActions, ETProps> {
         const {clonedTemplate} = self;
         this.#root.appendChild(clonedTemplate!);
         return {
 
         }
     }
-    async hydrateRoot(self: this): ProPMP<TProps, TActions, ETProps> {
+    async initSSRXform(self: this): ProPMP<TProps, TActions, ETProps> {
         const root = self.#root;
         const {xform, propagator} = self;
         const {Transform} = await import('./Transform.js');
@@ -104,8 +107,13 @@ export class Mount<TProps = any, TActions = TProps, ETProps = TProps>
             propagator
         });
         return {
-
+            hydrated: true
         }
+    }
+    async onNoXForm(self: this): ProPMP<TProps, TActions, ETProps> {
+         return {
+            hydrated: true,
+         }
     }
     // async #adopt(self: this, root: ShadowRoot){
     //     // const styles = ((<any>self.constructor).config as MntCfg).styles;

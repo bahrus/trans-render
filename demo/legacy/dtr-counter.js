@@ -10,16 +10,16 @@ const ce = new CE({
         },
         propDefaults: {
             count: 30,
-            xform: {
-                '% count': 'localize',
-                "button": {
-                    m: {
-                        on: 'click',
-                        inc: 'count',
-                        byAmt: '.dataset.d',
-                    },
-                }
-            },
+            // xform: {
+            //     '% count': 'localize',
+            //     "button": {
+            //         m: {
+            //             on: 'click',
+            //             inc: 'count',
+            //             byAmt: '.dataset.d',
+            //         },
+            //     }
+            // } as XForm<DTRCounterProps, LocalizerMethods>,
             shadowRootMode: 'open',
             styles: String.raw `
 <style>

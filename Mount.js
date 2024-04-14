@@ -15,15 +15,18 @@ export class Mount extends O {
             cloneMT: {
                 ifAllOf: 'csr'
             },
-            hydrateClone: {
+            initXform: {
                 ifAllOf: ['clonedTemplate', 'xform']
             },
             mountClone: {
                 ifAllOf: ['clonedTemplate', 'hydrated']
             },
-            hydrateRoot: {
+            initSSRXform: {
                 ifAllOf: ['xform'],
                 ifNoneOf: ['csr'],
+            },
+            onNoXForm: {
+                ifNoneOf: ['xform']
             }
         }
     };
@@ -70,7 +73,7 @@ export class Mount extends O {
             clonedTemplate
         };
     }
-    async hydrateClone(self) {
+    async initXform(self) {
         const { clonedTemplate, xform, propagator } = self;
         const { Transform } = await import('./Transform.js');
         await Transform(clonedTemplate, this, xform, {
@@ -85,13 +88,20 @@ export class Mount extends O {
         this.#root.appendChild(clonedTemplate);
         return {};
     }
-    async hydrateRoot(self) {
+    async initSSRXform(self) {
         const root = self.#root;
         const { xform, propagator } = self;
         const { Transform } = await import('./Transform.js');
         await Transform(root, this, xform, {
             propagator
         });
-        return {};
+        return {
+            hydrated: true
+        };
+    }
+    async onNoXForm(self) {
+        return {
+            hydrated: true,
+        };
     }
 }
