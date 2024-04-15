@@ -22,7 +22,7 @@ export class Mount<TProps = any, TActions = TProps, ETProps = TProps>
             cloneMT: {
                 ifAllOf: 'csr'
             },
-            initXform: {
+            initCSRXform: {
                 ifAllOf: ['clonedTemplate', 'xform']
             },
             mountClone: {
@@ -82,7 +82,7 @@ export class Mount<TProps = any, TActions = TProps, ETProps = TProps>
             clonedTemplate
         } as Partial<MountProps>
     }
-    async initXform(self: this): ProPMP<TProps, TActions, ETProps> {
+    async initCSRXform(self: this): ProPMP<TProps, TActions, ETProps> {
         const {clonedTemplate, xform, propagator} = self;
         const {Transform} = await import('./Transform.js');
         await Transform(clonedTemplate!, this, xform!, {

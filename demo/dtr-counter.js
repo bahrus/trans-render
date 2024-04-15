@@ -15,16 +15,16 @@ export class DTRCounter extends Mount {
         actions: {
             ...super.mntCfgMxn.actions
         },
-        // xform: {
-        //     '% count': 0,
-        //     button: {
-        //         m: {
-        //             on: 'click',
-        //             inc: 'count',
-        //             byAmt: '.dataset.d',
-        //         },
-        //     }
-        // }
+        xform: {
+            '% count': 0,
+            button: {
+                m: {
+                    on: 'click',
+                    inc: 'count',
+                    byAmt: '.dataset.d',
+                },
+            }
+        }
     };
 }
 await DTRCounter.bootUp();

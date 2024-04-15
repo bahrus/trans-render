@@ -15,7 +15,7 @@ export class Mount extends O {
             cloneMT: {
                 ifAllOf: 'csr'
             },
-            initXform: {
+            initCSRXform: {
                 ifAllOf: ['clonedTemplate', 'xform']
             },
             mountClone: {
@@ -73,7 +73,7 @@ export class Mount extends O {
             clonedTemplate
         };
     }
-    async initXform(self) {
+    async initCSRXform(self) {
         const { clonedTemplate, xform, propagator } = self;
         const { Transform } = await import('./Transform.js');
         await Transform(clonedTemplate, this, xform, {

@@ -474,7 +474,7 @@ export interface MountActions<TProps = any, TActions = TProps, ETProps = TProps>
     cloneMT(self: this): PMP;
     // inspect(self: this): PMP
     // mount(self: this): ProPMP
-    initXform(self: this): ProPMP<TProps, TActions, ETProps>;
+    initCSRXform(self: this): ProPMP<TProps, TActions, ETProps>;
     initSSRXform(self: this): ProPMP<TProps, TActions, ETProps>;
     onNoXForm(self: this): ProPMP<TProps, TActions, ETProps>;
     
