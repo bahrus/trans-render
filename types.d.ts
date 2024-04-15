@@ -461,7 +461,7 @@ export interface MntCfg<TProps = any, TActions = TProps, ETProps = TProps> exten
 
 export interface MountProps<TProps = any, TActions = TProps, ETProps = TProps>{
     readonly clonedTemplate?: DocumentFragment;
-    //skipTemplateClone?: boolean;
+    deferHydration?: boolean;
     readonly hydrated?: boolean;
     readonly csr?: boolean;
     readonly xform?: XForm<TProps, TActions>,

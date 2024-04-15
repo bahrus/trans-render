@@ -15,6 +15,11 @@ export class Mount<TProps = any, TActions = TProps, ETProps = TProps>
             hydrated: {
                 type: 'Boolean',
                 ro: true,
+            },
+            deferHydration: {
+                type: 'Boolean',
+                parse: true,
+                attrName: 'defer-hydration'
             }
 
         },
@@ -23,14 +28,15 @@ export class Mount<TProps = any, TActions = TProps, ETProps = TProps>
                 ifAllOf: 'csr'
             },
             initCSRXform: {
-                ifAllOf: ['clonedTemplate', 'xform']
+                ifAllOf: ['clonedTemplate', 'xform'],
+                ifNoneOf: ['deferHydration'],
             },
             mountClone: {
-                ifAllOf: ['clonedTemplate', 'hydrated']
+                ifAllOf: ['clonedTemplate', 'hydrated'],
             },
             initSSRXform: {
                 ifAllOf: ['xform'],
-                ifNoneOf: ['csr'],
+                ifNoneOf: ['csr', 'deferHydration'],
             },
             onNoXForm:{
                 ifNoneOf: ['xform']
@@ -142,42 +148,7 @@ export class Mount<TProps = any, TActions = TProps, ETProps = TProps>
             hydrated: true,
          }
     }
-    // async #adopt(self: this, root: ShadowRoot){
-    //     // const styles = ((<any>self.constructor).config as MntCfg).styles;
-    //     // if(styles === undefined) return;
-    //     // const {DoStyles} = await import('./lib/mixins/DoStyles.js');
-    //     // new DoStyles(this, styles, root, compiledStyleMap, modernBrowser);
-            
-    // }
-    // inspect(self: this): Partial<MountProps> {
-    //     return {
-            
-    //     }
-    // }
-    // async mount(self: this): PPMP {
-    //     const {shadowRoot, children} = self;
-    //     let root = self as any;
-    //     if(shadowRootMode){
-    //         if(shadowRoot === null){
-    //             root = this.attachShadow({mode: shadowRootMode});
-    //             this.#needToAppendClone = true;
-    //             await this.#adopt(this, root);
-    //         }else{
-    //             root = shadowRoot;
-    //         }
-    //     }else{
-    //         if(self.hasChildNodes()){
-    //             this.#needToAppendClone = true;
-    //         }
-    //     }
-    //     return {} as Partial<MountProps>
-    // }
 
-    // hydrate(self: this): Partial<MountProps> {
-    //     return {
-
-    //     }
-    // }
 }
 
 export interface Mount<TProps = any, TActions = TProps> extends MountProps{}

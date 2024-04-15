@@ -9,6 +9,11 @@ export class Mount extends O {
             hydrated: {
                 type: 'Boolean',
                 ro: true,
+            },
+            deferHydration: {
+                type: 'Boolean',
+                parse: true,
+                attrName: 'defer-hydration'
             }
         },
         actions: {
@@ -16,14 +21,15 @@ export class Mount extends O {
                 ifAllOf: 'csr'
             },
             initCSRXform: {
-                ifAllOf: ['clonedTemplate', 'xform']
+                ifAllOf: ['clonedTemplate', 'xform'],
+                ifNoneOf: ['deferHydration'],
             },
             mountClone: {
-                ifAllOf: ['clonedTemplate', 'hydrated']
+                ifAllOf: ['clonedTemplate', 'hydrated'],
             },
             initSSRXform: {
                 ifAllOf: ['xform'],
-                ifNoneOf: ['csr'],
+                ifNoneOf: ['csr', 'deferHydration'],
             },
             onNoXForm: {
                 ifNoneOf: ['xform']
