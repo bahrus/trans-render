@@ -6,7 +6,7 @@ import {
     XForm
 } from '../../lib/mixins/TemplMgmt.js';
 import { CE } from '../../froop/CE.js';
-import {Localizer, LocalizerMethods} from '../../lib/mixins/Localizer.js';
+import {Localizer, LocalizerMethods} from '../../mixins/Localizer.js';
 
 export interface DTRCounterProps {
     count: number;

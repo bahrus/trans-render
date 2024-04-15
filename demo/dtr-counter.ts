@@ -1,11 +1,17 @@
 import {MntCfg, Mount, MountActions, MountProps} from '../Mount.js';
-
+import {localize} from '../mixins/Localizer.js';
+import { ITransformer, UnitOfWork } from '../types.js';
 
 export interface DTRCounterProps {
     count: number;
 } 
+
+export interface DTRCounterMethods {
+    localize(model: any, transformer: ITransformer<any, any>, uow: UnitOfWork<any, any>, matchingElement: Element): string | Partial<HTMLDataElement> | Partial<HTMLTimeElement> | undefined; 
+}
 export class DTRCounter extends Mount{
-    static override config: MntCfg<DTRCounterProps & MountProps, MountActions> = {
+    localize = localize
+    static override config: MntCfg<DTRCounterProps & MountProps, DTRCounterMethods & MountActions> = {
         name: 'dtr-counter',
         shadowRootInit:{
             mode: 'open'
@@ -21,7 +27,7 @@ export class DTRCounter extends Mount{
             ...super.mntCfgMxn.actions
         },
         xform: {
-            '% count': 0,
+            '% count': 'localize',
             button: {
                 m: {
                     on: 'click',

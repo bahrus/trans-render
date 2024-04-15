@@ -1,5 +1,7 @@
 import { Mount } from '../Mount.js';
+import { localize } from '../mixins/Localizer.js';
 export class DTRCounter extends Mount {
+    localize = localize;
     static config = {
         name: 'dtr-counter',
         shadowRootInit: {
@@ -16,7 +18,7 @@ export class DTRCounter extends Mount {
             ...super.mntCfgMxn.actions
         },
         xform: {
-            '% count': 0,
+            '% count': 'localize',
             button: {
                 m: {
                     on: 'click',
