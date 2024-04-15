@@ -55,13 +55,40 @@ export class Mount<TProps = any, TActions = TProps, ETProps = TProps>
     constructor(){
         super();
         const {config} = this;
-        const {shadowRootInit} = config;
+        const {shadowRootInit, styles} = config;
         if(shadowRootInit){
             if(this.shadowRoot === null){
                 this.attachShadow(shadowRootInit);
                 this.#csr = true;
+            }else{
+                const declarativeStyles = Array.from(this.shadowRoot.querySelectorAll('style[adopt]'));
+                config.styles = declarativeStyles.map(x => x.innerHTML);
             }
             this.#root = this.shadowRoot!;
+            let stringStyles: Array<string> | undefined;
+            if(typeof(styles) === 'string'){
+                stringStyles = [styles];
+            }else if(Array.isArray(styles) && styles.length > 0 && typeof(styles[0]) === 'string'){
+                stringStyles = styles as Array<string>;
+            }
+            if(stringStyles !== undefined){
+                stringStyles = stringStyles.map(x => x.replace("<style>", "").replace("</style>", ""));
+                const CSSStyleSheets: CSSStyleSheet[] = [];
+                for(const stringSyleSheet of stringStyles){
+                    const newSheet = new CSSStyleSheet();
+                    newSheet.replaceSync(stringSyleSheet);
+                    CSSStyleSheets.push(newSheet);
+                }
+                config.styles = CSSStyleSheets;
+            }
+            if(this.#csr){
+                let compiledStyles = config.styles as CSSStyleSheet[] | undefined;
+                if(compiledStyles !== undefined){
+                    this.shadowRoot!.adoptedStyleSheets = [...compiledStyles];
+                    
+                }
+            }
+            
         }else{
             this.#root = this;
         }
