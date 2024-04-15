@@ -1,5 +1,5 @@
 import { Mount } from '../Mount.js';
-import { localize } from '../mixins/Localizer.js';
+import { localize } from '../funions/Localizer.js';
 export class DTRCounter extends Mount {
     localize = localize;
     static config = {

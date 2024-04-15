@@ -1,4 +1,4 @@
-import {ITransformer, UnitOfWork} from '../types';
+import {ITransformer, UnitOfWork} from '../types.js';
 import {Mount} from '../Mount.js';
 export interface LocalizerProps {
 

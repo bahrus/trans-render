@@ -19,6 +19,7 @@
     "./trans-render.js": "./trans-render.js",
     "./dss/parse.js": "./dss/parse.js",
     "./dss/find.js": "./dss/find.js",
+    "./funions/Localizer.js": "./functions/Localizer.js",
     "./froop/CE.js": "./froop/CE.js",
     "./froop/O.js": "./froop/O.js",
     "./lib/arr.js": "./lib/arr.js",

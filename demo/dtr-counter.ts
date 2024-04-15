@@ -1,5 +1,5 @@
 import {MntCfg, Mount, MountActions, MountProps} from '../Mount.js';
-import {localize} from '../mixins/Localizer.js';
+import {localize} from '../funions/Localizer.js';
 import { ITransformer, UnitOfWork } from '../types.js';
 
 export interface DTRCounterProps {

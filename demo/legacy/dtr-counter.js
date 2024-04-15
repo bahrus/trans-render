@@ -1,6 +1,6 @@
 import { TemplMgmt, beTransformed } from '../../lib/mixins/TemplMgmt.js';
 import { CE } from '../../froop/CE.js';
-import { Localizer } from '../../mixins/Localizer.js';
+import { Localizer } from '../../funions/Localizer.js';
 const ce = new CE({
     mixins: [TemplMgmt, Localizer],
     config: {

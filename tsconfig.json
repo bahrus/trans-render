@@ -20,7 +20,7 @@
 		"froop/*", 
 		"MyCustomElement/*",
 		"positractions/*"
-, "demo/legacy/dtr-counter.ts", "demo/legacy/dtr-counter.js", "mixins/Localizer.ts"	],
+, "demo/legacy/dtr-counter.ts", "demo/legacy/dtr-counter.js", "funions/Localizer.ts"	],
 	"exclude":[
 		"node_modules"
 	]
