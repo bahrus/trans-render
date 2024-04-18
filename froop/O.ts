@@ -19,7 +19,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     async connectedCallback(){
         const props = (<any>this.constructor).props as PropLookup;
         this.#propUp(props);
-        await this.#mount();
+        await this.#instantiateRoundaboutIfApplicable();
         const states = (<any>this.constructor).states as PropLookup;
         if(Object.keys(states).length > 0){
             const {CustStSvc} = await import('./CustStSvc.js');
@@ -34,10 +34,14 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     #internals: ElementInternals;
 
     #roundabout: RoundAbout | undefined;
+
+    get #config(){
+        return (<any>this.constructor).config as OConfig;
+    }
     
-    async #mount(){
+    async #instantiateRoundaboutIfApplicable(){
         
-        const config = (<any>this.constructor).config as OConfig;
+        const config = this.#config;
         const {actions, compacts, onsets, infractions, handlers, positractions} = config;
         if((actions || compacts || onsets || infractions || handlers || positractions) !== undefined){
             const {roundabout} = await import('./roundabout.js');
