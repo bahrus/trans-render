@@ -180,20 +180,18 @@ export interface WCConfig<TProps = any, TActions = TProps, TPropInfo = PropInfo,
 export interface OConfig<TProps = any, TActions = TProps, ETProps = TProps>{
     /**
      * canonical name
+     * not sure this is helpful, actually
      */
     name?: string;
-    isEnh?: boolean;
+    //isEnh?: boolean;
     propDefaults?: Partial<{[key in keyof TProps]: TProps[key]}>;
     propInfo?: Partial<{[key in keyof TProps]: PropInfo}>;
-    //derivedProps?: (keyof TProps & string)[];
     onsets?: Onsets<TProps, TActions>;
     actions?: Actions<TProps, TActions>;
-    propChangeMethod?: keyof TActions;
     /**
      * inferred actions
      */
     infractions?: Infractions<TProps>,
-    //style?: Partial<CSSStyleDeclaration>;
     compacts?: Compacts<TProps>;
     handlers?: Handlers<ETProps, TActions>;
     positractions?: Positractions<TProps, TActions>;
@@ -394,7 +392,7 @@ export interface RoundaboutReady{
     readonly propagator : EventTarget | undefined;
 }
 
-export type PropLookup = {[key: string]: PropInfo}
+
 
 export interface BaseProps{
     proppedUp: boolean,

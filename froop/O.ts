@@ -46,7 +46,6 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         if((actions || compacts || onsets || infractions || handlers || positractions) !== undefined){
             const {roundabout} = await import('./roundabout.js');
             const [vm, ra] = await roundabout({
-                //propagator: this.propagator,
                 vm: this,
                 actions,
                 compacts,
@@ -160,7 +159,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     static async bootUp(){
         const config = this.config!;
         const {propDefaults, propInfo} = config;
-        const props = {...this.props, ...propInfo as PropLookup};
+        const props = {...this.props as PropLookup};
         const attrs = this.attrs;
         const states = this.states;
         Object.assign(props, propInfo);
@@ -188,8 +187,13 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         if(propInfo !== undefined){
             for(const key in propInfo){
                 const prop = propInfo[key]!;
-                prop.propName = key;
-                const {parse, attrName, css} = prop;
+                const mergedPropInfo = {
+                    ...defaultProp,
+                    prop,
+                    propName: key
+                } as PropInfo
+                props[key] = mergedPropInfo;
+                const {parse, attrName, css} = mergedPropInfo;
                 if(parse && attrName){
                     attrs[attrName] = prop;
                 }
