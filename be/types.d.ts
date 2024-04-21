@@ -13,7 +13,7 @@ type CSSQuery = string;
 
 type delimiter = '-' | ':' | '--';
 
-export interface ObservedAttributes<TBranches = any>{
+export interface EnhancementMountCnfg<TBranches = any>{
     enhancedElementInstanceOf?: Array<{new(): Element}>,
     enhancedElementMatches?: string,
     enhPropKey: string,
@@ -22,41 +22,40 @@ export interface ObservedAttributes<TBranches = any>{
     base: string,
     preBranchDelimiter: delimiter,
     branches?: Array<string>,
+    //TODO
     watchedBranches?: Array<string>,
+    //TODO
     preLeafDelimiter: delimiter,
+    //TODO
     leaves?: Partial<{[key in keyof TBranches & string]: stringArray}>,
+    //TODO
     hostMatches?: CSSQuery,
+    //TODO
     hostInstanceOf?: Array<{new(): HTMLElement}>,
     block?: boolean,
+    //TODO
     unblock?: boolean,
     do: {
         mount: {
-            import: () => Promise<{new(): IEnhancement}>, //Roundabout ready
-    
-            //mapTo?: (parts: AttrParts) => string,
-            //parse: (parts: AttrParts, val: string | null) => any,
-
+            import: () => Promise<{new(): IEnhancement}>, //Roundabout ready?
         },
-
-        
-
     } 
 }
 
-export type MountBeHive<TBranches = any> = Partial<ObservedAttributes<TBranches>>
+export type MountBeHive<TBranches = any> = Partial<EnhancementMountCnfg<TBranches>>
 
 
 export interface EnhancementInfo {
-    // enhancement: Enhancement,
-    // enh: Enh,
-    // fqn: FQN,
-    // localName: string,
     initialPropValues?: any,
     initialAttrInfo?: Array<AttrChangeInfo>,
-    mountInit?: MountInit,
-    //ifWantsToBe: string,
-
+    mountCnfg?: EnhancementMountCnfg,
 }
+
+export interface BEAllProps {
+    resolved: boolean;
+    rejected: boolean;
+}
+
 export interface IEnhancement<TElement = Element> extends BEAllProps, HTMLElement{
     attach(el: TElement, enhancement: EnhancementInfo): Promise<void>;
     detach(el: TElement): Promise<void>;
