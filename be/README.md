@@ -1,0 +1,1 @@
+Common types needed between be-enhanced and be-hive, to avoid circular references.
