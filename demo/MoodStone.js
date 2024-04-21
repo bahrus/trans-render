@@ -3,7 +3,6 @@ const calcAgePlus10 = ({ age }) => ({ agePlus10: age + 10 });
 const max = (a, b) => Math.max(a, b);
 export class MoodStone extends O {
     static config = {
-        name: 'mood-stone',
         propDefaults: {
             age: 22,
             data: [1, 2, 3, 4, 5]
@@ -90,4 +89,4 @@ export class MoodStone extends O {
     }
 }
 await MoodStone.bootUp();
-customElements.define(MoodStone.config.name, MoodStone);
+customElements.define('mood-stone', MoodStone);

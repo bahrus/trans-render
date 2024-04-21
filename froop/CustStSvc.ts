@@ -16,7 +16,7 @@ export class CustStSvc{
         const {states} = this;
         for(const stateKey in states){
             const state = states[stateKey];
-            const {css} = state;
+            const {css} = state!;
             const customStateObj: ICustomState = typeof css === 'string' ? {
                 nameValue: css,
             } : css!;

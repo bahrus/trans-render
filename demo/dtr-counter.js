@@ -3,7 +3,6 @@ import { localize } from '../funions/Localizer.js';
 export class DTRCounter extends Mount {
     localize = localize;
     static config = {
-        name: 'dtr-counter',
         shadowRootInit: {
             mode: 'open'
         },
@@ -57,4 +56,4 @@ export class DTRCounter extends Mount {
     };
 }
 await DTRCounter.bootUp();
-customElements.define(DTRCounter.config.name, DTRCounter);
+customElements.define('dtr-counter', DTRCounter);

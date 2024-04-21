@@ -14,7 +14,7 @@ export class O extends HTMLElement {
     async connectedCallback() {
         const props = this.constructor.props;
         this.#propUp(props);
-        await this.#mount();
+        await this.#instantiateRoundaboutIfApplicable();
         const states = this.constructor.states;
         if (Object.keys(states).length > 0) {
             const { CustStSvc } = await import('./CustStSvc.js');
@@ -26,13 +26,15 @@ export class O extends HTMLElement {
     }
     #internals;
     #roundabout;
-    async #mount() {
-        const config = this.constructor.config;
+    get #config() {
+        return this.constructor.config;
+    }
+    async #instantiateRoundaboutIfApplicable() {
+        const config = this.#config;
         const { actions, compacts, onsets, infractions, handlers, positractions } = config;
         if ((actions || compacts || onsets || infractions || handlers || positractions) !== undefined) {
             const { roundabout } = await import('./roundabout.js');
             const [vm, ra] = await roundabout({
-                //propagator: this.propagator,
                 vm: this,
                 actions,
                 compacts,
@@ -144,7 +146,7 @@ export class O extends HTMLElement {
     static async bootUp() {
         const config = this.config;
         const { propDefaults, propInfo } = config;
-        const props = { ...this.props, ...propInfo };
+        const props = { ...this.props };
         const attrs = this.attrs;
         const states = this.states;
         Object.assign(props, propInfo);
@@ -171,8 +173,13 @@ export class O extends HTMLElement {
         if (propInfo !== undefined) {
             for (const key in propInfo) {
                 const prop = propInfo[key];
-                prop.propName = key;
-                const { parse, attrName, css } = prop;
+                const mergedPropInfo = {
+                    ...defaultProp,
+                    prop,
+                    propName: key
+                };
+                props[key] = mergedPropInfo;
+                const { parse, attrName, css } = mergedPropInfo;
                 if (parse && attrName) {
                     attrs[attrName] = prop;
                 }

@@ -19,8 +19,8 @@
 		"xslt/*",
 		"froop/*", 
 		"MyCustomElement/*",
-		"positractions/*"
-, "demo/legacy/dtr-counter.ts", "demo/legacy/dtr-counter.js", "funions/Localizer.ts"	],
+		"positractions/*",
+		"funions/Localizer.ts"	],
 	"exclude":[
 		"node_modules"
 	]

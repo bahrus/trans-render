@@ -28,7 +28,6 @@ const max = (a: number, b : number) => Math.max(a, b);
 
 export class MoodStone extends O implements IMoodStoneActions {
     static override config: OConfig<IMoodStoneProps & IMoodStoneETs, IMoodStoneActions, IMoodStoneETs> = {
-        name: 'mood-stone',
         propDefaults:{
             age: 22,
             data: [1,2, 3, 4, 5]
@@ -123,4 +122,4 @@ export interface MoodStone extends IMoodStoneETs{}
 
 await MoodStone.bootUp();
 
-customElements.define(MoodStone.config.name!, MoodStone);
+customElements.define('mood-stone', MoodStone);

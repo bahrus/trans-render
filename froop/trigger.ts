@@ -6,7 +6,7 @@ import {intersects} from '../lib/intersects.js';
 import {act} from './act.js';
 
 const cache = new Map<any, Map<string, Set<string>>>();
-
+//deprecate
 export function trigger(instance: EventTarget, propagator: IPropagator, args: CEArgs){
     //console.debug('addPropBagListener');
     propagator.addEventListener(pc, e => {

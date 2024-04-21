@@ -157,7 +157,7 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
         await propper.resolve();
         //await connectActions?.resolve();
         
-        def(newClass);
+        def(newClass.is!, newClass);
         
     }
 

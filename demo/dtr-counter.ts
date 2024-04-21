@@ -12,7 +12,6 @@ export interface DTRCounterMethods {
 export class DTRCounter extends Mount{
     localize = localize
     static override config: MntCfg<DTRCounterProps & MountProps, DTRCounterMethods & MountActions> = {
-        name: 'dtr-counter',
         shadowRootInit:{
             mode: 'open'
         },
@@ -68,4 +67,4 @@ export class DTRCounter extends Mount{
 
 await DTRCounter.bootUp();
 
-customElements.define(DTRCounter.config.name!, DTRCounter);
+customElements.define('dtr-counter', DTRCounter);

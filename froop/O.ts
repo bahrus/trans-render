@@ -87,7 +87,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
      */
     #propUp<T>(props: PropLookup){
         for(const key in props){
-            const propInfo = props[key];
+            const propInfo = props[key]!;
             let value = (<any>this)[key];
             if(value === undefined){
                 const {def, parse, attrName} = propInfo;
@@ -115,7 +115,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         const proto = newClass.prototype;
         for(const key in props){
             if(key in proto) continue;
-            const prop = props[key];
+            const prop = props[key]!;
             const {ro, parse, attrName} = prop;
             if(ro){
                 Object.defineProperty(proto, key, {
@@ -149,7 +149,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null){
         if(!this.proppedUp) return;
         const attrs = (<any>this.constructor).attrs as PropLookup;
-        const propInfo = attrs[name];
+        const propInfo = attrs[name]!;
         const val = this.#parseAttr(propInfo, name, oldVal, newVal);
         (<any>this)[propInfo.propName!] = val;
         

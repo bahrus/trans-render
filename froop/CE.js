@@ -141,7 +141,7 @@ export class CE extends Svc {
         const { propper, /*hooker: connectActions*/ } = services;
         await propper.resolve();
         //await connectActions?.resolve();
-        def(newClass);
+        def(newClass.is, newClass);
     }
     async #evalConfig(args) {
         if (args === undefined)

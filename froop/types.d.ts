@@ -128,6 +128,7 @@ export interface CEArgs<TProps = any, TActions = TProps, TPropInfo = PropInfo, T
     definer?: IDefine,
     servers?: CEServiceClasses
     services?: CEServices,
+    asides?: any
 }
 
 export interface DynamicTransform {
@@ -159,7 +160,7 @@ export interface DefineArgs<MixinCompositeProps = any, MixinCompositeActions = M
 }
 
 export interface WCConfig<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction = Action>{
-    name?: string;
+    tagName?: string;
     isEnh?: boolean;
     propDefaults?: Partial<{[key in keyof TProps]: TProps[key]}>;
     propInfo?: Partial<{[key in keyof TProps]: TPropInfo}>;
@@ -175,15 +176,13 @@ export interface WCConfig<TProps = any, TActions = TProps, TPropInfo = PropInfo,
     keyQueries?: string[];
     formAss?: boolean;
     compacts?: Compacts<TProps>;
+    
 }
 
+export type PropLookup<TProps = any> = Partial<{[key in keyof TProps]: PropInfo}>;
+
 export interface OConfig<TProps = any, TActions = TProps, ETProps = TProps>{
-    /**
-     * canonical name
-     * not sure this is helpful, actually
-     */
-    name?: string;
-    //isEnh?: boolean;
+
     propDefaults?: Partial<{[key in keyof TProps]: TProps[key]}>;
     propInfo?: Partial<{[key in keyof TProps]: PropInfo}>;
     onsets?: Onsets<TProps, TActions>;

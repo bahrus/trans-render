@@ -3,6 +3,7 @@ import { pq } from './pq.js';
 import { intersects } from '../lib/intersects.js';
 import { act } from './act.js';
 const cache = new Map();
+//deprecate
 export function trigger(instance, propagator, args) {
     //console.debug('addPropBagListener');
     propagator.addEventListener(pc, e => {
