@@ -185,7 +185,7 @@ export interface OConfig<TProps = any, TActions = TProps, ETProps = TProps>{
 
     propDefaults?: Partial<{[key in keyof TProps]: TProps[key]}>;
     propInfo?: Partial<{[key in keyof TProps]: PropInfo}>;
-    onsets?: Onsets<TProps, TActions>;
+    //onsets?: Onsets<TProps, TActions>;
     actions?: Actions<TProps, TActions>;
     /**
      * inferred actions
@@ -209,33 +209,37 @@ export interface Positraction<TProps = any, TActions = TProps> extends LogicOp<T
     assignTo?: Array<null | (keyof TProps & string)>
 }
 
-export type Onsets<TProps = any, TActions = TProps> = 
-    | Partial<{[key in `${keyof TProps & string}_to_${keyof TActions & string}` & string]: 
-        /**
-         * Call the method anytime the property is set
-         */
-        | 0 
-        /**
-         * Call the method if the property is truthy
-         */
-        | 1 
-}>
+// export type Onsets<TProps = any, TActions = TProps> = 
+//     | Partial<{[key in `${keyof TProps & string}_to_${keyof TActions & string}` & string]: 
+//         /**
+//          * Call the method anytime the property is set
+//          */
+//         | 0 
+//         /**
+//          * Call the method if the property is truthy
+//          */
+//         | 1 
+// }>
 
-export type Compacts<TProps = any> = 
-    | Partial<{[key in `${keyof TProps & string}_to_${keyof TProps & string}` & string]: Operation<TProps> }>
+export type Compacts<TProps = any, TActions = TProps> = 
+    //| Partial<{[key in `${keyof TProps & string}_to_${keyof TProps & string}` & string]: Operation<TProps> }>
+    | Partial<{[key in `negate_${keyof TProps & string}_to_${keyof TProps & string}`]: number}>
+    | Partial<{[key in `passLengthOf_${keyof TProps & string}_to_${keyof TProps & string}`]: number}>
+    | Partial<{[key in `echo_${keyof TProps & string}_to_${keyof TProps & string}`]: number}>
+    
 
 export type Handlers<ETProps = any, TActions = ETProps> = 
     | Partial<{[key in `${keyof ETProps & string}_to_${keyof TActions & string}_on` & string]: string }>
 
-export type op = 'length' | 'inc' | 'negate' | 'toggle' | 'echo' | 'toLocale' | 'dec';
+// export type op = 'length' | 'inc' | 'negate' | 'toggle' | 'echo' | 'toLocale' | 'dec';
 
-export interface ComplexCompact<TProps = any> {
-    op: 'echo'
-}
-export interface EchoBy<TProps = any> extends ComplexCompact{
-    op: 'echo',
-    delay: number | keyof TProps,
-}
+// export interface ComplexCompact<TProps = any> {
+//     op: 'echo'
+// }
+// export interface EchoBy<TProps = any> extends ComplexCompact{
+//     op: 'echo',
+//     delay: number | keyof TProps,
+// }
 
 
 

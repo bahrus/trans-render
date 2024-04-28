@@ -2,12 +2,12 @@ import { AttrChangeInfo, MountInit, RootCnfg } from '../../mount-observer/types'
 export type stringArray = string | Array<string>;
 
 export type stringArrayOrTree = Array<string> | [string, Array<string>];
-export interface AttrParts {
-    root: string,
-    base: string,
-    branch: string,
-    leaf: string,
-} 
+// export interface AttrParts {
+//     root: string,
+//     base: string,
+//     branch: string,
+//     leaf: string,
+// } 
 
 type CSSQuery = string;
 
@@ -39,8 +39,15 @@ export interface EnhancementMountCnfg<TBranches = any>{
         mount: {
             import: () => Promise<{new(): IEnhancement}>, //Roundabout ready?
         },
-    } 
+    },
+    map?: {[key: AttrCoordinates]: any}
 }
+
+export type Branchitutde = number;
+export type Leafitude = number;
+export type AttrCoordinates = `${Branchitutde}.${Leafitude}`
+
+
 
 export type MountBeHive<TBranches = any> = Partial<EnhancementMountCnfg<TBranches>>
 
