@@ -209,37 +209,20 @@ export interface Positraction<TProps = any, TActions = TProps> extends LogicOp<T
     assignTo?: Array<null | (keyof TProps & string)>
 }
 
-// export type Onsets<TProps = any, TActions = TProps> = 
-//     | Partial<{[key in `${keyof TProps & string}_to_${keyof TActions & string}` & string]: 
-//         /**
-//          * Call the method anytime the property is set
-//          */
-//         | 0 
-//         /**
-//          * Call the method if the property is truthy
-//          */
-//         | 1 
-// }>
+
 
 export type Compacts<TProps = any, TActions = TProps> = 
     //| Partial<{[key in `${keyof TProps & string}_to_${keyof TProps & string}` & string]: Operation<TProps> }>
     | Partial<{[key in `negate_${keyof TProps & string}_to_${keyof TProps & string}`]: number}>
-    | Partial<{[key in `passLengthOf_${keyof TProps & string}_to_${keyof TProps & string}`]: number}>
+    | Partial<{[key in `pass_length_of_${keyof TProps & string}_to_${keyof TProps & string}`]: number}>
     | Partial<{[key in `echo_${keyof TProps & string}_to_${keyof TProps & string}`]: number}>
-    
+    | Partial<{[key in `when_${keyof TProps & string}_changes_invoke_${keyof TActions & string}`]: number}>
+    | Partial<{[key in `on_change_of_${keyof TProps & string}_toggle_${keyof TActions & string}`]: number}>
+    | Partial<{[key in `when_${keyof TProps & string}_changes_inc_${keyof TProps & string}_by`]: number}>
+
 
 export type Handlers<ETProps = any, TActions = ETProps> = 
     | Partial<{[key in `${keyof ETProps & string}_to_${keyof TActions & string}_on` & string]: string }>
-
-// export type op = 'length' | 'inc' | 'negate' | 'toggle' | 'echo' | 'toLocale' | 'dec';
-
-// export interface ComplexCompact<TProps = any> {
-//     op: 'echo'
-// }
-// export interface EchoBy<TProps = any> extends ComplexCompact{
-//     op: 'echo',
-//     delay: number | keyof TProps,
-// }
 
 
 
@@ -249,9 +232,7 @@ export interface ICustomState<MCProps = any>{
     nameValue: string
 }
 
-export type Operation<TProps = any> = 
-    | op
-    | EchoBy<TProps> 
+
 
 export type ListOfLogicalExpressions<MCProps = any> = (keyof MCProps | LogicOp<MCProps>)[];
 
