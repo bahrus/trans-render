@@ -36,7 +36,7 @@ export class RoundAbout{
         this.#busses = newBusses;
         this.#routers = routers;
         //TODO:  memoize this whole logic, keyed off of options
-        const {actions, onsets, handlers, positractions} = options;
+        const {actions, handlers, positractions} = options;
         for(const key in actions){
             newBusses[key] = new Set();
             const val = actions[key];
@@ -52,29 +52,29 @@ export class RoundAbout{
             if(debug) check.debug = true;
             checks[key] = check;
         }
-        for(const onsetKey in onsets){
-            const split = onsetKey.split('_to_');
-            const val = (<any>onsets)[onsetKey] as 0 | 1;
-            const [prop, action] = split;
-            if(checks[action] !== undefined){
-                //need to put in the right bucket
-                throw 'NI'
-            }else{
-                const check: SetLogicOps = {};
-                const s = new Set([prop]);
-                switch(val){
-                    case 0:
-                        check.ifEquals = s;
-                        break;
-                    case 1:
-                        check.ifAllOf = s;
-                        break;
-                }
-                newBusses[action] = new Set();
-                checks[action] = check;
-            }
+        // for(const onsetKey in onsets){
+        //     const split = onsetKey.split('_to_');
+        //     const val = (<any>onsets)[onsetKey] as 0 | 1;
+        //     const [prop, action] = split;
+        //     if(checks[action] !== undefined){
+        //         //need to put in the right bucket
+        //         throw 'NI'
+        //     }else{
+        //         const check: SetLogicOps = {};
+        //         const s = new Set([prop]);
+        //         switch(val){
+        //             case 0:
+        //                 check.ifEquals = s;
+        //                 break;
+        //             case 1:
+        //                 check.ifAllOf = s;
+        //                 break;
+        //         }
+        //         newBusses[action] = new Set();
+        //         checks[action] = check;
+        //     }
 
-        }
+        // }
         if(handlers !== undefined){
             //TODO:  maybe this could be done more globally on static properties, since it will 
             //repeat per instance
@@ -163,7 +163,7 @@ export class RoundAbout{
         const checks = this.#checks;
         const busses = this.#busses;
         const {infractions, options} = this;
-        const {vm} = options;
+        const {vm, compacts} = options;
         if(infractions !== undefined){
             const {getDestructArgs} = await import('../lib/getDestructArgs.js');
             for(const infraction of infractions){
@@ -179,16 +179,21 @@ export class RoundAbout{
                 }
             }
         }
+        if(compacts !== undefined){
+            const {prsCompacts} = await import('./prsCompacts.js');
+            
+        }
+
     }
 
     async hydrate(keysToPropagate: Set<string>){
         const {options} = this;
-        const {compacts, vm} = options;
-        if(compacts !== undefined){
-            const {Compact} = await import('./Compact.js');
-            this.#compact = new Compact(compacts, vm);
-            this.#compact.covertAssignment(vm, vm, keysToPropagate, this.#busses);
-        }
+        const {vm} = options;
+        // if(compacts !== undefined){
+        //     const {Compact} = await import('./Compact.void');
+        //     this.#compact = new Compact(compacts, vm);
+        //     this.#compact.covertAssignment(vm, vm, keysToPropagate, this.#busses);
+        // }
         const checks = this.#checks;
         for(const key in checks){
             const check = checks[key];

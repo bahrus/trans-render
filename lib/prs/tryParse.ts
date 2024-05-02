@@ -1,5 +1,6 @@
 import { arr } from '../arr.js';
 import { RegExpOrRegExpExt } from './types';
+export { RegExpOrRegExpExt } from './types';
 
 export function tryParse<TParsedObj = any>(s: string, regExpOrRegExpExt: RegExpOrRegExpExt<TParsedObj> | RegExpOrRegExpExt<TParsedObj>[]){
     const reArr = arr(regExpOrRegExpExt);

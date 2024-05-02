@@ -1,99 +1,105 @@
-export class Compact {
-    compacts;
-    vm;
-    #compactions = {};
-    constructor(compacts, vm) {
-        this.compacts = compacts;
-        this.vm = vm;
+import {Busses, Compacts, ICompact, RoundaboutReady} from './types.js';
+
+export class Compact implements ICompact{
+    #compactions : Compactions = {};
+    constructor(public compacts: Compacts, public vm: RoundaboutReady){
         const compactions = this.#compactions;
-        for (const key in compacts) {
+        for(const key in compacts){
             const split = key.split('_to_');
             const [src, dest] = split;
-            const rhs = compacts[key];
-            switch (typeof rhs) {
+            const rhs = (<any>compacts)[key] as Operation;
+            switch(typeof rhs){
                 case 'string':
-                    switch (rhs) {
+                    switch(rhs){
                         case 'negate':
                             compactions[src] = {
                                 fn: vm => {
                                     const srcVal = vm[src];
-                                    switch (typeof srcVal) {
+                                    switch(typeof srcVal){
                                         case 'number':
                                             return {
                                                 [dest]: -srcVal,
-                                            };
+                                            }
                                         case 'boolean':
                                             return {
                                                 [dest]: !srcVal
-                                            };
+                                            }
+                                        
                                     }
+
                                 }
-                            };
+                            }
                             break;
                         case 'echo':
                             compactions[src] = {
                                 fn: vm => ({
                                     [dest]: vm[src]
                                 })
-                            };
+                            }
                             break;
                         case 'inc':
                             compactions[src] = {
                                 fn: vm => ({
                                     [dest]: (vm[dest] || 0) + 1
                                 })
-                            };
+
+                            }
                             break;
                         case 'dec':
                             compactions[src] = {
                                 fn: vm => ({
                                     [dest]: (vm[dest] || 0) - 1
                                 })
-                            };
+                            }
                             break;
                         case 'toggle':
                             compactions[src] = {
                                 fn: vm => {
                                     const destVal = vm[dest];
-                                    switch (typeof destVal) {
+                                    switch(typeof destVal){
                                         case 'number':
                                             return {
                                                 [dest]: -destVal,
-                                            };
+                                            }
                                         //case 'boolean':
                                         default:
                                             return {
                                                 [dest]: !destVal
-                                            };
+                                            }
+                                        
                                     }
+
                                 }
-                            };
+                            }
                             break;
+
                         case 'length':
                             compactions[src] = {
                                 fn: vm => ({
                                     [dest]: vm[src]?.length || 0,
                                 })
-                            };
+                            }
                             break;
                         case 'toLocale':
                             compactions[src] = {
                                 fn: vm => {
                                     const srcVal = vm[src];
-                                    if (srcVal instanceof Date) {
+                                    if(srcVal instanceof Date){
                                         return {
                                             [dest]: srcVal.toLocaleDateString()
-                                        };
+                                        }
                                     }
-                                    switch (typeof srcVal) {
+                                    switch(typeof srcVal){
                                         case 'bigint':
                                         case 'number':
                                             return {
                                                 [dest]: srcVal.toLocaleString(),
-                                            };
+                                            }
+                                        
                                     }
+
                                 }
-                            };
+                            }
                             break;
                     }
                     break;
@@ -103,28 +109,28 @@ export class Compact {
             }
         }
     }
-    async #doComplexCompact(compact, vm, src, dest) {
-        const { op } = compact;
-        switch (op) {
+    async #doComplexCompact(compact: ComplexCompact, vm: RoundaboutReady, src: string, dest: string){
+        const {op} = compact;
+        switch(op){
             case 'echo':
-                const { EchoCompact } = await import('./EchoCompact.js');
+                const {EchoCompact} = await import('./EchoCompact.js');
                 //TODO work out aborting the listeners on disconnect
                 //propagator needs a dispose event
-                const echoCompact = new EchoCompact(src, dest, compact, vm);
+                const echoCompact = new EchoCompact(src, dest, compact as EchoBy, vm);
         }
     }
-    async covertAssignment(obj, vm, keysToPropagate, busses) {
+    async covertAssignment(obj: any, vm: RoundaboutReady, keysToPropagate: Set<string>, busses: Busses) {
         const compactions = this.#compactions;
-        for (const vmKey in obj) {
-            if (vmKey in compactions) {
+        for(const vmKey in obj){
+            if(vmKey in compactions){
                 const compaction = compactions[vmKey];
                 const result = compaction.fn(vm);
                 //console.log({result});
                 vm.covertAssignment(result);
                 await this.covertAssignment(result, vm, keysToPropagate, busses);
-                for (const resultKey in result) {
+                for(const resultKey in result){
                     keysToPropagate.add(resultKey);
-                    for (const busKey in busses) {
+                    for(const busKey in busses){
                         const bus = busses[busKey];
                         bus.add(resultKey);
                     }
@@ -133,3 +139,11 @@ export class Compact {
         }
     }
 }
+
+
+
+interface Compaction{
+    fn: (obj: any) => any
+}
+
+type Compactions = {[key: string] : Compaction};

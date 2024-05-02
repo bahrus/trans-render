@@ -332,7 +332,7 @@ export type roundaboutOptions<TProps = any, TActions = TProps, ETProps = TProps>
     propagate?: keyof TProps & string | Array<keyof TProps & string>,
     actions?: Actions<TProps,TActions>,
     compacts?: Compacts<TProps>,
-    onsets?: Onsets<TProps, TActions>,
+    //onsets?: Onsets<TProps, TActions>,
     handlers?: Handlers<ETProps, TActions>,
     positractions?: Positractions<TProps>
     //do?:  Partial<{[key in `${keyof TActions & string}_on`]: Keysh<TProps> }>
@@ -384,7 +384,7 @@ export interface BaseProps{
 
 export interface ICompact{
     compacts: Compacts,
-    covertAssignment(obj: any, vm: RoundaboutReady, keysToPropagate: Set<string>, busses: Busses): Promise<void>,
+    //covertAssignment(obj: any, vm: RoundaboutReady, keysToPropagate: Set<string>, busses: Busses): Promise<void>,
 }
 
 
