@@ -1,8 +1,9 @@
 import { tryParse } from '../lib/prs/tryParse.js';
 const srcToDest = String.raw `(?<srcKey>[\w\_])_to_(?<destKey>[\w\_])`;
+const whenSrcKeyChanges = String.raw `^when_(?<srcKey>[\w\_])_changes_`;
 const reCompacts = [
     {
-        regExp: new RegExp(String.raw `^when_(?<srcKey>[\w\_])_changes_invoke_(?<destKey>[\w\_])`),
+        regExp: new RegExp(String.raw `${whenSrcKeyChanges}invoke_(?<destKey>[\w\_])`),
         defaultVals: {
             op: 'invoke'
         }
@@ -26,13 +27,13 @@ const reCompacts = [
         }
     },
     {
-        regExp: new RegExp(String.raw `^on_change_of_(?<srcKey>[\w\_])_toggle_(?<destKey>[\w\_])`),
+        regExp: new RegExp(String.raw `${whenSrcKeyChanges}toggle_(?<destKey>[\w\_])`),
         defaultVals: {
             op: 'toggle'
         }
     },
     {
-        regExp: new RegExp(String.raw `when_(?<srcKey>[\w\_])_changes_inc_(?<destKey>[\w\_])`),
+        regExp: new RegExp(String.raw `${whenSrcKeyChanges}inc_(?<destKey>[\w\_])`),
         defaultVals: {
             op: 'inc'
         }

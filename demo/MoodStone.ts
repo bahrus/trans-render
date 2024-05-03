@@ -83,7 +83,7 @@ export class MoodStone extends O implements IMoodStoneActions {
             negate_isHappy_to_isNotHappy: 0,
             pass_length_of_data_to_dataLength: -1,
             echo_dataLength_to_echoLength: 20,
-            on_change_of_age_toggle_ageChangeCount: 0,
+            when_age_changes_toggle_ageChangedToggle: 0,
             when_isHappy_changes_invoke_incAge: 0,
 
         },
