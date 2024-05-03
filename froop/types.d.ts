@@ -191,7 +191,7 @@ export interface OConfig<TProps = any, TActions = TProps, ETProps = TProps>{
      * inferred actions
      */
     infractions?: Infractions<TProps>,
-    compacts?: Compacts<TProps>;
+    compacts?: Compacts<TProps, TActions>;
     handlers?: Handlers<ETProps, TActions>;
     positractions?: Positractions<TProps, TActions>;
 }
@@ -331,7 +331,7 @@ export type roundaboutOptions<TProps = any, TActions = TProps, ETProps = TProps>
     vm?: TProps & TActions & RoundaboutReady,
     propagate?: keyof TProps & string | Array<keyof TProps & string>,
     actions?: Actions<TProps,TActions>,
-    compacts?: Compacts<TProps>,
+    compacts?: Compacts<TProps, TActions>,
     //onsets?: Onsets<TProps, TActions>,
     handlers?: Handlers<ETProps, TActions>,
     positractions?: Positractions<TProps>

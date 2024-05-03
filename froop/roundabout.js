@@ -33,7 +33,7 @@ export class RoundAbout {
         this.#busses = newBusses;
         this.#routers = routers;
         //TODO:  memoize this whole logic, keyed off of options
-        const { actions, onsets, handlers, positractions } = options;
+        const { actions, handlers, positractions } = options;
         for (const key in actions) {
             newBusses[key] = new Set();
             const val = actions[key];
@@ -55,29 +55,28 @@ export class RoundAbout {
                 check.debug = true;
             checks[key] = check;
         }
-        for (const onsetKey in onsets) {
-            const split = onsetKey.split('_to_');
-            const val = onsets[onsetKey];
-            const [prop, action] = split;
-            if (checks[action] !== undefined) {
-                //need to put in the right bucket
-                throw 'NI';
-            }
-            else {
-                const check = {};
-                const s = new Set([prop]);
-                switch (val) {
-                    case 0:
-                        check.ifEquals = s;
-                        break;
-                    case 1:
-                        check.ifAllOf = s;
-                        break;
-                }
-                newBusses[action] = new Set();
-                checks[action] = check;
-            }
-        }
+        // for(const onsetKey in onsets){
+        //     const split = onsetKey.split('_to_');
+        //     const val = (<any>onsets)[onsetKey] as 0 | 1;
+        //     const [prop, action] = split;
+        //     if(checks[action] !== undefined){
+        //         //need to put in the right bucket
+        //         throw 'NI'
+        //     }else{
+        //         const check: SetLogicOps = {};
+        //         const s = new Set([prop]);
+        //         switch(val){
+        //             case 0:
+        //                 check.ifEquals = s;
+        //                 break;
+        //             case 1:
+        //                 check.ifAllOf = s;
+        //                 break;
+        //         }
+        //         newBusses[action] = new Set();
+        //         checks[action] = check;
+        //     }
+        // }
         if (handlers !== undefined) {
             //TODO:  maybe this could be done more globally on static properties, since it will 
             //repeat per instance
@@ -171,7 +170,7 @@ export class RoundAbout {
         const checks = this.#checks;
         const busses = this.#busses;
         const { infractions, options } = this;
-        const { vm } = options;
+        const { vm, compacts } = options;
         if (infractions !== undefined) {
             const { getDestructArgs } = await import('../lib/getDestructArgs.js');
             for (const infraction of infractions) {
@@ -187,15 +186,19 @@ export class RoundAbout {
                 };
             }
         }
+        if (compacts !== undefined) {
+            const { hydrateCompacts } = await import('./hydrateCompacts.js');
+            hydrateCompacts(compacts, this);
+        }
     }
     async hydrate(keysToPropagate) {
         const { options } = this;
-        const { compacts, vm } = options;
-        if (compacts !== undefined) {
-            const { Compact } = await import('./Compact.js');
-            this.#compact = new Compact(compacts, vm);
-            this.#compact.covertAssignment(vm, vm, keysToPropagate, this.#busses);
-        }
+        const { vm } = options;
+        // if(compacts !== undefined){
+        //     const {Compact} = await import('./Compact.void');
+        //     this.#compact = new Compact(compacts, vm);
+        //     this.#compact.covertAssignment(vm, vm, keysToPropagate, this.#busses);
+        // }
         const checks = this.#checks;
         for (const key in checks) {
             const check = checks[key];
@@ -335,12 +338,12 @@ export class RoundAbout {
     }
     async doCoreEvt(key, evtCount) {
         let compactKeysToPropagate;
-        if (this.#compact) {
-            const { options } = this;
-            const { vm } = options;
-            const compactKeysToPropagate = new Set();
-            this.#compact.covertAssignment({ [key]: vm[key] }, vm, compactKeysToPropagate, this.#busses);
-        }
+        // if(this.#compact){
+        //     const {options} = this;
+        //     const {vm} = options;
+        //     const compactKeysToPropagate = new Set<string>();
+        //     this.#compact.covertAssignment({[key]: (<any>vm)[key]}, vm, compactKeysToPropagate, this.#busses);
+        // }
         const busses = this.#busses;
         for (const busKey in busses) {
             const bus = busses[busKey];
@@ -447,9 +450,9 @@ export class RoundAbout {
         const ret = isAsync ? await method.apply(vm, [vm, e]) : method.apply(vm, [vm, e]);
         if (ret === undefined || ret === null)
             return;
-        if (this.#compact) {
-            this.#compact.covertAssignment(ret, vm, keysToPropagate, this.#busses);
-        }
+        // if(this.#compact){
+        //     this.#compact.covertAssignment(ret, vm as RoundaboutReady, keysToPropagate, this.#busses);
+        // }
         vm.covertAssignment(ret);
         const keys = Object.keys(ret);
         const busses = this.#busses;

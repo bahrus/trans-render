@@ -180,8 +180,8 @@ export class RoundAbout{
             }
         }
         if(compacts !== undefined){
-            const {prsCompacts} = await import('./prsCompacts.js');
-            
+            const {hydrateCompacts} = await import('./hydrateCompacts.js');
+            hydrateCompacts(compacts, this);
         }
 
     }
@@ -336,12 +336,12 @@ export class RoundAbout{
 
     async doCoreEvt(key: string, evtCount: number){
         let compactKeysToPropagate: Set<string> | undefined;
-        if(this.#compact){
-            const {options} = this;
-            const {vm} = options;
-            const compactKeysToPropagate = new Set<string>();
-            this.#compact.covertAssignment({[key]: (<any>vm)[key]}, vm, compactKeysToPropagate, this.#busses);
-        }
+        // if(this.#compact){
+        //     const {options} = this;
+        //     const {vm} = options;
+        //     const compactKeysToPropagate = new Set<string>();
+        //     this.#compact.covertAssignment({[key]: (<any>vm)[key]}, vm, compactKeysToPropagate, this.#busses);
+        // }
         const busses = this.#busses;
         for(const busKey in busses){
             const bus = busses[busKey];
@@ -440,9 +440,9 @@ export class RoundAbout{
         const isAsync = method.constructor.name === 'AsyncFunction';
         const ret = isAsync ? await method.apply(vm, [vm, e]) : method.apply(vm, [vm, e]);
         if(ret === undefined || ret === null) return;
-        if(this.#compact){
-            this.#compact.covertAssignment(ret, vm as RoundaboutReady, keysToPropagate, this.#busses);
-        }
+        // if(this.#compact){
+        //     this.#compact.covertAssignment(ret, vm as RoundaboutReady, keysToPropagate, this.#busses);
+        // }
         vm.covertAssignment(ret);
         const keys = Object.keys(ret);
         const busses = this.#busses;
