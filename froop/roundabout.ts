@@ -199,7 +199,9 @@ export class RoundAbout{
             const bus = busses[busKey];
             const check = checks[busKey];
             if(check !== undefined){
-                if(check.debug) debugger;
+                const {debug, delay} = check;
+                if(debug) debugger;
+                if(delay) throw 'NI';
                 const isOfInterest = await this.#checkSubscriptions(check!, bus);
                 if(!isOfInterest) {
                     busses[busKey] = new Set<string>();
