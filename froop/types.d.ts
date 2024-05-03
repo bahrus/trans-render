@@ -255,6 +255,8 @@ export interface LogicOp<Props = any>{
 
     debug?: boolean,
 
+    delay?: number,
+
 }
 
 export interface SetLogicOps<Props = any>{
@@ -272,6 +274,8 @@ export interface SetLogicOps<Props = any>{
     ifAtLeastOneOf?: Set<Key<Props>>,
 
     debug?: boolean,
+
+    delay?: number,
 }
 
 export interface Action<MCProps = any, MCActions = MCProps> extends LogicOp<MCProps>{

@@ -31,14 +31,13 @@ export class O extends HTMLElement {
     }
     async #instantiateRoundaboutIfApplicable() {
         const config = this.#config;
-        const { actions, compacts, onsets, infractions, handlers, positractions } = config;
-        if ((actions || compacts || onsets || infractions || handlers || positractions) !== undefined) {
+        const { actions, compacts, infractions, handlers, positractions } = config;
+        if ((actions || compacts || infractions || handlers || positractions) !== undefined) {
             const { roundabout } = await import('./roundabout.js');
             const [vm, ra] = await roundabout({
                 vm: this,
                 actions,
                 compacts,
-                onsets,
                 handlers,
                 positractions
             }, infractions);

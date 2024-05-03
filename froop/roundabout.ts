@@ -42,39 +42,16 @@ export class RoundAbout{
             const val = actions[key];
             if(val === undefined) continue;
             
-            const {ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf, debug} = val;
-            const check: SetLogicOps = {}
+            const {ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf, debug, delay} = val;
+            const check: SetLogicOps = {delay, debug};
             if(ifAllOf) check.ifAllOf = this.#toSet(ifAllOf);
             if(ifAtLeastOneOf) check.ifAtLeastOneOf = this.#toSet(ifAtLeastOneOf);
             if(ifEquals) check.ifEquals = this.#toSet(ifEquals);
             if(ifNoneOf) check.ifNoneOf = this.#toSet(ifNoneOf);
             if(ifKeyIn) check.ifKeyIn = this.#toSet(ifKeyIn);
-            if(debug) check.debug = true;
             checks[key] = check;
         }
-        // for(const onsetKey in onsets){
-        //     const split = onsetKey.split('_to_');
-        //     const val = (<any>onsets)[onsetKey] as 0 | 1;
-        //     const [prop, action] = split;
-        //     if(checks[action] !== undefined){
-        //         //need to put in the right bucket
-        //         throw 'NI'
-        //     }else{
-        //         const check: SetLogicOps = {};
-        //         const s = new Set([prop]);
-        //         switch(val){
-        //             case 0:
-        //                 check.ifEquals = s;
-        //                 break;
-        //             case 1:
-        //                 check.ifAllOf = s;
-        //                 break;
-        //         }
-        //         newBusses[action] = new Set();
-        //         checks[action] = check;
-        //     }
 
-        // }
         if(handlers !== undefined){
             //TODO:  maybe this could be done more globally on static properties, since it will 
             //repeat per instance
@@ -196,7 +173,9 @@ export class RoundAbout{
         // }
         const checks = this.#checks;
         for(const key in checks){
-            const check = checks[key];
+            const check = checks[key]!;
+            const {delay} = check;
+            if(delay) throw 'NI';
             const checkVal = await this.#doChecks(check!, true);
             check!.a = checkVal;
             if(checkVal){
