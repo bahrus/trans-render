@@ -1,18 +1,18 @@
 import {tryParse, RegExpOrRegExpExt} from '../lib/prs/tryParse.js';
-import { RoundAbout } from './roundabout.js';
-import { Compacts, RoundaboutReady } from './types.js';
+import { RoundAbout, whenSrcKeyChanges } from './roundabout.js';
+import { Compacts, RoundaboutReady, CompactConnection } from './types.js';
 
 const srcToDest = String.raw `(?<srcKey>[\w\_])_to_(?<destKey>[\w\_])`;
 
-const whenSrcKeyChanges = String.raw `^when_(?<srcKey>[\w\_])_changes_`;
+
 
 const reCompacts: Array<RegExpOrRegExpExt<CompactConnection>> = [
-    {
-        regExp: new RegExp(String.raw `${whenSrcKeyChanges}invoke_(?<destKey>[\w\_])`),
-        defaultVals:{
-            op: 'invoke'
-        }
-    },
+    // {
+    //     regExp: new RegExp(String.raw `${whenSrcKeyChanges}invoke_(?<destKey>[\w\_])`),
+    //     defaultVals:{
+    //         op: 'invoke'
+    //     }
+    // },
     {
         regExp: new RegExp(String.raw `^negate_${srcToDest}`),
         defaultVals:{
@@ -48,7 +48,7 @@ const reCompacts: Array<RegExpOrRegExpExt<CompactConnection>> = [
 export function hydrateCompacts(compacts: Compacts, ra: RoundAbout){
     for(const key in compacts){
         const test = tryParse(key, reCompacts) as CompactConnection;
-        if(test === null) throw 400;
+        if(test === null) continue; // hopefully an invoke
         const cm = new CompactManager(test, (<any>compacts)[key] as number, ra);
     }
 }
@@ -118,8 +118,3 @@ class CompactManager{
     }
 }
 
-interface CompactConnection {
-    srcKey: string,
-    destKey: string,
-    op: 'toggle' | 'negate' | 'invoke' | 'pass_length' | 'echo' | 'inc'
-}

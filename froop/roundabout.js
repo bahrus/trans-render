@@ -33,7 +33,7 @@ export class RoundAbout {
         this.#busses = newBusses;
         this.#routers = routers;
         //TODO:  memoize this whole logic, keyed off of options
-        const { actions, handlers, positractions } = options;
+        const { actions, handlers, positractions, compacts } = options;
         for (const key in actions) {
             newBusses[key] = new Set();
             const val = actions[key];
@@ -136,6 +136,22 @@ export class RoundAbout {
                 if (ifKeyIn)
                     check.ifKeyIn = this.#toSet(ifKeyIn);
                 checks[name] = check;
+            }
+            if (compacts !== undefined) {
+                for (const key in compacts) {
+                    const parsedCompact = reInvoke.exec(key);
+                    if (parsedCompact !== null) {
+                        const grps = parsedCompact.groups;
+                        const { destKey, srcKey } = grps;
+                        const check = {
+                            ifKeyIn: new Set([srcKey]),
+                        };
+                        newBusses[destKey] = new Set();
+                        checks[destKey] = check;
+                    }
+                    //console.log({tbd: parsedCompact});
+                }
+                //const invokingCompacts = Object.keys(compacts).filter(x => x.indexOf())
             }
         }
     }
@@ -447,6 +463,8 @@ export class RoundAbout {
         });
     }
 }
+export const whenSrcKeyChanges = String.raw `^when_(?<srcKey>[\w]+)_changes_`;
+const reInvoke = new RegExp(String.raw `${whenSrcKeyChanges}invoke_(?<destKey>[\w]+)`);
 export class RoundAboutEvent extends Event {
 }
 // export class ActionBus{

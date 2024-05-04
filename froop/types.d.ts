@@ -391,5 +391,11 @@ export interface ICompact{
     //covertAssignment(obj: any, vm: RoundaboutReady, keysToPropagate: Set<string>, busses: Busses): Promise<void>,
 }
 
+interface CompactConnection {
+    srcKey: string,
+    destKey: string,
+    op: 'toggle' | 'negate' | 'invoke' | 'pass_length' | 'echo' | 'inc'
+}
+
 
 

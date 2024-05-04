@@ -1,13 +1,13 @@
 import { tryParse } from '../lib/prs/tryParse.js';
+import { whenSrcKeyChanges } from './roundabout.js';
 const srcToDest = String.raw `(?<srcKey>[\w\_])_to_(?<destKey>[\w\_])`;
-const whenSrcKeyChanges = String.raw `^when_(?<srcKey>[\w\_])_changes_`;
 const reCompacts = [
-    {
-        regExp: new RegExp(String.raw `${whenSrcKeyChanges}invoke_(?<destKey>[\w\_])`),
-        defaultVals: {
-            op: 'invoke'
-        }
-    },
+    // {
+    //     regExp: new RegExp(String.raw `${whenSrcKeyChanges}invoke_(?<destKey>[\w\_])`),
+    //     defaultVals:{
+    //         op: 'invoke'
+    //     }
+    // },
     {
         regExp: new RegExp(String.raw `^negate_${srcToDest}`),
         defaultVals: {
@@ -43,7 +43,7 @@ export function hydrateCompacts(compacts, ra) {
     for (const key in compacts) {
         const test = tryParse(key, reCompacts);
         if (test === null)
-            throw 400;
+            continue; // hopefully an invoke
         const cm = new CompactManager(test, compacts[key], ra);
     }
 }
