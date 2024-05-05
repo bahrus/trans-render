@@ -30,7 +30,7 @@ export class MoodStone extends O implements IMoodStoneActions {
     static override config: OConfig<IMoodStoneProps & IMoodStoneETs, IMoodStoneActions, IMoodStoneETs> = {
         propDefaults:{
             age: 22,
-            data: [1,2, 3, 4, 5]
+            data: [1, 2, 3, 4, 5]
         },
         propInfo:{
             isHappy: {
