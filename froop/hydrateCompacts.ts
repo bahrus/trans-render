@@ -2,7 +2,7 @@ import {tryParse, RegExpOrRegExpExt} from '../lib/prs/tryParse.js';
 import { RoundAbout, whenSrcKeyChanges } from './roundabout.js';
 import { Compacts, RoundaboutReady, CompactConnection } from './types.js';
 
-const srcToDest = String.raw `(?<srcKey>[\w\_])_to_(?<destKey>[\w\_])`;
+const srcToDest = String.raw `(?<srcKey>[\w]+)_to_(?<destKey>[\w]+)`;
 
 
 

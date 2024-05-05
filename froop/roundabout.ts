@@ -7,7 +7,7 @@ export async function roundabout<TProps = any, TActions = TProps>(
     const ra = new RoundAbout(options, infractions);
     const keysToPropagate = new Set<string>();
     await ra.subscribe();
-    if(infractions){
+    if(infractions || options.compacts){
         await ra.init();
     }
     
