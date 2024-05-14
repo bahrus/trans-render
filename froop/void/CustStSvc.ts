@@ -1,4 +1,4 @@
-import { ICustomState, PropLookup, RoundaboutReady } from "./types";
+import { ICustomState, PropLookup, RoundaboutReady } from "../types.js";
 
 export class CustStSvc{
     #abortControllers: Array<AbortController> = [];
@@ -34,7 +34,7 @@ export class CustStSvc{
 
         if(nameValue !== undefined){
             if(nv !== undefined){
-                const {camelToLisp} = await import('../lib/camelToLisp.js');
+                const {camelToLisp} = await import('../../lib/camelToLisp.js');
                 const valAsLisp = camelToLisp(nv.toString());
                 (<any>internals).states.add(`--${nameValue}-${valAsLisp}`);
             }

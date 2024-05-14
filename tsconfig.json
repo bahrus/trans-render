@@ -20,7 +20,7 @@
 		"froop/*", 
 		"MyCustomElement/*",
 		"positractions/*",
-		"funions/Localizer.ts"	],
+		"funions/Localizer.ts", "froop/void/A.js", "froop/void/A.ts", "froop/void/act.ts", "froop/void/CE.ts", "froop/void/act.js", "froop/void/CE.js", "froop/void/const.js", "froop/void/const.ts", "froop/void/CustStSvc.js", "froop/void/CustStSvc.ts", "froop/void/eq.js", "froop/void/eq.ts", "froop/void/Hookup.js", "froop/void/Hookup.ts", "froop/void/InstSvc.js", "froop/void/InstSvc.ts", "froop/void/Mix.js", "froop/void/Mix.ts", "froop/void/none.js", "froop/void/none.ts", "froop/void/oneOf.js", "froop/void/oneOf.ts", "froop/void/PropSvc.js", "froop/void/PropSvc.ts", "froop/void/PropRegistry.js", "froop/void/PropRegistry.ts", "froop/void/pq.js", "froop/void/PE.js", "froop/void/Svc.js", "froop/void/Svc.ts", "froop/void/trigger.js", "froop/void/trigger.ts"	],
 	"exclude":[
 		"node_modules"
 	]

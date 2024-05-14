@@ -1,5 +1,5 @@
 import {r} from './const.js';
-import {IResolvableService} from './types';
+import {IResolvableService} from '../types.js';
 
 export class Svc extends EventTarget implements IResolvableService{
     #resolved = false;

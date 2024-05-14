@@ -1,6 +1,6 @@
 import { pc } from './const.js';
 import { pq } from './pq.js';
-import { intersects } from '../lib/intersects.js';
+import { intersects } from '../../lib/intersects.js';
 import { act } from './act.js';
 const cache = new Map();
 //deprecate

@@ -1,7 +1,7 @@
-import { PropInfo, DefineArgs } from "./types";
+import { PropInfo, DefineArgs } from "../types.js";
 import { pc, xsr, ccb, dcb, r, mse} from './const.js';
 import { Svc } from "./Svc.js";
-import { IPropagator, IPropSvc, CEArgs, INewPropagator, IConnectedCB, IDisconnectedCB, IPropChg } from './types';
+import { IPropagator, IPropSvc, CEArgs, INewPropagator, IConnectedCB, IDisconnectedCB, IPropChg } from '../types.js';
 
 export class PropSvc extends Svc implements IPropSvc{
     constructor(public args: CEArgs){

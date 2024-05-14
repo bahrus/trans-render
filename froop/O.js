@@ -17,7 +17,7 @@ export class O extends HTMLElement {
         await this.#instantiateRoundaboutIfApplicable();
         const states = this.constructor.states;
         if (Object.keys(states).length > 0) {
-            const { CustStSvc } = await import('./CustStSvc.js');
+            const { CustStSvc } = await import('./void/CustStSvc.js');
             new CustStSvc(states, this, this.#internals);
         }
     }

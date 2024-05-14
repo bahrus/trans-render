@@ -1,8 +1,8 @@
-import {Action, IActionProcessor, WCConfig} from '../froop/types';
+import {Action, IActionProcessor, WCConfig} from '../types.js';
 import {pc} from './const.js';
-import {CEArgs, IPropagator, IPropChg} from './types';
+import {CEArgs, IPropagator, IPropChg} from '../types.js';
 import {pq} from './pq.js';
-import {intersects} from '../lib/intersects.js';
+import {intersects} from '../../lib/intersects.js';
 import {act} from './act.js';
 
 const cache = new Map<any, Map<string, Set<string>>>();

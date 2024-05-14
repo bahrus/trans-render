@@ -22,7 +22,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         await this.#instantiateRoundaboutIfApplicable();
         const states = (<any>this.constructor).states as PropLookup;
         if(Object.keys(states).length > 0){
-            const {CustStSvc} = await import('./CustStSvc.js');
+            const {CustStSvc} = await import('./void/CustStSvc.js');
             new CustStSvc(states, this, this.#internals);
         }
     }

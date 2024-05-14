@@ -1,5 +1,5 @@
-import {ActionOnEventConfigs, DynamicTransform, IPE, IPET} from './types';
-import {Action} from  './types';
+import {ActionOnEventConfigs, DynamicTransform, IPE, IPET} from '../types.js';
+import {Action} from  '../types.js';
 const PELookup = new WeakMap<EventTarget, IPE>();
 const PETLookup = new WeakMap<EventTarget, IPET>();
 export async function act(instance: EventTarget, actions: {[methodName: string]: Action}){

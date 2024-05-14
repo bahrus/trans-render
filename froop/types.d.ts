@@ -192,6 +192,7 @@ export interface OConfig<TProps = any, TActions = TProps, ETProps = TProps>{
      */
     infractions?: Infractions<TProps>,
     compacts?: Compacts<TProps, TActions>;
+    hitch?: Hitches<TProps, TActions>;
     handlers?: Handlers<ETProps, TActions>;
     positractions?: Positractions<TProps, TActions>;
 }
@@ -219,7 +220,11 @@ export type Compacts<TProps = any, TActions = TProps> =
     | Partial<{[key in `when_${keyof TProps & string}_changes_invoke_${keyof TActions & string}`]: number}>
     | Partial<{[key in `when_${keyof TProps & string}_changes_toggle_${keyof TProps & string}`]: number}>
     | Partial<{[key in `when_${keyof TProps & string}_changes_inc_${keyof TProps & string}_by`]: number}>
+;
 
+export type Hitches<TProps = any, TActions = TProps> = 
+    | Partial<{[key in `when_${keyof TProps & string}_emits_${keyof TProps & string}_inc_${keyof TProps & string}_by`]: number}>
+;
 
 export type Handlers<ETProps = any, TActions = ETProps> = 
     | Partial<{[key in `${keyof ETProps & string}_to_${keyof TActions & string}_on` & string]: string }>
@@ -338,6 +343,7 @@ export type roundaboutOptions<TProps = any, TActions = TProps, ETProps = TProps>
     compacts?: Compacts<TProps, TActions>,
     //onsets?: Onsets<TProps, TActions>,
     handlers?: Handlers<ETProps, TActions>,
+    hitch?: Hitches<TProps, TActions>,
     positractions?: Positractions<TProps>
     //do?:  Partial<{[key in `${keyof TActions & string}_on`]: Keysh<TProps> }>
 }

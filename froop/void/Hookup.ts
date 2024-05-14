@@ -1,7 +1,7 @@
-import {WCConfig} from './types';
+import {WCConfig} from '../types.js';
 import { InstSvc } from "./InstSvc.js";
 import {xsr, mse, acb} from './const.js';
-import { CEArgs, IHookup, INewPropagator, IAttrChgCB } from './types';
+import { CEArgs, IHookup, INewPropagator, IAttrChgCB } from '../types.js';
 import {trigger} from './trigger.js';
 /**
  * Connects the prop change subscription via Propagate observer to the corresponding actions
@@ -29,7 +29,7 @@ export class Hookup extends InstSvc {
             definer.addEventListener(acb, async e => {
                 const acbE = {...(e as CustomEvent).detail}  as IAttrChgCB;
                 const {instance} = acbE;
-                const {parse} = await import('./parse.js');
+                const {parse} = await import('../parse.js');
                 await args.definer!.resolveInstanceSvcs(args, instance);
                 await parse(acbE, propInfos, defaults);
             });

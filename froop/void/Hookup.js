@@ -27,7 +27,7 @@ export class Hookup extends InstSvc {
             definer.addEventListener(acb, async (e) => {
                 const acbE = { ...e.detail };
                 const { instance } = acbE;
-                const { parse } = await import('./parse.js');
+                const { parse } = await import('../parse.js');
                 await args.definer.resolveInstanceSvcs(args, instance);
                 await parse(acbE, propInfos, defaults);
             });

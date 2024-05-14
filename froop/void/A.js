@@ -1,28 +1,28 @@
-import { AttribsSettings } from "../lib/types";
-import {camelToLisp} from '../lib/camelToLisp.js';
-export function A(attribSettings: AttribsSettings, target: Element){
-    
+import { camelToLisp } from '../../lib/camelToLisp.js';
+export function A(attribSettings, target) {
     for (const key in attribSettings) {
         const val = attribSettings[key];
         const cKey = camelToLisp(key);
         switch (typeof val) {
             case 'boolean':
-                if(key.startsWith('.')){
+                if (key.startsWith('.')) {
                     const className = cKey.substr(1);
                     const verb = val ? 'add' : 'remove';
-                    (<any>target.classList)[verb](className);
-                }else if(key.startsWith('::')){
+                    target.classList[verb](className);
+                }
+                else if (key.startsWith('::')) {
                     const partName = cKey.substr(2);
                     const verb = val ? 'add' : 'remove';
-                    (<any>target).part[verb](partName);
-                }else{
+                    target.part[verb](partName);
+                }
+                else {
                     if (val) {
                         target.setAttribute(cKey, '');
-                    } else {
+                    }
+                    else {
                         target.removeAttribute(cKey);
                     }
                 }
-
                 break;
             case 'string':
                 target.setAttribute(cKey, val);
@@ -33,7 +33,8 @@ export function A(attribSettings: AttribsSettings, target: Element){
             case 'object':
                 if (val === null) {
                     target.removeAttribute(cKey);
-                }else{
+                }
+                else {
                     target.setAttribute(cKey, JSON.stringify(val));
                 }
                 break;

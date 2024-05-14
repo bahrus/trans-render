@@ -1,5 +1,5 @@
-import {PropInfo, WCConfig, Action, PropInfoTypes} from './types';
-import {CEArgs, IPropRegistrar as IPropRegistrar, IAttrChgCB, INewPropagator} from './types';
+import {PropInfo, WCConfig, Action, PropInfoTypes} from '../types.js';
+import {CEArgs, IPropRegistrar as IPropRegistrar, IAttrChgCB, INewPropagator} from '../types.js';
 import { xsr, r, mse} from './const.js';
 import { Svc } from './Svc.js';
 
@@ -78,7 +78,7 @@ export class PropRegistry extends Svc{
     async getAttrNames(ext: any){
         const returnArr: string[] = ext.observedAttributes || [];
         const {propInfos} = this;
-        const {camelToLisp} = await import('../lib/camelToLisp.js');
+        const {camelToLisp} = await import('../../lib/camelToLisp.js');
         for(const key in propInfos){
             const prop = propInfos[key];
             if(prop.parse){

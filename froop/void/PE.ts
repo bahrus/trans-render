@@ -1,4 +1,4 @@
-import {ActionOnEventConfigs, IPE} from './types';
+import {ActionOnEventConfigs, IPE} from '../types';
 import {assign} from './act.js';
 
 export class PE implements IPE{

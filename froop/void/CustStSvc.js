@@ -36,7 +36,7 @@ export class CustStSvc {
         const nv = vm[stateKey];
         if (nameValue !== undefined) {
             if (nv !== undefined) {
-                const { camelToLisp } = await import('../lib/camelToLisp.js');
+                const { camelToLisp } = await import('../../lib/camelToLisp.js');
                 const valAsLisp = camelToLisp(nv.toString());
                 internals.states.add(`--${nameValue}-${valAsLisp}`);
             }

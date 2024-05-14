@@ -1,13 +1,13 @@
-export { TRElementActions, TRElementProps, } from '../lib/types.js';
-export { WCConfig, } from './types';
-export {ActionOnEventConfigs, PropInfo, Action, IActionProcessor as IHasPostHoc} from './types';
-import { def } from '../lib/def.js';
+export { TRElementActions, TRElementProps, } from '../../lib/types.js';
+export { WCConfig, } from '../types.js';
+export {ActionOnEventConfigs, PropInfo, Action, IActionProcessor as IHasPostHoc} from '../types.js';
+import { def } from '../../lib/def.js';
 import {
     IMix, CEArgs, IDefine, IAttrChgCB, IConnectedCB, IDisconnectedCB, 
     CEServices, DefineArgs, LogicOp,
     ListOfLogicalExpressions, WCConfig,
     PropInfo, Action
-} from './types';
+} from '../types.js';
 import {acb, ccb, dcb, mse} from './const.js';
 import { Svc } from './Svc.js';
 
@@ -126,7 +126,7 @@ export class CE<TProps = any, TActions = TProps, TPropInfo = PropInfo, TAction e
                 const dh = 'defer-hydration';
                 if(!isEnh){
                     if((this as any as HTMLElement).hasAttribute(dh)){
-                        const {wfac} = await import('../lib/wfac.js');
+                        const {wfac} = await import('../../lib/wfac.js');
                         await wfac(this as any as HTMLElement, dh, (s: string | null) => s === null);
                     }
                     if(this.#checkIfAttrsAreParsed()){

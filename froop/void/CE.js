@@ -1,4 +1,4 @@
-import { def } from '../lib/def.js';
+import { def } from '../../lib/def.js';
 import { acb, ccb, dcb, mse } from './const.js';
 import { Svc } from './Svc.js';
 export class CE extends Svc {
@@ -111,7 +111,7 @@ export class CE extends Svc {
                 const dh = 'defer-hydration';
                 if (!isEnh) {
                     if (this.hasAttribute(dh)) {
-                        const { wfac } = await import('../lib/wfac.js');
+                        const { wfac } = await import('../../lib/wfac.js');
                         await wfac(this, dh, (s) => s === null);
                     }
                     if (this.#checkIfAttrsAreParsed()) {

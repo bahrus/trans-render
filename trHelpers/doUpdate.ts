@@ -73,7 +73,7 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
         const path = s as string;
         await setPath(matchingElement, path, val);
     }else if(sa !== undefined){
-        const {A} = await import('../froop/A.js');
+        const {A} = await import('../froop/void/A.js');
         A({[sa]: val}, matchingElement);
     }else if(ss !== undefined){
         const {setProp} = await import('../lib/setProp.js');

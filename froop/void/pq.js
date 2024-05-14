@@ -1,4 +1,4 @@
-import { all } from '../lib/all.js';
+import { all } from '../../lib/all.js';
 import { none } from './none.js';
 import { eq } from './eq.js';
 import { oneOf } from './oneOf.js';

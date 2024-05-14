@@ -1,5 +1,5 @@
-import {DefineArgs} from './types';
-import { IMix} from './types';
+import {DefineArgs} from '../types.js';
+import { IMix} from '../types.js';
 import { Svc } from './Svc.js';
 
 export class Mix extends Svc implements IMix {

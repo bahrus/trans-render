@@ -1,6 +1,6 @@
 import {Svc} from './Svc.js';
 import {ir} from './const.js';
-import {IInstanceResolvableService} from './types';
+import {IInstanceResolvableService} from '../types.js';
 /**
  * Instance Resolvable Service
  */

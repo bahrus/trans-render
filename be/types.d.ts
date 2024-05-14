@@ -58,12 +58,13 @@ export interface EnhancementInfo {
     mountCnfg?: EnhancementMountCnfg,
 }
 
-export interface BEAllProps {
+export interface BEAllProps<TElement = Element> {
     resolved: boolean;
     rejected: boolean;
+    enhancedElement: TElement;
 }
 
-export interface IEnhancement<TElement = Element> extends BEAllProps, HTMLElement{
+export interface IEnhancement<TElement = Element> extends BEAllProps<TElement>, HTMLElement{
     attach(el: TElement, enhancement: EnhancementInfo): Promise<void>;
     detach(el: TElement): Promise<void>;
     resolved: boolean;

@@ -73,7 +73,7 @@ export class PropRegistry extends Svc {
     async getAttrNames(ext) {
         const returnArr = ext.observedAttributes || [];
         const { propInfos } = this;
-        const { camelToLisp } = await import('../lib/camelToLisp.js');
+        const { camelToLisp } = await import('../../lib/camelToLisp.js');
         for (const key in propInfos) {
             const prop = propInfos[key];
             if (prop.parse) {
