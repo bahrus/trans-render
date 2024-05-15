@@ -397,10 +397,20 @@ export interface ICompact{
     //covertAssignment(obj: any, vm: RoundaboutReady, keysToPropagate: Set<string>, busses: Busses): Promise<void>,
 }
 
-interface CompactConnection {
+interface CompactStatement {
     srcKey: string,
     destKey: string,
     op: 'toggle' | 'negate' | 'invoke' | 'pass_length' | 'echo' | 'inc'
+}
+
+interface HitchStatement {
+    leftKey: string,
+    middleKey: string,
+    rightKey: string,
+    lOp: 'when'
+    lmOp: 'emits',
+    mrOp: 'inc',
+    rOp: 'by'
 }
 
 
