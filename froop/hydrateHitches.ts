@@ -13,7 +13,7 @@ export function hydrateHitches(hitches: Hitches, ra: RoundAbout){
     for(const key in hitches){
         const test = tryParse(key, reHitches) as HitchStatement;
         if(test === null) throw 400;
-        //const 
+        const hm = new HitchManager(test, (<any>hitches)[key] as number, ra); 
     }
 }
 
