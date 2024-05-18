@@ -2,9 +2,7 @@ export async function roundabout(options, infractions) {
     const ra = new RoundAbout(options, infractions);
     const keysToPropagate = new Set();
     await ra.subscribe();
-    if (infractions || options.compacts) {
-        await ra.init();
-    }
+    await ra.init();
     await ra.hydrate(keysToPropagate);
     await ra.checkQ(keysToPropagate);
     return [ra.options.vm, ra];
