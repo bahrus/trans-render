@@ -86,7 +86,7 @@ export class RoundAbout {
                 else {
                     fn = d;
                 }
-                const infraction = async (vm, cxt) => {
+                const infraction = async (vm, e, ra) => {
                     const args = passR.map(key => {
                         if (typeof key !== 'string')
                             return key;
@@ -97,8 +97,7 @@ export class RoundAbout {
                             return vm[key];
                         //TODO:  work with scenarios where there is a container (element enhancement)
                         if (key === '$0') {
-                            console.log({ vm, cxt });
-                            return vm;
+                            return ra.options.container || vm;
                         }
                         return key;
                     });
@@ -450,7 +449,7 @@ export class RoundAbout {
     async #doKey(key, vm, keysToPropagate, e) {
         const method = vm[key] || this.#infractionsLookup[key];
         const isAsync = method.constructor.name === 'AsyncFunction';
-        const ret = isAsync ? await method.apply(vm, [vm, e]) : method.apply(vm, [vm, e]);
+        const ret = isAsync ? await method.apply(vm, [vm, e, this]) : method.apply(vm, [vm, e, this]);
         if (ret === undefined || ret === null)
             return;
         // if(this.#compact){
