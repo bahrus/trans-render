@@ -338,6 +338,8 @@ export type Checks<TProps = any, TActions = TProps> =
 
 export type roundaboutOptions<TProps = any, TActions = TProps, ETProps = TProps> = {
     vm?: TProps & TActions & RoundaboutReady,
+    //for enhanced elements, pass in the container, referenced via $0.
+    container?: EventTarget,
     propagate?: keyof TProps & string | Array<keyof TProps & string>,
     actions?: Actions<TProps,TActions>,
     compacts?: Compacts<TProps, TActions>,

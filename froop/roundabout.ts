@@ -89,14 +89,18 @@ export class RoundAbout{
                     fn = d;
                 }
                 
-                const infraction = async (vm: any) => {
+                const infraction = async (vm: any, cxt: any) => {
                     const args = passR.map(key => {
                         if(typeof key !== 'string') return key;
                         if(key.startsWith('`') && key.startsWith('`')){
                             return key.substring(1, key.length - 1);
                         }
                         if(key in vm) return vm[key];
-                        if(key === '$0') return vm;
+                        //TODO:  work with scenarios where there is a container (element enhancement)
+                        if(key === '$0') {
+                            console.log({vm, cxt});
+                            return vm;
+                        }
                         return key;
                     });
 
@@ -156,7 +160,7 @@ export class RoundAbout{
         const checks = this.#checks;
         const busses = this.#busses;
         const {infractions, options} = this;
-        const {vm, compacts} = options;
+        const {vm, compacts, hitch} = options;
         if(infractions !== undefined){
             const {getDestructArgs} = await import('../lib/getDestructArgs.js');
             for(const infraction of infractions){
@@ -175,6 +179,10 @@ export class RoundAbout{
         if(compacts !== undefined){
             const {hydrateCompacts} = await import('./hydrateCompacts.js');
             hydrateCompacts(compacts, this);
+        }
+        if(hitch !== undefined){
+            const {hydrateHitches} = await import('./hydrateHitches.js');
+            hydrateHitches(hitch, this);
         }
 
     }

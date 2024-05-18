@@ -32,6 +32,10 @@ class HitchManager {
         propagator.addEventListener(leftKey, (e) => {
             this.#hydrate();
         });
+        propagator.addEventListener('disconnectedCallback', (e) => {
+            if (this.#ac !== undefined)
+                this.#ac.abort();
+        });
         this.#hydrate();
     }
     #hydrate() {
