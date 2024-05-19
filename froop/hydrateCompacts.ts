@@ -1,12 +1,12 @@
 import {tryParse, RegExpOrRegExpExt} from '../lib/prs/tryParse.js';
 import { RoundAbout, whenSrcKeyChanges } from './roundabout.js';
-import { Compacts, RoundaboutReady, CompactConnection } from './types.js';
+import { Compacts, RoundaboutReady, CompactStatement } from './types.js';
 
 const srcToDest = String.raw `(?<srcKey>[\w]+)_to_(?<destKey>[\w]+)`;
 
 
 
-const reCompacts: Array<RegExpOrRegExpExt<CompactConnection>> = [
+const reCompacts: Array<RegExpOrRegExpExt<CompactStatement>> = [
     // {
     //     regExp: new RegExp(String.raw `${whenSrcKeyChanges}invoke_(?<destKey>[\w\_])`),
     //     defaultVals:{
@@ -23,6 +23,13 @@ const reCompacts: Array<RegExpOrRegExpExt<CompactConnection>> = [
         regExp: new RegExp(String.raw `^pass_length_of_${srcToDest}`),
         defaultVals: {
             op: 'pass_length'
+        }
+    },
+    {
+        regExp: new RegExp(String.raw `^echo_${srcToDest}_after`),
+        defaultVals: {
+            op: 'echo',
+            rhsIsDynamic: true,
         }
     },
     {
@@ -47,7 +54,7 @@ const reCompacts: Array<RegExpOrRegExpExt<CompactConnection>> = [
 
 export function hydrateCompacts(compacts: Compacts, ra: RoundAbout){
     for(const key in compacts){
-        const test = tryParse(key, reCompacts) as CompactConnection;
+        const test = tryParse(key, reCompacts) as CompactStatement;
         if(test === null) continue; // hopefully an invoke
         const cm = new CompactManager(test, (<any>compacts)[key] as number, ra);
     }
@@ -55,10 +62,10 @@ export function hydrateCompacts(compacts: Compacts, ra: RoundAbout){
 
 class CompactManager{
     #ac: AbortController;
-    #cc: CompactConnection;
+    #cc: CompactStatement;
     #rhs: number;
     #ra: RoundAbout;
-    constructor(cc: CompactConnection, rhs: number, ra: RoundAbout){
+    constructor(cc: CompactStatement, rhs: number, ra: RoundAbout){
         this.#ac = new AbortController();
         this.#cc = cc;
         this.#rhs = rhs;
@@ -71,14 +78,16 @@ class CompactManager{
             this.#doAction(false);
         }, {signal: this.#ac.signal});
         this.#doAction(false);
-        propagator?.addEventListener('disconnectedCallback', e=> {
+        propagator?.addEventListener('disconnectedCallback', e => {
             this.#ac.abort();
-        })
+        });
     }
 
     #doAction(afterDelay: boolean){
-        const {op} = this.#cc;
-        const rhs = this.#rhs;
+        const {op, rhsIsDynamic} = this.#cc;
+        const vm = this.#ra.options.vm;
+        const rhs = rhsIsDynamic ? vm[this.#rhs] : this.#rhs;
+        
         if(!afterDelay && rhs > 0){
             switch(op){
                 case 'echo':
@@ -92,7 +101,6 @@ class CompactManager{
             }
         }
         const {srcKey, destKey} = this.#cc;
-        const vm = this.#ra.options.vm
         const val = vm[srcKey];
         switch(op){
             case 'echo':

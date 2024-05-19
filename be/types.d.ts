@@ -13,7 +13,7 @@ type CSSQuery = string;
 
 type delimiter = '-' | ':' | '--';
 
-export interface EnhancementMountCnfg<TBranches = any>{
+export interface EnhancementMountCnfg<TBranches = any, TProps = any>{
     enhancedElementInstanceOf?: Array<{new(): Element}>,
     enhancedElementMatches?: string,
     enhPropKey: string,
@@ -40,7 +40,14 @@ export interface EnhancementMountCnfg<TBranches = any>{
             import: () => Promise<{new(): IEnhancement}>, //Roundabout ready?
         },
     },
-    map?: {[key: AttrCoordinates]: any}
+    map?: {[key: AttrCoordinates]: AttrMapPoint<TProps>}
+}
+
+export type AttrMapPoint<TProps = any> = keyof TProps & string | AttrMapConfig<TProps>
+
+export interface AttrMapConfig<TProps = any> {
+    instanceOf: 'Object',
+    mapsTo: '.' | keyof TProps,
 }
 
 export type Branchitutde = number;

@@ -21,6 +21,13 @@ const reCompacts = [
         }
     },
     {
+        regExp: new RegExp(String.raw `^echo_${srcToDest}_after`),
+        defaultVals: {
+            op: 'echo',
+            rhsIsDynamic: true,
+        }
+    },
+    {
         regExp: new RegExp(String.raw `^echo_${srcToDest}`),
         defaultVals: {
             op: 'echo'
@@ -70,8 +77,9 @@ class CompactManager {
         });
     }
     #doAction(afterDelay) {
-        const { op } = this.#cc;
-        const rhs = this.#rhs;
+        const { op, rhsIsDynamic } = this.#cc;
+        const vm = this.#ra.options.vm;
+        const rhs = rhsIsDynamic ? vm[this.#rhs] : this.#rhs;
         if (!afterDelay && rhs > 0) {
             switch (op) {
                 case 'echo':
@@ -85,7 +93,6 @@ class CompactManager {
             }
         }
         const { srcKey, destKey } = this.#cc;
-        const vm = this.#ra.options.vm;
         const val = vm[srcKey];
         switch (op) {
             case 'echo':

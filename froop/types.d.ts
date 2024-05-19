@@ -217,6 +217,7 @@ export type Compacts<TProps = any, TActions = TProps> =
     | Partial<{[key in `negate_${keyof TProps & string}_to_${keyof TProps & string}`]: number}>
     | Partial<{[key in `pass_length_of_${keyof TProps & string}_to_${keyof TProps & string}`]: number}>
     | Partial<{[key in `echo_${keyof TProps & string}_to_${keyof TProps & string}`]: number}>
+    | Partial<{[key in `echo_${keyof TProps & string}_to_${keyof TProps & string}_after`]: number}>
     | Partial<{[key in `when_${keyof TProps & string}_changes_invoke_${keyof TActions & string}`]: number}>
     | Partial<{[key in `when_${keyof TProps & string}_changes_toggle_${keyof TProps & string}`]: number}>
     | Partial<{[key in `when_${keyof TProps & string}_changes_inc_${keyof TProps & string}_by`]: number}>
@@ -224,6 +225,7 @@ export type Compacts<TProps = any, TActions = TProps> =
 
 export type Hitches<TProps = any, TActions = TProps> = 
     | Partial<{[key in `when_${keyof TProps & string}_emits_${keyof TProps & string}_inc_${keyof TProps & string}_by`]: number}>
+    
 ;
 
 export type Handlers<ETProps = any, TActions = ETProps> = 
@@ -402,7 +404,8 @@ export interface ICompact{
 interface CompactStatement {
     srcKey: string,
     destKey: string,
-    op: 'toggle' | 'negate' | 'invoke' | 'pass_length' | 'echo' | 'inc'
+    op: 'toggle' | 'negate' | 'invoke' | 'pass_length' | 'echo' | 'inc',
+    rhsIsDynamic: boolean
 }
 
 interface HitchStatement {
