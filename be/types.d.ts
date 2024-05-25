@@ -16,16 +16,16 @@ type delimiter = '-' | ':' | '--';
 export interface EnhancementMountCnfg<TBranches = any, TProps = any>{
     enhancedElementInstanceOf?: Array<{new(): Element}>,
     enhancedElementMatches?: string,
-    enhPropKey: string,
-    hasRootIn: Array<RootCnfg>,
-    preBaseDelimiter: delimiter,
-    base: string,
-    preBranchDelimiter: delimiter,
+    enhPropKey?: string,
+    hasRootIn?: Array<RootCnfg>,
+    preBaseDelimiter?: delimiter,
+    base?: string,
+    preBranchDelimiter?: delimiter,
     branches?: Array<string>,
     //TODO
     watchedBranches?: Array<string>,
     //TODO
-    preLeafDelimiter: delimiter,
+    preLeafDelimiter?: delimiter,
     //TODO
     leaves?: Partial<{[key in keyof TBranches & string]: stringArray}>,
     //TODO
@@ -35,11 +35,12 @@ export interface EnhancementMountCnfg<TBranches = any, TProps = any>{
     block?: boolean,
     //TODO
     unblock?: boolean,
-    do: {
-        mount: {
-            import: () => Promise<{new(): IEnhancement}>, //Roundabout ready?
-        },
-    },
+    importEnh?: () => Promise<{new(): IEnhancement}>
+    // do: {
+    //     mount: {
+            
+    //     },
+    // },
     map?: {[key: AttrCoordinates]: AttrMapPoint<TProps>}
 }
 
@@ -56,8 +57,11 @@ export type AttrCoordinates = `${Branchitutde}.${Leafitude}`
 
 
 
-export type MountBeHive<TBranches = any> = Partial<EnhancementMountCnfg<TBranches>>
+export type MountBeHive<TBranches = any> = Partial<EnhancementMountCnfg<TBranches>> & ObservedAttrsOfEnhancee
 
+export interface ObservedAttrsOfEnhancee {
+    attrIn?: Array<string>
+}
 
 export interface EnhancementInfo {
     initialPropValues?: any,
