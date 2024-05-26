@@ -1,4 +1,4 @@
-import { AttrChangeInfo, MountInit, RootCnfg } from '../../mount-observer/types';
+import { AttrChangeInfo, MountInit, ObservedSourceOfTruthAttribute, RootCnfg } from '../../mount-observer/types';
 export type stringArray = string | Array<string>;
 
 export type stringArrayOrTree = Array<string> | [string, Array<string>];
@@ -36,12 +36,12 @@ export interface EnhancementMountCnfg<TBranches = any, TProps = any>{
     //TODO
     unblock?: boolean,
     importEnh?: () => Promise<{new(): IEnhancement}>
-    // do: {
-    //     mount: {
-            
-    //     },
-    // },
-    map?: {[key: AttrCoordinates]: AttrMapPoint<TProps>}
+
+    map?: {[key: AttrCoordinates]: AttrMapPoint<TProps>},
+    /**
+     * Observed Source of Truth Attributes
+     */
+    osotas? : Array<ObservedSourceOfTruthAttribute>,
 }
 
 export type AttrMapPoint<TProps = any> = keyof TProps & string | AttrMapConfig<TProps>
