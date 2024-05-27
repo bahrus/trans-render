@@ -50,6 +50,9 @@ export interface AttrMapConfig<TProps = any> {
     instanceOf?: 'Object' | 'String' | 'Object$tring',
     mapsTo: '.' | keyof TProps,
     valIfFalsy?: any,
+    strValMapsTo?: keyof TProps,
+    objValMapsTo?: '.' | keyof TProps,
+    arrValMapsTo?: keyof TProps,
 }
 
 export type Branchitutde = number;
