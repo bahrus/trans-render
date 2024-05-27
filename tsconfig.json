@@ -8,6 +8,7 @@
 		"strict": true
 	},
 	"include": [
+		"Object$tring.ts",
 		"Transform.ts",
 		"Mount.ts",
 		"dss/*",

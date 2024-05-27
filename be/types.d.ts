@@ -47,8 +47,9 @@ export interface EnhancementMountCnfg<TBranches = any, TProps = any>{
 export type AttrMapPoint<TProps = any> = keyof TProps & string | AttrMapConfig<TProps>
 
 export interface AttrMapConfig<TProps = any> {
-    instanceOf: 'Object',
+    instanceOf?: 'Object' | 'String' | 'Object$tring',
     mapsTo: '.' | keyof TProps,
+    valIfFalsy?: any,
 }
 
 export type Branchitutde = number;

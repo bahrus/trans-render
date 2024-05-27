@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object$tring test</title>
+</head>
+<body>
+    <div id=target></div>
+    <script type=module>
+        import {Object$tring} from '/Object$tring.js';
+        const test1 = new Object$tring('   {"a": "b"}  hello');
+        if(test1.stringVal === 'hello' && test1.objVal.a === 'b'){
+            target.setAttribute('mark', 'good');
+        }
+    </script>
+</body>
+</html>
