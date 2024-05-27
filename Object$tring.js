@@ -1,5 +1,5 @@
 export class Object$tring {
-    stringVal;
+    strVal;
     objVal;
     arrVal;
     constructor(s) {
@@ -7,28 +7,28 @@ export class Object$tring {
         const firstOpenBracePos = trim.indexOf('{');
         const firstOpenBracketPos = trim.indexOf('[');
         if (firstOpenBracePos === -1 && firstOpenBracketPos === -1) {
-            this.stringVal = trim;
+            this.strVal = trim;
             return;
         }
         const lastCloseBracePos = trim.lastIndexOf('}');
         const lastCloseBracketPos = trim.lastIndexOf(']');
         if (lastCloseBracePos === -1 && lastCloseBracketPos === -1) {
-            this.stringVal = trim;
+            this.strVal = trim;
             return;
         }
         if ((firstOpenBracketPos === -1 || firstOpenBracePos < firstOpenBracketPos) &&
             (lastCloseBracketPos === -1 || lastCloseBracePos > lastCloseBracketPos)) {
-            this.stringVal = trim.substring(lastCloseBracePos + 1).trim();
+            this.strVal = trim.substring(lastCloseBracePos + 1).trim();
             const jsonString = trim.substring(firstOpenBracePos, lastCloseBracePos + 1);
             this.objVal = JSON.parse(jsonString);
             return;
         }
         if ((firstOpenBracePos === -1 || firstOpenBracketPos < firstOpenBracePos) &&
             (lastCloseBracePos === -1 || lastCloseBracketPos > lastCloseBracePos)) {
-            this.stringVal = trim.substring(lastCloseBracketPos + 1).trim();
+            this.strVal = trim.substring(lastCloseBracketPos + 1).trim();
             this.arrVal = JSON.parse(trim.substring(firstOpenBracketPos, lastCloseBracketPos + 1));
             return;
         }
-        this.stringVal = trim;
+        this.strVal = trim;
     }
 }
