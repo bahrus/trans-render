@@ -23,7 +23,7 @@ export interface ElO {
 }
 
 export interface RegExpExt<TStatementGroup = any>{
-    regExp: RegExp,
+    regExp: RegExp | string,
     defaultVals: Partial<TStatementGroup>,
 }
 

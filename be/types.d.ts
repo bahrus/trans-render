@@ -1,4 +1,5 @@
 import { AttrChangeInfo, MountInit, RootCnfg,  ObservedSourceOfTruthAttribute} from '../../mount-observer/types';
+import { RegExpExt } from '../lib/prs/types';
 import {IObject$tring} from '../types';
 export type stringArray = string | Array<string>;
 
@@ -56,6 +57,7 @@ export interface AttrMapConfig<TProps = any> {
     objValMapsTo?: '.' | keyof TProps,
     arrValMapsTo?: keyof TProps,
     strArrMapsTo?: keyof TProps,
+    regExpExts?: Partial<{[key in keyof TProps]: RegExpExt[]}>;
 }
 
 export type Branchitutde = number;

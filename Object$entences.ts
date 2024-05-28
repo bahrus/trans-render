@@ -1,7 +1,9 @@
 import {Object$tring} from './Object$tring.js';
+import { AttrMapConfig, AttrMapPoint } from './be/types.js';
+import {tryParse} from './lib/prs/tryParse.js';
 
 export class Object$entences extends Object$tring{
-    constructor(newVal: string){
+    constructor(newVal: string, mapConfig: AttrMapConfig){
         super(newVal);
         let {strVal, objVal} = this;
         if(objVal === undefined) {
@@ -13,15 +15,39 @@ export class Object$entences extends Object$tring{
                 .map(s => s.trim())
                 .filter( s=> !s.startsWith('//'))
                 .map(s => s.replace(reNormalize, ' '))
+                .filter( s => s !== '')
             ;
+            const {regExpExts} = mapConfig;
             for(const statement of statements){
                 const iPosOfSpace = statement.indexOf(' ');
                 if(iPosOfSpace == -1) throw 400;
-                const head = statement.substring(0, iPosOfSpace);
-                if(objVal[head] === undefined) objVal[head] = [];
-                objVal[head].push(statement.substring(iPosOfSpace + 1));
+                if(regExpExts !== undefined){
+                
+                    for(const key in regExpExts){
+                        const rhs = regExpExts[key]!;
+                        for(const regExpExt of rhs){
+                            if(!(regExpExt.regExp instanceof RegExp)){
+                                regExpExt.regExp = new RegExp(regExpExt.regExp);
+                            }
+                        }
+                        const test = tryParse(statement, rhs);
+                        if(test !== null){
+                            if(objVal[key] === undefined) objVal[key] = [];
+                            objVal[key].push(test);
+                            continue;
+                        }
+
+                    }
+                }
+                if(objVal.rawStatements === undefined) objVal.rawStatements = [];
+                objVal.rawStatements.push(statement);
+                // const head = statement.substring(0, iPosOfSpace);
+                // if(objVal[head] === undefined) objVal[head] = [];
+                // const tail = statement.substring(iPosOfSpace + 1);
+                // objVal[head].push();
             }
         }
+        console.log(this);
     }
 }
 
