@@ -49,8 +49,7 @@ export type AttrMapPoint<TProps = any> = keyof TProps & string | AttrMapConfig<T
 
 
 export interface AttrMapConfig<TProps = any> {
-    instanceOf?: 'Object' | 'String' | 'Object$tring',
-    //Object$Stringer: () => Promise<{new(newValue: string): IObject$tring}>
+    instanceOf?: 'Object' | 'String' | 'Object$tring' | 'Object$entences',
     mapsTo?: '.' | keyof TProps,
     valIfFalsy?: any,
     strValMapsTo?: keyof TProps,
