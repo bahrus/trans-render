@@ -17,6 +17,7 @@
   "exports": {
     ".": "./Transform.js",
     "./Object$tring.js": "./Object$tring.js",
+    "./Object$entences.js": "./Object$entences.js",
     "./trans-render.js": "./trans-render.js",
     "./dss/parse.js": "./dss/parse.js",
     "./dss/find.js": "./dss/find.js",

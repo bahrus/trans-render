@@ -9,6 +9,7 @@
 	},
 	"include": [
 		"Object$tring.ts",
+		"Object$entences.ts",
 		"Transform.ts",
 		"Mount.ts",
 		"dss/*",

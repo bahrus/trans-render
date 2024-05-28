@@ -50,11 +50,13 @@ export type AttrMapPoint<TProps = any> = keyof TProps & string | AttrMapConfig<T
 
 export interface AttrMapConfig<TProps = any> {
     instanceOf?: 'Object' | 'String' | 'Object$tring',
+    //Object$Stringer: () => Promise<{new(newValue: string): IObject$tring}>
     mapsTo?: '.' | keyof TProps,
     valIfFalsy?: any,
     strValMapsTo?: keyof TProps,
     objValMapsTo?: '.' | keyof TProps,
     arrValMapsTo?: keyof TProps,
+    strArrMapsTo?: keyof TProps,
 }
 
 export type Branchitutde = number;
