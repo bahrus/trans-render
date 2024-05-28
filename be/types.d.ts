@@ -48,7 +48,7 @@ export type AttrMapPoint<TProps = any> = keyof TProps & string | AttrMapConfig<T
 
 export interface AttrMapConfig<TProps = any> {
     instanceOf?: 'Object' | 'String' | 'Object$tring',
-    mapsTo: '.' | keyof TProps,
+    mapsTo?: '.' | keyof TProps,
     valIfFalsy?: any,
     strValMapsTo?: keyof TProps,
     objValMapsTo?: '.' | keyof TProps,
