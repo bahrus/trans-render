@@ -1,4 +1,5 @@
-export class Object$tring{
+import {IObject$tring} from './types';
+export class Object$tring implements IObject$tring{
     strVal: string | undefined;
     objVal: any;
     arrVal: any[] | undefined;

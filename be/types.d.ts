@@ -1,4 +1,5 @@
-import { AttrChangeInfo, MountInit, ObservedSourceOfTruthAttribute, RootCnfg } from '../../mount-observer/types';
+import { AttrChangeInfo, MountInit, RootCnfg,  ObservedSourceOfTruthAttribute} from '../../mount-observer/types';
+import {IObject$tring} from '../types';
 export type stringArray = string | Array<string>;
 
 export type stringArrayOrTree = Array<string> | [string, Array<string>];
@@ -46,6 +47,7 @@ export interface EnhancementMountCnfg<TBranches = any, TProps = any>{
 
 export type AttrMapPoint<TProps = any> = keyof TProps & string | AttrMapConfig<TProps>
 
+
 export interface AttrMapConfig<TProps = any> {
     instanceOf?: 'Object' | 'String' | 'Object$tring',
     mapsTo?: '.' | keyof TProps,
@@ -63,9 +65,9 @@ export type AttrCoordinates = `${Branchitutde}.${Leafitude}`
 
 export type MountBeHive<TBranches = any> = Partial<EnhancementMountCnfg<TBranches>> & ObservedAttrsOfEnhancee
 
-export interface ObservedAttrsOfEnhancee {
-    attrIn?: Array<string>
-}
+// export interface ObservedAttrsOfEnhancee {
+//     attrIn?: Array<string>
+// }
 
 export interface EnhancementInfo {
     initialPropValues?: any,
