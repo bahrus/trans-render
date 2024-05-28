@@ -480,3 +480,10 @@ export interface MountActions<TProps = any, TActions = TProps, ETProps = TProps>
     
     mountClone(self: this): Partial<MountProps<TProps, TActions, ETProps>>;
 }
+
+export interface IObject$tring{
+    strVal: string | undefined;
+    objVal: any;
+    arrVal: any[] | undefined;
+    
+}
