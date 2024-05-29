@@ -1,8 +1,13 @@
 export class Object$tring {
+    s;
     strVal;
     objVal;
     arrVal;
     constructor(s) {
+        this.s = s;
+    }
+    async parse() {
+        const s = this.s;
         const trim = s.trim();
         const firstOpenBracePos = trim.indexOf('{');
         const firstOpenBracketPos = trim.indexOf('[');

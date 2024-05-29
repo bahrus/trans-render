@@ -3,7 +3,9 @@ export class Object$tring implements IObject$tring{
     strVal: string | undefined;
     objVal: any;
     arrVal: any[] | undefined;
-    constructor(s: string){
+    constructor(public s: string){}
+    async parse(){
+        const s = this.s;
         const trim = s.trim();
         const firstOpenBracePos = trim.indexOf('{');
         const firstOpenBracketPos = trim.indexOf('[');

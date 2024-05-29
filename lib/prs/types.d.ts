@@ -25,6 +25,7 @@ export interface ElO {
 export interface RegExpExt<TStatementGroup = any>{
     regExp: RegExp | string,
     defaultVals: Partial<TStatementGroup>,
+    dssKeys?: string[],
 }
 
 export type RegExpOrRegExpExt<TStatementGroup = any> = RegExp | RegExpExt<TStatementGroup>;

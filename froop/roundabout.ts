@@ -176,11 +176,11 @@ export class RoundAbout{
         }
         if(compacts !== undefined){
             const {hydrateCompacts} = await import('./hydrateCompacts.js');
-            hydrateCompacts(compacts, this);
+            await hydrateCompacts(compacts, this);
         }
         if(hitch !== undefined){
             const {hydrateHitches} = await import('./hydrateHitches.js');
-            hydrateHitches(hitch, this);
+            await hydrateHitches(hitch, this);
         }
 
     }

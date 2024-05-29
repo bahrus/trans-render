@@ -5,9 +5,9 @@ const reHitches = [
         defaultVals: {}
     }
 ];
-export function hydrateHitches(hitches, ra) {
+export async function hydrateHitches(hitches, ra) {
     for (const key in hitches) {
-        const test = tryParse(key, reHitches);
+        const test = await tryParse(key, reHitches);
         if (test === null)
             throw 400;
         const hm = new HitchManager(test, hitches[key], ra);

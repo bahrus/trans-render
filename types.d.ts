@@ -485,5 +485,5 @@ export interface IObject$tring{
     strVal: string | undefined;
     objVal: any;
     arrVal: any[] | undefined;
-    
+    parse(): Promise<void>;
 }

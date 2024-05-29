@@ -1,10 +1,13 @@
 import {Object$tring} from './Object$tring.js';
 import { AttrMapConfig, AttrMapPoint } from './be/types.js';
-import {tryParse} from './lib/prs/tryParse.js';
 
 export class Object$entences extends Object$tring{
-    constructor(newVal: string, mapConfig: AttrMapConfig){
-        super(newVal);
+    constructor(public s: string, public mapConfig: AttrMapConfig){
+        super(s);
+    }
+    override async parse(){
+        await super.parse();
+        const {mapConfig} = this;
         let {strVal, objVal} = this;
         if(objVal === undefined) {
             objVal = {};
@@ -23,6 +26,7 @@ export class Object$entences extends Object$tring{
                 if(iPosOfSpace == -1) throw 400;
                 if(regExpExts !== undefined){
                     let foundMatch = false;
+                    const {tryParse} = await import('./lib/prs/tryParse.js');
                     for(const key in regExpExts){
                         const rhs = regExpExts[key]!;
                         for(const regExpExt of rhs){
@@ -30,8 +34,9 @@ export class Object$entences extends Object$tring{
                                 regExpExt.regExp = new RegExp(regExpExt.regExp);
                             }
                         }
-                        const test = tryParse(statement, rhs);
+                        const test = await tryParse(statement, rhs);
                         if(test !== null){
+                            
                             if(objVal[key] === undefined) objVal[key] = [];
                             objVal[key].push(test);
                             foundMatch = true;

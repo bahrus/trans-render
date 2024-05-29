@@ -46,9 +46,9 @@ const reCompacts = [
         }
     }
 ];
-export function hydrateCompacts(compacts, ra) {
+export async function hydrateCompacts(compacts, ra) {
     for (const key in compacts) {
-        const test = tryParse(key, reCompacts);
+        const test = await tryParse(key, reCompacts);
         if (test === null)
             continue; // hopefully an invoke
         const cm = new CompactManager(test, compacts[key], ra);

@@ -1,8 +1,15 @@
 import { Object$tring } from './Object$tring.js';
-import { tryParse } from './lib/prs/tryParse.js';
 export class Object$entences extends Object$tring {
-    constructor(newVal, mapConfig) {
-        super(newVal);
+    s;
+    mapConfig;
+    constructor(s, mapConfig) {
+        super(s);
+        this.s = s;
+        this.mapConfig = mapConfig;
+    }
+    async parse() {
+        await super.parse();
+        const { mapConfig } = this;
         let { strVal, objVal } = this;
         if (objVal === undefined) {
             objVal = {};
@@ -21,6 +28,7 @@ export class Object$entences extends Object$tring {
                     throw 400;
                 if (regExpExts !== undefined) {
                     let foundMatch = false;
+                    const { tryParse } = await import('./lib/prs/tryParse.js');
                     for (const key in regExpExts) {
                         const rhs = regExpExts[key];
                         for (const regExpExt of rhs) {
@@ -28,7 +36,7 @@ export class Object$entences extends Object$tring {
                                 regExpExt.regExp = new RegExp(regExpExt.regExp);
                             }
                         }
-                        const test = tryParse(statement, rhs);
+                        const test = await tryParse(statement, rhs);
                         if (test !== null) {
                             if (objVal[key] === undefined)
                                 objVal[key] = [];

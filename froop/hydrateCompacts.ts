@@ -52,9 +52,9 @@ const reCompacts: Array<RegExpOrRegExpExt<CompactStatement>> = [
     }
 ];
 
-export function hydrateCompacts(compacts: Compacts, ra: RoundAbout){
+export async function hydrateCompacts(compacts: Compacts, ra: RoundAbout){
     for(const key in compacts){
-        const test = tryParse(key, reCompacts) as CompactStatement;
+        const test = await tryParse(key, reCompacts) as CompactStatement;
         if(test === null) continue; // hopefully an invoke
         const cm = new CompactManager(test, (<any>compacts)[key] as number, ra);
     }

@@ -9,9 +9,9 @@ const reHitches: Array<RegExpOrRegExpExt<HitchStatement>> = [
     }
 ];
 
-export function hydrateHitches(hitches: Hitches, ra: RoundAbout){
+export async function hydrateHitches(hitches: Hitches, ra: RoundAbout){
     for(const key in hitches){
-        const test = tryParse(key, reHitches) as HitchStatement;
+        const test = await tryParse(key, reHitches) as HitchStatement;
         if(test === null) throw 400;
         const hm = new HitchManager(test, (<any>hitches)[key] as number, ra); 
     }

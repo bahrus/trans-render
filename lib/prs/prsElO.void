@@ -1,8 +1,8 @@
-import { ElO, ElTypes, RegExpOrRegExpExt } from './types';
+import { ElO, ElTypes, RegExpOrRegExpExt } from './types.js';
 import { tryParse } from './tryParse.js';
 import {lispToCamel} from '../lispToCamel.js';
 import { camelToLisp } from '../camelToLisp.js';
-import { Scope } from '../types';
+import { Scope } from '../types.js';
 
 export const strType = String.raw `\||\#|\@|\/|\%|\~|\-`;
 
@@ -27,11 +27,11 @@ const reDependencyStatements: RegExpOrRegExpExt<ElO>[] = [
     }
 ];
 
-export function prsElO(str: string, splitProp = true) : ElO{
+export async function prsElO(str: string, splitProp = true) : ElO{
     //const returnObj: ElO = {};
     const eventSplit = str.split('::');
     let nonEventPart = eventSplit[0];
-    const test = tryParse<ElO>(nonEventPart, reDependencyStatements);
+    const test = await tryParse<ElO>(nonEventPart, reDependencyStatements);
     if(test === null) throw 'PE'; //Parsing error
     if(test.elType === '-'){
         test.marker = `-${test.prop}`
