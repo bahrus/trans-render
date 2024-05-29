@@ -7,7 +7,7 @@ export async function tryParse<TParsedObj = any>(s: string, regExpOrRegExpExt: R
     for(const reOrRegExt of reArr){
         let re: RegExp | undefined;
         let def: Partial<TParsedObj> | undefined;
-        let dssKeys: string[] | undefined;
+        let dssKeys: [string, string][] | undefined;
         if(reOrRegExt instanceof RegExp){
             re = reOrRegExt;
         }else{
@@ -23,9 +23,9 @@ export async function tryParse<TParsedObj = any>(s: string, regExpOrRegExpExt: R
         if(dssKeys !== undefined){
             const { parse } = await import ('../../dss/parse.js');
             for(const dssKey of dssKeys){
-                const propVal = parsedObj[dssKey];
+                const propVal = parsedObj[dssKey[0]];
                 if(propVal !== undefined){
-                    parsedObj[dssKey + 'Specifier'] = await parse(propVal);
+                    parsedObj[dssKey[1]] = await parse(propVal);
                 }
             }
         }
