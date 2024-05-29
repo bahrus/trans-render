@@ -45,7 +45,6 @@ export class Object$entences extends Object$tring {
                 objVal.rawStatements.push(statement);
             }
         }
-        console.log(this);
     }
 }
 const reNormalize = /\s+/g;
