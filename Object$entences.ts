@@ -22,7 +22,7 @@ export class Object$entences extends Object$tring{
                 const iPosOfSpace = statement.indexOf(' ');
                 if(iPosOfSpace == -1) throw 400;
                 if(regExpExts !== undefined){
-                
+                    let foundMatch = false;
                     for(const key in regExpExts){
                         const rhs = regExpExts[key]!;
                         for(const regExpExt of rhs){
@@ -34,17 +34,15 @@ export class Object$entences extends Object$tring{
                         if(test !== null){
                             if(objVal[key] === undefined) objVal[key] = [];
                             objVal[key].push(test);
-                            continue;
+                            foundMatch = true;
+                            break;
                         }
 
                     }
+                    if(foundMatch) continue;
                 }
                 if(objVal.rawStatements === undefined) objVal.rawStatements = [];
                 objVal.rawStatements.push(statement);
-                // const head = statement.substring(0, iPosOfSpace);
-                // if(objVal[head] === undefined) objVal[head] = [];
-                // const tail = statement.substring(iPosOfSpace + 1);
-                // objVal[head].push();
             }
         }
         console.log(this);
