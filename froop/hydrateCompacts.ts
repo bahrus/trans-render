@@ -70,11 +70,11 @@ class CompactManager{
         this.#cc = cc;
         this.#rhs = rhs;
         this.#ra = ra;
-        const {destKey, op, srcKey} = cc;
+        const {srcKey} = cc;
         const {options} = ra;
         const {vm} = options;
         const {propagator} = (vm as RoundaboutReady);
-        propagator?.addEventListener(destKey, e => {
+        propagator?.addEventListener(srcKey, e => {
             this.#doAction(false);
         }, {signal: this.#ac.signal});
         this.#doAction(false);

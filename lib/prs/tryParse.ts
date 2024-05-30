@@ -20,6 +20,9 @@ export async function tryParse<TParsedObj = any>(s: string, regExpOrRegExpExt: R
         const groups = test.groups;
         if(groups === undefined) continue;
         const parsedObj = toParsedObj(groups);
+        if(def !== undefined){
+            Object.assign(parsedObj, def);
+        }
         if(dssKeys !== undefined){
             const { parse } = await import ('../../dss/parse.js');
             for(const dssKey of dssKeys){

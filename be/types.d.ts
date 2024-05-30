@@ -84,7 +84,7 @@ export interface BEAllProps<TElement = Element> {
     enhancedElement: TElement;
 }
 
-export interface IEnhancement<TElement = Element> extends BEAllProps<TElement>, HTMLElement{
+export interface IEnhancement<TElement = Element> extends BEAllProps<TElement>{
     attach(el: TElement, enhancement: EnhancementInfo): Promise<void>;
     detach(el: TElement): Promise<void>;
     resolved: boolean;
