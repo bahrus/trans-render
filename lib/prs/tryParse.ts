@@ -26,10 +26,20 @@ export async function tryParse<TParsedObj = any>(s: string, regExpOrRegExpExt: R
         if(dssKeys !== undefined){
             const { parse } = await import ('../../dss/parse.js');
             for(const dssKey of dssKeys){
-                const propVal = parsedObj[dssKey[0]];
-                if(propVal !== undefined){
-                    parsedObj[dssKey[1]] = await parse(propVal);
+                const [partName, destProp] = dssKey;
+                const propVal = parsedObj[partName] as string;
+                if(propVal === undefined) continue;
+                if(destProp.endsWith('[]')){
+                    const andSplit = propVal.split(' and ');
+                    const newVal = [];
+                    for(const token of andSplit){
+                        newVal.push(await parse(token));
+                    }
+                    parsedObj[destProp.substring(0, destProp.length - 2)] = newVal;
+                }else{
+                    parsedObj[destProp] = await parse(propVal);
                 }
+
             }
         }
         return parsedObj as TParsedObj;
