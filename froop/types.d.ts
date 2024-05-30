@@ -353,7 +353,7 @@ export type roundaboutOptions<TProps = any, TActions = TProps, ETProps = TProps>
 }
 
 export type PropsToPartialProps<TProps = any> = 
- | ((self: TProps) => Promise<Partial<TProps>>) 
+ | ((self: TProps, a: any, b: any) => Promise<Partial<TProps>>) 
  | ((self: TProps) => Partial<TProps>);
 
 export type Infractions<TProps = any> = 

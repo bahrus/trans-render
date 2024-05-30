@@ -1,4 +1,4 @@
-import {roundaboutOptions, RoundaboutReady, Busses, SetLogicOps, Checks, Keysh, ICompact, Infractions, PropsToPartialProps, Routers, LogicOp, CompactConnection} from './types';
+import {roundaboutOptions, RoundaboutReady, Busses, SetLogicOps, Checks, Keysh, ICompact, Infractions, PropsToPartialProps, Routers, LogicOp} from './types';
 
 export async function roundabout<TProps = any, TActions = TProps>(
     options: roundaboutOptions<TProps, TActions>,
@@ -136,7 +136,7 @@ export class RoundAbout{
                 for(const key in compacts){
                     const parsedCompact = reInvoke.exec(key);
                     if(parsedCompact !== null){
-                        const grps = parsedCompact.groups as any as CompactConnection;
+                        const grps = parsedCompact.groups as any;
                         const {destKey, srcKey} = grps;
                         const check: SetLogicOps = {
                             ifKeyIn: new Set([srcKey]),

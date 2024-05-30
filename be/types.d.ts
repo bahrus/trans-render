@@ -66,11 +66,7 @@ export type AttrCoordinates = `${Branchitutde}.${Leafitude}`
 
 
 
-export type MountBeHive<TBranches = any> = Partial<EnhancementMountCnfg<TBranches>> & ObservedAttrsOfEnhancee
-
-// export interface ObservedAttrsOfEnhancee {
-//     attrIn?: Array<string>
-// }
+export type MountBeHive<TBranches = any> = Partial<EnhancementMountCnfg<TBranches>>;
 
 export interface EnhancementInfo {
     initialPropValues?: any,

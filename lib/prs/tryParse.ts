@@ -11,7 +11,7 @@ export async function tryParse<TParsedObj = any>(s: string, regExpOrRegExpExt: R
         if(reOrRegExt instanceof RegExp){
             re = reOrRegExt;
         }else{
-            re = reOrRegExt.regExp;
+            re = reOrRegExt.regExp as RegExp;
             def = reOrRegExt.defaultVals;
             dssKeys = reOrRegExt.dssKeys
         }
