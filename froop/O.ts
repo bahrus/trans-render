@@ -71,7 +71,13 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
             case 'Number':
                 return Number(nv);
             case 'Object':
-                return JSON.parse(nv);
+                if (this.getAttribute('onload') === 'doEval') {
+                    return eval(`(${nv})`);
+                }
+                else {
+                    return JSON.parse(nv);
+                }
+                
             case 'RegExp':
                 return new RegExp(nv);
             case 'String':
