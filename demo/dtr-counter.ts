@@ -10,7 +10,7 @@ export interface DTRCounterMethods {
     localize(model: any, transformer: ITransformer<any, any>, uow: UnitOfWork<any, any>, matchingElement: Element): string | Partial<HTMLDataElement> | Partial<HTMLTimeElement> | undefined; 
 }
 export class DTRCounter extends Mount{
-    localize = localize
+    localize = localize;
     static override config: MntCfg<DTRCounterProps & MountProps, DTRCounterMethods & MountActions> = {
         shadowRootInit:{
             mode: 'open'

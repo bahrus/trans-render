@@ -87,6 +87,8 @@
   "files": [
     "dss/*.js",
     "dss/*.d.ts",
+    "funions/*.js",
+    "funions/*.d.ts",
     "lib/*.js",
     "lib/mixins/*.js",
     "lib/mixins/*.d.ts",
