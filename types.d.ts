@@ -456,7 +456,9 @@ export interface MntCfg<TProps = any, TActions = TProps, ETProps = TProps> exten
 
     styles?: /*CSSStyleSheet[] |*/ string | string[] | CSSStyleSheet | Array<CSSStyleSheet>;
 
-    shadowRootInit?: ShadowRootInit
+    shadowRootInit?: ShadowRootInit,
+
+    assumeCSR?: boolean
 }
 
 export interface MountProps<TProps = any, TActions = TProps, ETProps = TProps>{

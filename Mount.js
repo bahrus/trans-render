@@ -39,7 +39,7 @@ export class Mount extends O {
     #root;
     #csr = false;
     get csr() {
-        return this.#csr || this.hasAttribute('csr');
+        return this.config.assumeCSR || this.#csr || this.hasAttribute('csr');
     }
     get config() {
         return this.constructor.config;

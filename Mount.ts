@@ -47,7 +47,7 @@ export class Mount<TProps = any, TActions = TProps, ETProps = TProps>
     #root: ShadowRoot | HTMLElement;
     #csr = false;
     get csr(){
-        return this.#csr || this.hasAttribute('csr');
+        return this.config.assumeCSR || this.#csr || this.hasAttribute('csr');
     }
     get config(){
         return (<any>this.constructor).config as MntCfg;
