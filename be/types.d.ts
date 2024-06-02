@@ -15,7 +15,12 @@ type CSSQuery = string;
 
 type delimiter = '-' | ':' | '--';
 
-export interface EnhancementMountCnfg<TBranches = any, TProps = any>{
+//TODO:  deprecate
+export type EnhancementMountCnfg<TBranches = any, TProps = any> = EnhancementMountConfig<TBranches, TProps>;
+
+export type EMC<TBranches = any, TProps = any> = EnhancementMountConfig<TBranches, TProps>
+
+export interface EnhancementMountConfig<TBranches = any, TProps = any>{
     enhancedElementInstanceOf?: Array<{new(): Element}>,
     enhancedElementMatches?: string,
     enhPropKey?: string,
