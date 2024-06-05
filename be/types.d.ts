@@ -20,6 +20,11 @@ export type EnhancementMountCnfg<TBranches = any, TProps = any> = EnhancementMou
 
 export type EMC<TBranches = any, TProps = any> = EnhancementMountConfig<TBranches, TProps>
 
+export interface AttrCacheConfig {
+    enable: 'always' | 'instantiating',
+    clone?: boolean
+}
+
 export interface EnhancementMountConfig<TBranches = any, TProps = any>{
     enhancedElementInstanceOf?: Array<{new(): Element}>,
     enhancedElementMatches?: string,
@@ -42,13 +47,16 @@ export interface EnhancementMountConfig<TBranches = any, TProps = any>{
     block?: boolean,
     //TODO
     unblock?: boolean,
-    importEnh?: () => Promise<{new(): IEnhancement}>
+
+    importEnh?: () => Promise<{new(): IEnhancement}> 
 
     map?: {[key: AttrCoordinates]: AttrMapPoint<TProps>},
     /**
      * Observed Source of Truth Attributes
      */
     osotas? : Array<ObservedSourceOfTruthAttribute>,
+
+    cacheConfig?: AttrCacheConfig,
 }
 
 export type AttrMapPoint<TProps = any> = keyof TProps & string | AttrMapConfig<TProps>
@@ -65,9 +73,9 @@ export interface AttrMapConfig<TProps = any> {
     regExpExts?: Partial<{[key in keyof TProps]: RegExpExt[]}>;
 }
 
-export type Branchitutde = number;
+export type Branchitude = number;
 export type Leafitude = number;
-export type AttrCoordinates = `${Branchitutde}.${Leafitude}`
+export type AttrCoordinates = `${Branchitude}.${Leafitude}`
 
 
 
