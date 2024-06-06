@@ -365,7 +365,7 @@ export class RoundAbout{
         }
     }
 
-    async #checkSubscriptions(check: SetLogicOps, bus: any): Promise<boolean>{
+    async #checkSubscriptions(check: SetLogicOps, bus: Set<string>): Promise<boolean>{
         const {ifAllOf, ifKeyIn, ifAtLeastOneOf, ifEquals, ifNoneOf} = check;
         if(ifAllOf !== undefined){
             if(!bus.isDisjointFrom(ifAllOf)) return true;

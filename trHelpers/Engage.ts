@@ -19,7 +19,7 @@ export async function Engage<TProps extends {}, TMethods = TProps, TElement = {}
         }] : arr(e!).map(x => typeof x === 'string' ? {do: x} : x);
     for (const engagement of transpiledEngagements) {
         if('enhPropKey' in engagement){
-
+            throw 'NI';
         }else{
             const { do: d, with: w, undo, forget, be, dep, waitForResolved } = engagement;
             let met: (keyof TMethods & string) | undefined;
