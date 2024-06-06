@@ -28,7 +28,7 @@ export interface AttrCacheConfig {
 export interface EnhancementMountConfig<TBranches = any, TProps = any>{
     enhancedElementInstanceOf?: Array<{new(): Element}>,
     enhancedElementMatches?: string,
-    enhPropKey?: string,
+    enhPropKey: string,
     hasRootIn?: Array<RootCnfg>,
     preBaseDelimiter?: delimiter,
     base?: string,

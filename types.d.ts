@@ -1,5 +1,6 @@
 import { MountContext, PipelineStage } from "mount-observer/types";
 import { ConvertOptions, Scope } from "./lib/types";
+import { EMC} from './be/types';
 
 
 export type PropAttrQueryType = 
@@ -103,11 +104,19 @@ export interface EngagementCtx<TModel> {
     mountContext: MountContext
 }
 
-export type EngagementOrKey<TMethods> = (keyof TMethods & string) | Engagement<TMethods>;
+export type EngagementOrKeyOrEMC<TMethods, TProps = TMethods> = 
+    | (keyof TMethods & string) 
+    | Engagement<TMethods>
+    | EMC<any, TProps>
+;
 
-export type Engagements<TMethods> = 
-    | EngagementOrKey<TMethods>
-    | Array<EngagementOrKey<TMethods>>
+export type EngagementOrEMC<TMethods, TProps = TMethods> = 
+    | Engagement<TMethods>
+    | EMC<any, TProps>
+
+export type Engagements<TMethods, TProps = TMethods> = 
+    | EngagementOrKeyOrEMC<TMethods>
+    | Array<EngagementOrKeyOrEMC<TMethods>>
 ;
 
 export interface IMountOrchestrator<TProps, TMethods = TProps>{
