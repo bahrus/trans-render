@@ -13,7 +13,7 @@ export async function Engage<TProps extends {}, TMethods = TProps, TElement = {}
         type
     };
     const model = transformer.model as any;
-    let transpiledEngagements: Array<EngagementOrEMC<TMethods, TProps>> =
+    let transpiledEngagements: Array<EngagementOrEMC<TMethods, any>> =
         typeof e === 'string' ? [{
             do: e
         }] : arr(e!).map(x => typeof x === 'string' ? {do: x} : x);
