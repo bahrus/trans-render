@@ -206,7 +206,7 @@ export interface Positraction<TProps = any, TActions = TProps> extends LogicOp<T
     ifAllOf?: Array<keyof TProps & string>,
     //ifNoneOf: Array<keyof TProps & string>,
     
-    pass?: Array<(keyof TProps & string) | number | boolean | '$0' | `\`${string}\``>,
+    pass?: Array<(keyof TProps & string) | number | boolean | '$0' | '$0+' | `\`${string}\``>,
     assignTo?: Array<null | (keyof TProps & string)>
 }
 

@@ -193,6 +193,7 @@ export class RoundAbout {
         }
     }
     async hydrate(keysToPropagate) {
+        //const clone = structuredClone(keysToPropagate);// new Set(keysToPropagate);
         const { options } = this;
         const { vm } = options;
         // if(compacts !== undefined){
@@ -452,9 +453,14 @@ export class RoundAbout {
         return true;
     }
     async #doKey(key, vm, keysToPropagate, e) {
+        //if(key.startsWith('dispatch')) debugger;
         const method = vm[key] || this.#infractionsLookup[key];
         const isAsync = method.constructor.name === 'AsyncFunction';
         const ret = isAsync ? await method.apply(vm, [vm, e, this]) : method.apply(vm, [vm, e, this]);
+        const busses = this.#busses;
+        //TODO:  this eliminates double invokation only if nothing returned.  
+        //Need to do something similar if a key is returned, but it doesn't match any keys in the bus
+        busses[key] = new Set();
         if (ret === undefined || ret === null)
             return;
         // if(this.#compact){
@@ -462,12 +468,11 @@ export class RoundAbout {
         // }
         vm.covertAssignment(ret);
         const keys = Object.keys(ret);
-        const busses = this.#busses;
-        keys.forEach(key => {
-            keysToPropagate.add(key);
+        keys.forEach(returnKey => {
+            keysToPropagate.add(returnKey);
             for (const busKey in busses) {
                 const bus = busses[busKey];
-                bus.add(key);
+                bus.add(returnKey);
             }
         });
     }
