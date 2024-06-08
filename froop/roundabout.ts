@@ -74,6 +74,7 @@ export class RoundAbout{
         if(positractions !== undefined){
             const {options} = this;
             const {vm} = options;
+            const infractionLookup = this.#infractionsLookup;
             for(const positraction of positractions){
                 const {
                     ifKeyIn, ifAllOf, ifAtLeastOneOf, ifEquals, ifNoneOf,
@@ -96,8 +97,11 @@ export class RoundAbout{
                         }
                         if(key in vm) return vm[key];
                         //TODO:  work with scenarios where there is a container (element enhancement)
-                        if(key === '$0') {
-                            return ra.options.container || vm;
+                        switch(key){
+                            case '$0':
+                                return ra.options.container || vm;
+                            case '$0+':
+                                return vm;
                         }
                         return key;
                     });
@@ -118,10 +122,10 @@ export class RoundAbout{
                     return returnObj;
                 }
                 let name = fn.name;
-                while(name in vm){
+                while(name in vm || name in infractionLookup){
                     name+= '_';
                 }
-                this.#infractionsLookup[name] = infraction;
+                infractionLookup[name] = infraction;
                 newBusses[name] = new Set();
 
                 const check: SetLogicOps = {debug}
@@ -161,12 +165,13 @@ export class RoundAbout{
         const {vm, compacts, hitch} = options;
         if(infractions !== undefined){
             const {getDestructArgs} = await import('../lib/getDestructArgs.js');
+            const infractionsLookup = this.#infractionsLookup;
             for(const infraction of infractions){
                 let name = infraction.name;
-                while(name in vm){
+                while(name in vm  || name in infractionsLookup){
                     name+= '_';
                 }
-                this.#infractionsLookup[name] = infraction;
+                infractionsLookup[name] = infraction;
                 const args = getDestructArgs(infraction);
                 busses[name] = new Set();
                 checks[name] = {

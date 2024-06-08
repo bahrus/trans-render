@@ -15,8 +15,9 @@ type CSSQuery = string;
 
 type delimiter = '-' | ':' | '--';
 
-//TODO:  deprecate
-
+/**
+ * Abbrev. for EnhancementMountConfig
+ */
 export type EMC<TBranches = any, TProps = any> = EnhancementMountConfig<TBranches, TProps>
 
 export interface AttrCacheConfig {
