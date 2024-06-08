@@ -458,8 +458,6 @@ export class RoundAbout {
         const isAsync = method.constructor.name === 'AsyncFunction';
         const ret = isAsync ? await method.apply(vm, [vm, e, this]) : method.apply(vm, [vm, e, this]);
         const busses = this.#busses;
-        //TODO:  this eliminates double invokation only if nothing returned.  
-        //Need to do something similar if a key is returned, but it doesn't match any keys in the bus
         busses[key] = new Set();
         if (ret === undefined || ret === null)
             return;
