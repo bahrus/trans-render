@@ -16,7 +16,6 @@ type CSSQuery = string;
 type delimiter = '-' | ':' | '--';
 
 //TODO:  deprecate
-export type EnhancementMountCnfg<TBranches = any, TProps = any> = EnhancementMountConfig<TBranches, TProps>;
 
 export type EMC<TBranches = any, TProps = any> = EnhancementMountConfig<TBranches, TProps>
 
@@ -26,6 +25,7 @@ export interface AttrCacheConfig {
 }
 
 export interface EnhancementMountConfig<TBranches = any, TProps = any>{
+    id?: string;
     enhancedElementInstanceOf?: Array<{new(): Element}>,
     enhancedElementMatches?: string,
     enhPropKey: string,
@@ -79,12 +79,12 @@ export type AttrCoordinates = `${Branchitude}.${Leafitude}`
 
 
 
-export type MountBeHive<TBranches = any> = Partial<EnhancementMountCnfg<TBranches>>;
+export type MountBeHive<TBranches = any> = Partial<EMC<TBranches>>;
 
 export interface EnhancementInfo {
     initialPropValues?: any,
     initialAttrInfo?: Array<AttrChangeInfo>,
-    mountCnfg?: EnhancementMountCnfg,
+    mountCnfg?: EMC,
 }
 
 export interface BEAllProps<TElement = Element> {
