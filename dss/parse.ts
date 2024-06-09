@@ -1,4 +1,3 @@
-import { none } from '../froop/void/none';
 import { Sigils, Specifier } from './types';
 
 export async function parse(s: string) : Promise<Specifier>{

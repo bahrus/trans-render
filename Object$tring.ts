@@ -7,8 +7,9 @@ export class Object$tring implements IObject$tring{
     async parse(){
         const s = this.s;
         const trim = s.trim();
-        const firstOpenBracePos = trim.indexOf('{');
-        const firstOpenBracketPos = trim.indexOf('[');
+        const firstChar = trim[0];
+        const firstOpenBracePos = firstChar === '{' ? 0 : -1;
+        const firstOpenBracketPos = firstChar === '[' ? 0 : -1;
         if(firstOpenBracePos === -1 && firstOpenBracketPos === -1){
             this.strVal = trim;
             return;
