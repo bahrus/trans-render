@@ -163,7 +163,7 @@ export class O extends HTMLElement {
                     propName: key
                 };
                 this.setType(propInfo, def);
-                if (propInfo.type !== 'Object') {
+                if (propInfo.type !== 'Object' && def !== true) {
                     propInfo.parse = true;
                     const { camelToLisp } = await import('../lib/camelToLisp.js');
                     propInfo.attrName = camelToLisp(key);

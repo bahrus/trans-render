@@ -177,7 +177,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                     propName: key
                 } as PropInfo;
                 this.setType(propInfo, def);
-                if(propInfo.type !== 'Object'){
+                if(propInfo.type !== 'Object' && def !== true){
                     propInfo.parse = true;
                     const {camelToLisp} = await import('../lib/camelToLisp.js');
                     propInfo.attrName = camelToLisp(key);
