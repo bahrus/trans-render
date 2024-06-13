@@ -13,12 +13,6 @@ export async function findR(element, specifier, scopeE) {
                         return closest;
                     }
                 }
-                const found = closest?.querySelector(elS);
-                if (found) {
-                    return found;
-                }
-                if (rec && closest)
-                    return await findR(element, specifier, closest);
                 if (rnf) {
                     const rn = element.getRootNode();
                     if (host && rn instanceof ShadowRoot) {
@@ -31,6 +25,12 @@ export async function findR(element, specifier, scopeE) {
                     }
                     return rn?.querySelector(elS);
                 }
+                const found = closest?.querySelector(elS);
+                if (found) {
+                    return found;
+                }
+                if (rec && closest)
+                    return await findR(element, specifier, closest);
                 return null;
             case '?':
                 throw 'NI';
