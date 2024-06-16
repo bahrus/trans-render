@@ -109,6 +109,7 @@ async function parseProp(
                 }
                     break;
                 case '~':{
+                    specifier.host = true;
                     specifier.hpf = propInference;
                     const {camelToLisp} = await import('../lib/camelToLisp.js');
                     specifier.el = specifier.elS = camelToLisp(propInference);

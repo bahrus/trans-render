@@ -4,7 +4,7 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
     const {scopeS, elS} = specifier;
     
     if(scopeS !== undefined && elS !== undefined){
-        const {dss, rec, rnf, host} = specifier;
+        const {dss, rec, rnf, host, s} = specifier;
         switch(dss){
             case '^':
                 const {parentElement} = (scopeE || element);
@@ -14,6 +14,13 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
                     if(localName.includes('-')){
                         await customElements.whenDefined(localName);
                         return closest;
+                    }
+                }
+                if(s === '~'){
+                    const peerCE = closest?.querySelector(elS);
+                    if(peerCE){
+                        await customElements.whenDefined(elS);
+                        return peerCE;
                     }
                 }
                 if(rnf){

@@ -8,12 +8,13 @@ export async function tryParse<TParsedObj = any>(s: string, regExpOrRegExpExt: R
         let re: RegExp | undefined;
         let def: Partial<TParsedObj> | undefined;
         let dssKeys: [string, string][] | undefined;
+        let defaultVals: any;
         if(reOrRegExt instanceof RegExp){
             re = reOrRegExt;
         }else{
             re = reOrRegExt.regExp as RegExp;
             def = reOrRegExt.defaultVals;
-            dssKeys = reOrRegExt.dssKeys
+            dssKeys = reOrRegExt.dssKeys;
         }
         const test = re.exec(s);
         if(test === null) continue;
