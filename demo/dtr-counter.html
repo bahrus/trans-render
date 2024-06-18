@@ -11,6 +11,8 @@
     <script>
         test1.count = 24;
     </script>
+    <button onclick=testp1()>test1</button>
+    <button onclick=testp2()>test2</button>
     <!-- <dtr-counter count="2000"></dtr-counter> -->
     <!-- <dtr-counter defer-hydration id='test' count="1000"></dtr-counter>
     <button onclick='changeTemplate()'>change template</button> -->
@@ -25,13 +27,29 @@
     </script>
     <style>
         dtr-counter {
-            --attrs-to-reflect: count
+            --attrs-to-reflect: count red
         }
     </style>
     <script>
-        const styles = getComputedStyle(test1);
-        const attrsToReflect = styles.getPropertyValue('--attrs-to-reflect')
-        console.log({attrsToReflect, styles});
+        const uBound = 100000;
+        function testp1(){
+            const start = performance.now();
+            for(let i = 0; i < uBound; i++){
+                const styles = getComputedStyle(test1);
+                const attrsToReflect = styles.getPropertyValue('--attrs-to-reflect')
+            }
+            const end = performance.now();
+            console.log(end - start + ' milliseconds.');
+        }
+        function testp2(){
+            const start = performance.now();
+            for(let i = 0; i < uBound; i++){
+                const attrsToReflect = test1.computedStyleMap().get('--attrs-to-reflect');
+            }
+            const end = performance.now();
+            console.log(end - start + ' milliseconds.');
+        }
+        //console.log({attrsToReflect, styles});
     </script>
 </body>
 </html>
