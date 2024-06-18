@@ -23,6 +23,15 @@
     <script type=module>
         import './dtr-counter.js';
     </script>
-
+    <style>
+        dtr-counter {
+            --attrs-to-reflect: count
+        }
+    </style>
+    <script>
+        const styles = getComputedStyle(test1);
+        const attrsToReflect = styles.getPropertyValue('--attrs-to-reflect')
+        console.log({attrsToReflect, styles});
+    </script>
 </body>
 </html>
