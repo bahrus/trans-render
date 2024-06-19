@@ -27,29 +27,15 @@
     </script>
     <style>
         dtr-counter {
-            --attrs-to-reflect: count red
+            --attrs-to-reflect: {
+                count: 10
+            }
         }
     </style>
     <script>
-        const uBound = 100000;
-        function testp1(){
-            const start = performance.now();
-            for(let i = 0; i < uBound; i++){
-                const styles = getComputedStyle(test1);
-                const attrsToReflect = styles.getPropertyValue('--attrs-to-reflect')
-            }
-            const end = performance.now();
-            console.log(end - start + ' milliseconds.');
-        }
-        function testp2(){
-            const start = performance.now();
-            for(let i = 0; i < uBound; i++){
-                const attrsToReflect = test1.computedStyleMap().get('--attrs-to-reflect');
-            }
-            const end = performance.now();
-            console.log(end - start + ' milliseconds.');
-        }
-        //console.log({attrsToReflect, styles});
+        const styles = getComputedStyle(test1);
+        const attrsToReflect = styles.getPropertyValue('--attrs-to-reflect')
+        console.log({attrsToReflect, styles});
     </script>
 </body>
 </html>
