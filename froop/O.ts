@@ -25,6 +25,11 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
             const {CustStSvc} = await import('./CustStSvc.js');
             new CustStSvc(states, this, this.#internals);
         }
+        const attrsToReflect = getComputedStyle(this).getPropertyValue('--attrs-to-reflect');
+        if(attrsToReflect !== ''){
+            const {Reflector} = await import('./Reflector.js');
+            const r = new Reflector(this, attrsToReflect);
+        }
     }
 
     disconnectedCallback(): any {
@@ -152,6 +157,9 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         }
     }
     #ignoreAttrChanges = false;
+    set ignoreAttrChanges(nv: boolean){
+        this.#ignoreAttrChanges = nv;
+    }
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null){
         if(!this.proppedUp || this.#ignoreAttrChanges) return;
         const attrs = (<any>this.constructor).attrs as PropLookup;

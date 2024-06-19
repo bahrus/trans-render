@@ -17,8 +17,13 @@ export class O extends HTMLElement {
         await this.#instantiateRoundaboutIfApplicable();
         const states = this.constructor.states;
         if (Object.keys(states).length > 0) {
-            const { CustStSvc } = await import('./void/CustStSvc.js');
+            const { CustStSvc } = await import('./CustStSvc.js');
             new CustStSvc(states, this, this.#internals);
+        }
+        const attrsToReflect = getComputedStyle(this).getPropertyValue('--attrs-to-reflect');
+        if (attrsToReflect !== '') {
+            const { Reflector } = await import('./Reflector.js');
+            const r = new Reflector(this, attrsToReflect);
         }
     }
     disconnectedCallback() {
@@ -138,8 +143,12 @@ export class O extends HTMLElement {
             }
         }
     }
+    #ignoreAttrChanges = false;
+    set ignoreAttrChanges(nv) {
+        this.#ignoreAttrChanges = nv;
+    }
     attributeChangedCallback(name, oldVal, newVal) {
-        if (!this.proppedUp)
+        if (!this.proppedUp || this.#ignoreAttrChanges)
             return;
         const attrs = this.constructor.attrs;
         const propInfo = attrs[name];
