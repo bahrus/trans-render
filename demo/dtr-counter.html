@@ -27,18 +27,19 @@
     </script>
     <style>
         @property --attrs-to-reflect {
-            syntax: "<custom-ident>";
+            syntax: '<custom-ident>+';
             inherits: false;
             /* initial-value: #c0ffee; */
         }
         dtr-counter {
-            --attrs-to-reflect: count;
+            --attrs-to-reflect: count fig;
         }
+
     </style>
-    <!-- <script>
+    <script>
         const styles = getComputedStyle(test1);
         const attrsToReflect = styles.getPropertyValue('--attrs-to-reflect')
         console.log({attrsToReflect, styles});
-    </script> -->
+    </script>
 </body>
 </html>
