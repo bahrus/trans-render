@@ -22,7 +22,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         await this.#instantiateRoundaboutIfApplicable();
         const states = (<any>this.constructor).states as PropLookup;
         if(Object.keys(states).length > 0){
-            const {CustStSvc} = await import('./void/CustStSvc.js');
+            const {CustStSvc} = await import('./CustStSvc.js');
             new CustStSvc(states, this, this.#internals);
         }
     }
@@ -151,8 +151,9 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
             }
         }
     }
+    #ignoreAttrChanges = false;
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null){
-        if(!this.proppedUp) return;
+        if(!this.proppedUp || this.#ignoreAttrChanges) return;
         const attrs = (<any>this.constructor).attrs as PropLookup;
         const propInfo = attrs[name]!;
         const val = this.#parseAttr(propInfo, name, oldVal, newVal);
