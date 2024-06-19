@@ -58,6 +58,7 @@ export class DTRCounter extends Mount{
       border-radius: 10px;
       background-color: seagreen;
       color: white;
+      --attrs-to-reflect: none;
     }
 </style>
             `
