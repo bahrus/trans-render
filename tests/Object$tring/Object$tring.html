@@ -10,6 +10,8 @@
     <script type=module>
         import {Object$tring} from '/Object$tring.js';
         const test1 = new Object$tring('   {"a": "b"}  hello');
+        await test1.parse();
+        console.log({test1});
         if(test1.strVal === 'hello' && test1.objVal.a === 'b'){
             target.setAttribute('mark', 'good');
         }
