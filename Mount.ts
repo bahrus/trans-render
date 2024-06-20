@@ -81,11 +81,11 @@ export class Mount<TProps = any, TActions = TProps, ETProps = TProps>
             }
             if(stringStyles !== undefined){
                 stringStyles = stringStyles.map(x => x.replace("<style>", "").replace("</style>", ""));
-                stringStyles[0] += `
+                stringStyles[0] += String.raw `
 * {
     --attrs-to-reflect: initial;
 }
-                `
+                `;
                 const CSSStyleSheets: CSSStyleSheet[] = [];
                 for(const stringSyleSheet of stringStyles){
                     const newSheet = new CSSStyleSheet();

@@ -76,7 +76,7 @@ export class Mount extends O {
             }
             if (stringStyles !== undefined) {
                 stringStyles = stringStyles.map(x => x.replace("<style>", "").replace("</style>", ""));
-                stringStyles[0] += `
+                stringStyles[0] += String.raw `
 * {
     --attrs-to-reflect: initial;
 }
