@@ -76,7 +76,7 @@ export class Mount<TProps = any, TActions = TProps, ETProps = TProps>
                 stringStyles = [styles];
             }else if(Array.isArray(styles) && styles.length > 0 && typeof(styles[0]) === 'string'){
                 stringStyles = styles as Array<string>;
-            }else if(typeof(styles === undefined){
+            }else if(typeof(styles === undefined)){
                 stringStyles = [''];
             }
             if(stringStyles !== undefined){
