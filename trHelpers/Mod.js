@@ -6,8 +6,8 @@ export class Mod {
         matchingElement.addEventListener(on, async (e) => {
             const { inc, byAmt, s, toggle } = m;
             const { model, options } = transformer;
-            const { propagator } = options;
-            const isPropagating = !(model instanceof EventTarget) && propagator !== undefined;
+            //const {propagator} = options;
+            //const isPropagating = !(model instanceof EventTarget) && propagator !== undefined;
             if (inc !== undefined) {
                 let valToIncBy = 0;
                 switch (typeof byAmt) {
@@ -27,9 +27,9 @@ export class Mod {
                         throw 'NI';
                 }
                 model[inc] += valToIncBy;
-                if (isPropagating) {
-                    propagator.dispatchEvent(new Event(inc));
-                }
+                // if(isPropagating){
+                //     propagator.dispatchEvent(new Event(inc));
+                // }
             }
             if (s !== undefined) {
                 const { toValFrom, to } = m;
@@ -56,15 +56,15 @@ export class Mod {
                     throw 'NI';
                 }
                 (model[s]) = valToSet;
-                if (isPropagating) {
-                    propagator.dispatchEvent(new Event(s));
-                }
+                // if(isPropagating){
+                //     propagator.dispatchEvent(new Event(s));
+                // }
             }
             if (toggle !== undefined) {
                 model[toggle] = !model[toggle];
-                if (isPropagating) {
-                    propagator.dispatchEvent(new Event(toggle));
-                }
+                // if(isPropagating){
+                //     propagator.dispatchEvent(new Event(toggle));
+                // }
             }
         }, {
             signal: this.#abortController.signal,

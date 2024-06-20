@@ -12,6 +12,15 @@ export class DTRCounter extends Mount {
         },
         propInfo: {
             ...super.mntCfgMxn.propInfo,
+            count: {
+                def: 30,
+                parse: true,
+                attrName: 'count',
+                propName: 'count',
+                css: {
+                    nameValue: 'cnt'
+                }
+            }
         },
         actions: {
             ...super.mntCfgMxn.actions
