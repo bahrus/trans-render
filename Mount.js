@@ -71,8 +71,16 @@ export class Mount extends O {
             else if (Array.isArray(styles) && styles.length > 0 && typeof (styles[0]) === 'string') {
                 stringStyles = styles;
             }
+            else if (typeof (styles === undefined)) {
+                stringStyles = [''];
+            }
             if (stringStyles !== undefined) {
                 stringStyles = stringStyles.map(x => x.replace("<style>", "").replace("</style>", ""));
+                stringStyles[0] += `
+* {
+    --attrs-to-reflect: initial;
+}
+                `;
                 const CSSStyleSheets = [];
                 for (const stringSyleSheet of stringStyles) {
                     const newSheet = new CSSStyleSheet();

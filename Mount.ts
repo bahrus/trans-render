@@ -76,9 +76,16 @@ export class Mount<TProps = any, TActions = TProps, ETProps = TProps>
                 stringStyles = [styles];
             }else if(Array.isArray(styles) && styles.length > 0 && typeof(styles[0]) === 'string'){
                 stringStyles = styles as Array<string>;
+            }else if(typeof(styles === undefined){
+                stringStyles = [''];
             }
             if(stringStyles !== undefined){
                 stringStyles = stringStyles.map(x => x.replace("<style>", "").replace("</style>", ""));
+                stringStyles[0] += `
+* {
+    --attrs-to-reflect: initial;
+}
+                `
                 const CSSStyleSheets: CSSStyleSheet[] = [];
                 for(const stringSyleSheet of stringStyles){
                     const newSheet = new CSSStyleSheet();
@@ -87,6 +94,9 @@ export class Mount<TProps = any, TActions = TProps, ETProps = TProps>
                 }
                 config.styles = CSSStyleSheets;
             }
+
+
+
             if(this.#csr){
                 let compiledStyles = config.styles as CSSStyleSheet[] | undefined;
                 if(compiledStyles !== undefined){
