@@ -27,8 +27,16 @@ export class Reflector {
         }
     }
     reflect(instance, attr, propName, propInfo) {
+        const val = instance[propName];
+        if (val === undefined)
+            return;
         instance.ignoreAttrChanges = true;
-        instance.setAttribute(attr, instance[propName].toString());
+        if (val === null) {
+            instance.removeAttribute(attr);
+        }
+        else {
+            instance.setAttribute(attr, val.toString());
+        }
         instance.ignoreAttrChanges = false;
     }
 }
