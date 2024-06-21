@@ -13,7 +13,6 @@ export class Reflector {
             const propInfo = attrs[attr];
             const { propName } = propInfo;
             propagator.addEventListener(propName, e => {
-                console.log({ e });
                 this.reflect(instance, attr, propName, propInfo);
             }, { signal: ac.signal });
             this.reflect(instance, attr, propName, propInfo);
