@@ -7,9 +7,13 @@ export class Reflector{
         const {propagator} = instance;
         this.#acs = [];
         const attrs = (<any>instance.constructor).attrs as {[key: string] : PropInfo};
-        const parsedAttrsToReflect = attrsToReflect.split(' ');
+        const reflectAll = attrsToReflect === '*';
+        let parsedAttrsToReflect: string[] | undefined;
+        if(!reflectAll){
+            parsedAttrsToReflect = attrsToReflect.split(' ');
+        }
         for(const attr in attrs){
-            if(!parsedAttrsToReflect.includes(attr)) continue;
+            if(!reflectAll && !parsedAttrsToReflect!.includes(attr)) continue;
             const ac: AbortController = new AbortController();
             this.#acs.push(ac);
             const propInfo = attrs[attr];
@@ -21,7 +25,7 @@ export class Reflector{
         }
         propagator.addEventListener('disconnectedCallback', e => {
             this.#disconnect();
-        })
+        });
     }
 
     #disconnect(){

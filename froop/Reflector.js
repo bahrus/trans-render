@@ -4,9 +4,13 @@ export class Reflector {
         const { propagator } = instance;
         this.#acs = [];
         const attrs = instance.constructor.attrs;
-        const parsedAttrsToReflect = attrsToReflect.split(' ');
+        const reflectAll = attrsToReflect === '*';
+        let parsedAttrsToReflect;
+        if (!reflectAll) {
+            parsedAttrsToReflect = attrsToReflect.split(' ');
+        }
         for (const attr in attrs) {
-            if (!parsedAttrsToReflect.includes(attr))
+            if (!reflectAll && !parsedAttrsToReflect.includes(attr))
                 continue;
             const ac = new AbortController();
             this.#acs.push(ac);
