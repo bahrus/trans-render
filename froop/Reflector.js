@@ -35,7 +35,7 @@ export class Reflector {
         if (val === undefined)
             return;
         instance.ignoreAttrChanges = true;
-        if (val === null) {
+        if (val === null || val === false) {
             instance.removeAttribute(attr);
         }
         else {

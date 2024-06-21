@@ -38,7 +38,7 @@ export class Reflector{
         const val = (<any>instance)[propName!];
         if(val === undefined) return;
         instance.ignoreAttrChanges = true;
-        if(val === null) {
+        if(val === null || val === false) {
             instance.removeAttribute(attr);
         }else{
             instance.setAttribute(attr, val.toString());
