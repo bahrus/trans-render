@@ -28,7 +28,6 @@ export class Reflector {
         }
     }
     reflect(instance, attr, propName, propInfo) {
-        console.log({ attr, propInfo });
         instance.ignoreAttrChanges = true;
         instance.setAttribute(attr, instance[propName].toString());
         instance.ignoreAttrChanges = false;
