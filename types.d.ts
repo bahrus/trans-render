@@ -58,6 +58,7 @@ export type DerivationCriteria<TProps, TMethods> = {
 
 export interface TransformOptions{
     propagator?: MarkedUpEventTarget,
+    propagatorIsReady?: boolean,
     skipInit?: boolean,
 }
 

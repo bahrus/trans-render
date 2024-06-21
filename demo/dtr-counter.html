@@ -26,8 +26,12 @@
         import './dtr-counter.js';
     </script>
     <style>
+        @property --attrs-to-reflect {
+            syntax: '<custom-ident>+';
+            inherits: false;
+        }
         dtr-counter {
-            --attrs-to-reflect: count;
+            --attrs-to-reflect: count test;
         }
 
     </style>

@@ -8,9 +8,12 @@ export class Mod<TProps, TMethods, TElement = {}>{
         matchingElement: Element,
         m: ModificationUnitOfWork<TProps, TMethods, TElement>
     ){
+        console.log(matchingElement.outerHTML);
         const {on} = m;
         const once = on === 'load';
         matchingElement.addEventListener(on, async e => {
+            console.log(matchingElement.outerHTML);
+            debugger;
             const {inc, byAmt, s, toggle} = m;
             const {model, options} = transformer;
             //const {propagator} = options;

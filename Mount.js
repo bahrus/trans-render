@@ -118,7 +118,8 @@ export class Mount extends O {
         const { clonedTemplate, xform, propagator } = self;
         const { Transform } = await import('./Transform.js');
         await Transform(clonedTemplate, this, xform, {
-            propagator
+            propagator,
+            propagatorIsReady: true,
         });
         return {
             hydrated: true,

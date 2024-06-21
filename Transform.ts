@@ -432,16 +432,19 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
             let {o} = uow;
             const p = arr(o) as string[];
             const {target, options, model} = this.transformer;
-            const {propagator} = options;
+            const {propagator, propagatorIsReady} = options;
             for(const propName of p){
                 if(typeof propName !== 'string') throw 'NI';
                 if(!(propName in (model as any))) continue;
-                const propsSet = propagator!.___props;
-                if(propsSet instanceof Set){
-                    if(!propsSet.has(propName)){
-                        const {subscribe} = await import('./lib/subscribe2.js');
-                        await subscribe(model, propName, propagator!, true);
+                if(!propagatorIsReady){
+                    const propsSet = propagator!.___props;
+                    if(propsSet instanceof Set){
+                        if(!propsSet.has(propName)){
+                            const {subscribe} = await import('./lib/subscribe2.js');
+                            await subscribe(model, propName, propagator!, true);
+                        }
                     }
+
                 }
                 propagator!.addEventListener(propName, e => {
                     const all = this.#cleanUp();
@@ -449,7 +452,8 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
                         
                         this.doUpdate(matchingElement, uow);
                     }
-                })
+                });
+
             }
             if(Array.isArray(target)){
                 throw 'NI';

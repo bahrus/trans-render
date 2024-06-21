@@ -392,17 +392,19 @@ export class MountOrchestrator extends EventTarget {
             let { o } = uow;
             const p = arr(o);
             const { target, options, model } = this.transformer;
-            const { propagator } = options;
+            const { propagator, propagatorIsReady } = options;
             for (const propName of p) {
                 if (typeof propName !== 'string')
                     throw 'NI';
                 if (!(propName in model))
                     continue;
-                const propsSet = propagator.___props;
-                if (propsSet instanceof Set) {
-                    if (!propsSet.has(propName)) {
-                        const { subscribe } = await import('./lib/subscribe2.js');
-                        await subscribe(model, propName, propagator, true);
+                if (!propagatorIsReady) {
+                    const propsSet = propagator.___props;
+                    if (propsSet instanceof Set) {
+                        if (!propsSet.has(propName)) {
+                            const { subscribe } = await import('./lib/subscribe2.js');
+                            await subscribe(model, propName, propagator, true);
+                        }
                     }
                 }
                 propagator.addEventListener(propName, e => {

@@ -1,9 +1,12 @@
 export class Mod {
     #abortController = new AbortController();
     constructor(mountObserver, transformer, matchingElement, m) {
+        console.log(matchingElement.outerHTML);
         const { on } = m;
         const once = on === 'load';
         matchingElement.addEventListener(on, async (e) => {
+            console.log(matchingElement.outerHTML);
+            debugger;
             const { inc, byAmt, s, toggle } = m;
             const { model, options } = transformer;
             //const {propagator} = options;
