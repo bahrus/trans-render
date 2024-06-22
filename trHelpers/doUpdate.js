@@ -72,7 +72,7 @@ export async function doUpdate(transformer, matchingElement, uow) {
         await setPath(matchingElement, path, val);
     }
     else if (sa !== undefined) {
-        const { A } = await import('../froop/void/A.js');
+        const { A } = await import('./A.js');
         A({ [sa]: val }, matchingElement);
     }
     else if (ss !== undefined) {
