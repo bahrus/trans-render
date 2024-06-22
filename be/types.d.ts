@@ -63,7 +63,7 @@ export interface EnhancementMountConfig<TBranches = any, TProps = any>{
 export type AttrMapPoint<TProps = any> = keyof TProps & string | AttrMapConfig<TProps>
 
 
-export interface AttrMapConfig<TProps = any> {
+export interface AttrMapConfig<TProps = any, TMethods = TProps> {
     instanceOf?: 'Object' | 'String' | 'Object$tring' | 'Object$entences',
     mapsTo?: '.' | keyof TProps,
     valIfFalsy?: any,
@@ -71,12 +71,12 @@ export interface AttrMapConfig<TProps = any> {
     objValMapsTo?: '.' | keyof TProps,
     arrValMapsTo?: keyof TProps,
     strArrMapsTo?: keyof TProps,
-    regExpExts?: Partial<{[key in keyof TProps]: RegExpExt[]}>;
+    regExpExts?: Partial<{[key in keyof TProps]: RegExpExt<any, TProps, TMethods>[]}>;
 }
 
 export type Branchitude = number;
 export type Leafitude = number;
-export type AttrCoordinates = `${Branchitude}.${Leafitude}`
+export type AttrCoordinates = `${Branchitude}.${Leafitude}`;
 
 
 

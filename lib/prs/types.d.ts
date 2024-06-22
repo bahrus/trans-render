@@ -22,10 +22,11 @@ export interface ElO {
     scope?: Scope,
 }
 
-export interface RegExpExt<TStatementGroup = any>{
+export interface RegExpExt<TStatementGroup = any, TProps = any, TMethods = TProps>{
     regExp: RegExp | string,
     defaultVals: Partial<TStatementGroup>,
     dssKeys?: [string, string][],
+    bespoke?: keyof TMethods & string,
 }
 
 export type RegExpOrRegExpExt<TStatementGroup = any> = RegExp | RegExpExt<TStatementGroup>;
