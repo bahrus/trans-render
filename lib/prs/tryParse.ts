@@ -24,7 +24,19 @@ export async function tryParse<TParsedObj = any>(s: string, regExpOrRegExpExt: R
         if(groups === undefined) continue;
         const parsedObj = toParsedObj(groups);
         if(statementPartParser !== undefined){
+            //TODO:  move to a separate file
             const {splitWord, propMap} = statementPartParser;
+            if(!statementPartParser.parsedRegExps){
+                for(const key in propMap){
+                    const rhs = propMap[key];
+                    for(const regexpExt of rhs){
+                        if(!(regexpExt.regExp instanceof RegExp)){
+                            regexpExt.regExp = new RegExp(regexpExt.regExp);
+                        }
+                    }
+                }
+                statementPartParser.parsedRegExps = true;
+            }
             for(const key in propMap){
                 const subStringToParse = parsedObj[key] as string;
                 if(subStringToParse === undefined) continue;

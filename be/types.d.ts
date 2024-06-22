@@ -72,6 +72,7 @@ export interface AttrMapConfig<TProps = any, TMethods = TProps> {
     arrValMapsTo?: keyof TProps,
     strArrMapsTo?: keyof TProps,
     regExpExts?: Partial<{[key in keyof TProps]: RegExpExt<any>[]}>;
+    parsedRegExps?: boolean;
 }
 
 export type Branchitude = number;

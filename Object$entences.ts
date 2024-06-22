@@ -21,6 +21,17 @@ export class Object$entences extends Object$tring{
                 .filter( s => s !== '')
             ;
             const {regExpExts} = mapConfig;
+            if(regExpExts !== undefined && !mapConfig.parsedRegExps){
+                for(const key in regExpExts){
+                    const rhs = regExpExts[key]!
+                    for(const regExpExt of rhs){
+                        if(!(regExpExt.regExp instanceof RegExp)){
+                            regExpExt.regExp = new RegExp(regExpExt.regExp);
+                        }
+                    }
+                }
+                mapConfig.parsedRegExps = true;
+            }
             for(const statement of statements){
                 const iPosOfSpace = statement.indexOf(' ');
                 if(iPosOfSpace == -1) throw 400;
@@ -29,11 +40,12 @@ export class Object$entences extends Object$tring{
                     const {tryParse} = await import('./lib/prs/tryParse.js');
                     for(const key in regExpExts){
                         const rhs = regExpExts[key]!;
-                        for(const regExpExt of rhs){
-                            if(!(regExpExt.regExp instanceof RegExp)){
-                                regExpExt.regExp = new RegExp(regExpExt.regExp);
-                            }
-                        }
+
+                        // for(const regExpExt of rhs){
+                        //     if(!(regExpExt.regExp instanceof RegExp)){
+                        //         regExpExt.regExp = new RegExp(regExpExt.regExp);
+                        //     }
+                        // }
                         const test = await tryParse(statement, rhs);
                         if(test !== null){
                             

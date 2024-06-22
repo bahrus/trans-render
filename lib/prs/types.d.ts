@@ -31,7 +31,8 @@ export interface RegExpExt<TStatementGroup = any>{
 
 export interface StatementPartParser {
     splitWord: string,
-    propMap: {[key: string]: Array<RegExpExt>}
+    propMap: {[key: string]: Array<RegExpExt>},
+    parsedRegExps?: boolean,
 }
 
 export type RegExpOrRegExpExt<TStatementGroup = any> = RegExp | RegExpExt<TStatementGroup>;
