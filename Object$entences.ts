@@ -53,4 +53,4 @@ export class Object$entences extends Object$tring{
     }
 }
 
-const reNormalize = /\s+/g;
+export const reNormalize = /\s+/g;

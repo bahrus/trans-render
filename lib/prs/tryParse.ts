@@ -1,6 +1,7 @@
 import { arr } from '../arr.js';
 import { RegExpExt, RegExpOrRegExpExt, StatementPartParser } from './types';
 export { RegExpOrRegExpExt } from './types';
+import {reNormalize} from '../../Object$entences.js'
 
 export async function tryParse<TParsedObj = any>(s: string, regExpOrRegExpExt: RegExpOrRegExpExt<TParsedObj> | RegExpOrRegExpExt<TParsedObj>[]){
     const reArr = arr(regExpOrRegExpExt);
@@ -27,7 +28,11 @@ export async function tryParse<TParsedObj = any>(s: string, regExpOrRegExpExt: R
             for(const key in propMap){
                 const subStringToParse = parsedObj[key] as string;
                 if(subStringToParse === undefined) continue;
-                const split = subStringToParse.split(splitWord);
+                const split = subStringToParse.split(splitWord)
+                .map(s => s.trim())
+                .filter(s => !s.startsWith('//'))
+                .map(s => s.replace(reNormalize, ' '))
+                .filter(s => s !== '');
                 const parsedSubObjs = [];
                 for(const token of split){
                     const subTest = await tryParse(token, propMap[key]);
