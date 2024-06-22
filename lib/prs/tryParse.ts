@@ -1,28 +1,39 @@
 import { arr } from '../arr.js';
-import { RegExpOrRegExpExt } from './types';
+import { RegExpExt, RegExpOrRegExpExt } from './types';
 export { RegExpOrRegExpExt } from './types';
 
 export async function tryParse<TParsedObj = any>(s: string, regExpOrRegExpExt: RegExpOrRegExpExt<TParsedObj> | RegExpOrRegExpExt<TParsedObj>[]){
     const reArr = arr(regExpOrRegExpExt);
     for(const reOrRegExt of reArr){
         let re: RegExp | undefined;
-        let def: Partial<TParsedObj> | undefined;
+        let defaultVals: Partial<TParsedObj> | undefined;
         let dssKeys: [string, string][] | undefined;
-        let defaultVals: any;
+        let partParser: {[key: string]: RegExpExt<any>[]} | undefined
         if(reOrRegExt instanceof RegExp){
             re = reOrRegExt;
         }else{
             re = reOrRegExt.regExp as RegExp;
-            def = reOrRegExt.defaultVals;
+            defaultVals = reOrRegExt.defaultVals;
             dssKeys = reOrRegExt.dssKeys;
+            partParser = reOrRegExt.partParser;
         }
         const test = re.exec(s);
         if(test === null) continue;
         const groups = test.groups;
         if(groups === undefined) continue;
         const parsedObj = toParsedObj(groups);
-        if(def !== undefined){
-            Object.assign(parsedObj, def);
+        if(partParser !== undefined){
+            for(const key in partParser){
+                const subStringToParse = parsedObj[key];
+                if(subStringToParse === undefined) continue;
+                const subTest = await tryParse(subStringToParse as string, partParser[key]);
+                if(subTest === null) continue;
+                const subObj = toParsedObj(subTest);
+                parsedObj[key] = subObj;
+            }
+        }
+        if(defaultVals !== undefined){
+            Object.assign(parsedObj, defaultVals);
         }
         if(dssKeys !== undefined){
             const { parse } = await import ('../../dss/parse.js');
