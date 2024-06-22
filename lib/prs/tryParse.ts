@@ -1,5 +1,5 @@
 import { arr } from '../arr.js';
-import { RegExpExt, RegExpOrRegExpExt } from './types';
+import { RegExpExt, RegExpOrRegExpExt, StatementPartParser } from './types';
 export { RegExpOrRegExpExt } from './types';
 
 export async function tryParse<TParsedObj = any>(s: string, regExpOrRegExpExt: RegExpOrRegExpExt<TParsedObj> | RegExpOrRegExpExt<TParsedObj>[]){
@@ -8,28 +8,35 @@ export async function tryParse<TParsedObj = any>(s: string, regExpOrRegExpExt: R
         let re: RegExp | undefined;
         let defaultVals: Partial<TParsedObj> | undefined;
         let dssKeys: [string, string][] | undefined;
-        let partParser: {[key: string]: RegExpExt<any>[]} | undefined
+        let statementPartParser: StatementPartParser | undefined
         if(reOrRegExt instanceof RegExp){
             re = reOrRegExt;
         }else{
             re = reOrRegExt.regExp as RegExp;
             defaultVals = reOrRegExt.defaultVals;
             dssKeys = reOrRegExt.dssKeys;
-            partParser = reOrRegExt.partParser;
+            statementPartParser = reOrRegExt.statementPartParser;
         }
         const test = re.exec(s);
         if(test === null) continue;
         const groups = test.groups;
         if(groups === undefined) continue;
         const parsedObj = toParsedObj(groups);
-        if(partParser !== undefined){
-            for(const key in partParser){
-                const subStringToParse = parsedObj[key];
+        if(statementPartParser !== undefined){
+            const {splitWord, propMap} = statementPartParser;
+            for(const key in propMap){
+                const subStringToParse = parsedObj[key] as string;
                 if(subStringToParse === undefined) continue;
-                const subTest = await tryParse(subStringToParse as string, partParser[key]);
-                if(subTest === null) continue;
-                const subObj = toParsedObj(subTest);
-                parsedObj[key] = subObj;
+                const split = subStringToParse.split(splitWord);
+                const parsedSubObjs = [];
+                for(const token of split){
+                    const subTest = await tryParse(token, propMap[key]);
+                    if(subTest === null) continue;
+                    const subObj = toParsedObj(subTest);
+                    parsedSubObjs.push(subObj);
+                }
+                
+                parsedObj[key] = parsedSubObjs;
             }
         }
         if(defaultVals !== undefined){

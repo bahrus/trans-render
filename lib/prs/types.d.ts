@@ -26,7 +26,12 @@ export interface RegExpExt<TStatementGroup = any>{
     regExp: RegExp | string,
     defaultVals: Partial<TStatementGroup>,
     dssKeys?: [string, string][],
-    partParser: {[key: string]: Array<RegExpExt>}
+    statementPartParser?: StatementPartParser
+}
+
+export interface StatementPartParser {
+    splitWord: string,
+    propMap: {[key: string]: Array<RegExpExt>}
 }
 
 export type RegExpOrRegExpExt<TStatementGroup = any> = RegExp | RegExpExt<TStatementGroup>;
