@@ -20,6 +20,7 @@ export class CustStSvc{
             propagator.addEventListener(propName, e => {
                 this.#reflect(instance, internals, propName)
             }, {signal: ac.signal});
+            this.#reflect(instance, internals, propName);
         }
         propagator.addEventListener('disconnectedCallback', e => {
             this.#disconnect();

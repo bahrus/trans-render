@@ -1,8 +1,7 @@
 export class Reflector {
-    #acs;
+    #acs = [];
     constructor(instance, attrsToReflect) {
         const { propagator } = instance;
-        this.#acs = [];
         const attrs = instance.constructor.attrs;
         const reflectAll = attrsToReflect === '*';
         let parsedAttrsToReflect;
@@ -17,9 +16,9 @@ export class Reflector {
             const propInfo = attrs[attr];
             const { propName } = propInfo;
             propagator.addEventListener(propName, e => {
-                this.reflect(instance, attr, propName, propInfo);
+                this.#reflect(instance, attr, propName, propInfo);
             }, { signal: ac.signal });
-            this.reflect(instance, attr, propName, propInfo);
+            this.#reflect(instance, attr, propName, propInfo);
         }
         propagator.addEventListener('disconnectedCallback', e => {
             this.#disconnect();
@@ -30,7 +29,7 @@ export class Reflector {
             ac.abort();
         }
     }
-    reflect(instance, attr, propName, propInfo) {
+    #reflect(instance, attr, propName, propInfo) {
         const val = instance[propName];
         if (val === undefined)
             return;

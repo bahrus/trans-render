@@ -213,12 +213,9 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                     propName: key
                 } as PropInfo
                 props[key] = mergedPropInfo;
-                const {parse, attrName, css} = mergedPropInfo;
+                const {parse, attrName} = mergedPropInfo;
                 if(parse && attrName){
                     attrs[attrName] = mergedPropInfo;
-                }
-                if(css !== undefined){
-                    states[key] = prop;
                 }
             }
         }

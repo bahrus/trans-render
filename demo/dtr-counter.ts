@@ -26,9 +26,6 @@ export class DTRCounter extends Mount{
                 parse: true,
                 attrName: 'count',
                 propName: 'count',
-                css: {
-                    nameValue: 'cnt'
-                }
             }
         },
         actions:{

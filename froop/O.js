@@ -15,10 +15,15 @@ export class O extends HTMLElement {
         const props = this.constructor.props;
         this.#propUp(props);
         await this.#instantiateRoundaboutIfApplicable();
-        const states = this.constructor.states;
-        if (Object.keys(states).length > 0) {
+        // const states = (<any>this.constructor).states as PropLookup;
+        // if(Object.keys(states).length > 0){
+        //     const {CustStSvc} = await import('./CustStSvc.js');
+        //     new CustStSvc(states, this, this.#internals);
+        // }
+        const customStatesToReflect = getComputedStyle(this).getPropertyValue('--custom-state-exports');
+        if (customStatesToReflect !== '') {
             const { CustStSvc } = await import('./CustStSvc.js');
-            new CustStSvc(states, this, this.#internals);
+            new CustStSvc(this, this.#internals, customStatesToReflect);
         }
         const attrsToReflect = getComputedStyle(this).getPropertyValue('--attrs-to-reflect');
         if (attrsToReflect !== '') {
@@ -193,12 +198,9 @@ export class O extends HTMLElement {
                     propName: key
                 };
                 props[key] = mergedPropInfo;
-                const { parse, attrName, css } = mergedPropInfo;
+                const { parse, attrName } = mergedPropInfo;
                 if (parse && attrName) {
                     attrs[attrName] = mergedPropInfo;
-                }
-                if (css !== undefined) {
-                    states[key] = prop;
                 }
             }
         }

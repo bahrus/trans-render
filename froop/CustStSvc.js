@@ -1,54 +1,34 @@
 export class CustStSvc {
-    states;
-    vm;
-    internals;
+    customStatesToReflect;
     #abortControllers = [];
-    constructor(states, vm, internals) {
-        this.states = states;
-        this.vm = vm;
-        this.internals = internals;
-        this.#do();
+    constructor(instance, internals, customStatesToReflect) {
+        this.customStatesToReflect = customStatesToReflect;
+        this.#do(instance, internals);
     }
-    async #do() {
-        const { vm, internals } = this;
-        const { propagator } = vm;
-        if (!(propagator instanceof EventTarget))
-            return;
+    #acs = [];
+    async #do(instance, internals) {
+        const splitSplit = this
+            .customStatesToReflect
+            .split(',')
+            .map(s => s.trim().split(' if ').map(t => t.trim()));
+        const simpleOnes = splitSplit.filter(x => x.length === 1);
+        const { propagator } = instance;
+        for (const propName of simpleOnes.map(x => x[0])) {
+            const ac = new AbortController();
+            this.#acs.push(ac);
+            propagator.addEventListener(propName, e => {
+                this.#reflect(instance, internals, propName);
+            }, { signal: ac.signal });
+            this.#reflect(instance, internals, propName);
+        }
         propagator.addEventListener('disconnectedCallback', e => {
             this.#disconnect();
-        }, { once: true });
-        const { states } = this;
-        for (const stateKey in states) {
-            const state = states[stateKey];
-            const { css } = state;
-            const customStateObj = typeof css === 'string' ? {
-                nameValue: css,
-            } : css;
-            propagator.addEventListener(stateKey, async (e) => {
-                this.#doSetCustomState(stateKey, customStateObj);
-            });
-            this.#doSetCustomState(stateKey, customStateObj);
-        }
+        });
     }
-    async #doSetCustomState(stateKey, customStateObj) {
-        const { nameValue, falsy, truthy } = customStateObj;
-        const { vm, internals } = this;
-        const nv = vm[stateKey];
-        if (nameValue !== undefined) {
-            if (nv !== undefined) {
-                const { camelToLisp } = await import('../lib/camelToLisp.js');
-                const valAsLisp = camelToLisp(nv.toString());
-                internals.states.add(`--${nameValue}-${valAsLisp}`);
-            }
-        }
-        if (truthy) {
-            const verb = nv ? 'add' : 'remove';
-            internals.states[verb](`--${truthy}`);
-        }
-        if (falsy) {
-            const verb = nv ? 'remove' : 'add';
-            internals.states[verb](`--${falsy}`);
-        }
+    #reflect(instance, internals, propName) {
+        const val = instance[propName];
+        const method = val ? 'add' : 'delete';
+        internals.states[method](propName);
     }
     #disconnect() {
         for (const ac of this.#abortControllers) {
