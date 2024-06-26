@@ -1,11 +1,10 @@
 export class CustStSvc {
     customStatesToReflect;
-    #abortControllers = [];
+    #acs = [];
     constructor(instance, internals, customStatesToReflect) {
         this.customStatesToReflect = customStatesToReflect;
         this.#do(instance, internals);
     }
-    #acs = [];
     async #do(instance, internals) {
         const splitSplit = this
             .customStatesToReflect
@@ -13,6 +12,7 @@ export class CustStSvc {
             .map(s => s.trim().split(' if ').map(t => t.trim()));
         const simpleOnes = splitSplit.filter(x => x.length === 1);
         const { propagator } = instance;
+        //Use flatten?
         for (const propName of simpleOnes.map(x => x[0])) {
             const ac = new AbortController();
             this.#acs.push(ac);
@@ -24,6 +24,11 @@ export class CustStSvc {
         propagator.addEventListener('disconnectedCallback', e => {
             this.#disconnect();
         });
+        const complexOnes = splitSplit.filter(x => x.length > 1);
+        if (complexOnes.length > 0) {
+            const { CustStExt } = await import('./CustStExt.js');
+            new CustStExt(instance, internals, this.customStatesToReflect, complexOnes);
+        }
     }
     #reflect(instance, internals, propName) {
         const val = instance[propName];
@@ -31,7 +36,7 @@ export class CustStSvc {
         internals.states[method](propName);
     }
     #disconnect() {
-        for (const ac of this.#abortControllers) {
+        for (const ac of this.#acs) {
             ac.abort();
         }
     }
