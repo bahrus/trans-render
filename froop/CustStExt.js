@@ -27,25 +27,37 @@ export class CustStExt {
                 });
                 this.#simpleCompare(instance, internals, parsedExpr, propName, customStateKey);
             }
-            console.log({ parsedExpr, test, expr });
         }
     }
     #simpleCompare(instance, internals, parsedExpr, propName, customStateKey) {
         const val = instance[propName];
+        if (val === null || val === undefined) {
+            internals.states.delete(customStateKey);
+            return;
+        }
         const { op, rhs } = parsedExpr;
-        //let method : 'add' | 'delete' = 'delete';
+        let method;
         switch (op) {
             case '==': {
-                if (val === null || val === undefined) {
-                    internals.states.delete(customStateKey);
-                    return;
+                method = val.toString() === rhs ? 'add' : 'delete';
+                break;
+            }
+            case '>': {
+                const t = this.#getType(instance, propName);
+                switch (op) {
+                    case '>':
+                        method = val > Number(rhs) ? 'add' : 'delete';
+                        break;
                 }
-                const method = val.toString() === rhs ? 'add' : 'delete';
-                internals.states[method](customStateKey);
-                return;
+                console.log({ t });
+                break;
             }
             default:
                 throw 'NI';
         }
+        internals.states[method](customStateKey);
+    }
+    #getType(instance, propName) {
+        return instance.constructor.props[propName].type;
     }
 }
