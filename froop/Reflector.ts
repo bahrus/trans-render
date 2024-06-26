@@ -9,7 +9,7 @@ export class Reflector{
         const reflectAll = attrsToReflect === '*';
         let parsedAttrsToReflect: string[] | undefined;
         if(!reflectAll){
-            parsedAttrsToReflect = attrsToReflect.split(' ');
+            parsedAttrsToReflect = attrsToReflect.split(',').map(s => s.trim());
         }
         for(const attr in attrs){
             if(!reflectAll && !parsedAttrsToReflect!.includes(attr)) continue;

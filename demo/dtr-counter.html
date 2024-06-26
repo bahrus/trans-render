@@ -31,10 +31,12 @@
             inherits: false;
         }
         dtr-counter {
-            --attrs-to-reflect: count test;
+            --attrs-to-reflect: count, test;
             --custom-state-exports: count;
         }
-
+        dtr-counter:state(count){
+            color: red;
+        }
     </style>
     <script>
         const styles = getComputedStyle(test1);
