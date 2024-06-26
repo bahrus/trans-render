@@ -21,14 +21,19 @@ export class CustStExt {
                 rhs: groups.rhs.trim(),
             } as ParsedExpr;
             const re2 = new RegExp(String.raw `^(?<prop>[\w]+)`);
-            const test3 = re2.exec(parsedExpr.lhs)
-            if(test3 !== null){
-                const propName = parsedExpr.lhs;
+            const {lhs} = parsedExpr;
+            const test3 = re2.exec(lhs);
+            if((<any>test3?.groups).prop === lhs){
+                const propName = lhs;
                 propagator.addEventListener(propName, e => {
                     this.#simpleCompare(instance, internals, parsedExpr, propName, customStateKey);
                 });
                 this.#simpleCompare(instance, internals, parsedExpr, propName, customStateKey);
                 continue;
+            }
+            const percentSplit = lhs.split('%').map(s => s.trim());
+            if(percentSplit.length === 2){
+                console.log('modulo')
             }
             //const re3
         }
