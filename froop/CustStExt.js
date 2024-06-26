@@ -24,16 +24,28 @@ export class CustStExt {
             const test3 = re2.exec(lhs);
             if ((test3?.groups).prop === lhs) {
                 const propName = lhs;
+                const ac = new AbortController();
+                this.#acs.push(ac);
                 propagator.addEventListener(propName, e => {
                     this.#simpleCompare(instance, internals, parsedExpr, propName, customStateKey);
-                });
+                }, { signal: ac.signal });
                 this.#simpleCompare(instance, internals, parsedExpr, propName, customStateKey);
                 continue;
             }
             const percentSplit = lhs.split('%').map(s => s.trim());
             if (percentSplit.length === 2) {
+                const [propName, moduloS] = percentSplit;
+                const modulo = Number(moduloS);
+                const ac = new AbortController();
+                this.#acs.push(ac);
+                propagator.addEventListener(propName, e => {
+                    this.#moduloCompare(instance, internals, parsedExpr, modulo, propName, customStateKey);
+                }, { signal: ac.signal });
                 console.log('modulo');
             }
+            propagator.addEventListener('disconnectedCallback', e => {
+                this.#disconnect();
+            });
             //const re3
         }
     }
@@ -79,7 +91,21 @@ export class CustStExt {
         }
         internals.states[method](customStateKey);
     }
+    #moduloCompare(instance, internals, parsedExpr, modulo, propName, customStateKey) {
+        const val = instance[propName];
+        if (val === null || val === undefined) {
+            internals.states.delete(customStateKey);
+            return;
+        }
+        const method = Number(val) % modulo === Number(parsedExpr.rhs) ? 'add' : 'delete';
+        internals.states[method](customStateKey);
+    }
     #getType(instance, propName) {
         return instance.constructor.props[propName].type;
+    }
+    #disconnect() {
+        for (const ac of this.#acs) {
+            ac.abort();
+        }
     }
 }

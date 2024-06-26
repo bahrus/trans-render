@@ -25,16 +25,28 @@ export class CustStExt {
             const test3 = re2.exec(lhs);
             if((<any>test3?.groups).prop === lhs){
                 const propName = lhs;
+                const ac = new AbortController();
+                this.#acs.push(ac);
                 propagator.addEventListener(propName, e => {
                     this.#simpleCompare(instance, internals, parsedExpr, propName, customStateKey);
-                });
+                }, {signal: ac.signal});
                 this.#simpleCompare(instance, internals, parsedExpr, propName, customStateKey);
                 continue;
             }
             const percentSplit = lhs.split('%').map(s => s.trim());
             if(percentSplit.length === 2){
-                console.log('modulo')
+                const [propName, moduloS] = percentSplit;
+                const modulo = Number(moduloS);
+                const ac = new AbortController();
+                this.#acs.push(ac);
+                propagator.addEventListener(propName, e => {
+                    this.#moduloCompare(instance, internals, parsedExpr, modulo, propName, customStateKey);
+                }, {signal: ac.signal});
+                console.log('modulo');
             }
+            propagator.addEventListener('disconnectedCallback', e => {
+                this.#disconnect();
+            });
             //const re3
         }
     }
@@ -86,8 +98,26 @@ export class CustStExt {
         (<any>internals).states[method](customStateKey);
     }
 
+    #moduloCompare(instance: O, internals: ElementInternals, parsedExpr: ParsedExpr,
+    modulo: number, propName: string,
+    customStateKey: string){
+        const val = (<any>instance)[propName!];
+        if(val === null || val === undefined){
+            (<any>internals).states.delete(customStateKey);
+            return;
+        }
+        const method = Number(val) % modulo === Number(parsedExpr.rhs) ? 'add' : 'delete';
+        (<any>internals).states[method](customStateKey);
+    }
+
     #getType(instance: O, propName: string){
         return (<any>instance.constructor).props[propName].type;
+    }
+
+    #disconnect(){
+        for(const ac of this.#acs){
+            ac.abort();
+        }
     }
     
 }
