@@ -257,7 +257,7 @@ The following table lists how the LHS is translated into CSS multi-match queries
     <tr>
         <td>The last capital letter in the string is a "N", doesn't end with "s"</td><td>firstNameN</td><td>.querySelector('[name="first-name"]')</td><td></td>
     <tr>
-        <td>Anything else</td><td>'a[href$=".mp3"]'</td><td>.querySelectorAll('a[href$=".mp3"]')</td><td>&nbsp;</td>
+        <td>otherwise</td><td>'a[href$=".mp3"]'</td><td>.querySelectorAll('a[href$=".mp3"]')</td><td>&nbsp;</td>
     </tr>
 </table>
 

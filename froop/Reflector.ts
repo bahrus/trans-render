@@ -2,10 +2,9 @@ import {O} from './O.js';
 import { PropInfo } from './types';
 
 export class Reflector{
-    #acs: AbortController[];
+    #acs: AbortController[] = [];
     constructor(instance: O, attrsToReflect: string){
         const {propagator} = instance;
-        this.#acs = [];
         const attrs = (<any>instance.constructor).attrs as {[key: string] : PropInfo};
         const reflectAll = attrsToReflect === '*';
         let parsedAttrsToReflect: string[] | undefined;
@@ -19,9 +18,9 @@ export class Reflector{
             const propInfo = attrs[attr];
             const {propName} = propInfo;
             propagator.addEventListener(propName!, e => {
-                this.reflect(instance, attr, propName!, propInfo);
+                this.#reflect(instance, attr, propName!, propInfo);
             }, {signal: ac.signal});
-            this.reflect(instance, attr, propName!, propInfo);
+            this.#reflect(instance, attr, propName!, propInfo);
         }
         propagator.addEventListener('disconnectedCallback', e => {
             this.#disconnect();
@@ -34,7 +33,7 @@ export class Reflector{
         }
     }
 
-    reflect(instance: O, attr: string, propName: string, propInfo: PropInfo){
+    #reflect(instance: O, attr: string, propName: string, propInfo: PropInfo){
         const val = (<any>instance)[propName!];
         if(val === undefined) return;
         instance.ignoreAttrChanges = true;

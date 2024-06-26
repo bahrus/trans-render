@@ -20,10 +20,15 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         const props = (<any>this.constructor).props as PropLookup;
         this.#propUp(props);
         await this.#instantiateRoundaboutIfApplicable();
-        const states = (<any>this.constructor).states as PropLookup;
-        if(Object.keys(states).length > 0){
+        // const states = (<any>this.constructor).states as PropLookup;
+        // if(Object.keys(states).length > 0){
+        //     const {CustStSvc} = await import('./CustStSvc.js');
+        //     new CustStSvc(states, this, this.#internals);
+        // }
+        const customStatesToReflect = getComputedStyle(this).getPropertyValue('--custom-state-exports');
+        if(customStatesToReflect !== ''){
             const {CustStSvc} = await import('./CustStSvc.js');
-            new CustStSvc(states, this, this.#internals);
+            new CustStSvc(this, this.#internals, customStatesToReflect);
         }
         const attrsToReflect = getComputedStyle(this).getPropertyValue('--attrs-to-reflect');
         if(attrsToReflect !== ''){

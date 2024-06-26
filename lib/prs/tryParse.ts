@@ -9,7 +9,7 @@ export async function tryParse<TParsedObj = any>(s: string, regExpOrRegExpExt: R
         let re: RegExp | undefined;
         let defaultVals: Partial<TParsedObj> | undefined;
         let dssKeys: [string, string][] | undefined;
-        let statementPartParser: StatementPartParser | undefined
+        let statementPartParser: StatementPartParser | undefined;
         if(reOrRegExt instanceof RegExp){
             re = reOrRegExt;
         }else{

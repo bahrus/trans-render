@@ -1,53 +1,39 @@
-import { ICustomState, PropLookup, RoundaboutReady } from "./types.js";
+import { O } from "./O.js";
+import { PropLookup, RoundaboutReady } from "./types.js";
 
 export class CustStSvc{
     #abortControllers: Array<AbortController> = [];
-    constructor(public states: PropLookup, public vm: RoundaboutReady, public internals: ElementInternals){
-        this.#do();
+    constructor(instance: O, internals: ElementInternals, public customStatesToReflect: string){
+        this.#do(instance, internals);
     }
-
-    async #do(){
-        const {vm, internals} = this;
-        const {propagator} = vm;
-        if(!(propagator instanceof EventTarget)) return;
+    #acs: AbortController[] = [];
+    async #do(instance: O, internals: ElementInternals){
+        const splitSplit = this
+            .customStatesToReflect
+            .split(',')
+            .map(s => s.trim().split(' if ').map(t => t.trim()));
+        const simpleOnes = splitSplit.filter(x => x.length === 1);
+        const {propagator} = instance;
+        for(const propName of simpleOnes.map(x => x[0])){
+            const ac: AbortController = new AbortController();
+            this.#acs.push(ac);
+            propagator.addEventListener(propName, e => {
+                this.#reflect(instance, internals, propName)
+            }, {signal: ac.signal});
+        }
         propagator.addEventListener('disconnectedCallback', e => {
             this.#disconnect();
-        }, {once: true});
-        const {states} = this;
-        for(const stateKey in states){
-            const state = states[stateKey];
-            const {css} = state!;
-            const customStateObj: ICustomState = typeof css === 'string' ? {
-                nameValue: css,
-            } : css!;
-            propagator.addEventListener(stateKey, async e => {
-                this.#doSetCustomState(stateKey, customStateObj);
-            });
-            this.#doSetCustomState(stateKey, customStateObj);
-        }
+        });
     }
 
-    async #doSetCustomState(stateKey: string, customStateObj: ICustomState){
-        const {nameValue, falsy, truthy} = customStateObj;
-        const {vm, internals} = this;
-        const nv = (<any>vm)[stateKey];
-
-        if(nameValue !== undefined){
-            if(nv !== undefined){
-                const {camelToLisp} = await import('../lib/camelToLisp.js');
-                const valAsLisp = camelToLisp(nv.toString());
-                (<any>internals).states.add(`--${nameValue}-${valAsLisp}`);
-            }
-        }
-        if(truthy){
-            const verb = nv ? 'add' : 'remove';
-            (<any>internals).states[verb](`--${truthy}`);
-        }
-        if(falsy){
-            const verb = nv ? 'remove' : 'add';
-            (<any>internals).states[verb](`--${falsy}`);
-        }
+    #reflect(instance: O, internals: ElementInternals, propName: string){
+        const val = (<any>instance)[propName!];
+        const method = val ? 'add' : 'delete';
+        (<any>internals).states[method](propName);
+        
     }
+
+
 
     #disconnect(){
         for(const ac of this.#abortControllers){

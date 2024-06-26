@@ -233,11 +233,11 @@ export type Handlers<ETProps = any, TActions = ETProps> =
 
 
 
-export interface ICustomState<MCProps = any>{
-    truthy?: string,
-    falsy?: string,
-    nameValue: string
-}
+// export interface ICustomState<MCProps = any>{
+//     truthy?: string,
+//     falsy?: string,
+//     nameValue: string
+// }
 
 
 
@@ -306,7 +306,7 @@ export interface PropInfo{
     def?: any;
     attrName?: string;
     propName?: string;
-    css?: ICustomState;
+    //css?: ICustomState;
 }
 
 export type ConstString = String;
