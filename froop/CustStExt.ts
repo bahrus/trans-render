@@ -48,11 +48,17 @@ export class CustStExt {
                 method = val.toString() === rhs ? 'add' : 'delete';
                 break;
             }
+            case '<':
             case '>':{
                 const t = this.#getType(instance, propName);
+                const rhsM = t === 'Number' ? Number(rhs) : rhs;
+                const lhsM = t === 'Number' ? val : val.toString();
                 switch(op){
                     case '>':
-                        method = val > Number(rhs) ? 'add' : 'delete';
+                        method = lhsM > rhsM ? 'add' : 'delete';
+                        break;
+                    case '<':
+                        method = lhsM < rhsM ? 'add' : 'delete';
                         break;
                 }
                 console.log({t});
