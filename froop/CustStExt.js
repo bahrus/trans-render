@@ -9,7 +9,16 @@ export class CustStExt {
     }
     async #do(instance, internals) {
         for (const statement of this.splitSplit) {
-            console.log({ statement });
+            const [customStateKey, expr] = statement;
+            const re = new RegExp(String.raw `^(?<lhs>.*)(?<op>==|>|>=|<|<=)(?<rhs>.*)`);
+            const test = re.exec(expr);
+            const { groups } = test;
+            const parsedExpr = {
+                lhs: groups.lhs.trim(),
+                op: groups.op,
+                rhs: groups.rhs.trim()
+            };
+            console.log({ parsedExpr, test, expr });
         }
     }
 }
