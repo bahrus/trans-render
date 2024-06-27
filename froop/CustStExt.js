@@ -41,12 +41,10 @@ export class CustStExt {
                 propagator.addEventListener(propName, e => {
                     this.#moduloCompare(instance, internals, parsedExpr, modulo, propName, customStateKey);
                 }, { signal: ac.signal });
-                console.log('modulo');
             }
             propagator.addEventListener('disconnectedCallback', e => {
                 this.#disconnect();
-            });
-            //const re3
+            }, { once: true });
         }
     }
     #simpleCompare(instance, internals, parsedExpr, propName, customStateKey) {
