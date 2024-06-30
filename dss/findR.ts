@@ -3,7 +3,7 @@ import { Specifier } from "./types";
 export async function findR(element: Element, specifier: Specifier, scopeE?: Element | undefined){
     const {scopeS, elS} = specifier;
     
-    if(scopeS !== undefined && elS !== undefined){
+    if(scopeS !== undefined){
         const {dss, rec, rnf, host, s} = specifier;
         switch(dss){
             case '^':
@@ -16,6 +16,7 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
                         return closest;
                     }
                 }
+                if(elS === undefined) return closest;
                 if(s === '~'){
                     const peerCE = closest?.querySelector(elS);
                     if(peerCE){

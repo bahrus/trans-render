@@ -13,6 +13,7 @@ export class DSSArray implements IObject$tring{
         const split = this.s.split(' ').map(s => s.trim()).filter(s => !!s);
         const specifiers: Specifier[] = [];
         for(const dss of split){
+            if(dss === 'and') continue;
             specifiers.push(await parse(dss));
         }
         this.arrVal = specifiers;

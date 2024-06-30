@@ -64,7 +64,7 @@ export type AttrMapPoint<TProps = any> = keyof TProps & string | AttrMapConfig<T
 
 
 export interface AttrMapConfig<TProps = any, TMethods = TProps> {
-    instanceOf?: 'Object' | 'String' | 'Object$tring' | 'Object$entences',
+    instanceOf?: 'Object' | 'String' | 'Object$tring' | 'Object$entences' | 'DSSArray',
     mapsTo?: '.' | keyof TProps,
     valIfFalsy?: any,
     strValMapsTo?: keyof TProps,

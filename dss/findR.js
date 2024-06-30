@@ -1,6 +1,6 @@
 export async function findR(element, specifier, scopeE) {
     const { scopeS, elS } = specifier;
-    if (scopeS !== undefined && elS !== undefined) {
+    if (scopeS !== undefined) {
         const { dss, rec, rnf, host, s } = specifier;
         switch (dss) {
             case '^':
@@ -13,6 +13,8 @@ export async function findR(element, specifier, scopeE) {
                         return closest;
                     }
                 }
+                if (elS === undefined)
+                    return closest;
                 if (s === '~') {
                     const peerCE = closest?.querySelector(elS);
                     if (peerCE) {
