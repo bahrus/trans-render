@@ -8,6 +8,7 @@
 		"strict": true
 	},
 	"include": [
+		"DSSArray.ts",
 		"Object$tring.ts",
 		"Object$entences.ts",
 		"Transform.ts",

@@ -53,7 +53,7 @@ export interface EnhancementMountConfig<TBranches = any, TProps = any>{
 
     map?: {[key: AttrCoordinates]: AttrMapPoint<TProps>},
     /**
-     * Observed Source of Truth Attributes
+     * Observed Source of Truth Attributes [TODO, need better name]
      */
     osotas? : Array<ObservedSourceOfTruthAttribute>,
 
