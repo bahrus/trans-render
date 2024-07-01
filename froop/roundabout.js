@@ -461,11 +461,11 @@ export class RoundAbout {
         busses[key] = new Set();
         if (ret === undefined || ret === null)
             return;
+        const keys = Object.keys(ret).filter(key => ret[key] !== vm[key]);
         // if(this.#compact){
         //     this.#compact.covertAssignment(ret, vm as RoundaboutReady, keysToPropagate, this.#busses);
         // }
         vm.covertAssignment(ret);
-        const keys = Object.keys(ret);
         keys.forEach(returnKey => {
             keysToPropagate.add(returnKey);
             for (const busKey in busses) {
