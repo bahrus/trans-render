@@ -8,10 +8,13 @@ export async function parse(s: string) : Promise<Specifier>{
     }
     
     let nonEventPart = eventSplit[0];
-    const firstChar = nonEventPart[0];
-    if(firstChar >= 'A'  && firstChar <= 'Z' || firstChar >= 'a' && firstChar <= 'z'){
-        nonEventPart = '/' + nonEventPart;
+    if(!nonEventPart.startsWith('Y*') && !nonEventPart.startsWith('Y{')){
+        const firstChar = nonEventPart[0];
+        if(firstChar >= 'A'  && firstChar <= 'Z' || firstChar >= 'a' && firstChar <= 'z'){
+            nonEventPart = '/' + nonEventPart;
+        }
     }
+
     const lenNonEventPart = nonEventPart.length;
     const head2 = nonEventPart.substring(0, 2);
     let tailStart = 0;
