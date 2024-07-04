@@ -7,7 +7,11 @@ export async function parse(s: string) : Promise<Specifier>{
         specifier.evt = eventSplit[1];
     }
     
-    const nonEventPart = eventSplit[0];
+    let nonEventPart = eventSplit[0];
+    const firstChar = nonEventPart[0];
+    if(firstChar >= 'A'  && firstChar <= 'Z' || firstChar >= 'a' && firstChar <= 'z'){
+        nonEventPart = '/' + nonEventPart;
+    }
     const lenNonEventPart = nonEventPart.length;
     const head2 = nonEventPart.substring(0, 2);
     let tailStart = 0;
@@ -37,6 +41,8 @@ export async function parse(s: string) : Promise<Specifier>{
                 case 'Y':
                     specifier.dss = head0;
                     tailStart = 1;
+                // default:
+                //     specifier.dss = '^';
             }
 
     }
