@@ -74,7 +74,7 @@ export interface AttrMapConfig<TProps = any, TMethods = TProps> {
     regExpExts?: Partial<{[key in keyof TProps]: RegExpExt<any>[]}>;
     parsedRegExps?: boolean;
     /** used for preventing xss injections */
-    blockingRules?: Partial<{[key in keyof TProps]: string | RegExp}>;
+    blockingRules?: Partial<{[key : string]: string[] | RegExp[]}>;
 }
 
 export type Branchitude = number;
