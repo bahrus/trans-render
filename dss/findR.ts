@@ -18,7 +18,7 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
                 }
                 if(elS === undefined) return closest;
                 if(s === '~'){
-                    const peerCE = closest?.querySelector(elS);
+                    const peerCE = ((closest || element.getRootNode()) as DocumentFragment).querySelector(elS);
                     if(peerCE){
                         await customElements.whenDefined(elS);
                         return peerCE;
