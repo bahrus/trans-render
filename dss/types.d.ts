@@ -65,6 +65,8 @@ export interface Specifier {
      * host prop fallback
      */
     hpf?: string;
+    
+    as?: 'Number' | 'Boolean' | 'String' | 'Object' | 'RegExp' | 'URLPattern'
 }
 
 export type InferredPropName = string;
