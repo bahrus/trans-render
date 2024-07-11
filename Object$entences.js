@@ -21,12 +21,7 @@ export class Object$entences extends Object$tring {
                 .filter(s => !s.startsWith('//'))
                 .map(s => s.replace(reNormalize, ' '))
                 .filter(s => s !== '');
-            const { regExpExts, blockingRules } = mapConfig;
-            let parseBlocker = blockingRules;
-            if (blockingRules !== undefined && blockingRules.parsedBlockingRules === undefined) {
-                const { ParseBlocker } = await import('./lib/prs/ParseBlocker.js');
-                parseBlocker = new ParseBlocker(blockingRules);
-            }
+            const { regExpExts } = mapConfig;
             if (regExpExts !== undefined && !mapConfig.parsedRegExps) {
                 for (const key in regExpExts) {
                     const rhs = regExpExts[key];
@@ -44,7 +39,7 @@ export class Object$entences extends Object$tring {
                     const { tryParse } = await import('./lib/prs/tryParse.js');
                     for (const key in regExpExts) {
                         const rhs = regExpExts[key];
-                        const test = await tryParse(statement, rhs, parseBlocker);
+                        const test = await tryParse(statement, rhs);
                         if (test !== null) {
                             if (objVal[key] === undefined)
                                 objVal[key] = [];

@@ -2,12 +2,10 @@ import { arr } from '../arr.js';
 import { RegExpExt, RegExpOrRegExpExt, StatementPartParser } from './types';
 export { RegExpOrRegExpExt } from './types';
 import {reNormalize} from '../../Object$entences.js'
-import { IParseBlocker } from '../../be/types.js';
 
 export async function tryParse<TParsedObj = any>(
     s: string, 
-    regExpOrRegExpExt: RegExpOrRegExpExt<TParsedObj> | RegExpOrRegExpExt<TParsedObj>[],
-    parseBlocker: IParseBlocker | undefined
+    regExpOrRegExpExt: RegExpOrRegExpExt<TParsedObj> | RegExpOrRegExpExt<TParsedObj>[]
 ){
     const reArr = arr(regExpOrRegExpExt);
     for(const reOrRegExt of reArr){
@@ -27,7 +25,7 @@ export async function tryParse<TParsedObj = any>(
         if(test === null) continue;
         const groups = test.groups;
         if(groups === undefined) continue;
-        const parsedObj = toParsedObj(groups, parseBlocker);
+        const parsedObj = toParsedObj(groups);
         if(statementPartParser !== undefined){
             //TODO:  move to a separate file
             const {splitWord, propMap} = statementPartParser;
@@ -52,9 +50,9 @@ export async function tryParse<TParsedObj = any>(
                 .filter(s => s !== '');
                 const parsedSubObjs = [];
                 for(const token of split){
-                    const subTest = await tryParse(token, propMap[key], parseBlocker);
+                    const subTest = await tryParse(token, propMap[key]);
                     if(subTest === null) continue;
-                    const subObj = toParsedObj(subTest, parseBlocker);
+                    const subObj = toParsedObj(subTest);
                     parsedSubObjs.push(subObj);
                 }
                 
@@ -93,21 +91,10 @@ export async function tryParse<TParsedObj = any>(
     return null;
 }
 
-function toParsedObj(groups: any, parseBlocker: IParseBlocker | undefined){
+function toParsedObj(groups: any){
     const parsedObj = {} as any;
     for(const k in groups){
         const val = groups[k];
-        if(parseBlocker !== undefined){
-            const blockRules = parseBlocker.parsedBlockingRules[k];
-            if(blockRules !== undefined){
-                for(const blockRule of blockRules){
-                    const test = blockRule.exec(val);
-                    if(test !== null){
-                        throw 403;
-                    }
-                }
-            }
-        }
         parsedObj[k] = val;
     }
     return parsedObj;

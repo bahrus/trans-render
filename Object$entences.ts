@@ -1,5 +1,5 @@
 import {Object$tring} from './Object$tring.js';
-import { AttrMapConfig, AttrMapPoint, IParseBlocker, ParsedBlockingRules, UnParsedBlockingRules } from './be/types.js';
+import { AttrMapConfig, AttrMapPoint} from './be/types.js';
 
 
 export class Object$entences extends Object$tring{
@@ -21,12 +21,7 @@ export class Object$entences extends Object$tring{
                 .map(s => s.replace(reNormalize, ' '))
                 .filter( s => s !== '')
             ;
-            const {regExpExts, blockingRules} = mapConfig;
-            let parseBlocker = blockingRules as IParseBlocker | undefined;
-            if(blockingRules !== undefined && blockingRules.parsedBlockingRules === undefined ){
-                const {ParseBlocker} = await import('./lib/prs/ParseBlocker.js');
-                parseBlocker = new ParseBlocker(blockingRules as UnParsedBlockingRules);
-            }
+            const {regExpExts} = mapConfig;
             if(regExpExts !== undefined && !mapConfig.parsedRegExps){
                 for(const key in regExpExts){
                     const rhs = regExpExts[key]!
@@ -45,7 +40,7 @@ export class Object$entences extends Object$tring{
                     for(const key in regExpExts){
                         const rhs = regExpExts[key]!;
 
-                        const test = await tryParse(statement, rhs, parseBlocker);
+                        const test = await tryParse(statement, rhs);
                         if(test !== null){
                             
                             if(objVal[key] === undefined) objVal[key] = [];

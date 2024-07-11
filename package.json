@@ -2,6 +2,7 @@
   "name": "trans-render",
   "version": "0.0.792",
   "description": "Instantiate an HTML Template",
+  "type": "module",
   "main": "trans-render.js",
   "module": "trans-render.js",
   "typings": "lib/types.d.ts",
@@ -109,7 +110,7 @@
   },
   "devDependencies": {
     "@playwright/test": "1.45.1",
-    "may-it-serve": "0.0.7",
+    "may-it-serve": "0.0.8",
     "xtal-shell": "0.0.27"
   },
   "repository": {
