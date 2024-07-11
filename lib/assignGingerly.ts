@@ -7,12 +7,22 @@ export function assignGingerly(dest: any, src: any, allowedProps?: {[key: string
         if(srcKey.startsWith('?.')){
             doChains = true;
             chainOps[srcKey] = src[srcKey];
-            delete srcCopy[srcKey]
+            delete srcCopy[srcKey];
         }else{
             if(allowedProps !== undefined && !(srcKey in allowedProps)) throw 401;
         }
+        //if target prop exists and isn't an instance of a class,  but the src prop is of type EventType
+        //merge what is there first...
+        const destProp = dest[srcKey];
+        const srcProp = srcCopy[srcKey];
+        if(destProp instanceof Object && destProp.constructor === Object){
+            if(srcProp instanceof EventTarget){
+                assignGingerly(srcProp, destProp);
+            }
+        }
+        dest[srcKey] = srcProp;
     }
-    Object.assign(dest, srcCopy);
+    //Object.assign(dest, srcCopy);
     applyChains(dest, chainOps);
 }
 
