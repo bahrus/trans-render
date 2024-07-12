@@ -12,6 +12,7 @@ export async function tryParse<TParsedObj = any>(
         let re: RegExp | undefined;
         let defaultVals: Partial<TParsedObj> | undefined;
         let dssKeys: [string, string][] | undefined;
+        let dssArrayKeys: [string, string][] | undefined;
         let statementPartParser: StatementPartParser | undefined;
         if(reOrRegExt instanceof RegExp){
             re = reOrRegExt;
@@ -19,6 +20,7 @@ export async function tryParse<TParsedObj = any>(
             re = reOrRegExt.regExp as RegExp;
             defaultVals = reOrRegExt.defaultVals;
             dssKeys = reOrRegExt.dssKeys;
+            dssArrayKeys = reOrRegExt.dssArrayKeys;
             statementPartParser = reOrRegExt.statementPartParser;
         }
         const test = re.exec(s);
@@ -62,25 +64,30 @@ export async function tryParse<TParsedObj = any>(
         if(defaultVals !== undefined){
             Object.assign(parsedObj, defaultVals);
         }
-        if(dssKeys !== undefined){
+        if(dssKeys!== undefined){
             const { parse } = await import ('../../dss/parse.js');
-            for(const dssKey of dssKeys){
-                const [partName, destProp] = dssKey;
-                const propVal = parsedObj[partName] as string;
-                if(propVal === undefined) continue;
-                if(destProp.endsWith('[]')){
-                    const andSplit = propVal.split(' and ');
-                    const newVal = [];
-                    for(const token of andSplit){
-                        newVal.push(await parse(token));
-                    }
-                    parsedObj[destProp.substring(0, destProp.length - 2)] = newVal;
-                }else{
+            if(dssKeys !== undefined){
+                for(const dssKey of dssKeys){
+                    const [partName, destProp] = dssKey;
+                    const propVal = parsedObj[partName] as string;
+                    if(propVal === undefined) continue;
                     parsedObj[destProp] = await parse(propVal);
+    
                 }
-
             }
         }
+        if(dssArrayKeys !== undefined){
+            const {DSSArray} = await import('../../DSSArray.js');
+            for(const dssArrayKey of dssArrayKeys){
+                const [partName, destProp] = dssArrayKey;
+                const propVal = parsedObj[partName] as string;
+                if(propVal === undefined) continue;
+                const dssArrayParser = new DSSArray(propVal);
+                await dssArrayParser.parse();
+                parsedObj[destProp] = dssArrayParser.arrVal;
+            }
+        }
+
         return parsedObj as TParsedObj;
         // const returnObj =  toLcGrp(test.groups);
         // if(def !== undefined){

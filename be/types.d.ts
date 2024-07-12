@@ -73,17 +73,8 @@ export interface AttrMapConfig<TProps = any, TMethods = TProps> {
     strArrMapsTo?: keyof TProps,
     regExpExts?: Partial<{[key in keyof TProps]: RegExpExt<any>[]}>;
     parsedRegExps?: boolean;
-    /** used for preventing xss injections */
-    //blockingRules?: UnParsedBlockingRules | IParseBlocker;
 }
 
-//export type UnParsedBlockingRules = Partial<{[key : string]: string[]}>;
-
-//export type ParsedBlockingRules = Partial<{[key : string]: RegExp[]}>
-
-// export interface  IParseBlocker {
-//     parsedBlockingRules: ParsedBlockingRules;
-// }
 
 export type Branchitude = number;
 export type Leafitude = number;
