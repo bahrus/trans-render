@@ -1,11 +1,16 @@
 export async function parse(s) {
     const specifier = {};
+    const iPosOfAs = s.lastIndexOf(' as ');
+    if (iPosOfAs > -1) {
+        specifier.as = s.substring(iPosOfAs + 4).trimEnd();
+        s = s.substring(0, iPosOfAs);
+    }
     const eventSplit = s.split('::');
     if (eventSplit[1] !== undefined) {
         specifier.evt = eventSplit[1];
     }
     let nonEventPart = eventSplit[0];
-    if (!nonEventPart.startsWith('Y*') && !nonEventPart.startsWith('Y{')) {
+    if (!nonEventPart.startsWith('Y{')) {
         const firstChar = nonEventPart[0];
         if (firstChar >= 'A' && firstChar <= 'Z' || firstChar >= 'a' && firstChar <= 'z') {
             nonEventPart = '/' + nonEventPart;
