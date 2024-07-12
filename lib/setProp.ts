@@ -1,3 +1,6 @@
+import './assignGingerly.js';
+import { assignGingerly } from './assignGingerly.js';
+
 export function setProp(obj: any, path: string, val: any){
     const splitPath = path.split('.');
     const last = splitPath.pop()!;
@@ -18,7 +21,7 @@ export function setProp(obj: any, path: string, val: any){
 
     }
     if(typeof(context[last]) === 'object' && typeof(val) === 'object'){
-        Object.assign(context[last], val);
+        assignGingerly(context[last], val);
     }else{
         context[last] = val;
     }
