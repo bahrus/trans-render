@@ -4,16 +4,21 @@ export type DirectionalScopeSigils =
     /**
      * upward direction, non recursive
      */
-    '^' | 
+    |'^'  
     /**
      * downward direction, next element siblings only
      */
-    'Y' |
+    |'Y' 
     /**
      * IdRef query
      * 
      */ 
-    '?';
+    |'?'
+    /**
+     * self
+     */
+    |'.'
+    ;
 
 export type AttrSigils =
     /**

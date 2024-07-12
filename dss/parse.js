@@ -23,7 +23,8 @@ export async function parse(s) {
     switch (head2) {
         case '$0':
             specifier.self = true;
-            tailStart = 2;
+            specifier.dss = '.';
+            //specifier.s = '$0';
             break;
         case '^^':
             specifier.dss = '^';
@@ -49,7 +50,8 @@ export async function parse(s) {
                 //     specifier.dss = '^';
             }
     }
-    if (specifier.dss !== undefined) {
+    const dss = specifier.dss;
+    if (dss !== undefined && dss !== '.') {
         const result = parseScope(nonEventPart, tailStart, specifier);
         tailStart = result.tailStart;
     }
@@ -59,9 +61,9 @@ export async function parse(s) {
     return specifier;
 }
 async function parseProp(nonEventPart, tailStart, specifier) {
-    const s = nonEventPart.substring(tailStart, tailStart + 1);
+    const s = specifier.self ? '$0' : nonEventPart.substring(tailStart, tailStart + 1);
     const { scopeS } = specifier;
-    tailStart++;
+    tailStart += specifier.self ? 2 : 1;
     const iPosOfSC = nonEventPart.indexOf(':', tailStart);
     let propInference;
     let subProp;
@@ -80,6 +82,8 @@ async function parseProp(nonEventPart, tailStart, specifier) {
         specifier.s = s;
     }
     switch (s) {
+        case '$0':
+            break;
         case '#':
             specifier.elS = `${propInference}`;
             break;
@@ -150,6 +154,7 @@ async function parseProp(nonEventPart, tailStart, specifier) {
             case '-':
             case '|':
             case '/':
+            case '$0':
                 specifier.path = subProp;
                 break;
             case '~':

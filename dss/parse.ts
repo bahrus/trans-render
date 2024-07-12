@@ -28,7 +28,8 @@ export async function parse(s: string) : Promise<Specifier>{
     switch(head2){
         case '$0':
             specifier.self = true;
-            tailStart = 2;
+            specifier.dss = '.';
+            //specifier.s = '$0';
             break;
         case '^^':
             specifier.dss = '^';
@@ -55,7 +56,8 @@ export async function parse(s: string) : Promise<Specifier>{
             }
 
     }
-    if(specifier.dss !== undefined){
+    const dss = specifier.dss;
+    if(dss !== undefined && dss !== '.'){
         const result = parseScope(nonEventPart, tailStart, specifier);
         tailStart = result.tailStart;
     }
@@ -69,9 +71,10 @@ export async function parse(s: string) : Promise<Specifier>{
 async function parseProp(
     nonEventPart: string, tailStart: number, specifier: Specifier
 ){
-    const s = nonEventPart.substring(tailStart, tailStart + 1) as Sigils | ':';
+
+    const s = specifier.self ? '$0' : nonEventPart.substring(tailStart, tailStart + 1) as Sigils | ':';
     const {scopeS} = specifier;
-    tailStart++;
+    tailStart += specifier.self ? 2 : 1;
     const iPosOfSC = nonEventPart.indexOf(':', tailStart);
     let propInference: string;
     let subProp: string | undefined;
@@ -89,8 +92,9 @@ async function parseProp(
     if(s !== ':'){
         specifier.s = s;
     }
-
     switch(s){
+        case '$0':
+            break;
         case '#':
             specifier.elS = `${propInference}`;
             break;
@@ -159,6 +163,7 @@ async function parseProp(
             case '-':
             case '|':
             case '/':
+            case '$0':
                 specifier.path = subProp;
                 break;
             case '~':
