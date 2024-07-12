@@ -66,7 +66,19 @@ export interface Specifier {
      */
     hpf?: string;
     
-    as?: 'Number' | 'Boolean' | 'String' | 'Object' | 'RegExp' | 'URLPattern'
+    as?: 
+        | 'Number' 
+        | 'number'
+        | 'Boolean'
+        | 'boolean'
+        | 'String'
+        | 'string' 
+        | 'Object'
+        | 'object'
+        | 'RegExp'
+        | 'regexp' 
+        | 'URLPattern'
+        | 'urlpattern' 
 }
 
 export type InferredPropName = string;
