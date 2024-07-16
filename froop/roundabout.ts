@@ -207,7 +207,7 @@ export class RoundAbout{
             const checkVal = await this.#doChecks(check!, true);
             check!.a = checkVal;
             if(checkVal){
-                await this.#doKey(key, vm, keysToPropagate);
+                await this.doKey(key, vm, keysToPropagate);
             }
         }
         const routers = this.#routers;
@@ -243,7 +243,7 @@ export class RoundAbout{
                 }
                 didNothing = false;
                 busses[busKey] = new Set<string>();
-                await this.#doKey(busKey, vm, keysToPropagate);
+                await this.doKey(busKey, vm, keysToPropagate);
             }
 
         }
@@ -325,7 +325,7 @@ export class RoundAbout{
                 handlerControllers[full] = ac;
                 evtTarget.addEventListener(on, async e => {
                     const keysToPropagate = new Set<string>();
-                    await this.#doKey(d, vm, keysToPropagate, e);
+                    await this.doKey(d, vm, keysToPropagate, e);
                     await this.checkQ(keysToPropagate);
                 },  {signal: ac.signal});
             }
@@ -444,7 +444,7 @@ export class RoundAbout{
         return true;
     }
 
-    async #doKey(key: string, vm: any, keysToPropagate: Set<string>, e?: Event){
+    async doKey(key: string, vm: any, keysToPropagate: Set<string>, e?: Event){
         //if(key.startsWith('dispatch')) debugger;
         const method = vm[key] || this.#infractionsLookup[key];
         const isAsync = method.constructor.name === 'AsyncFunction';

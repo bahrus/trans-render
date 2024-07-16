@@ -110,8 +110,7 @@ class CompactManager{
                 vm[destKey] += rhs;
                 break;
             case 'invoke':
-                // this is where we want to make use of covert assignment, busses if possible
-                throw 'NI';
+                this.#ra.doKey(destKey, vm, new Set());
             case 'negate':
                 vm[destKey] = !val;
                 break;
