@@ -42,7 +42,10 @@ export interface Specifier {
      * root node fallback
      */
     rnf?: boolean,
-    
+    /**
+     * include sibings in scope search
+     */
+    isiss?: boolean,
     scopeS?: CSSSelector,
     elS?: CSSSelector,
     el?: string,

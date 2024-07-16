@@ -1,11 +1,22 @@
 export async function findR(element, specifier, scopeE) {
     const { scopeS, elS } = specifier;
     if (scopeS !== undefined) {
-        const { dss, rec, rnf, host, s, prop } = specifier;
+        const { dss, rec, rnf, host, s, prop, isiss } = specifier;
         switch (dss) {
             case '^':
-                const { parentElement } = (scopeE || element);
-                const closest = parentElement?.closest(scopeS);
+                let closest;
+                const seed = (scopeE || element);
+                if (isiss) {
+                    const prev = seed.previousElementSibling || seed.parentElement;
+                    if (prev === null)
+                        throw 404;
+                    const { upSearch } = await import('../lib/upSearch.js');
+                    closest = upSearch(prev, scopeS);
+                }
+                else {
+                    const { parentElement } = seed;
+                    closest = parentElement?.closest(scopeS);
+                }
                 if (host && closest) {
                     const { localName } = closest;
                     if (localName.includes('-')) {

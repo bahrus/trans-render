@@ -174,7 +174,12 @@ function parseScope(nonEventPart, tailStart, specifier) {
     const iPosOfClosedBrace = nonEventPart.indexOf('}', tailStart + 2);
     if (iPosOfClosedBrace === -1)
         throw 'PE'; // parsing error
-    specifier.scopeS = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace);
+    let scopeS = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace);
+    if (scopeS.startsWith('(') && scopeS.endsWith(')')) {
+        specifier.isiss = true;
+        scopeS = scopeS.substring(1, scopeS.length - 1);
+    }
+    specifier.scopeS = scopeS;
     return {
         tailStart: iPosOfClosedBrace + 1
     };
