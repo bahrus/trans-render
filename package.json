@@ -109,7 +109,7 @@
     "mount-observer": "0.0.29"
   },
   "devDependencies": {
-    "@playwright/test": "1.45.1",
+    "@playwright/test": "1.45.2",
     "may-it-serve": "0.0.8",
     "xtal-shell": "0.0.27"
   },
