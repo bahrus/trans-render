@@ -75,15 +75,15 @@ class CompactManager{
         const {vm} = options;
         const {propagator} = (vm as RoundaboutReady);
         propagator?.addEventListener(srcKey, e => {
-            this.#doAction(false);
+            this.#doAction(false, false);
         }, {signal: this.#ac.signal});
-        this.#doAction(false);
+        this.#doAction(false, true);
         propagator?.addEventListener('disconnectedCallback', e => {
             this.#ac.abort();
         });
     }
 
-    #doAction(afterDelay: boolean){
+    #doAction(afterDelay: boolean, initializing: boolean){
         const {op, rhsIsDynamic} = this.#cc;
         const vm = this.#ra.options.vm;
         const rhs = rhsIsDynamic ? vm[this.#rhs] : this.#rhs;
@@ -95,13 +95,14 @@ class CompactManager{
                 case 'negate':
                 case 'toggle':
                     setTimeout(() => {
-                        this.#doAction(true);
+                        this.#doAction(true, initializing);
                     }, rhs);
                     return;
             }
         }
         const {srcKey, destKey} = this.#cc;
         const val = vm[srcKey];
+        if(initializing && val === undefined) return;
         switch(op){
             case 'echo':
                 vm[destKey] = val;
@@ -111,6 +112,7 @@ class CompactManager{
                 break;
             case 'invoke':
                 this.#ra.doKey(destKey, vm, new Set());
+                break;
             case 'negate':
                 vm[destKey] = !val;
                 break;
