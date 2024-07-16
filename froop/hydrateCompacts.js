@@ -2,12 +2,12 @@ import { tryParse } from '../lib/prs/tryParse.js';
 import { whenSrcKeyChanges } from './roundabout.js';
 const srcToDest = String.raw `(?<srcKey>[\w]+)_to_(?<destKey>[\w]+)`;
 const reCompacts = [
-    // {
-    //     regExp: new RegExp(String.raw `${whenSrcKeyChanges}invoke_(?<destKey>[\w\_])`),
-    //     defaultVals:{
-    //         op: 'invoke'
-    //     }
-    // },
+    {
+        regExp: new RegExp(String.raw `${whenSrcKeyChanges}invoke_(?<destKey>[\w\_]+)`),
+        defaultVals: {
+            op: 'invoke'
+        }
+    },
     {
         regExp: new RegExp(String.raw `^negate_${srcToDest}`),
         defaultVals: {

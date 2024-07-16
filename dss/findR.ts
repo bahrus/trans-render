@@ -4,7 +4,7 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
     const {scopeS, elS} = specifier;
     
     if(scopeS !== undefined){
-        const {dss, rec, rnf, host, s} = specifier;
+        const {dss, rec, rnf, host, s, prop} = specifier;
         switch(dss){
             case '^':
                 const {parentElement} = (scopeE || element);
@@ -13,7 +13,20 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
                     const {localName} = closest;
                     if(localName.includes('-')){
                         await customElements.whenDefined(localName);
-                        return closest;
+                        // if(prop){
+                        //     if(prop in closest) return closest;
+                        // }else{
+                        //     return closest;
+                        // }
+                        
+                    }
+                    const itemScopeAttr = closest.getAttribute('itemscope');
+                    if(itemScopeAttr){
+                        const et = (<any>closest)[itemScopeAttr];
+                        if(et !== undefined) return et;
+                        const {waitForEvent} = await import('../lib/isResolved.js');
+                        await waitForEvent(closest, itemScopeAttr);
+                        return (<any>closest)[itemScopeAttr];
                     }
                 }
                 if(elS === undefined) return closest;

@@ -5,10 +5,10 @@ export async function isResolved(host: EventTarget, tokens: string[], position?:
     await waitForEvent(host, eventName);
 }
 
-export function waitForEvent(et: EventTarget, eventName: string): Promise<void>{
+export function waitForEvent(et: EventTarget, eventName: string): Promise<Event>{
     return new Promise(resolved => {
         et.addEventListener(eventName, e => {
-            resolved();
+            resolved(e);
         }, {once: true});
     })
 }
