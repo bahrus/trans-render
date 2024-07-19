@@ -1,5 +1,22 @@
 import { Specifier } from "./types";
 
+async function getHostish(el: Element, prop?: string){
+    const {localName} = el;
+    if(localName.includes('-')){
+        await customElements.whenDefined(localName);
+        if(prop){
+            if(prop in el) return el;
+        }
+    }
+    const itemScopeAttr = el.getAttribute('itemscope');
+    if(itemScopeAttr){
+        const et = el.querySelector(itemScopeAttr);
+        if(et !== null){
+            return getHostish(et, prop);
+        }
+        
+    }
+}
 export async function findR(element: Element, specifier: Specifier, scopeE?: Element | undefined){
     const {scopeS, elS} = specifier;
     
@@ -20,24 +37,8 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
                 }
 
                 if(host && closest){
-                    const {localName} = closest;
-                    if(localName.includes('-')){
-                        await customElements.whenDefined(localName);
-                        // if(prop){
-                        //     if(prop in closest) return closest;
-                        // }else{
-                        //     return closest;
-                        // }
-                        
-                    }
-                    const itemScopeAttr = closest.getAttribute('itemscope');
-                    if(itemScopeAttr){
-                        const et = (<any>closest)[itemScopeAttr];
-                        if(et !== undefined) return et;
-                        const {waitForEvent} = await import('../lib/isResolved.js');
-                        await waitForEvent(closest, itemScopeAttr);
-                        return (<any>closest)[itemScopeAttr];
-                    }
+                    const hostish = getHostish(closest, prop);
+                    if(hostish) return hostish;
                 }
                 if(elS === undefined) return closest;
                 if(s === '~'){

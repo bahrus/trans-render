@@ -55,7 +55,7 @@ export interface EnhancementMountConfig<TBranches = any, TProps = any>{
     /**
      * Observed Source of Truth Attributes [TODO, need better name]
      */
-    osotas? : Array<ObservedSourceOfTruthAttribute>,
+    osotas? : Array<ObservedSourceOfTruthAttribute<TProps>>,
 
     cacheConfig?: AttrCacheConfig,
 }
