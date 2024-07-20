@@ -195,6 +195,7 @@ export interface OConfig<TProps = any, TActions = TProps, ETProps = TProps>{
     hitch?: Hitches<TProps, TActions>;
     handlers?: Handlers<ETProps, TActions>;
     positractions?: Positractions<TProps, TActions>;
+    mainTemplate?: string | HTMLTemplateElement;
 }
 
 export type Positractions<TProps = any, TActions = TProps> = 

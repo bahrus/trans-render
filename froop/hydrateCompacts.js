@@ -83,7 +83,7 @@ class CompactManager {
         if (!afterDelay && rhs > 0) {
             switch (op) {
                 case 'echo':
-                case 'invoke':
+                //case 'invoke': taken care of from actions
                 case 'negate':
                 case 'toggle':
                     setTimeout(() => {
@@ -104,7 +104,8 @@ class CompactManager {
                 vm[destKey] += rhs;
                 break;
             case 'invoke':
-                this.#ra.doKey(destKey, vm, new Set());
+                //taken care of from actions
+                //this.#ra.doKey(destKey, vm, new Set());
                 break;
             case 'negate':
                 vm[destKey] = !val;
