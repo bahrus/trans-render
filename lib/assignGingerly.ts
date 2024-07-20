@@ -29,10 +29,32 @@ export function assignGingerly(dest: any, src: any, allowedProps?: {[key: string
 }
 
 async function applyChains(dest: any, chainOps: any){
-    const {setProp} = await import('./setProp.js');
+    // const {setProp} = await import('./setProp.js');
     for(const chainOpsKey in chainOps){
-        const key = chainOpsKey.replaceAll('?.', '.');
         const val = chainOps[chainOpsKey];
-        setProp(dest, key, val);
+        const split = chainOpsKey.split('?.');
+        let context = dest;
+        const last = split.pop()!;
+        split.shift();
+        for(const token of split){
+            let newContext = context[token];
+            if(newContext === undefined){
+                const getMethod = `get${token[0].toUpperCase()}${token.substring(1)}`;
+                let obj: any;
+                if(getMethod in context){
+                    obj = await context[getMethod]();
+                }else{
+                    obj = {};
+                    
+                }
+                context[token] = obj;
+                context = obj;
+            }
+        }
+        if(typeof(context[last]) === 'object' && typeof(val) === 'object'){
+            await assignGingerly(context[last], val);
+        }else{
+            context[last] = val;
+        }
     }
 }
