@@ -1,7 +1,8 @@
 import { Specifier } from "./types";
 
 async function getHostish(el: Element, prop?: string){
-    const {localName} = el;
+    const {localName, host} = el as any;
+    if(host) return host;
     if(localName.includes('-')){
         await customElements.whenDefined(localName);
         if(prop){

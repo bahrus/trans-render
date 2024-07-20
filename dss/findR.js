@@ -1,3 +1,22 @@
+async function getHostish(el, prop) {
+    const { localName, host } = el;
+    if (host)
+        return host;
+    if (localName.includes('-')) {
+        await customElements.whenDefined(localName);
+        if (prop) {
+            if (prop in el)
+                return el;
+        }
+    }
+    const itemScopeAttr = el.getAttribute('itemscope');
+    if (itemScopeAttr) {
+        const et = el.querySelector(itemScopeAttr);
+        if (et !== null) {
+            return getHostish(et, prop);
+        }
+    }
+}
 export async function findR(element, specifier, scopeE) {
     const { scopeS, elS } = specifier;
     if (scopeS !== undefined) {
@@ -18,24 +37,9 @@ export async function findR(element, specifier, scopeE) {
                     closest = parentElement?.closest(scopeS);
                 }
                 if (host && closest) {
-                    const { localName } = closest;
-                    if (localName.includes('-')) {
-                        await customElements.whenDefined(localName);
-                        // if(prop){
-                        //     if(prop in closest) return closest;
-                        // }else{
-                        //     return closest;
-                        // }
-                    }
-                    const itemScopeAttr = closest.getAttribute('itemscope');
-                    if (itemScopeAttr) {
-                        const et = closest[itemScopeAttr];
-                        if (et !== undefined)
-                            return et;
-                        const { waitForEvent } = await import('../lib/isResolved.js');
-                        await waitForEvent(closest, itemScopeAttr);
-                        return closest[itemScopeAttr];
-                    }
+                    const hostish = getHostish(closest, prop);
+                    if (hostish)
+                        return hostish;
                 }
                 if (elS === undefined)
                     return closest;
