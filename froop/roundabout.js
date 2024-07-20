@@ -141,22 +141,22 @@ export class RoundAbout {
                     check.ifKeyIn = this.#toSet(ifKeyIn);
                 checks[name] = check;
             }
-            if (compacts !== undefined) {
-                for (const key in compacts) {
-                    const parsedCompact = reInvoke.exec(key);
-                    if (parsedCompact !== null) {
-                        const grps = parsedCompact.groups;
-                        const { destKey, srcKey } = grps;
-                        const check = {
-                            ifKeyIn: new Set([srcKey]),
-                        };
-                        newBusses[destKey] = new Set();
-                        checks[destKey] = check;
-                    }
-                    //console.log({tbd: parsedCompact});
+        }
+        if (compacts !== undefined) {
+            for (const key in compacts) {
+                const parsedCompact = reInvoke.exec(key);
+                if (parsedCompact !== null) {
+                    const grps = parsedCompact.groups;
+                    const { destKey, srcKey } = grps;
+                    const check = {
+                        ifKeyIn: new Set([srcKey]),
+                    };
+                    newBusses[destKey] = new Set();
+                    checks[destKey] = check;
                 }
-                //const invokingCompacts = Object.keys(compacts).filter(x => x.indexOf())
+                //console.log({tbd: parsedCompact});
             }
+            //const invokingCompacts = Object.keys(compacts).filter(x => x.indexOf())
         }
     }
     async init() {
