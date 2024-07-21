@@ -1,7 +1,8 @@
-export class AttachedHost{
+export class AttachedHost extends EventTarget{
     queue: Array<any> = [];
     #ce: WeakRef<HTMLElement> | undefined;
     constructor(enhancedElement: Element){
+        super();
         this.#do(enhancedElement);
     }
 
@@ -37,6 +38,7 @@ export class AttachedHost{
             enumerable: true,
             configurable: true,
         });
+        this.dispatchEvent(new Event('resolved'));
     }
 
     async #assignGingerly(enhancedElement: Element, itemCE: string){
