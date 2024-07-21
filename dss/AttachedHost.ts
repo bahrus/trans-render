@@ -54,10 +54,10 @@ export class AttachedHost{
     }
 
     async #doSearch(enhancedElement: Element, itemCE: string){
-        // if(enhancedElement instanceof HTMLTemplateElement){
-        //     const {withTemplate} = await import('./withTemplate.js');
-        //     return await withTemplate(self);
-        // }
+        if(enhancedElement instanceof HTMLTemplateElement){
+            const {PseudoCE} = await import('./PseudoCE.js');
+            return await PseudoCE(enhancedElement, itemCE);
+        }
         return enhancedElement.querySelector(itemCE) as HTMLElement | null;
     }
 }
