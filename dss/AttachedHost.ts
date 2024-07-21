@@ -1,5 +1,6 @@
 export class AttachedHost extends EventTarget{
     queue: Array<any> = [];
+    isResolved = false;
     #ce: WeakRef<HTMLElement> | undefined;
     constructor(enhancedElement: Element){
         super();
@@ -38,6 +39,7 @@ export class AttachedHost extends EventTarget{
             enumerable: true,
             configurable: true,
         });
+        this.isResolved = true;
         this.dispatchEvent(new Event('resolved'));
     }
 

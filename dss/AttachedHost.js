@@ -1,5 +1,6 @@
 export class AttachedHost extends EventTarget {
     queue = [];
+    isResolved = false;
     #ce;
     constructor(enhancedElement) {
         super();
@@ -39,6 +40,7 @@ export class AttachedHost extends EventTarget {
             enumerable: true,
             configurable: true,
         });
+        this.isResolved = true;
         this.dispatchEvent(new Event('resolved'));
     }
     async #assignGingerly(enhancedElement, itemCE) {
