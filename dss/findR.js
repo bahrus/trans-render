@@ -11,10 +11,17 @@ async function getHostish(el, prop) {
     }
     const itemScopeAttr = el.getAttribute('itemscope');
     if (itemScopeAttr) {
-        const et = el.querySelector(itemScopeAttr);
-        if (et !== null) {
-            return getHostish(et, prop);
+        let host = el.host;
+        if (host)
+            return getHostish(host, prop);
+        const { AttachedHost, waitForEvent } = await import('./AttachedHost.js');
+        const ah = new AttachedHost(el);
+        if (!ah.isResolved) {
+            await waitForEvent(ah, 'resolved');
         }
+        host = el.host;
+        if (host)
+            return getHostish(host, prop);
     }
 }
 export async function findR(element, specifier, scopeE) {

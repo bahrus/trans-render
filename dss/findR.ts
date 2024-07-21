@@ -11,10 +11,15 @@ async function getHostish(el: Element, prop?: string){
     }
     const itemScopeAttr = el.getAttribute('itemscope');
     if(itemScopeAttr){
-        const et = el.querySelector(itemScopeAttr);
-        if(et !== null){
-            return getHostish(et, prop);
+        let host = (<any>el).host as HTMLElement | undefined;
+        if(host) return getHostish(host, prop);
+        const {AttachedHost, waitForEvent} = await import('./AttachedHost.js');
+        const ah = new AttachedHost(el);
+        if(!ah.isResolved){
+            await waitForEvent(ah, 'resolved');
         }
+        host = (<any>el).host as HTMLElement | undefined;
+        if(host) return getHostish(host, prop);
         
     }
 }

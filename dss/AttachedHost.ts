@@ -1,3 +1,4 @@
+export {waitForEvent} from '../lib/isResolved.js';
 export class AttachedHost extends EventTarget{
     queue: Array<any> = [];
     isResolved = false;
