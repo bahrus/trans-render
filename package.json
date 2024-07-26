@@ -17,6 +17,7 @@
   },
   "exports": {
     ".": "./Transform.js",
+    "./Mount.js": "./Mount.js",
     "./Object$tring.js": "./Object$tring.js",
     "./Object$entences.js": "./Object$entences.js",
     "./trans-render.js": "./trans-render.js",
