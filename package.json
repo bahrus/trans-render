@@ -86,6 +86,8 @@
     "./xslt/swap.js": "./xslt/swap.js"
   },
   "files": [
+    "be/*.js",
+    "be/*.d.ts",
     "dss/*.js",
     "dss/*.d.ts",
     "funions/*.js",
