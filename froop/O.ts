@@ -13,8 +13,14 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     }
     constructor(){
         super();
-        this.#internals = this.attachInternals();
+        const internals = this.attachInternals();
+        this.#internals = internals;
+        this.copyInternals(internals);
     }
+    /**
+     * Keep internals reference private, but allow subclasses to get a handle to the internal "singleton"
+     */
+    copyInternals(internals: ElementInternals){}
     static observedAttributes: Array<string> = [];
     async connectedCallback(){
         const props = (<any>this.constructor).props as PropLookup;

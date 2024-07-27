@@ -8,8 +8,14 @@ export class O extends HTMLElement {
     }
     constructor() {
         super();
-        this.#internals = this.attachInternals();
+        const internals = this.attachInternals();
+        this.#internals = internals;
+        this.copyInternals(internals);
     }
+    /**
+     * Keep internals reference private, but allow subclasses to get a handle to the internal "singleton"
+     */
+    copyInternals(internals) { }
     static observedAttributes = [];
     async connectedCallback() {
         const props = this.constructor.props;
