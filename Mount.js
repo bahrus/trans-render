@@ -59,7 +59,7 @@ export class Mount extends O {
                 this.attachShadow(shadowRootInit);
                 this.#csr = true;
             }
-            else {
+            else if (!styles) {
                 const declarativeStyles = Array.from(this.shadowRoot.querySelectorAll('style[adopt]'));
                 config.styles = declarativeStyles.map(x => x.innerHTML);
             }
@@ -71,7 +71,7 @@ export class Mount extends O {
             else if (Array.isArray(styles) && styles.length > 0 && typeof (styles[0]) === 'string') {
                 stringStyles = styles;
             }
-            else if (typeof (styles === undefined)) {
+            else if (typeof (styles) === undefined) {
                 stringStyles = [''];
             }
             if (stringStyles !== undefined) {

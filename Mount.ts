@@ -66,7 +66,7 @@ export class Mount<TProps = any, TActions = TProps, ETProps = TProps>
             if(this.shadowRoot === null){
                 this.attachShadow(shadowRootInit);
                 this.#csr = true;
-            }else{
+            }else if(!styles){
                 const declarativeStyles = Array.from(this.shadowRoot.querySelectorAll('style[adopt]'));
                 config.styles = declarativeStyles.map(x => x.innerHTML);
             }
@@ -76,7 +76,7 @@ export class Mount<TProps = any, TActions = TProps, ETProps = TProps>
                 stringStyles = [styles];
             }else if(Array.isArray(styles) && styles.length > 0 && typeof(styles[0]) === 'string'){
                 stringStyles = styles as Array<string>;
-            }else if(typeof(styles === undefined)){
+            }else if(typeof(styles) === undefined){
                 stringStyles = [''];
             }
             if(stringStyles !== undefined){
