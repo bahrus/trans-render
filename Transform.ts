@@ -432,14 +432,14 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
             let {o} = uow;
             const p = arr(o) as string[];
             const {target, options, model} = this.transformer;
-            const propagator = (<any>model).propagator || options.propagator as EventTarget;
+            const propagator = ((<any>model).propagator || options.propagator) as EventTarget;
             const propagatorIsReady = (<any>model).propagator ? true : options.propagatorIsReady;
             
             for(const propName of p){
                 if(typeof propName !== 'string') throw 'NI';
                 if(!(propName in (model as any))) continue;
                 if(!propagatorIsReady){
-                    const propsSet = propagator!.___props;
+                    const propsSet = (propagator as MarkedUpEventTarget)!.___props;
                     if(propsSet instanceof Set){
                         if(!propsSet.has(propName)){
                             const {subscribe} = await import('./lib/subscribe2.js');

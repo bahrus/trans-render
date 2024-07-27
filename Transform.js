@@ -392,7 +392,7 @@ export class MountOrchestrator extends EventTarget {
             let { o } = uow;
             const p = arr(o);
             const { target, options, model } = this.transformer;
-            const propagator = model.propagator || options.propagator;
+            const propagator = (model.propagator || options.propagator);
             const propagatorIsReady = model.propagator ? true : options.propagatorIsReady;
             for (const propName of p) {
                 if (typeof propName !== 'string')
