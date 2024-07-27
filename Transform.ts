@@ -432,7 +432,9 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
             let {o} = uow;
             const p = arr(o) as string[];
             const {target, options, model} = this.transformer;
-            const {propagator, propagatorIsReady} = options;
+            const propagator = (<any>model).propagator || options.propagator as EventTarget;
+            const propagatorIsReady = (<any>model).propagator ? true : options.propagatorIsReady;
+            
             for(const propName of p){
                 if(typeof propName !== 'string') throw 'NI';
                 if(!(propName in (model as any))) continue;
