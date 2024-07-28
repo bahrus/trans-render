@@ -176,6 +176,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                         }else if(farom){
                             return (this as O).#internals[farom];
                         }
+                        return this[publicPrivateStore][key];
                         
                     },
                     enumerable: true,

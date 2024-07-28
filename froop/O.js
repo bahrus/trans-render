@@ -161,6 +161,7 @@ export class O extends HTMLElement {
                         else if (farom) {
                             return this.#internals[farom];
                         }
+                        return this[publicPrivateStore][key];
                     },
                     enumerable: true,
                     configurable: true,
