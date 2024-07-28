@@ -129,6 +129,10 @@ export class O extends HTMLElement {
                     delete this[key];
                 }
                 this[publicPrivateStore][key] = value;
+                const { fawm } = propInfo;
+                if (fawm !== undefined) {
+                    this.#internals[fawm](value);
+                }
                 //(<any>this)[key] = value;
             }
         }
@@ -140,7 +144,7 @@ export class O extends HTMLElement {
             if (key in proto)
                 continue;
             const prop = props[key];
-            const { ro, parse, attrName, farop, farom, ip } = prop;
+            const { ro, parse, attrName, farop, farom, ip, fawm } = prop;
             if (ro || farop) {
                 Object.defineProperty(proto, key, {
                     get() {
@@ -173,6 +177,9 @@ export class O extends HTMLElement {
                             if (prop.dry && ov === nv)
                                 return;
                             this[publicPrivateStore][key] = nv;
+                        }
+                        if (fawm !== undefined) {
+                            this.#internals[fawm](nv);
                         }
                         this.propagator.dispatchEvent(new Event(key));
                     },

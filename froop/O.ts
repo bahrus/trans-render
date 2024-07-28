@@ -126,6 +126,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     #propUp<T>(props: PropLookup){
         for(const key in props){
             const propInfo = props[key]!;
+            
             let value = (<any>this)[key];
             if(value === undefined){
                 const {def, parse, attrName} = propInfo;
@@ -143,6 +144,10 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                     delete (<any>this)[key];
                 }
                 (<any>this[publicPrivateStore])[key] = value;
+                const {fawm} = propInfo;
+                if(fawm !== undefined){
+                    (<any>(this as O).#internals)[fawm](value);
+                }
                 //(<any>this)[key] = value;
             }
 
@@ -154,7 +159,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         for(const key in props){
             if(key in proto) continue;
             const prop = props[key]!;
-            const {ro, parse, attrName, farop, farom, ip} = prop;
+            const {ro, parse, attrName, farop, farom, ip, fawm} = prop;
             if(ro || farop){
                 Object.defineProperty(proto, key, {
                     get(){
@@ -185,6 +190,9 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                             const ov = this[publicPrivateStore][key];
                             if(prop.dry && ov === nv) return;
                             this[publicPrivateStore][key] = nv;
+                        }
+                        if(fawm !== undefined){
+                            (<any>(this as O).#internals)[fawm](nv);
                         }
                         (this as O).propagator.dispatchEvent(new Event(key));
                         
