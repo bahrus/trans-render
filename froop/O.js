@@ -5,15 +5,23 @@ export class O extends HTMLElement {
     [publicPrivateStore] = {};
     covertAssignment(obj) {
         const props = this.constructor.props;
-        assignGingerly(this[publicPrivateStore], obj, props);
-        if (this.constructor.formAssociated) {
-            for (const key in obj) {
-                const prop = props[key];
-                if (prop?.fawm) {
-                    this.#internals[prop.fawm](obj[key]);
-                }
+        const extObj = {};
+        for (const key in obj) {
+            const prop = props[key];
+            const val = obj[key];
+            if (prop === undefined)
+                throw 403;
+            const { fawm, ip } = prop;
+            if (ip) {
+                this.#internals[key] = val;
+                continue;
+            }
+            extObj[key] = val;
+            if (fawm !== undefined) {
+                this.#internals[fawm](obj[key]);
             }
         }
+        assignGingerly(this[publicPrivateStore], extObj);
     }
     constructor() {
         super();
