@@ -4,7 +4,16 @@ export class O extends HTMLElement {
     propagator = new EventTarget();
     [publicPrivateStore] = {};
     covertAssignment(obj) {
-        assignGingerly(this[publicPrivateStore], obj, this.constructor.props);
+        const props = this.constructor.props;
+        assignGingerly(this[publicPrivateStore], obj, props);
+        if (this.constructor.formAssociated) {
+            for (const key in obj) {
+                const prop = props[key];
+                if (prop?.fawm) {
+                    this.#internals[prop.fawm](obj[key]);
+                }
+            }
+        }
     }
     constructor() {
         super();
@@ -123,11 +132,17 @@ export class O extends HTMLElement {
             if (key in proto)
                 continue;
             const prop = props[key];
-            const { ro, parse, attrName } = prop;
-            if (ro) {
+            const { ro, parse, attrName, farop, farom, ip } = prop;
+            if (ro || farop) {
                 Object.defineProperty(proto, key, {
                     get() {
-                        return this[publicPrivateStore][key];
+                        if (farop) {
+                            //not sure this will work
+                            return this.#internals[key];
+                        }
+                        else if (farom) {
+                            return this.#internals[farom];
+                        }
                     },
                     enumerable: true,
                     configurable: true,
@@ -136,9 +151,16 @@ export class O extends HTMLElement {
             else {
                 Object.defineProperty(proto, key, {
                     get() {
+                        if (ip) {
+                            return this.#internals[key];
+                        }
                         return this[publicPrivateStore][key];
                     },
                     set(nv) {
+                        if (ip) {
+                            this.#internals[key] = nv;
+                            return;
+                        }
                         const ov = this[publicPrivateStore][key];
                         if (prop.dry && ov === nv)
                             return;
