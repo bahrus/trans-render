@@ -307,6 +307,10 @@ export interface PropInfo{
     def?: any;
     attrName?: string;
     propName?: string;
+    /**
+     * form associated
+     */
+    fa?: boolean;
     //css?: ICustomState;
 }
 
