@@ -140,11 +140,18 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                 
             }
             if(value !== undefined){
-                if (this.hasOwnProperty(key)) {
-                    delete (<any>this)[key];
+                const {fawm, ip} = propInfo;
+                if(ip){
+                    (<any>(this as O).#internals)[key] = value;
+                    continue;
+                }else{
+                    if (this.hasOwnProperty(key)) {
+                        delete (<any>this)[key];
+                    }
+                    (<any>this[publicPrivateStore])[key] = value;
                 }
-                (<any>this[publicPrivateStore])[key] = value;
-                const {fawm} = propInfo;
+
+                
                 if(fawm !== undefined){
                     (<any>(this as O).#internals)[fawm](value);
                 }

@@ -125,11 +125,17 @@ export class O extends HTMLElement {
                 }
             }
             if (value !== undefined) {
-                if (this.hasOwnProperty(key)) {
-                    delete this[key];
+                const { fawm, ip } = propInfo;
+                if (ip) {
+                    this.#internals[key] = value;
+                    continue;
                 }
-                this[publicPrivateStore][key] = value;
-                const { fawm } = propInfo;
+                else {
+                    if (this.hasOwnProperty(key)) {
+                        delete this[key];
+                    }
+                    this[publicPrivateStore][key] = value;
+                }
                 if (fawm !== undefined) {
                     this.#internals[fawm](value);
                 }
