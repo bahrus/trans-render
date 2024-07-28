@@ -324,6 +324,12 @@ export interface PropInfo{
      * form associated write method
      */
     fawm?: 'setValidity' | 'setFormValue'
+
+    /**
+     * internals pass through property
+     * examples aria
+     */
+    ip?: boolean;
 }
 
 export type ConstString = String;
