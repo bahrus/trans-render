@@ -308,9 +308,9 @@ export interface PropInfo{
     attrName?: string;
     propName?: string;
     /**
-     * form associated
+     * form associated read only property
      */
-    fa?: boolean;
+    farop?: boolean;
     //css?: ICustomState;
 }
 
