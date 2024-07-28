@@ -137,15 +137,15 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         for(const key in props){
             if(key in proto) continue;
             const prop = props[key]!;
-            const {ro, parse, attrName, farop} = prop;
+            const {ro, parse, attrName, farop, farom} = prop;
             if(ro || farop){
                 Object.defineProperty(proto, key, {
                     get(){
                         if(farop){
                             //not sure this will work
                             return (<any>(this as O).#internals)[key];
-                        }else{
-                            return this[publicPrivateStore][key];
+                        }else if(farom){
+                            return (this as O).#internals[farom];
                         }
                         
                     },
