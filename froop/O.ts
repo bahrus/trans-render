@@ -172,12 +172,12 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                     set(nv: any){
                         if(ip){
                             (<any>(this as O).#internals)[key] = nv;
-                            return;
+                            
+                        }else{
+                            const ov = this[publicPrivateStore][key];
+                            if(prop.dry && ov === nv) return;
+                            this[publicPrivateStore][key] = nv;
                         }
-                        const ov = this[publicPrivateStore][key];
-                        if(prop.dry && ov === nv) return;
-                        this[publicPrivateStore][key] = nv;
-
                         (this as O).propagator.dispatchEvent(new Event(key));
                         
                     },

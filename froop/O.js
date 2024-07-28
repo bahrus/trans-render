@@ -159,12 +159,13 @@ export class O extends HTMLElement {
                     set(nv) {
                         if (ip) {
                             this.#internals[key] = nv;
-                            return;
                         }
-                        const ov = this[publicPrivateStore][key];
-                        if (prop.dry && ov === nv)
-                            return;
-                        this[publicPrivateStore][key] = nv;
+                        else {
+                            const ov = this[publicPrivateStore][key];
+                            if (prop.dry && ov === nv)
+                                return;
+                            this[publicPrivateStore][key] = nv;
+                        }
                         this.propagator.dispatchEvent(new Event(key));
                     },
                     enumerable: true,

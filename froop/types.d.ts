@@ -326,7 +326,7 @@ export interface PropInfo{
 
     /**
      * internals pass through property
-     * examples aria
+     * examples: role, ariaRole
      */
     ip?: boolean;
 }
