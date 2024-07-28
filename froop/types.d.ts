@@ -319,7 +319,11 @@ export interface PropInfo{
      * examples: checkValidity, reportValidity
      */
     farom?: 'checkValidity' | 'reportValidity';
-    //css?: ICustomState;
+    
+    /**
+     * form associated write method
+     */
+    fawm?: 'setValidity' | 'setFormValue'
 }
 
 export type ConstString = String;
