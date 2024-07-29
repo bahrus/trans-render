@@ -410,6 +410,15 @@ export interface RoundaboutReady{
      * when property is set via public interface, not (immediately) via an action method's return object
      */
     readonly propagator : EventTarget | undefined;
+
+    /**
+     * If set to true, it will become false the next 
+     * time the propagator event target emits event "sleep".
+     * During this time, queues/buses continue to perform "booking"
+     * but doesn't process the queue until sleep turns off.
+     * [TODO]
+     */ 
+    readonly sleep: boolean,
 }
 
 
