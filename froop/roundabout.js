@@ -1,4 +1,9 @@
 export async function roundabout(options, infractions) {
+    const { vm } = options;
+    const { sleep } = vm;
+    if (sleep) {
+        await vm?.awake();
+    }
     const ra = new RoundAbout(options, infractions);
     const keysToPropagate = new Set();
     await ra.subscribe();
@@ -196,6 +201,9 @@ export class RoundAbout {
         //const clone = structuredClone(keysToPropagate);// new Set(keysToPropagate);
         const { options } = this;
         const { vm } = options;
+        const { sleep } = vm;
+        if (sleep)
+            await vm.awake();
         // if(compacts !== undefined){
         //     const {Compact} = await import('./Compact.void');
         //     this.#compact = new Compact(compacts, vm);
@@ -220,10 +228,13 @@ export class RoundAbout {
         }
     }
     async checkQ(keysToPropagate) {
-        const busses = this.#busses;
-        const checks = this.#checks;
         const { options } = this;
         const { vm } = options;
+        const { sleep } = vm;
+        if (sleep)
+            await vm.awake();
+        const busses = this.#busses;
+        const checks = this.#checks;
         let didNothing = true;
         for (const busKey in busses) {
             const bus = busses[busKey];

@@ -201,6 +201,8 @@ export class RoundAbout{
         //const clone = structuredClone(keysToPropagate);// new Set(keysToPropagate);
         const {options} = this;
         const {vm} = options;
+        const {sleep} = vm;
+        if(sleep) await vm.awake();
         // if(compacts !== undefined){
         //     const {Compact} = await import('./Compact.void');
         //     this.#compact = new Compact(compacts, vm);
@@ -224,13 +226,15 @@ export class RoundAbout{
         }
     }
 
-    #isSleeping = false;
+    
     async checkQ(keysToPropagate: Set<string>){
-        if(this.#isSleeping) return;
-        const busses = this.#busses;
-        const checks = this.#checks;
         const {options} = this;
         const {vm} = options;
+        const {sleep} = vm;
+        if(sleep) await vm.awake();
+        const busses = this.#busses;
+        const checks = this.#checks;
+        
         let didNothing = true;
         for(const busKey in busses){
             const bus = busses[busKey];
