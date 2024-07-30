@@ -417,9 +417,9 @@ export interface RoundaboutReady{
      * If truthy, can call await awake() before processing should resume
      * [TODO]
      */  
-    readonly sleep: number,
+    readonly sleep?: number,
 
-    async awake();
+    async awake(): void;
 
     nudge();
 }
@@ -428,6 +428,7 @@ export interface RoundaboutReady{
 
 export interface BaseProps{
     proppedUp: boolean,
+    sleep?: number;
 }
 
 export interface ICompact{

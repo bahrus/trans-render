@@ -29,6 +29,28 @@ export class O extends HTMLElement {
         this.#internals = internals;
         this.copyInternals(internals);
     }
+    awake() {
+        return new Promise((resolve, reject) => {
+            if (!this.sleep) {
+                resolve();
+                return;
+            }
+            const ac = new AbortController();
+            this.propagator.addEventListener('sleep', e => {
+                if (!this.sleep) {
+                    ac.abort();
+                    resolve();
+                }
+            }, { signal: ac.signal });
+            // this.propagator.addEventListener('disconnectedCallback', e => {
+            //     reject();
+            // }, {once: true});
+        });
+    }
+    nudge() {
+        const { sleep } = this;
+        this.sleep = sleep ? sleep - 1 : 0;
+    }
     /**
      * Keep internals reference private, but allow subclasses to get a handle to the internal "singleton"
      */
