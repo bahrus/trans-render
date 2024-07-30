@@ -412,13 +412,16 @@ export interface RoundaboutReady{
     readonly propagator : EventTarget | undefined;
 
     /**
-     * If set to true, it will become false the next 
-     * time the propagator event target emits event "sleep".
-     * During this time, queues/buses continue to perform "booking"
-     * but doesn't process the queue until sleep turns off.
+     * During this time, queues/buses continue to perform "bookkeeping"
+     * but doesn't process the queue until sleep property becomes falsy.
+     * If truthy, can call await awake() before processing should resume
      * [TODO]
-     */ 
-    readonly sleep: boolean,
+     */  
+    readonly sleep: number,
+
+    async awake();
+
+    nudge();
 }
 
 

@@ -4,6 +4,11 @@ export async function roundabout<TProps = any, TActions = TProps>(
     options: roundaboutOptions<TProps, TActions>,
     infractions?: Infractions<TProps>
     ){
+    const {vm} = options;
+    const {sleep} = vm!;
+    if(sleep){
+        await vm?.awake();
+    }
     const ra = new RoundAbout(options, infractions);
     const keysToPropagate = new Set<string>();
     await ra.subscribe();
@@ -191,6 +196,7 @@ export class RoundAbout{
 
     }
 
+
     async hydrate(keysToPropagate: Set<string>){
         //const clone = structuredClone(keysToPropagate);// new Set(keysToPropagate);
         const {options} = this;
@@ -218,7 +224,9 @@ export class RoundAbout{
         }
     }
 
+    #isSleeping = false;
     async checkQ(keysToPropagate: Set<string>){
+        if(this.#isSleeping) return;
         const busses = this.#busses;
         const checks = this.#checks;
         const {options} = this;
@@ -393,7 +401,7 @@ export class RoundAbout{
     }
 
 
-
+    
     async #doChecks(check: SetLogicOps, initCheck: boolean){
         const {ifAllOf, ifKeyIn, ifAtLeastOneOf, ifEquals, ifNoneOf, debug} = check;
         if(debug) debugger;
