@@ -1,4 +1,5 @@
 import { arr } from '../Transform.js';
+import { assignGingerly } from '../lib/assignGingerly.js';
 export async function Engage(transformer, matchingElement, type, uow, mountContext) {
     const { e } = uow;
     const methodArg = {
@@ -40,20 +41,22 @@ export async function Engage(transformer, matchingElement, type, uow, mountConte
                 if (dep !== undefined)
                     dep();
                 if (be !== undefined) {
-                    const prop = 'be' + be[0].toUpperCase() + be.substring(1);
-                    const { camelToLisp } = await import('../lib/camelToLisp.js');
-                    const localName = 'be-' + camelToLisp(be);
+                    //const prop = 'be' + be[0].toUpperCase() + be.substring(1);
+                    //const {camelToLisp} = await import('../lib/camelToLisp.js');
+                    //const localName = 'be-' + camelToLisp(be);
                     await customElements.whenDefined('be-enhanced');
-                    const obj = matchingElement.beEnhanced.by[prop];
-                    if (w !== undefined) {
-                        Object.assign(obj, w);
-                    }
+                    const beEnhanced = matchingElement.beEnhanced;
+                    // if(w !== undefined){
+                    //     Object.assign(obj, w);
+                    // }
+                    let obj;
                     if (waitForResolved) {
-                        await matchingElement.beEnhanced.whenResolved(localName);
+                        obj = await matchingElement.beEnhanced.whenResolved(be);
                     }
                     else {
-                        matchingElement.beEnhanced.whenAttached(localName);
+                        obj = matchingElement.beEnhanced.whenAttached(be);
                     }
+                    assignGingerly(obj, w);
                 }
             }
         }

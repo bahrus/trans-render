@@ -87,7 +87,7 @@ export interface Engagement<TMethods>{
      * Can be used for any kind of label, but most common use is for specifying a behavior/enhancement
      * to attach.
      */
-    be?: string,
+    be?: EMC,
     with?: any,
     waitForResolved?: boolean,
     dep?: () => void;

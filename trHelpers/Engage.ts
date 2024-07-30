@@ -1,6 +1,7 @@
 import { IMountObserver, MountContext, PipelineStage } from 'mount-observer/types';
 import { MountOrchestrator, Transformer, arr } from '../Transform.js';
 import { onMountStatusChange, EngagementCtx, UnitOfWork, Engagement, EngagementOrEMC } from '../types.js';
+import { assignGingerly } from '../lib/assignGingerly.js';
 
 export async function Engage<TProps extends {}, TMethods = TProps, TElement = {}>(
     transformer: Transformer<TProps, TMethods, TElement>,
@@ -46,19 +47,21 @@ export async function Engage<TProps extends {}, TMethods = TProps, TElement = {}
             if(type === 'onMount'){
                 if(dep !== undefined) dep();
                 if(be !== undefined){
-                    const prop = 'be' + be[0].toUpperCase() + be.substring(1);
-                    const {camelToLisp} = await import('../lib/camelToLisp.js');
-                    const localName = 'be-' + camelToLisp(be);
+                    //const prop = 'be' + be[0].toUpperCase() + be.substring(1);
+                    //const {camelToLisp} = await import('../lib/camelToLisp.js');
+                    //const localName = 'be-' + camelToLisp(be);
                     await customElements.whenDefined('be-enhanced');
-                    const obj = (<any>matchingElement).beEnhanced.by[prop];
-                    if(w !== undefined){
-                        Object.assign(obj, w);
-                    }
+                    const beEnhanced = (<any>matchingElement).beEnhanced;
+                    // if(w !== undefined){
+                    //     Object.assign(obj, w);
+                    // }
+                    let obj: any;
                     if(waitForResolved){
-                        await (<any>matchingElement).beEnhanced.whenResolved(localName);
+                        obj = await (<any>matchingElement).beEnhanced.whenResolved(be);
                     }else{
-                        (<any>matchingElement).beEnhanced.whenAttached(localName);
+                        obj = (<any>matchingElement).beEnhanced.whenAttached(be);
                     }
+                    assignGingerly(obj, w);
                                     
                 }
                 
