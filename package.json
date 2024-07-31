@@ -104,7 +104,8 @@
     "froop/*.js",
     "froop/*.d.ts",
     "*.js",
-    "*.d.ts"
+    "*.d.ts",
+    "/ts-refs/*"
   ],
   "dependencies": {
     "mount-observer": "0.0.29"
