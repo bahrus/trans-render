@@ -1,5 +1,5 @@
 import {Transform} from '../Transform.js';
-import { UnitOfWork, ITransformer } from '../types.js';
+import { UnitOfWork, ITransformer } from '../ts-refs/trans-render/types.js'; 
 
 interface Props{
     greeting: string;

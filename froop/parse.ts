@@ -1,5 +1,4 @@
-import {IAttrChgCB} from './types';
-import {PropInfo} from './types';
+import {IAttrChgCB, PropInfo} from '../ts-refs/trans-render/froop/types.js';
 declare const Sanitizer: any;
 
 

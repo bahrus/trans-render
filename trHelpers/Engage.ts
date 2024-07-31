@@ -1,6 +1,6 @@
 import { IMountObserver, MountContext, PipelineStage } from 'mount-observer/types';
 import { MountOrchestrator, Transformer, arr } from '../Transform.js';
-import { onMountStatusChange, EngagementCtx, UnitOfWork, Engagement, EngagementOrEMC } from '../types.js';
+import { onMountStatusChange, EngagementCtx, UnitOfWork, Engagement, EngagementOrEMC } from '../ts-refs/trans-render/types.js'; 
 import { assignGingerly } from '../lib/assignGingerly.js';
 
 export async function Engage<TProps extends {}, TMethods = TProps, TElement = {}>(

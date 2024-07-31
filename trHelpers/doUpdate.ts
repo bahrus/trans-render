@@ -1,6 +1,6 @@
 import {MountOrchestrator, Transformer} from '../Transform.js';
 import { match } from '../lib/specialKeys.js';
-import { Derivative, UnitOfWork } from '../types.js';
+import { Derivative, UnitOfWork } from '../ts-refs/trans-render/types.js'; 
 export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = {}>(
     transformer: Transformer<TProps, TMethods, TElement>,
     matchingElement: Element, 

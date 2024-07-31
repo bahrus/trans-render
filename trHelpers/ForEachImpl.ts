@@ -1,5 +1,5 @@
 import { MountOrchestrator, Transformer } from '../Transform';
-import { ForEach, ForEachInterface, QuenitOfWork } from '../types';
+import { ForEach, ForEachInterface, QuenitOfWork } from '../ts-refs/trans-render/types.js'; 
 
 export const forEachImpls = new WeakMap<Element, ForEachInterface>();
 export class ForEachImpl implements ForEachInterface{

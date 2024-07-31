@@ -1,6 +1,6 @@
-import { UnitOfWork } from 'trans-render/types.js';
+import { UnitOfWork } from '../ts-refs/trans-render/types.js'; 
 import {Transformer} from '../Transform.js';
-import { DerivationCriteria } from '../types.js';
+import { DerivationCriteria } from '../ts-refs/trans-render/types.js'; 
 import { } from '../lib/convert.js';
 
 export async function getComplexDerivedVal<TProps extends {}, TMethods, TElement = {}>(

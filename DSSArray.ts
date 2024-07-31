@@ -1,5 +1,5 @@
-import { Specifier } from './dss/types.js';
-import { IObject$tring } from './types.js';
+import { Specifier } from '../ts-refs/trans-render/dss/types.js';  //'./dss/types.js';
+import { IObject$tring } from './ts-refs/trans-render/types.js'; 
 
 export class DSSArray implements IObject$tring{
     strVal: string | undefined;

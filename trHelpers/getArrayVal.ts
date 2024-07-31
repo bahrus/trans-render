@@ -1,4 +1,4 @@
-import { InterpolatingExpression, NumberExpression, UnitOfWork } from "trans-render/types";
+import { InterpolatingExpression, NumberExpression, UnitOfWork } from '../ts-refs/trans-render/types.js'; 
 import {Transformer} from '../Transform.js';
 
 export function getArrayVal<TProps extends {}, TMethods, TElement = {}>(transformer: Transformer<TProps, TMethods, TElement>, uow: UnitOfWork<TProps, TMethods, TElement>, u: NumberExpression | InterpolatingExpression){

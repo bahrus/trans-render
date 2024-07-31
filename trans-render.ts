@@ -1,5 +1,5 @@
 import {Scope} from './lib/types';
-import { TransRenderMethods, XForm } from './types';
+import { TransRenderMethods, XForm } from './ts-refs/trans-render/types.js'; 
 export class TransRender extends HTMLElement implements TransRenderMethods{
     async getTarget(){
         const attrVal = this.getAttribute('scope');

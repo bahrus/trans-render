@@ -1,8 +1,8 @@
-import { RHS } from '../../types.js';
-import { Action, PropInfo } from '../../froop/types.js';
-export { Action, PropInfo } from '../../froop/types.js';
+import { RHS } from '../../ts-refs/trans-render/types.js';
+import { Action, PropInfo } from '../../ts-refs/trans-render/froop/types.js';
+export { Action, PropInfo } from '../../ts-refs/trans-render/froop/types.js';
 
-export {XForm} from '../../types.js'
+export {XForm} from '../../ts-refs/trans-render/types.js';
 
 import { TemplMgmtBase, TemplMgmtProps } from './types.js';
 export { TemplMgmtProps, TemplMgmtActions } from './types.js';

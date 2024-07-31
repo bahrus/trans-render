@@ -1,6 +1,6 @@
 import { arr } from '../arr.js';
-import { RegExpExt, RegExpOrRegExpExt, StatementPartParser } from './types';
-export { RegExpOrRegExpExt } from './types';
+import { RegExpExt, RegExpOrRegExpExt, StatementPartParser } from '../../ts-refs/trans-render/lib/prs/types.js'; 
+export { RegExpOrRegExpExt } from '../../ts-refs/trans-render/lib/prs/types.js'; 
 import {reNormalize} from '../../Object$entences.js'
 
 export async function tryParse<TParsedObj = any>(

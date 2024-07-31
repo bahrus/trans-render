@@ -1,5 +1,5 @@
 import {O} from './O.js';
-import { PropInfo } from './types';
+import { PropInfo } from '../ts-refs/trans-render/froop/types.js';
 
 export class Reflector{
     #acs: AbortController[] = [];

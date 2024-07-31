@@ -1,6 +1,6 @@
 import {MntCfg, Mount, MountActions, MountProps} from '../Mount.js';
 import {localize} from '../funions/Localizer.js';
-import { ITransformer, UnitOfWork } from '../types.js';
+import { ITransformer, UnitOfWork } from '../ts-refs/trans-render/types.js';
 
 export interface DTRCounterProps {
     count: number;

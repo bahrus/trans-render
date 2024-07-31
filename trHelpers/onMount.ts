@@ -1,7 +1,7 @@
 import { MountObserver } from '../../mount-observer/MountObserver.js';
 import { IMountObserver, MountContext } from '../../mount-observer/types.js';
 import {Transformer, MountOrchestrator, arr} from '../Transform.js';
-import {QuenitOfWork, AddEventListener, ForEachInterface} from '../types.js';
+import {QuenitOfWork, AddEventListener, ForEachInterface} from '../ts-refs/trans-render/types.js'; 
 
 
 export async function onMount<TProps extends {}, TMethods = TProps, TElement = {}>(

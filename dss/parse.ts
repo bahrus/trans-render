@@ -1,4 +1,4 @@
-import { Sigils, Specifier } from './types';
+import { Sigils, Specifier } from "../ts-refs/trans-render/dss/types";
 
 export async function parse(s: string) : Promise<Specifier>{
 

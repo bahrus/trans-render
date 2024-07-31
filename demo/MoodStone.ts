@@ -1,5 +1,5 @@
 import {O} from '../froop/O.js';
-import { Infractions, OConfig, PropsToPartialProps } from '../froop/types.js';
+import { Infractions, OConfig, PropsToPartialProps } from '../ts-refs/trans-render/froop/types.js'; //'../froop/types.js';
 
 interface IMoodStoneProps{
     isHappy: boolean,

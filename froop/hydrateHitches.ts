@@ -1,6 +1,6 @@
 import {tryParse, RegExpOrRegExpExt} from '../lib/prs/tryParse.js';
 import { RoundAbout, whenSrcKeyChanges } from './roundabout.js';
-import { Compacts, RoundaboutReady, HitchStatement, Hitches } from './types.js';
+import { Compacts, RoundaboutReady, HitchStatement, Hitches } from '../ts-refs/trans-render/froop/types.js';
 
 const reHitches: Array<RegExpOrRegExpExt<HitchStatement>> = [
     {

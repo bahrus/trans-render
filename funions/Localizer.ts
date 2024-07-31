@@ -1,6 +1,6 @@
-import {UnitOfWork, ITransformer} from '../types';
-import {LocalizerMethods, LocalizerType} from './types';
-export {LocalizerProps, LocalizerMethods} from './types';
+import {UnitOfWork, ITransformer} from '../ts-refs/trans-render/types';
+import {LocalizerMethods, LocalizerType} from '../ts-refs/trans-render/funions/types';
+export {LocalizerProps, LocalizerMethods} from '../ts-refs/trans-render/funions/types';
 
 
 export const localize = (model: any, transformer: ITransformer<any, any>, uow: UnitOfWork<any, any>, matchingElement: Element) => {

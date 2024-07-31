@@ -1,7 +1,7 @@
-import {RoundaboutReady, BaseProps, PropInfo, PropInfoTypes, PropLookup, OConfig} from './types';
+import {RoundaboutReady, BaseProps, PropInfo, PropInfoTypes, PropLookup, OConfig} from '../ts-refs/trans-render/froop/types.js';
+export {OConfig} from '../ts-refs/trans-render/froop/types.js';
 import {assignGingerly} from '../lib/assignGingerly.js';
 import { RoundAbout } from './roundabout.js';
-export {OConfig} from './types';
 const publicPrivateStore = Symbol();
 
 export class O<TProps=any, TActions=TProps> extends HTMLElement implements RoundaboutReady{

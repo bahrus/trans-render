@@ -1,5 +1,5 @@
-import {TRElementActions, TRElementProps, } from './types.js';
-import {PropInfo} from '../froop/types.js'
+import {TRElementActions, TRElementProps, } from '../ts-refs/trans-render/lib/types.js'; 
+import {PropInfo} from '../ts-refs/trans-render/froop/types.js';
 export async function doAttrCC(
         self: TRElementActions & TRElementProps, 
         values: {[key: string]: any}, 

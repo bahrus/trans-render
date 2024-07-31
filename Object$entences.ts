@@ -1,5 +1,5 @@
 import {Object$tring} from './Object$tring.js';
-import { AttrMapConfig, AttrMapPoint} from './be/types.js';
+import { AttrMapConfig, AttrMapPoint} from '../ts-refs/trans-render/be/types.js';  
 
 
 export class Object$entences extends Object$tring{

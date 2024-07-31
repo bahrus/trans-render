@@ -1,5 +1,5 @@
 import {MountObserver} from 'mount-observer/MountObserver.js';
-import {ModificationUnitOfWork, ITransformer} from '../types';
+import {ModificationUnitOfWork, ITransformer} from '../ts-refs/trans-render/types.js'; 
 export class Mod<TProps, TMethods, TElement = {}>{
     #abortController = new AbortController();
     constructor(

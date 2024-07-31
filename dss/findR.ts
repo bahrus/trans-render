@@ -1,4 +1,4 @@
-import { Specifier } from "./types";
+import { Specifier } from "../ts-refs/trans-render/dss/types";
 
 async function getHostish(el: Element, prop?: string){
     const {localName, host} = el as any;

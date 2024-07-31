@@ -1,4 +1,4 @@
-import {AttrMap, QuenitOfWork, XForm} from '../types';
+import {AttrMap, QuenitOfWork, XForm} from '../ts-refs/trans-render/types.js'; 
 import {MountOrchestrator, Transform} from '../Transform.js';
 export async function doNestedTransforms(
     matchingElement: Element,

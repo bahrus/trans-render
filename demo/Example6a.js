@@ -25,7 +25,7 @@ Transform(div, model, {
             e: {
                 do: 'hydrateInputElement',
                 forget: 'cleanupInputElement',
-                be: 'committed',
+                //be: 'committed',
                 with: {
                     to: 'change'
                 }

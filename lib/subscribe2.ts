@@ -1,4 +1,4 @@
-import {MarkedUpEventTarget} from '../types';
+import {MarkedUpEventTarget} from '../ts-refs/trans-render/types.js';// '../types';
 export async function subscribe(target: any, props: string | string[], propagator: MarkedUpEventTarget, autoCreateProp = false){
     if(target instanceof Element){
         const {isDefined} = await import('./isDefined.js');

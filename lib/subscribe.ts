@@ -1,4 +1,4 @@
-import {IPropChg} from '../froop/types';
+import {IPropChg} from '../ts-refs/trans-render/froop/types.js';
 export type Callback = (element: EventTarget, propName: string, newValue: any) => void;
 
 const propSubscribers = new WeakMap<Element, {[key: string]: Callback[]}>();

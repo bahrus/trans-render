@@ -1,5 +1,5 @@
 import {Transform} from '../Transform.js';
-import { EngagementCtx } from '../types.js';
+import { EngagementCtx } from '../ts-refs/trans-render/types.js'; 
 
 interface Props{
     msg1: string;
@@ -39,7 +39,7 @@ Transform<Props, Methods>(div, model, {
             e: {
                 do: 'hydrateInputElement',
                 forget: 'cleanupInputElement',
-                be: 'committed',
+                //be: 'committed',
                 with: {
                     to: 'change'
                 }

@@ -1,4 +1,4 @@
-import { Specifier } from "./types";
+import { Specifier } from "../ts-refs/trans-render/dss/types";
 
 export async function find(element: Element, specifier: Specifier){
     const {self, s} = specifier;

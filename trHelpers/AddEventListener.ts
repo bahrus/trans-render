@@ -1,4 +1,4 @@
-import {UnitOfWork, EventListenerAction, ITransformer} from '../types';
+import {UnitOfWork, EventListenerAction, ITransformer} from '../ts-refs/trans-render/types.js'; 
 import {MountObserver} from 'mount-observer/MountObserver.js';
 export class AddEventListener<TProps, TMethods, TElement = {}>{
     #abortController = new AbortController();

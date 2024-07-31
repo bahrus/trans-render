@@ -1,5 +1,5 @@
 import { O } from "./O.js";
-import { PropLookup, RoundaboutReady } from "./types.js";
+import {PropLookup, RoundaboutReady} from '../ts-refs/trans-render/froop/types.js';
 
 export class CustStSvc{
     #acs: AbortController[] = [];
