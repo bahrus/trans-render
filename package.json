@@ -17,6 +17,7 @@
   },
   "exports": {
     ".": "./Transform.js",
+    "./EventRouter.js": "./EventRouter.js",
     "./Mount.js": "./Mount.js",
     "./Object$tring.js": "./Object$tring.js",
     "./Object$entences.js": "./Object$entences.js",
@@ -86,9 +87,17 @@
     "./xslt/clone.js": "./xslt/clone.js",
     "./xslt/Mgmt.js": "./xslt/Mgmt.js",
     "./xslt/swap.js": "./xslt/swap.js",
-    "./types": {
+    "./Mount": {
       "default": "./Mount.js",
-      "types": "./index.d.ts"
+      "types": "./ts-refs/types.d.ts"
+    },
+    "./O":{
+      "default": "./froop/O.js",
+      "types": "./ts-refs/froop/types.d.ts"
+    },
+    "./be": {
+      "default": "./trHelpers/Engage.js",
+      "types": "./ts-refs/be/types.d.ts"
     }
   },
   "files": [

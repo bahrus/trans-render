@@ -68,15 +68,23 @@ class CompactManager {
         const { options } = ra;
         const { vm } = options;
         const { propagator } = vm;
-        propagator?.addEventListener(srcKey, e => {
-            this.#doAction(false, false);
-        }, { signal: this.#ac.signal });
+        // propagator?.addEventListener(srcKey, e => {
+        //     this.#doAction(false, false);
+        // }, {signal: this.#ac.signal});
+        propagator?.addEventListener(srcKey, this, { signal: this.#ac.signal });
         this.#doAction(false, true);
-        propagator?.addEventListener('disconnectedCallback', e => {
-            this.#ac.abort();
-        });
+        propagator?.addEventListener('disconnectedCallback', this, { once: true });
     }
-    #doAction(afterDelay, initializing) {
+    handleEvent(e) {
+        switch (e.type) {
+            case 'disconnectedCallback':
+                this.#ac.abort();
+                break;
+            default:
+                this.#doAction(false, false);
+        }
+    }
+    #doAction(afterDelay = false, initializing = false) {
         const { op, rhsIsDynamic } = this.#cc;
         const vm = this.#ra.options.vm;
         const rhs = rhsIsDynamic ? vm[this.#rhs] : this.#rhs;
