@@ -9,6 +9,8 @@ export class EventRouter {
         this.arg = arg;
     }
     handleEvent(e) {
+        if (this.method === undefined)
+            return;
         this.method(this.self, e, this.arg);
     }
 }

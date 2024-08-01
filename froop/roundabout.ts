@@ -20,6 +20,15 @@ export async function roundabout<TProps = any, TActions = TProps>(
     return [ra.options.vm, ra];
 }
 
+export class DoKeyAndCheckQ extends EventRouter<RoundAbout>{
+    d: string | undefined;
+    vm: any;
+    async handleEvent(e: Event){
+        const keysToPropagate = new Set<string>();
+        await this.self.doKey(this.d!, this.vm, keysToPropagate, e);
+        await this.self.checkQ(keysToPropagate);
+    }
+}
 export class RoundAbout{
     #checks: Checks;
     #busses: Busses;
@@ -222,7 +231,7 @@ export class RoundAbout{
         const routers = this.#routers;
         for(const routerKey in routers){
             // 
-            this.#wireUpRouter(routerKey);
+            this.#wireUpRouter(this, {type: routerKey} as Event);
         }
     }
 
@@ -311,17 +320,15 @@ export class RoundAbout{
         for(const routerKey in routers){
             const ac = new AbortController();
             controllers.push(ac);
-            propagator.addEventListener(routerKey, e => {
-                //const evtTarget = vm[routerKey];
-                this.#wireUpRouter(routerKey);
-            }, {signal: ac.signal});
+            propagator.addEventListener(routerKey, new EventRouter(this, this.#wireUpRouter), {signal: ac.signal});
         }
     }
 
-    #wireUpRouter(routerKey: string){
-        const routers = this.#routers;
-        const handlerControllers = this.#handlerControllers;
-        const {options} = this;
+    #wireUpRouter(self: this, e: Event){
+        const routerKey = e.type;
+        const routers = self.#routers;
+        const handlerControllers = self.#handlerControllers;
+        const {options} = self;
         const {vm} = options;
         const router = routers[routerKey];
         for(const route of router){
@@ -335,11 +342,10 @@ export class RoundAbout{
             if(evtTarget instanceof EventTarget){
                 ac = new AbortController();
                 handlerControllers[full] = ac;
-                evtTarget.addEventListener(on, async e => {
-                    const keysToPropagate = new Set<string>();
-                    await this.doKey(d, vm, keysToPropagate, e);
-                    await this.checkQ(keysToPropagate);
-                },  {signal: ac.signal});
+                const dkacq = new DoKeyAndCheckQ(self);
+                dkacq.d = d;
+                dkacq.vm = vm;
+                evtTarget.addEventListener(on, dkacq, {signal: ac.signal});
             }
         }
     }
