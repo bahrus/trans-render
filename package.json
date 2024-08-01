@@ -85,7 +85,11 @@
     "./positractions/getNextValOfLoop.js": "./positractions/getNextValOfLoop.js",
     "./xslt/clone.js": "./xslt/clone.js",
     "./xslt/Mgmt.js": "./xslt/Mgmt.js",
-    "./xslt/swap.js": "./xslt/swap.js"
+    "./xslt/swap.js": "./xslt/swap.js",
+    "./types": {
+      "default": "./Mount.js",
+      "types": "./index.d.ts"
+    }
   },
   "files": [
     "be/*.js",

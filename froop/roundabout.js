@@ -1,3 +1,4 @@
+import { EventRouter } from '../EventRouter.js';
 export async function roundabout(options, infractions) {
     const { vm } = options;
     const { sleep } = vm;
@@ -281,15 +282,19 @@ export class RoundAbout {
     }
     #controllers = [];
     #extEvtCount = 0;
+    #handleRoundAboutEvent(self, e) {
+        if (e instanceof RoundAboutEvent)
+            return;
+        self.#extEvtCount++;
+        this.doCoreEvt(e.type, self.#extEvtCount);
+    }
     async subscribe() {
         const { options } = this;
         const { vm } = options;
         const { propagator } = vm;
         if (!(propagator instanceof EventTarget))
             return;
-        propagator.addEventListener('disconnectedCallback', e => {
-            this.#unsubscribe();
-        }, { once: true });
+        propagator.addEventListener('disconnectedCallback', new EventRouter(this, this.#unsubscribe), { once: true });
         const checks = this.#checks;
         let keys = new Set();
         for (const checkKey in checks) {
@@ -302,12 +307,7 @@ export class RoundAbout {
             const ac = new AbortController();
             controllers.push(ac);
             const signal = ac.signal;
-            propagator.addEventListener(key, e => {
-                if (e instanceof RoundAboutEvent)
-                    return;
-                this.#extEvtCount++;
-                this.doCoreEvt(key, this.#extEvtCount);
-            }, { signal });
+            propagator.addEventListener(key, new EventRouter(this, this.#handleRoundAboutEvent), { signal });
         }
         const routers = this.#routers;
         for (const routerKey in routers) {
@@ -345,11 +345,11 @@ export class RoundAbout {
             }
         }
     }
-    async #unsubscribe() {
-        for (const ac of this.#controllers) {
+    async #unsubscribe(instance) {
+        for (const ac of instance.#controllers) {
             ac.abort();
         }
-        const handlerControllers = this.#handlerControllers;
+        const handlerControllers = instance.#handlerControllers;
         for (const handlerKey in handlerControllers) {
             const controller = handlerControllers[handlerKey];
             controller.abort();
