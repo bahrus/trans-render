@@ -92,7 +92,6 @@
       "types": "./ts-refs/types.d.ts"
     },
     "./O": {
-      "default": "./froop/O.js",
       "types": "./ts-refs/froop/types.d.ts"
     },
     "./be": {
