@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.808",
+  "version": "0.0.809",
   "description": "Instantiate an HTML Template",
   "type": "module",
   "main": "trans-render.js",
@@ -91,7 +91,7 @@
       "default": "./Mount.js",
       "types": "./ts-refs/types.d.ts"
     },
-    "./O":{
+    "./O": {
       "default": "./froop/O.js",
       "types": "./ts-refs/froop/types.d.ts"
     },
