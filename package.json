@@ -92,12 +92,12 @@
       "types": "./ts-refs/types.d.ts"
     },
     "./O": {
-      "default": "./ts-refs/froop/types.d.ts",
-      "types": "./ts-refs/froop/types.d.ts"
+      "default": "./froop/O.js",
+      "types": "./ts-refs/trans-render/froop/types.d.ts"
     },
     "./be": {
       "default": "./trHelpers/Engage.js",
-      "types": "./ts-refs/be/types.d.ts"
+      "types": "./ts-refs/trans-render/be/types.d.ts"
     }
   },
   "files": [
