@@ -87,7 +87,11 @@
     "./xslt/clone.js": "./xslt/clone.js",
     "./xslt/Mgmt.js": "./xslt/Mgmt.js",
     "./xslt/swap.js": "./xslt/swap.js",
-    "./Mount": {
+    "./be.d.ts": {
+      "default": "./Mount.js",
+      "types": "./be.d.ts"
+    },
+    "./lib.d.ts": {
       "default": "./Mount.js",
       "types": "./ts-refs/types.d.ts"
     },
@@ -95,9 +99,9 @@
       "default": "./Mount.js",
       "types": "./O.d.ts"
     },
-    "./be": {
-      "default": "./trHelpers/Engage.js",
-      "types": "./ts-refs/trans-render/be/types.d.ts"
+    "./prs.d.ts": {
+      "default": "./Mount.js",
+      "types": "./prs.d.ts"
     }
   },
   "files": [
@@ -123,10 +127,10 @@
     "/ts-refs/*"
   ],
   "dependencies": {
-    "mount-observer": "0.0.29"
+    "mount-observer": "0.0.30"
   },
   "devDependencies": {
-    "@playwright/test": "1.45.2",
+    "@playwright/test": "1.45.3",
     "may-it-serve": "0.0.8",
     "xtal-shell": "0.0.27"
   },
