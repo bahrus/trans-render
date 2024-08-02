@@ -68,9 +68,6 @@ class CompactManager {
         const { options } = ra;
         const { vm } = options;
         const { propagator } = vm;
-        // propagator?.addEventListener(srcKey, e => {
-        //     this.#doAction(false, false);
-        // }, {signal: this.#ac.signal});
         propagator?.addEventListener(srcKey, this, { signal: this.#ac.signal });
         this.#doAction(false, true);
         propagator?.addEventListener('disconnectedCallback', this, { once: true });
