@@ -92,8 +92,8 @@
       "types": "./ts-refs/types.d.ts"
     },
     "./O": {
-      "default": "./froop/O.js",
-      "types": "./froop/index.d.ts"
+      "default": "./Mount.js",
+      "types": "./O.d.ts"
     },
     "./be": {
       "default": "./trHelpers/Engage.js",
