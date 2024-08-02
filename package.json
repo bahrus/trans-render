@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.812",
+  "version": "0.0.813",
   "description": "Instantiate an HTML Template",
   "type": "module",
   "main": "trans-render.js",
@@ -98,7 +98,6 @@
     "./be": {
       "default": "./trHelpers/Engage.js",
       "types": "./ts-refs/trans-render/be/types.d.ts"
-
     }
   },
   "files": [
