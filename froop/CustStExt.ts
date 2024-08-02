@@ -1,5 +1,5 @@
 import { O } from "./O.js";
-import {} from '../EventRouter.js';
+import {} from '../EventHandler.js';
 
 
 export class CustStExt {

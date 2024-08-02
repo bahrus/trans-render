@@ -1,5 +1,5 @@
 import { tryParse } from '../lib/prs/tryParse.js';
-import { EventHandler } from '../EventRouter.js';
+import { EventHandler } from '../EventHandler.js';
 const reHitches = [
     {
         regExp: new RegExp(String.raw `^(?<lOp>when)_(?<leftKey>[\w]+)_(?<lmOp>emits)_(?<middleKey>[\w]+)_(?<mrOp>inc)_(?<rightKey>[\w]+)_(?<rOp>by)`),

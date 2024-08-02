@@ -17,7 +17,7 @@
   },
   "exports": {
     ".": "./Transform.js",
-    "./EventRouter.js": "./EventRouter.js",
+    "./EventHandler.js": "./EventHandler.js",
     "./Mount.js": "./Mount.js",
     "./Object$tring.js": "./Object$tring.js",
     "./Object$entences.js": "./Object$entences.js",

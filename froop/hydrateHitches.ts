@@ -1,7 +1,7 @@
 import {tryParse, RegExpOrRegExpExt} from '../lib/prs/tryParse.js';
 import { RoundAbout, whenSrcKeyChanges } from './roundabout.js';
 import { Compacts, RoundaboutReady, HitchStatement, Hitches } from '../ts-refs/trans-render/froop/types.js';
-import {EventHandler} from '../EventRouter.js';
+import {EventHandler} from '../EventHandler.js';
 const reHitches: Array<RegExpOrRegExpExt<HitchStatement>> = [
     {
         regExp: new RegExp(String.raw `^(?<lOp>when)_(?<leftKey>[\w]+)_(?<lmOp>emits)_(?<middleKey>[\w]+)_(?<mrOp>inc)_(?<rightKey>[\w]+)_(?<rOp>by)`),

@@ -1,4 +1,4 @@
-import { EventHandler } from '../EventRouter.js';
+import { EventHandler } from '../EventHandler.js';
 export async function roundabout(options, infractions) {
     const { vm } = options;
     const { sleep } = vm;
