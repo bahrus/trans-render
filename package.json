@@ -93,11 +93,12 @@
     },
     "./O": {
       "default": "./froop/O.js",
-      "types": "./ts-refs/trans-render/froop/types.d.ts"
+      "types": "./froop/index.d.ts"
     },
     "./be": {
       "default": "./trHelpers/Engage.js",
-      "types": "./ts-refs/trans-render/be/types.d.ts"
+      "types": "./ts-refs/trans-render/be/types.d.ts",
+
     }
   },
   "files": [
