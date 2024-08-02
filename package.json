@@ -97,7 +97,7 @@
     },
     "./be": {
       "default": "./trHelpers/Engage.js",
-      "types": "./ts-refs/trans-render/be/types.d.ts",
+      "types": "./ts-refs/trans-render/be/types.d.ts"
 
     }
   },
