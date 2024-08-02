@@ -91,7 +91,7 @@
       "default": "./Mount.js",
       "types": "./ts-refs/types.d.ts"
     },
-    "./O": {
+    "./O.d.ts": {
       "default": "./Mount.js",
       "types": "./O.d.ts"
     },
