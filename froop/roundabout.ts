@@ -293,7 +293,7 @@ export class RoundAbout{
     #handleRoundAboutEvent(self: this, e: Event){
         if(e instanceof RoundAboutEvent) return;
         self.#extEvtCount++;
-        this.doCoreEvt(e.type, self.#extEvtCount);
+        self.doCoreEvt(e.type, self.#extEvtCount);
     }
     async subscribe(){
         const {options} = this;
