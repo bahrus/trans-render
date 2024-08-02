@@ -1,5 +1,5 @@
 import {roundaboutOptions, RoundaboutReady, Busses, SetLogicOps, Checks, Keysh, ICompact, Infractions, PropsToPartialProps, Routers, LogicOp} from '../ts-refs/trans-render/froop/types.js';
-import {EventRouter} from '../EventRouter.js';
+import {EventHandler} from '../EventRouter.js';
 export async function roundabout<TProps = any, TActions = TProps>(
     options: roundaboutOptions<TProps, TActions>,
     infractions?: Infractions<TProps>
@@ -20,7 +20,7 @@ export async function roundabout<TProps = any, TActions = TProps>(
     return [ra.options.vm, ra];
 }
 
-export class DoKeyAndCheckQ extends EventRouter<RoundAbout>{
+export class DoKeyAndCheckQ extends EventHandler<RoundAbout>{
     d: string | undefined;
     vm: any;
     async handleEvent(e: Event){
@@ -300,7 +300,7 @@ export class RoundAbout{
         const {vm} = options;
         const {propagator} = vm;
         if(!(propagator instanceof EventTarget)) return;
-        propagator.addEventListener('disconnectedCallback', new EventRouter(this, this.#unsubscribe), {once: true});
+        propagator.addEventListener('disconnectedCallback', new EventHandler(this, this.#unsubscribe), {once: true});
         const checks = this.#checks;
         let keys = new Set<string>()
         for(const checkKey in checks){
@@ -313,14 +313,14 @@ export class RoundAbout{
             const ac = new AbortController();
             controllers.push(ac);
             const signal = ac.signal;
-            propagator.addEventListener(key, new EventRouter(this, this.#handleRoundAboutEvent) ,{signal});
+            propagator.addEventListener(key, new EventHandler(this, this.#handleRoundAboutEvent) ,{signal});
         }
         const routers = this.#routers;
         
         for(const routerKey in routers){
             const ac = new AbortController();
             controllers.push(ac);
-            propagator.addEventListener(routerKey, new EventRouter(this, this.#wireUpRouter), {signal: ac.signal});
+            propagator.addEventListener(routerKey, new EventHandler(this, this.#wireUpRouter), {signal: ac.signal});
         }
     }
 

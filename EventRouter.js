@@ -1,5 +1,5 @@
 //until the platform fixes this issue (sigh):  https://jakearchibald.com/2024/garbage-collection-and-closures/
-export class EventRouter {
+export class EventHandler {
     self;
     method;
     arg;

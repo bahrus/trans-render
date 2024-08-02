@@ -1,5 +1,5 @@
 import { tryParse } from '../lib/prs/tryParse.js';
-import { EventRouter } from '../EventRouter.js';
+import { EventHandler } from '../EventRouter.js';
 const reHitches = [
     {
         regExp: new RegExp(String.raw `^(?<lOp>when)_(?<leftKey>[\w]+)_(?<lmOp>emits)_(?<middleKey>[\w]+)_(?<mrOp>inc)_(?<rightKey>[\w]+)_(?<rOp>by)`),
@@ -30,11 +30,11 @@ class HitchManager {
         const { propagator } = vm;
         const { middleKey, leftKey } = hs;
         this.#mkAC = new AbortController();
-        propagator.addEventListener(middleKey, new EventRouter(this, this.#hydrate), { signal: this.#mkAC.signal });
+        propagator.addEventListener(middleKey, new EventHandler(this, this.#hydrate), { signal: this.#mkAC.signal });
         this.#lkAC = new AbortController();
-        propagator.addEventListener(leftKey, new EventRouter(this, this.#hydrate), { signal: this.#lkAC.signal });
-        propagator.addEventListener('disconnectedCallback', new EventRouter(this, this.#disconnect), { once: true });
-        propagator.addEventListener('disconnectedCallback', new EventRouter(this, this.#disconnectLKAndMK), { once: true });
+        propagator.addEventListener(leftKey, new EventHandler(this, this.#hydrate), { signal: this.#lkAC.signal });
+        propagator.addEventListener('disconnectedCallback', new EventHandler(this, this.#disconnect), { once: true });
+        propagator.addEventListener('disconnectedCallback', new EventHandler(this, this.#disconnectLKAndMK), { once: true });
         this.#hydrate(this);
     }
     #disconnectLKAndMK(self) {

@@ -1,4 +1,7 @@
 import { O } from "./O.js";
+import {} from '../EventRouter.js';
+
+
 export class CustStExt {
     #acs: AbortController[] = [];
     constructor(instance: O, internals: ElementInternals, 

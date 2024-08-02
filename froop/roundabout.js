@@ -1,4 +1,4 @@
-import { EventRouter } from '../EventRouter.js';
+import { EventHandler } from '../EventRouter.js';
 export async function roundabout(options, infractions) {
     const { vm } = options;
     const { sleep } = vm;
@@ -13,7 +13,7 @@ export async function roundabout(options, infractions) {
     await ra.checkQ(keysToPropagate);
     return [ra.options.vm, ra];
 }
-export class DoKeyAndCheckQ extends EventRouter {
+export class DoKeyAndCheckQ extends EventHandler {
     d;
     vm;
     async handleEvent(e) {
@@ -303,7 +303,7 @@ export class RoundAbout {
         const { propagator } = vm;
         if (!(propagator instanceof EventTarget))
             return;
-        propagator.addEventListener('disconnectedCallback', new EventRouter(this, this.#unsubscribe), { once: true });
+        propagator.addEventListener('disconnectedCallback', new EventHandler(this, this.#unsubscribe), { once: true });
         const checks = this.#checks;
         let keys = new Set();
         for (const checkKey in checks) {
@@ -316,13 +316,13 @@ export class RoundAbout {
             const ac = new AbortController();
             controllers.push(ac);
             const signal = ac.signal;
-            propagator.addEventListener(key, new EventRouter(this, this.#handleRoundAboutEvent), { signal });
+            propagator.addEventListener(key, new EventHandler(this, this.#handleRoundAboutEvent), { signal });
         }
         const routers = this.#routers;
         for (const routerKey in routers) {
             const ac = new AbortController();
             controllers.push(ac);
-            propagator.addEventListener(routerKey, new EventRouter(this, this.#wireUpRouter), { signal: ac.signal });
+            propagator.addEventListener(routerKey, new EventHandler(this, this.#wireUpRouter), { signal: ac.signal });
         }
     }
     #wireUpRouter(self, e) {

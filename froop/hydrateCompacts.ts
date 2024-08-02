@@ -1,7 +1,7 @@
 import {tryParse, RegExpOrRegExpExt} from '../lib/prs/tryParse.js';
 import { RoundAbout, whenSrcKeyChanges } from './roundabout.js';
 import { Compacts, RoundaboutReady, CompactStatement } from '../ts-refs/trans-render/froop/types.js';
-import {EventRouter} from '../EventRouter.js';
+
 const srcToDest = String.raw `(?<srcKey>[\w]+)_to_(?<destKey>[\w]+)`;
 
 
