@@ -19,6 +19,8 @@ export async function hydrateHitches(hitches: Hitches, ra: RoundAbout){
 
 class HitchManager{
     #ac: AbortController | undefined;
+    #mkAC: AbortController | undefined;
+    #lkAC: AbortController | undefined;
     #hs: HitchStatement;
     #rhs: number;
     #ra: RoundAbout;
@@ -30,14 +32,21 @@ class HitchManager{
         const {vm} = options!;
         const {propagator} = vm!;
         const {middleKey, leftKey} = hs;
-        propagator.addEventListener(middleKey, new EventRouter(this, this.#hydrate));
-        propagator.addEventListener(leftKey, new EventRouter(this, this.#hydrate));
+        this.#mkAC = new AbortController();
+        propagator.addEventListener(middleKey, new EventRouter(this, this.#hydrate), {signal: this.#mkAC.signal});
+        this.#lkAC = new AbortController();
+        propagator.addEventListener(leftKey, new EventRouter(this, this.#hydrate), {signal: this.#lkAC.signal});
         propagator.addEventListener('disconnectedCallback', new EventRouter(this, this.#disconnect), {once: true});
+        propagator.addEventListener('disconnectedCallback', new EventRouter(this, this.#disconnectLKAndMK), {once: true});
         this.#hydrate(this);
     }
+    #disconnectLKAndMK(self: this){
+        if(self.#lkAC !== undefined) self.#lkAC.abort();
+        if(self.#mkAC !== undefined) self.#mkAC.abort();
+    }
     #disconnect(self: this){
-        if(this.#ac !== undefined) this.#ac.abort();
-        this.#ac = new AbortController();
+        if(self.#ac !== undefined) self.#ac.abort();
+        self.#ac = new AbortController();
     }
     #hydrate(self: this){
         const {options} = self.#ra;
