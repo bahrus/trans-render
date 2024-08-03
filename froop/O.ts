@@ -41,6 +41,8 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                 return;
             }
             const ac = new AbortController();
+            //I'm thinking this one isn't worth wrapping in an EventHandler, as the "closure"
+            //isn't accessing anything other than the resolve and abort controller, doesn't seem worth it.
             this.propagator.addEventListener('sleep', e => {
                 if(!this.sleep){
                     ac.abort();
