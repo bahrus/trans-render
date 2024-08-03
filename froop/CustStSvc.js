@@ -33,11 +33,7 @@ export class CustStSvc {
             const reflector = new Reflect(this);
             Object.assign(reflector, { instance, internals, propName });
             reflector.sub(propagator, propName, { signal: ac.signal });
-            // propagator.addEventListener(propName, e => {
-            //     this.#reflect(instance, internals, propName)
-            // }, {signal: ac.signal});
             reflector.handleEvent();
-            //this.#reflect(instance, internals, propName);
         }
         propagator.addEventListener('disconnectedCallback', e => {
             this.#disconnect();
