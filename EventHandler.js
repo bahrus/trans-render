@@ -8,12 +8,15 @@ export class EventHandler {
         this.method = method;
         this.arg = arg;
     }
+    static new(self, method, arg) {
+        return new EventHandler(self, method, arg);
+    }
     handleEvent(e) {
         if (this.method === undefined)
             return;
         this.method(this.self, e, this.arg);
     }
-    addEventListener(et, type, options) {
+    sub(et, type, options) {
         et.addEventListener(type, this, options);
     }
 }
