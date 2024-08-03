@@ -1,15 +1,14 @@
 import { O } from "./O.js";
-import { EventHandler } from '../EventHandler.js';
 
-class Reflect extends EventHandler<CustStSvc>{
-    instance: O | undefined;
-    internals: ElementInternals | undefined; 
-    propName: string | undefined;
-    override handleEvent(): void {
-        const instance = this.instance!;
-        const propName = this.propName!;
-        const internals = this.internals!;
-        const val = (<any>instance)[propName!];
+class Reflect implements EventListenerObject{
+    constructor(
+        public instance: O,
+        public internals: ElementInternals,
+        public propName: string,
+    ){}
+    handleEvent(): void {
+        const {instance, internals, propName} = this;
+        const val = (<any>instance)[propName];
         const method = val ? 'add' : 'delete';
         (<any>internals).states[method](propName);
     }
@@ -32,12 +31,12 @@ export class CustStSvc{
         for(const propName of simpleOnes.map(x => x[0])){
             const ac: AbortController = new AbortController();
             this.#acs.push(ac);
-            const reflector = new Reflect(this);
-            Object.assign(reflector, {instance, internals, propName});
-            reflector.sub(propagator, propName, {signal: ac.signal});
-            reflector.handleEvent();
+            const reflector = new Reflect(instance, internals, propName);
+            propagator.addEventListener(propName, reflector, {signal: ac.signal});
         }
-        EventHandler.new(this, this.#disconnect).sub(propagator, 'disconnectedCallback', {once: true})
+        propagator.addEventListener('disconnectedCallback', e => {
+            this.#disconnect();
+        }, {once: true});
         const complexOnes = splitSplit.filter(x => x.length > 1);
         if(complexOnes.length > 0){
             const {CustStExt} = await import('./CustStExt.js');

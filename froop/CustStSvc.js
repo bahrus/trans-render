@@ -1,12 +1,14 @@
-import { EventHandler } from '../EventHandler.js';
-class Reflect extends EventHandler {
+class Reflect {
     instance;
     internals;
     propName;
+    constructor(instance, internals, propName) {
+        this.instance = instance;
+        this.internals = internals;
+        this.propName = propName;
+    }
     handleEvent() {
-        const instance = this.instance;
-        const propName = this.propName;
-        const internals = this.internals;
+        const { instance, internals, propName } = this;
         const val = instance[propName];
         const method = val ? 'add' : 'delete';
         internals.states[method](propName);
@@ -30,12 +32,12 @@ export class CustStSvc {
         for (const propName of simpleOnes.map(x => x[0])) {
             const ac = new AbortController();
             this.#acs.push(ac);
-            const reflector = new Reflect(this);
-            Object.assign(reflector, { instance, internals, propName });
-            reflector.sub(propagator, propName, { signal: ac.signal });
-            reflector.handleEvent();
+            const reflector = new Reflect(instance, internals, propName);
+            propagator.addEventListener(propName, reflector, { signal: ac.signal });
         }
-        EventHandler.new(this, this.#disconnect).sub(propagator, 'disconnectedCallback', { once: true });
+        propagator.addEventListener('disconnectedCallback', e => {
+            this.#disconnect();
+        }, { once: true });
         const complexOnes = splitSplit.filter(x => x.length > 1);
         if (complexOnes.length > 0) {
             const { CustStExt } = await import('./CustStExt.js');
