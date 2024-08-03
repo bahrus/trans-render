@@ -1,25 +1,29 @@
 import { Specifier } from "../ts-refs/trans-render/dss/types";
 
 async function getHostish(el: Element, prop?: string){
-    const {localName, host} = el as any;
-    if(host) return host;
+    let {localName, ish} = el as any;
     if(localName.includes('-')){
         await customElements.whenDefined(localName);
-        if(prop){
-            if(prop in el) return el;
-        }
+        // if(prop){
+        //     if(prop in el) {
+        //         return el;
+        //     }else{
+        //         throw 404;
+        //     }
+        // }
     }
+    if(ish instanceof HTMLElement) return ish;
     const itemScopeAttr = el.getAttribute('itemscope');
     if(itemScopeAttr){
-        let host = (<any>el).host as HTMLElement | undefined;
-        if(host) return getHostish(host, prop);
+        //let ish = (<any>el).ish as HTMLElement | undefined;
+        //if(host) return getHostish(host, prop);
         const {AttachedHost, waitForEvent} = await import('./AttachedHost.js');
         const ah = new AttachedHost(el);
         if(!ah.isResolved){
             await waitForEvent(ah, 'resolved');
         }
-        host = (<any>el).host as HTMLElement | undefined;
-        if(host) return getHostish(host, prop);
+        ish = (<any>el).ish as HTMLElement | undefined;
+        return ish;
         
     }
 }

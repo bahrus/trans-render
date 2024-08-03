@@ -3,54 +3,49 @@ export class AttachedHost extends EventTarget{
     queue: Array<any> = [];
     isResolved = false;
     #ce: WeakRef<HTMLElement> | undefined;
-    constructor(enhancedElement: Element){
+    constructor(enhancedElement: Element, itemscope: string){
         super();
-        this.#do(enhancedElement);
+        this.#do(enhancedElement, itemscope);
     }
 
-    async #do(enhancedElement: Element){
-        if(Object.hasOwn(enhancedElement, 'host')) return;
-        const itemCE = enhancedElement.getAttribute('itemscope')!;
-        const initPropVals = (<any>enhancedElement)['host'];
-        if(enhancedElement instanceof HTMLElement){
-            if(enhancedElement.dataset.hostInitProps){
-                const parsedHostProps = JSON.parse(enhancedElement.dataset.hostInitProps);
-                this.queue.push(parsedHostProps);
+    async #do(enhancedElement: Element, itemscope: string){
+        //if(Object.hasOwn(enhancedElement, 'host')) return;
+        await customElements.whenDefined(itemscope);
+        const initPropVals = (<any>enhancedElement)['ish'];
+        //check to make sure it didn't already get attached while waiting
+        if(customElements.getName(initPropVals) !== itemscope){
+            if(enhancedElement instanceof HTMLElement){
+                if(enhancedElement.dataset.hostInitProps){
+                    const parsedHostProps = JSON.parse(enhancedElement.dataset.hostInitProps);
+                    this.queue.push(parsedHostProps);
+                }
             }
-        }
-        if(initPropVals !== undefined) this.queue.push(initPropVals);
-        let ref: WeakRef<Element> | undefined;
-        const ce = await this.#doSearch(enhancedElement, itemCE);
-        ref = new WeakRef(enhancedElement);
-        if(ce !== null){
-            if(Object.hasOwn(ce, 'ownerElement') && (<any>ce).ownerElement === undefined){
-                (<any>ce).ownerElement = ref;
-            }
+            if(initPropVals !== undefined) this.queue.push(initPropVals);
+            const ce = document.createElement(itemscope);
             this.#ce = new WeakRef(ce);
+            const self = this;
+            Object.defineProperty(enhancedElement, 'ish', {
+                get(){
+                    return self.#ce?.deref();
+                },
+                set(nv: any){
+                    self.queue.push(nv);
+                    self.#assignGingerly();
+                },
+                enumerable: true,
+                configurable: true,
+            });
         }
-        const self = this;
-        Object.defineProperty(enhancedElement, 'host', {
-            get(){
-                return self.#ce?.deref();
-            },
-            set(nv: any){
-                self.queue.push(nv);
-                self.#assignGingerly(this, itemCE);
-            },
-            enumerable: true,
-            configurable: true,
-        });
+
         this.isResolved = true;
         this.dispatchEvent(new Event('resolved'));
     }
 
-    async #assignGingerly(enhancedElement: Element, itemCE: string){
-        let ce = this.#ce?.deref() as HTMLElement | undefined | null;
+    async #assignGingerly(){
+        let ce = this.#ce?.deref();
         if(ce === undefined){
-            ce = await this.#doSearch(enhancedElement, itemCE);
-            if(ce) this.#ce = new WeakRef(ce);
+            throw 500;
         }
-        if(!ce) return;
         const {assignGingerly} = await import('../lib/assignGingerly.js');
         while(this.queue.length > 0 ){
             const fi = this.queue.shift();
@@ -58,11 +53,4 @@ export class AttachedHost extends EventTarget{
         }
     }
 
-    async #doSearch(enhancedElement: Element, itemCE: string){
-        if(enhancedElement instanceof HTMLTemplateElement){
-            const {PseudoCE} = await import('./PseudoCE.js');
-            return await PseudoCE(enhancedElement, itemCE);
-        }
-        return enhancedElement.querySelector(itemCE) as HTMLElement | null;
-    }
 }
