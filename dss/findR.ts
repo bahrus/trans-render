@@ -18,7 +18,7 @@ async function getHostish(el: Element, prop?: string){
         //let ish = (<any>el).ish as HTMLElement | undefined;
         //if(host) return getHostish(host, prop);
         const {AttachedHost, waitForEvent} = await import('./AttachedHost.js');
-        const ah = new AttachedHost(el);
+        const ah = new AttachedHost(el, itemScopeAttr);
         if(!ah.isResolved){
             await waitForEvent(ah, 'resolved');
         }
