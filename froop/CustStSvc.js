@@ -35,9 +35,7 @@ export class CustStSvc {
             reflector.sub(propagator, propName, { signal: ac.signal });
             reflector.handleEvent();
         }
-        propagator.addEventListener('disconnectedCallback', e => {
-            this.#disconnect();
-        });
+        EventHandler.new(this, this.#disconnect).sub(propagator, 'disconnectedCallback', { once: true });
         const complexOnes = splitSplit.filter(x => x.length > 1);
         if (complexOnes.length > 0) {
             const { CustStExt } = await import('./CustStExt.js');
