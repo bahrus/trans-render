@@ -1,16 +1,18 @@
-import { EventHandler } from '../EventHandler.js';
-class SCHandler extends EventHandler {
+class SCHandler {
     instance;
     internals;
     parsedExpr;
     propName;
     customStateKey;
+    constructor(instance, internals, parsedExpr, propName, customStateKey) {
+        this.instance = instance;
+        this.internals = internals;
+        this.parsedExpr = parsedExpr;
+        this.propName = propName;
+        this.customStateKey = customStateKey;
+    }
     handleEvent() {
-        const internals = this.internals;
-        const customStateKey = this.customStateKey;
-        const instance = this.instance;
-        const parsedExpr = this.parsedExpr;
-        const propName = this.propName;
+        const { internals, customStateKey, instance, parsedExpr, propName } = this;
         const val = instance[propName];
         if (val === null || val === undefined) {
             internals.states.delete(customStateKey);
@@ -106,9 +108,8 @@ export class CustStExt {
                 const propName = lhs;
                 const ac = new AbortController();
                 this.#acs.push(ac);
-                const sc = new SCHandler(this);
-                Object.assign(sc, { instance, internals, parsedExpr, propName, customStateKey });
-                sc.sub(propagator, propName, { signal: ac.signal });
+                const sc = new SCHandler(instance, internals, parsedExpr, propName, customStateKey);
+                propagator.addEventListener(propName, sc, { signal: ac.signal });
                 sc.handleEvent();
                 continue;
             }
