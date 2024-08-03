@@ -127,9 +127,7 @@ export class CustStExt {
                 Object.assign(mh, {instance, internals, parsedExpr, propName, customStateKey, modulo});
                 mh.sub(propagator, propName, {signal: ac.signal});
             }
-            propagator.addEventListener('disconnectedCallback', e => {
-                this.#disconnect();
-            }, {once: true});
+            EventHandler.new(this, this.#disconnect).sub(propagator, 'disconnectedCallback', {once: true});
         }
     }
 
