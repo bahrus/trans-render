@@ -8,6 +8,7 @@ import {
     IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget, TransformOptions, LHS, WhereConditions, Info, ModificationUnitOfWork, YieldSettings
 } from './ts-refs/trans-render/types.js'; 
 import { IMountObserver, MountContext, PipelineStage } from 'mount-observer/types';
+import { EventHandler } from './EventHandler.js';
 export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './ts-refs/trans-render/types.js'; 
 
 export async function Transform<TProps extends {}, TMethods = TProps, TElement = {}>(
@@ -372,6 +373,8 @@ export function arr<T = any>(inp: T | T[] | undefined) : T[] {
         : Array.isArray(inp) ? inp : [inp];
 }
 
+
+
 export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = {}> extends EventTarget implements IMountOrchestrator<TProps, TMethods> {
     #mountObserver: MountObserver | undefined;
     #matchingElements: WeakRef<Element>[] = [];
@@ -448,6 +451,8 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
                     }
 
                 }
+                //I'm thinking this event handler doesn't access any memory, hence 
+                //risk of memory leaks seems really low.
                 propagator!.addEventListener(propName, e => {
                     const all = this.#cleanUp();
                     for(const matchingElement of all){

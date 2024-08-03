@@ -408,6 +408,8 @@ export class MountOrchestrator extends EventTarget {
                         }
                     }
                 }
+                //I'm thinking this event handler doesn't access any memory, hence 
+                //risk of memory leaks seems really low.
                 propagator.addEventListener(propName, e => {
                     const all = this.#cleanUp();
                     for (const matchingElement of all) {
