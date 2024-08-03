@@ -13,13 +13,20 @@ export async function roundabout(options, infractions) {
     await ra.checkQ(keysToPropagate);
     return [ra.options.vm, ra];
 }
-export class DoKeyAndCheckQ extends EventHandler {
+export class DoKeyAndCheckQ {
     d;
     vm;
+    ra;
+    constructor(d, vm, ra) {
+        this.d = d;
+        this.vm = vm;
+        this.ra = ra;
+    }
     async handleEvent(e) {
+        const { d, vm, ra } = this;
         const keysToPropagate = new Set();
-        await this.self.doKey(this.d, this.vm, keysToPropagate, e);
-        await this.self.checkQ(keysToPropagate);
+        await ra.doKey(this.d, this.vm, keysToPropagate, e);
+        await ra.checkQ(keysToPropagate);
     }
 }
 export class RoundAbout {
@@ -303,7 +310,10 @@ export class RoundAbout {
         const { propagator } = vm;
         if (!(propagator instanceof EventTarget))
             return;
-        EventHandler.new(this, this.#unsubscribe).sub(propagator, 'disconnectedCallback', { once: true });
+        propagator.addEventListener('disconnectedCallback', () => {
+            //do inline as long as no external variable access other than this, I think
+            this.#unsubscribe();
+        }, { once: true });
         const checks = this.#checks;
         let keys = new Set();
         for (const checkKey in checks) {
@@ -344,18 +354,18 @@ export class RoundAbout {
             if (evtTarget instanceof EventTarget) {
                 ac = new AbortController();
                 handlerControllers[full] = ac;
-                const dkacq = new DoKeyAndCheckQ(self);
+                const dkacq = new DoKeyAndCheckQ(d, vm, self);
                 dkacq.d = d;
                 dkacq.vm = vm;
                 evtTarget.addEventListener(on, dkacq, { signal: ac.signal });
             }
         }
     }
-    async #unsubscribe(instance) {
-        for (const ac of instance.#controllers) {
+    async #unsubscribe() {
+        for (const ac of this.#controllers) {
             ac.abort();
         }
-        const handlerControllers = instance.#handlerControllers;
+        const handlerControllers = this.#handlerControllers;
         for (const handlerKey in handlerControllers) {
             const controller = handlerControllers[handlerKey];
             controller.abort();

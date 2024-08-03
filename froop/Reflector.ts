@@ -1,6 +1,5 @@
 import {O} from './O.js';
 import { PropInfo } from '../ts-refs/trans-render/froop/types.js';
-// import { EventHandler } from '../EventHandler.js';
 
 class AttrReflector implements EventListenerObject {
     constructor(

@@ -1,4 +1,3 @@
-// import { EventHandler } from '../EventHandler.js';
 class AttrReflector {
     instance;
     attr;

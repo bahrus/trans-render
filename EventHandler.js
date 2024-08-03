@@ -1,4 +1,5 @@
 //until the platform fixes this issue (sigh):  https://jakearchibald.com/2024/garbage-collection-and-closures/
+//This seems to be helpful if the event handler needs to call private methods
 export class EventHandler {
     self;
     method;
