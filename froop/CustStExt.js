@@ -85,9 +85,7 @@ export class CustStExt {
                 this.#acs.push(ac);
                 const sc = new SCHandler(this);
                 Object.assign(sc, { instance, internals, parsedExpr, propName, customStateKey });
-                propagator.addEventListener(propName, e => {
-                    this.#simpleCompare(instance, internals, parsedExpr, propName, customStateKey);
-                }, { signal: ac.signal });
+                sc.sub(propagator, propName, { signal: ac.signal });
                 sc.handleEvent();
                 //this.#simpleCompare(instance, internals, parsedExpr, propName, customStateKey);
                 continue;
