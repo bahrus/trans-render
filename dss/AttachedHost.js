@@ -22,6 +22,9 @@ export class AttachedHost extends EventTarget {
             if (initPropVals !== undefined)
                 this.queue.push(initPropVals);
             const ce = document.createElement(itemscope);
+            if ('attachedCallback' in ce && typeof ce.attachedCallback === 'function') {
+                await ce.attachedCallback(enhancedElement);
+            }
             this.#ce = new WeakRef(ce);
             const self = this;
             Object.defineProperty(enhancedElement, 'ish', {
