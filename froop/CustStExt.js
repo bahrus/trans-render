@@ -55,6 +55,29 @@ class SCHandler extends EventHandler {
         return instance.constructor.props[propName].type;
     }
 }
+class ModHandler extends EventHandler {
+    instance;
+    internals;
+    parsedExpr;
+    propName;
+    customStateKey;
+    modulo;
+    handleEvent(e) {
+        const internals = this.internals;
+        const customStateKey = this.customStateKey;
+        const instance = this.instance;
+        const parsedExpr = this.parsedExpr;
+        const propName = this.propName;
+        const modulo = this.modulo;
+        const val = instance[propName];
+        if (val === null || val === undefined) {
+            internals.states.delete(customStateKey);
+            return;
+        }
+        const method = Number(val) % modulo === Number(parsedExpr.rhs) ? 'add' : 'delete';
+        internals.states[method](customStateKey);
+    }
+}
 export class CustStExt {
     customStatesToReflect;
     splitSplit;
@@ -87,7 +110,6 @@ export class CustStExt {
                 Object.assign(sc, { instance, internals, parsedExpr, propName, customStateKey });
                 sc.sub(propagator, propName, { signal: ac.signal });
                 sc.handleEvent();
-                //this.#simpleCompare(instance, internals, parsedExpr, propName, customStateKey);
                 continue;
             }
             const percentSplit = lhs.split('%').map(s => s.trim());
@@ -96,9 +118,9 @@ export class CustStExt {
                 const modulo = Number(moduloS);
                 const ac = new AbortController();
                 this.#acs.push(ac);
-                propagator.addEventListener(propName, e => {
-                    this.#moduloCompare(instance, internals, parsedExpr, modulo, propName, customStateKey);
-                }, { signal: ac.signal });
+                const mh = new ModHandler(this);
+                Object.assign(mh, { instance, internals, parsedExpr, propName, customStateKey, modulo });
+                mh.sub(propagator, propName, { signal: ac.signal });
             }
             propagator.addEventListener('disconnectedCallback', e => {
                 this.#disconnect();
@@ -151,15 +173,17 @@ export class CustStExt {
     //     }
     //     (<any>internals).states[method](customStateKey);
     // }
-    #moduloCompare(instance, internals, parsedExpr, modulo, propName, customStateKey) {
-        const val = instance[propName];
-        if (val === null || val === undefined) {
-            internals.states.delete(customStateKey);
-            return;
-        }
-        const method = Number(val) % modulo === Number(parsedExpr.rhs) ? 'add' : 'delete';
-        internals.states[method](customStateKey);
-    }
+    // #moduloCompare(instance: O, internals: ElementInternals, parsedExpr: ParsedExpr,
+    // modulo: number, propName: string,
+    // customStateKey: string){
+    //     const val = (<any>instance)[propName!];
+    //     if(val === null || val === undefined){
+    //         (<any>internals).states.delete(customStateKey);
+    //         return;
+    //     }
+    //     const method = Number(val) % modulo === Number(parsedExpr.rhs) ? 'add' : 'delete';
+    //     (<any>internals).states[method](customStateKey);
+    // }
     // #getType(instance: O, propName: string){
     //     return (<any>instance.constructor).props[propName].type;
     // }
