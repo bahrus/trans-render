@@ -33,20 +33,22 @@ class HitchManager {
         EventHandler.new(this, this.#hydrate).sub(propagator, middleKey, { signal: this.#mkAC.signal });
         this.#lkAC = new AbortController();
         EventHandler.new(this, this.#hydrate).sub(propagator, leftKey, { signal: this.#lkAC.signal });
-        EventHandler.new(this, this.#disconnect).sub(propagator, 'disconnectedCallback', { once: true });
-        EventHandler.new(this, this.#disconnectLKAndMK).sub(propagator, 'disconnectedCallback', { once: true });
+        propagator.addEventListener('disconnectedCallback', () => {
+            this.#disconnect();
+            this.#disconnectLKAndMK();
+        }, { once: true });
         this.#hydrate(this);
     }
-    #disconnectLKAndMK(self) {
-        if (self.#lkAC !== undefined)
-            self.#lkAC.abort();
-        if (self.#mkAC !== undefined)
-            self.#mkAC.abort();
+    #disconnectLKAndMK() {
+        if (this.#lkAC !== undefined)
+            this.#lkAC.abort();
+        if (this.#mkAC !== undefined)
+            this.#mkAC.abort();
     }
-    #disconnect(self) {
-        if (self.#ac !== undefined)
-            self.#ac.abort();
-        self.#ac = new AbortController();
+    #disconnect() {
+        if (this.#ac !== undefined)
+            this.#ac.abort();
+        this.#ac = new AbortController();
     }
     #hydrate(self) {
         const { options } = self.#ra;
@@ -58,7 +60,7 @@ class HitchManager {
         const eventProp = vm[middleKey];
         if (eventProp === undefined)
             return;
-        self.#disconnect(self);
+        self.#disconnect();
         self.#ac = new AbortController();
         eventTarget.addEventListener(eventProp, self, { signal: self.#ac.signal });
     }
