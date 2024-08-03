@@ -55,21 +55,17 @@ class SCHandler implements EventListenerObject{
     }
 }
 
-class ModHandler extends EventHandler<CustStExt>{
-    instance: O<any, any> | undefined;
-    internals: ElementInternals | undefined;
-    parsedExpr: ParsedExpr | undefined;
-    propName: string | undefined;
-    customStateKey: string | undefined;
-    modulo: number | undefined;
+class ModHandler implements EventListenerObject{
+    constructor(
+    public instance: O<any, any>,
+    public internals: ElementInternals,
+    public parsedExpr: ParsedExpr,
+    public propName: string,
+    public customStateKey: string,
+    public modulo: number,
+    ){}
     handleEvent(e: Event): void {
-        const internals = this.internals!;
-        const customStateKey = this.customStateKey!;
-        const instance = this.instance!;
-        const parsedExpr = this.parsedExpr!;
-        const propName = this.propName!;
-        const modulo = this.modulo!;
-
+        const {internals, customStateKey, instance, parsedExpr, propName, modulo} = this;
         const val = (<any>instance)[propName!];
         if(val === null || val === undefined){
             (<any>internals).states.delete(customStateKey);
@@ -118,11 +114,13 @@ export class CustStExt {
                 const modulo = Number(moduloS);
                 const ac = new AbortController();
                 this.#acs.push(ac);
-                const mh = new ModHandler(this);
-                Object.assign(mh, {instance, internals, parsedExpr, propName, customStateKey, modulo});
-                mh.sub(propagator, propName, {signal: ac.signal});
+                const mh = new ModHandler(instance, internals, parsedExpr, propName, customStateKey, modulo);
+                propagator.addEventListener(propName, mh, {signal: ac.signal});
             }
-            EventHandler.new(this, this.#disconnect).sub(propagator, 'disconnectedCallback', {once: true});
+            //no memory access outside closure, I think
+            propagator.addEventListener('disconnectedCallback', e => {
+                this.#disconnect();
+            }, {once: true})
         }
     }
 

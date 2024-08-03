@@ -57,20 +57,23 @@ class SCHandler {
         return instance.constructor.props[propName].type;
     }
 }
-class ModHandler extends EventHandler {
+class ModHandler {
     instance;
     internals;
     parsedExpr;
     propName;
     customStateKey;
     modulo;
+    constructor(instance, internals, parsedExpr, propName, customStateKey, modulo) {
+        this.instance = instance;
+        this.internals = internals;
+        this.parsedExpr = parsedExpr;
+        this.propName = propName;
+        this.customStateKey = customStateKey;
+        this.modulo = modulo;
+    }
     handleEvent(e) {
-        const internals = this.internals;
-        const customStateKey = this.customStateKey;
-        const instance = this.instance;
-        const parsedExpr = this.parsedExpr;
-        const propName = this.propName;
-        const modulo = this.modulo;
+        const { internals, customStateKey, instance, parsedExpr, propName, modulo } = this;
         const val = instance[propName];
         if (val === null || val === undefined) {
             internals.states.delete(customStateKey);
@@ -119,11 +122,13 @@ export class CustStExt {
                 const modulo = Number(moduloS);
                 const ac = new AbortController();
                 this.#acs.push(ac);
-                const mh = new ModHandler(this);
-                Object.assign(mh, { instance, internals, parsedExpr, propName, customStateKey, modulo });
-                mh.sub(propagator, propName, { signal: ac.signal });
+                const mh = new ModHandler(instance, internals, parsedExpr, propName, customStateKey, modulo);
+                propagator.addEventListener(propName, mh, { signal: ac.signal });
             }
-            EventHandler.new(this, this.#disconnect).sub(propagator, 'disconnectedCallback', { once: true });
+            //no memory access outside closure, I think
+            propagator.addEventListener('disconnectedCallback', e => {
+                this.#disconnect();
+            }, { once: true });
         }
     }
     #disconnect() {
