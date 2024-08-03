@@ -125,66 +125,6 @@ export class CustStExt {
             EventHandler.new(this, this.#disconnect).sub(propagator, 'disconnectedCallback', { once: true });
         }
     }
-    // #simpleCompare(
-    //     instance: O, internals: ElementInternals, 
-    //     parsedExpr: ParsedExpr, propName: string,
-    //     customStateKey: string,
-    // ){
-    //     const val = (<any>instance)[propName!];
-    //     if(val === null || val === undefined){
-    //         (<any>internals).states.delete(customStateKey);
-    //         return;
-    //     }
-    //     const {op, rhs} = parsedExpr;
-    //     let method: 'add' | 'delete' | undefined;
-    //     switch(op){
-    //         case '==':{
-    //             method = val.toString() === rhs ? 'add' : 'delete';
-    //             break;
-    //         }
-    //         case '>=':
-    //         case '<=':
-    //         case '<':
-    //         case '>':{
-    //             const t = this.#getType(instance, propName);
-    //             const rhsM = t === 'Number' ? Number(rhs) : rhs;
-    //             const lhsM = t === 'Number' ? val : val.toString();
-    //             switch(op){
-    //                 case '>':
-    //                     method = lhsM > rhsM ? 'add' : 'delete';
-    //                     break;
-    //                 case '<':
-    //                     method = lhsM < rhsM ? 'add' : 'delete';
-    //                     break;
-    //                 case '>=':
-    //                     method = lhsM >= rhsM ? 'add' : 'delete';
-    //                     break;
-    //                 case '<=':
-    //                     method = lhsM <= rhsM ? 'add' : 'delete';
-    //                     break;
-    //             }
-    //             console.log({t});
-    //             break;
-    //         }
-    //         default:
-    //             throw 'NI';
-    //     }
-    //     (<any>internals).states[method](customStateKey);
-    // }
-    // #moduloCompare(instance: O, internals: ElementInternals, parsedExpr: ParsedExpr,
-    // modulo: number, propName: string,
-    // customStateKey: string){
-    //     const val = (<any>instance)[propName!];
-    //     if(val === null || val === undefined){
-    //         (<any>internals).states.delete(customStateKey);
-    //         return;
-    //     }
-    //     const method = Number(val) % modulo === Number(parsedExpr.rhs) ? 'add' : 'delete';
-    //     (<any>internals).states[method](customStateKey);
-    // }
-    // #getType(instance: O, propName: string){
-    //     return (<any>instance.constructor).props[propName].type;
-    // }
     #disconnect() {
         for (const ac of this.#acs) {
             ac.abort();
