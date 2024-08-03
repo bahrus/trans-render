@@ -8,7 +8,6 @@ import {
     IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget, TransformOptions, LHS, WhereConditions, Info, ModificationUnitOfWork, YieldSettings
 } from './ts-refs/trans-render/types.js'; 
 import { IMountObserver, MountContext, PipelineStage } from 'mount-observer/types';
-import { EventHandler } from './EventHandler.js';
 export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './ts-refs/trans-render/types.js'; 
 
 export async function Transform<TProps extends {}, TMethods = TProps, TElement = {}>(
