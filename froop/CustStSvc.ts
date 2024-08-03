@@ -46,16 +46,6 @@ export class CustStSvc{
     }
 
 
-
-    // #reflect(instance: O, internals: ElementInternals, propName: string){
-    //     const val = (<any>instance)[propName!];
-    //     const method = val ? 'add' : 'delete';
-    //     (<any>internals).states[method](propName);
-        
-    // }
-
-
-
     #disconnect(){
         for(const ac of this.#acs){
             ac.abort();
