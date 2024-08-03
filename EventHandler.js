@@ -13,4 +13,7 @@ export class EventHandler {
             return;
         this.method(this.self, e, this.arg);
     }
+    addEventListener(et, type, options) {
+        et.addEventListener(type, this, options);
+    }
 }

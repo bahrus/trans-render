@@ -5,4 +5,7 @@ export class EventHandler<T = any> {
         if(this.method === undefined) return;
         this.method(this.self, e, this.arg);
     }
+    addEventListener(et: EventTarget, type: string, options: AddEventListenerOptions){
+        et.addEventListener(type, this, options);
+    }
 }
