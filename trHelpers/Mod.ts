@@ -10,6 +10,8 @@ export class Mod<TProps, TMethods, TElement = {}>{
     ){
         const {on} = m;
         const once = on === 'load';
+        //I'm thinking there's no memory access issues here 
+        //so keeping as a closure for now.
         matchingElement.addEventListener(on, async e => {
             const {inc, byAmt, s, toggle} = m;
             const {model, options} = transformer;
@@ -80,6 +82,7 @@ export class Mod<TProps, TMethods, TElement = {}>{
             matchingElement.dispatchEvent(new Event('load'));
             transformer.initializedMods.add(m);
         }
+        //I'm thinking no shared memory access in this closure, so leaving as is.
         mountObserver?.addEventListener('disconnect', e => {
             this.#abortController.abort();
         });
