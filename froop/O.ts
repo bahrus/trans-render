@@ -47,9 +47,6 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                     resolve();
                 }
             }, {signal: ac.signal});
-            // this.propagator.addEventListener('disconnectedCallback', e => {
-            //     reject();
-            // }, {once: true});
         })
     }
     nudge() {

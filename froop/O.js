@@ -42,9 +42,6 @@ export class O extends HTMLElement {
                     resolve();
                 }
             }, { signal: ac.signal });
-            // this.propagator.addEventListener('disconnectedCallback', e => {
-            //     reject();
-            // }, {once: true});
         });
     }
     nudge() {
