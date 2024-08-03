@@ -1,21 +1,23 @@
 import {O} from './O.js';
 import { PropInfo } from '../ts-refs/trans-render/froop/types.js';
-import { EventHandler } from '../EventHandler.js';
+// import { EventHandler } from '../EventHandler.js';
 
-class AttrReflector extends EventHandler<Reflector>{
-    instance: O | undefined;
-    attr: string | undefined;
-    propName: string | undefined;
-    propInfo: PropInfo | undefined;
-    override handleEvent(): void {
+class AttrReflector implements EventListenerObject {
+    constructor(
+        public instance: O,
+        public attr: string,
+        public propName: string,
+    ){}
+
+    handleEvent(): void {
         const {instance, propName, attr} = this;
-        const val = (<any>instance)[propName!];
+        const val = (<any>instance)[propName];
         if(val === undefined) return;
         instance!.ignoreAttrChanges = true;
         if(val === null || val === false) {
-            instance!.removeAttribute(attr!);
+            instance!.removeAttribute(attr);
         }else{
-            instance!.setAttribute(attr!, val.toString());
+            instance!.setAttribute(attr, val.toString());
         }
         
         instance!.ignoreAttrChanges = false;
@@ -37,9 +39,8 @@ export class Reflector{
             this.#acs.push(ac);
             const propInfo = attrs[attr];
             const {propName} = propInfo;
-            const attrReflector = new AttrReflector(this);
-            Object.assign(attrReflector, {instance, attr, propName, propInfo});
-            attrReflector.sub(propagator, propName!, {signal: ac.signal});
+            const attrReflector = new AttrReflector(instance, attr, propName!);
+            propagator.addEventListener(propName!, attrReflector, {signal: ac.signal});
             attrReflector.handleEvent();
         }
         //I'm thinking this event handler doesn't access any shared memory
@@ -57,16 +58,4 @@ export class Reflector{
 
 
 
-    #reflect(instance: O, attr: string, propName: string, propInfo: PropInfo){
-        const val = (<any>instance)[propName!];
-        if(val === undefined) return;
-        instance.ignoreAttrChanges = true;
-        if(val === null || val === false) {
-            instance.removeAttribute(attr);
-        }else{
-            instance.setAttribute(attr, val.toString());
-        }
-        
-        instance.ignoreAttrChanges = false;
-    }
 }
