@@ -1,5 +1,19 @@
 import { O } from "./O.js";
-import {PropLookup, RoundaboutReady} from '../ts-refs/trans-render/froop/types.js';
+import { EventHandler } from '../EventHandler.js';
+
+class Reflect extends EventHandler<CustStSvc>{
+    instance: O | undefined;
+    internals: ElementInternals | undefined; 
+    propName: string | undefined;
+    override handleEvent(): void {
+        const instance = this.instance!;
+        const propName = this.propName!;
+        const internals = this.internals!;
+        const val = (<any>instance)[propName!];
+        const method = val ? 'add' : 'delete';
+        (<any>internals).states[method](propName);
+    }
+}
 
 export class CustStSvc{
     #acs: AbortController[] = [];
@@ -18,10 +32,14 @@ export class CustStSvc{
         for(const propName of simpleOnes.map(x => x[0])){
             const ac: AbortController = new AbortController();
             this.#acs.push(ac);
-            propagator.addEventListener(propName, e => {
-                this.#reflect(instance, internals, propName)
-            }, {signal: ac.signal});
-            this.#reflect(instance, internals, propName);
+            const reflector = new Reflect(this);
+            Object.assign(reflector, {instance, internals, propName});
+            reflector.sub(propagator, propName, {signal: ac.signal});
+            // propagator.addEventListener(propName, e => {
+            //     this.#reflect(instance, internals, propName)
+            // }, {signal: ac.signal});
+            reflector.handleEvent();
+            //this.#reflect(instance, internals, propName);
         }
         propagator.addEventListener('disconnectedCallback', e => {
             this.#disconnect();
@@ -33,12 +51,14 @@ export class CustStSvc{
         }
     }
 
-    #reflect(instance: O, internals: ElementInternals, propName: string){
-        const val = (<any>instance)[propName!];
-        const method = val ? 'add' : 'delete';
-        (<any>internals).states[method](propName);
+
+
+    // #reflect(instance: O, internals: ElementInternals, propName: string){
+    //     const val = (<any>instance)[propName!];
+    //     const method = val ? 'add' : 'delete';
+    //     (<any>internals).states[method](propName);
         
-    }
+    // }
 
 
 
