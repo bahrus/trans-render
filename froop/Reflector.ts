@@ -41,10 +41,6 @@ export class Reflector{
             Object.assign(attrReflector, {instance, attr, propName, propInfo});
             attrReflector.sub(propagator, propName!, {signal: ac.signal});
             attrReflector.handleEvent();
-            // propagator.addEventListener(propName!, e => {
-            //     this.#reflect(instance, attr, propName!, propInfo);
-            // }, );
-            // this.#reflect(instance, attr, propName!, propInfo);
         }
         //I'm thinking this event handler doesn't access any shared memory
         // so no need to use EventHandler
