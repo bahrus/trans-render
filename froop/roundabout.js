@@ -303,7 +303,7 @@ export class RoundAbout {
         const { propagator } = vm;
         if (!(propagator instanceof EventTarget))
             return;
-        propagator.addEventListener('disconnectedCallback', new EventHandler(this, this.#unsubscribe), { once: true });
+        EventHandler.new(this, this.#unsubscribe).sub(propagator, 'disconnectedCallback', { once: true });
         const checks = this.#checks;
         let keys = new Set();
         for (const checkKey in checks) {
@@ -316,13 +316,13 @@ export class RoundAbout {
             const ac = new AbortController();
             controllers.push(ac);
             const signal = ac.signal;
-            propagator.addEventListener(key, new EventHandler(this, this.#handleRoundAboutEvent), { signal });
+            EventHandler.new(this, this.#handleRoundAboutEvent).sub(propagator, key, { signal });
         }
         const routers = this.#routers;
         for (const routerKey in routers) {
             const ac = new AbortController();
             controllers.push(ac);
-            propagator.addEventListener(routerKey, new EventHandler(this, this.#wireUpRouter), { signal: ac.signal });
+            EventHandler.new(this, this.#wireUpRouter).sub(propagator, routerKey, { signal: ac.signal });
         }
     }
     #wireUpRouter(self, e) {
