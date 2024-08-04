@@ -66,9 +66,10 @@
     "./lib/homeInOn.js": "./lib/homeInOn.js",
     "./lib/html.js": "./lib/html.js",
     "./lib/interpolate.js": "./lib/interpolate.js",
-    "./lib/insertAdjacentClone.js": "./lib/insertAdjacentClone.js",
-    "./lib/insertAdjacentTemplate.js": "./lib/insertAdjacentTemplate.js",
-    "./lib/intersection.js": "./lib/intersection.js",
+    "./lib/insertTempl.js": {
+      "default": "./lib/insertTempl.js",
+      "types": "./lib/insertTempl.ts"
+    },
     "./lib/isContainedIn.js": "./lib/isContainedIn.js",
     "./lib/isResolved.js": "./lib/isResolved.js",
     "./lib/linkTemplates.js": "./lib/linkTemplates.js",
