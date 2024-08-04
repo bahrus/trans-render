@@ -37,6 +37,22 @@
     },
     "./dss/parse.js": "./dss/parse.js",
     "./dss/find.js": "./dss/find.js",
+    "./dss/tref/getChildren.js": {
+      "default": "./dss/tref/getChildren.js",
+      "types": "./dss/tref/getChildren.ts"
+    },
+    "./dss/tref/insertTempl.js": {
+      "default": "./dss/tref/insertTempl.js",
+      "types": "./dss/tref/insertTempl.ts"
+    },
+    "./dss/tref/querySelector.js": {
+      "default": "./dss/tref/querySelector.js",
+      "types": "./dss/tref/querySelector.ts"
+    },
+    "./dss/tref/splitRefs.js": {
+      "default": "./dss/tref/splitRefs.js",
+      "types": "./dss/tref/splitRefs.ts"
+    },
     "./funions/Localizer.js": "./functions/Localizer.js",
     "./froop/CE.js": "./froop/CE.js",
     "./froop/O.js": "./froop/O.js",
@@ -66,10 +82,6 @@
     "./lib/homeInOn.js": "./lib/homeInOn.js",
     "./lib/html.js": "./lib/html.js",
     "./lib/interpolate.js": "./lib/interpolate.js",
-    "./lib/insertTempl.js": {
-      "default": "./lib/insertTempl.js",
-      "types": "./lib/insertTempl.ts"
-    },
     "./lib/isContainedIn.js": "./lib/isContainedIn.js",
     "./lib/isResolved.js": "./lib/isResolved.js",
     "./lib/linkTemplates.js": "./lib/linkTemplates.js",
@@ -122,6 +134,8 @@
     "be/*.d.ts",
     "dss/*.js",
     "dss/*.d.ts",
+    "dss/tref/*.js",
+    "dss/tref/*.d.ts",
     "funions/*.js",
     "funions/*.d.ts",
     "lib/*.js",
