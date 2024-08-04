@@ -4,21 +4,14 @@ async function getHostish(el: Element, prop?: string){
     let {localName, ish} = el as any;
     if(localName.includes('-')){
         await customElements.whenDefined(localName);
-        // if(prop){
-        //     if(prop in el) {
-        //         return el;
-        //     }else{
-        //         throw 404;
-        //     }
-        // }
     }
     if(ish instanceof HTMLElement) return ish;
     const itemScopeAttr = el.getAttribute('itemscope');
     if(itemScopeAttr){
         //let ish = (<any>el).ish as HTMLElement | undefined;
         //if(host) return getHostish(host, prop);
-        const {AttachedHost: Newish, waitForEvent} = await import('./Newish.js');
-        const ah = new AttachedHost(el, itemScopeAttr);
+        const {Newish, waitForEvent} = await import('./Newish.js');
+        const ah = new Newish(el, itemScopeAttr);
         if(!ah.isResolved){
             await waitForEvent(ah, 'resolved');
         }
