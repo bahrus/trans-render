@@ -36,7 +36,10 @@
       "types": "./dss/Newish.ts"
     },
     "./dss/parse.js": "./dss/parse.js",
-    "./dss/find.js": "./dss/find.js",
+    "./dss/find.js": {
+      "default": "./dss/find.js",
+      "types": "./dss/find.ts"
+    },
     "./dss/tref/getChildren.js": {
       "default": "./dss/tref/getChildren.js",
       "types": "./dss/tref/getChildren.ts"
