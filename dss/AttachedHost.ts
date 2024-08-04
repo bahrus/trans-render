@@ -2,7 +2,8 @@ export {waitForEvent} from '../lib/isResolved.js';
 export class AttachedHost extends EventTarget{
     queue: Array<any> = [];
     isResolved = false;
-    #ce: WeakRef<HTMLElement> | undefined;
+    #ce: HTMLElement | undefined;
+
     constructor(enhancedElement: Element, itemscope: string){
         super();
         this.#do(enhancedElement, itemscope);
@@ -13,7 +14,7 @@ export class AttachedHost extends EventTarget{
         await customElements.whenDefined(itemscope);
         const initPropVals = (<any>enhancedElement)['ish'];
         //check to make sure it didn't already get attached while waiting
-        if(customElements.getName(initPropVals) !== itemscope){
+        if(initPropVals === undefined ||  customElements.getName(initPropVals.constructor) !== itemscope){
             if(enhancedElement instanceof HTMLElement){
                 if(enhancedElement.dataset.hostInitProps){
                     const parsedHostProps = JSON.parse(enhancedElement.dataset.hostInitProps);
@@ -25,11 +26,11 @@ export class AttachedHost extends EventTarget{
             if('attachedCallback' in ce && typeof ce.attachedCallback === 'function'){
                 await ce.attachedCallback(enhancedElement)
             }
-            this.#ce = new WeakRef(ce);
+            this.#ce = ce;
             const self = this;
             Object.defineProperty(enhancedElement, 'ish', {
                 get(){
-                    return self.#ce?.deref();
+                    return self.#ce;
                 },
                 set(nv: any){
                     self.queue.push(nv);
@@ -45,7 +46,7 @@ export class AttachedHost extends EventTarget{
     }
 
     async #assignGingerly(){
-        let ce = this.#ce?.deref();
+        let ce = this.#ce!;
         if(ce === undefined){
             throw 500;
         }

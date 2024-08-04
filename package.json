@@ -22,7 +22,10 @@
     "./Object$tring.js": "./Object$tring.js",
     "./Object$entences.js": "./Object$entences.js",
     "./trans-render.js": "./trans-render.js",
-    "./dss/AttachedHost.js": "./dss/AttachedHost.js",
+    "./dss/AttachedHost.js": {
+      "default": "./dss/AttachedHost.js",
+      "types": "./dss/AttachedHost.ts"
+    },
     "./dss/parse.js": "./dss/parse.js",
     "./dss/find.js": "./dss/find.js",
     "./funions/Localizer.js": "./functions/Localizer.js",
