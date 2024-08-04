@@ -16,15 +16,24 @@
     "update": "ncu -u && npm install"
   },
   "exports": {
-    ".": "./Transform.js",
-    "./EventHandler.js": "./EventHandler.js",
-    "./Mount.js": "./Mount.js",
+    ".": {
+      "default": "./Transform.js",
+      "types": "./Transform.ts"
+    },
+    "./EventHandler.js": {
+      "default": "./EventHandler.js",
+      "types": "./EventHandler.ts"
+    },
+    "./Mount.js": {
+      "default": "./Mount.js",
+      "types": "./Mount.ts"
+    },
     "./Object$tring.js": "./Object$tring.js",
     "./Object$entences.js": "./Object$entences.js",
     "./trans-render.js": "./trans-render.js",
-    "./dss/AttachedHost.js": {
-      "default": "./dss/AttachedHost.js",
-      "types": "./dss/AttachedHost.ts"
+    "./dss/Newish.js": {
+      "default": "./dss/Newish.js",
+      "types": "./dss/Newish.ts"
     },
     "./dss/parse.js": "./dss/parse.js",
     "./dss/find.js": "./dss/find.js",
