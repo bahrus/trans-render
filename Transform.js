@@ -1,4 +1,6 @@
 import { MountObserver } from 'mount-observer/MountObserver.js';
+import { arr0 } from './arr.js';
+export { arr0 } from './arr.js';
 export async function Transform(target, model, xform, options) {
     const xformer = new Transformer(target, model, xform, options);
     await xformer.do();
@@ -110,7 +112,7 @@ export class Transformer extends EventTarget {
                     break;
                 case 'object':
                     {
-                        const rhses = arr(rhs);
+                        const rhses = arr0(rhs);
                         for (const rhsPart of rhses) {
                             const uow = {
                                 //d: 0,
@@ -281,7 +283,7 @@ export class Transformer extends EventTarget {
     }
     getNumberUVal(uow, d) {
         const { o } = uow;
-        const arrO = arr(o);
+        const arrO = arr0(o);
         const propName = this.#getPropName(arrO, d);
         const pOrC = arrO[d];
         const model = this.model;
@@ -334,10 +336,6 @@ export class Transformer extends EventTarget {
         return 'textContent';
     }
 }
-export function arr(inp) {
-    return inp === undefined ? []
-        : Array.isArray(inp) ? inp : [inp];
-}
 export class MountOrchestrator extends EventTarget {
     transformer;
     queryInfo;
@@ -348,7 +346,7 @@ export class MountOrchestrator extends EventTarget {
         super();
         this.transformer = transformer;
         this.queryInfo = queryInfo;
-        this.#unitsOfWork = arr(uows);
+        this.#unitsOfWork = arr0(uows);
     }
     async do() {
         const { transformer, queryInfo } = this;
@@ -390,7 +388,7 @@ export class MountOrchestrator extends EventTarget {
     async subscribe() {
         for (const uow of this.#unitsOfWork) {
             let { o } = uow;
-            const p = arr(o);
+            const p = arr0(o);
             const { target, options, model } = this.transformer;
             const propagator = (model.propagator || options.propagator);
             const propagatorIsReady = model.propagator ? true : options.propagatorIsReady;

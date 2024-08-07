@@ -1,4 +1,4 @@
-import {MountOrchestrator, Transformer, arr} from '../Transform.js';
+import {MountOrchestrator, Transformer, arr0} from '../Transform.js';
 import {YieldSettings, ConditionGate, UnitOfWork} from '../ts-refs/trans-render/types.js'; 
 import {getUIVal} from './getUIVal.js';
 export async function doYield<TProps extends {}, TMethods = TProps, TElement = {}>(
@@ -9,7 +9,7 @@ export async function doYield<TProps extends {}, TMethods = TProps, TElement = {
 ){
     const {model} = transformer;
     const {o} = uow;
-    const observeArr = arr(o);
+    const observeArr = arr0(o);
     const yIsNum = typeof y === 'number';
     const to = yIsNum ? observeArr![y] : y.to;
     let val = getUIVal(matchingElement);

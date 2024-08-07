@@ -1,4 +1,4 @@
-import {MountOrchestrator, Transformer, arr} from '../Transform.js';
+import {MountOrchestrator, Transformer, arr0} from '../Transform.js';
 import { Derivative, UnitOfWork } from '../ts-refs/trans-render/types.js'; 
 export async function getDerivedVal<TProps extends {}, TMethods, TElement = {}>(
     transformer: Transformer<TProps, TMethods, TElement>, 

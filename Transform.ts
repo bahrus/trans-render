@@ -8,6 +8,8 @@ import {
     IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget, TransformOptions, LHS, WhereConditions, Info, ModificationUnitOfWork, YieldSettings
 } from './ts-refs/trans-render/types.js'; 
 import { IMountObserver, MountContext, PipelineStage } from 'mount-observer/types';
+import {arr0} from './arr.js';
+export {arr0} from './arr.js';
 export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './ts-refs/trans-render/types.js'; 
 
 export async function Transform<TProps extends {}, TMethods = TProps, TElement = {}>(
@@ -125,7 +127,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
                     break;
                 case 'object':
                     {
-                        const rhses = arr(rhs) as Array<UnitOfWork<TProps, TMethods, TElement>>;
+                        const rhses = arr0(rhs) as Array<UnitOfWork<TProps, TMethods, TElement>>;
                         for(const rhsPart of rhses){
                             
                             const uow: QuenitOfWork<TProps, TMethods, TElement> = {
@@ -310,7 +312,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
 
     getNumberUVal(uow: UnitOfWork<TProps, TMethods, TElement>, d: number){
         const {o} = uow;
-        const arrO = arr(o);
+        const arrO = arr0(o);
         const propName = this.#getPropName(arrO, d);
         const pOrC = arrO[d];
         const model = this.model as any;
@@ -367,10 +369,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
 
 }
 
-export function arr<T = any>(inp: T | T[] | undefined) : T[] {
-    return inp === undefined ? []
-        : Array.isArray(inp) ? inp : [inp];
-}
+
 
 
 
@@ -383,7 +382,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
         uows: QuenitOfWork<TProps, TMethods, TElement>, 
         public queryInfo: QueryInfo){
         super();
-        this.#unitsOfWork = arr(uows);
+        this.#unitsOfWork = arr0(uows);
     }
     async do(){
         const {transformer, queryInfo} = this;   
@@ -432,7 +431,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
     async subscribe(){
         for(const uow of this.#unitsOfWork){
             let {o} = uow;
-            const p = arr(o) as string[];
+            const p = arr0(o) as string[];
             const {target, options, model} = this.transformer;
             const propagator = ((<any>model).propagator || options.propagator) as EventTarget;
             const propagatorIsReady = (<any>model).propagator ? true : options.propagatorIsReady;

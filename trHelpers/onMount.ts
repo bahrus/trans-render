@@ -1,6 +1,6 @@
 import { MountObserver } from '../../mount-observer/MountObserver.js';
 import { IMountObserver, MountContext } from '../../mount-observer/types.js';
-import {Transformer, MountOrchestrator, arr} from '../Transform.js';
+import {Transformer, MountOrchestrator, arr0} from '../Transform.js';
 import {QuenitOfWork, AddEventListener, ForEachInterface} from '../ts-refs/trans-render/types.js'; 
 
 
@@ -64,7 +64,7 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
             if(typeof a === 'string'){
                 transpiledActions = [mo.toStdEvt(a, matchingElement)];
             }else{
-                transpiledActions = arr(a).map(ai => typeof ai === 'string' ? mo.toStdEvt(ai, matchingElement) : ai);
+                transpiledActions = arr0(a).map(ai => typeof ai === 'string' ? mo.toStdEvt(ai, matchingElement) : ai);
             }
             const {AddEventListener} = await import('./AddEventListener.js')
             for(const ap of transpiledActions!){
@@ -80,7 +80,7 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
             }
         }
         if(m !== undefined){
-            const transpiledMs = arr(m);
+            const transpiledMs = arr0(m);
             const {Mod} = await import('./Mod.js');
             for(const mi of transpiledMs){
                 new Mod<TProps, TMethods, TElement>(mountObserver, transformer, matchingElement, mi);

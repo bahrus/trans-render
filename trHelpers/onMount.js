@@ -1,4 +1,4 @@
-import { arr } from '../Transform.js';
+import { arr0 } from '../Transform.js';
 export async function onMount(transformer, mo, matchingElement, uows, skipInit, ctx, matchingElements, observer, mountObserver) {
     const { queryInfo } = mo;
     const { hostPropToAttrMap } = queryInfo;
@@ -55,7 +55,7 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
                 transpiledActions = [mo.toStdEvt(a, matchingElement)];
             }
             else {
-                transpiledActions = arr(a).map(ai => typeof ai === 'string' ? mo.toStdEvt(ai, matchingElement) : ai);
+                transpiledActions = arr0(a).map(ai => typeof ai === 'string' ? mo.toStdEvt(ai, matchingElement) : ai);
             }
             const { AddEventListener } = await import('./AddEventListener.js');
             for (const ap of transpiledActions) {
@@ -64,7 +64,7 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
             }
         }
         if (m !== undefined) {
-            const transpiledMs = arr(m);
+            const transpiledMs = arr0(m);
             const { Mod } = await import('./Mod.js');
             for (const mi of transpiledMs) {
                 new Mod(mountObserver, transformer, matchingElement, mi);

@@ -1,4 +1,4 @@
-import { arr } from '../Transform.js';
+import { arr0 } from '../Transform.js';
 import { assignGingerly } from '../lib/assignGingerly.js';
 export async function Engage(transformer, matchingElement, type, uow, mountContext) {
     const { e } = uow;
@@ -9,7 +9,7 @@ export async function Engage(transformer, matchingElement, type, uow, mountConte
     const model = transformer.model;
     let transpiledEngagements = typeof e === 'string' ? [{
             do: e
-        }] : arr(e).map(x => typeof x === 'string' ? { do: x } : x);
+        }] : arr0(e).map(x => typeof x === 'string' ? { do: x } : x);
     for (const engagement of transpiledEngagements) {
         if ('enhPropKey' in engagement) {
             throw 'NI';

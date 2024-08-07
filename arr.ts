@@ -4,6 +4,6 @@ export function arr<T = any>(inp: ZeroOrMore<T>) : T[] | undefined {
         : Array.isArray(inp) ? inp : [inp];
 }
 
-export function arr0<T = any>(inp: ZeroOrMore<T>) : T[] | undefined {
+export function arr0<T = any>(inp: ZeroOrMore<T>) : T[] {
     return arr(inp) || [];
 }

@@ -1,4 +1,4 @@
-import {MountOrchestrator, Transformer, arr} from '../Transform.js';
+import {MountOrchestrator, Transformer, arr0} from '../Transform.js';
 import {IfInstructions, ConditionGate, UnitOfWork} from '../ts-refs/trans-render/types.js'; 
 export async function doIfs<TProps extends {}, TMethods = TProps, TElement = {}>(
     transformer: Transformer<TProps, TMethods, TElement>, 
