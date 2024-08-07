@@ -499,3 +499,5 @@ export interface IObject$tring{
     arrVal: any[] | undefined;
     parse(): Promise<void>;
 }
+
+export type ZeroOrMore<T> = T | Array<T> | undefined;

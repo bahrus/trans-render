@@ -20,6 +20,10 @@
       "default": "./Transform.js",
       "types": "./Transform.ts"
     },
+    "./arr.js": {
+      "default": "./arr.js",
+      "types": "./arr.ts"
+    },
     "./EventHandler.js": {
       "default": "./EventHandler.js",
       "types": "./EventHandler.ts"

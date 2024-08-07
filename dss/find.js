@@ -1,9 +1,10 @@
-export async function find(element, specifier) {
+export async function find(element, specifier, within) {
     const { self, s } = specifier;
     if (self)
         return element;
     if (s === '#') {
         const { elS } = specifier;
+        //const rns = 
         return element.getRootNode().getElementById(elS);
     }
     const { findR } = await import('./findR.js');
