@@ -1,6 +1,7 @@
 import { Specifier } from "../ts-refs/trans-render/dss/types";
+import {ZeroOrMore} from '../types';
 
-async function getHostish(el: Element, prop?: string){
+async function getHostish(el: Element, prop?: string, within?: ZeroOrMore<Element | DocumentFragment>){
     let {localName, ish} = el as any;
     if(localName.includes('-')){
         await customElements.whenDefined(localName);

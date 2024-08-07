@@ -1,4 +1,4 @@
-async function getHostish(el, prop) {
+async function getHostish(el, prop, within) {
     let { localName, ish } = el;
     if (localName.includes('-')) {
         await customElements.whenDefined(localName);

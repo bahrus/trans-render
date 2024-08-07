@@ -3,12 +3,17 @@ export async function find(element, specifier, within) {
     if (self)
         return element;
     if (s === '#') {
+        const { arr } = await import('../arr.js');
         const { elS } = specifier;
-        //const rns = 
-        return element.getRootNode().getElementById(elS);
+        const rns = (arr(within) || [element.getRootNode()]);
+        for (const rn of rns) {
+            const el = (rn instanceof DocumentFragment) ? rn.getElementById(elS) : rn.querySelector('#' + elS);
+            if (el !== null)
+                return el;
+        }
     }
     const { findR } = await import('./findR.js');
-    return await findR(element, specifier);
+    return await findR(element, specifier, within);
 }
 export function getSubProp(specifier, el) {
     const { path } = specifier;
