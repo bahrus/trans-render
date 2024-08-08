@@ -8,12 +8,15 @@ export async function find(element: Element, specifier: Specifier, within?: Zero
         const {elS} = specifier;
         const rns = (arr(within) || [element.getRootNode()]) as Array<Element>;
         for(const rn of rns){
+            let el: Element | null = null;
             if(s === '#'){
-                const el = (s === '#' && rn instanceof DocumentFragment) ? rn.getElementById(elS!) : rn.querySelector('#' + elS);
-                if(el !== null) return el;
+                el = (rn instanceof DocumentFragment) ? rn.getElementById(elS!) : rn.querySelector('#' + elS);
+            }else{
+                el = rn.querySelector(elS!);
             }
-            
+            if(el !== null) return el;
         }
+        throw 404;
     }
     const {findR} = await import('./findR.js');
     return await findR(element, specifier, undefined);
