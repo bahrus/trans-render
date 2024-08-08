@@ -205,7 +205,7 @@ function parseScope(
         case '[':
             iPosOfClosedBrace = nonEventPart.indexOf(']', tailStart + 2);
             specifier.isModulo = true;
-            specifier.modulo = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace) as Modulo;
+            specifier.modulo = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace).toLowerCase() as Modulo;
             break;
         default:
             throw 'PE'; //Parsing error
