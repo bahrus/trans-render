@@ -1,4 +1,4 @@
-import { Sigils, Specifier } from "../ts-refs/trans-render/dss/types";
+import { Modulo, Sigils, Specifier } from "../ts-refs/trans-render/dss/types";
 
 export async function parse(s: string) : Promise<Specifier>{
 
@@ -47,7 +47,7 @@ export async function parse(s: string) : Promise<Specifier>{
         }
         case '%[':
             specifier.dss = '%';
-            tailStart = 2;
+            tailStart = 1;
             break;
         default: 
             const head0 = head2[0];
@@ -203,8 +203,9 @@ function parseScope(
             specifier.scopeS = scopeS;
             break;
         case '[':
-            iPosOfClosedBrace = nonEventPart.indexOf('}', tailStart + 2);
+            iPosOfClosedBrace = nonEventPart.indexOf(']', tailStart + 2);
             specifier.isModulo = true;
+            specifier.modulo = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace) as Modulo;
             break;
         default:
             throw 'PE'; //Parsing error

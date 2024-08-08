@@ -42,7 +42,7 @@ export async function parse(s) {
         }
         case '%[':
             specifier.dss = '%';
-            tailStart = 2;
+            tailStart = 1;
             break;
         default:
             const head0 = head2[0];
@@ -189,8 +189,9 @@ function parseScope(nonEventPart, tailStart, specifier) {
             specifier.scopeS = scopeS;
             break;
         case '[':
-            iPosOfClosedBrace = nonEventPart.indexOf('}', tailStart + 2);
+            iPosOfClosedBrace = nonEventPart.indexOf(']', tailStart + 2);
             specifier.isModulo = true;
+            specifier.modulo = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace);
             break;
         default:
             throw 'PE'; //Parsing error
