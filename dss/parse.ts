@@ -78,7 +78,7 @@ async function parseProp(
 ){
 
     const s = specifier.self ? '$0' : nonEventPart.substring(tailStart, tailStart + 1) as Sigils | ':';
-    const {scopeS} = specifier;
+    const {scopeS, isModulo} = specifier;
     tailStart += specifier.self ? 2 : 1;
     const iPosOfSC = nonEventPart.indexOf(':', tailStart);
     let propInference: string;
@@ -144,7 +144,7 @@ async function parseProp(
             break;
         case '@':
             specifier.elS = `[name="${propInference}"]`;
-            if(scopeS === undefined){
+            if(scopeS === undefined && !isModulo){
                 if(specifier.dss === undefined) specifier.dss = '^';
                 specifier.scopeS = 'form';
                 specifier.rnf = true;

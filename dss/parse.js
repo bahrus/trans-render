@@ -67,7 +67,7 @@ export async function parse(s) {
 }
 async function parseProp(nonEventPart, tailStart, specifier) {
     const s = specifier.self ? '$0' : nonEventPart.substring(tailStart, tailStart + 1);
-    const { scopeS } = specifier;
+    const { scopeS, isModulo } = specifier;
     tailStart += specifier.self ? 2 : 1;
     const iPosOfSC = nonEventPart.indexOf(':', tailStart);
     let propInference;
@@ -135,7 +135,7 @@ async function parseProp(nonEventPart, tailStart, specifier) {
             break;
         case '@':
             specifier.elS = `[name="${propInference}"]`;
-            if (scopeS === undefined) {
+            if (scopeS === undefined && !isModulo) {
                 if (specifier.dss === undefined)
                     specifier.dss = '^';
                 specifier.scopeS = 'form';
