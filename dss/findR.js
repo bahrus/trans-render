@@ -19,7 +19,7 @@ async function getHostish(el, prop) {
     }
 }
 export async function findR(element, specifier, scopeE) {
-    const { scopeS, elS } = specifier;
+    const { scopeS, elS, isModulo } = specifier;
     if (scopeS !== undefined) {
         const { dss, rec, rnf, host, s, prop, isiss } = specifier;
         switch (dss) {
@@ -76,5 +76,14 @@ export async function findR(element, specifier, scopeE) {
             case 'Y':
                 throw 'NI';
         }
+    }
+    else if (isModulo) {
+        const { modulo: m, elS } = specifier;
+        const { modulo } = await import('./modulo.js');
+        const within = modulo(element, m);
+        if (elS !== undefined)
+            throw 'NI'; //not implemented
+        return within;
+        //within
     }
 }
