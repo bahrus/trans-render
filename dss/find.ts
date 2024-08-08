@@ -1,5 +1,5 @@
 import { Specifier } from "../ts-refs/trans-render/dss/types";
-import {ZeroOrMore} from '../types';
+import {ZeroOrMore} from '../ts-refs/trans-render/types';
 export async function find(element: Element, specifier: Specifier, within?: ZeroOrMore<Element>){
     const {self, s} = specifier;
     if(self) return element;

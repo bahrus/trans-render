@@ -1,5 +1,5 @@
 import { Specifier } from "../ts-refs/trans-render/dss/types";
-import {ZeroOrMore} from '../types';
+import {ZeroOrMore} from '../ts-refs/trans-render/types';
 
 async function getHostish(el: Element, prop?: string){
     let {localName, ish} = el as any;

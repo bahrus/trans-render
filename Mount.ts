@@ -1,6 +1,6 @@
 import {O, OConfig} from './froop/O.js';
-import { MntCfg, MountActions, MountProps, PMP, ProPMP } from '../ts-refs/trans-render/types.js'; 
-export {MntCfg, MountProps, MountActions} from '../ts-refs/trans-render/types.js'; 
+import { MntCfg, MountActions, MountProps, PMP, ProPMP } from './ts-refs/trans-render/types.js'; 
+export {MntCfg, MountProps, MountActions} from './ts-refs/trans-render/types.js'; 
 
 
 export class Mount<TProps extends {}, TActions = TProps, ETProps = TProps> 

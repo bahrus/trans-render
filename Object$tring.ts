@@ -1,4 +1,4 @@
-import {IObject$tring} from '../ts-refs/trans-render/types.js'; 
+import {IObject$tring} from './ts-refs/trans-render/types.js'; 
 export class Object$tring implements IObject$tring{
     strVal: string | undefined;
     objVal: any;

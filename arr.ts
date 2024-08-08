@@ -1,4 +1,4 @@
-import {ZeroOrMore} from './types';
+import {ZeroOrMore} from './ts-refs/trans-render/types';
 export function arr<T = any>(inp: ZeroOrMore<T>) : T[] | undefined {
     return inp === undefined ? undefined
         : Array.isArray(inp) ? inp : [inp];

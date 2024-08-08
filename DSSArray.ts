@@ -1,4 +1,4 @@
-import { Specifier } from '../ts-refs/trans-render/dss/types.js';  //'./dss/types.js';
+import { Specifier } from './ts-refs/trans-render/dss/types.js';  //'./dss/types.js';
 import { IObject$tring } from './ts-refs/trans-render/types.js'; 
 
 export class DSSArray implements IObject$tring{
