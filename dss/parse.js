@@ -35,10 +35,15 @@ export async function parse(s) {
             specifier.dss = 'Y';
             specifier.rec = true;
             tailStart = 2;
+            break;
         case '?': {
             //TODO
             throw 'NI';
         }
+        case '%[':
+            specifier.dss = '%';
+            tailStart = 2;
+            break;
         default:
             const head0 = head2[0];
             switch (head0) {
@@ -169,17 +174,27 @@ async function parseProp(nonEventPart, tailStart, specifier) {
     }
 }
 function parseScope(nonEventPart, tailStart, specifier) {
-    if (nonEventPart.substring(tailStart, tailStart + 1) !== '{')
-        throw 'PE'; //parsing error
-    const iPosOfClosedBrace = nonEventPart.indexOf('}', tailStart + 2);
-    if (iPosOfClosedBrace === -1)
-        throw 'PE'; // parsing error
-    let scopeS = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace);
-    if (scopeS.startsWith('(') && scopeS.endsWith(')')) {
-        specifier.isiss = true;
-        scopeS = scopeS.substring(1, scopeS.length - 1);
+    const openingSymbol = nonEventPart.substring(tailStart, tailStart + 1);
+    let iPosOfClosedBrace;
+    switch (openingSymbol) {
+        case '{':
+            iPosOfClosedBrace = nonEventPart.indexOf('}', tailStart + 2);
+            if (iPosOfClosedBrace === -1)
+                throw 'PE'; // parsing error
+            let scopeS = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace);
+            if (scopeS.startsWith('(') && scopeS.endsWith(')')) {
+                specifier.isiss = true;
+                scopeS = scopeS.substring(1, scopeS.length - 1);
+            }
+            specifier.scopeS = scopeS;
+            break;
+        case '[':
+            iPosOfClosedBrace = nonEventPart.indexOf('}', tailStart + 2);
+            specifier.isModulo = true;
+            break;
+        default:
+            throw 'PE'; //Parsing error
     }
-    specifier.scopeS = scopeS;
     return {
         tailStart: iPosOfClosedBrace + 1
     };

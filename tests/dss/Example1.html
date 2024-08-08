@@ -8,42 +8,45 @@
 <body>
     <script type=module>
         import {parse} from '/dss/parse.js';
-        const test1 = await parse('$0');
-        console.log('$0', test1);
-        const test2 = await parse('/myProp');
-        console.log('/myProp',  test2);
-        const test3 = await parse('|myProp');
-        console.log('|myProp', test3);
-        const test4 = await parse('%myProp');
-        console.log('%myProp', test4);
-        const test5 = await parse('@myProp');
-        console.log({test5});
-        const test6 = await parse('-my-prop');
-        console.log({test6});
-        const test7 = await parse('~myElement');
-        console.log({test7});
+        // const test1 = await parse('$0');
+        // console.log('$0', test1);
+        // const test2 = await parse('/myProp');
+        // console.log('/myProp',  test2);
+        // const test3 = await parse('|myProp');
+        // console.log('|myProp', test3);
+        // const test4 = await parse('%myProp');
+        // console.log('%myProp', test4);
+        // const test5 = await parse('@myProp');
+        // console.log({test5});
+        // const test6 = await parse('-my-prop');
+        // console.log({test6});
+        // const test7 = await parse('~myElement');
+        // console.log({test7});
         
 
-        const test11 = await parse('$0:myProp');
-        console.log({test11});
-        const test12 = await parse('/myProp:subProp1');
-        console.log({test12});
-        const test13 = await parse('|myProp:p');
-        console.log({test13});
-        const test14 = await parse('%myProp:subProp1:myMethod|7');
-        console.log({test14});
-        const test15 = await parse('@myProp:subProp1:myMethod|7::change');
-        console.log({test15});
-        const test16 = await parse('-my-prop:subProp1');
-        console.log({test16});
-        const test17 = await parse('~myElement:subProp1:myMethod|7::change');
-        console.log({test17});
+        // const test11 = await parse('$0:myProp');
+        // console.log({test11});
+        // const test12 = await parse('/myProp:subProp1');
+        // console.log({test12});
+        // const test13 = await parse('|myProp:p');
+        // console.log({test13});
+        // const test14 = await parse('%myProp:subProp1:myMethod|7');
+        // console.log({test14});
+        // const test15 = await parse('@myProp:subProp1:myMethod|7::change');
+        // console.log({test15});
+        // const test16 = await parse('-my-prop:subProp1');
+        // console.log({test16});
+        // const test17 = await parse('~myElement:subProp1:myMethod|7::change');
+        // console.log({test17});
 
-        const test23 = await parse('^{section}|myProp:p');
-        console.log({test23});
+        // const test23 = await parse('^{section}|myProp:p');
+        // console.log({test23});
 
-        const test24 = await parse('Y{*}@myProp:subProp1:myMethod|7::change');
-        console.log({test24});
+        // const test24 = await parse('Y{*}@myProp:subProp1:myMethod|7::change');
+        // console.log({test24});
+
+        const test25 = await parse('%[aria-rowIndex]@lhs');
+        console.log({test25});
     </script>
 </body>
 </html>
