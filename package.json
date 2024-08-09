@@ -48,9 +48,9 @@
       "default": "./dss/tref/getChildren.js",
       "types": "./dss/tref/getChildren.ts"
     },
-    "./dss/tref/insertTempl.js": {
-      "default": "./dss/tref/insertTempl.js",
-      "types": "./dss/tref/insertTempl.ts"
+    "./dss/tref/tagTempl.js": {
+      "default": "./dss/tref/tagTempl.js",
+      "types": "./dss/tref/tagTempl.ts"
     },
     "./dss/tref/querySelector.js": {
       "default": "./dss/tref/querySelector.js",
