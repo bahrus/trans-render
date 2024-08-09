@@ -83,7 +83,10 @@
     "./lib/getHost.js": "./lib/getHost.js",
     "./lib/getProp.js": "./lib/getProp.js",
     "./lib/getRecipientElement": "./lib/getRecipientElement.js",
-    "./lib/getVal.js": "./lib/getVal.js",
+    "./lib/getVal.js": {
+      "default": "./lib/getVal.js",
+      "types": "./lib/getVal.ts"
+    },
     "./lib/getValFromEvent.js": "./lib/getValFromEvent.js",
     "./lib/Hashit.js": "./lib/Hashit.js",
     "./lib/homeInOn.js": "./lib/homeInOn.js",
@@ -161,10 +164,10 @@
     "/ts-refs/*"
   ],
   "dependencies": {
-    "mount-observer": "0.0.30"
+    "mount-observer": "0.0.31"
   },
   "devDependencies": {
-    "@playwright/test": "1.45.3",
+    "@playwright/test": "1.46.0",
     "may-it-serve": "0.0.8",
     "xtal-shell": "0.0.27"
   },
