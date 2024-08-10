@@ -166,7 +166,7 @@
     "/ts-refs/*"
   ],
   "dependencies": {
-    "mount-observer": "0.0.33"
+    "mount-observer": "0.0.34"
   },
   "devDependencies": {
     "@playwright/test": "1.46.0",
