@@ -34,11 +34,12 @@ export function tagTempl(templToTag: HTMLTemplateElement, baseID: string){
     for(const child of children){
         if(!child.id){
             const cnt = getCount(baseID);
-            child.id = `${baseID}_${cnt}`;
+            child.id = `${baseID}-${cnt}`;
         }
         keys.push(child.id);
     }
 
     templToTag.setAttribute('itemref', keys.join(' '));
     if(!templToTag.hasAttribute('itemscope')) templToTag.setAttribute('itemscope', '');
+    templToTag.after(clone);
 }
