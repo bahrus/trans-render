@@ -20,6 +20,10 @@
       "default": "./Transform.js",
       "types": "./Transform.ts"
     },
+    "./Transform.js": {
+      "default": "./Transform.js",
+      "types": "./Transform.ts"
+    },
     "./arr.js": {
       "default": "./arr.js",
       "types": "./arr.ts"
