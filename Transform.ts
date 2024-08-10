@@ -7,7 +7,7 @@ import {
     onMountStatusChange, RHS, AddEventListener,
     IfInstructions, UnitOfWork, QueryInfo, PropOrComputedProp, ITransformer, XForm, MarkedUpEventTarget, TransformOptions, LHS, WhereConditions, Info, ModificationUnitOfWork, YieldSettings
 } from './ts-refs/trans-render/types.js'; 
-import { IMountObserver, MountContext, PipelineStage } from 'mount-observer/types';
+import { IMountObserver, MountContext, PipelineStage } from './ts-refs/mount-observer/types';
 import {arr0} from './arr.js';
 export {arr0} from './arr.js';
 export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './ts-refs/trans-render/types.js'; 

@@ -1,4 +1,4 @@
-import { IMountObserver, MountContext, PipelineStage } from 'mount-observer/types';
+import { IMountObserver, MountContext, PipelineStage } from '../ts-refs/mount-observer/types';
 import { MountOrchestrator, Transformer, arr0 } from '../Transform.js';
 import { onMountStatusChange, EngagementCtx, UnitOfWork, Engagement, EngagementOrEMC } from '../ts-refs/trans-render/types.js'; 
 import { assignGingerly } from '../lib/assignGingerly.js';
