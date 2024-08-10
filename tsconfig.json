@@ -15,6 +15,7 @@
 		"Transform.ts",
 		"Mount.ts",
 		"dss/*",
+		"dss/tref/*"
 		"lib/*",
 		"lib/prs/*",
 		"demo/*",
