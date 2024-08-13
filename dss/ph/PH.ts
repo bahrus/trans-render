@@ -1,9 +1,11 @@
+import {PHI} from '../../ts-refs/trans-render/dss/types';
+
 export const sym = Symbol.for('X6fTibxRk0KqM9FSHfqktA');
 
 /**
  * Prop Host
  */
-export class PH<TValue = any>{
+export class PH<TValue = any> implements PHI<TValue>{
     #propagator: EventTarget = new EventTarget();
     get propagator(){
         return this.#propagator;
@@ -13,7 +15,7 @@ export class PH<TValue = any>{
         return this.#value;
     }
     syncVal(el: Element){
-        
+
     }
     async setValue(el: Element, nv: TValue){
         this.#value = nv;
