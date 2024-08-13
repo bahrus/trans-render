@@ -12,6 +12,9 @@ export class PH<TValue = any>{
     async getValue(el: Element){
         return this.#value;
     }
+    syncVal(el: Element){
+        
+    }
     async setValue(el: Element, nv: TValue){
         this.#value = nv;
         const {localName} = el;
