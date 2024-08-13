@@ -1,6 +1,5 @@
-import {PHI} from '../../ts-refs/trans-render/dss/types';
+import { PHI } from "../../ts-refs/trans-render/dss/types";
 
-export const sym = Symbol.for('X6fTibxRk0KqM9FSHfqktA');
 
 /**
  * Prop Host
@@ -62,16 +61,7 @@ export class PH<TValue = any> implements PHI<TValue>{
     }
 }
 
-let map: WeakMap<Element, PH> = (<any>globalThis)[sym] as WeakMap<Element, PH>;
-if(map === undefined){
-    map = new WeakMap<Element, PH>();
-    (<any>globalThis)[sym] = map;
-}
 
 
 
-export function getPH(element: Element){
-    if(!map.has(element)){
-        map.set(element, new PH());
-    }
-}
+
