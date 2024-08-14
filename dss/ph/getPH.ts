@@ -16,6 +16,7 @@ export async function getPH(element: Element, options: GetPHOptions){
             options.isRoundAboutReady = isRoundAboutReady =  (<any>element).propagator instanceof EventTarget;
         }
         if(isRoundAboutReady){
+            // move this logic to constructor
             if(prop === undefined){
                 options.prop = prop = 'value';
             }if(evtName === undefined){
@@ -34,6 +35,14 @@ export async function getPH(element: Element, options: GetPHOptions){
             }else if(sota !== undefined){
                 const {SotaPH} = await import('./SotaPH.js');
                 if(!map.has(element)) map.set(element, new SotaPH(options, element));
+            }else if(prop !== undefined && evtName !== undefined){
+                throw 'NI'
+            }else if(prop === undefined && evtName !== undefined){
+                throw 'NI'
+            }else if(prop !== undefined && evtName === undefined){
+                throw 'NI'
+            }else if(prop === undefined && evtName === undefined){
+                throw 'NI'
             }
         }
     }
