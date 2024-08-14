@@ -4,7 +4,8 @@ import { PHI } from "../../ts-refs/trans-render/dss/types";
 /**
  * Prop Host
  */
-export class PH<TValue = any> implements PHI<TValue>{
+export class InputPH<TValue = any> implements PHI<TValue>{
+    outEvtName: string;
     #propagator: EventTarget = new EventTarget();
     get propagator(){
         return this.#propagator;

@@ -26,7 +26,7 @@
 		"MyCustomElement/*",
 		"positractions/*",
 		"funions/Localizer.ts"
-, "dss/ph/PH.ts"	],
+, "dss/ph/InputPH.void"	],
 	"exclude":[
 		"node_modules/*"
 	]
