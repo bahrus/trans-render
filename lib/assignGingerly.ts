@@ -37,10 +37,10 @@ async function applyChains(dest: any, chainOps: any){
         for(const token of split){
             let newContext = context[token];
             if(newContext === undefined){
-                const getMethod = `get${token[0].toUpperCase()}${token.substring(1)}`;
+                const newMethod = `new${token[0].toUpperCase()}${token.substring(1)}`;
                 let obj: any;
-                if(getMethod in context){
-                    obj = await context[getMethod]();
+                if(newMethod in context){
+                    obj = await context[newMethod]();
                 }else{
                     obj = {};
                     

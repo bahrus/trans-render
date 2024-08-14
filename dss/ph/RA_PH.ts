@@ -6,6 +6,14 @@ import { RoundaboutReady } from '../../ts-refs/trans-render/froop/types';
  */
 export class RA_PH implements PHI{
     constructor(public options: GetPHOptions, element: RoundaboutReady){
+        // move this logic to constructor
+        const {prop, evtName} = options;
+        if(prop === undefined){
+            options.prop = 'value';
+        }
+        if(evtName === undefined){
+            options.evtName = prop;
+        }
         this.propagator = element.propagator!;
     }
     propagator: EventTarget;

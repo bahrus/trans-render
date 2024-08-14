@@ -9,6 +9,7 @@ if(map === undefined){
     (<any>globalThis)[sym] = map;
 }
 
+
 export async function getPH(element: Element, options: GetPHOptions){
     if(!map.has(element)){
         let {isRoundAboutReady, prop, evtName, sota} = options;
@@ -16,12 +17,7 @@ export async function getPH(element: Element, options: GetPHOptions){
             options.isRoundAboutReady = isRoundAboutReady =  (<any>element).propagator instanceof EventTarget;
         }
         if(isRoundAboutReady){
-            // move this logic to constructor
-            if(prop === undefined){
-                options.prop = prop = 'value';
-            }if(evtName === undefined){
-                options.evtName = prop;
-            }
+
             const {RA_PH} = await import('./RA_PH.js');
             if(!map.has(element)) map.set(element, new RA_PH(options, element as any as  RoundaboutReady));
             
