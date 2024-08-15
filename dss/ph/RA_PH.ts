@@ -1,12 +1,11 @@
-import {PHI, GetPHOptions} from '../../ts-refs/trans-render/dss/types'
+import {PIP, GetPHOptions} from '../../ts-refs/trans-render/dss/types'
 import { RoundaboutReady } from '../../ts-refs/trans-render/froop/types';
 
 /**
  * Round about ready PH
  */
-export class RA_PH implements PHI{
+export class RA_PH implements PIP{
     constructor(public options: GetPHOptions, element: RoundaboutReady){
-        // move this logic to constructor
         const {prop, evtName} = options;
         if(prop === undefined){
             options.prop = 'value';
