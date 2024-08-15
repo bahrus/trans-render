@@ -1,9 +1,9 @@
-import { PHI, GetPHOptions } from "../../ts-refs/trans-render/dss/types";
+import { PIP, GetPHOptions } from "../../ts-refs/trans-render/dss/types";
 
 /**
  * Prop Host
  */
-export class InputPH<TValue, HTMLInputElement> implements PHI<TValue, HTMLInputElement>{
+export class InputPH<TValue, HTMLInputElement> implements PIP<TValue, HTMLInputElement>{
 
     constructor(public options: GetPHOptions, element: HTMLInputElement){
         

@@ -1,11 +1,11 @@
-import {PHI, GetPHOptions} from '../../ts-refs/trans-render/dss/types';
+import {PIP, GetPHOptions} from '../../ts-refs/trans-render/dss/types.js';
 import { RoundaboutReady } from '../../ts-refs/trans-render/froop/types.js';
 
 export const sym = Symbol.for('X6fTibxRk0KqM9FSHfqktA');
 
-let map: WeakMap<Element, PHI> = (<any>globalThis)[sym] as WeakMap<Element, PHI>;
+let map: WeakMap<Element, PIP> = (<any>globalThis)[sym] as WeakMap<Element, PIP>;
 if(map === undefined){
-    map = new WeakMap<Element, PHI>();
+    map = new WeakMap<Element, PIP>();
     (<any>globalThis)[sym] = map;
 }
 
