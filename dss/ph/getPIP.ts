@@ -18,7 +18,7 @@ export async function getPH(element: Element, options: GetPHOptions){
         }
         if(isRoundAboutReady){
 
-            const {RA_PH} = await import('./RA_PH.js');
+            const {RA_PH} = await import('./RA_PIP.js');
             if(!map.has(element)) map.set(element, new RA_PH(options, element as any as  RoundaboutReady));
             
         }else{
@@ -26,10 +26,10 @@ export async function getPH(element: Element, options: GetPHOptions){
                 if(evtName === undefined){
                     options.evtName = 'input';
                 }
-                const {InputPH} = await import('./InputPH.js');
+                const {InputPH} = await import('./InputPIP.js');
                 if(!map.has(element)) map.set(element, new InputPH(options, element));
             }else if(sota !== undefined){
-                const {SotaPH} = await import('./SotaPH.js');
+                const {SotaPH} = await import('./SotaPIP.js');
                 if(!map.has(element)) map.set(element, new SotaPH(options, element));
             }else if(prop !== undefined && evtName !== undefined){
                 throw 'NI'
