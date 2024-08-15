@@ -1,11 +1,13 @@
-import {PIP, GetPHOptions} from '../../ts-refs/trans-render/dss/types'
-import { RoundaboutReady } from '../../ts-refs/trans-render/froop/types';
+import {PIP, GetPIPOptions} from '../../ts-refs/trans-render/dss/types.js'
+import { RoundaboutReady } from '../../ts-refs/trans-render/froop/types.js';
+import {BasePIP} from './BasePIP.js';
 
 /**
  * Round about ready PH
  */
-export class RA_PH implements PIP{
-    constructor(public options: GetPHOptions, element: RoundaboutReady){
+export class RA_PH<TValue = any, TElement = Element> extends BasePIP<TValue, TElement>{
+    constructor(public options: GetPIPOptions, element: RoundaboutReady){
+        super();
         const {prop, evtName} = options;
         if(prop === undefined){
             options.prop = 'value';
@@ -16,18 +18,13 @@ export class RA_PH implements PIP{
         this.propagator = element.propagator!;
     }
     propagator: EventTarget;
-    getValue(el: Element): Promise<any> {
-        return (<any>el)[this.options.prop!];
-    }
-    setValue(el: Element, val: any) {
-        (<any>el)[this.options.prop!];
-    }
-    hydrate(el: Element) {
+
+    hydrate(el: TElement) {
         //throw new Error('Method not implemented.');
     }
-    syncVal(el: Element) {
-        //throw new Error('Method not implemented.');
-    }
+    // syncVal(el: Element) {
+    //     //throw new Error('Method not implemented.');
+    // }
     disconnect() {
         throw new Error('Method not implemented.');
     }

@@ -1,4 +1,4 @@
-import {PIP, GetPHOptions} from '../../ts-refs/trans-render/dss/types.js';
+import {PIP, GetPIPOptions} from '../../ts-refs/trans-render/dss/types.js';
 import { RoundaboutReady } from '../../ts-refs/trans-render/froop/types.js';
 
 export const sym = Symbol.for('X6fTibxRk0KqM9FSHfqktA');
@@ -10,14 +10,13 @@ if(map === undefined){
 }
 
 
-export async function getPH(element: Element, options: GetPHOptions){
+export async function getPH(element: Element, options: GetPIPOptions){
     if(!map.has(element)){
         let {isRoundAboutReady, prop, evtName, sota} = options;
         if(isRoundAboutReady === undefined){
             options.isRoundAboutReady = isRoundAboutReady =  (<any>element).propagator instanceof EventTarget;
         }
         if(isRoundAboutReady){
-
             const {RA_PH} = await import('./RA_PIP.js');
             if(!map.has(element)) map.set(element, new RA_PH(options, element as any as  RoundaboutReady));
             
@@ -29,8 +28,12 @@ export async function getPH(element: Element, options: GetPHOptions){
                 const {InputPH} = await import('./InputPIP.js');
                 if(!map.has(element)) map.set(element, new InputPH(options, element));
             }else if(sota !== undefined){
-                const {SotaPH} = await import('./SotaPIP.js');
-                if(!map.has(element)) map.set(element, new SotaPH(options, element));
+                const {SotaPIP} = await import('./SotaPIP.js');
+                if(prop === undefined){
+                    const {lispToCamel} = await import('../../lib/lispToCamel.js');
+                    if(options.prop === undefined) options.prop = lispToCamel(sota);
+                }
+                if(!map.has(element)) map.set(element, new SotaPIP(options, element));
             }else if(prop !== undefined && evtName !== undefined){
                 throw 'NI'
             }else if(prop === undefined && evtName !== undefined){
