@@ -19,7 +19,7 @@ export class FCC {
                 if ('value' in targetEl) { //example 'button', 'output'
                     valueProp = 'value';
                 }
-                else if ('href' in targetEl) { //example 'a'
+                else if ('href' in targetEl) { //example 'a', 'link'
                     valueProp = 'href';
                 }
                 else {

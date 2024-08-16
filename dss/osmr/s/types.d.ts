@@ -20,10 +20,34 @@ export type ValueType = StringWithAutocompleteOptions<
     | 'NumericRange'
 >;
 
-export interface SetOptions{
+export type TrueText = StringWithAutocompleteOptions<
+    | 'Yes'
+    | 'On'
+>;
+
+export type FalseText = StringWithAutocompleteOptions<
+    | 'No'
+    | 'Off'
+>;
+
+export type TrueValue = StringWithAutocompleteOptions<
+    | 'https://schema.org/True'
+    
+>;
+
+export type FalseValue = StringWithAutocompleteOptions<
+    | 'https://schema.org/False'
+>;
+
+export interface SetOptions<TProp = any>{
     valueProp?: ValueProp;
     valueType?: ValueType
     displayProps: ZeroOrMore<DisplayProp>;
+    valToDisplay?: (v: TProp) => string;
+    trueText?: TrueText;
+    falseText?: FalseText;
+    trueValue?: TrueValue;
+    falseValue?: FalseValue;
 }
 
 export interface Setter<TProp = any> {
