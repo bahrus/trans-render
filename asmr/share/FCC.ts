@@ -1,11 +1,14 @@
-import { SetOptions, ValueProp } from "./types";
+import { SetOptions, ValueProp } from "../../ts-refs/trans-render/asmr/types";
 
 
 /**
  * Flow Content Container
  */
 export class FCC<TProp = any>{
-    constructor(public so: SetOptions, targetEl: Element){
+    constructor(targetEl: Element, public so: SetOptions){
+        this.mindRead(targetEl, so);
+    }
+    async mindRead(targetEl: Element, so: SetOptions){
         let {valueProp, valueType, displayProps} = so;
         if(valueProp === undefined){
             if(valueType === 'Boolean'){
@@ -41,6 +44,8 @@ export class FCC<TProp = any>{
             }
             so.displayProps = 'textContent';
         }
+        
 
     }
+
 }
