@@ -1,4 +1,4 @@
-import {StringWithAutocompleteOptions, ZeroOrMore} from '../../../ts-refs/trans-render/types';
+import {StringWithAutocompleteOptions, ZeroOrMore} from '../../ts-refs/trans-render/types';
 
 export type ValueProp = StringWithAutocompleteOptions<
     | 'value' 
