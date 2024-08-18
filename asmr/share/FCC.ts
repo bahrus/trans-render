@@ -1,15 +1,15 @@
-import { SetOptions, ValueProp } from "../../ts-refs/trans-render/asmr/types";
+import { SetOptions, SharingObject, ValueProp } from "../../ts-refs/trans-render/asmr/types";
 
 
 /**
  * Flow Content Container
  */
-export class FCC<TProp = any>{
+export class FCC<TProp = any> implements SharingObject{
     constructor(targetEl: Element, public so: SetOptions){
         this.mindRead(targetEl, so);
     }
-    async mindRead(targetEl: Element, so: SetOptions){
-        let {valueProp, valueType, displayProps} = so;
+    mindRead(targetEl: Element, so: SetOptions){
+        let {valueProp, valueType, displayProp} = so;
         if(valueProp === undefined){
             if(valueType === 'Boolean'){
                 if('checked' in targetEl){
@@ -34,18 +34,31 @@ export class FCC<TProp = any>{
             so.valueProp = valueProp;
 
         }
-        if(displayProps === undefined){
+        if(displayProp === undefined){
             switch(valueType){
                 case 'NumericRange':
-                    displayProps = 'ariaValueText';
+                    displayProp = 'ariaValueText';
                     break;
                 default:
-                    displayProps = 'textContent';
+                    displayProp = 'textContent';
+                    break;
             }
-            so.displayProps = 'textContent';
+            so.displayProp = 'textContent';
         }
         
 
     }
-
+    #pureValue;
+    setValue(el: Element, val: TProp) {
+        this.#pureValue = val;
+        const {valueType, displayProp} = this.so;
+        switch(typeof val){
+            case 'string':
+                if(valueType === undefined){
+                    (<any>el)[displayProp!] = val;
+                }
+            default:
+                throw 'NI';
+        }
+    }
 }
