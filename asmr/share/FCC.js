@@ -3,9 +3,12 @@
  */
 export class FCC {
     so;
-    constructor(so, targetEl) {
+    constructor(targetEl, so) {
         this.so = so;
-        let { valueProp, valueType, displayProps } = so;
+        this.mindRead(targetEl, so);
+    }
+    mindRead(targetEl, so) {
+        let { valueProp, valueType, displayProp } = so;
         if (valueProp === undefined) {
             if (valueType === 'Boolean') {
                 if ('checked' in targetEl) {
@@ -32,15 +35,30 @@ export class FCC {
             }
             so.valueProp = valueProp;
         }
-        if (displayProps === undefined) {
+        if (displayProp === undefined) {
             switch (valueType) {
                 case 'NumericRange':
-                    displayProps = 'ariaValueText';
+                    displayProp = 'ariaValueText';
                     break;
                 default:
-                    displayProps = 'textContent';
+                    displayProp = 'textContent';
+                    break;
             }
-            so.displayProps = 'textContent';
+            so.displayProp = 'textContent';
+        }
+    }
+    #pureValue;
+    setValue(el, val) {
+        this.#pureValue = val;
+        const { valueType, displayProp } = this.so;
+        switch (typeof val) {
+            case 'string':
+                if (valueType === undefined) {
+                    el[displayProp] = val;
+                }
+                break;
+            default:
+                throw 'NI';
         }
     }
 }

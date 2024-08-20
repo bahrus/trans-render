@@ -48,7 +48,7 @@ export class FCC<TProp = any> implements SharingObject{
         
 
     }
-    #pureValue;
+    #pureValue: TProp | undefined;
     setValue(el: Element, val: TProp) {
         this.#pureValue = val;
         const {valueType, displayProp} = this.so;
@@ -57,6 +57,7 @@ export class FCC<TProp = any> implements SharingObject{
                 if(valueType === undefined){
                     (<any>el)[displayProp!] = val;
                 }
+                break;
             default:
                 throw 'NI';
         }

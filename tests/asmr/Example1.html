@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>asmr example 1</title>
+</head>
+<body>
+    <span id=span></span>
+
+    <script type=module>
+        import {ASMR} from '../../asmr/asmr.js';
+        const spanSO = await ASMR.getSO(span);
+        spanSO.setValue(span, 'hello');
+    </script>
+</body>
+</html>
