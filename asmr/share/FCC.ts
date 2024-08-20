@@ -10,6 +10,7 @@ export class FCC<TProp = any> implements SharingObject{
     }
     mindRead(targetEl: Element, so: SetOptions){
         let {valueProp, valueType, displayProp} = so;
+        
         if(valueProp === undefined){
             if(valueType === 'Boolean'){
                 if('checked' in targetEl){
@@ -18,7 +19,7 @@ export class FCC<TProp = any> implements SharingObject{
                     valueProp = 'ariaChecked';
                 }
             }else{
-                if('value' in targetEl){ //example 'button', 'output'
+                if('value' in targetEl){ //example 'input', 'output'
                     valueProp = 'value';
                 }else if('href' in targetEl){ //example 'a', 'link'
                     valueProp = 'href';
@@ -52,6 +53,7 @@ export class FCC<TProp = any> implements SharingObject{
     setValue(el: Element, val: TProp) {
         this.#pureValue = val;
         const {valueType, displayProp} = this.so;
+        const {localName} = el;
         switch(typeof val){
             case 'string':
                 if(valueType === undefined){
@@ -60,6 +62,9 @@ export class FCC<TProp = any> implements SharingObject{
                 break;
             default:
                 throw 'NI';
+        }
+        if(localName === 'button' && !el.textContent){
+            el.textContent = val;
         }
     }
 }
