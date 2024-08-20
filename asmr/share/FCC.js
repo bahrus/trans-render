@@ -9,6 +9,7 @@ export class FCC {
     }
     mindRead(targetEl, so) {
         let { valueProp, valueType, displayProp } = so;
+        const { localName } = targetEl;
         if (valueProp === undefined) {
             if (valueType === 'Boolean') {
                 if ('checked' in targetEl) {
@@ -19,7 +20,7 @@ export class FCC {
                 }
             }
             else {
-                if ('value' in targetEl) { //example 'input', 'output'
+                if ('value' in targetEl && !'button-li'.includes(localName)) { //example 'input', 'output'
                     valueProp = 'value';
                 }
                 else if ('href' in targetEl) { //example 'a', 'link'
@@ -36,33 +37,41 @@ export class FCC {
             so.valueProp = valueProp;
         }
         if (displayProp === undefined) {
-            switch (valueType) {
-                case 'NumericRange':
-                    displayProp = 'ariaValueText';
+            switch (localName) {
+                case 'input':
+                    //no value
                     break;
                 default:
-                    displayProp = 'textContent';
-                    break;
+                    switch (valueType) {
+                        case 'NumericRange':
+                            displayProp = 'ariaValueText';
+                            break;
+                        default:
+                            displayProp = 'textContent';
+                            break;
+                    }
             }
-            so.displayProp = 'textContent';
+            so.displayProp = displayProp;
         }
     }
     #pureValue;
-    setValue(el, val) {
+    async setValue(el, val) {
         this.#pureValue = val;
-        const { valueType, displayProp } = this.so;
+        const { valueType, displayProp, valueProp } = this.so;
         const { localName } = el;
-        switch (typeof val) {
-            case 'string':
-                if (valueType === undefined) {
-                    el[displayProp] = val;
-                }
-                break;
-            default:
-                throw 'NI';
+        if (displayProp !== undefined) {
+            switch (typeof val) {
+                case 'string':
+                    if (valueType === undefined) {
+                        el[displayProp] = val;
+                    }
+                    break;
+                default:
+                    throw 'NI';
+            }
         }
-        if (localName === 'button' && !el.textContent) {
-            el.textContent = val;
+        if (valueProp !== undefined) {
+            el[valueProp] = val;
         }
     }
 }

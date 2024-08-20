@@ -9,7 +9,7 @@ if(sharingObjMap === undefined){
 
 export class ASMR {
     static async getSO(element: Element, options?: SetOptions){
-        if(sharingObjMap.has(element)) return sharingObjMap.get(element);
+        if(sharingObjMap.has(element)) return sharingObjMap.get(element)!;
         const {FCC} = await import('./share/FCC.js');
         const fcc = new FCC(element, {...(options || {})});
         sharingObjMap.set(element, fcc);

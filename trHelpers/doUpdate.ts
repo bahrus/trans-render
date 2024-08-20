@@ -1,5 +1,4 @@
 import {MountOrchestrator, Transformer} from '../Transform.js';
-import { match } from '../lib/specialKeys.js';
 import { Derivative, UnitOfWork } from '../ts-refs/trans-render/types.js'; 
 export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = {}>(
     transformer: Transformer<TProps, TMethods, TElement>,
@@ -59,7 +58,6 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
         const subModel = (<any>model)[(o as Array<string>)[0]];
         if(forEachImpl !== undefined){
             await forEachImpl.update(subModel);
-            
         }
         return;
     }
@@ -82,7 +80,10 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
     }else if(invoke !== undefined){
         await (<any>matchingElement)[invoke](val);
     }else{
-        transformer.setPrimeValue(matchingElement, val);
+        const {ASMR} = await import('../asmr/asmr.js');
+        const so = await ASMR.getSO(matchingElement);
+        so.setValue(matchingElement, val);
+        //transformer.setPrimeValue(matchingElement, val);
     }
 }
 

@@ -305,36 +305,6 @@ export class Transformer extends EventTarget {
             return pOrC[0];
         return pOrC;
     }
-    setPrimeValue(matchingElement, val) {
-        if (typeof val === 'object' && !Array.isArray(val)) {
-            Object.assign(matchingElement, val);
-            return;
-        }
-        const defaultProp = this.getDefaultProp(matchingElement);
-        switch (defaultProp) {
-            case 'href':
-                if (matchingElement instanceof HTMLLinkElement && typeof val === 'boolean') {
-                    matchingElement.href = 'https://schema.org/' + (val ? 'True' : 'False');
-                    return;
-                }
-        }
-        matchingElement[defaultProp] = val;
-    }
-    getDefaultProp(matchingElement) {
-        if ('href' in matchingElement)
-            return 'href';
-        if ('value' in matchingElement && !('button-li'.includes(matchingElement.localName))) {
-            if (matchingElement instanceof HTMLInputElement) {
-                const { type } = matchingElement;
-                switch (type) {
-                    case 'checkbox':
-                        return 'checked';
-                }
-            }
-            return 'value';
-        }
-        return 'textContent';
-    }
 }
 export class MountOrchestrator extends EventTarget {
     transformer;

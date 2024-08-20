@@ -10,7 +10,7 @@ export class FCC<TProp = any> implements SharingObject{
     }
     mindRead(targetEl: Element, so: SetOptions){
         let {valueProp, valueType, displayProp} = so;
-        
+        const {localName} = targetEl;
         if(valueProp === undefined){
             if(valueType === 'Boolean'){
                 if('checked' in targetEl){
@@ -19,7 +19,7 @@ export class FCC<TProp = any> implements SharingObject{
                     valueProp = 'ariaChecked';
                 }
             }else{
-                if('value' in targetEl){ //example 'input', 'output'
+                if('value' in targetEl && !'button-li'.includes(localName)){ //example 'input', 'output'
                     valueProp = 'value';
                 }else if('href' in targetEl){ //example 'a', 'link'
                     valueProp = 'href';
@@ -36,35 +36,46 @@ export class FCC<TProp = any> implements SharingObject{
 
         }
         if(displayProp === undefined){
-            switch(valueType){
-                case 'NumericRange':
-                    displayProp = 'ariaValueText';
+            switch(localName){
+                case 'input':
+                    //no value
                     break;
                 default:
-                    displayProp = 'textContent';
-                    break;
+                    switch(valueType){
+                        case 'NumericRange':
+                            displayProp = 'ariaValueText';
+                            break;
+                        default:
+                            displayProp = 'textContent';
+                            break;
+                    }
             }
-            so.displayProp = 'textContent';
+
+            so.displayProp = displayProp;
         }
         
 
     }
     #pureValue: TProp | undefined;
-    setValue(el: Element, val: TProp) {
+    async setValue(el: Element, val: TProp) {
         this.#pureValue = val;
-        const {valueType, displayProp} = this.so;
+        const {valueType, displayProp, valueProp} = this.so;
         const {localName} = el;
-        switch(typeof val){
-            case 'string':
-                if(valueType === undefined){
-                    (<any>el)[displayProp!] = val;
-                }
-                break;
-            default:
-                throw 'NI';
+        if(displayProp !== undefined){
+            switch(typeof val){
+                case 'string':
+                    if(valueType === undefined){
+                        (<any>el)[displayProp!] = val;
+                    }
+                    break;
+                default:
+                    throw 'NI';
+            }
         }
-        if(localName === 'button' && !el.textContent){
-            el.textContent = val;
+        if(valueProp !== undefined){
+            (<any>el)[valueProp!] = val;
         }
+
+
     }
 }

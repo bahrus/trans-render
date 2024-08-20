@@ -334,38 +334,38 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
         return pOrC;
     }
 
-    setPrimeValue(matchingElement: Element, val: any){
-        if(typeof val === 'object'  && !Array.isArray(val)){
-            Object.assign(matchingElement, val);
-            return;
+    // setPrimeValue(matchingElement: Element, val: any){
+    //     if(typeof val === 'object'  && !Array.isArray(val)){
+    //         Object.assign(matchingElement, val);
+    //         return;
             
-        }
-        const defaultProp = this.getDefaultProp(matchingElement);
-        switch(defaultProp){
-            case 'href':
-                if(matchingElement instanceof HTMLLinkElement && typeof val === 'boolean'){
-                    matchingElement.href = 'https://schema.org/' + (val ? 'True' : 'False');
-                    return;
-                }
-        }
-        (<any>matchingElement)[defaultProp] = val;
-    }
+    //     }
+    //     const defaultProp = this.getDefaultProp(matchingElement);
+    //     switch(defaultProp){
+    //         case 'href':
+    //             if(matchingElement instanceof HTMLLinkElement && typeof val === 'boolean'){
+    //                 matchingElement.href = 'https://schema.org/' + (val ? 'True' : 'False');
+    //                 return;
+    //             }
+    //     }
+    //     (<any>matchingElement)[defaultProp] = val;
+    // }
 
-    getDefaultProp(matchingElement: Element){
-        if('href' in matchingElement) return 'href';
-        if('value' in matchingElement && !('button-li'.includes(matchingElement.localName))) {
-            if(matchingElement instanceof HTMLInputElement){
-                const {type} = matchingElement;
-                switch(type){
-                    case 'checkbox':
-                        return 'checked';
+    // getDefaultProp(matchingElement: Element){
+    //     if('href' in matchingElement) return 'href';
+    //     if('value' in matchingElement && !('button-li'.includes(matchingElement.localName))) {
+    //         if(matchingElement instanceof HTMLInputElement){
+    //             const {type} = matchingElement;
+    //             switch(type){
+    //                 case 'checkbox':
+    //                     return 'checked';
                     
-                }
-            }
-            return 'value';
-        } 
-        return 'textContent';
-    }
+    //             }
+    //         }
+    //         return 'value';
+    //     } 
+    //     return 'textContent';
+    // }
 
 }
 

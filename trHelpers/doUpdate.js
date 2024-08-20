@@ -84,7 +84,10 @@ export async function doUpdate(transformer, matchingElement, uow) {
         await matchingElement[invoke](val);
     }
     else {
-        transformer.setPrimeValue(matchingElement, val);
+        const { ASMR } = await import('../asmr/asmr.js');
+        const so = await ASMR.getSO(matchingElement);
+        so.setValue(matchingElement, val);
+        //transformer.setPrimeValue(matchingElement, val);
     }
 }
 async function setPath(matchingElement, path, val) {
