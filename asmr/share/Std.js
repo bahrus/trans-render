@@ -1,7 +1,7 @@
 /**
  * Flow Content Container
  */
-export class FCC {
+export class Std {
     so;
     constructor(targetEl, so) {
         this.so = so;

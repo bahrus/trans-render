@@ -8,8 +8,8 @@ export class ASMR {
     static async getSO(element, options) {
         if (sharingObjMap.has(element))
             return sharingObjMap.get(element);
-        const { FCC } = await import('./share/FCC.js');
-        const fcc = new FCC(element, { ...(options || {}) });
+        const { Std } = await import('./share/Std.js');
+        const fcc = new Std(element, { ...(options || {}) });
         sharingObjMap.set(element, fcc);
         return fcc;
     }

@@ -4,7 +4,7 @@ import { SetOptions, SharingObject, ValueProp } from "../../ts-refs/trans-render
 /**
  * Flow Content Container
  */
-export class FCC<TProp = any> implements SharingObject{
+export class Std<TProp = any> implements SharingObject{
     constructor(targetEl: Element, public so: SetOptions){
         this.mindRead(targetEl, so);
     }
