@@ -62,10 +62,14 @@ export class FCC {
         if (displayProp !== undefined) {
             switch (typeof val) {
                 case 'string':
+                case 'boolean':
                     if (valueType === undefined) {
                         el[displayProp] = val;
                     }
                     break;
+                // case 'boolean':
+                //     debugger;
+                //     break;
                 default:
                     throw 'NI';
             }

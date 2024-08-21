@@ -64,10 +64,14 @@ export class FCC<TProp = any> implements SharingObject{
         if(displayProp !== undefined){
             switch(typeof val){
                 case 'string':
+                case 'boolean':
                     if(valueType === undefined){
                         (<any>el)[displayProp!] = val;
                     }
                     break;
+                // case 'boolean':
+                //     debugger;
+                //     break;
                 default:
                     throw 'NI';
             }
@@ -75,7 +79,5 @@ export class FCC<TProp = any> implements SharingObject{
         if(valueProp !== undefined){
             (<any>el)[valueProp!] = val;
         }
-
-
     }
 }
