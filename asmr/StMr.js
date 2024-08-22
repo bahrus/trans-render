@@ -1,10 +1,13 @@
+const id = 'trans-render.StMr';
 /**
  * Standard MindRead
  * @param el
  * @param asmrOptions
  */
 export function StMr(el, asmrOptions) {
-    let { valueProp, valueType, displayProp } = asmrOptions;
+    let { valueProp, valueType, displayProp, mrID } = asmrOptions;
+    if (mrID === id)
+        return;
     const { localName } = el;
     if (valueProp === undefined) {
         if (valueType === 'Boolean') {
@@ -48,5 +51,6 @@ export function StMr(el, asmrOptions) {
                 }
         }
         asmrOptions.displayProp = displayProp;
+        asmrOptions.mrID = id;
     }
 }
