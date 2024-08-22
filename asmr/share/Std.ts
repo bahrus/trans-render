@@ -2,7 +2,7 @@ import { SetOptions, SharingObject, ValueProp } from "../../ts-refs/trans-render
 import { StMr } from '../StMr.js';
 
 /**
- * Flow Content Container
+ * Standard sharing
  */
 export class Std<TProp = any> implements SharingObject{
     constructor(targetEl: Element, public so: SetOptions){
@@ -19,18 +19,23 @@ export class Std<TProp = any> implements SharingObject{
                 case 'boolean':
                     if(valueType === undefined){
                         (<any>el)[displayProp!] = val;
+                    }else{
+                        throw 'NI';
                     }
                     break;
-                // case 'boolean':
-                //     debugger;
-                //     break;
                 default:
-                    //remember for boolean to use "mixed" when targeting ariaChecked
                     throw 'NI';
             }
         }
         if(valueProp !== undefined){
-            (<any>el)[valueProp!] = val;
+            switch(valueProp!){
+                case 'ariaChecked':
+                    el.ariaChecked = val === true ? 'true' : val === false ? 'false' : 'mixed';
+                    break;
+                default:
+                    (<any>el)[valueProp!] = val;
+            }
+            
         }
     }
 }

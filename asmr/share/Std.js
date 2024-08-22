@@ -1,6 +1,6 @@
 import { StMr } from '../StMr.js';
 /**
- * Flow Content Container
+ * Standard sharing
  */
 export class Std {
     so;
@@ -20,17 +20,22 @@ export class Std {
                     if (valueType === undefined) {
                         el[displayProp] = val;
                     }
+                    else {
+                        throw 'NI';
+                    }
                     break;
-                // case 'boolean':
-                //     debugger;
-                //     break;
                 default:
-                    //remember for boolean to use "mixed" when targeting ariaChecked
                     throw 'NI';
             }
         }
         if (valueProp !== undefined) {
-            el[valueProp] = val;
+            switch (valueProp) {
+                case 'ariaChecked':
+                    el.ariaChecked = val === true ? 'true' : val === false ? 'false' : 'mixed';
+                    break;
+                default:
+                    el[valueProp] = val;
+            }
         }
     }
 }
