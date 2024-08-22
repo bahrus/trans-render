@@ -8,9 +8,9 @@ export class Std {
         this.so = so;
         StMr(targetEl, so);
     }
-    #pureValue;
+    pureValue;
     async setValue(el, val) {
-        this.#pureValue = val;
+        this.pureValue = val;
         const { valueType, displayProp, valueProp } = this.so;
         const { localName } = el;
         if (displayProp !== undefined) {

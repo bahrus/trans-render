@@ -8,9 +8,9 @@ export class Std<TProp = any> implements SharingObject{
     constructor(targetEl: Element, public so: SetOptions){
         StMr(targetEl, so);
     }
-    #pureValue: TProp | undefined;
+    pureValue: TProp | undefined;
     async setValue(el: Element, val: TProp) {
-        this.#pureValue = val;
+        this.pureValue = val;
         const {valueType, displayProp, valueProp} = this.so;
         const {localName} = el;
         if(displayProp !== undefined){
