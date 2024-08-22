@@ -1,6 +1,10 @@
-import { AbsorbingObject } from '../../ts-refs/trans-render/asmr/types';
+import { AbsOptions, AbsorbingObject } from '../../ts-refs/trans-render/asmr/types';
 export class Std<TProp=any> extends EventTarget implements AbsorbingObject{
-    getValue(el: Element): Promise<any> {
+    constructor(targetEl: Element, public ao: AbsOptions){
+        super();
+        
+    }
+    async getValue(el: Element) {
         throw new Error('Method not implemented.');
     }
     
