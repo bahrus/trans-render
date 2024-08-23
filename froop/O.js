@@ -23,12 +23,18 @@ export class O extends HTMLElement {
         }
         assignGingerly(this[publicPrivateStore], extObj);
     }
+    #disconnectedAbortController;
+    get disconnectedSignal() {
+        return this.#disconnectedAbortController.signal;
+    }
     constructor() {
         super();
         const internals = this.attachInternals();
         this.#internals = internals;
         this.copyInternals(internals);
+        this.#disconnectedAbortController = new AbortController();
     }
+    sleep;
     awake() {
         return new Promise((resolve, reject) => {
             if (!this.sleep) {
@@ -56,6 +62,9 @@ export class O extends HTMLElement {
     copyInternals(internals) { }
     static observedAttributes = [];
     async connectedCallback() {
+        if (this.#disconnectedAbortController.signal.aborted) {
+            this.#disconnectedAbortController = new AbortController();
+        }
         const props = this.constructor.props;
         this.#propUp(props);
         await this.#instantiateRoundaboutIfApplicable();
@@ -76,7 +85,7 @@ export class O extends HTMLElement {
         }
     }
     disconnectedCallback() {
-        this.propagator.dispatchEvent(new Event('disconnectedCallback'));
+        this.#disconnectedAbortController.abort();
     }
     #internals;
     #roundabout;

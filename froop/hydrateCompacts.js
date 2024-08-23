@@ -67,14 +67,14 @@ class CompactManager {
         const { srcKey } = cc;
         const { options } = ra;
         const { vm } = options;
-        const { propagator } = vm;
+        const { propagator, disconnectedSignal } = vm;
         propagator?.addEventListener(srcKey, this, { signal: this.#ac.signal });
         this.#doAction(false, true);
-        propagator?.addEventListener('disconnectedCallback', this, { once: true });
+        disconnectedSignal?.addEventListener('abort', this, { once: true });
     }
     handleEvent(e) {
         switch (e.type) {
-            case 'disconnectedCallback':
+            case 'abort':
                 this.#ac.abort();
                 break;
             default:

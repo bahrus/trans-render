@@ -30,13 +30,13 @@ class HitchManager{
         this.#ra = ra;
         const {options} = ra;
         const {vm} = options!;
-        const {propagator} = vm!;
+        const {propagator, disconnectedSignal} = vm!;
         const {middleKey, leftKey} = hs;
         this.#mkAC = new AbortController();
         EventHandler.new(this, this.#hydrate).sub(propagator, middleKey, {signal: this.#mkAC.signal});
         this.#lkAC = new AbortController();
         EventHandler.new(this, this.#hydrate).sub(propagator, leftKey, {signal: this.#lkAC.signal});
-        propagator.addEventListener('disconnectedCallback', () => {
+        disconnectedSignal.addEventListener('abort', () => {
             this.#disconnect();
             this.#disconnectLKAndMK();
         },  {once: true})

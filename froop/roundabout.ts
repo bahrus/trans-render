@@ -303,9 +303,9 @@ export class RoundAbout{
     async subscribe(){
         const {options} = this;
         const {vm} = options;
-        const {propagator} = vm;
+        const {propagator, disconnectedSignal} = vm;
         if(!(propagator instanceof EventTarget)) return;
-        propagator.addEventListener('disconnectedCallback', () => {
+        disconnectedSignal.addEventListener('abort', () => {
             //do inline as long as no external variable access other than this, I think
             this.#unsubscribe();
         }, {once: true});
