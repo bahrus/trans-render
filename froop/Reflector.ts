@@ -25,7 +25,7 @@ class AttrReflector implements EventListenerObject {
 export class Reflector{
     #acs: AbortController[] = [];
     constructor(public instance: O, public attrsToReflect: string){
-        const {propagator} = instance;
+        const {propagator, disconnectedSignal} = instance;
         const attrs = (<any>instance.constructor).attrs as {[key: string] : PropInfo};
         const reflectAll = attrsToReflect === '*';
         let parsedAttrsToReflect: string[] | undefined;
@@ -44,7 +44,7 @@ export class Reflector{
         }
         //I'm thinking this event handler doesn't access any shared memory
         // so no need to use EventHandler
-        propagator.addEventListener('disconnectedCallback', e => {
+        disconnectedSignal.addEventListener('abort', e => {
             this.#disconnect();
         }, {once: true});
     }

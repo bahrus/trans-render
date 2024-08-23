@@ -84,7 +84,7 @@ export class CustStExt {
     }
 
     async #do(instance: O, internals: ElementInternals){
-        const {propagator} = instance;
+        const {propagator, disconnectedSignal} = instance;
         for(const statement of this.splitSplit){
             const [customStateKey, expr] = statement;
             const re = new RegExp(String.raw `^(?<lhs>.*)(?<op>==|>|>=|<|<=)(?<rhs>.*)`);
@@ -118,9 +118,9 @@ export class CustStExt {
                 propagator.addEventListener(propName, mh, {signal: ac.signal});
             }
             //no memory access outside closure, I think
-            propagator.addEventListener('disconnectedCallback', e => {
+            disconnectedSignal.addEventListener('abort', e => {
                 this.#disconnect();
-            }, {once: true})
+            }, {once: true});
         }
     }
 
