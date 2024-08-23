@@ -28,12 +28,22 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         assignGingerly(this[publicPrivateStore], extObj);
 
     }
+
+    #disconnectedAbortController: AbortController;
+
+    get disconnectedSignal(){
+        return this.#disconnectedAbortController.signal;
+    }
+
     constructor(){
         super();
         const internals = this.attachInternals();
         this.#internals = internals;
         this.copyInternals(internals);
+        this.#disconnectedAbortController = new AbortController();
     }
+    
+    sleep?: number | undefined;
     awake() : Promise<void> {
         return new Promise((resolve, reject) => {
             if(!this.sleep) {
@@ -61,6 +71,9 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     copyInternals(internals: ElementInternals){}
     static observedAttributes: Array<string> = [];
     async connectedCallback(){
+        if(this.#disconnectedAbortController.signal.aborted){
+            this.#disconnectedAbortController = new AbortController();
+        }
         const props = (<any>this.constructor).props as PropLookup;
         this.#propUp(props);
         await this.#instantiateRoundaboutIfApplicable();
@@ -82,7 +95,8 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     }
 
     disconnectedCallback(): any {
-        this.propagator.dispatchEvent(new Event('disconnectedCallback'));
+
+        //this.propagator.dispatchEvent(new Event('disconnectedCallback'));
     }
 
     #internals: ElementInternals;
