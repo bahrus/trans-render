@@ -7,8 +7,6 @@ export class Std extends EventTarget {
         this.so = so;
     }
     async getValue(el) {
-        const { so } = this;
-        if (so !== undefined)
-            return so.pureValue;
+        return this.so.pureValue;
     }
 }

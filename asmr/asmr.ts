@@ -21,7 +21,8 @@ export class ASMR {
     }
     static async getAO(element: Element, options?: AbsOptions){
         if(absObjMap.has(element)) return absObjMap.get(element)!;
+        const so = await ASMR.getSO(element, options);
         const {Std} = await import('./absorb/Std.js');
-        const std = new Std(element, {...(options || {})});
+        const std = new Std(element, {...(options || {})}, so);
     }
 }
