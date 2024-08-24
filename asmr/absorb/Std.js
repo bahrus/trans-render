@@ -1,13 +1,13 @@
 export class Std extends EventTarget {
     ao;
     so;
-    ac;
+    disconnectedSignal;
     //#readMind = false;
-    constructor(sourceEl, ao, so, ac) {
+    constructor(sourceEl, ao, so, disconnectedSignal) {
         super();
         this.ao = ao;
         this.so = so;
-        this.ac = ac;
+        this.disconnectedSignal = disconnectedSignal;
         this.readMind(sourceEl, ao);
     }
     handleEvent(e) {
@@ -29,10 +29,19 @@ export class Std extends EventTarget {
                 await customElements.whenDefined(localName);
                 const propagator = sourceEl.propagator;
                 if (propagator instanceof EventTarget) {
+                    const ac = new AbortController();
+                    propagator.addEventListener(valueProp, this, { signal: ac.signal });
+                    this.#ac = ac;
+                }
+                else {
+                    throw 'NI';
                 }
             }
         }
     }
     async deHydrate() {
+        this.disconnectedSignal?.addEventListener('abort', e => {
+            this.#ac?.abort();
+        });
     }
 }

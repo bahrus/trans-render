@@ -7,7 +7,7 @@ export class Std<TProp=any> extends EventTarget implements
         sourceEl: Element, 
         public ao: AbsOptions, 
         public so: SharingObject,
-        public ac?: AbortController,
+        public disconnectedSignal?: AbortSignal,
     ){
         super();
         this.readMind(sourceEl, ao);
@@ -35,7 +35,11 @@ export class Std<TProp=any> extends EventTarget implements
                 await customElements.whenDefined(localName);
                 const propagator = (<any>sourceEl).propagator;
                 if(propagator instanceof EventTarget){
-    
+                    const ac = new AbortController();
+                    propagator.addEventListener(valueProp, this, {signal: ac.signal});
+                    this.#ac = ac;
+                }else{
+                    throw 'NI';
                 }
             }
         }
@@ -43,7 +47,9 @@ export class Std<TProp=any> extends EventTarget implements
     }
 
     async deHydrate(){
-
+        this.disconnectedSignal?.addEventListener('abort', e => {
+            this.#ac?.abort();
+        });
     }
     
 }
