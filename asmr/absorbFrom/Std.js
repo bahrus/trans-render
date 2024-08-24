@@ -4,9 +4,7 @@ export class Std extends EventTarget {
     disconnectedSignal;
     #so;
     #propagator;
-    constructor(sourceEl, ao, 
-    //public so: SharingObject,
-    disconnectedSignal) {
+    constructor(sourceEl, ao, disconnectedSignal) {
         super();
         this.ao = ao;
         this.disconnectedSignal = disconnectedSignal;
@@ -15,8 +13,9 @@ export class Std extends EventTarget {
         this.dispatchEvent(new Event('value'));
     }
     async getValue(el) {
-        const { isRA, } = this.ao;
+        const { isRA, propToAbsorb } = this.ao;
         if (isRA) {
+            return el[propToAbsorb];
         }
         if (this.#so !== undefined) {
             return this.#so.pureValue;
@@ -32,7 +31,7 @@ export class Std extends EventTarget {
                 ao.isRA = true;
                 let { propToAbsorb, propToAbsorbValueType } = ao;
                 if (propToAbsorb === undefined) {
-                    propToAbsorb = ASMR.getValueProp(sourceEl, propToAbsorbValueType);
+                    ao.propToAbsorb = ASMR.getValueProp(sourceEl, propToAbsorbValueType);
                 }
             }
             else {

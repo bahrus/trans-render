@@ -10,7 +10,6 @@ export class Std<TProp=any> extends EventTarget implements
     constructor(
         sourceEl: Element, 
         public ao: AbsOptions, 
-        //public so: SharingObject,
         public disconnectedSignal?: AbortSignal,
     ){
         super();
@@ -19,9 +18,9 @@ export class Std<TProp=any> extends EventTarget implements
         this.dispatchEvent(new Event('value'));
     }
     async getValue(el: Element) {
-        const {isRA, } = this.ao;
+        const {isRA, propToAbsorb} = this.ao;
         if(isRA){
-
+            return (<any>el)[propToAbsorb!];
         }
         if(this.#so !== undefined){
             return this.#so.pureValue;
@@ -41,7 +40,7 @@ export class Std<TProp=any> extends EventTarget implements
                 ao.isRA = true;
                 let {propToAbsorb, propToAbsorbValueType} = ao;
                 if(propToAbsorb === undefined) {
-                    propToAbsorb = ASMR.getValueProp(sourceEl, propToAbsorbValueType);
+                    ao.propToAbsorb = ASMR.getValueProp(sourceEl, propToAbsorbValueType);
                 }
             }else{
                 throw 'NI';

@@ -6,7 +6,6 @@ export class Std {
     so;
     constructor(targetEl, so) {
         this.so = so;
-        //StMr(targetEl, so);
         this.readMind(targetEl, so);
     }
     readMind(el, asmrOptions) {

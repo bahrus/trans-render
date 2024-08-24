@@ -6,7 +6,6 @@ import { ASMR } from "../asmr.js";
  */
 export class Std<TProp = any> implements SharingObject{
     constructor(targetEl: Element, public so: SetOptions){
-        //StMr(targetEl, so);
         this.readMind(targetEl, so);
     }
     readMind(el:Element, asmrOptions: SetOptions){
