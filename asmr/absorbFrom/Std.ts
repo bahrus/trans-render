@@ -4,7 +4,6 @@ import { ASMR } from '../asmr.js';
 
 export class Std<TProp=any> extends EventTarget implements 
     AbsorbingObject, EventListenerObject {
-    //#readMind = false;
     #so: SharingObject | undefined;
     #propagator: Propagator | undefined;
 
@@ -15,12 +14,15 @@ export class Std<TProp=any> extends EventTarget implements
         public disconnectedSignal?: AbortSignal,
     ){
         super();
-        this.readMind(sourceEl, ao);
     }
     handleEvent(e: Event){
         this.dispatchEvent(new Event('value'));
     }
     async getValue(el: Element) {
+        const {isRA, } = this.ao;
+        if(isRA){
+
+        }
         if(this.#so !== undefined){
             return this.#so.pureValue;
         }
@@ -29,34 +31,36 @@ export class Std<TProp=any> extends EventTarget implements
 
     
 
-    async readMind(sourceEl: Element, ao: AbsOptions){
+    async readMind(sourceEl: Element){
         const {localName} = sourceEl;
+        const ao = this.ao;
         if(localName.includes('-')){
             await customElements.whenDefined(localName);
             const propagator = (<any>sourceEl).propagator;
             if(propagator instanceof EventTarget){
                 ao.isRA = true;
-                let {propToAbsorb, valueType} = ao;
+                let {propToAbsorb, propToAbsorbValueType} = ao;
                 if(propToAbsorb === undefined) {
-                    propToAbsorb = ASMR.getValueProp(sourceEl, valueType);
+                    propToAbsorb = ASMR.getValueProp(sourceEl, propToAbsorbValueType);
                 }
             }else{
                 throw 'NI';
             }
         }
-        //this.#readMind = true;
         //this.dispatchEvent(new Event('readMind'));
     }
     #ac: AbortController | undefined;
     async hydrate(sourceEl: Element, ao: AbsOptions){
         
-        const {valueProp} = ao;
-        if(valueProp !== undefined){
+        const {propToAbsorbValueType} = ao;
+        if(propToAbsorbValueType !== undefined){
             const propagator = this.#propagator;
             if(propagator !== undefined){
                 const ac = new AbortController();
-                propagator.addEventListener(valueProp, this, {signal: ac.signal});
+                propagator.addEventListener(propToAbsorbValueType, this, {signal: ac.signal});
                 this.#ac = ac;
+            }else{
+                throw 'NI';
             }
         }else{
             throw 'NI';

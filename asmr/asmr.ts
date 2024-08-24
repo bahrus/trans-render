@@ -24,6 +24,8 @@ export class ASMR {
         //const so = await ASMR.getSO(element, options);
         const {Std} = await import('./absorbFrom/Std.js');
         const std = new Std(element, {...(options || {})});
+        await std.readMind(element);
+        return std;
     }
     static getValueProp(el: Element, valueType?:  ValueType): ValueProp {
         const {localName} = el;
