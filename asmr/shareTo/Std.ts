@@ -1,4 +1,5 @@
 import { SetOptions, SharingObject, ValueProp } from "../../ts-refs/trans-render/asmr/types";
+import { ASMR } from "../asmr.js";
 
 /**
  * Standard sharing
@@ -12,26 +13,7 @@ export class Std<TProp = any> implements SharingObject{
         let {valueProp, valueType, displayProp} = asmrOptions;
         const {localName} = el;
         if(valueProp === undefined){
-            if(valueType === 'Boolean'){
-                if('checked' in el){
-                    valueProp = 'checked';
-                }else{
-                    valueProp = 'ariaChecked';
-                }
-            }else{
-                if('value' in el && !'button-li'.includes(localName)){ //example 'input', 'output'
-                    valueProp = 'value';
-                }else if('href' in el){ //example 'a', 'link'
-                    valueProp = 'href';
-                }else{
-                    switch(valueType){
-                        case 'NumericRange':
-                            valueProp = 'ariaValueNow';
-                            break;
-    
-                    }
-                }
-            }
+            valueProp = ASMR.getValueProp(el, valueType);
             asmrOptions.valueProp = valueProp;
     
         }
