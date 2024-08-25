@@ -4,7 +4,7 @@ let sharingObjMap = globalThis[sharingSym];
 if (sharingObjMap === undefined) {
     globalThis[sharingSym] = sharingObjMap = new WeakMap();
 }
-let absObjMap = globalThis[sharingSym];
+let absObjMap = globalThis[absorbingSym];
 if (absObjMap === undefined) {
     globalThis[absorbingSym] = absObjMap = new WeakMap();
 }

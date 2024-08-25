@@ -7,7 +7,7 @@ if(sharingObjMap === undefined){
     (<any>globalThis)[sharingSym] = sharingObjMap = new WeakMap<Element, SharingObject>();
 }
 
-let absObjMap: WeakMap<Element, AbsorbingObject> = (<any>globalThis)[sharingSym] as WeakMap<Element, AbsorbingObject>;
+let absObjMap: WeakMap<Element, AbsorbingObject> = (<any>globalThis)[absorbingSym] as WeakMap<Element, AbsorbingObject>;
 if(absObjMap === undefined){
     (<any>globalThis)[absorbingSym] = absObjMap = new WeakMap<Element, AbsorbingObject>(); 
 }
