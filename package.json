@@ -148,6 +148,9 @@
     }
   },
   "files": [
+    "asmr/*",
+    "asmr/absorbFrom/*",
+    "asmr/shareTo/*",
     "be/*.js",
     "be/*.ts",
     "dss/*.js",
