@@ -1,4 +1,4 @@
-const props = ['propagator', 'covertAssignment', 'observeProp'];
+export const props = ['propagator', 'covertAssignment', 'observeProp'];
 const publicPrivateStore = Symbol();
 const propLookup = Symbol();
 export function beRR(obj: any){
