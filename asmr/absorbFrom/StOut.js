@@ -33,6 +33,7 @@ export class StOut extends EventTarget {
             await customElements.whenDefined(localName);
             const propagator = sourceEl.propagator;
             if (propagator instanceof EventTarget) {
+                this.#propagator = propagator;
                 ao.isRAR = true;
                 let { propToAbsorb, propToAbsorbValueType } = ao;
                 if (propToAbsorb === undefined) {
@@ -44,6 +45,11 @@ export class StOut extends EventTarget {
                 const ret = beRR(sourceEl);
                 if (ret) {
                     ao.isRAE = true;
+                    let { propToAbsorb, propToAbsorbValueType } = ao;
+                    this.#propagator = sourceEl.propagator;
+                    if (propToAbsorb === undefined) {
+                        ao.propToAbsorb = ASMR.getValueProp(sourceEl, propToAbsorbValueType);
+                    }
                 }
                 else {
                     throw 'NI';

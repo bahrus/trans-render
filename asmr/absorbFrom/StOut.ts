@@ -1,11 +1,10 @@
-import { Propagator } from '../../lib/bePropagating.js';
 import { AbsOptions, AbsorbingObject, BuiltInEditables, SharingObject } from '../../ts-refs/trans-render/asmr/types.js';
 import { ASMR } from '../asmr.js';
 
 export class StOut<TProp=any> extends EventTarget implements 
     AbsorbingObject, EventListenerObject {
     #so: SharingObject | undefined;
-    #propagator: Propagator | undefined;
+    #propagator: EventTarget | undefined;
 
     constructor(
         sourceEl: Element, 
@@ -42,6 +41,7 @@ export class StOut<TProp=any> extends EventTarget implements
             await customElements.whenDefined(localName);
             const propagator = (<any>sourceEl).propagator;
             if(propagator instanceof EventTarget){
+                this.#propagator = propagator;
                 ao.isRAR = true;
                 let {propToAbsorb, propToAbsorbValueType} = ao;
                 if(propToAbsorb === undefined) {
@@ -52,6 +52,11 @@ export class StOut<TProp=any> extends EventTarget implements
                 const ret = beRR(sourceEl);
                 if(ret){
                     ao.isRAE = true;
+                    let {propToAbsorb, propToAbsorbValueType} = ao;
+                    this.#propagator = (<any>sourceEl).propagator;
+                    if(propToAbsorb === undefined) {
+                        ao.propToAbsorb = ASMR.getValueProp(sourceEl, propToAbsorbValueType);
+                    }
                 }else{
                     throw 'NI';
                 }
