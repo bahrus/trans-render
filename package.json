@@ -39,6 +39,10 @@
     "./Object$tring.js": "./Object$tring.js",
     "./Object$entences.js": "./Object$entences.js",
     "./trans-render.js": "./trans-render.js",
+    "./asmr/asmr.js":{
+      "default": "./asmr/asmr.js",
+      "types": "./asmr/asmr.ts"
+    },
     "./dss/Newish.js": {
       "default": "./dss/Newish.js",
       "types": "./dss/Newish.ts"
