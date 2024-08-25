@@ -52,6 +52,16 @@ export function UEMR(el: Element, ao: AbsOptions){
                     }
                 }
                 break;
+            case 'button':
+                if(UEEN === undefined) ao.UEEN = 'click';
+                if(propToAbsorb === undefined){
+                    ao.propToAbsorb = 'value';
+                }
+            case 'form':
+                if(UEEN === undefined) ao.UEEN = 'input';
+                if(propToAbsorb === undefined){
+                    ao.propToAbsorb = 'formData'
+                }
             case 'default':
                 //content editable
                 if(UEEN === undefined) ao.UEEN = 'input';
