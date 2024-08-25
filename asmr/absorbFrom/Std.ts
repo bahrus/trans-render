@@ -56,19 +56,26 @@ export class Std<TProp=any> extends EventTarget implements
     #ac: AbortController | undefined;
     async hydrate(sourceEl: Element, ao: AbsOptions){
         
-        const {propToAbsorbValueType} = ao;
-        if(propToAbsorbValueType !== undefined){
+        const {propToAbsorb, isUE, UEEN} = ao;
+        if(isUE && UEEN !== undefined){
+            const ac = new AbortController();
+            sourceEl.addEventListener(UEEN, this, {signal: ac.signal});
+            this.#ac = ac;
+            return;
+        }
+        if(propToAbsorb !== undefined){
             const propagator = this.#propagator;
             if(propagator !== undefined){
                 const ac = new AbortController();
-                propagator.addEventListener(propToAbsorbValueType, this, {signal: ac.signal});
+                propagator.addEventListener(propToAbsorb, this, {signal: ac.signal});
                 this.#ac = ac;
+                return;
             }else{
                 throw 'NI';
             }
-        }else{
-            throw 'NI';
         }
+        throw 'NI';
+
 
     }
 

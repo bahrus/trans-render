@@ -24,7 +24,12 @@ export class Std extends EventTarget {
     async readMind(sourceEl) {
         const { localName } = sourceEl;
         const ao = this.ao;
-        if (localName.includes('-')) {
+        const isBuiltInEditable = builtInEditables.includes(localName);
+        if (isBuiltInEditable || sourceEl.hasAttribute('contentEditable')) {
+            const { UEMR } = await import('./UEMR.js');
+            UEMR(sourceEl, ao);
+        }
+        else if (localName.includes('-')) {
             await customElements.whenDefined(localName);
             const propagator = sourceEl.propagator;
             if (propagator instanceof EventTarget) {
@@ -42,21 +47,26 @@ export class Std extends EventTarget {
     }
     #ac;
     async hydrate(sourceEl, ao) {
-        const { propToAbsorbValueType } = ao;
-        if (propToAbsorbValueType !== undefined) {
+        const { propToAbsorb, isUE, UEEN } = ao;
+        if (isUE && UEEN !== undefined) {
+            const ac = new AbortController();
+            sourceEl.addEventListener(UEEN, this, { signal: ac.signal });
+            this.#ac = ac;
+            return;
+        }
+        if (propToAbsorb !== undefined) {
             const propagator = this.#propagator;
             if (propagator !== undefined) {
                 const ac = new AbortController();
-                propagator.addEventListener(propToAbsorbValueType, this, { signal: ac.signal });
+                propagator.addEventListener(propToAbsorb, this, { signal: ac.signal });
                 this.#ac = ac;
+                return;
             }
             else {
                 throw 'NI';
             }
         }
-        else {
-            throw 'NI';
-        }
+        throw 'NI';
     }
     async deHydrate() {
         this.disconnectedSignal?.addEventListener('abort', e => {
@@ -64,3 +74,4 @@ export class Std extends EventTarget {
         });
     }
 }
+const builtInEditables = ['input', 'select', 'textarea'];
