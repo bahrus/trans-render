@@ -1,5 +1,5 @@
 import { Propagator } from '../../lib/bePropagating';
-import { AbsOptions, AbsorbingObject, SharingObject } from '../../ts-refs/trans-render/asmr/types';
+import { AbsOptions, AbsorbingObject, BuiltInEditables, SharingObject } from '../../ts-refs/trans-render/asmr/types';
 import { ASMR } from '../asmr.js';
 
 export class Std<TProp=any> extends EventTarget implements 
@@ -33,7 +33,12 @@ export class Std<TProp=any> extends EventTarget implements
     async readMind(sourceEl: Element){
         const {localName} = sourceEl;
         const ao = this.ao;
-        if(localName.includes('-')){
+        const isBuiltInEditable = builtInEditables.includes(localName);
+        if(isBuiltInEditable || sourceEl.hasAttribute('contentEditable')){
+            const {UEMR} = await import('./UEMR.js');
+            UEMR(sourceEl, ao);
+
+        }else if(localName.includes('-')){
             await customElements.whenDefined(localName);
             const propagator = (<any>sourceEl).propagator;
             if(propagator instanceof EventTarget){
@@ -74,3 +79,5 @@ export class Std<TProp=any> extends EventTarget implements
     }
     
 }
+
+const builtInEditables: Array<BuiltInEditables> = ['input', 'select', 'textarea'];
