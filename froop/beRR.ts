@@ -3,7 +3,7 @@ const publicPrivateStore = Symbol();
 const propLookup = Symbol();
 export function beRR(obj: any){
     for(const prop of props){
-        if(prop in obj) return;
+        if(prop in obj) return false;
     }
     obj[publicPrivateStore] = {};
     obj[propLookup] = {};
@@ -47,4 +47,6 @@ export function beRR(obj: any){
         });
 
     }
+
+    return true;
 }

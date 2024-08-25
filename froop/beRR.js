@@ -4,7 +4,7 @@ const propLookup = Symbol();
 export function beRR(obj) {
     for (const prop of props) {
         if (prop in obj)
-            return;
+            return false;
     }
     obj[publicPrivateStore] = {};
     obj[propLookup] = {};
@@ -46,4 +46,5 @@ export function beRR(obj) {
             configurable: true,
         });
     };
+    return true;
 }

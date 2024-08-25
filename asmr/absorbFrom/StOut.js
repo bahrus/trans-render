@@ -40,7 +40,14 @@ export class StOut extends EventTarget {
                 }
             }
             else {
-                const {} = await ;
+                const { beRR } = await import('../../froop/beRR.js');
+                const ret = beRR(sourceEl);
+                if (ret) {
+                    ao.isRAE = true;
+                }
+                else {
+                    throw 'NI';
+                }
             }
         }
         //this.dispatchEvent(new Event('readMind'));
