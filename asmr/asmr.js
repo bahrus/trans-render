@@ -1,11 +1,12 @@
-export const sym = Symbol.for('X6fTibxRk0KqM9FSHfqktA');
-let sharingObjMap = globalThis[sym];
+export const sharingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktA');
+export const absorbingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktB');
+let sharingObjMap = globalThis[sharingSym];
 if (sharingObjMap === undefined) {
-    globalThis[sym] = sharingObjMap = new WeakMap();
+    globalThis[sharingSym] = sharingObjMap = new WeakMap();
 }
-let absObjMap = globalThis[sym];
+let absObjMap = globalThis[sharingSym];
 if (absObjMap === undefined) {
-    globalThis[sym] = absObjMap = new WeakMap();
+    globalThis[absorbingSym] = absObjMap = new WeakMap();
 }
 export class ASMR {
     static async getSO(element, options) {

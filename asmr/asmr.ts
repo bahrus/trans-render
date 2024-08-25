@@ -1,14 +1,15 @@
 import { AbsOptions, AbsorbingObject, SetOptions, SharingObject, ValueProp, ValueType,  } from "../ts-refs/trans-render/asmr/types";
-export const sym = Symbol.for('X6fTibxRk0KqM9FSHfqktA');
+export const sharingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktA');
+export const absorbingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktB');
 
-let sharingObjMap: WeakMap<Element, SharingObject> = (<any>globalThis)[sym] as WeakMap<Element, SharingObject>;
+let sharingObjMap: WeakMap<Element, SharingObject> = (<any>globalThis)[sharingSym] as WeakMap<Element, SharingObject>;
 if(sharingObjMap === undefined){
-    (<any>globalThis)[sym] = sharingObjMap = new WeakMap<Element, SharingObject>();
+    (<any>globalThis)[sharingSym] = sharingObjMap = new WeakMap<Element, SharingObject>();
 }
 
-let absObjMap: WeakMap<Element, AbsorbingObject> = (<any>globalThis)[sym] as WeakMap<Element, AbsorbingObject>;
+let absObjMap: WeakMap<Element, AbsorbingObject> = (<any>globalThis)[sharingSym] as WeakMap<Element, AbsorbingObject>;
 if(absObjMap === undefined){
-    (<any>globalThis)[sym] = absObjMap = new WeakMap<Element, AbsorbingObject>(); 
+    (<any>globalThis)[absorbingSym] = absObjMap = new WeakMap<Element, AbsorbingObject>(); 
 }
 
 export class ASMR {
