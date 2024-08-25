@@ -1,8 +1,8 @@
-import { Propagator } from '../../lib/bePropagating';
-import { AbsOptions, AbsorbingObject, BuiltInEditables, SharingObject } from '../../ts-refs/trans-render/asmr/types';
+import { Propagator } from '../../lib/bePropagating.js';
+import { AbsOptions, AbsorbingObject, BuiltInEditables, SharingObject } from '../../ts-refs/trans-render/asmr/types.js';
 import { ASMR } from '../asmr.js';
 
-export class Std<TProp=any> extends EventTarget implements 
+export class StOut<TProp=any> extends EventTarget implements 
     AbsorbingObject, EventListenerObject {
     #so: SharingObject | undefined;
     #propagator: Propagator | undefined;
@@ -54,8 +54,8 @@ export class Std<TProp=any> extends EventTarget implements
         //this.dispatchEvent(new Event('readMind'));
     }
     #ac: AbortController | undefined;
-    async hydrate(sourceEl: Element, ao: AbsOptions){
-        
+    async hydrate(sourceEl: Element){
+        const {ao} = this;
         const {propToAbsorb, isUE, UEEN} = ao;
         if(isUE && UEEN !== undefined){
             const ac = new AbortController();

@@ -1,4 +1,4 @@
-import { SetOptions, SharingObject, ValueProp } from "../../ts-refs/trans-render/asmr/types";
+import { SetOptions, SharingObject, ValueProp } from "../../ts-refs/trans-render/asmr/types.js";
 import { ASMR } from "../asmr.js";
 
 /**

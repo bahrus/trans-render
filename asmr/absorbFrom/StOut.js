@@ -1,5 +1,5 @@
 import { ASMR } from '../asmr.js';
-export class Std extends EventTarget {
+export class StOut extends EventTarget {
     ao;
     disconnectedSignal;
     #so;
@@ -46,7 +46,8 @@ export class Std extends EventTarget {
         //this.dispatchEvent(new Event('readMind'));
     }
     #ac;
-    async hydrate(sourceEl, ao) {
+    async hydrate(sourceEl) {
+        const { ao } = this;
         const { propToAbsorb, isUE, UEEN } = ao;
         if (isUE && UEEN !== undefined) {
             const ac = new AbortController();

@@ -15,16 +15,17 @@ if(absObjMap === undefined){
 export class ASMR {
     static async getSO(element: Element, options?: SetOptions){
         if(sharingObjMap.has(element)) return sharingObjMap.get(element)!;
-        const {Std} = await import('./shareTo/Std.js');
+        const {Std} = await import('./shareTo/StIn.js');
         const std = new Std(element, {...(options || {})});
         sharingObjMap.set(element, std);
         return std;
     }
     static async getAO(element: Element, options?: AbsOptions){
         if(absObjMap.has(element)) return absObjMap.get(element)!;
-        const {Std} = await import('./absorbFrom/Std.js');
-        const std = new Std(element, {...(options || {})});
+        const {StOut} = await import('./absorbFrom/StOut.js');
+        const std = new StOut(element, {...(options || {})});
         await std.readMind(element);
+        await std.hydrate(element);
         return std;
     }
     static getValueProp(el: Element, valueType?:  ValueType): ValueProp {
