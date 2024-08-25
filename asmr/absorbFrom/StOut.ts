@@ -18,8 +18,8 @@ export class StOut<TProp=any> extends EventTarget implements
         this.dispatchEvent(new Event('value'));
     }
     async getValue(el: Element) {
-        const {isRA, propToAbsorb} = this.ao;
-        if(isRA){
+        const {isRAR, propToAbsorb} = this.ao;
+        if(isRAR){
             return (<any>el)[propToAbsorb!];
         }
         if(this.#so !== undefined){
@@ -42,13 +42,13 @@ export class StOut<TProp=any> extends EventTarget implements
             await customElements.whenDefined(localName);
             const propagator = (<any>sourceEl).propagator;
             if(propagator instanceof EventTarget){
-                ao.isRA = true;
+                ao.isRAR = true;
                 let {propToAbsorb, propToAbsorbValueType} = ao;
                 if(propToAbsorb === undefined) {
                     ao.propToAbsorb = ASMR.getValueProp(sourceEl, propToAbsorbValueType);
                 }
             }else{
-                throw 'NI';
+                const {} = await 
             }
         }
         //this.dispatchEvent(new Event('readMind'));
