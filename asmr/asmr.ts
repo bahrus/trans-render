@@ -1,7 +1,7 @@
 import { AbsOptions, AbsorbingObject, SetOptions, SharingObject, ValueProp, ValueType,  } from "../ts-refs/trans-render/asmr/types";
 export const emptyOptionsSharingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktA');
 export const nonEmptyOptionsSharingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktB');
-export const absorbingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktC');
+export const emptyOptionsAbsorbingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktC');
 
 let emptyOptionsSharingObjMap = (<any>globalThis)[emptyOptionsSharingSym] as WeakMap<Element, SharingObject>;
 if(emptyOptionsSharingObjMap === undefined){
@@ -13,10 +13,9 @@ if(nonEmptyOptionsSharingObjMap === undefined){
     (<any>globalThis)[nonEmptyOptionsSharingSym] = nonEmptyOptionsSharingObjMap = new Map<SetOptions, WeakMap<Element, SharingObject>>();
 }
 
-
-let absObjMap: WeakMap<Element, AbsorbingObject> = (<any>globalThis)[absorbingSym] as WeakMap<Element, AbsorbingObject>;
-if(absObjMap === undefined){
-    (<any>globalThis)[absorbingSym] = absObjMap = new WeakMap<Element, AbsorbingObject>(); 
+let emptyOptionsAbsObjMap: WeakMap<Element, AbsorbingObject> = (<any>globalThis)[emptyOptionsAbsorbingSym] as WeakMap<Element, AbsorbingObject>;
+if(emptyOptionsAbsObjMap === undefined){
+    (<any>globalThis)[emptyOptionsAbsorbingSym] = emptyOptionsAbsObjMap = new WeakMap<Element, AbsorbingObject>(); 
 }
 
 export class ASMR {
@@ -43,7 +42,7 @@ export class ASMR {
         return sharingObj;
     }
     static async getAO(element: Element, options?: AbsOptions){
-        if(absObjMap.has(element)) return absObjMap.get(element)!;
+        if(emptyOptionsAbsObjMap.has(element)) return emptyOptionsAbsObjMap.get(element)!;
         const {StOut} = await import('./absorbFrom/StOut.js');
         const std = new StOut(element, {...(options || {})});
         await std.readMind(element);
