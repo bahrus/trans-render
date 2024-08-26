@@ -1,8 +1,13 @@
-export const sharingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktA');
-export const absorbingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktB');
-let sharingObjMap = globalThis[sharingSym];
-if (sharingObjMap === undefined) {
-    globalThis[sharingSym] = sharingObjMap = new WeakMap();
+export const emptyOptionsSharingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktA');
+export const nonEmptyOptionsSharingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktB');
+export const absorbingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktC');
+let emptyOptionsSharingObjMap = globalThis[emptyOptionsSharingSym];
+if (emptyOptionsSharingObjMap === undefined) {
+    globalThis[emptyOptionsSharingSym] = emptyOptionsSharingObjMap = new WeakMap();
+}
+let nonEmptyOptionsSharingObjMap = globalThis[nonEmptyOptionsSharingSym];
+if (nonEmptyOptionsSharingObjMap === undefined) {
+    globalThis[nonEmptyOptionsSharingSym] = nonEmptyOptionsSharingObjMap = new Map();
 }
 let absObjMap = globalThis[absorbingSym];
 if (absObjMap === undefined) {
@@ -10,12 +15,29 @@ if (absObjMap === undefined) {
 }
 export class ASMR {
     static async getSO(element, options) {
-        if (sharingObjMap.has(element))
-            return sharingObjMap.get(element);
-        const { Std } = await import('./shareTo/StIn.js');
-        const std = new Std(element, { ...(options || {}) });
-        sharingObjMap.set(element, std);
-        return std;
+        const optionsIsUndefined = options === undefined;
+        if (optionsIsUndefined) {
+            if (emptyOptionsSharingObjMap.has(element))
+                return emptyOptionsSharingObjMap.get(element);
+        }
+        else {
+            const cachedSharingObject = nonEmptyOptionsSharingObjMap.get(options)?.get(element);
+            if (cachedSharingObject !== undefined)
+                return cachedSharingObject;
+        }
+        const { StdIn } = await import('./shareTo/StIn.js');
+        const sharingObj = new StdIn({ ...(options || {}) });
+        await sharingObj.readMind(element);
+        if (optionsIsUndefined) {
+            emptyOptionsSharingObjMap.set(element, sharingObj);
+        }
+        else {
+            if (!nonEmptyOptionsSharingObjMap.has(options)) {
+                nonEmptyOptionsSharingObjMap.set(options, new WeakMap());
+            }
+            nonEmptyOptionsSharingObjMap.get(options).set(element, sharingObj);
+        }
+        return sharingObj;
     }
     static async getAO(element, options) {
         if (absObjMap.has(element))

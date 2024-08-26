@@ -1,11 +1,18 @@
 import { AbsOptions, AbsorbingObject, SetOptions, SharingObject, ValueProp, ValueType,  } from "../ts-refs/trans-render/asmr/types";
-export const sharingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktA');
-export const absorbingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktB');
+export const emptyOptionsSharingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktA');
+export const nonEmptyOptionsSharingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktB');
+export const absorbingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktC');
 
-let sharingObjMap: WeakMap<Element, SharingObject> = (<any>globalThis)[sharingSym] as WeakMap<Element, SharingObject>;
-if(sharingObjMap === undefined){
-    (<any>globalThis)[sharingSym] = sharingObjMap = new WeakMap<Element, SharingObject>();
+let emptyOptionsSharingObjMap = (<any>globalThis)[emptyOptionsSharingSym] as WeakMap<Element, SharingObject>;
+if(emptyOptionsSharingObjMap === undefined){
+    (<any>globalThis)[emptyOptionsSharingSym] = emptyOptionsSharingObjMap = new WeakMap<Element, SharingObject>();
 }
+
+let nonEmptyOptionsSharingObjMap = (<any>globalThis)[nonEmptyOptionsSharingSym] as  Map<SetOptions, WeakMap<Element, SharingObject>>;
+if(nonEmptyOptionsSharingObjMap === undefined){
+    (<any>globalThis)[nonEmptyOptionsSharingSym] = nonEmptyOptionsSharingObjMap = new Map<SetOptions, WeakMap<Element, SharingObject>>();
+}
+
 
 let absObjMap: WeakMap<Element, AbsorbingObject> = (<any>globalThis)[absorbingSym] as WeakMap<Element, AbsorbingObject>;
 if(absObjMap === undefined){
@@ -14,11 +21,26 @@ if(absObjMap === undefined){
 
 export class ASMR {
     static async getSO(element: Element, options?: SetOptions){
-        if(sharingObjMap.has(element)) return sharingObjMap.get(element)!;
-        const {Std} = await import('./shareTo/StIn.js');
-        const std = new Std(element, {...(options || {})});
-        sharingObjMap.set(element, std);
-        return std;
+        const optionsIsUndefined = options === undefined;
+        if(optionsIsUndefined){
+            if(emptyOptionsSharingObjMap.has(element)) return emptyOptionsSharingObjMap.get(element)!;
+        }else{
+            const cachedSharingObject = nonEmptyOptionsSharingObjMap.get(options)?.get(element);
+            if(cachedSharingObject  !== undefined) return cachedSharingObject;
+        } 
+        const {StdIn} = await import('./shareTo/StIn.js');
+        const sharingObj = new StdIn({...(options || {})});
+        await sharingObj.readMind(element);
+        if(optionsIsUndefined){
+            emptyOptionsSharingObjMap.set(element, sharingObj);
+        }else{
+            if(!nonEmptyOptionsSharingObjMap.has(options)){
+                nonEmptyOptionsSharingObjMap.set(options, new WeakMap<Element, SharingObject>());
+            }
+            nonEmptyOptionsSharingObjMap.get(options)!.set(element, sharingObj);
+        }
+        
+        return sharingObj;
     }
     static async getAO(element: Element, options?: AbsOptions){
         if(absObjMap.has(element)) return absObjMap.get(element)!;

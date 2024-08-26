@@ -2,18 +2,18 @@ import { ASMR } from "../asmr.js";
 /**
  * Standard sharing
  */
-export class Std {
+export class StdIn {
     so;
-    constructor(targetEl, so) {
+    constructor(so) {
         this.so = so;
-        this.readMind(targetEl, so);
     }
-    readMind(el, asmrOptions) {
-        let { valueProp, valueType, displayProp } = asmrOptions;
+    async readMind(el) {
+        const { so } = this;
+        let { valueProp, valueType, displayProp } = so;
         const { localName } = el;
         if (valueProp === undefined) {
             valueProp = ASMR.getValueProp(el, valueType);
-            asmrOptions.valueProp = valueProp;
+            so.valueProp = valueProp;
         }
         if (displayProp === undefined) {
             switch (localName) {
@@ -30,7 +30,7 @@ export class Std {
                             break;
                     }
             }
-            asmrOptions.displayProp = displayProp;
+            so.displayProp = displayProp;
         }
     }
     pureValue;

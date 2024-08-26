@@ -4,16 +4,16 @@ import { ASMR } from "../asmr.js";
 /**
  * Standard sharing
  */
-export class Std<TProp = any> implements SharingObject{
-    constructor(targetEl: Element, public so: SetOptions){
-        this.readMind(targetEl, so);
+export class StdIn<TProp = any> implements SharingObject{
+    constructor(public so: SetOptions){
     }
-    readMind(el:Element, asmrOptions: SetOptions){
-        let {valueProp, valueType, displayProp} = asmrOptions;
+    async readMind(el:Element){
+        const {so} = this;
+        let {valueProp, valueType, displayProp} = so;
         const {localName} = el;
         if(valueProp === undefined){
             valueProp = ASMR.getValueProp(el, valueType);
-            asmrOptions.valueProp = valueProp;
+            so.valueProp = valueProp;
     
         }
         if(displayProp === undefined){
@@ -32,7 +32,7 @@ export class Std<TProp = any> implements SharingObject{
                     }
             }
     
-            asmrOptions.displayProp = displayProp;
+            so.displayProp = displayProp;
         }
     }
     pureValue: TProp | undefined;
