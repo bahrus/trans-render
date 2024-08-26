@@ -17,8 +17,8 @@ export class StOut<TProp=any> extends EventTarget implements
         this.dispatchEvent(new Event('value'));
     }
     async getValue(el: Element) {
-        const {isRAR, propToAbsorb} = this.ao;
-        if(isRAR){
+        const {isRAR, propToAbsorb, isUE, isRAE} = this.ao;
+        if(isRAR || isUE || isRAE){
             return (<any>el)[propToAbsorb!];
         }
         if(this.#so !== undefined){

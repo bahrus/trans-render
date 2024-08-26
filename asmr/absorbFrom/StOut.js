@@ -13,8 +13,8 @@ export class StOut extends EventTarget {
         this.dispatchEvent(new Event('value'));
     }
     async getValue(el) {
-        const { isRAR, propToAbsorb } = this.ao;
-        if (isRAR) {
+        const { isRAR, propToAbsorb, isUE, isRAE } = this.ao;
+        if (isRAR || isUE || isRAE) {
             return el[propToAbsorb];
         }
         if (this.#so !== undefined) {
