@@ -79,18 +79,32 @@ export class ASMR {
                 valueProp = 'ariaChecked';
             }
         }else{
-            if('value' in el && !'button-li'.includes(localName)){ //example 'input', 'output'
-                valueProp = 'value';
-            }else if('href' in el){ //example 'a', 'link'
-                valueProp = 'href';
-            }else{
-                switch(valueType){
-                    case 'NumericRange':
-                        valueProp = 'ariaValueNow';
-                        break;
-
-                }
+            switch(localName){
+                case 'input':
+                    const {type} = el as HTMLInputElement;
+                    switch(type){
+                        case 'checkbox':
+                            valueProp = 'checked';
+                            break;
+                        default:
+                            throw 'NI';
+                    }
+                    break;
+                default:
+                    if('value' in el && !'button-li'.includes(localName)){ //example 'input', 'output'
+                        valueProp = 'value';
+                    }else if('href' in el){ //example 'a', 'link'
+                        valueProp = 'href';
+                    }else{
+                        switch(valueType){
+                            case 'NumericRange':
+                                valueProp = 'ariaValueNow';
+                                break;
+        
+                        }
+                    }
             }
+
         }
         return valueProp;
     }
