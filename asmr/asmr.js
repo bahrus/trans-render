@@ -1,6 +1,7 @@
 export const emptyOptionsSharingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktA');
 export const nonEmptyOptionsSharingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktB');
 export const emptyOptionsAbsorbingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktC');
+export const nonEmptyOptionsAbsorbingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktD');
 let emptyOptionsSharingObjMap = globalThis[emptyOptionsSharingSym];
 if (emptyOptionsSharingObjMap === undefined) {
     globalThis[emptyOptionsSharingSym] = emptyOptionsSharingObjMap = new WeakMap();
@@ -12,6 +13,10 @@ if (nonEmptyOptionsSharingObjMap === undefined) {
 let emptyOptionsAbsObjMap = globalThis[emptyOptionsAbsorbingSym];
 if (emptyOptionsAbsObjMap === undefined) {
     globalThis[emptyOptionsAbsorbingSym] = emptyOptionsAbsObjMap = new WeakMap();
+}
+let nonEmptyOptionsAbsObjMap = globalThis[nonEmptyOptionsAbsorbingSym];
+if (nonEmptyOptionsAbsObjMap === undefined) {
+    globalThis[nonEmptyOptionsAbsorbingSym] = nonEmptyOptionsAbsObjMap = new Map();
 }
 export class ASMR {
     static async getSO(element, options) {
@@ -40,13 +45,30 @@ export class ASMR {
         return sharingObj;
     }
     static async getAO(element, options) {
-        if (emptyOptionsAbsObjMap.has(element))
-            return emptyOptionsAbsObjMap.get(element);
+        const optionsIsUndefined = options === undefined;
+        if (optionsIsUndefined) {
+            if (emptyOptionsAbsObjMap.has(element))
+                return emptyOptionsAbsObjMap.get(element);
+        }
+        else {
+            const cachedAbsObj = nonEmptyOptionsAbsObjMap.get(options)?.get(element);
+            if (cachedAbsObj !== undefined)
+                return cachedAbsObj;
+        }
         const { StOut } = await import('./absorbFrom/StOut.js');
-        const std = new StOut(element, { ...(options || {}) });
-        await std.readMind(element);
-        await std.hydrate(element);
-        return std;
+        const absorbingObj = new StOut(element, { ...(options || {}) });
+        await absorbingObj.readMind(element);
+        await absorbingObj.hydrate(element);
+        if (optionsIsUndefined) {
+            emptyOptionsAbsObjMap.set(element, absorbingObj);
+        }
+        else {
+            if (!nonEmptyOptionsAbsObjMap.has(options)) {
+                nonEmptyOptionsAbsObjMap.set(options, new WeakMap());
+            }
+            nonEmptyOptionsAbsObjMap.get(options).set(element, absorbingObj);
+        }
+        return absorbingObj;
     }
     static getValueProp(el, valueType) {
         const { localName } = el;

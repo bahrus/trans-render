@@ -2,6 +2,7 @@ import { AbsOptions, AbsorbingObject, SetOptions, SharingObject, ValueProp, Valu
 export const emptyOptionsSharingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktA');
 export const nonEmptyOptionsSharingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktB');
 export const emptyOptionsAbsorbingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktC');
+export const nonEmptyOptionsAbsorbingSym = Symbol.for('X6fTibxRk0KqM9FSHfqktD');
 
 let emptyOptionsSharingObjMap = (<any>globalThis)[emptyOptionsSharingSym] as WeakMap<Element, SharingObject>;
 if(emptyOptionsSharingObjMap === undefined){
@@ -13,9 +14,14 @@ if(nonEmptyOptionsSharingObjMap === undefined){
     (<any>globalThis)[nonEmptyOptionsSharingSym] = nonEmptyOptionsSharingObjMap = new Map<SetOptions, WeakMap<Element, SharingObject>>();
 }
 
-let emptyOptionsAbsObjMap: WeakMap<Element, AbsorbingObject> = (<any>globalThis)[emptyOptionsAbsorbingSym] as WeakMap<Element, AbsorbingObject>;
+let emptyOptionsAbsObjMap = (<any>globalThis)[emptyOptionsAbsorbingSym] as WeakMap<Element, AbsorbingObject>;
 if(emptyOptionsAbsObjMap === undefined){
     (<any>globalThis)[emptyOptionsAbsorbingSym] = emptyOptionsAbsObjMap = new WeakMap<Element, AbsorbingObject>(); 
+}
+
+let nonEmptyOptionsAbsObjMap = (<any>globalThis)[nonEmptyOptionsAbsorbingSym] as Map<AbsOptions, WeakMap<Element, AbsorbingObject>>;
+if(nonEmptyOptionsAbsObjMap === undefined){
+    (<any>globalThis)[nonEmptyOptionsAbsorbingSym] = nonEmptyOptionsAbsObjMap = new Map<AbsOptions, WeakMap<Element, AbsorbingObject>>();
 }
 
 export class ASMR {
@@ -42,12 +48,26 @@ export class ASMR {
         return sharingObj;
     }
     static async getAO(element: Element, options?: AbsOptions){
-        if(emptyOptionsAbsObjMap.has(element)) return emptyOptionsAbsObjMap.get(element)!;
+        const optionsIsUndefined = options === undefined;
+        if(optionsIsUndefined){
+            if(emptyOptionsAbsObjMap.has(element)) return emptyOptionsAbsObjMap.get(element)!;
+        }else{
+            const cachedAbsObj = nonEmptyOptionsAbsObjMap.get(options)?.get(element);
+            if(cachedAbsObj !== undefined) return cachedAbsObj;
+        }
         const {StOut} = await import('./absorbFrom/StOut.js');
-        const std = new StOut(element, {...(options || {})});
-        await std.readMind(element);
-        await std.hydrate(element);
-        return std;
+        const absorbingObj = new StOut(element, {...(options || {})});
+        await absorbingObj.readMind(element);
+        await absorbingObj.hydrate(element);
+        if(optionsIsUndefined){
+            emptyOptionsAbsObjMap.set(element, absorbingObj);
+        }else{
+            if(!nonEmptyOptionsAbsObjMap.has(options)){
+                nonEmptyOptionsAbsObjMap.set(options, new WeakMap<Element, AbsorbingObject>());
+            }
+            nonEmptyOptionsAbsObjMap.get(options)!.set(element, absorbingObj);
+        }
+        return absorbingObj;
     }
     static getValueProp(el: Element, valueType?:  ValueType): ValueProp {
         const {localName} = el;
