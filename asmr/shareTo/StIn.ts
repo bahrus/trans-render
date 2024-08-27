@@ -21,6 +21,9 @@ export class StdIn<TProp = any> implements SharingObject{
                 case 'input':
                     //no value
                     break;
+                case 'form':
+                    //no value
+                    break;
                 default:
                     switch(valueType){
                         case 'NumericRange':
@@ -44,23 +47,33 @@ export class StdIn<TProp = any> implements SharingObject{
             switch(typeof val){
                 case 'string':
                 case 'boolean':
+                case 'number':
                     if(valueType === undefined){
                         (<any>el)[displayProp!] = val;
                     }else{
                         throw 'NI';
                     }
                     break;
+                
+
                 default:
                     throw 'NI';
             }
         }
         if(valueProp !== undefined){
+            const isGingerly = valueProp.startsWith('?.');
             switch(valueProp!){
                 case 'ariaChecked':
                     el.ariaChecked = val === true ? 'true' : val === false ? 'false' : 'mixed';
                     break;
                 default:
-                    (<any>el)[valueProp!] = val;
+                    if(isGingerly){
+                        const {assignGingerly} = await import('trans-render/lib/assignGingerly.js');
+                        assignGingerly(el, {[valueProp!]: val});
+                    }else{
+                        (<any>el)[valueProp!] = val;
+                    }
+                    
             }
             
         }

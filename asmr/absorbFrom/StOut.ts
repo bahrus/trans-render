@@ -21,8 +21,16 @@ export class StOut<TProp=any> extends EventTarget implements
         if(sotaProp !== undefined){
             return (<any>el)[sotaProp];
         }
-        if(isRAR || isUE || isRAE){
-            return (<any>el)[propToAbsorb!];
+        if(propToAbsorb !== undefined){
+            if(propToAbsorb.startsWith('?.')){
+                //TODO -- less string manipulation
+                const dotDelimitedPath = propToAbsorb.replaceAll('?.', '.');
+                const {getVal} = await import('../../lib/getVal.js');
+                return await getVal({host: el}, dotDelimitedPath);
+            }else{
+                return (<any>el)[propToAbsorb!];
+            }
+            
         }
         if(this.#so !== undefined){
             return this.#so.pureValue;
@@ -82,7 +90,7 @@ export class StOut<TProp=any> extends EventTarget implements
             hac(sourceEl, sota, this);
             return;
         }
-        if(isUE && UEEN !== undefined){
+        if(UEEN !== undefined){
             const ac = new AbortController();
             sourceEl.addEventListener(UEEN, this, {signal: ac.signal});
             this.#ac = ac;

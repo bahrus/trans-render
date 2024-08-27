@@ -96,6 +96,10 @@ export class ASMR {
                         case 'url':
                             valueProp = 'value';
                             break;
+                        case 'number':
+                        case 'range':
+                            valueProp = 'valueAsNumber';
+                            break;
                         default:
                             throw 'NI';
                     }

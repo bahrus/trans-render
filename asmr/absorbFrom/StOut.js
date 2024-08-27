@@ -17,8 +17,16 @@ export class StOut extends EventTarget {
         if (sotaProp !== undefined) {
             return el[sotaProp];
         }
-        if (isRAR || isUE || isRAE) {
-            return el[propToAbsorb];
+        if (propToAbsorb !== undefined) {
+            if (propToAbsorb.startsWith('?.')) {
+                //TODO -- less string manipulation
+                const dotDelimitedPath = propToAbsorb.replaceAll('?.', '.');
+                const { getVal } = await import('../../lib/getVal.js');
+                return await getVal({ host: el }, dotDelimitedPath);
+            }
+            else {
+                return el[propToAbsorb];
+            }
         }
         if (this.#so !== undefined) {
             return this.#so.pureValue;
@@ -77,7 +85,7 @@ export class StOut extends EventTarget {
             hac(sourceEl, sota, this);
             return;
         }
-        if (isUE && UEEN !== undefined) {
+        if (UEEN !== undefined) {
             const ac = new AbortController();
             sourceEl.addEventListener(UEEN, this, { signal: ac.signal });
             this.#ac = ac;

@@ -20,6 +20,9 @@ export class StdIn {
                 case 'input':
                     //no value
                     break;
+                case 'form':
+                    //no value
+                    break;
                 default:
                     switch (valueType) {
                         case 'NumericRange':
@@ -42,6 +45,7 @@ export class StdIn {
             switch (typeof val) {
                 case 'string':
                 case 'boolean':
+                case 'number':
                     if (valueType === undefined) {
                         el[displayProp] = val;
                     }
@@ -54,12 +58,19 @@ export class StdIn {
             }
         }
         if (valueProp !== undefined) {
+            const isGingerly = valueProp.startsWith('?.');
             switch (valueProp) {
                 case 'ariaChecked':
                     el.ariaChecked = val === true ? 'true' : val === false ? 'false' : 'mixed';
                     break;
                 default:
-                    el[valueProp] = val;
+                    if (isGingerly) {
+                        const { assignGingerly } = await import('trans-render/lib/assignGingerly.js');
+                        assignGingerly(el, { [valueProp]: val });
+                    }
+                    else {
+                        el[valueProp] = val;
+                    }
             }
         }
     }
