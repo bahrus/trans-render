@@ -86,6 +86,13 @@ export class ASMR {
                         case 'checkbox':
                             valueProp = 'checked';
                             break;
+                        case 'text':
+                        case 'password':
+                        case 'email':
+                        case 'tel':
+                        case 'url':
+                            valueProp = 'value';
+                            break;
                         default:
                             throw 'NI';
                     }

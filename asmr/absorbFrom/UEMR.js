@@ -57,13 +57,15 @@ export function UEMR(el, ao) {
                 if (propToAbsorb === undefined) {
                     ao.propToAbsorb = 'value';
                 }
+                break;
             case 'form':
                 if (UEEN === undefined)
                     ao.UEEN = 'input';
                 if (propToAbsorb === undefined) {
                     ao.propToAbsorb = 'formData';
                 }
-            case 'default':
+                break;
+            default:
                 //content editable
                 if (UEEN === undefined)
                     ao.UEEN = 'input';
