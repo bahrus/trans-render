@@ -97,6 +97,9 @@ export class ASMR {
                             throw 'NI';
                     }
                     break;
+                case 'meta':
+                    valueProp = 'content';
+                    break;
                 default:
                     if('value' in el && !'button-li'.includes(localName)){ //example 'input', 'output'
                         valueProp = 'value';

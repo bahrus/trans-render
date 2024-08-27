@@ -9,11 +9,14 @@ export class StOut extends EventTarget {
         this.ao = ao;
         this.disconnectedSignal = disconnectedSignal;
     }
-    handleEvent(e) {
+    handleEvent() {
         this.dispatchEvent(new Event('value'));
     }
     async getValue(el) {
-        const { isRAR, propToAbsorb, isUE, isRAE } = this.ao;
+        const { isRAR, propToAbsorb, isUE, isRAE, sotaProp } = this.ao;
+        if (sotaProp !== undefined) {
+            return el[sotaProp];
+        }
         if (isRAR || isUE || isRAE) {
             return el[propToAbsorb];
         }
@@ -28,6 +31,9 @@ export class StOut extends EventTarget {
         if (isBuiltInEditable || sourceEl.hasAttribute('contentEditable')) {
             const { UEMR } = await import('./UEMR.js');
             UEMR(sourceEl, ao);
+        }
+        else if (localName === 'meta') {
+            ao.sota = 'content';
         }
         else if (localName.includes('-')) {
             await customElements.whenDefined(localName);
@@ -57,12 +63,20 @@ export class StOut extends EventTarget {
                 }
             }
         }
+        if (ao.sota !== undefined && ao.sotaProp === undefined) {
+            ao.sotaProp = ao.sota;
+        }
         //this.dispatchEvent(new Event('readMind'));
     }
     #ac;
     async hydrate(sourceEl) {
         const { ao } = this;
-        const { propToAbsorb, isUE, UEEN } = ao;
+        const { propToAbsorb, isUE, UEEN, sota } = ao;
+        if (sota !== undefined) {
+            const { hac } = await import('../../lib/hac.js');
+            hac(sourceEl, sota, this);
+            return;
+        }
         if (isUE && UEEN !== undefined) {
             const ac = new AbortController();
             sourceEl.addEventListener(UEEN, this, { signal: ac.signal });

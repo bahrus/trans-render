@@ -13,11 +13,14 @@ export class StOut<TProp=any> extends EventTarget implements
     ){
         super();
     }
-    handleEvent(e: Event){
+    handleEvent(){
         this.dispatchEvent(new Event('value'));
     }
     async getValue(el: Element) {
-        const {isRAR, propToAbsorb, isUE, isRAE} = this.ao;
+        const {isRAR, propToAbsorb, isUE, isRAE, sotaProp} = this.ao;
+        if(sotaProp !== undefined){
+            return (<any>el)[sotaProp];
+        }
         if(isRAR || isUE || isRAE){
             return (<any>el)[propToAbsorb!];
         }
@@ -37,6 +40,8 @@ export class StOut<TProp=any> extends EventTarget implements
             const {UEMR} = await import('./UEMR.js');
             UEMR(sourceEl, ao);
 
+        }else if(localName === 'meta'){
+            ao.sota = 'content';
         }else if(localName.includes('-')){
             await customElements.whenDefined(localName);
             const propagator = (<any>sourceEl).propagator;
@@ -63,12 +68,20 @@ export class StOut<TProp=any> extends EventTarget implements
                 }
             }
         }
+        if(ao.sota !== undefined && ao.sotaProp === undefined){
+            ao.sotaProp = ao.sota;
+        }
         //this.dispatchEvent(new Event('readMind'));
     }
     #ac: AbortController | undefined;
     async hydrate(sourceEl: Element){
         const {ao} = this;
-        const {propToAbsorb, isUE, UEEN} = ao;
+        const {propToAbsorb, isUE, UEEN, sota} = ao;
+        if(sota !== undefined){
+            const {hac} = await import('../../lib/hac.js');
+            hac(sourceEl, sota, this);
+            return;
+        }
         if(isUE && UEEN !== undefined){
             const ac = new AbortController();
             sourceEl.addEventListener(UEEN, this, {signal: ac.signal});
@@ -100,3 +113,4 @@ export class StOut<TProp=any> extends EventTarget implements
 }
 
 const builtInEditables: Array<BuiltInEditables> = ['input', 'select', 'textarea'];
+
