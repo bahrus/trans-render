@@ -47,6 +47,8 @@ async function applyChains(dest: any, chainOps: any){
                 }
                 context[token] = obj;
                 context = obj;
+            }else{
+                context = newContext;
             }
         }
         if(typeof(context[last]) === 'object' && typeof(val) === 'object'){
