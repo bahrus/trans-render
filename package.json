@@ -43,6 +43,10 @@
       "default": "./asmr/asmr.js",
       "types": "./asmr/asmr.ts"
     },
+    "./asmr/getDefaultRemotePropName.js": {
+      "default": "./asmr/getDefaultRemotePropName.js",
+      "types": "./asmr/getDefaultRemotePropName.ts"
+    },
     "./dss/Newish.js": {
       "default": "./dss/Newish.js",
       "types": "./dss/Newish.ts"
@@ -180,7 +184,7 @@
     "mount-observer": "0.0.34"
   },
   "devDependencies": {
-    "@playwright/test": "1.46.0",
+    "@playwright/test": "1.46.1",
     "may-it-serve": "0.0.8",
     "xtal-shell": "0.0.27"
   },
