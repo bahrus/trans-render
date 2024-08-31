@@ -5,14 +5,17 @@ import { ASMR } from "../asmr.js";
 export class StdIn {
     so;
     #ref;
+    isDisconnected = false;
     constructor(so, el) {
         this.so = so;
         this.#ref = new WeakRef(el);
     }
     async readMind() {
         const el = this.#ref.deref();
-        if (el === undefined)
+        if (el === undefined) {
+            this.isDisconnected = true;
             return;
+        }
         const { so } = this;
         let { valueProp, valueType, displayProp } = so;
         const { localName } = el;
@@ -42,7 +45,12 @@ export class StdIn {
         }
     }
     pureValue;
-    async setValue(el, val) {
+    async setValue(val) {
+        const el = this.#ref.deref();
+        if (el === undefined) {
+            this.isDisconnected = true;
+            return;
+        }
         this.pureValue = val;
         const { valueType, displayProp, valueProp } = this.so;
         const { localName } = el;

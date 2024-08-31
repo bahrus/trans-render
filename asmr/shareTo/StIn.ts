@@ -6,12 +6,16 @@ import { ASMR } from "../asmr.js";
  */
 export class StdIn<TProp = any> implements SharingObject{
     #ref: WeakRef<Element>;
+    isDisconnected = false;
     constructor(public so: SetOptions, el: Element){
         this.#ref = new WeakRef(el);
     }
     async readMind(){
         const el = this.#ref.deref();
-        if(el === undefined) return;
+        if(el === undefined) {
+            this.isDisconnected = true;
+            return;
+        }
         const {so} = this;
         let {valueProp, valueType, displayProp} = so;
         const {localName} = el;
@@ -43,7 +47,12 @@ export class StdIn<TProp = any> implements SharingObject{
         }
     }
     pureValue: TProp | undefined;
-    async setValue(el: Element, val: TProp) {
+    async setValue(val: TProp) {
+        const el = this.#ref.deref();
+        if(el === undefined){
+            this.isDisconnected = true;
+            return;
+        }
         this.pureValue = val;
         const {valueType, displayProp, valueProp} = this.so;
         const {localName} = el;

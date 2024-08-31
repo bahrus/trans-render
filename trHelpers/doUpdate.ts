@@ -82,7 +82,7 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
     }else{
         const {ASMR} = await import('../asmr/asmr.js');
         const so = await ASMR.getSO(matchingElement);
-        so.setValue(matchingElement, val);
+        so.setValue(val);
         //transformer.setPrimeValue(matchingElement, val);
     }
 }
