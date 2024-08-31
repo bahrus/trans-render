@@ -34,8 +34,8 @@ export class ASMR {
             if(cachedSharingObject  !== undefined) return cachedSharingObject;
         } 
         const {StdIn} = await import('./shareTo/StIn.js');
-        const sharingObj = new StdIn({...(options || {})});
-        await sharingObj.readMind(element);
+        const sharingObj = new StdIn({...(options || {})}, element);
+        await sharingObj.readMind();
         if(optionsIsUndefined){
             emptyOptionsSharingObjMap.set(element, sharingObj);
         }else{

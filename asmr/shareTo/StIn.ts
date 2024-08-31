@@ -5,9 +5,13 @@ import { ASMR } from "../asmr.js";
  * Standard sharing
  */
 export class StdIn<TProp = any> implements SharingObject{
-    constructor(public so: SetOptions){
+    #ref: WeakRef<Element>;
+    constructor(public so: SetOptions, el: Element){
+        this.#ref = new WeakRef(el);
     }
-    async readMind(el:Element){
+    async readMind(){
+        const el = this.#ref.deref();
+        if(el === undefined) return;
         const {so} = this;
         let {valueProp, valueType, displayProp} = so;
         const {localName} = el;

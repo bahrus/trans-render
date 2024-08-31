@@ -4,15 +4,20 @@ export class StOut extends EventTarget {
     disconnectedSignal;
     #so;
     #propagator;
+    #ref;
     constructor(sourceEl, ao, disconnectedSignal) {
         super();
         this.ao = ao;
         this.disconnectedSignal = disconnectedSignal;
+        this.#ref = new WeakRef(sourceEl);
     }
     handleEvent() {
         this.dispatchEvent(new Event('value'));
     }
-    async getValue(el) {
+    async getValue() {
+        const el = this.#ref.deref();
+        if (el === undefined)
+            return undefined;
         const { isRAR, propToAbsorb, isUE, isRAE, sotaProp } = this.ao;
         if (sotaProp !== undefined) {
             return el[sotaProp];

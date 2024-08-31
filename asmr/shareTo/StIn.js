@@ -4,10 +4,15 @@ import { ASMR } from "../asmr.js";
  */
 export class StdIn {
     so;
-    constructor(so) {
+    #ref;
+    constructor(so, el) {
         this.so = so;
+        this.#ref = new WeakRef(el);
     }
-    async readMind(el) {
+    async readMind() {
+        const el = this.#ref.deref();
+        if (el === undefined)
+            return;
         const { so } = this;
         let { valueProp, valueType, displayProp } = so;
         const { localName } = el;

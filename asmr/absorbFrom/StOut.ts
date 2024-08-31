@@ -5,6 +5,7 @@ export class StOut<TProp=any> extends EventTarget implements
     AbsorbingObject, EventListenerObject {
     #so: SharingObject | undefined;
     #propagator: EventTarget | undefined;
+    #ref: WeakRef<Element>;
 
     constructor(
         sourceEl: Element, 
@@ -12,11 +13,14 @@ export class StOut<TProp=any> extends EventTarget implements
         public disconnectedSignal?: AbortSignal,
     ){
         super();
+        this.#ref = new WeakRef(sourceEl)
     }
     handleEvent(){
         this.dispatchEvent(new Event('value'));
     }
-    async getValue(el: Element) {
+    async getValue() {
+        const el = this.#ref.deref();
+        if(el === undefined) return undefined;
         const {isRAR, propToAbsorb, isUE, isRAE, sotaProp} = this.ao;
         if(sotaProp !== undefined){
             return (<any>el)[sotaProp];
