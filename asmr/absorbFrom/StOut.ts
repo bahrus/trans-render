@@ -88,15 +88,15 @@ export class StOut<TProp=any> extends EventTarget implements
     #ac: AbortController | undefined;
     async hydrate(sourceEl: Element){
         const {ao} = this;
-        const {propToAbsorb, isUE, UEEN, sota} = ao;
+        const {propToAbsorb, isUE, evt, sota} = ao;
         if(sota !== undefined){
             const {hac} = await import('../../lib/hac.js');
             hac(sourceEl, sota, this);
             return;
         }
-        if(UEEN !== undefined){
+        if(evt !== undefined){
             const ac = new AbortController();
-            sourceEl.addEventListener(UEEN, this, {signal: ac.signal});
+            sourceEl.addEventListener(evt, this, {signal: ac.signal});
             this.#ac = ac;
             return;
         }

@@ -6,12 +6,12 @@ import { AbsOptions, AbsorbingObject, BuiltInEditables, SharingObject } from '..
  */
 export function UEMR(el: Element, ao: AbsOptions){
     ao.isUE = true;
-    let {UEEN, propToAbsorb} = ao;
+    let {evt, propToAbsorb} = ao;
     const {localName} = el;
     if(propToAbsorb === undefined){
         switch(localName){
             case 'input':
-                if(UEEN === undefined) ao.UEEN = 'input';
+                if(evt === undefined) ao.evt = 'input';
                 if(propToAbsorb === undefined){
                     const {type} = el as HTMLInputElement;
                     switch(type){
@@ -53,20 +53,20 @@ export function UEMR(el: Element, ao: AbsOptions){
                 }
                 break;
             case 'button':
-                if(UEEN === undefined) ao.UEEN = 'click';
+                if(evt === undefined) ao.evt = 'click';
                 if(propToAbsorb === undefined){
                     ao.propToAbsorb = 'value';
                 }
                 break;
             case 'form':
-                if(UEEN === undefined) ao.UEEN = 'input';
+                if(evt === undefined) ao.evt = 'input';
                 if(propToAbsorb === undefined){
                     ao.propToAbsorb = 'formData'
                 }
                 break;
             default:
                 //content editable
-                if(UEEN === undefined) ao.UEEN = 'input';
+                if(evt === undefined) ao.evt = 'input';
                 if(propToAbsorb === undefined) ao.propToAbsorb = 'textContent';
                 break;
         }
