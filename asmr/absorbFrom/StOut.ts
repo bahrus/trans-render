@@ -21,7 +21,8 @@ export class StOut<TProp=any> extends EventTarget implements
     async getValue() {
         const el = this.#ref.deref();
         if(el === undefined) return undefined;
-        const {isRAR, propToAbsorb, isUE, isRAE, sotaProp} = this.ao;
+        const {isRAR, propToAbsorb, isUE, isRAE, sotaProp, selfIsVal} = this.ao;
+        if(selfIsVal) return el;
         
         if(sotaProp !== undefined){
             return (<any>el)[sotaProp];
