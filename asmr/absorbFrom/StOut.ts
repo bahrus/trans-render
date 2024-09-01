@@ -16,7 +16,7 @@ export class StOut<TProp=any> extends EventTarget implements
         this.#ref = new WeakRef(sourceEl)
     }
     handleEvent(){
-        this.dispatchEvent(new Event('value'));
+        this.dispatchEvent(new Event('.'));
     }
     async getValue() {
         const el = this.#ref.deref();
