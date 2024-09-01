@@ -41,6 +41,8 @@ export class StOut extends EventTarget {
         const { localName } = sourceEl;
         const ao = this.ao;
         const isBuiltInEditable = builtInEditables.includes(localName);
+        const { propToAbsorb, propToAbsorbValueType } = ao;
+        const p2aUn = propToAbsorb === undefined;
         if (isBuiltInEditable || sourceEl.hasAttribute('contentEditable')) {
             const { UEMR } = await import('./UEMR.js');
             UEMR(sourceEl, ao);
@@ -55,7 +57,7 @@ export class StOut extends EventTarget {
                 this.#propagator = propagator;
                 ao.isRAR = true;
                 let { propToAbsorb, propToAbsorbValueType } = ao;
-                if (propToAbsorb === undefined) {
+                if (p2aUn) {
                     ao.propToAbsorb = ASMR.getValueProp(sourceEl, propToAbsorbValueType);
                 }
             }
@@ -64,9 +66,8 @@ export class StOut extends EventTarget {
                 const ret = beRR(sourceEl);
                 if (ret) {
                     ao.isRAE = true;
-                    let { propToAbsorb, propToAbsorbValueType } = ao;
                     this.#propagator = sourceEl[props[0]];
-                    if (propToAbsorb === undefined) {
+                    if (p2aUn) {
                         ao.propToAbsorb = ASMR.getValueProp(sourceEl, propToAbsorbValueType);
                     }
                     sourceEl[props[2]](ao.propToAbsorb);
@@ -74,6 +75,14 @@ export class StOut extends EventTarget {
                 else {
                     throw 'NI';
                 }
+            }
+        }
+        else {
+            switch (localName) {
+                case 'output':
+                    if (p2aUn) {
+                        ao.propToAbsorb = 'value';
+                    }
             }
         }
         if (ao.sota !== undefined && ao.sotaProp === undefined) {

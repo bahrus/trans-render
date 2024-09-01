@@ -22,6 +22,7 @@ export class StOut<TProp=any> extends EventTarget implements
         const el = this.#ref.deref();
         if(el === undefined) return undefined;
         const {isRAR, propToAbsorb, isUE, isRAE, sotaProp} = this.ao;
+        
         if(sotaProp !== undefined){
             return (<any>el)[sotaProp];
         }
@@ -48,6 +49,8 @@ export class StOut<TProp=any> extends EventTarget implements
         const {localName} = sourceEl;
         const ao = this.ao;
         const isBuiltInEditable = builtInEditables.includes(localName);
+        const {propToAbsorb, propToAbsorbValueType} = ao;
+        const p2aUn = propToAbsorb === undefined;
         if(isBuiltInEditable || sourceEl.hasAttribute('contentEditable')){
             const {UEMR} = await import('./UEMR.js');
             UEMR(sourceEl, ao);
@@ -61,7 +64,7 @@ export class StOut<TProp=any> extends EventTarget implements
                 this.#propagator = propagator;
                 ao.isRAR = true;
                 let {propToAbsorb, propToAbsorbValueType} = ao;
-                if(propToAbsorb === undefined) {
+                if(p2aUn) {
                     ao.propToAbsorb = ASMR.getValueProp(sourceEl, propToAbsorbValueType);
                 }
             }else{
@@ -69,15 +72,22 @@ export class StOut<TProp=any> extends EventTarget implements
                 const ret = beRR(sourceEl);
                 if(ret){
                     ao.isRAE = true;
-                    let {propToAbsorb, propToAbsorbValueType} = ao;
+                    
                     this.#propagator = (<any>sourceEl)[props[0]];
-                    if(propToAbsorb === undefined) {
+                    if(p2aUn) {
                         ao.propToAbsorb = ASMR.getValueProp(sourceEl, propToAbsorbValueType);
                     }
                     (<any>sourceEl)[props[2]](ao.propToAbsorb);
                 }else{
                     throw 'NI';
                 }
+            }
+        }else{
+            switch(localName){
+                case 'output':
+                    if(p2aUn){
+                        ao.propToAbsorb = 'value';
+                    }
             }
         }
         if(ao.sota !== undefined && ao.sotaProp === undefined){
