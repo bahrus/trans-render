@@ -26,10 +26,9 @@ export class StdIn<TProp = any> implements SharingObject{
         }
         if(displayProp === undefined){
             switch(localName){
-                case 'input':
-                    //no value
-                    break;
                 case 'form':
+                case 'input':
+                case 'a':
                     //no value
                     break;
                 default:

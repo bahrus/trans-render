@@ -25,10 +25,9 @@ export class StdIn {
         }
         if (displayProp === undefined) {
             switch (localName) {
-                case 'input':
-                    //no value
-                    break;
                 case 'form':
+                case 'input':
+                case 'a':
                     //no value
                     break;
                 default:
