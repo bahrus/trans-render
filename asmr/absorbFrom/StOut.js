@@ -18,26 +18,35 @@ export class StOut extends EventTarget {
         const el = this.#ref.deref();
         if (el === undefined)
             return undefined;
-        const { isRAR, propToAbsorb, isUE, isRAE, sotaProp, selfIsVal } = this.ao;
+        const { isRAR, propToAbsorb, isUE, isRAE, sotaProp, selfIsVal, as } = this.ao;
         if (selfIsVal)
             return el;
+        let val;
         if (sotaProp !== undefined) {
-            return el[sotaProp];
+            val = el[sotaProp];
         }
         if (propToAbsorb !== undefined) {
             if (propToAbsorb.startsWith('?.')) {
                 //TODO -- less string manipulation
                 const dotDelimitedPath = propToAbsorb.replaceAll('?.', '.');
                 const { getVal } = await import('../../lib/getVal.js');
-                return await getVal({ host: el }, dotDelimitedPath);
+                val = await getVal({ host: el }, dotDelimitedPath);
             }
             else {
-                return el[propToAbsorb];
+                val = el[propToAbsorb];
             }
         }
         if (this.#so !== undefined) {
-            return this.#so.pureValue;
+            val = this.#so.pureValue;
         }
+        switch (as) {
+            case 'boolean':
+            case 'number':
+            case 'boolean|number':
+                val = JSON.parse(val);
+                break;
+        }
+        return val;
     }
     async readMind(sourceEl) {
         const { localName } = sourceEl;
@@ -83,10 +92,12 @@ export class StOut extends EventTarget {
         else {
             switch (localName) {
                 case 'data':
+                    ao.as = ao.as || 'boolean|number';
                 case 'output':
                     if (p2aUn) {
-                        ao.propToAbsorb = 'value';
+                        ao.sota = 'value';
                     }
+                    break;
             }
         }
         if (ao.sota !== undefined && ao.sotaProp === undefined) {
