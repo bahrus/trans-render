@@ -71,6 +71,7 @@ export class StOut<TProp=any> extends EventTarget implements
             }else{
                 const {beRR, props} = await import('../../froop/beRR.js');
                 const ret = beRR(sourceEl);
+                console.log({ret});
                 if(ret){
                     ao.isRAE = true;
                     
@@ -85,6 +86,7 @@ export class StOut<TProp=any> extends EventTarget implements
             }
         }else{
             switch(localName){
+                case 'data':
                 case 'output':
                     if(p2aUn){
                         ao.propToAbsorb = 'value';
@@ -105,23 +107,20 @@ export class StOut<TProp=any> extends EventTarget implements
             hac(sourceEl, sota, this);
             return;
         }
+        const propagator = this.#propagator;
+        if(propToAbsorb !== undefined &&  propagator !== undefined){
+            const ac = new AbortController();
+            propagator.addEventListener(propToAbsorb, this, {signal: ac.signal});
+            this.#ac = ac;
+            return;
+        }
         if(evt !== undefined){
             const ac = new AbortController();
             sourceEl.addEventListener(evt, this, {signal: ac.signal});
             this.#ac = ac;
             return;
         }
-        if(propToAbsorb !== undefined){
-            const propagator = this.#propagator;
-            if(propagator !== undefined){
-                const ac = new AbortController();
-                propagator.addEventListener(propToAbsorb, this, {signal: ac.signal});
-                this.#ac = ac;
-                return;
-            }else{
-                throw 'NI';
-            }
-        }
+
         throw 'NI';
 
 
