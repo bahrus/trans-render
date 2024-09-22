@@ -26,13 +26,6 @@ export function UEMR(el: Element, ao: AbsOptions){
                         case 'datetime-local':
                             ao.propToAbsorb = 'valueAsDate';
                             break;
-                        case 'password':
-                        case 'email':
-                        case 'tel':
-                        case 'url':
-                        case 'text':
-                            ao.propToAbsorb = 'value';
-                            break;
                         case 'file':
                             throw 'NI';
                         case 'image':
@@ -48,7 +41,7 @@ export function UEMR(el: Element, ao: AbsOptions){
                         case 'week':
                             throw 'NI';
                         default:
-
+                            ao.propToAbsorb = 'value';
                     }
                 }
                 break;
