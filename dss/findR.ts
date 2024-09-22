@@ -42,7 +42,7 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
                 }
 
                 if(host && closest){
-                    const hostish = getHostish(closest, prop);
+                    const hostish = await getHostish(closest, prop);
                     if(hostish) return hostish;
                 }
                 if(elS === undefined) return closest;

@@ -39,7 +39,7 @@ export async function findR(element, specifier, scopeE) {
                     closest = parentElement?.closest(scopeS);
                 }
                 if (host && closest) {
-                    const hostish = getHostish(closest, prop);
+                    const hostish = await getHostish(closest, prop);
                     if (hostish)
                         return hostish;
                 }
