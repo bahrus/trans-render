@@ -35,7 +35,7 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
                     const prev = seed.previousElementSibling || seed.parentElement;
                     if(prev ===null) throw 404;
                     const {upSearch} = await import('../lib/upSearch.js');
-                    const css = `${scopeS}:has(${elS})`;
+                    const css = elS === undefined ? `${scopeS}` : `${scopeS}:has(${elS})`;
                     closest = upSearch(prev, css);
                 }else{
                     const {parentElement} = seed;

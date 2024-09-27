@@ -32,7 +32,7 @@ export async function findR(element, specifier, scopeE) {
                     if (prev === null)
                         throw 404;
                     const { upSearch } = await import('../lib/upSearch.js');
-                    const css = `${scopeS}:has(${elS})`;
+                    const css = elS === undefined ? `${scopeS}` : `${scopeS}:has(${elS})`;
                     closest = upSearch(prev, css);
                 }
                 else {
