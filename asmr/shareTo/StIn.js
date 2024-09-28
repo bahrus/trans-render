@@ -17,13 +17,13 @@ export class StdIn {
             return;
         }
         const { so } = this;
-        let { valueProp, valueType, displayProp } = so;
+        let { valueProp, valueType, displayProp, path } = so;
         const { localName } = el;
-        if (valueProp === undefined) {
+        if (valueProp === undefined && path === undefined) {
             valueProp = ASMR.getValueProp(el, valueType);
             so.valueProp = valueProp;
         }
-        if (displayProp === undefined) {
+        if (displayProp === undefined && path === undefined) {
             switch (localName) {
                 case 'form':
                 case 'input':
@@ -51,7 +51,7 @@ export class StdIn {
             return;
         }
         this.pureValue = val;
-        const { valueType, displayProp, valueProp } = this.so;
+        const { valueType, displayProp, valueProp, path } = this.so;
         const { localName } = el;
         if (displayProp !== undefined) {
             switch (typeof val) {
@@ -84,6 +84,10 @@ export class StdIn {
                         el[valueProp] = val;
                     }
             }
+        }
+        else if (path !== undefined) {
+            const { setProp } = await import('../../lib/setProp.js');
+            setProp(el, path, val);
         }
     }
 }
