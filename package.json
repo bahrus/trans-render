@@ -47,6 +47,10 @@
       "default": "./asmr/stdProp.js",
       "types": "./asmr/stdProp.ts"
     },
+    "./asmr/stdEvt.js": {
+      "default": "./asmr/stdEvt.js",
+      "types": "./asmr/stdEvt.ts"
+    },
     "./dss/Newish.js": {
       "default": "./dss/Newish.js",
       "types": "./dss/Newish.ts"
