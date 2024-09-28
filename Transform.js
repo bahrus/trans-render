@@ -1,6 +1,7 @@
 import { MountObserver } from 'mount-observer/MountObserver.js';
 import { arr0 } from './arr.js';
 export { arr0 } from './arr.js';
+import { stdEvt } from './asmr/stdEvt.js';
 export async function Transform(target, model, xform, options) {
     const xformer = new Transformer(target, model, xform, options);
     await xformer.do();
@@ -412,14 +413,7 @@ export class MountOrchestrator extends EventTarget {
         }
     }
     toStdEvt(a, matchingElement) {
-        let on = 'click';
-        switch (matchingElement.localName) {
-            case 'input':
-                on = 'input';
-                break;
-            case 'slot':
-                on = 'slotchange';
-        }
+        const on = stdEvt(matchingElement);
         return {
             on,
             do: a,

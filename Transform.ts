@@ -10,6 +10,7 @@ import {
 import { IMountObserver, MountContext, PipelineStage } from './ts-refs/mount-observer/types';
 import {arr0} from './arr.js';
 export {arr0} from './arr.js';
+import {stdEvt} from './asmr/stdEvt.js';
 export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './ts-refs/trans-render/types.js'; 
 
 export async function Transform<TProps extends {}, TMethods = TProps, TElement = {}>(
@@ -488,14 +489,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
     }
 
     toStdEvt(a: keyof TMethods, matchingElement: Element): AddEventListener<TProps, TMethods>{
-        let on = 'click';
-        switch(matchingElement.localName){
-            case 'input':
-                on = 'input';
-                break;
-            case 'slot':
-                on = 'slotchange'
-        }
+        const on = stdEvt(matchingElement);
         return {
             on,
             do: a,
