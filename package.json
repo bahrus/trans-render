@@ -43,9 +43,9 @@
       "default": "./asmr/asmr.js",
       "types": "./asmr/asmr.ts"
     },
-    "./asmr/getDefaultRemotePropName.js": {
-      "default": "./asmr/getDefaultRemotePropName.js",
-      "types": "./asmr/getDefaultRemotePropName.ts"
+    "./asmr/stdProp.js": {
+      "default": "./asmr/stdProp.js",
+      "types": "./asmr/stdProp.ts"
     },
     "./dss/Newish.js": {
       "default": "./dss/Newish.js",
