@@ -185,10 +185,10 @@
     "/ts-refs/*"
   ],
   "dependencies": {
-    "mount-observer": "0.0.36"
+    "mount-observer": "0.0.37"
   },
   "devDependencies": {
-    "@playwright/test": "1.47.1",
+    "@playwright/test": "1.47.2",
     "may-it-serve": "0.0.8",
     "xtal-shell": "0.0.27"
   },
