@@ -5,13 +5,12 @@
   "type": "module",
   "main": "trans-render.js",
   "module": "trans-render.js",
-  "types": "index.d.ts",
+  "types": "./ts-refs/trans-render/types.d.ts",
   "scripts": {
-    "serve": "node node_modules/may-it-serve/serve.js",
+    "serve": "python3 ./node_modules/ssi-server/ssi_server.py",
     "test": "playwright test",
     "doc": "wca analyze trans-render.js --outFile custom-elements.json",
     "package-check": "package-check",
-    "compress": "terser lib/CE.js -o dist/CE.min.js -c -m ",
     "safari": "npx playwright wk http://localhost:3030",
     "update": "ncu -u && npm install"
   },
@@ -185,12 +184,11 @@
     "/ts-refs/*"
   ],
   "dependencies": {
-    "mount-observer": "0.0.38"
+    "mount-observer": "0.0.39"
   },
   "devDependencies": {
-    "@playwright/test": "1.47.2",
-    "may-it-serve": "0.0.8",
-    "xtal-shell": "0.0.27"
+    "@playwright/test": "1.48.0",
+    "ssi-server": "0.0.1"
   },
   "repository": {
     "type": "git",
