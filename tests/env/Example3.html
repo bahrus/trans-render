@@ -8,25 +8,24 @@
 <body>
     <script type=module>
         import {IndexedDBWrapper} from '/env/IndexedDBWrapper.js';
-        const dbWrapper = new IndexedDBWrapper('myDatabase', 1);
+        const dbWrapper = new IndexedDBWrapper('myDatabase', 'myTable', 1);
         
         await dbWrapper.openDB();
         
-        await dbWrapper.addData('store', { name: 'John Doe', age: 30 });
+        await dbWrapper.addData({ name: 'John Doe', age: 30 });
 
         //dbWrapper.watch('store');
-        const idx = await dbWrapper.addData('store', { name: 'Jane Doe', age: 31 });
-        await dbWrapper.addData('store', { name: 'Jane Smith', age: 32 });
-        const data1 = await dbWrapper.getRow('store', 0);
-        const data2 = await dbWrapper.getRow('store', idx);
-        const count = await dbWrapper.getCount('store');
-        const data3 = await dbWrapper.getRow('store', count - 1);
-        const data4 = await dbWrapper.getLastRow('store');
-        const data5 = await dbWrapper.getRow('store', -1);
-        const data6 = await dbWrapper.getLastRow('bogus');
-        const data7 = await dbWrapper.getAllRows('store');
-        await dbWrapper.updateRow('store', 1, { name: 'Isaac Newton', age: 12});
-        console.log({data1, data2, count, data3, data4, data5, data6, data7});
+        const idx = await dbWrapper.addData({ name: 'Jane Doe', age: 31 });
+        await dbWrapper.addData({ name: 'Jane Smith', age: 32 });
+        const data1 = await dbWrapper.getRow(0);
+        const data2 = await dbWrapper.getRow(idx);
+        const count = await dbWrapper.getCount();
+        const data3 = await dbWrapper.getRow(count - 1);
+        const data4 = await dbWrapper.getLastRow();
+        const data5 = await dbWrapper.getRow(-1);
+        const data6 = await dbWrapper.getAllRows();
+        await dbWrapper.updateRow(1, { name: 'Isaac Newton', age: 12});
+        console.log({data1, data2, count, data3, data4, data5, data6});
     </script>
     </script>
 </body>
