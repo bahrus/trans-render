@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script type=module>
+        import {IndexedDBWrapper} from '/env/IndexedDBWrapper.js';
+        const dbWrapper = new IndexedDBWrapper('myDatabase', 1);
+        await dbWrapper.openDB();
+        await dbWrapper.addData('store', { name: 'John Doe', age: 30 });
+        
+        await dbWrapper.addData('store', { name: 'Jane Doe', age: 31 });
+        const data = await dbWrapper.getData('store', 1);
+        console.log(data);
+    </script>
+    </script>
+</body>
+</html>
