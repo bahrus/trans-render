@@ -12,7 +12,7 @@ export async function pull(resourcePath: `${protocols}://${string}`){
             if(storeName === undefined) throw 400;
             try{
                 const req = indexedDB.open(storeName, 3);
-                const evt = (await import('../lib/waitForEvent.js')).waitForEvent(req, 'success', 'error') as any;
+                const evt = await (await import('../lib/waitForEvent.js')).waitForEvent(req, 'success', 'error') as any;
                 const db = evt.target.result;
                 const transaction = db.transaction([storeName], 'readonly');
                 const objectStore = transaction.objectStore(storeName);

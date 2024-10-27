@@ -11,7 +11,7 @@ export async function pull(resourcePath) {
                 throw 400;
             try {
                 const req = indexedDB.open(storeName, 3);
-                const evt = (await import('../lib/waitForEvent.js')).waitForEvent(req, 'success', 'error');
+                const evt = await (await import('../lib/waitForEvent.js')).waitForEvent(req, 'success', 'error');
                 const db = evt.target.result;
                 const transaction = db.transaction([storeName], 'readonly');
                 const objectStore = transaction.objectStore(storeName);

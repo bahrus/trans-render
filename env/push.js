@@ -13,13 +13,18 @@ export async function push(resourcePath, val) {
                 throw 400;
             switch (protocol) {
                 case 'idb':
+                    const req = indexedDB.open(storeName, 1);
+                    req.addEventListener('upgradeneeded', e => {
+                        console.log('iah');
+                        const dbe = e.target.result;
+                        dbe.createObjectStore(storeName, { keyPath: 'id' });
+                    });
+                    const evt = await (await import('../lib/waitForEvent.js')).waitForEvent(req, 'success', 'error');
+                    const db = evt.target.result;
+                    const transaction = db.transaction(storeName, 'readwrite');
+                    const objectStore = transaction.objectStore(storeName);
                     const existingObj = await (await import('./pull.js')).pull(resourcePath) || {};
                     await assignGingerly(existingObj, val);
-                    const req = indexedDB.open(storeName, 3);
-                    const evt = (await import('../lib/waitForEvent.js')).waitForEvent(req, 'success', 'error');
-                    const db = evt.target.result;
-                    const transaction = db.transaction([storeName], 'readonly');
-                    const objectStore = transaction.objectStore(storeName);
                     objectStore.add(existingObj);
                     break;
             }
