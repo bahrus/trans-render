@@ -15,7 +15,8 @@
         await dbWrapper.addData('store', { name: 'John Doe', age: 30 });
         dbWrapper.addEventListener('store', e => {
             console.log(e);
-        })
+        });
+        //dbWrapper.watch('store');
         const idx = await dbWrapper.addData('store', { name: 'Jane Doe', age: 31 });
         await dbWrapper.addData('store', { name: 'Jane Smith', age: 32 });
         const data1 = await dbWrapper.getData('store', 1);
@@ -23,7 +24,8 @@
         const count = await dbWrapper.getCount('store');
         const data3 = await dbWrapper.getData('store', count);
         const data4 = await dbWrapper.getLatest('store');
-        console.log({data1, data2, count, data3, data4});
+        const data5 = await dbWrapper.getData('store', 1000);
+        console.log({data1, data2, count, data3, data4, data5});
     </script>
     </script>
 </body>

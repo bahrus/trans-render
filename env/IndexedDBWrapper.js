@@ -8,13 +8,6 @@ export class IndexedDBWrapper extends EventTarget {
         this.version = version;
         this.#db = null;
     }
-    async watch(storeName) {
-        while (true) {
-            const max = await this.getCount(storeName);
-            await this.getData(storeName, max + 1);
-            this.dispatchEvent(new Event(storeName));
-        }
-    }
     async openDB() {
         return new Promise((resolve, reject) => {
             const request = indexedDB.open(this.dbName, this.version);
