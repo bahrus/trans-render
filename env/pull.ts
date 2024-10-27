@@ -10,7 +10,6 @@ export async function pull(resourcePath: `${protocols}://${string}`){
         case 'idb':
             const storeName = splitPath.shift();
             if(storeName === undefined) throw 400;
-            
             break;
         case 'session':
             const head = splitPath.shift();

@@ -188,7 +188,6 @@
     "/ts-refs/*"
   ],
   "dependencies": {
-    "idb": "8.0.0",
     "mount-observer": "0.0.39"
   },
   "devDependencies": {
