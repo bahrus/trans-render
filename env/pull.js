@@ -9,8 +9,8 @@ export async function pull(resourcePath) {
             const storeName = splitPath.shift();
             if (storeName === undefined)
                 throw 400;
-            const req = indexedDB.open(storeName, 3);
             try {
+                const req = indexedDB.open(storeName, 3);
                 const evt = (await import('../lib/waitForEvent.js')).waitForEvent(req, 'success', 'error');
                 const db = evt.target.result;
                 const transaction = db.transaction([storeName], 'readonly');
