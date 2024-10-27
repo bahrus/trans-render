@@ -58,7 +58,7 @@ export class IndexedDBWrapper {
     async getLatest(storeName) {
         try {
             const count = await this.getCount(storeName);
-            return await this.getRow(storeName, count);
+            return await this.getRow(storeName, count - 1);
         }
         catch (e) {
             return undefined;
