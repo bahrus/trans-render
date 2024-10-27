@@ -9,18 +9,26 @@ export class IndexedDBWrapper {
         this.version = version;
         this.#db = null;
     }
-    async openDB() {
+    async openDB(version = 1) {
+        //const dbs = (await indexedDB.databases()).filter(x => x.name === this.dbName);
         return new Promise((resolve, reject) => {
-            const request = indexedDB.open(this.dbName, this.version);
+            const request = indexedDB.open(this.dbName, version);
             request.onupgradeneeded = (event) => {
                 this.#db = event.target.result;
                 if (!this.#db.objectStoreNames.contains(this.tableName)) {
                     this.#db.createObjectStore(this.tableName, { keyPath: 'id', autoIncrement: true });
                 }
             };
-            request.onsuccess = (event) => {
-                this.#db = event.target.result;
-                resolve(this.#db);
+            request.onsuccess = async (event) => {
+                const db = event.target.result;
+                if (db.objectStoreNames.contains(this.tableName)) {
+                    this.#db = db;
+                    resolve(db);
+                }
+                else {
+                    const newDB = await this.openDB(version + 1);
+                    resolve(newDB);
+                }
             };
             request.onerror = (event) => {
                 reject(`Database error: ${event.target.errorCode}`);

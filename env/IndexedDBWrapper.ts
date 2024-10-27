@@ -4,9 +4,11 @@ export class IndexedDBWrapper {
         this.#db = null;
     }
 
-    async openDB() {
+    async openDB(version: number = 1) {
+        //const dbs = (await indexedDB.databases()).filter(x => x.name === this.dbName);
+        
         return new Promise((resolve, reject) => {
-            const request = indexedDB.open(this.dbName, this.version);
+            const request = indexedDB.open(this.dbName, version);
 
             request.onupgradeneeded = (event: any) => {
                 this.#db = event.target.result;
@@ -15,9 +17,17 @@ export class IndexedDBWrapper {
                 }
             };
 
-            request.onsuccess = (event: any) => {
-                this.#db = event.target.result;
-                resolve(this.#db);
+            request.onsuccess = async (event: any) => {
+                const db = event.target.result;
+                if(db.objectStoreNames.contains(this.tableName)){
+                    this.#db = db;
+                    resolve(db);
+                }else{
+                    const newDB = await this.openDB(version + 1);
+                    resolve(newDB);
+                }
+                
+
             };
 
             request.onerror = (event: any) => {
