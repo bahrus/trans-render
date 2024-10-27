@@ -51,4 +51,20 @@ export class IndexedDBWrapper {
             };
         });
     }
+    async getCount(storeName) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.#db.transaction([storeName]);
+            const store = transaction.objectStore(storeName);
+            const request = store.count();
+            request.addEventListener('success', (e) => {
+                console.log({ e });
+            });
+            request.onsuccess = () => {
+                resolve(request.result);
+            };
+            request.onerror = (event) => {
+                reject(`Get error: ${event.target.errorCode}`);
+            };
+        });
+    }
 }

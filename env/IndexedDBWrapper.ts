@@ -48,7 +48,24 @@ export class IndexedDBWrapper {
             const transaction = this.#db.transaction([storeName]);
             const store = transaction.objectStore(storeName);
             const request = store.get(key);
+            request.onsuccess = () => {
+                resolve(request.result);
+            };
 
+            request.onerror = (event: any) => {
+                reject(`Get error: ${event.target.errorCode}`);
+            };
+        });
+    }
+
+    async getCount(storeName: string){
+        return new Promise((resolve, reject) => {
+            const transaction = this.#db.transaction([storeName]);
+            const store = transaction.objectStore(storeName);
+            const request = store.count();
+            request.addEventListener('success', (e: any) => {
+                console.log({e});
+            })
             request.onsuccess = () => {
                 resolve(request.result);
             };

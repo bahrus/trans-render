@@ -9,13 +9,17 @@
     <script type=module>
         import {IndexedDBWrapper} from '/env/IndexedDBWrapper.js';
         const dbWrapper = new IndexedDBWrapper('myDatabase', 1);
+        
         await dbWrapper.openDB();
+        
         await dbWrapper.addData('store', { name: 'John Doe', age: 30 });
         
         const idx = await dbWrapper.addData('store', { name: 'Jane Doe', age: 31 });
+        
         const data1 = await dbWrapper.getData('store', 1);
         const data2 = await dbWrapper.getData('store', idx);
-        console.log({data1, data2});
+        const count = await dbWrapper.getCount('store');
+        console.log({data1, data2, count});
     </script>
     </script>
 </body>
