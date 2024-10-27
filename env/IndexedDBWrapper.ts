@@ -67,7 +67,7 @@ export class IndexedDBWrapper {
         return await this.#tableAction(tableName, 'put', current);
     }
 
-    async getLatest(tableName: string){
+    async getLastRow(tableName: string){
         try{
             const count = await this.getCount(tableName);
             return await this.getRow(tableName, count - 1);

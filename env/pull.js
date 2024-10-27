@@ -14,7 +14,7 @@ export async function pull(resourcePath) {
                 throw 400;
             const { IndexedDBWrapper } = await import('./IndexedDBWrapper.js');
             const idb = new IndexedDBWrapper(dbName, 1);
-            const baseVal = await idb.getLatest(tableName);
+            const baseVal = await idb.getLastRow(tableName);
             return splitPath.length > 0 ? await getProp(baseVal, splitPath) : baseVal;
         case 'session':
             const head = splitPath.shift();

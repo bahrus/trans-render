@@ -59,7 +59,7 @@ export class IndexedDBWrapper {
         await assignGingerly(current, data);
         return await this.#tableAction(tableName, 'put', current);
     }
-    async getLatest(tableName) {
+    async getLastRow(tableName) {
         try {
             const count = await this.getCount(tableName);
             return await this.getRow(tableName, count - 1);
