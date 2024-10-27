@@ -6,21 +6,16 @@ export async function pull(resourcePath) {
         case 'globalThis':
             return await getProp(globalThis, splitPath);
         case 'idb':
-            const storeName = splitPath.shift();
-            if (storeName === undefined)
+            const dbName = splitPath.shift();
+            if (dbName === undefined)
                 throw 400;
-            try {
-                const req = indexedDB.open(storeName, 3);
-                const evt = await (await import('../lib/waitForEvent.js')).waitForEvent(req, 'success', 'error');
-                const db = evt.target.result;
-                const transaction = db.transaction([storeName], 'readonly');
-                const objectStore = transaction.objectStore(storeName);
-                const baseVal = objectStore.get('myKey');
-                return splitPath.length > 0 ? await getProp(baseVal, splitPath) : baseVal;
-            }
-            catch (err) {
-                return undefined;
-            }
+            const tableName = splitPath.shift();
+            if (tableName === undefined)
+                throw 400;
+            const { IndexedDBWrapper } = await import('./IndexedDBWrapper.js');
+            const idb = new IndexedDBWrapper(dbName, 1);
+            const baseVal = await idb.getLatest(tableName);
+            return splitPath.length > 0 ? await getProp(baseVal, splitPath) : baseVal;
         case 'session':
             const head = splitPath.shift();
             if (head === undefined)

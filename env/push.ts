@@ -10,10 +10,14 @@ export async function push(resourcePath: `${protocols}://${string}`, val: any){
         case 'session':
         case 'idb':
             const splitPath = path.split('?.');
-            const storeName = splitPath.shift();
-            if(storeName === undefined) throw 400;
+            const dbName = splitPath.shift();
+            if(dbName === undefined) throw 400;
             switch(protocol){
                 case 'idb':
+                    const tableName = splitPath.shift();
+                    if(tableName === undefined) throw 400;
+                    const {IndexedDBWrapper} = await import('./IndexedDBWrapper.js');
+                    const idb = new IndexedDBWrapper(dbName, 1);
                     const req = indexedDB.open(storeName, 1);
                     req.addEventListener('upgradeneeded', e => {
                         console.log('iah');

@@ -27,11 +27,11 @@ export class IndexedDBWrapper {
         });
     }
 
-    async #storeInvoke(storeName: string, methodName: 'add' | 'get' | 'count', arg?: any){
+    async #storeInvoke(storeName: string, methodName: 'add' | 'get' | 'count', arg1?: any, arg2?: any){
         return new Promise((resolve, reject) => {
             const transaction = this.#db.transaction([storeName], 'readwrite');
             const store = transaction.objectStore(storeName);
-            const request = store[methodName](arg);
+            const request = store[methodName](arg1, arg2);
 
             request.onsuccess = () => {
                 resolve(request.result);
@@ -43,17 +43,27 @@ export class IndexedDBWrapper {
         });
     }
 
-    async addData(storeName: string, data: any) {
-        return await this.#storeInvoke(storeName, 'add', data);
+    async addData(storeName: string, data: any, key?: number) {
+        return await this.#storeInvoke(storeName, 'add', data, key);
     }
 
     async getData(storeName: string, key: number) {
-        return await this.#storeInvoke(storeName, 'get', key);
+        try{
+            return await this.#storeInvoke(storeName, 'get', key);
+        }catch(e){
+            return undefined;
+        }
+        
     }
 
     async getLatest(storeName: string){
-        const count = await this.getCount(storeName);
-        return await this.getData(storeName, count);
+        try{
+            const count = await this.getCount(storeName);
+            return await this.getData(storeName, count);
+        }catch(e){
+            return undefined;
+        }
+        
     }
 
     async getCount(storeName: string): Promise<number>{
