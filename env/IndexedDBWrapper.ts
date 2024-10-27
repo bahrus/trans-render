@@ -49,7 +49,7 @@ export class IndexedDBWrapper {
 
     async getRow(storeName: string, idx: number) {
         try{
-            return await this.#tableAction(storeName, 'get', idx);
+            return await this.#tableAction(storeName, 'get', idx + 1);
         }catch(e){
             return undefined;
         }

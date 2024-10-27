@@ -17,10 +17,10 @@
         //dbWrapper.watch('store');
         const idx = await dbWrapper.addData('store', { name: 'Jane Doe', age: 31 });
         await dbWrapper.addData('store', { name: 'Jane Smith', age: 32 });
-        const data1 = await dbWrapper.getRow('store', 1);
+        const data1 = await dbWrapper.getRow('store', 0);
         const data2 = await dbWrapper.getRow('store', idx);
         const count = await dbWrapper.getCount('store');
-        const data3 = await dbWrapper.getRow('store', count);
+        const data3 = await dbWrapper.getRow('store', count - 1);
         const data4 = await dbWrapper.getLatest('store');
         const data5 = await dbWrapper.getRow('store', 1000);
         const data6 = await dbWrapper.getLatest('bogus');
