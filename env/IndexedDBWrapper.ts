@@ -47,9 +47,9 @@ export class IndexedDBWrapper {
         return await this.#tableAction(storeName, 'add', data, key);
     }
 
-    async getData(storeName: string, key: number) {
+    async getRow(storeName: string, idx: number) {
         try{
-            return await this.#tableAction(storeName, 'get', key);
+            return await this.#tableAction(storeName, 'get', idx);
         }catch(e){
             return undefined;
         }
@@ -57,7 +57,7 @@ export class IndexedDBWrapper {
     }
 
     async updateData(storeName: string, key: number, data: any){
-        const current = await this.getData(storeName, key) || {};
+        const current = await this.getRow(storeName, key) || {};
         const {assignGingerly} = await import('../lib/assignGingerly.js');
         await assignGingerly(current, data);
         return await this.#tableAction(storeName, 'put', current);
@@ -66,7 +66,7 @@ export class IndexedDBWrapper {
     async getLatest(storeName: string){
         try{
             const count = await this.getCount(storeName);
-            return await this.getData(storeName, count);
+            return await this.getRow(storeName, count);
         }catch(e){
             return undefined;
         }
