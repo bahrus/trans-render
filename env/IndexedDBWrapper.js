@@ -25,7 +25,7 @@ export class IndexedDBWrapper {
             };
         });
     }
-    async #storeInvoke(storeName, methodName, arg1, arg2) {
+    async #tableAction(storeName, methodName, arg1, arg2) {
         return new Promise((resolve, reject) => {
             const transaction = this.#db.transaction([storeName], 'readwrite');
             const store = transaction.objectStore(storeName);
@@ -39,11 +39,11 @@ export class IndexedDBWrapper {
         });
     }
     async addData(storeName, data, key) {
-        return await this.#storeInvoke(storeName, 'add', data, key);
+        return await this.#tableAction(storeName, 'add', data, key);
     }
     async getData(storeName, key) {
         try {
-            return await this.#storeInvoke(storeName, 'get', key);
+            return await this.#tableAction(storeName, 'get', key);
         }
         catch (e) {
             return undefined;
@@ -53,7 +53,7 @@ export class IndexedDBWrapper {
         const current = await this.getData(storeName, key) || {};
         const { assignGingerly } = await import('../lib/assignGingerly.js');
         await assignGingerly(current, data);
-        return await this.#storeInvoke(storeName, 'put', current);
+        return await this.#tableAction(storeName, 'put', current);
     }
     async getLatest(storeName) {
         try {
@@ -65,6 +65,6 @@ export class IndexedDBWrapper {
         }
     }
     async getCount(storeName) {
-        return await this.#storeInvoke(storeName, 'count');
+        return await this.#tableAction(storeName, 'count');
     }
 }
