@@ -10,6 +10,8 @@ export async function pull(resourcePath: `${protocols}://${string}`){
         case 'idb':
             const storeName = splitPath.shift();
             if(storeName === undefined) throw 400;
+            const req = indexedDB.open(storeName, 3);
+            (await import('../lib/isResolved.js')).waitForEvent(req.)
             break;
         case 'session':
             const head = splitPath.shift();
