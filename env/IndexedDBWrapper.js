@@ -11,6 +11,7 @@ export class IndexedDBWrapper {
         return new Promise((resolve, reject) => {
             const request = indexedDB.open(this.dbName, this.version);
             request.onupgradeneeded = (event) => {
+                console.log(event);
                 this.#db = event.target.result;
                 if (!this.#db.objectStoreNames.contains('store')) {
                     this.#db.createObjectStore('store', { keyPath: 'id', autoIncrement: true });

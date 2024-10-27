@@ -9,6 +9,7 @@ export class IndexedDBWrapper {
             const request = indexedDB.open(this.dbName, this.version);
 
             request.onupgradeneeded = (event: any) => {
+                console.log(event);
                 this.#db = event.target.result;
                 if (!this.#db.objectStoreNames.contains('store')) {
                     this.#db.createObjectStore('store', { keyPath: 'id', autoIncrement: true });
