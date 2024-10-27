@@ -24,6 +24,7 @@
         const data4 = await dbWrapper.getLatest('store');
         const data5 = await dbWrapper.getData('store', 1000);
         const data6 = await dbWrapper.getLatest('bogus');
+        await dbWrapper.updateData('store', 1, { name: 'Isaac Newton', age: 12});
         console.log({data1, data2, count, data3, data4, data5, data6});
     </script>
     </script>

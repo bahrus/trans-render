@@ -27,7 +27,7 @@ export class IndexedDBWrapper {
         });
     }
 
-    async #storeInvoke(storeName: string, methodName: 'add' | 'get' | 'count', arg1?: any, arg2?: any){
+    async #storeInvoke(storeName: string, methodName: 'add' | 'get' | 'count' | 'put', arg1?: any, arg2?: any){
         return new Promise((resolve, reject) => {
             const transaction = this.#db.transaction([storeName], 'readwrite');
             const store = transaction.objectStore(storeName);
@@ -54,6 +54,13 @@ export class IndexedDBWrapper {
             return undefined;
         }
         
+    }
+
+    async updateData(storeName: string, key: number, data: any){
+        const current = await this.getData(storeName, key) || {};
+        const {assignGingerly} = await import('../lib/assignGingerly.js');
+        await assignGingerly(current, data);
+        return await this.#storeInvoke(storeName, 'put', current);
     }
 
     async getLatest(storeName: string){

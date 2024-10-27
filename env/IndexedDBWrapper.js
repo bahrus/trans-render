@@ -49,6 +49,12 @@ export class IndexedDBWrapper {
             return undefined;
         }
     }
+    async updateData(storeName, key, data) {
+        const current = await this.getData(storeName, key) || {};
+        const { assignGingerly } = await import('../lib/assignGingerly.js');
+        await assignGingerly(current, data);
+        return await this.#storeInvoke(storeName, 'put', current);
+    }
     async getLatest(storeName) {
         try {
             const count = await this.getCount(storeName);
