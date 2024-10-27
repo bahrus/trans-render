@@ -1,7 +1,7 @@
 import { getProp } from '../lib/getProp.js';
 export async function pull(resourcePath) {
     const [protocol, path] = resourcePath.split('://', 2);
-    const splitPath = path.split('.');
+    const splitPath = path.split('?.');
     switch (protocol) {
         case 'globalThis':
             return await getProp(globalThis, splitPath);
