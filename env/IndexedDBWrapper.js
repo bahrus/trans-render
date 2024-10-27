@@ -25,10 +25,10 @@ export class IndexedDBWrapper {
             };
         });
     }
-    async #tableAction(storeName, methodName, arg1, arg2) {
+    async #tableAction(tableName, methodName, arg1, arg2) {
         return new Promise((resolve, reject) => {
-            const transaction = this.#db.transaction([storeName], 'readwrite');
-            const store = transaction.objectStore(storeName);
+            const transaction = this.#db.transaction([tableName], 'readwrite');
+            const store = transaction.objectStore(tableName);
             const request = store[methodName](arg1, arg2);
             request.onsuccess = () => {
                 resolve(request.result);
@@ -38,37 +38,37 @@ export class IndexedDBWrapper {
             };
         });
     }
-    async addData(storeName, data, key) {
-        return await this.#tableAction(storeName, 'add', data, key);
+    async addData(tableName, data, key) {
+        return await this.#tableAction(tableName, 'add', data, key);
     }
-    async getRow(storeName, idx) {
+    async getRow(tableName, idx) {
         try {
             if (idx < 0) {
-                const count = await this.getCount(storeName);
-                return await this.#tableAction(storeName, 'get', count + idx + 1);
+                const count = await this.getCount(tableName);
+                return await this.#tableAction(tableName, 'get', count + idx + 1);
             }
-            return await this.#tableAction(storeName, 'get', idx + 1);
+            return await this.#tableAction(tableName, 'get', idx + 1);
         }
         catch (e) {
             return undefined;
         }
     }
-    async updateData(storeName, key, data) {
-        const current = await this.getRow(storeName, key) || {};
+    async updateData(tableName, key, data) {
+        const current = await this.getRow(tableName, key) || {};
         const { assignGingerly } = await import('../lib/assignGingerly.js');
         await assignGingerly(current, data);
-        return await this.#tableAction(storeName, 'put', current);
+        return await this.#tableAction(tableName, 'put', current);
     }
-    async getLatest(storeName) {
+    async getLatest(tableName) {
         try {
-            const count = await this.getCount(storeName);
-            return await this.getRow(storeName, count - 1);
+            const count = await this.getCount(tableName);
+            return await this.getRow(tableName, count - 1);
         }
         catch (e) {
             return undefined;
         }
     }
-    async getCount(storeName) {
-        return await this.#tableAction(storeName, 'count');
+    async getCount(tableName) {
+        return await this.#tableAction(tableName, 'count');
     }
 }
