@@ -1,4 +1,3 @@
-
 export class IndexedDBWrapper {
     #db: any;
     constructor(public dbName: string, public version: number){
@@ -27,7 +26,7 @@ export class IndexedDBWrapper {
         });
     }
 
-    async #tableAction(tableName: string, methodName: 'add' | 'get' | 'count' | 'put', arg1?: any, arg2?: any){
+    async #tableAction(tableName: string, methodName: 'add' | 'get' | 'getAll' | 'count' | 'put', arg1?: any, arg2?: any){
         return new Promise((resolve, reject) => {
             const transaction = this.#db.transaction([tableName], 'readwrite');
             const store = transaction.objectStore(tableName);
@@ -60,8 +59,8 @@ export class IndexedDBWrapper {
         
     }
 
-    async updateData(tableName: string, key: number, data: any){
-        const current = await this.getRow(tableName, key) || {};
+    async updateRow(tableName: string, idx: number, data: any){
+        const current = await this.getRow(tableName, idx) || {};
         const {assignGingerly} = await import('../lib/assignGingerly.js');
         await assignGingerly(current, data);
         return await this.#tableAction(tableName, 'put', current);
@@ -79,5 +78,9 @@ export class IndexedDBWrapper {
 
     async getCount(tableName: string): Promise<number>{
         return await this.#tableAction(tableName, 'count') as number;
+    }
+
+    async getAllRows(tableName: string): Promise<any>{
+        return await this.#tableAction(tableName, 'getAll');
     }
 }

@@ -53,8 +53,8 @@ export class IndexedDBWrapper {
             return undefined;
         }
     }
-    async updateData(tableName, key, data) {
-        const current = await this.getRow(tableName, key) || {};
+    async updateRow(tableName, idx, data) {
+        const current = await this.getRow(tableName, idx) || {};
         const { assignGingerly } = await import('../lib/assignGingerly.js');
         await assignGingerly(current, data);
         return await this.#tableAction(tableName, 'put', current);
@@ -70,5 +70,8 @@ export class IndexedDBWrapper {
     }
     async getCount(tableName) {
         return await this.#tableAction(tableName, 'count');
+    }
+    async getAllRows(tableName) {
+        return await this.#tableAction(tableName, 'getAll');
     }
 }
