@@ -19,13 +19,19 @@ export async function push(resourcePath, val) {
                         const dbe = e.target.result;
                         dbe.createObjectStore(storeName, { keyPath: 'id' });
                     });
-                    const evt = await (await import('../lib/waitForEvent.js')).waitForEvent(req, 'success', 'error');
-                    const db = evt.target.result;
                     const transaction = db.transaction(storeName, 'readwrite');
                     const objectStore = transaction.objectStore(storeName);
                     const existingObj = await (await import('./pull.js')).pull(resourcePath) || {};
                     await assignGingerly(existingObj, val);
                     objectStore.add(existingObj);
+                    let evt;
+                    try {
+                        evt = await (await import('../lib/waitForEvent.js')).waitForEvent(req, 'success', 'error');
+                    }
+                    catch (err) {
+                        console.log({ err });
+                    }
+                    const db = evt.target.result;
                     break;
             }
     }
