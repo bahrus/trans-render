@@ -1,9 +1,8 @@
-export class IndexedDBWrapper extends EventTarget {
+export class IndexedDBWrapper {
     dbName;
     version;
     #db;
     constructor(dbName, version) {
-        super();
         this.dbName = dbName;
         this.version = version;
         this.#db = null;
@@ -26,11 +25,11 @@ export class IndexedDBWrapper extends EventTarget {
             };
         });
     }
-    async addData(storeName, data) {
+    async #storeInvoke(storeName, methodName, arg) {
         return new Promise((resolve, reject) => {
             const transaction = this.#db.transaction([storeName], 'readwrite');
             const store = transaction.objectStore(storeName);
-            const request = store.add(data);
+            const request = store[methodName](arg);
             request.onsuccess = () => {
                 resolve(request.result);
             };
@@ -38,6 +37,20 @@ export class IndexedDBWrapper extends EventTarget {
                 reject(`Add error: ${event.target.errorCode}`);
             };
         });
+    }
+    async addData(storeName, data) {
+        return await this.#storeInvoke(storeName, 'add', data);
+        // return new Promise((resolve, reject) => {
+        //     const transaction = this.#db.transaction([storeName], 'readwrite');
+        //     const store = transaction.objectStore(storeName);
+        //     const request = store.add(data);
+        //     request.onsuccess = () => {
+        //         resolve(request.result);
+        //     };
+        //     request.onerror = (event: any) => {
+        //         reject(`Add error: ${event.target.errorCode}`);
+        //     };
+        // });
     }
     async getData(storeName, key) {
         return new Promise((resolve, reject) => {

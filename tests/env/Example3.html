@@ -13,9 +13,7 @@
         await dbWrapper.openDB();
         
         await dbWrapper.addData('store', { name: 'John Doe', age: 30 });
-        dbWrapper.addEventListener('store', e => {
-            console.log(e);
-        });
+
         //dbWrapper.watch('store');
         const idx = await dbWrapper.addData('store', { name: 'Jane Doe', age: 31 });
         await dbWrapper.addData('store', { name: 'Jane Smith', age: 32 });
