@@ -45,34 +45,10 @@ export class IndexedDBWrapper {
 
     async addData(storeName: string, data: any) {
         return await this.#storeInvoke(storeName, 'add', data);
-        // return new Promise((resolve, reject) => {
-        //     const transaction = this.#db.transaction([storeName], 'readwrite');
-        //     const store = transaction.objectStore(storeName);
-        //     const request = store.add(data);
-
-        //     request.onsuccess = () => {
-        //         resolve(request.result);
-        //     };
-
-        //     request.onerror = (event: any) => {
-        //         reject(`Add error: ${event.target.errorCode}`);
-        //     };
-        // });
     }
 
     async getData(storeName: string, key: number) {
-        return new Promise((resolve, reject) => {
-            const transaction = this.#db.transaction([storeName]);
-            const store = transaction.objectStore(storeName);
-            const request = store.get(key);
-            request.onsuccess = () => {
-                resolve(request.result);
-            };
-
-            request.onerror = (event: any) => {
-                reject(`Get error: ${event.target.errorCode}`);
-            };
-        });
+        return await this.#storeInvoke(storeName, 'get', key);
     }
 
     async getLatest(storeName: string){
