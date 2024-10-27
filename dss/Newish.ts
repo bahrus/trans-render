@@ -1,4 +1,4 @@
-export {waitForEvent} from '../lib/isResolved.js';
+export {waitForEvent} from '../lib/waitForEvent.js';
 export class Newish extends EventTarget{
     queue: Array<any> = [];
     isResolved = false;

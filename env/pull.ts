@@ -6,13 +6,22 @@ export async function pull(resourcePath: `${protocols}://${string}`){
     const splitPath = path.split('.');
     switch(protocol){
         case 'globalThis':
-            return await getProp(globalThis, splitPath) ;
+            return await getProp(globalThis, splitPath);
         case 'idb':
             const storeName = splitPath.shift();
             if(storeName === undefined) throw 400;
             const req = indexedDB.open(storeName, 3);
-            (await import('../lib/isResolved.js')).waitForEvent(req.)
-            break;
+            try{
+                const evt = (await import('../lib/waitForEvent.js')).waitForEvent(req, 'success', 'error') as any;
+                const db = evt.target.result;
+                const transaction = db.transaction([storeName], 'readonly');
+                const objectStore = transaction.objectStore(storeName);
+                const baseVal =  objectStore.get('myKey');
+                return splitPath.length > 0 ? await getProp(baseVal, splitPath) : baseVal;
+
+            }catch(err){
+                return undefined;
+            }
         case 'session':
             const head = splitPath.shift();
             if(head === undefined) throw 400;
@@ -20,7 +29,12 @@ export async function pull(resourcePath: `${protocols}://${string}`){
             if(sessionStr === undefined) return undefined;
             const start = sessionStr[0];
             const last = sessionStr[-1];
-            if((start === '[' && last === ']') || (start === '{' && last === '}')) return JSON.parse(sessionStr);
-            return sessionStr;
+            if((start === '[' && last === ']') || (start === '{' && last === '}')){
+                const baseVal = JSON.parse(sessionStr);
+                return splitPath.length > 0 ? await getProp(baseVal, splitPath) : baseVal;
+            }else{
+                return sessionStr;
+            }
+            
     }
 }

@@ -10,7 +10,16 @@ export async function pull(resourcePath) {
             if (storeName === undefined)
                 throw 400;
             const req = indexedDB.open(storeName, 3);
-            (await import('../lib/isResolved.js')).waitForEvent(req.);
+            try {
+                const evt = (await import('../lib/waitForEvent.js')).waitForEvent(req, 'success', 'error');
+                const db = evt.target.result;
+                const transaction = db.transaction([storeName], 'readonly');
+                const objectStore = transaction.objectStore(storeName);
+                return objectStore.get('myKey');
+            }
+            catch (err) {
+                return undefined;
+            }
             break;
         case 'session':
             const head = splitPath.shift();

@@ -19,7 +19,7 @@ export class BePropagating extends EventTarget{
             return;
         };
         if(this._innerET === undefined){
-            const {waitForEvent} = await import('./isResolved.js');
+            const {waitForEvent} = await import('./waitForEvent.js');
             if(this._innerET === undefined){
                 await waitForEvent(this, 'super.resolved');
             }
