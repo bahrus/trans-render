@@ -4,7 +4,22 @@ export class IndexedDBWrapper {
         this.#db = null;
     }
 
-    async openDB(version: number = 1) {
+    async openDB(){
+        let version = 1;
+        
+        while(true){
+            try{
+                console.log(version);
+                await this.openDBVersion(version);
+                return;
+            }catch{
+                version++;
+            }
+        }
+
+    }
+
+    async openDBVersion(version: number) {
         //const dbs = (await indexedDB.databases()).filter(x => x.name === this.dbName);
         
         return new Promise((resolve, reject) => {
@@ -23,8 +38,7 @@ export class IndexedDBWrapper {
                     this.#db = db;
                     resolve(db);
                 }else{
-                    const newDB = await this.openDB(version + 1);
-                    resolve(newDB);
+                    reject();
                 }
                 
 
