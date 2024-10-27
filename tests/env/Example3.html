@@ -19,7 +19,9 @@
         const data1 = await dbWrapper.getData('store', 1);
         const data2 = await dbWrapper.getData('store', idx);
         const count = await dbWrapper.getCount('store');
-        console.log({data1, data2, count});
+        const data3 = await dbWrapper.getData('store', count);
+        const data4 = await dbWrapper.getLatest('store');
+        console.log({data1, data2, count, data3, data4});
     </script>
     </script>
 </body>

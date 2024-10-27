@@ -51,6 +51,10 @@ export class IndexedDBWrapper {
             };
         });
     }
+    async getLatest(storeName) {
+        const count = await this.getCount(storeName);
+        return await this.getData(storeName, count);
+    }
     async getCount(storeName) {
         return new Promise((resolve, reject) => {
             const transaction = this.#db.transaction([storeName]);

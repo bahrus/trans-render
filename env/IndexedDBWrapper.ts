@@ -43,7 +43,7 @@ export class IndexedDBWrapper {
         });
     }
 
-    async getData(storeName: string, key: string) {
+    async getData(storeName: string, key: number) {
         return new Promise((resolve, reject) => {
             const transaction = this.#db.transaction([storeName]);
             const store = transaction.objectStore(storeName);
@@ -58,7 +58,12 @@ export class IndexedDBWrapper {
         });
     }
 
-    async getCount(storeName: string){
+    async getLatest(storeName: string){
+        const count = await this.getCount(storeName);
+        return await this.getData(storeName, count);
+    }
+
+    async getCount(storeName: string): Promise<number>{
         return new Promise((resolve, reject) => {
             const transaction = this.#db.transaction([storeName]);
             const store = transaction.objectStore(storeName);
@@ -67,7 +72,7 @@ export class IndexedDBWrapper {
                 console.log({e});
             })
             request.onsuccess = () => {
-                resolve(request.result);
+                resolve(request.result as number);
             };
 
             request.onerror = (event: any) => {
