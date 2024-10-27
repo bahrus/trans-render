@@ -79,6 +79,10 @@
       "default": "./env/pull.js",
       "types": "./env/pull.ts"
     },
+    "./env/push.js": {
+      "default": "./env/push.js",
+      "types": "./env/push.ts"
+    },
     "./funions/Localizer.js": "./functions/Localizer.js",
     "./froop/CE.js": "./froop/CE.js",
     "./froop/O.js": "./froop/O.js",
@@ -100,7 +104,10 @@
     "./lib/findRealm.js": "./lib/findRealm.js",
     "./lib/getAdjacentChildren.js": "./lib/getAdjacentChildren.js",
     "./lib/getHost.js": "./lib/getHost.js",
-    "./lib/getProp.js": "./lib/getProp.js",
+    "./lib/getProp.js": {
+      "default": "./lib/getProp.js",
+      "types": "./lib/getProp.ts"
+    },
     "./lib/getRecipientElement": "./lib/getRecipientElement.js",
     "./lib/getVal.js": {
       "default": "./lib/getVal.js",
@@ -135,6 +142,10 @@
     "./lib/upSearch.js": "./lib/upSearch.js",
     "./lib/upShadowSearch.js": "./lib/upShadowSearch.js",
     "./lib/waitForAttributeChange.js": "./lib/waitForAttributeChange.js",
+    "./lib/waitForEvent.js":{
+      "default": "./lib/waitForEvent.js",
+      "types": "./lib/waitForEvent.ts"
+    },
     "./lib/weave.js": "./lib/weave.js",
     "./positractions/dispatchEvent.js": "./positractions/dispatchEvent.js",
     "./positractions/getNextValOfLoop.js": "./positractions/getNextValOfLoop.js",

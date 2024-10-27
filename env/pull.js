@@ -15,12 +15,12 @@ export async function pull(resourcePath) {
                 const db = evt.target.result;
                 const transaction = db.transaction([storeName], 'readonly');
                 const objectStore = transaction.objectStore(storeName);
-                return objectStore.get('myKey');
+                const baseVal = objectStore.get('myKey');
+                return splitPath.length > 0 ? await getProp(baseVal, splitPath) : baseVal;
             }
             catch (err) {
                 return undefined;
             }
-            break;
         case 'session':
             const head = splitPath.shift();
             if (head === undefined)
@@ -30,8 +30,12 @@ export async function pull(resourcePath) {
                 return undefined;
             const start = sessionStr[0];
             const last = sessionStr[-1];
-            if ((start === '[' && last === ']') || (start === '{' && last === '}'))
-                return JSON.parse(sessionStr);
-            return sessionStr;
+            if ((start === '[' && last === ']') || (start === '{' && last === '}')) {
+                const baseVal = JSON.parse(sessionStr);
+                return splitPath.length > 0 ? await getProp(baseVal, splitPath) : baseVal;
+            }
+            else {
+                return sessionStr;
+            }
     }
 }
