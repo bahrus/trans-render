@@ -57,20 +57,6 @@ export class IndexedDBWrapper {
     }
 
     async getCount(storeName: string): Promise<number>{
-        return new Promise((resolve, reject) => {
-            const transaction = this.#db.transaction([storeName]);
-            const store = transaction.objectStore(storeName);
-            const request = store.count();
-            request.addEventListener('success', (e: any) => {
-                console.log({e});
-            })
-            request.onsuccess = () => {
-                resolve(request.result as number);
-            };
-
-            request.onerror = (event: any) => {
-                reject(`Get error: ${event.target.errorCode}`);
-            };
-        });
+        return await this.#storeInvoke(storeName, 'count') as number;
     }
 }
