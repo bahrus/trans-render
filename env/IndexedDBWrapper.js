@@ -1,11 +1,19 @@
-export class IndexedDBWrapper {
+export class IndexedDBWrapper extends EventTarget {
     dbName;
     version;
     #db;
     constructor(dbName, version) {
+        super();
         this.dbName = dbName;
         this.version = version;
         this.#db = null;
+    }
+    async watch(storeName) {
+        while (true) {
+            const max = await this.getCount(storeName);
+            await this.getData(storeName, max + 1);
+            this.dispatchEvent(new Event(storeName));
+        }
     }
     async openDB() {
         return new Promise((resolve, reject) => {
