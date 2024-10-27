@@ -188,10 +188,11 @@
     "/ts-refs/*"
   ],
   "dependencies": {
+    "idb": "8.0.0",
     "mount-observer": "0.0.39"
   },
   "devDependencies": {
-    "@playwright/test": "1.48.0",
+    "@playwright/test": "1.48.2",
     "ssi-server": "0.0.1"
   },
   "repository": {
