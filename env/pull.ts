@@ -8,9 +8,18 @@ export async function pull(resourcePath: `${protocols}://${string}`){
         case 'globalThis':
             return await getProp(globalThis, splitPath) ;
         case 'idb':
-            break;
-        case 'session':
+            const storeName = splitPath.shift();
+            if(storeName === undefined) throw 400;
             
             break;
+        case 'session':
+            const head = splitPath.shift();
+            if(head === undefined) throw 400;
+            const sessionStr = sessionStorage.getItem(head)?.trim();
+            if(sessionStr === undefined) return undefined;
+            const start = sessionStr[0];
+            const last = sessionStr[-1];
+            if((start === '[' && last === ']') || (start === '{' && last === '}')) return JSON.parse(sessionStr);
+            return sessionStr;
     }
 }
