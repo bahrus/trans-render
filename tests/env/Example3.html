@@ -12,9 +12,10 @@
         await dbWrapper.openDB();
         await dbWrapper.addData('store', { name: 'John Doe', age: 30 });
         
-        await dbWrapper.addData('store', { name: 'Jane Doe', age: 31 });
-        const data = await dbWrapper.getData('store', 1);
-        console.log(data);
+        const idx = await dbWrapper.addData('store', { name: 'Jane Doe', age: 31 });
+        const data1 = await dbWrapper.getData('store', 1);
+        const data2 = await dbWrapper.getData('store', idx);
+        console.log({data1, data2});
     </script>
     </script>
 </body>
