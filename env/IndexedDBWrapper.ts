@@ -49,6 +49,10 @@ export class IndexedDBWrapper {
 
     async getRow(storeName: string, idx: number) {
         try{
+            if(idx < 0){
+                const count = await this.getCount(storeName);
+                return await this.#tableAction(storeName, 'get', count + idx + 1);
+            }
             return await this.#tableAction(storeName, 'get', idx + 1);
         }catch(e){
             return undefined;
