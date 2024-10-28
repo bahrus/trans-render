@@ -1,6 +1,6 @@
 import { BaseIndexedDB } from "./BaseIndexedDB.js";
 
-class IndexedDBObject<TObject> extends BaseIndexedDB {
+export class IndexedDBObject<TObject> extends BaseIndexedDB {
     get dbOptions(){
         return { keyPath: 'key'}
     }

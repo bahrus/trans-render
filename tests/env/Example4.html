@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script type=module>
+        import {IndexedDBObject} from '/env/IndexedDBObject.js';
+        const dbObject = new IndexedDBObject('myDatabase2', 'myObj');
+        
+        await dbObject.openDB();
+        
+        await dbObject.assign({ name: 'John Doe', age: 30 });
+
+        const prop = await dbObject.getProperty('name');
+
+        console.log({prop});
+
+        
+    </script>
+</body>
+</html>
