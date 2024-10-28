@@ -1,19 +1,17 @@
 export class IndexedDBTable {
     dbName;
-    tableName;
+    storeName;
     version;
     #db;
-    constructor(dbName, tableName, version) {
+    constructor(dbName, storeName, version) {
         this.dbName = dbName;
-        this.tableName = tableName;
+        this.storeName = storeName;
         this.version = version;
-        this.#db = null;
     }
     async openDB() {
         let version = 1;
         while (true) {
             try {
-                console.log(version);
                 await this.openDBVersion(version);
                 return;
             }
@@ -28,13 +26,13 @@ export class IndexedDBTable {
             const request = indexedDB.open(this.dbName, version);
             request.onupgradeneeded = (event) => {
                 this.#db = event.target.result;
-                if (!this.#db.objectStoreNames.contains(this.tableName)) {
-                    this.#db.createObjectStore(this.tableName, { keyPath: 'id', autoIncrement: true });
+                if (!this.#db.objectStoreNames.contains(this.storeName)) {
+                    this.#db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
                 }
             };
             request.onsuccess = async (event) => {
                 const db = event.target.result;
-                if (db.objectStoreNames.contains(this.tableName)) {
+                if (db.objectStoreNames.contains(this.storeName)) {
                     this.#db = db;
                     resolve(db);
                 }
@@ -49,8 +47,8 @@ export class IndexedDBTable {
     }
     async #tableAction(methodName, arg1, arg2) {
         return new Promise((resolve, reject) => {
-            const transaction = this.#db.transaction([this.tableName], 'readwrite');
-            const store = transaction.objectStore(this.tableName);
+            const transaction = this.#db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
             const request = store[methodName](arg1, arg2);
             request.onsuccess = () => {
                 resolve(request.result);

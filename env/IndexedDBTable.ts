@@ -1,15 +1,12 @@
 export class IndexedDBTable<TItem> {
     #db: any;
-    constructor(public dbName: string, public tableName: string, public version: number){
-        this.#db = null;
-    }
+    constructor(public dbName: string, public storeName: string, public version: number){}
 
     async openDB(){
         let version = 1;
         
         while(true){
             try{
-                console.log(version);
                 await this.openDBVersion(version);
                 return;
             }catch{
@@ -27,14 +24,14 @@ export class IndexedDBTable<TItem> {
 
             request.onupgradeneeded = (event: any) => {
                 this.#db = event.target.result;
-                if (!this.#db.objectStoreNames.contains(this.tableName)) {
-                    this.#db.createObjectStore(this.tableName, { keyPath: 'id', autoIncrement: true });
+                if (!this.#db.objectStoreNames.contains(this.storeName)) {
+                    this.#db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
                 }
             };
 
             request.onsuccess = async (event: any) => {
                 const db = event.target.result;
-                if(db.objectStoreNames.contains(this.tableName)){
+                if(db.objectStoreNames.contains(this.storeName)){
                     this.#db = db;
                     resolve(db);
                 }else{
@@ -52,8 +49,8 @@ export class IndexedDBTable<TItem> {
 
     async #tableAction(methodName: 'add' | 'get' | 'getAll' | 'count' | 'put', arg1?: any, arg2?: any){
         return new Promise((resolve, reject) => {
-            const transaction = this.#db.transaction([this.tableName], 'readwrite');
-            const store = transaction.objectStore(this.tableName);
+            const transaction = this.#db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
             const request = store[methodName](arg1, arg2);
 
             request.onsuccess = () => {

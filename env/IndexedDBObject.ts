@@ -1,9 +1,6 @@
-class IndexedDBKeyValues {
-    constructor(public dbName: string, public objName) {
-      this.dbName = dbName;
-      this.storeName = storeName;
-      this.db = null;
-    }
+class IndexedDBObject<TObject> {
+    #db: any
+    constructor(public dbName: string, public objName: string) {}
   
     async init() {
       return new Promise((resolve, reject) => {

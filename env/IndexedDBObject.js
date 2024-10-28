@@ -1,13 +1,11 @@
 "use strict";
-class IndexedDBKeyValues {
+class IndexedDBObject {
     dbName;
     objName;
+    #db;
     constructor(dbName, objName) {
         this.dbName = dbName;
         this.objName = objName;
-        this.dbName = dbName;
-        this.storeName = storeName;
-        this.db = null;
     }
     async init() {
         return new Promise((resolve, reject) => {
