@@ -1,0 +1,51 @@
+export class BaseIndexedDB {
+    dbName;
+    storeName;
+    version;
+    #db;
+    get db() {
+        return this.#db;
+    }
+    constructor(dbName, storeName, version) {
+        this.dbName = dbName;
+        this.storeName = storeName;
+        this.version = version;
+    }
+    async openDB() {
+        let version = 1;
+        while (true) {
+            try {
+                await this.openDBVersion(version);
+                return;
+            }
+            catch {
+                version++;
+            }
+        }
+    }
+    async openDBVersion(version) {
+        //const dbs = (await indexedDB.databases()).filter(x => x.name === this.dbName);
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this.dbName, version);
+            request.onupgradeneeded = (event) => {
+                this.#db = event.target.result;
+                if (!this.#db.objectStoreNames.contains(this.storeName)) {
+                    this.#db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
+                }
+            };
+            request.onsuccess = async (event) => {
+                const db = event.target.result;
+                if (db.objectStoreNames.contains(this.storeName)) {
+                    this.#db = db;
+                    resolve(db);
+                }
+                else {
+                    reject();
+                }
+            };
+            request.onerror = (event) => {
+                reject(`Database error: ${event.target.errorCode}`);
+            };
+        });
+    }
+}
