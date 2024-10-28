@@ -16,7 +16,7 @@
 
         //dbTable.watch('store');
         const idx = await dbTable.addRow({ name: 'Jane Doe', age: 31 });
-        await dbTable.addRow({ name: 'Jane Smith', age: 32 });
+        const addRowResult = await dbTable.addRow({ name: 'Jane Smith', age: 32 });
         const data1 = await dbTable.getRow(0);
         const data2 = await dbTable.getRow(idx);
         const count = await dbTable.getCount();
@@ -24,7 +24,7 @@
         const data4 = await dbTable.getLastRow();
         const data5 = await dbTable.getRow(-1);
         const data6 = await dbTable.getAllRows();
-        await dbTable.updateRow(1, { name: 'Isaac Newton', age: 12});
+        const updateRowResult = await dbTable.updateRow(1, { name: 'Isaac Newton', age: 12});
         console.log({data1, data2, count, data3, data4, data5, data6});
     </script>
     </script>
