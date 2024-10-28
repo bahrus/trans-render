@@ -1,4 +1,4 @@
-export class IndexedDBTable {
+export class IndexedDBTable<TItem> {
     #db: any;
     constructor(public dbName: string, public tableName: string, public version: number){
         this.#db = null;
@@ -66,28 +66,28 @@ export class IndexedDBTable {
         });
     }
 
-    async addRow(data: any) {
-        return await this.#tableAction('add', data);
+    async addRow(data: TItem) {
+        return await this.#tableAction('add', data) as number;
     }
 
     async getRow(idx: number) {
         try{
             if(idx < 0){
                 const count = await this.getCount();
-                return await this.#tableAction('get', count + idx + 1);
+                return await this.#tableAction('get', count + idx + 1) as TItem;
             }
-            return await this.#tableAction('get', idx + 1);
+            return await this.#tableAction('get', idx + 1) as TItem;
         }catch(e){
             return undefined;
         }
         
     }
 
-    async updateRow(idx: number, data: any){
+    async updateRow(idx: number, data: TItem){
         const current = await this.getRow(idx) || {};
         const {assignGingerly} = await import('../lib/assignGingerly.js');
         await assignGingerly(current, data);
-        return await this.#tableAction('put', current);
+        return await this.#tableAction('put', current)  as number;
     }
 
     async getLastRow(){
@@ -105,6 +105,6 @@ export class IndexedDBTable {
     }
 
     async getAllRows(): Promise<any>{
-        return await this.#tableAction('getAll');
+        return await this.#tableAction('getAll') as Array<TItem>;
     }
 }
