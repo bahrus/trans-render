@@ -3,7 +3,7 @@ export abstract class BaseIndexedDB{
     get db(){
         return this.#db;
     }
-    constructor(public dbName: string, public storeName: string, public version: number){}
+    constructor(public dbName: string, public storeName: string){}
 
     abstract get dbOptions(): IDBObjectStoreParameters;
    

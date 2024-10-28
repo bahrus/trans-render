@@ -1,15 +1,13 @@
 export class BaseIndexedDB {
     dbName;
     storeName;
-    version;
     #db;
     get db() {
         return this.#db;
     }
-    constructor(dbName, storeName, version) {
+    constructor(dbName, storeName) {
         this.dbName = dbName;
         this.storeName = storeName;
-        this.version = version;
     }
     async openDB() {
         let version = 1;
