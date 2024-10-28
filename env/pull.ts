@@ -15,11 +15,11 @@ export async function pull(resourcePath: `${protocols}://${string}`){
             await dbObj.openDB();
             const obj = await dbObj.getProperty(propName);
             return path === undefined ? obj : await getProp(obj, path);
-            
+        case 'localStorage':
         case 'sessionStorage':
             const head = splitPath.shift();
             if(head === undefined) throw 400;
-            const sessionStr = sessionStorage.getItem(head)?.trim();
+            const sessionStr = window[protocol].getItem(head)?.trim();
             if(sessionStr === undefined) return undefined;
             const start = sessionStr[0];
             const last = sessionStr[-1];
