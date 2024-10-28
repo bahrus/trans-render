@@ -8,16 +8,16 @@ export async function pull(resourcePath: `${protocols}://${string}`){
         case 'globalThis':
             return await getProp(globalThis, splitPath);
         case 'idb':
-            const dbName = splitPath.shift();
-            if(dbName === undefined) throw 400;
-            const tableName = splitPath.shift();
-            if(tableName === undefined) throw 400;
-            const {IndexedDBWrapper} = await import('./IndexedDBWrapper.js');
-            const idb = new IndexedDBWrapper(dbName, 1);
+            // const dbName = splitPath.shift();
+            // if(dbName === undefined) throw 400;
+            // const tableName = splitPath.shift();
+            // if(tableName === undefined) throw 400;
+            // const {IndexedDBWrapper} = await import('./IndexedDBWrapper.js');
+            // const idb = new IndexedDBWrapper(dbName, 1);
 
-            const baseVal = await idb.getLastRow(tableName);
-            return splitPath.length > 0 ? await getProp(baseVal, splitPath) : baseVal;
-        case 'session':
+            // const baseVal = await idb.getLastRow(tableName);
+            // return splitPath.length > 0 ? await getProp(baseVal, splitPath) : baseVal;
+        case 'sessionStorage':
             const head = splitPath.shift();
             if(head === undefined) throw 400;
             const sessionStr = sessionStorage.getItem(head)?.trim();

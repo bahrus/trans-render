@@ -16,7 +16,7 @@ export async function push(resourcePath, val) {
                     const tableName = splitPath.shift();
                     if (tableName === undefined)
                         throw 400;
-                    const { IndexedDBWrapper } = await import('./IndexedDBWrapper.js');
+                    const { IndexedDBWrapper: IndexedDBTable } = await import('./IndexedDBTable.js');
                     const idb = new IndexedDBWrapper(dbName, 1);
                     const req = indexedDB.open(storeName, 1);
                     req.addEventListener('upgradeneeded', e => {
