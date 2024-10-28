@@ -16,7 +16,7 @@ export class IndexedDBObject<TObject> extends BaseIndexedDB {
     }
   
     async getProperty(key: keyof TObject) {
-        return await this.idbAction('get', key);
+        return ((await this.idbAction('get', key)) as any).value;
 
     }
   }

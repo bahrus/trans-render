@@ -12,6 +12,6 @@ export class IndexedDBObject extends BaseIndexedDB {
         return await this.idbAction('put', { key, value });
     }
     async getProperty(key) {
-        return await this.idbAction('get', key);
+        return (await this.idbAction('get', key)).value;
     }
 }
