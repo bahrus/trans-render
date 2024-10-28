@@ -48,4 +48,20 @@ export class BaseIndexedDB{
             };
         });
     }
+
+    async idbAction(methodName: 'add' | 'get' | 'getAll' | 'count' | 'put', arg1?: any, arg2?: any){
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const request = store[methodName](arg1, arg2);
+
+            request.onsuccess = () => {
+                resolve(request.result);
+            };
+
+            request.onerror = (event: any) => {
+                reject(`Add error: ${event.target.errorCode}`);
+            };
+        });
+    }
 }

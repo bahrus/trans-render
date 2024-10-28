@@ -48,4 +48,17 @@ export class BaseIndexedDB {
             };
         });
     }
+    async idbAction(methodName, arg1, arg2) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            const request = store[methodName](arg1, arg2);
+            request.onsuccess = () => {
+                resolve(request.result);
+            };
+            request.onerror = (event) => {
+                reject(`Add error: ${event.target.errorCode}`);
+            };
+        });
+    }
 }
