@@ -1,9 +1,11 @@
-export class BaseIndexedDB{
+export abstract class BaseIndexedDB{
     #db: any;
     get db(){
         return this.#db;
     }
     constructor(public dbName: string, public storeName: string, public version: number){}
+
+    abstract get dbOptions(): IDBObjectStoreParameters;
    
     async openDB(){
         let version = 1;
@@ -27,7 +29,7 @@ export class BaseIndexedDB{
             request.onupgradeneeded = (event: any) => {
                 this.#db = event.target.result;
                 if (!this.#db.objectStoreNames.contains(this.storeName)) {
-                    this.#db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
+                    this.#db.createObjectStore(this.storeName, this.dbOptions);
                 }
             };
 

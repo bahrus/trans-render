@@ -1,5 +1,8 @@
 import { BaseIndexedDB } from './BaseIndexedDB.js';
 export class IndexedDBTable extends BaseIndexedDB {
+    get dbOptions() {
+        return { keyPath: 'id', autoIncrement: true };
+    }
     async addRow(data) {
         return await this.idbAction('add', data);
     }

@@ -30,7 +30,7 @@ export class BaseIndexedDB {
             request.onupgradeneeded = (event) => {
                 this.#db = event.target.result;
                 if (!this.#db.objectStoreNames.contains(this.storeName)) {
-                    this.#db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
+                    this.#db.createObjectStore(this.storeName, this.dbOptions);
                 }
             };
             request.onsuccess = async (event) => {
