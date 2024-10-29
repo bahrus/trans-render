@@ -11,8 +11,10 @@ export class IndexedDBObject<TObject> extends BaseIndexedDB {
         }
     }
   
-    async #setItem(key: keyof TObject, value: any) {
-        return await this.idbAction('put', {key, value});
+    async #setItem(key: keyof TObject & string, value: any) {
+        const resp = await this.idbAction('put', {key, value});
+        postMessage(`idb://${this.dbName}?.${this.storeName}?.${key}`);
+        return resp;
     }
   
     async getProperty(key: keyof TObject) {
@@ -20,6 +22,8 @@ export class IndexedDBObject<TObject> extends BaseIndexedDB {
 
     }
   }
+
+
   
 
   
