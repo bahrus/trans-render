@@ -6,6 +6,7 @@
     <title>Document</title>
 </head>
 <body>
+    <div id=target></div>
     <script type=module>
         import {IndexedDBObject} from '/env/IndexedDBObject.js';
         const dbObject = new IndexedDBObject('myDatabase2', 'myObj');
@@ -17,7 +18,10 @@
         const prop = await dbObject.getProperty('name');
 
         console.log({prop});
-
+        if(prop === 'John Doe'){
+            target.setAttribute('mark', 'good');
+        }
+        
         
     </script>
 </body>
