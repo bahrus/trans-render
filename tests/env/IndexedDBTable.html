@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>IndexedDB Table test</title>
 </head>
 <body>
+    <div id=target></div>
     <script type=module>
         import {IndexedDBTable} from '/env/IndexedDBTable.js';
         const dbTable = new IndexedDBTable('myDatabase', 'myTable2');
@@ -14,7 +15,7 @@
         
         await dbTable.addRow({ name: 'John Doe', age: 30 });
 
-        //dbTable.watch('store');
+        
         const idx = await dbTable.addRow({ name: 'Jane Doe', age: 31 });
         const addRowResult = await dbTable.addRow({ name: 'Jane Smith', age: 32 });
         const data1 = await dbTable.getRow(0);
@@ -25,6 +26,10 @@
         const data5 = await dbTable.getRow(-1);
         const data6 = await dbTable.getAllRows();
         const updateRowResult = await dbTable.updateRow(1, { name: 'Isaac Newton', age: 12});
+        const data7 = await dbTable.getRow(1);
+        if(data7.name === 'Isaac Newton'){
+            target.setAttribute('mark', 'good');
+        }
         console.log({data1, data2, count, data3, data4, data5, data6});
     </script>
 </body>
