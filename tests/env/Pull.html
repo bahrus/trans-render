@@ -8,7 +8,7 @@
 <body>
     <div id=target></div>
     <script type=module>
-        import {IndexedDBObject} from '/env/IndexedDBObject.js';
+        import {IndexedDBObject} from '/XV/IndexedDBObject.js';
         const dbObject = new IndexedDBObject('myDatabase2', 'myObj');
         
         await dbObject.openDB();
@@ -17,7 +17,7 @@
 
         const prop = await dbObject.getProperty('name');
         
-        import {pull} from '/env/pull.js';
+        import {pull} from '/XV/pull.js';
         const test = await pull('idb://myDatabase2?.myObj?.name');
         if(test === 'John Doe'){
             target.setAttribute('mark', 'good');

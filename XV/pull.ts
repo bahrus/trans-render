@@ -1,4 +1,4 @@
-import {protocols} from '../ts-refs/trans-render/env/types';
+import {protocols} from '../ts-refs/trans-render/env/types.js';
 import {getProp} from '../lib/getProp.js';
 
 export async function pull(resourcePath: `${protocols}://${string}`){

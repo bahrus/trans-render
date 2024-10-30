@@ -75,13 +75,13 @@
       "default": "./dss/tref/splitRefs.js",
       "types": "./dss/tref/splitRefs.ts"
     },
-    "./env/pull.js": {
-      "default": "./env/pull.js",
-      "types": "./env/pull.ts"
+    "./XV/pull.js": {
+      "default": "./XV/pull.js",
+      "types": "./XV/pull.ts"
     },
-    "./env/push.js": {
-      "default": "./env/push.js",
-      "types": "./env/push.ts"
+    "./XV/push.js": {
+      "default": "./XV/push.js",
+      "types": "./XV/push.ts"
     },
     "./funions/Localizer.js": "./functions/Localizer.js",
     "./froop/CE.js": "./froop/CE.js",
