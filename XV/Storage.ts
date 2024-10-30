@@ -1,3 +1,6 @@
+import {protocols} from '../ts-refs/trans-render/env/types.js';
+import {getProp} from '../lib/getProp.js';
+
 const cache = {
     sessionStorage: Symbol.for('yx84OGtTMU2GufafFtsZLw'),
     localStorage: Symbol.for('eFljX6VSOkOAmcNJyph1sw')
@@ -69,3 +72,18 @@ export function init(whichStorage: 'sessionStorage' | 'localStorage', win: Windo
 
 init('localStorage');
 init('sessionStorage');
+
+export async function pull(splitPath: Array<string>, protocol: 'sessionStorage' | 'localStorage'){
+    const head = splitPath.shift();
+    if(head === undefined) throw 400;
+    const sessionStr = window[protocol].getItem(head)?.trim();
+    if(sessionStr === undefined) return undefined;
+    const start = sessionStr[0];
+    const last = sessionStr[-1];
+    if((start === '[' && last === ']') || (start === '{' && last === '}')){
+        const baseVal = JSON.parse(sessionStr);
+        return splitPath.length > 0 ? await getProp(baseVal, splitPath) : baseVal;
+    }else{
+        return sessionStr;
+    }
+}

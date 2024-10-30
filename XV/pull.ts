@@ -17,18 +17,9 @@ export async function pull(resourcePath: `${protocols}://${string}`){
             return path === undefined ? obj : await getProp(obj, path);
         case 'localStorage':
         case 'sessionStorage':
-            const head = splitPath.shift();
-            if(head === undefined) throw 400;
-            const sessionStr = window[protocol].getItem(head)?.trim();
-            if(sessionStr === undefined) return undefined;
-            const start = sessionStr[0];
-            const last = sessionStr[-1];
-            if((start === '[' && last === ']') || (start === '{' && last === '}')){
-                const baseVal = JSON.parse(sessionStr);
-                return splitPath.length > 0 ? await getProp(baseVal, splitPath) : baseVal;
-            }else{
-                return sessionStr;
-            }
+            const {pull} = await import('./Storage.js');
+            return await pull(splitPath, protocol);
+
             
     }
 }
