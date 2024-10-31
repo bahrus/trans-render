@@ -1,5 +1,5 @@
 import {protocols} from '../ts-refs/trans-render/env/types.js';
-import {getProp} from '../lib/getProp.js';
+//import {getProp} from '../lib/getProp.js';
 
 const cache = {
     sessionStorage: Symbol.for('yx84OGtTMU2GufafFtsZLw'),
@@ -82,7 +82,7 @@ export async function pull(splitPath: Array<string>, protocol: 'sessionStorage' 
     const last = sessionStr[-1];
     if((start === '[' && last === ']') || (start === '{' && last === '}')){
         const baseVal = JSON.parse(sessionStr);
-        return splitPath.length > 0 ? await getProp(baseVal, splitPath) : baseVal;
+        return baseVal;
     }else{
         return sessionStr;
     }
