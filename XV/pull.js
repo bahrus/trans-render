@@ -1,35 +1,31 @@
 import { getProp } from '../lib/getProp.js';
+import { splitOnce } from '../lib/splitOnce.js';
 export async function pull(resourcePath) {
-    const [protocol, path] = resourcePath.split('://', 2);
-    const splitPath = path.split('?.');
+    const [protocol, path] = splitOnce(resourcePath, '://');
+    const [usp, accessorChain] = splitOnce(path, '.?');
+    const uspParts = usp.split('/');
+    let ctxObj;
     switch (protocol) {
-        case 'globalThis':
-            return await getProp(globalThis, splitPath);
+        // case 'globalThis':
+        //     return await getProp(globalThis, splitPath);
         case 'idb':
-            const [dbName, storeName, propName, ...path] = splitPath;
+            const [dbName, storeName, propName] = uspParts;
             if (dbName === undefined || storeName === undefined || propName === undefined)
                 throw 400;
             const { IndexedDBObject } = await import('./IndexedDBObject.js');
             const dbObj = new IndexedDBObject(dbName, storeName);
             await dbObj.openDB();
-            const obj = await dbObj.getProperty(propName);
-            return path === undefined ? obj : await getProp(obj, path);
+            ctxObj = await dbObj.getProperty(propName);
+            break;
         case 'localStorage':
         case 'sessionStorage':
-            const head = splitPath.shift();
-            if (head === undefined)
-                throw 400;
-            const sessionStr = window[protocol].getItem(head)?.trim();
-            if (sessionStr === undefined)
-                return undefined;
-            const start = sessionStr[0];
-            const last = sessionStr[-1];
-            if ((start === '[' && last === ']') || (start === '{' && last === '}')) {
-                const baseVal = JSON.parse(sessionStr);
-                return splitPath.length > 0 ? await getProp(baseVal, splitPath) : baseVal;
-            }
-            else {
-                return sessionStr;
-            }
+            const { pull } = await import('./Storage.js');
+            ctxObj = await pull(uspParts, protocol);
+            break;
     }
+    if (accessorChain !== undefined) {
+        const splitAccessorChain = accessorChain.split('?.');
+        ctxObj = getProp(ctxObj, splitAccessorChain);
+    }
+    return ctxObj;
 }

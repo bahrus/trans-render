@@ -9,7 +9,9 @@ export class IndexedDBObject extends BaseIndexedDB {
         }
     }
     async #setItem(key, value) {
-        return await this.idbAction('put', { key, value });
+        const resp = await this.idbAction('put', { key, value });
+        postMessage(`idb://${this.dbName}?.${this.storeName}?.${key}`);
+        return resp;
     }
     async getProperty(key) {
         return (await this.idbAction('get', key)).value;
