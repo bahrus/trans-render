@@ -1,9 +1,9 @@
-import {protocols} from '../ts-refs/trans-render/XV/types.js';
+import {USL, USP, protocols} from '../ts-refs/trans-render/XV/types.js';
 import {getProp} from '../lib/getProp.js';
 import {splitOnce} from '../lib/splitOnce.js';
 
 export async function pull(resourcePath: 
-    | `${protocols}://${string}`
+    | USL
 ){
     const [protocol, path] = splitOnce(resourcePath, '://') as [protocols, string];
     const [usp, accessorChain] = splitOnce(path, '.?')
@@ -12,7 +12,7 @@ export async function pull(resourcePath:
     switch(protocol){
         // case 'globalThis':
         //     return await getProp(globalThis, splitPath);
-        case 'idb':
+        case 'indexedDB':
             const [dbName, storeName, propName] = uspParts;
             if(dbName === undefined || storeName === undefined || propName === undefined) throw 400;
             const {IndexedDBObject} = await import('./IndexedDBObject.js');

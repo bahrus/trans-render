@@ -8,7 +8,7 @@ export async function pull(resourcePath) {
     switch (protocol) {
         // case 'globalThis':
         //     return await getProp(globalThis, splitPath);
-        case 'idb':
+        case 'indexedDB':
             const [dbName, storeName, propName] = uspParts;
             if (dbName === undefined || storeName === undefined || propName === undefined)
                 throw 400;
