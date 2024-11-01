@@ -1,6 +1,6 @@
 import { getProp } from '../lib/getProp.js';
 import { splitOnce } from '../lib/splitOnce.js';
-export async function pull(resourcePath) {
+export async function get(resourcePath) {
     const [protocol, path] = splitOnce(resourcePath, '://');
     const [usp, accessorChain] = splitOnce(path, '.?');
     const uspParts = usp.split('/');
