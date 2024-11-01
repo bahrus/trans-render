@@ -17,7 +17,7 @@
 
         const prop = await dbObject.getProperty('name');
         
-        import {pull} from '/XV/get.js';
+        import {get} from '/XV/get.js';
         const test = await get('indexedDB://myDatabase2/myObj/name');
         if(test === 'John Doe'){
             target.setAttribute('mark', 'good');

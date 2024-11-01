@@ -75,9 +75,13 @@
       "default": "./dss/tref/splitRefs.js",
       "types": "./dss/tref/splitRefs.ts"
     },
-    "./XV/pull.js": {
-      "default": "./XV/pull.js",
-      "types": "./XV/pull.ts"
+    "./XV/get.js": {
+      "default": "./XV/get.js",
+      "types": "./XV/get.ts"
+    },
+    "./XV/map.js": {
+      "default": "./XV/map.js",
+      "types": "./XV/map.ts"
     },
     "./XV/push.js": {
       "default": "./XV/push.js",
