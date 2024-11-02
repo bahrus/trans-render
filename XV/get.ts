@@ -1,10 +1,10 @@
-import {USL, protocols} from '../ts-refs/trans-render/XV/types.js';
+import {USL} from '../ts-refs/trans-render/XV/types.js';
 import {getProp} from '../lib/getProp.js';
 import {parse} from './parse.js';
 
 export async function get(usl: USL){
     const parsedUSL = parse(usl);
-    const {protocol, usp, accessorChain, uspParts} = parsedUSL
+    const {protocol, accessorChain, uspParts} = parsedUSL;
     let ctxObj: any;
     switch(protocol){
         // case 'globalThis':

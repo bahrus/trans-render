@@ -2,7 +2,7 @@ import { getProp } from '../lib/getProp.js';
 import { parse } from './parse.js';
 export async function get(usl) {
     const parsedUSL = parse(usl);
-    const { protocol, usp, accessorChain, uspParts } = parsedUSL;
+    const { protocol, accessorChain, uspParts } = parsedUSL;
     let ctxObj;
     switch (protocol) {
         // case 'globalThis':
