@@ -1,11 +1,10 @@
 import {USL, protocols} from '../ts-refs/trans-render/XV/types.js';
 import {getProp} from '../lib/getProp.js';
-import {splitOnce} from '../lib/splitOnce.js';
+import {parse} from './parse.js';
 
-export async function get(resourcePath: USL){
-    const [protocol, path] = splitOnce(resourcePath, '://') as [protocols, string];
-    const [usp, accessorChain] = splitOnce(path, '.?')
-    const uspParts = usp.split('/');
+export async function get(usl: USL){
+    const parsedUSL = parse(usl);
+    const {protocol, usp, accessorChain, uspParts} = parsedUSL
     let ctxObj: any;
     switch(protocol){
         // case 'globalThis':

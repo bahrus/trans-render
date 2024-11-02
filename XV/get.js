@@ -1,9 +1,8 @@
 import { getProp } from '../lib/getProp.js';
-import { splitOnce } from '../lib/splitOnce.js';
-export async function get(resourcePath) {
-    const [protocol, path] = splitOnce(resourcePath, '://');
-    const [usp, accessorChain] = splitOnce(path, '.?');
-    const uspParts = usp.split('/');
+import { parse } from './parse.js';
+export async function get(usl) {
+    const parsedUSL = parse(usl);
+    const { protocol, usp, accessorChain, uspParts } = parsedUSL;
     let ctxObj;
     switch (protocol) {
         // case 'globalThis':
