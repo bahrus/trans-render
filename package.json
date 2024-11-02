@@ -79,9 +79,9 @@
       "default": "./XV/get.js",
       "types": "./XV/get.ts"
     },
-    "./XV/map.js": {
-      "default": "./XV/map.js",
-      "types": "./XV/map.ts"
+    "./XV/draw.js": {
+      "default": "./XV/draw.js",
+      "types": "./XV/draw.ts"
     },
     "./XV/push.js": {
       "default": "./XV/push.js",
