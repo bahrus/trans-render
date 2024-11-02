@@ -22,6 +22,8 @@ export async function get(usl: USL){
             const {pull} = await import('./Storage.js');
             ctxObj = await pull(uspParts, protocol);
             break;
+        default:
+            throw 'NI';
             
     }
     if(accessorChain !== undefined){

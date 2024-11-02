@@ -31,6 +31,12 @@ export class Wrapper<TProp = any>{
             return val;
         }else{
             //save
+            if(cache){
+                this.cachedVal = newVal;
+                this.asOf = (new Date()).valueOf();
+            }
+            const {set} = await import('./set.js');
+            await set(usl, newVal);
         }
     }
 }

@@ -33,6 +33,12 @@ export class Wrapper {
         }
         else {
             //save
+            if (cache) {
+                this.cachedVal = newVal;
+                this.asOf = (new Date()).valueOf();
+            }
+            const { set } = await import('./set.js');
+            await set(usl, newVal);
         }
     }
 }

@@ -12,7 +12,7 @@ export async function set(usl: USL, val: any){
             const dbObj = new IndexedDBObject<any>(dbName, storeName);
             await dbObj.openDB();
             const obj = {[accessorChain]: val};
-            dbObj.assign(obj)
+            dbObj.assign(obj);
             break;
     }    
 }
