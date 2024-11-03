@@ -244,7 +244,7 @@ export class O extends HTMLElement {
     static config;
     static async bootUp() {
         const config = this.config;
-        const { propDefaults, propInfo } = config;
+        const { propDefaults, propInfo, wrappers } = config;
         const props = { ...this.props };
         const attrs = this.attrs;
         const states = this.states;
@@ -287,6 +287,10 @@ export class O extends HTMLElement {
         }
         this.props = props;
         this.addProps(this, props);
+        if (wrappers !== undefined) {
+            const { addWrappers } = await import('./addWrappers.js');
+            await addWrappers(this, wrappers);
+        }
     }
     static setType(prop, val) {
         if (val !== undefined) {

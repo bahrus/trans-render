@@ -19,8 +19,8 @@ export async function get(usl: USL){
             break;
         case 'localStorage':
         case 'sessionStorage':
-            const {pull} = await import('./Storage.js');
-            ctxObj = await pull(uspParts, protocol);
+            const {get} = await import('./Storage.js');
+            ctxObj = await get(uspParts, protocol);
             break;
         default:
             throw 'NI';

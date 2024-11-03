@@ -265,7 +265,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     
     static async bootUp(){
         const config = this.config!;
-        const {propDefaults, propInfo} = config;
+        const {propDefaults, propInfo, wrappers} = config;
         const props = {...this.props as PropLookup};
         const attrs = this.attrs;
         const states = this.states;
@@ -309,7 +309,10 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         }
         this.props = props;
         this.addProps(this, props);
-        
+        if(wrappers !== undefined){
+            const {addWrappers} = await import('./addWrappers.js');
+            await addWrappers(this, wrappers);
+        }
     }
 
     static setType(prop: PropInfo, val: any){

@@ -71,7 +71,7 @@ export function init(whichStorage, win = window) {
 }
 init('localStorage');
 init('sessionStorage');
-export async function pull(splitPath, protocol) {
+export async function get(splitPath, protocol) {
     const head = splitPath.shift();
     if (head === undefined)
         throw 400;
@@ -87,4 +87,7 @@ export async function pull(splitPath, protocol) {
     else {
         return sessionStr;
     }
+}
+export async function set(splitPath, protocol) {
+    const head = splitPath.shift();
 }

@@ -13,5 +13,11 @@ export async function set(usl, val) {
             const obj = { [accessorChain]: val };
             dbObj.assign(obj);
             break;
+        case 'localStorage':
+        case 'sessionStorage':
+            const { set } = await import('./Storage.js');
+            throw 'NI';
+        default:
+            throw 'NI';
     }
 }
