@@ -6,7 +6,6 @@ export async function addWrappers(ctr, wrappers) {
         if (key in proto)
             continue;
         const wrapper = wrappers[key];
-        //const {} = wrapper;
         Object.defineProperty(proto, key, {
             get() {
                 if (this[wrapperKey] === undefined) {

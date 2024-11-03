@@ -7,7 +7,6 @@ export async function addWrappers(ctr: any, wrappers: Partial<{[key: string]: Wr
     for(const key in wrappers){
         if(key in proto) continue;
         const wrapper = wrappers[key]!;
-        //const {} = wrapper;
         Object.defineProperty(proto, key, {
             get(){
                 if(this[wrapperKey] === undefined){
