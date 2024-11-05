@@ -8,6 +8,9 @@
 <body>
     <div id=target></div>
     <script type=module>
+        window.addEventListener('message', e => {
+            console.log({e});
+        })
         import {IndexedDBObject} from '/XV/IndexedDBObject.js';
         const dbObject = new IndexedDBObject('myDatabase2', 'myObj');
         

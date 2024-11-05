@@ -1,3 +1,4 @@
+import { USL } from "../ts-refs/trans-render/XV/types.js";
 import { BaseIndexedDB } from "./BaseIndexedDB.js";
 
 export class IndexedDBObject<TObject> extends BaseIndexedDB {
@@ -6,14 +7,17 @@ export class IndexedDBObject<TObject> extends BaseIndexedDB {
     }
   
     async assign(obj: Partial<TObject>){
+        const USLs: Array<USL> = [];
         for(const key in obj){
           await this.#setItem(key, obj[key]);
+          USLs.push(`idb://${this.dbName}?.${this.storeName}?.${key}` as USL);
         }
+        postMessage(USLs);
     }
   
     async #setItem(key: keyof TObject & string, value: any) {
         const resp = await this.idbAction('put', {key, value});
-        postMessage(`idb://${this.dbName}?.${this.storeName}?.${key}`);
+        
         return resp;
     }
   
