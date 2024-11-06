@@ -71,11 +71,10 @@ export function init(whichStorage, win = window) {
 }
 init('localStorage');
 init('sessionStorage');
-export async function get(splitPath, protocol) {
-    const head = splitPath.shift();
-    if (head === undefined)
-        throw 400;
-    const sessionStr = window[protocol].getItem(head)?.trim();
+export async function get(key, splitPath, protocol) {
+    // const head = splitPath.shift();
+    // if(head === undefined) throw 400;
+    const sessionStr = window[protocol].getItem(key)?.trim();
     if (sessionStr === undefined)
         return undefined;
     const start = sessionStr[0];
@@ -88,6 +87,8 @@ export async function get(splitPath, protocol) {
         return sessionStr;
     }
 }
-export async function set(splitPath, protocol) {
+export async function set(key, splitPath, protocol) {
     const head = splitPath.shift();
+    if (head === undefined)
+        throw 400;
 }

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id=target></div>
+    <script type=module>
+        window.addEventListener('message', e => {
+            console.log({e});
+        })
+        import {get} from '/XV/get.js';
+        const test = {a: 'b'};
+        sessionStorage.setItem('c', JSON.stringify(test));
+        
+        const test2 = get('sessionStorage://c');
+        
+        
+    </script>
+</body>
+</html>

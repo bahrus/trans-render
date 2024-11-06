@@ -73,10 +73,10 @@ export function init(whichStorage: 'sessionStorage' | 'localStorage', win: Windo
 init('localStorage');
 init('sessionStorage');
 
-export async function get(splitPath: Array<string>, protocol: 'sessionStorage' | 'localStorage'){
-    const head = splitPath.shift();
-    if(head === undefined) throw 400;
-    const sessionStr = window[protocol].getItem(head)?.trim();
+export async function get(key: string, splitPath: Array<string>, protocol: 'sessionStorage' | 'localStorage'){
+    // const head = splitPath.shift();
+    // if(head === undefined) throw 400;
+    const sessionStr = window[protocol].getItem(key)?.trim();
     if(sessionStr === undefined) return undefined;
     const start = sessionStr[0];
     const last = sessionStr[-1];
@@ -88,7 +88,8 @@ export async function get(splitPath: Array<string>, protocol: 'sessionStorage' |
     }
 }
 
-export async function set(splitPath: Array<string>, protocol: 'sessionStorage' | 'localStorage'){
+export async function set(key: string, splitPath: Array<string>, protocol: 'sessionStorage' | 'localStorage'){
     const head = splitPath.shift();
-    
+    if(head === undefined) throw 400;
+
 }

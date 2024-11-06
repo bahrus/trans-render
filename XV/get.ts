@@ -20,7 +20,8 @@ export async function get(usl: USL){
         case 'localStorage':
         case 'sessionStorage':
             const {get} = await import('./Storage.js');
-            ctxObj = await get(uspParts, protocol);
+            const [key] = uspParts
+            ctxObj = await get(key, [], protocol);
             break;
         default:
             throw 'NI';
