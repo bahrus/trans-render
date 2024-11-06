@@ -3,20 +3,24 @@ const cache = {
     sessionStorage: Symbol.for('yx84OGtTMU2GufafFtsZLw'),
     localStorage: Symbol.for('eFljX6VSOkOAmcNJyph1sw')
 };
-const initialized = Symbol('1IBxCFcbCUW3KQllamedmw');
+const initialized = {
+    sessionStorage: Symbol('1IBxCFcbCUW3KQllamedmw'),
+    localStorage: Symbol('H2lL+vYErUGixatKub3nWA')
+};
 const isLoaded = navigator.deviceMemory > 1;
 export function init(whichStorage, win = window) {
     const aWin = win;
-    if (aWin[initialized])
+    const initializedKey = initialized[whichStorage];
+    if (aWin[initializedKey])
         return;
-    aWin[initialized] = true;
+    aWin[initializedKey] = true;
     if (!aWin[cache[whichStorage]] && isLoaded) {
         aWin[cache[whichStorage]] = {};
     }
     if (isLoaded) {
         const originalGetItem = win[whichStorage].getItem;
         const boundGetItem = originalGetItem.bind(win[whichStorage]);
-        win.sessionStorage.getItem = function (key) {
+        win[whichStorage].getItem = function (key) {
             const item = boundGetItem(key);
             if (item === null)
                 return null;
@@ -72,20 +76,8 @@ export function init(whichStorage, win = window) {
 init('localStorage');
 init('sessionStorage');
 export async function get(key, splitPath, protocol) {
-    // const head = splitPath.shift();
-    // if(head === undefined) throw 400;
-    const sessionStr = window[protocol].getItem(key)?.trim();
-    if (sessionStr === undefined)
-        return undefined;
-    const start = sessionStr[0];
-    const last = sessionStr[-1];
-    if ((start === '[' && last === ']') || (start === '{' && last === '}')) {
-        const baseVal = JSON.parse(sessionStr);
-        return baseVal;
-    }
-    else {
-        return sessionStr;
-    }
+    let returnObj = window[protocol].getItem(key);
+    return returnObj;
 }
 export async function set(key, splitPath, protocol) {
     const head = splitPath.shift();

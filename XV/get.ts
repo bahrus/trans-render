@@ -20,7 +20,7 @@ export async function get(usl: USL){
         case 'localStorage':
         case 'sessionStorage':
             const {get} = await import('./Storage.js');
-            const [key] = uspParts
+            const [key] = uspParts;
             ctxObj = await get(key, [], protocol);
             break;
         default:
