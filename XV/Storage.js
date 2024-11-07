@@ -24,14 +24,18 @@ export function init(whichStorage, win = window) {
             const item = boundGetItem(key);
             if (item === null)
                 return null;
-            if (!isLoaded)
-                return item;
-            const fromCache = aWin[whichStorage][key];
-            if (fromCache)
-                return aWin[whichStorage];
+            if (isLoaded) {
+                const fromCache = aWin[cache[whichStorage]][key];
+                if (fromCache)
+                    return fromCache;
+            }
+            ;
             try {
-                aWin[whichStorage][key] = JSON.parse(item);
-                return aWin[whichStorage][key];
+                const val = JSON.parse(item);
+                if (isLoaded) {
+                    aWin[cache[whichStorage]][key] = val;
+                }
+                return val;
             }
             catch (e) {
                 return item;

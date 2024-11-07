@@ -5,7 +5,7 @@ export function parse(usl) {
     if (test !== undefined)
         return test;
     const [protocol, path] = splitOnce(usl, '://');
-    const [usp, accessorChain] = splitOnce(path, '.?');
+    const [usp, accessorChain] = splitOnce(path, '?.');
     const uspParts = usp.split('/');
     const parsedUSL = {
         protocol,

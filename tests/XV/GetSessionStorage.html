@@ -10,13 +10,13 @@
     <script type=module>
         window.addEventListener('message', e => {
             console.log({e});
-        })
+        });
         import {get} from '/XV/get.js';
         const test = {a: 'b'};
         sessionStorage.setItem('c', JSON.stringify(test));
         
-        const test2 = get('sessionStorage://c');
-        
+        const test2 = await get('sessionStorage://c?.a');
+        console.log({test2});
         
     </script>
 </body>
