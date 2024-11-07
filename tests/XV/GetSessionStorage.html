@@ -16,8 +16,10 @@
         sessionStorage.setItem('c', JSON.stringify(test));
         
         const test2 = await get('sessionStorage://c?.a');
-        console.log({test2});
-        
+        //console.log({test2});
+        if(test2 === 'b'){
+            target.setAttribute('mark', 'good');
+        }
     </script>
 </body>
 </html>
