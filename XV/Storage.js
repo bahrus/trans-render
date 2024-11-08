@@ -20,7 +20,7 @@ export function init(whichStorage, win = window) {
 }
 init('localStorage');
 init('sessionStorage');
-export async function get(key, splitPath, protocol) {
+export async function get(key, protocol) {
     const aWin = window;
     if (isLoaded) {
         const cachedVal = aWin[cache[protocol]][key];

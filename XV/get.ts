@@ -22,7 +22,7 @@ export async function get(usl: USL){
             const {get} = await import('./Storage.js');
             const [key] = uspParts;
             
-            ctxObj = await get(key, [], protocol);
+            ctxObj = await get(key, protocol);
             break;
         default:
             throw 'NI';

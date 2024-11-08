@@ -25,7 +25,7 @@ export function init(whichStorage: 'sessionStorage' | 'localStorage', win: Windo
 init('localStorage');
 init('sessionStorage');
 
-export async function get(key: string, splitPath: Array<string>, protocol: 'sessionStorage' | 'localStorage'){
+export async function get(key: string, protocol: 'sessionStorage' | 'localStorage'){
     const aWin = window as any;
     if(isLoaded){
         const cachedVal = aWin[cache[protocol]][key];
