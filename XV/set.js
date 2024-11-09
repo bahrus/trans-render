@@ -16,6 +16,8 @@ export async function set(usl, val) {
         case 'localStorage':
         case 'sessionStorage':
             const { set } = await import('./Storage.js');
+            const [key] = uspParts;
+            await set(key, protocol, val);
             throw 'NI';
         default:
             throw 'NI';

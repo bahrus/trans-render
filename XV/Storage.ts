@@ -30,6 +30,9 @@ export async function get(key: string, protocol: 'sessionStorage' | 'localStorag
     if(isLoaded){
         const cachedVal = aWin[cache[protocol]][key];
         if(cachedVal !== undefined) return cachedVal;
+        window.addEventListener('message', (e: Event) => {
+            throw 'NI';
+        });
     }
     let returnObj = window[protocol].getItem(key);
     if(returnObj === null) return null;
@@ -43,8 +46,19 @@ export async function get(key: string, protocol: 'sessionStorage' | 'localStorag
     
 }
 
-export async function set(key: string, splitPath: Array<string>, protocol: 'sessionStorage' | 'localStorage'){
-    const head = splitPath.shift();
-    if(head === undefined) throw 400;
-
+export async function set(key: string, protocol: 'sessionStorage' | 'localStorage', val: any){
+    const aWin = window as any;
+    if(isLoaded){
+        aWin[cache[protocol]][key] = val;
+    }
+    if(val === null){
+        window[protocol].removeItem(key);
+    }else{
+        if(typeof val === 'object'){
+            window[protocol].setItem(key, JSON.stringify(val));
+        }else{
+            window[protocol].setItem(key, val);
+        }
+    }
+    window.postMessage([`$protocol://${key}`]);
 }
