@@ -18,7 +18,6 @@
         
         const test2 = await set('sessionStorage://c?.a', 'd');
         const test3 = await get('sessionStorage://c?.a');
-        //console.log({test2});
         if(test3 === 'd'){
             target.setAttribute('mark', 'good');
         }
