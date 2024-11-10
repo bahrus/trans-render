@@ -1,5 +1,5 @@
 import { parse } from './parse.js';
-export async function set(usl, val) {
+export async function set(usl, val, ctx) {
     const parsedUSL = parse(usl);
     const { protocol, accessorChain, uspParts } = parsedUSL;
     switch (protocol) {
@@ -11,7 +11,7 @@ export async function set(usl, val) {
             const dbObj = new IndexedDBObject(dbName, storeName);
             await dbObj.openDB();
             const obj = { [accessorChain]: val };
-            dbObj.assign(obj);
+            dbObj.assign(obj, ctx);
             break;
         }
         case 'localStorage':
@@ -19,7 +19,7 @@ export async function set(usl, val) {
             const { set } = await import('./Storage.js');
             const [key] = uspParts;
             const obj = { [accessorChain]: val };
-            await set(key, protocol, obj);
+            await set(key, protocol, obj, ctx);
             break;
         }
         default:

@@ -1,4 +1,4 @@
-import { USL } from "../ts-refs/trans-render/XV/types.js";
+import { SavingContext, USL } from "../ts-refs/trans-render/XV/types.js";
 import { BaseIndexedDB } from "./BaseIndexedDB.js";
 
 export class IndexedDBObject<TObject> extends BaseIndexedDB {
@@ -6,13 +6,16 @@ export class IndexedDBObject<TObject> extends BaseIndexedDB {
         return { keyPath: 'key'}
     }
   
-    async assign(obj: Partial<TObject>){
-        const USLs: Array<USL> = [];
+    async assign(obj: Partial<TObject>, ctx?: SavingContext){
+        const USLs: Array<USL> = ctx?.USLs ?? [];
         for(const key in obj){
           await this.#setItem(key, obj[key]);
           USLs.push(`idb://${this.dbName}?.${this.storeName}?.${key}` as USL);
         }
-        postMessage(USLs);
+        if(ctx === undefined){
+            postMessage(USLs);
+        }
+        
     }
   
     async #setItem(key: keyof TObject & string, value: any) {

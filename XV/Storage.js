@@ -42,7 +42,7 @@ export async function get(key, protocol) {
     }
     return returnObj;
 }
-export async function set(key, protocol, val) {
+export async function set(key, protocol, val, ctx) {
     const aWin = window;
     if (isLoaded) {
         aWin[cache[protocol]][key] = val;
@@ -58,5 +58,11 @@ export async function set(key, protocol, val) {
             window[protocol].setItem(key, val);
         }
     }
-    window.postMessage([`$protocol://${key}`]);
+    const msg = `$protocol://${key}`;
+    if (ctx !== undefined) {
+        ctx.USLs.push(msg);
+    }
+    else {
+        window.postMessage([msg]);
+    }
 }

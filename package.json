@@ -83,7 +83,7 @@
       "default": "./XV/draw.js",
       "types": "./XV/draw.ts"
     },
-    "./XV/push.js": {
+    "./XV/stow.js": {
       "default": "./XV/push.js",
       "types": "./XV/push.ts"
     },

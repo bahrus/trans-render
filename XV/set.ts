@@ -1,7 +1,7 @@
-import { USL } from "../ts-refs/trans-render/XV/types";
+import { SavingContext, USL } from "../ts-refs/trans-render/XV/types";
 import {parse} from './parse.js';
 
-export async function set(usl: USL, val: any){
+export async function set(usl: USL, val: any, ctx?: SavingContext){
     const parsedUSL = parse(usl);
     const {protocol, accessorChain, uspParts} = parsedUSL;
     switch(protocol){
@@ -12,7 +12,7 @@ export async function set(usl: USL, val: any){
             const dbObj = new IndexedDBObject<any>(dbName, storeName);
             await dbObj.openDB();
             const obj = {[accessorChain]: val};
-            dbObj.assign(obj);
+            dbObj.assign(obj, ctx);
             break;
         }
 
@@ -21,7 +21,7 @@ export async function set(usl: USL, val: any){
             const {set} = await import('./Storage.js');
             const [key] = uspParts;
             const obj = {[accessorChain]: val};
-            await set(key, protocol, obj);
+            await set(key, protocol, obj, ctx);
             break;
         }
 

@@ -3,13 +3,15 @@ export class IndexedDBObject extends BaseIndexedDB {
     get dbOptions() {
         return { keyPath: 'key' };
     }
-    async assign(obj) {
-        const USLs = [];
+    async assign(obj, ctx) {
+        const USLs = ctx?.USLs ?? [];
         for (const key in obj) {
             await this.#setItem(key, obj[key]);
             USLs.push(`idb://${this.dbName}?.${this.storeName}?.${key}`);
         }
-        postMessage(USLs);
+        if (ctx === undefined) {
+            postMessage(USLs);
+        }
     }
     async #setItem(key, value) {
         const resp = await this.idbAction('put', { key, value });

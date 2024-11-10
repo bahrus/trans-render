@@ -1,4 +1,4 @@
-import {protocols} from '../ts-refs/trans-render/XV/types.js';
+import {protocols, SavingContext, USL} from '../ts-refs/trans-render/XV/types.js';
 //import {getProp} from '../lib/getProp.js';
 
 const cache = {
@@ -46,7 +46,7 @@ export async function get(key: string, protocol: 'sessionStorage' | 'localStorag
     
 }
 
-export async function set(key: string, protocol: 'sessionStorage' | 'localStorage', val: any){
+export async function set(key: string, protocol: 'sessionStorage' | 'localStorage', val: any, ctx?: SavingContext){
     const aWin = window as any;
     if(isLoaded){
         aWin[cache[protocol]][key] = val;
@@ -60,5 +60,11 @@ export async function set(key: string, protocol: 'sessionStorage' | 'localStorag
             window[protocol].setItem(key, val);
         }
     }
-    window.postMessage([`$protocol://${key}`]);
+    const msg = `$protocol://${key}` as USL;
+    if(ctx !== undefined){
+        ctx.USLs.push(msg);
+    }else{
+        window.postMessage([msg]);
+    }
+    
 }
