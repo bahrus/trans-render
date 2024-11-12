@@ -8,9 +8,10 @@ export class Yield {
     #to: string;
     async to(guid: string){
         this.#to = guid;
+        const objToPipe = await this.#yield();
     }
 
-    async yield() : Promise<any>{
+    async #yield() : Promise<any>{
         return new Promise(async (resolve, reject) => {
             const {draw} = await import('./XV/draw.js');
             const drawn = await draw(this.schema);
