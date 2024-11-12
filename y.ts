@@ -6,7 +6,12 @@ export async function y(schema: USLMapping){
     return new Yield(schema);
 }
 
-
+export async function a(guid: string){
+    if(yields.has(guid)) return yields.get(guid);
+    const {waitForEvent} = await import('./lib/waitForEvent.js');
+    await waitForEvent(window, guid);
+    return yields.get(guid);
+}
 
 export class Yield {
     constructor(public schema: USLMapping){}
@@ -17,7 +22,7 @@ export class Yield {
 
         const objToPipe = await this.#yield();
         yields.set(guid, objToPipe);
-        window.postMessage(guid)
+        window.dispatchEvent(new Event(guid));
     }
 
     async #yield() : Promise<any>{
