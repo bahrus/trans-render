@@ -28,7 +28,8 @@
 		"MyCustomElement/*",
 		"positractions/*",
 		"funions/Localizer.ts",
-		"asmr/*"
+		"asmr/*",
+		"yield.ts"
 	],
 	"exclude":[
 		"node_modules/*"

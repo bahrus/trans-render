@@ -1,4 +1,4 @@
-import { USLMapping } from './ts-refs/trans-render/XV/types';
+import { USLMapping } from './ts-refs/trans-render/XV/types.js';
 
 export const yields: Map<string, any> = new Map();
 
@@ -15,7 +15,7 @@ export async function a(guid: string){
 
 export class Yield {
     constructor(public schema: USLMapping){}
-    #to: string;
+    #to: string | undefined;
     async to(guid: string){
         if(yields.has(guid)) return;
         this.#to = guid;

@@ -35,6 +35,10 @@
       "default": "./Mount.js",
       "types": "./Mount.ts"
     },
+    "./yield.js": {
+      "default": "./yield.js",
+      "types": "./yield.ts"
+    },
     "./Object$tring.js": "./Object$tring.js",
     "./Object$entences.js": "./Object$entences.js",
     "./trans-render.js": "./trans-render.js",
