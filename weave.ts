@@ -1,27 +1,27 @@
 import { USLMapping } from './ts-refs/trans-render/XV/types.js';
 
-export const yields: Map<string, any> = new Map();
+const values: Map<string, any> = new Map();
 
-export async function y(schema: USLMapping){
-    return new Yield(schema);
+export async function weave(schema: USLMapping){
+    return new Weave(schema);
 }
 
-export async function a(guid: string){
-    if(yields.has(guid)) return yields.get(guid);
+export async function when(guid: string){
+    if(values.has(guid)) return values.get(guid);
     const {waitForEvent} = await import('./lib/waitForEvent.js');
     await waitForEvent(window, guid);
-    return yields.get(guid);
+    return values.get(guid);
 }
 
-export class Yield {
+export class Weave {
     constructor(public schema: USLMapping){}
     #to: string | undefined;
-    async to(guid: string){
-        if(yields.has(guid)) return;
+    async into(guid: string){
+        if(values.has(guid)) return;
         this.#to = guid;
 
         const objToPipe = await this.#yield();
-        yields.set(guid, objToPipe);
+        values.set(guid, objToPipe);
         window.dispatchEvent(new Event(guid));
     }
 

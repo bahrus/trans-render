@@ -1,26 +1,26 @@
-export const yields = new Map();
-export async function y(schema) {
-    return new Yield(schema);
+const values = new Map();
+export async function weave(schema) {
+    return new Weave(schema);
 }
-export async function a(guid) {
-    if (yields.has(guid))
-        return yields.get(guid);
+export async function when(guid) {
+    if (values.has(guid))
+        return values.get(guid);
     const { waitForEvent } = await import('./lib/waitForEvent.js');
     await waitForEvent(window, guid);
-    return yields.get(guid);
+    return values.get(guid);
 }
-export class Yield {
+export class Weave {
     schema;
     constructor(schema) {
         this.schema = schema;
     }
     #to;
-    async to(guid) {
-        if (yields.has(guid))
+    async into(guid) {
+        if (values.has(guid))
             return;
         this.#to = guid;
         const objToPipe = await this.#yield();
-        yields.set(guid, objToPipe);
+        values.set(guid, objToPipe);
         window.dispatchEvent(new Event(guid));
     }
     async #yield() {
