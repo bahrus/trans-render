@@ -11,7 +11,7 @@ export async function assignGingerly(dest: any, src: any){
             continue;
         }else if(srcKey === '...'){
             const guid = src[srcKey];
-            const {when} = await import('../weave.js');
+            const {when} = await import('./weave.js');
             const values = await when(guid);
             await assignGingerly(dest, values);
             continue;

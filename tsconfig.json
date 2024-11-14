@@ -29,7 +29,7 @@
 		"positractions/*",
 		"funions/Localizer.ts",
 		"asmr/*",
-		"weave.ts"
+		"lib/weave.ts"
 	],
 	"exclude":[
 		"node_modules/*"
