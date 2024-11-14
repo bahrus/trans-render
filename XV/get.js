@@ -6,8 +6,9 @@ export async function get(usl) {
     let ctxObj;
     switch (protocol) {
         case 'globalThis':
-            throw 'NI';
-        //return await getProp(globalThis, splitPath);
+            if (accessorChain !== undefined)
+                throw 'NI';
+            return await getProp(globalThis, uspParts);
         case 'indexedDB':
             const [dbName, storeName, propName] = uspParts;
             if (dbName === undefined || storeName === undefined || propName === undefined)

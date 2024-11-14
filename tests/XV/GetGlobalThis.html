@@ -3,21 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Session Storage</title>
+    <title>Get Global This</title>
 </head>
 <body>
     <div id=target></div>
+    <script>
+        var a = {b: 'c'};
+    </script>
     <script type=module>
-        window.addEventListener('message', e => {
-            console.log({e});
-        });
-        import {get} from '/XV/get.js';
-        const test = {a: 'b'};
-        sessionStorage.setItem('c', JSON.stringify(test));
         
-        const test2 = await get('sessionStorage://c?.a');
-        //console.log({test2});
-        if(test2 === 'b'){
+        import {get} from '/XV/get.js';
+        
+        const test = await get('globalThis://a');
+        if(test.b === 'c'){
             target.setAttribute('mark', 'good');
         }
     </script>

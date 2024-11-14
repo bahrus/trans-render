@@ -8,8 +8,9 @@ export async function get(usl: USL){
     let ctxObj: any;
     switch(protocol){
         case 'globalThis':
-            throw 'NI';
-            //return await getProp(globalThis, splitPath);
+            if(accessorChain !== undefined) throw 'NI';
+            return await getProp(globalThis, uspParts);
+            
         case 'indexedDB':
             const [dbName, storeName, propName] = uspParts;
             if(dbName === undefined || storeName === undefined || propName === undefined) throw 400;
