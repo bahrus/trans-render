@@ -1,4 +1,4 @@
-export function assignGingerly(dest: any, src: any){
+export async function assignGingerly(dest: any, src: any){
     if(!src || typeof src !== 'object') return;
     const chainOps: any = {};
     const srcCopy = {...src};
@@ -8,6 +8,13 @@ export function assignGingerly(dest: any, src: any){
             doChains = true;
             chainOps[srcKey] = src[srcKey];
             delete srcCopy[srcKey];
+            continue;
+        }else if(srcKey === '...'){
+            const guid = src[srcKey];
+            const {when} = await import('../weave.js');
+            const values = await when(guid);
+            await assignGingerly(dest, values);
+            continue;
         }
         //if target prop exists and isn't an instance of a class,  but the src prop is of type EventType
         //merge what is there first...
@@ -15,15 +22,15 @@ export function assignGingerly(dest: any, src: any){
         const destProp = dest[srcKey];
         const srcProp = srcCopy[srcKey];
         if(destProp instanceof Object && destProp.constructor === Object && srcProp instanceof EventTarget){
-            assignGingerly(srcProp, destProp);
+            await assignGingerly(srcProp, destProp);
         }else if(destProp instanceof EventTarget && srcProp instanceof Object && srcProp.constructor === Object){
-            assignGingerly(destProp, srcProp);
+            await assignGingerly(destProp, srcProp);
             continue;
         }
         dest[srcKey] = srcProp;
     }
     //Object.assign(dest, srcCopy);
-    applyChains(dest, chainOps);
+    await applyChains(dest, chainOps);
 }
 
 async function applyChains(dest: any, chainOps: any){
