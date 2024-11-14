@@ -2,15 +2,8 @@ import { USLMapping } from '../ts-refs/trans-render/XV/types.js';
 
 const values: Map<string | number  | symbol, any> = new Map();
 
-export async function weave(schema: USLMapping){
+export function weave(schema: USLMapping){
     return new Weave(schema);
-}
-
-export async function when(guid: string){
-    if(values.has(guid)) return values.get(guid);
-    const {waitForEvent} = await import('./waitForEvent.js');
-    await waitForEvent(window, guid);
-    return values.get(guid);
 }
 
 export class Weave {
@@ -43,4 +36,17 @@ export class Weave {
         }
         return true;
     }
+
+    andWeave(schema: USLMapping){
+        return new Weave(schema);
+    }
+    
 }
+
+export async function when(guid: string){
+    if(values.has(guid)) return values.get(guid);
+    const {waitForEvent} = await import('./waitForEvent.js');
+    await waitForEvent(window, guid);
+    return values.get(guid);
+}
+
