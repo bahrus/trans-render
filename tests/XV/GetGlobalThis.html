@@ -14,8 +14,8 @@
         
         import {get} from '/XV/get.js';
         
-        const test = await get('globalThis://a');
-        if(test.b === 'c'){
+        const test = await get('globalThis://a/b');
+        if(test === 'c'){
             target.setAttribute('mark', 'good');
         }
     </script>
