@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.852",
+  "version": "0.0.853",
   "description": "Instantiate an HTML Template",
   "type": "module",
   "main": "trans-render.js",
@@ -154,7 +154,7 @@
       "default": "./weave.js",
       "types": "./weave.ts"
     },
-    "./lib/textWeave.js":{
+    "./lib/textWeave.js": {
       "default": "./lib/textWeave.js",
       "types": "./lib/textWeave.ts"
     },
