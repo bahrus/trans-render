@@ -8,7 +8,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     propagator = new EventTarget();
     [publicPrivateStore]: Partial<TProps> = {};
 
-    covertAssignment(obj: TProps): void {
+    async covertAssignment(obj: TProps){
         const props = (<any>this.constructor).props as PropLookup;
         const extObj: any = {};
         for(const key in obj){
@@ -25,7 +25,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
                 (<any>this.#internals)[fawm](obj[key])
             }
         }
-        assignGingerly(this[publicPrivateStore], extObj);
+        await assignGingerly(this[publicPrivateStore], extObj);
 
     }
 

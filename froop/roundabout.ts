@@ -217,11 +217,6 @@ export class RoundAbout{
         const {vm} = options;
         const {sleep} = vm;
         if(sleep) await vm.awake();
-        // if(compacts !== undefined){
-        //     const {Compact} = await import('./Compact.void');
-        //     this.#compact = new Compact(compacts, vm);
-        //     this.#compact.covertAssignment(vm, vm, keysToPropagate, this.#busses);
-        // }
         const checks = this.#checks;
         for(const key in checks){
             const check = checks[key]!;
@@ -371,12 +366,6 @@ export class RoundAbout{
 
     async doCoreEvt(key: string, evtCount: number){
         let compactKeysToPropagate: Set<string> | undefined;
-        // if(this.#compact){
-        //     const {options} = this;
-        //     const {vm} = options;
-        //     const compactKeysToPropagate = new Set<string>();
-        //     this.#compact.covertAssignment({[key]: (<any>vm)[key]}, vm, compactKeysToPropagate, this.#busses);
-        // }
         const busses = this.#busses;
         for(const busKey in busses){
             const bus = busses[busKey];
@@ -480,10 +469,7 @@ export class RoundAbout{
         busses[key] = new Set();
         if(ret === undefined || ret === null) return;
         const keys = Object.keys(ret).filter(key => ret[key] !== vm[key]);
-        // if(this.#compact){
-        //     this.#compact.covertAssignment(ret, vm as RoundaboutReady, keysToPropagate, this.#busses);
-        // }
-        vm.covertAssignment(ret);
+        await vm.covertAssignment(ret);
         
         
         keys.forEach(returnKey => {

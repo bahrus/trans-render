@@ -3,7 +3,7 @@ const publicPrivateStore = Symbol();
 export class O extends HTMLElement {
     propagator = new EventTarget();
     [publicPrivateStore] = {};
-    covertAssignment(obj) {
+    async covertAssignment(obj) {
         const props = this.constructor.props;
         const extObj = {};
         for (const key in obj) {
@@ -21,7 +21,7 @@ export class O extends HTMLElement {
                 this.#internals[fawm](obj[key]);
             }
         }
-        assignGingerly(this[publicPrivateStore], extObj);
+        await assignGingerly(this[publicPrivateStore], extObj);
     }
     #disconnectedAbortController;
     get disconnectedSignal() {
