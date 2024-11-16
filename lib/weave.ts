@@ -46,6 +46,7 @@ export class Weave {
 export async function when(guid: string){
     if(values.has(guid)) return values.get(guid);
     const {waitForEvent} = await import('./waitForEvent.js');
+    if(values.has(guid)) return values.get(guid);
     await waitForEvent(window, guid);
     return values.get(guid);
 }
