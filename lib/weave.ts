@@ -9,10 +9,14 @@ export function weave(schema: USLMapping){
 export class Weave {
     constructor(public schema: USLMapping){}
     #into: string | number  | symbol | undefined;
-    async into(guid: string | number | symbol){
+    into(guid: string | number | symbol){
         if(values.has(guid)) return;
         this.#into = guid;
+        this.#finishInto(guid);
+        return this;
+    }
 
+    async #finishInto(guid: string | number | symbol){
         const objToPipe = await this.#draw();
         values.set(guid, objToPipe);
         window.dispatchEvent(new Event(guid.toString()));
