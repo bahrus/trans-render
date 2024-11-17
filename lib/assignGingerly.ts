@@ -26,6 +26,12 @@ export async function assignGingerly(dest: any, src: any){
         }else if(destProp instanceof EventTarget && srcProp instanceof Object && srcProp.constructor === Object){
             await assignGingerly(destProp, srcProp);
             continue;
+        }else if(srcProp instanceof Object && ('...' in srcProp)){
+            if(destProp === undefined){
+                dest[srcKey] = {}
+            }
+            await assignGingerly(dest[srcKey], srcProp);
+            continue;
         }
         dest[srcKey] = srcProp;
     }
