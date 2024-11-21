@@ -75,6 +75,10 @@
       "default": "./dss/tref/splitRefs.js",
       "types": "./dss/tref/splitRefs.ts"
     },
+    "./XV.gait.js": {
+      "default": "./XV/gait.js",
+      "types": "./XV/gait.js"
+    },
     "./XV/get.js": {
       "default": "./XV/get.js",
       "types": "./XV/get.ts"
@@ -149,6 +153,10 @@
     "./lib/waitForEvent.js": {
       "default": "./lib/waitForEvent.js",
       "types": "./lib/waitForEvent.ts"
+    },
+    "./lib/waitForMatchingEvent.js": {
+      "default": "./lib/waitForMatchingEvent.js",
+      "types": "./lib/waitForMatchingEvent.ts"
     },
     "./weave.js": {
       "default": "./weave.js",
