@@ -27,6 +27,8 @@ export async function gait(usl: USL){
                 if(test !== null) return true;
             }
             return false;
+        }else{
+            throw 400;
         }
     });
     return test;

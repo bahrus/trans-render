@@ -28,6 +28,9 @@ export async function gait(usl) {
             }
             return false;
         }
+        else {
+            throw 400;
+        }
     });
     return test;
 }
