@@ -17,6 +17,7 @@ export async function gait(usl: USL){
                     foundMatch = true;
                     continue;
                 }
+                
                 if(item === parsed.usp){
                     foundMatch = true;
                     continue;

@@ -30,9 +30,9 @@ export async function get(key: string, protocol: 'sessionStorage' | 'localStorag
     if(isLoaded){
         const cachedVal = aWin[cache[protocol]][key];
         if(cachedVal !== undefined) return cachedVal;
-        window.addEventListener('message', (e: Event) => {
-            throw 'NI';
-        });
+        // window.addEventListener('message', (e: Event) => {
+        //     throw 'NI';
+        // });
     }
     let returnObj = window[protocol].getItem(key);
     if(returnObj === null) return null;
@@ -60,7 +60,7 @@ export async function set(key: string, protocol: 'sessionStorage' | 'localStorag
             window[protocol].setItem(key, val);
         }
     }
-    const msg = `$protocol://${key}` as USL;
+    const msg = `${protocol}://${key}` as USL;
     if(ctx !== undefined){
         ctx.USLs.push(msg);
     }else{

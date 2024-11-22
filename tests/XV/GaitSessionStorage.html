@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Session Storage</title>
+    <title>Gait Session Storage</title>
 </head>
 <body>
     <div id=target></div>
     <script type=module>
+        setTimeout(async () => {
+            //const test = {a: 'b'};
+            const {set} = await import('/XV/set.js');
+            set('sessionStorage://c?.a', 'b');
+        }, 1000);
         import {gait} from '/XV/gait.js';
         sessionStorage.removeItem('c');
         
@@ -16,10 +21,7 @@
         if(test2 === 'b'){
             target.setAttribute('mark', 'good');
         }
-        setTimeout(() => {
-            const test = {a: 'b'};
-            sessionStorage.setItem('c', JSON.stringify(test));
-        }, 500);
+
     </script>
 </body>
 </html>

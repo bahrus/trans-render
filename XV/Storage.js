@@ -26,9 +26,9 @@ export async function get(key, protocol) {
         const cachedVal = aWin[cache[protocol]][key];
         if (cachedVal !== undefined)
             return cachedVal;
-        window.addEventListener('message', (e) => {
-            throw 'NI';
-        });
+        // window.addEventListener('message', (e: Event) => {
+        //     throw 'NI';
+        // });
     }
     let returnObj = window[protocol].getItem(key);
     if (returnObj === null)
@@ -58,7 +58,7 @@ export async function set(key, protocol, val, ctx) {
             window[protocol].setItem(key, val);
         }
     }
-    const msg = `$protocol://${key}`;
+    const msg = `${protocol}://${key}`;
     if (ctx !== undefined) {
         ctx.USLs.push(msg);
     }
