@@ -30,7 +30,7 @@ export async function get(usl: USL){
             throw 'NI';
             
     }
-    if(accessorChain !== undefined){
+    if(accessorChain !== undefined && ctxObj !== null){
         const splitAccessorChain = accessorChain.split('?.');
         ctxObj = getProp(ctxObj, splitAccessorChain);
     }

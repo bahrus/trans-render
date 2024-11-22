@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Session Storage</title>
+</head>
+<body>
+    <div id=target></div>
+    <script type=module>
+        import {gait} from '/XV/gait.js';
+        sessionStorage.removeItem('c');
+        
+        const test2 = await gait('sessionStorage://c?.a');
+        //console.log({test2});
+        if(test2 === 'b'){
+            target.setAttribute('mark', 'good');
+        }
+        setTimeout(() => {
+            const test = {a: 'b'};
+            sessionStorage.setItem('c', JSON.stringify(test));
+        }, 500);
+    </script>
+</body>
+</html>
