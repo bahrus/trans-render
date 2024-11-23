@@ -60,9 +60,9 @@ export async function set(key, protocol, val, ctx) {
     }
     const msg = `${protocol}://${key}`;
     if (ctx !== undefined) {
-        ctx.USLs.push(msg);
+        ctx.USLs.add(msg);
     }
     else {
-        window.postMessage([msg]);
+        window.postMessage(new Set([msg]));
     }
 }

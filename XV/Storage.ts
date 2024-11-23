@@ -62,9 +62,9 @@ export async function set(key: string, protocol: 'sessionStorage' | 'localStorag
     }
     const msg = `${protocol}://${key}` as USL;
     if(ctx !== undefined){
-        ctx.USLs.push(msg);
+        ctx.USLs.add(msg);
     }else{
-        window.postMessage([msg]);
+        window.postMessage(new Set([msg]));
     }
     
 }
