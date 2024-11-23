@@ -10,7 +10,7 @@ export async function set(usl, val, ctx) {
             const { IndexedDBObject } = await import('./IndexedDBObject.js');
             const dbObj = new IndexedDBObject(dbName, storeName);
             await dbObj.openDB();
-            const obj = { [accessorChain]: val };
+            const obj = { [`${propName}${accessorChain || ''}`]: val };
             dbObj.assign(obj, ctx);
             break;
         }

@@ -11,7 +11,7 @@ export async function set(usl: USL, val: any, ctx?: SavingContext){
             const {IndexedDBObject} = await import('./IndexedDBObject.js');
             const dbObj = new IndexedDBObject<any>(dbName, storeName);
             await dbObj.openDB();
-            const obj = {[accessorChain]: val};
+            const obj = {[`${propName}${accessorChain || ''}`]: val};
             dbObj.assign(obj, ctx);
             break;
         }
