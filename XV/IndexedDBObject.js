@@ -4,10 +4,15 @@ export class IndexedDBObject extends BaseIndexedDB {
         return { keyPath: 'key' };
     }
     async assign(obj, ctx) {
-        const USLs = ctx?.USLs ?? [];
+        const USLs = ctx?.USLs ?? new Set();
         for (const key in obj) {
             await this.#setItem(key, obj[key]);
-            USLs.push(`idb://${this.dbName}?.${this.storeName}?.${key}`);
+            const protocol = 'indexedDB';
+            USLs.add(protocol);
+            const root = `${protocol}://${this.dbName}/${this.storeName}`;
+            USLs.add(root);
+            const usl = `${root}/${key}`;
+            USLs.add(usl);
         }
         if (ctx === undefined) {
             postMessage(USLs);

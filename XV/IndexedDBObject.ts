@@ -7,10 +7,15 @@ export class IndexedDBObject<TObject> extends BaseIndexedDB {
     }
   
     async assign(obj: Partial<TObject>, ctx?: SavingContext){
-        const USLs: Array<USL> = ctx?.USLs ?? [];
+        const USLs: Set<USL> = ctx?.USLs ?? new Set<USL>();
         for(const key in obj){
           await this.#setItem(key, obj[key]);
-          USLs.push(`idb://${this.dbName}?.${this.storeName}?.${key}` as USL);
+          const protocol = 'indexedDB';
+          USLs.add(protocol as USL);
+          const root = `${protocol}://${this.dbName}/${this.storeName}`;
+          USLs.add(root as USL);
+          const usl = `${root}/${key}`;
+          USLs.add(usl as USL);
         }
         if(ctx === undefined){
             postMessage(USLs);
