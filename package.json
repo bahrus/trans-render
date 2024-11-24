@@ -75,25 +75,13 @@
       "default": "./dss/tref/splitRefs.js",
       "types": "./dss/tref/splitRefs.ts"
     },
-    "./XV.gait.js": {
-      "default": "./XV/gait.js",
-      "types": "./XV/gait.js"
-    },
-    "./XV/get.js": {
-      "default": "./XV/get.js",
-      "types": "./XV/get.ts"
-    },
-    "./XV/draw.js": {
-      "default": "./XV/draw.js",
-      "types": "./XV/draw.ts"
-    },
-    "./XV/stow.js": {
-      "default": "./XV/push.js",
-      "types": "./XV/push.ts"
-    },
     "./funions/Localizer.js": "./functions/Localizer.js",
     "./froop/CE.js": "./froop/CE.js",
     "./froop/O.js": "./froop/O.js",
+    "./froop/roundabout.js": {
+      "default": "./froop/roundabout.js",
+      "types": "./froop/roundabout.ts"
+    },
     "./lib/arr.js": "./lib/arr.js",
     "./lib/beBeckoned.js": "./lib/beBeckoned.js",
     "./lib/bePropagating.js": "./lib/bePropagating.js",
@@ -171,6 +159,26 @@
     "./xslt/clone.js": "./xslt/clone.js",
     "./xslt/Mgmt.js": "./xslt/Mgmt.js",
     "./xslt/swap.js": "./xslt/swap.js",
+    "./XV.gait.js": {
+      "default": "./XV/gait.js",
+      "types": "./XV/gait.js"
+    },
+    "./XV/get.js": {
+      "default": "./XV/get.js",
+      "types": "./XV/get.ts"
+    },
+    "./XV/draw.js": {
+      "default": "./XV/draw.js",
+      "types": "./XV/draw.ts"
+    },
+    "./XV/set.js": {
+      "default": "./XV/set.js",
+      "types": "./XV/set.ts"
+    },
+    "./XV/stow.js": {
+      "default": "./XV/push.js",
+      "types": "./XV/push.ts"
+    },
     "./be.d.ts": {
       "default": "./Mount.js",
       "types": "./be.d.ts"
