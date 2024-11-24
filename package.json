@@ -231,7 +231,7 @@
     "mount-observer": "0.0.39"
   },
   "devDependencies": {
-    "@playwright/test": "1.48.2",
+    "@playwright/test": "1.49.0",
     "ssi-server": "0.0.1"
   },
   "repository": {
