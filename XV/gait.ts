@@ -10,20 +10,8 @@ export async function gait(usl: USL){
     //timeout?
     await waitForMatchingEvent<MessageEvent>(window, 'message', async (e: MessageEvent) => {
         const {data} = e;
-        if(Array.isArray(data)){
-            let foundMatch = false;
-            for(const item of data){
-                if(item === usl){
-                    foundMatch = true;
-                    continue;
-                }
-                
-                if(item === parsed.usp){
-                    foundMatch = true;
-                    continue;
-                }
-            }
-            if(foundMatch){
+        if(data instanceof Set){
+            if(data.has(usl) || data.has(parsed.usp)){
                 test = await get(usl);
                 if(test !== null) return true;
             }
