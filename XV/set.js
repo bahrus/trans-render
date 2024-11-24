@@ -22,6 +22,11 @@ export async function set(usl, val, ctx) {
             await set(key, protocol, obj, ctx);
             break;
         }
+        case 'cookie':
+            const { set } = await import('./Cookie.js');
+            const [key] = uspParts;
+            await set(key, val);
+            break;
         default:
             throw 'NI';
     }

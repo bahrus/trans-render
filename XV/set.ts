@@ -25,6 +25,12 @@ export async function set(usl: USL, val: any, ctx?: SavingContext){
             break;
         }
 
+        case 'cookie':
+            const {set} = await import('./Cookie.js');
+            const [key] = uspParts;
+            await set(key, val);
+            break;
+
         default:
             throw 'NI';
     }    
