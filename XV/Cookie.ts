@@ -17,7 +17,7 @@ export function get(name: string) {
  * @param name 
  * @param attributes 
  */
-export function set(name: string, value: string, attributes : Partial<CookieOptions> = {}) {
+export function set(name: string, value: string, attributes : Partial<CookieOptions> = {}, ctx?: SavingContext) {
 
     attributes = {
       path: '/',
@@ -40,6 +40,12 @@ export function set(name: string, value: string, attributes : Partial<CookieOpti
     }
   
     document.cookie = updatedCookie;
+    const msg = `cookie://${name}` as USL;
+    if(ctx !== undefined){
+        ctx.USLs.add(msg);
+    }else{
+        window.postMessage(new Set([msg]));
+    }
   }
   
   

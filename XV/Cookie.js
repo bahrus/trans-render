@@ -11,7 +11,7 @@ export function get(name) {
  * @param name
  * @param attributes
  */
-export function set(name, value, attributes = {}) {
+export function set(name, value, attributes = {}, ctx) {
     attributes = {
         path: '/',
         // add other defaults here if necessary
@@ -29,4 +29,11 @@ export function set(name, value, attributes = {}) {
         }
     }
     document.cookie = updatedCookie;
+    const msg = `cookie://${name}`;
+    if (ctx !== undefined) {
+        ctx.USLs.add(msg);
+    }
+    else {
+        window.postMessage(new Set([msg]));
+    }
 }
