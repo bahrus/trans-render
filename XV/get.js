@@ -19,11 +19,18 @@ export async function get(usl) {
             ctxObj = await dbObj.getProperty(propName);
             break;
         case 'localStorage':
-        case 'sessionStorage':
+        case 'sessionStorage': {
             const { get } = await import('./Storage.js');
             const [key] = uspParts;
             ctxObj = await get(key, protocol);
             break;
+        }
+        case 'locationHash': {
+            const { get } = await import('./hash.js');
+            const [key] = uspParts;
+            ctxObj = get(key);
+            break;
+        }
         default:
             throw 'NI';
     }
