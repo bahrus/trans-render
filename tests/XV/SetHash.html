@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Set Cookie</title>
+    <title>Set Hash</title>
 </head>
 <body>
     <div id=target></div>
@@ -17,7 +17,9 @@
         
         await set('locationHash://msg', 'goodbye');
         const test = await get('locationHash://msg');
-        console.log({test});
+        if(test === 'goodbye'){
+            target.setAttribute('mark', 'good');
+        }
     </script>
 </body>
 </html>
