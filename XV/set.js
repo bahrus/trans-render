@@ -32,6 +32,7 @@ export async function set(usl, val, ctx) {
             const { set } = await import('./hash.js');
             const [key] = uspParts;
             set(key, val);
+            break;
         }
         default:
             throw 'NI';

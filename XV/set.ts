@@ -35,6 +35,7 @@ export async function set(usl: USL, val: any, ctx?: SavingContext){
             const {set} = await import('./hash.js');
             const [key] = uspParts;
             set(key, val);
+            break;
         }
             
         default:
