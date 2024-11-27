@@ -88,6 +88,10 @@
     "./lib/bePropagating2.js": "./lib/bePropagating2.js",
     "./lib/birtualize.js": "./lib/birtualize.js",
     "./lib/brace.js": "./lib/brace.js",
+    "./lib/breakTie.js":{
+      "default": "./lib/breakTie.js",
+      "types": "./lib/breakTie.ts"
+    },
     "./lib/camelToLisp.js": "./lib/camelToLisp.js",
     "./lib/convert.js": "./lib/convert.js",
     "./lib/cpu.js": "./lib/cpu.js",
