@@ -18,8 +18,12 @@ export async function set(usl, val, ctx) {
         case 'sessionStorage': {
             const { set } = await import('./Storage.js');
             const [key] = uspParts;
-            const obj = { [accessorChain]: val };
-            await set(key, protocol, obj, ctx);
+            let val2 = val;
+            if (accessorChain !== undefined) {
+                val2 = { [accessorChain]: val };
+            }
+            //const obj = 
+            await set(key, protocol, val2, ctx);
             break;
         }
         case 'cookie': {
