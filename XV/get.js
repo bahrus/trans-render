@@ -25,6 +25,12 @@ export async function get(usl) {
             ctxObj = await get(key, protocol);
             break;
         }
+        case 'cookie': {
+            const { get } = await import('./Cookie.js');
+            const [key] = uspParts;
+            ctxObj = get(key);
+            break;
+        }
         case 'locationHash': {
             const { get } = await import('./hash.js');
             const [key] = uspParts;
