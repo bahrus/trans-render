@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.861",
+  "version": "0.0.862",
   "description": "Instantiate an HTML Template",
   "type": "module",
   "main": "trans-render.js",
@@ -88,7 +88,7 @@
     "./lib/bePropagating2.js": "./lib/bePropagating2.js",
     "./lib/birtualize.js": "./lib/birtualize.js",
     "./lib/brace.js": "./lib/brace.js",
-    "./lib/breakTie.js":{
+    "./lib/breakTie.js": {
       "default": "./lib/breakTie.js",
       "types": "./lib/breakTie.ts"
     },
