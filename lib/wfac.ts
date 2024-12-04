@@ -1,11 +1,14 @@
-export function wfac(el: HTMLElement, attributeName: string, test?: (s: string | null) => boolean){
-    //kind of limited, promises only seem to support one time only events.  I guess this is what RxJS is trying to do
+export function wfac(el: HTMLElement, attributeNameOrNames: string | Array<string>, test?: (mr: MutationRecord, el: HTMLElement, attributeNameOrNames: string | Array<string>) => boolean){
+    //kind of limited, promises only seem to support one time only events. 
+    const attrNames = Array.isArray(attributeNameOrNames) ? attributeNameOrNames : [attributeNameOrNames];
     return new Promise((resolve, reject) =>{
         const observer = new MutationObserver(mutations => {
             mutations.forEach(mutation => {
-                if(mutation.attributeName === attributeName){
+                const {attributeName} = mutation;
+                if(attributeName === null) return;
+                if(attrNames.includes(attributeName)){
                     if(test){
-                        if(test(el.getAttribute(attributeName))){
+                        if(test(mutation, el, attributeNameOrNames)){
                             observer.disconnect();
                             resolve(mutation);
                         }

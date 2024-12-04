@@ -141,7 +141,10 @@
     "./lib/tsChecker.js": "./lib/tsChecker.js",
     "./lib/upSearch.js": "./lib/upSearch.js",
     "./lib/upShadowSearch.js": "./lib/upShadowSearch.js",
-    "./lib/waitForAttributeChange.js": "./lib/waitForAttributeChange.js",
+    "./lib/waitForAttributeChange.js": {
+      "default": "./lib/waitForAttributeChange.js",
+      "types": "./lib/waitForAttributeChange.ts"
+    },
     "./lib/waitForEvent.js": {
       "default": "./lib/waitForEvent.js",
       "types": "./lib/waitForEvent.ts"
@@ -153,6 +156,10 @@
     "./weave.js": {
       "default": "./weave.js",
       "types": "./weave.ts"
+    },
+    "./lib/wfac.js": {
+      "default": "./lib/wfac.js",
+      "types": "./lib/wfac.ts"
     },
     "./lib/textWeave.js": {
       "default": "./lib/textWeave.js",
