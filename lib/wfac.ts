@@ -1,3 +1,4 @@
+//abbrev for wait for attribute change
 export function wfac(el: Element, attributeNameOrNames: string | Array<string>, test?: (mr: MutationRecord, el: Element, attributeNameOrNames: string | Array<string>) => boolean){
     //kind of limited, promises only seem to support one time only events. 
     const attrNames = Array.isArray(attributeNameOrNames) ? attributeNameOrNames : [attributeNameOrNames];
