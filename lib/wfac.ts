@@ -1,4 +1,4 @@
-export function wfac(el: HTMLElement, attributeNameOrNames: string | Array<string>, test?: (mr: MutationRecord, el: HTMLElement, attributeNameOrNames: string | Array<string>) => boolean){
+export function wfac(el: Element, attributeNameOrNames: string | Array<string>, test?: (mr: MutationRecord, el: Element, attributeNameOrNames: string | Array<string>) => boolean){
     //kind of limited, promises only seem to support one time only events. 
     const attrNames = Array.isArray(attributeNameOrNames) ? attributeNameOrNames : [attributeNameOrNames];
     return new Promise((resolve, reject) =>{
@@ -21,7 +21,8 @@ export function wfac(el: HTMLElement, attributeNameOrNames: string | Array<strin
         });
         const observerConfig = {
             attributes: true, 
-        };
+            attributeFilter: attrNames,
+        } as MutationObserverInit;
         observer.observe(el, observerConfig);
     });
 
