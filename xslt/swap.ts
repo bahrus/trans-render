@@ -1,3 +1,4 @@
+//TODO:  use :empty selector https://bsky.app/profile/konnorrogers.com/post/3lclacapbnc2x
 const tagsToSwap =  ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'];
 const tagsToRemove = ['script', 'noscript']; //TODO
 
