@@ -172,11 +172,11 @@ async function parseProp(
                 specifier.path = subProp;
                 break;
             case '~':
-                const split = (subProp[0] === '.' ? subProp.substring(1) : subProp).split('.');
+                const split = (subProp.startsWith('.?') ? subProp.substring(1) : subProp).split('.?');
                 specifier.prop = split[0];
                 const len = split.length;
                 if(len > 1){
-                    specifier.path = ((len > 2 || subProp.includes('|')) ? '.' : '') + split.slice(1).join('.');
+                    specifier.path = ((len > 2 || subProp.includes('|')) ? '.?' : '') + split.slice(1).join('.?');
                 }
               break;
         }

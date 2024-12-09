@@ -1,7 +1,7 @@
 import { assignGingerly } from './assignGingerly.js';
 
 export function setProp(obj: any, path: string, val: any){
-    const splitPath = path.split('.');
+    const splitPath = path.split('.?');
     const last = splitPath.pop()!;
     let context = obj;
     for(const token of splitPath){

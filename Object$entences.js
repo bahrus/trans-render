@@ -16,7 +16,7 @@ export class Object$entences extends Object$tring {
             this.objVal = objVal;
         }
         if (strVal) {
-            const statements = strVal.split('.')
+            const statements = strVal.split(reSentences)
                 .map(s => s.trim())
                 .filter(s => !s.startsWith('//'))
                 .map(s => s.replace(reNormalize, ' '))
@@ -59,3 +59,4 @@ export class Object$entences extends Object$tring {
     }
 }
 export const reNormalize = /\s+/g;
+export const reSentences = /(?<!\?\.)\./;
