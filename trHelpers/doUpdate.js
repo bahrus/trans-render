@@ -92,7 +92,7 @@ export async function doUpdate(transformer, matchingElement, uow) {
 }
 async function setPath(matchingElement, path, val) {
     switch (path[0]) {
-        case '.':
+        case '?':
             const { setProp } = await import('../lib/setProp.js');
             setProp(matchingElement, path, val);
             break;

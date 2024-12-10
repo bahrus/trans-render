@@ -89,7 +89,7 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
 
 async function setPath(matchingElement: Element, path: string, val: any){
     switch(path[0]){
-        case '.':
+        case '?':
             const {setProp} = await import('../lib/setProp.js');
             setProp(matchingElement, path, val);
             break;
