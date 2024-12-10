@@ -60,4 +60,4 @@ export class Object$entences extends Object$tring{
 }
 
 export const reNormalize = /\s+/g;
-export const reSentences = /(?<!\?\.)\./;
+export const reSentences = /(?<!\?)\./;
