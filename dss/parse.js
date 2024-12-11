@@ -61,117 +61,19 @@ export async function parse(s) {
         tailStart = result.tailStart;
     }
     if (tailStart < lenNonEventPart) {
-        await parseProp(nonEventPart, tailStart, specifier);
+        await parseNonEventPart(nonEventPart, tailStart, specifier);
     }
     return specifier;
 }
-async function parseProp(nonEventPart, tailStart, specifier) {
-    const s = specifier.self ? '$0' : nonEventPart.substring(tailStart, tailStart + 1);
-    const { scopeS, isModulo } = specifier;
-    tailStart += specifier.self ? 2 : 1;
-    const iPosOfSC = nonEventPart.indexOf(':', tailStart);
-    let propInference;
-    let subProp;
-    let subPropIsComplex = false;
-    if (iPosOfSC === -1) {
-        specifier.prop = propInference = nonEventPart.substring(tailStart);
+async function parseNonEventPart(nonEventPart, tailStart, specifier) {
+    const iPosOfQuestionPeriod = nonEventPart.indexOf('?.');
+    if (iPosOfQuestionPeriod === -1) {
+        await parseNonEventNonPath(nonEventPart, tailStart, specifier);
+        return;
     }
-    else {
-        specifier.prop = propInference = nonEventPart.substring(tailStart, iPosOfSC);
-        subProp = nonEventPart.substring(iPosOfSC + 1);
-        if (subProp.includes(':') || subProp.includes('|')) {
-            subProp = '.' + subProp.replaceAll(':', '.');
-        }
-    }
-    if (s !== ':') {
-        specifier.s = s;
-    }
-    switch (s) {
-        case '$0':
-            break;
-        case '#':
-            specifier.elS = `${propInference}`;
-            break;
-        case '|':
-        case '%':
-        case '-':
-        case '~':
-        case '/':
-            if (scopeS === undefined) {
-                if (specifier.dss === undefined)
-                    specifier.dss = '^';
-                specifier.scopeS = '[itemscope]';
-                specifier.rec = true;
-                specifier.rnf = true;
-            }
-            switch (s) {
-                case '/':
-                    specifier.elS = '*';
-                    specifier.host = true;
-                    break;
-                case '|':
-                    specifier.elS = `[itemprop~="${propInference}"]`;
-                    break;
-                case '%':
-                    specifier.elS = `[part~="${propInference}"]`;
-                    break;
-                case '-':
-                    {
-                        const { lispToCamel } = await import('../lib/lispToCamel.js');
-                        const ms = specifier.ms = propInference;
-                        specifier.prop = propInference = lispToCamel(propInference);
-                        specifier.elS = `[-${ms}]`;
-                    }
-                    break;
-                case '~': {
-                    specifier.host = true;
-                    specifier.hpf = propInference;
-                    const { camelToLisp } = await import('../lib/camelToLisp.js');
-                    specifier.el = specifier.elS = camelToLisp(propInference);
-                    delete specifier.prop;
-                    break;
-                }
-            }
-            break;
-        case '@':
-            specifier.elS = `[name="${propInference}"]`;
-            if (scopeS === undefined && !isModulo) {
-                if (specifier.dss === undefined)
-                    specifier.dss = '^';
-                specifier.scopeS = 'form';
-                specifier.rnf = true;
-            }
-            break;
-        // case '/':
-        //     specifier.host = true;
-        //     break; 
-        case ':':
-            //specifier.prop = propInference;
-            break;
-        default:
-            throw 'NI';
-    }
-    if (subProp !== undefined) {
-        switch (s) {
-            case '#':
-            case '%':
-            case '@':
-            case '-':
-            case '|':
-            case '/':
-            case '$0':
-                specifier.path = subProp;
-                break;
-            case '~':
-                const split = (subProp.startsWith('?.') ? subProp.substring(1) : subProp).split('?.');
-                specifier.prop = split[0];
-                const len = split.length;
-                if (len > 1) {
-                    specifier.path = ((len > 2 || subProp.includes('|')) ? '?.' : '') + split.slice(1).join('?.');
-                }
-                break;
-        }
-    }
+    const path = specifier.path = nonEventPart.substring(iPosOfQuestionPeriod);
+    specifier.prop = path.split('?.').at(-1);
+    await parseNonEventNonPath(nonEventPart.substring(0, iPosOfQuestionPeriod), tailStart, specifier);
 }
 function parseScope(nonEventPart, tailStart, specifier) {
     const openingSymbol = nonEventPart.substring(tailStart, tailStart + 1);
@@ -199,4 +101,109 @@ function parseScope(nonEventPart, tailStart, specifier) {
     return {
         tailStart: iPosOfClosedBrace + 1
     };
+}
+async function parseNonEventNonPath(nonEventNonPathPart, tailStart, specifier) {
+    const sigil = specifier.self ? '$0' : nonEventNonPathPart.substring(tailStart, tailStart + 1);
+    specifier.s = sigil;
+    if (sigil === '$0') {
+        if (specifier.prop === undefined)
+            specifier.prop = '$0';
+        return;
+    }
+    const { scopeS, isModulo } = specifier;
+    tailStart += specifier.self ? 2 : 1;
+    //const propAndPath = nonEventPart.substring(tailStart);
+    let propInference = nonEventNonPathPart.substring(tailStart);
+    if (specifier.prop === undefined) {
+        specifier.prop = propInference;
+        if (sigil !== ':') {
+            specifier.s = sigil;
+        }
+        switch (sigil) {
+            case '$0':
+                break;
+            case '#':
+                specifier.elS = `${propInference}`;
+                break;
+            case '|':
+            case '%':
+            case '-':
+            case '~':
+            case '/':
+                if (scopeS === undefined) {
+                    if (specifier.dss === undefined)
+                        specifier.dss = '^';
+                    specifier.scopeS = '[itemscope]';
+                    specifier.rec = true;
+                    specifier.rnf = true;
+                }
+                switch (sigil) {
+                    case '/':
+                        specifier.elS = '*';
+                        specifier.host = true;
+                        break;
+                    case '|':
+                        specifier.elS = `[itemprop~="${propInference}"]`;
+                        break;
+                    case '%':
+                        specifier.elS = `[part~="${propInference}"]`;
+                        break;
+                    case '-':
+                        {
+                            const { lispToCamel } = await import('../lib/lispToCamel.js');
+                            const ms = specifier.ms = propInference;
+                            specifier.prop = propInference = lispToCamel(propInference);
+                            specifier.elS = `[-${ms}]`;
+                        }
+                        break;
+                    case '~': {
+                        specifier.host = true;
+                        specifier.hpf = propInference;
+                        const { camelToLisp } = await import('../lib/camelToLisp.js');
+                        specifier.el = specifier.elS = camelToLisp(propInference);
+                        delete specifier.prop;
+                        break;
+                    }
+                }
+                break;
+            case '@':
+                specifier.elS = `[name="${propInference}"]`;
+                if (scopeS === undefined && !isModulo) {
+                    if (specifier.dss === undefined)
+                        specifier.dss = '^';
+                    specifier.scopeS = 'form';
+                    specifier.rnf = true;
+                }
+                break;
+            // case '/':
+            //     specifier.host = true;
+            //     break; 
+            case ':':
+                //specifier.prop = propInference;
+                break;
+            default:
+                throw 'NI';
+        }
+        // if(subProp !== undefined){
+        //     switch(sigil){
+        //         case '#':
+        //         case '%':
+        //         case '@':
+        //         case '-':
+        //         case '|':
+        //         case '/':
+        //         case '$0':
+        //             specifier.path = subProp;
+        //             break;
+        //         case '~':
+        //             const split = (subProp.startsWith('?.') ? subProp.substring(1) : subProp).split('?.');
+        //             specifier.prop = split[0];
+        //             const len = split.length;
+        //             if(len > 1){
+        //                 specifier.path = ((len > 2 || subProp.includes('|')) ? '?.' : '') + split.slice(1).join('?.');
+        //             }
+        //           break;
+        //     }
+        // }
+    }
 }

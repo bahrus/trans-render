@@ -1,3 +1,4 @@
+import { unsubscribe } from "../lib/subscribe";
 import { Modulo, Sigils, Specifier } from "../ts-refs/trans-render/dss/types";
 
 export async function parse(s: string) : Promise<Specifier>{
@@ -67,37 +68,79 @@ export async function parse(s: string) : Promise<Specifier>{
         tailStart = result.tailStart;
     }
     if(tailStart < lenNonEventPart){
-        await parseProp(nonEventPart, tailStart, specifier);
+        await parseNonEventPart(nonEventPart, tailStart, specifier);
 
     }
     return specifier;
 }
 
-async function parseProp(
+async function parseNonEventPart(
     nonEventPart: string, tailStart: number, specifier: Specifier
 ){
+    const iPosOfQuestionPeriod = nonEventPart.indexOf('?.');
+    if(iPosOfQuestionPeriod === -1){
+        await parseNonEventNonPath(nonEventPart, tailStart, specifier);
+        return;
+    }
+    
+    const path = specifier.path = nonEventPart.substring(iPosOfQuestionPeriod);
+    specifier.prop = path.split('?.').at(-1);
+    await parseNonEventNonPath(nonEventPart.substring(0, iPosOfQuestionPeriod), tailStart, specifier);
+    
+}
 
-    const s = specifier.self ? '$0' : nonEventPart.substring(tailStart, tailStart + 1) as Sigils | ':';
+function parseScope(
+    nonEventPart: string, tailStart: number, specifier: Specifier
+) : {tailStart: number}{
+    const openingSymbol = nonEventPart.substring(tailStart, tailStart + 1);
+    let iPosOfClosedBrace: number;
+    switch(openingSymbol){
+        case '{':
+            iPosOfClosedBrace = nonEventPart.indexOf('}', tailStart + 2);
+            if(iPosOfClosedBrace === -1) throw 'PE'; // parsing error
+            let scopeS = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace);
+            if(scopeS.startsWith('(') && scopeS.endsWith(')')){
+                specifier.isiss = true;
+                scopeS = scopeS.substring(1, scopeS.length - 1);
+            }
+            specifier.scopeS = scopeS;
+            break;
+        case '[':
+            iPosOfClosedBrace = nonEventPart.indexOf(']', tailStart + 2);
+            specifier.isModulo = true;
+            specifier.modulo = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace).toLowerCase() as Modulo;
+            break;
+        default:
+            throw 'PE'; //Parsing error
+    }
+    
+    return {
+        tailStart: iPosOfClosedBrace + 1
+    }
+}
+
+async function parseNonEventNonPath(
+    nonEventNonPathPart: string, 
+    tailStart: number, 
+    specifier: Specifier,
+){
+    const sigil = specifier.self ? '$0' : nonEventNonPathPart.substring(tailStart, tailStart + 1) as Sigils;
+    specifier.s = sigil;
+    if(sigil === '$0'){
+        if(specifier.prop === undefined) specifier.prop = '$0';
+        return;
+    }
     const {scopeS, isModulo} = specifier;
     tailStart += specifier.self ? 2 : 1;
-    const iPosOfSC = nonEventPart.indexOf(':', tailStart);
-    let propInference: string;
-    let subProp: string | undefined;
-    let subPropIsComplex = false;
-    if(iPosOfSC === -1){
-        specifier.prop = propInference = nonEventPart.substring(tailStart);
-    }else{
-        specifier.prop = propInference = nonEventPart.substring(tailStart, iPosOfSC);
-        subProp = nonEventPart.substring(iPosOfSC + 1);
-        if(subProp.includes(':') || subProp.includes('|')){
-            subProp = '.' + subProp.replaceAll(':', '.');
-        }
-        
+    //const propAndPath = nonEventPart.substring(tailStart);
+
+    let propInference = nonEventNonPathPart.substring(tailStart);
+    if(specifier.prop === undefined) {
+        specifier.prop = propInference;
+    if(sigil !== ':'){
+        specifier.s = sigil;
     }
-    if(s !== ':'){
-        specifier.s = s;
-    }
-    switch(s){
+    switch(sigil){
         case '$0':
             break;
         case '#':
@@ -114,7 +157,7 @@ async function parseProp(
                 specifier.rec = true;
                 specifier.rnf = true;
             }
-            switch(s){
+            switch(sigil){
                 case '/':
                     specifier.elS = '*';
                     specifier.host = true;
@@ -160,58 +203,26 @@ async function parseProp(
             throw 'NI';
 
     }
-    if(subProp !== undefined){
-        switch(s){
-            case '#':
-            case '%':
-            case '@':
-            case '-':
-            case '|':
-            case '/':
-            case '$0':
-                specifier.path = subProp;
-                break;
-            case '~':
-                const split = (subProp.startsWith('?.') ? subProp.substring(1) : subProp).split('?.');
-                specifier.prop = split[0];
-                const len = split.length;
-                if(len > 1){
-                    specifier.path = ((len > 2 || subProp.includes('|')) ? '?.' : '') + split.slice(1).join('?.');
-                }
-              break;
-        }
-    }
+    // if(subProp !== undefined){
+    //     switch(sigil){
+    //         case '#':
+    //         case '%':
+    //         case '@':
+    //         case '-':
+    //         case '|':
+    //         case '/':
+    //         case '$0':
+    //             specifier.path = subProp;
+    //             break;
+    //         case '~':
+    //             const split = (subProp.startsWith('?.') ? subProp.substring(1) : subProp).split('?.');
+    //             specifier.prop = split[0];
+    //             const len = split.length;
+    //             if(len > 1){
+    //                 specifier.path = ((len > 2 || subProp.includes('|')) ? '?.' : '') + split.slice(1).join('?.');
+    //             }
+    //           break;
+    //     }
+    // }
 
-    
-    
-}
-
-function parseScope(
-    nonEventPart: string, tailStart: number, specifier: Specifier
-) : {tailStart: number}{
-    const openingSymbol = nonEventPart.substring(tailStart, tailStart + 1);
-    let iPosOfClosedBrace: number;
-    switch(openingSymbol){
-        case '{':
-            iPosOfClosedBrace = nonEventPart.indexOf('}', tailStart + 2);
-            if(iPosOfClosedBrace === -1) throw 'PE'; // parsing error
-            let scopeS = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace);
-            if(scopeS.startsWith('(') && scopeS.endsWith(')')){
-                specifier.isiss = true;
-                scopeS = scopeS.substring(1, scopeS.length - 1);
-            }
-            specifier.scopeS = scopeS;
-            break;
-        case '[':
-            iPosOfClosedBrace = nonEventPart.indexOf(']', tailStart + 2);
-            specifier.isModulo = true;
-            specifier.modulo = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace).toLowerCase() as Modulo;
-            break;
-        default:
-            throw 'PE'; //Parsing error
-    }
-    
-    return {
-        tailStart: iPosOfClosedBrace + 1
-    }
 }
