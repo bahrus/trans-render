@@ -30,9 +30,9 @@ export class StOut<TProp=any> extends EventTarget implements
         if(propToAbsorb !== undefined){
             if(propToAbsorb.startsWith('?.')){
                 //TODO -- less string manipulation
-                const dotDelimitedPath = propToAbsorb.replaceAll('?.', '.');
+                //const dotDelimitedPath = propToAbsorb.replaceAll('?.', '.');
                 const {getVal} = await import('../../lib/getVal.js');
-                val = await getVal({host: el}, dotDelimitedPath);
+                val = await getVal({host: el}, propToAbsorb);
             }else{
                 val = (<any>el)[propToAbsorb!];
             }

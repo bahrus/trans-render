@@ -28,9 +28,9 @@ export class StOut extends EventTarget {
         if (propToAbsorb !== undefined) {
             if (propToAbsorb.startsWith('?.')) {
                 //TODO -- less string manipulation
-                const dotDelimitedPath = propToAbsorb.replaceAll('?.', '.');
+                //const dotDelimitedPath = propToAbsorb.replaceAll('?.', '.');
                 const { getVal } = await import('../../lib/getVal.js');
-                val = await getVal({ host: el }, dotDelimitedPath);
+                val = await getVal({ host: el }, propToAbsorb);
             }
             else {
                 val = el[propToAbsorb];

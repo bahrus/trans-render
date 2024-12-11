@@ -71,8 +71,11 @@ async function parseNonEventPart(nonEventPart, tailStart, specifier) {
         await parseNonEventNonPath(nonEventPart, tailStart, specifier);
         return;
     }
-    const path = specifier.path = nonEventPart.substring(iPosOfQuestionPeriod);
-    specifier.prop = path.split('?.').at(-1);
+    const fullPath = nonEventPart.substring(iPosOfQuestionPeriod);
+    //optimize?
+    const split = fullPath.split('?.');
+    specifier.prop = split.at(-1);
+    specifier.path = split.length === 1 ? specifier.prop : fullPath;
     await parseNonEventNonPath(nonEventPart.substring(0, iPosOfQuestionPeriod), tailStart, specifier);
 }
 function parseScope(nonEventPart, tailStart, specifier) {
