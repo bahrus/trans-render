@@ -39,8 +39,9 @@ export class Newish extends EventTarget{
                 enumerable: true,
                 configurable: true,
             });
+            this.#assignGingerly();
         }
-
+        
         this.isResolved = true;
         this.dispatchEvent(new Event('resolved'));
     }
