@@ -106,7 +106,7 @@ function parseScope(nonEventPart, tailStart, specifier) {
     };
 }
 async function parseNonEventNonPath(nonEventNonPathPart, tailStart, specifier) {
-    const sigil = specifier.self ? '$0' : nonEventNonPathPart.substring(tailStart, tailStart + 1);
+    const sigil = (specifier.self ? '$0' : nonEventNonPathPart.substring(tailStart, tailStart + 1));
     specifier.s = sigil;
     if (sigil === '$0') {
         if (specifier.prop === undefined)
@@ -119,94 +119,94 @@ async function parseNonEventNonPath(nonEventNonPathPart, tailStart, specifier) {
     let propInference = nonEventNonPathPart.substring(tailStart);
     if (specifier.prop === undefined) {
         specifier.prop = propInference;
-        if (sigil !== ':') {
-            specifier.s = sigil;
-        }
-        switch (sigil) {
-            case '$0':
-                break;
-            case '#':
-                specifier.elS = `${propInference}`;
-                break;
-            case '|':
-            case '%':
-            case '-':
-            case '~':
-            case '/':
-                if (scopeS === undefined) {
-                    if (specifier.dss === undefined)
-                        specifier.dss = '^';
-                    specifier.scopeS = '[itemscope]';
-                    specifier.rec = true;
-                    specifier.rnf = true;
-                }
-                switch (sigil) {
-                    case '/':
-                        specifier.elS = '*';
-                        specifier.host = true;
-                        break;
-                    case '|':
-                        specifier.elS = `[itemprop~="${propInference}"]`;
-                        break;
-                    case '%':
-                        specifier.elS = `[part~="${propInference}"]`;
-                        break;
-                    case '-':
-                        {
-                            const { lispToCamel } = await import('../lib/lispToCamel.js');
-                            const ms = specifier.ms = propInference;
-                            specifier.prop = propInference = lispToCamel(propInference);
-                            specifier.elS = `[-${ms}]`;
-                        }
-                        break;
-                    case '~': {
-                        specifier.host = true;
-                        specifier.hpf = propInference;
-                        const { camelToLisp } = await import('../lib/camelToLisp.js');
-                        specifier.el = specifier.elS = camelToLisp(propInference);
-                        delete specifier.prop;
-                        break;
-                    }
-                }
-                break;
-            case '@':
-                specifier.elS = `[name="${propInference}"]`;
-                if (scopeS === undefined && !isModulo) {
-                    if (specifier.dss === undefined)
-                        specifier.dss = '^';
-                    specifier.scopeS = 'form';
-                    specifier.rnf = true;
-                }
-                break;
-            // case '/':
-            //     specifier.host = true;
-            //     break; 
-            case ':':
-                //specifier.prop = propInference;
-                break;
-            default:
-                throw 'NI';
-        }
-        // if(subProp !== undefined){
-        //     switch(sigil){
-        //         case '#':
-        //         case '%':
-        //         case '@':
-        //         case '-':
-        //         case '|':
-        //         case '/':
-        //         case '$0':
-        //             specifier.path = subProp;
-        //             break;
-        //         case '~':
-        //             const split = (subProp.startsWith('?.') ? subProp.substring(1) : subProp).split('?.');
-        //             specifier.prop = split[0];
-        //             const len = split.length;
-        //             if(len > 1){
-        //                 specifier.path = ((len > 2 || subProp.includes('|')) ? '?.' : '') + split.slice(1).join('?.');
-        //             }
-        //           break;
-        //     }
-        // }
     }
+    // if(sigil !== ':'){
+    //     specifier.s = sigil;
+    // }
+    switch (sigil) {
+        case '$0':
+            break;
+        case '#':
+            specifier.elS = `${propInference}`;
+            break;
+        case '|':
+        case '%':
+        case '-':
+        case '~':
+        case '/':
+            if (scopeS === undefined) {
+                if (specifier.dss === undefined)
+                    specifier.dss = '^';
+                specifier.scopeS = '[itemscope]';
+                specifier.rec = true;
+                specifier.rnf = true;
+            }
+            switch (sigil) {
+                case '/':
+                    specifier.elS = '*';
+                    specifier.host = true;
+                    break;
+                case '|':
+                    specifier.elS = `[itemprop~="${propInference}"]`;
+                    break;
+                case '%':
+                    specifier.elS = `[part~="${propInference}"]`;
+                    break;
+                case '-':
+                    {
+                        const { lispToCamel } = await import('../lib/lispToCamel.js');
+                        const ms = specifier.ms = propInference;
+                        specifier.prop = propInference = lispToCamel(propInference);
+                        specifier.elS = `[-${ms}]`;
+                    }
+                    break;
+                case '~': {
+                    specifier.host = true;
+                    specifier.hpf = propInference;
+                    const { camelToLisp } = await import('../lib/camelToLisp.js');
+                    specifier.el = specifier.elS = camelToLisp(propInference);
+                    delete specifier.prop;
+                    break;
+                }
+            }
+            break;
+        case '@':
+            specifier.elS = `[name="${propInference}"]`;
+            if (scopeS === undefined && !isModulo) {
+                if (specifier.dss === undefined)
+                    specifier.dss = '^';
+                specifier.scopeS = 'form';
+                specifier.rnf = true;
+            }
+            break;
+        // case '/':
+        //     specifier.host = true;
+        //     break; 
+        // case ':':
+        //     //specifier.prop = propInference;
+        //     break;
+        default:
+            throw 'NI';
+    }
+    // if(subProp !== undefined){
+    //     switch(sigil){
+    //         case '#':
+    //         case '%':
+    //         case '@':
+    //         case '-':
+    //         case '|':
+    //         case '/':
+    //         case '$0':
+    //             specifier.path = subProp;
+    //             break;
+    //         case '~':
+    //             const split = (subProp.startsWith('?.') ? subProp.substring(1) : subProp).split('?.');
+    //             specifier.prop = split[0];
+    //             const len = split.length;
+    //             if(len > 1){
+    //                 specifier.path = ((len > 2 || subProp.includes('|')) ? '?.' : '') + split.slice(1).join('?.');
+    //             }
+    //           break;
+    //     }
+    // }
 }

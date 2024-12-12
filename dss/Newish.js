@@ -14,8 +14,8 @@ export class Newish extends EventTarget {
         //check to make sure it didn't already get attached while waiting
         if (initPropVals === undefined || customElements.getName(initPropVals.constructor) !== itemscope) {
             if (enhancedElement instanceof HTMLElement) {
-                if (enhancedElement.dataset.hostInitProps) {
-                    const parsedHostProps = JSON.parse(enhancedElement.dataset.hostInitProps);
+                if (enhancedElement.dataset.ish) {
+                    const parsedHostProps = JSON.parse(enhancedElement.dataset.ish);
                     this.queue.push(parsedHostProps);
                 }
             }

@@ -126,9 +126,9 @@ function parseScope(
 async function parseNonEventNonPath(
     nonEventNonPathPart: string, 
     tailStart: number, 
-    specifier: Specifier,
+    specifier: Specifier
 ){
-    const sigil = specifier.self ? '$0' : nonEventNonPathPart.substring(tailStart, tailStart + 1) as Sigils;
+    const sigil = (specifier.self ? '$0' : nonEventNonPathPart.substring(tailStart, tailStart + 1)) as Sigils;
     specifier.s = sigil;
     if(sigil === '$0'){
         if(specifier.prop === undefined) specifier.prop = '$0';
@@ -141,9 +141,10 @@ async function parseNonEventNonPath(
     let propInference = nonEventNonPathPart.substring(tailStart);
     if(specifier.prop === undefined) {
         specifier.prop = propInference;
-    if(sigil !== ':'){
-        specifier.s = sigil;
     }
+    // if(sigil !== ':'){
+    //     specifier.s = sigil;
+    // }
     switch(sigil){
         case '$0':
             break;
@@ -200,9 +201,9 @@ async function parseNonEventNonPath(
         // case '/':
         //     specifier.host = true;
         //     break; 
-        case ':':
-            //specifier.prop = propInference;
-            break;
+        // case ':':
+        //     //specifier.prop = propInference;
+        //     break;
         default:
             throw 'NI';
 
