@@ -79,7 +79,6 @@ export class StOut<TProp=any> extends EventTarget implements
             }else{
                 const {beRR, props} = await import('../../froop/beRR.js');
                 const ret = beRR(sourceEl);
-                console.log({ret});
                 if(ret){
                     ao.isRAE = true;
                     
