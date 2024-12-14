@@ -96,7 +96,7 @@ export class RoundAbout{
             const infractionLookup = this.#infractionsLookup;
             for(const positraction of positractions){
                 const {
-                    ifKeyIn, ifAllOf, ifAtLeastOneOf, ifEquals, ifNoneOf,
+                    ifKeyIn, ifAllOf, ifAtLeastOneOf, ifEquals, ifNoneOf, ifNotAllOf,
                     pass, do: d, 
                     assignTo, debug} = positraction;
                 const passR = pass || ifKeyIn;
@@ -150,6 +150,7 @@ export class RoundAbout{
                 const check: SetLogicOps = {debug}
                 if(ifAllOf) check.ifAllOf = this.#toSet(ifAllOf);
                 if(ifAtLeastOneOf) check.ifAtLeastOneOf = this.#toSet(ifAtLeastOneOf);
+                if(ifNotAllOf) check.ifNotAllOf = this.#toSet(ifNotAllOf);
                 if(ifEquals) check.ifEquals = this.#toSet(ifEquals);
                 if(ifNoneOf) check.ifNoneOf = this.#toSet(ifNoneOf);
                 if(ifKeyIn) check.ifKeyIn = this.#toSet(ifKeyIn);
@@ -308,8 +309,10 @@ export class RoundAbout{
         let keys = new Set<string>()
         for(const checkKey in checks){
             const check = checks[checkKey]!;
-            const {ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf} = check;
-            keys = new Set([...keys, ...ifAllOf || [], ...ifAtLeastOneOf || [], ...ifEquals || [], ...ifKeyIn || [], ...ifNoneOf || []]);
+            const {ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf, ifNotAllOf} = check;
+            keys = new Set(
+                [...keys, ...ifAllOf || [], ...ifAtLeastOneOf || [], ...ifEquals || [], ...ifKeyIn || [], ...ifNoneOf || [], ...ifNotAllOf || []]
+            );
         }
         const controllers = this.#controllers;
         for(const key of keys){
@@ -387,7 +390,7 @@ export class RoundAbout{
     }
 
     async #checkSubscriptions(check: SetLogicOps, bus: Set<string>): Promise<boolean>{
-        const {ifAllOf, ifKeyIn, ifAtLeastOneOf, ifEquals, ifNoneOf} = check;
+        const {ifAllOf, ifKeyIn, ifAtLeastOneOf, ifEquals, ifNoneOf, ifNotAllOf} = check;
         if(ifAllOf !== undefined){
             if(!bus.isDisjointFrom(ifAllOf)) return true;
         }
@@ -396,6 +399,9 @@ export class RoundAbout{
         }
         if(ifAtLeastOneOf !== undefined){
             if(!bus.isDisjointFrom(ifAtLeastOneOf)) return true;
+        }
+        if(ifNotAllOf !== undefined){
+            if(!bus.isDisjointFrom(ifNotAllOf)) return true;
         }
         if(ifEquals !== undefined){
             if(!bus.isDisjointFrom(ifEquals)) return true;
@@ -409,7 +415,7 @@ export class RoundAbout{
 
     
     async #doChecks(check: SetLogicOps, initCheck: boolean){
-        const {ifAllOf, ifKeyIn, ifAtLeastOneOf, ifEquals, ifNoneOf, debug} = check;
+        const {ifAllOf, ifKeyIn, ifAtLeastOneOf, ifNotAllOf, ifEquals, ifNoneOf, debug} = check;
         if(debug) debugger;
         const {options} = this;
         const {vm} = options;
@@ -455,6 +461,16 @@ export class RoundAbout{
             for(const prop of ifNoneOf){
                 if((vm as any)[prop]) return false;
             }
+        }
+        if(ifNotAllOf !== undefined){
+            let passed = false;
+            for(const prop of ifNotAllOf){
+                if(!(vm as any)[prop]){
+                    passed = true;
+                    break;
+                }
+            }
+            if(!passed) return false;
         }
         return true;
     }

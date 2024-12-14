@@ -98,7 +98,7 @@ export class RoundAbout {
             const { vm } = options;
             const infractionLookup = this.#infractionsLookup;
             for (const positraction of positractions) {
-                const { ifKeyIn, ifAllOf, ifAtLeastOneOf, ifEquals, ifNoneOf, pass, do: d, assignTo, debug } = positraction;
+                const { ifKeyIn, ifAllOf, ifAtLeastOneOf, ifEquals, ifNoneOf, ifNotAllOf, pass, do: d, assignTo, debug } = positraction;
                 const passR = pass || ifKeyIn;
                 if (passR === undefined)
                     throw 500;
@@ -155,6 +155,8 @@ export class RoundAbout {
                     check.ifAllOf = this.#toSet(ifAllOf);
                 if (ifAtLeastOneOf)
                     check.ifAtLeastOneOf = this.#toSet(ifAtLeastOneOf);
+                if (ifNotAllOf)
+                    check.ifNotAllOf = this.#toSet(ifNotAllOf);
                 if (ifEquals)
                     check.ifEquals = this.#toSet(ifEquals);
                 if (ifNoneOf)
@@ -313,8 +315,8 @@ export class RoundAbout {
         let keys = new Set();
         for (const checkKey in checks) {
             const check = checks[checkKey];
-            const { ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf } = check;
-            keys = new Set([...keys, ...ifAllOf || [], ...ifAtLeastOneOf || [], ...ifEquals || [], ...ifKeyIn || [], ...ifNoneOf || []]);
+            const { ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf, ifNotAllOf } = check;
+            keys = new Set([...keys, ...ifAllOf || [], ...ifAtLeastOneOf || [], ...ifEquals || [], ...ifKeyIn || [], ...ifNoneOf || [], ...ifNotAllOf || []]);
         }
         const controllers = this.#controllers;
         for (const key of keys) {
@@ -388,7 +390,7 @@ export class RoundAbout {
         }
     }
     async #checkSubscriptions(check, bus) {
-        const { ifAllOf, ifKeyIn, ifAtLeastOneOf, ifEquals, ifNoneOf } = check;
+        const { ifAllOf, ifKeyIn, ifAtLeastOneOf, ifEquals, ifNoneOf, ifNotAllOf } = check;
         if (ifAllOf !== undefined) {
             if (!bus.isDisjointFrom(ifAllOf))
                 return true;
@@ -399,6 +401,10 @@ export class RoundAbout {
         }
         if (ifAtLeastOneOf !== undefined) {
             if (!bus.isDisjointFrom(ifAtLeastOneOf))
+                return true;
+        }
+        if (ifNotAllOf !== undefined) {
+            if (!bus.isDisjointFrom(ifNotAllOf))
                 return true;
         }
         if (ifEquals !== undefined) {
@@ -412,7 +418,7 @@ export class RoundAbout {
         return false;
     }
     async #doChecks(check, initCheck) {
-        const { ifAllOf, ifKeyIn, ifAtLeastOneOf, ifEquals, ifNoneOf, debug } = check;
+        const { ifAllOf, ifKeyIn, ifAtLeastOneOf, ifNotAllOf, ifEquals, ifNoneOf, debug } = check;
         if (debug)
             debugger;
         const { options } = this;
@@ -465,6 +471,17 @@ export class RoundAbout {
                 if (vm[prop])
                     return false;
             }
+        }
+        if (ifNotAllOf !== undefined) {
+            let passed = false;
+            for (const prop of ifNotAllOf) {
+                if (!vm[prop]) {
+                    passed = true;
+                    break;
+                }
+            }
+            if (!passed)
+                return false;
         }
         return true;
     }
