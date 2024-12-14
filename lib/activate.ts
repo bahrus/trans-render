@@ -13,5 +13,6 @@ export function activate(jsExpr: string){
     script.innerHTML = JSExpr;
     document.head.appendChild(script);
     const handler = (<any>script)[guid] as (e: Event) => void;
+    cache.set(jsExpr, handler);
     return handler;
 }
