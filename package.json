@@ -82,7 +82,14 @@
       "default": "./froop/roundabout.js",
       "types": "./froop/roundabout.ts"
     },
-    "./lib/arr.js": "./lib/arr.js",
+    "./lib/activate.js": {
+      "default": "./lib/activate.js",
+      "types": "./lib/activate.ts"
+    },
+    "./lib/arr.js": {
+      "default": "./lib/arr.js",
+      "types": "./lib/arr.ts"
+    },
     "./lib/beBeckoned.js": "./lib/beBeckoned.js",
     "./lib/bePropagating.js": "./lib/bePropagating.js",
     "./lib/bePropagating2.js": "./lib/bePropagating2.js",
