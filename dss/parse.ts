@@ -6,7 +6,7 @@ export async function parse(s: string) : Promise<Specifier>{
     const specifier: Specifier = {};
     const iPosOfAs = s.lastIndexOf(' as ');
     if(iPosOfAs > -1){
-        specifier.as = s.substring(iPosOfAs + 4).trimEnd() as 'String';
+        specifier.as = s.substring(iPosOfAs + 4).trimEnd() as 'string';
         s = s.substring(0, iPosOfAs);
     }
     const eventSplit = s.split('::');
@@ -146,7 +146,7 @@ async function parseNonEventNonPath(
     //     specifier.s = sigil;
     // }
     switch(sigil){
-        case '$0':
+        case '$0' as Sigils:
             break;
         case '#':
             specifier.elS = `${propInference}`;

@@ -21,7 +21,7 @@ export class DSSArray implements IObject$tring{
                 continue;
             }
             if(lastDSS !== undefined && inAsMode){
-                lastDSS.as = dss as 'Number';
+                lastDSS.as = dss as 'number';
                 inAsMode = false;
                 continue;
             }
