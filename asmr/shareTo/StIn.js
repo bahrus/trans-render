@@ -51,7 +51,12 @@ export class StdIn {
             return;
         }
         this.pureValue = val;
-        const { valueType, displayProp, valueProp, path } = this.so;
+        const { valueType, displayProp, valueProp, path, allowUnsafe } = this.so;
+        if (!allowUnsafe) {
+            if (displayProp?.endsWith('HTML') || valueProp?.endsWith('HTML')) {
+                throw 403;
+            }
+        }
         const { localName } = el;
         if (displayProp !== undefined) {
             switch (typeof val) {
