@@ -6,17 +6,32 @@
     <title>Document</title>
 </head>
 <body>
-    <my-el>
-        <template shadowrootmode=open></template>
-    </my-el>
     <script>
-        class MyEl extends HTMLElement{
-            constructor(){
-                super();
-                console.log(this.shadowRoot)
-            }
-        }
-        customElements.define('my-el', MyEl);
+        const regex = /(?<!\?\.)(?<!```).(?!```)/gs;
+
+// Function to split the text
+function splitText(input) {
+    return input.split(regex);
+}
+
+// Example text
+const text = `
+This is a sentence.
+This is another sentence?. This should not split?.
+Here's the final sentence.
+\`\`\`
+This is a period inside triple ticks.
+Should be ignored.
+\`\`\`
+End of document.
+`;
+
+// Split the text based on the regex
+const splitResult = splitText(text);
+
+// Output the split result
+console.log(splitResult);
+
     </script>
 </body>
 </html>
