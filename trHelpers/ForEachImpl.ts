@@ -19,10 +19,25 @@ export class ForEachImpl implements ForEachInterface{
     }
     async init(){
         const config = this.#config;
-        const {clone} = config;
+        const {clone, wi} = config;
         const matchingElement = this.#ref.deref();
         if(matchingElement === undefined) return;
-        const elToClone = matchingElement.querySelector(clone || 'template');
+        const cssQry = clone || 'template';
+        let elToClone: Element | null = null;
+        //let rootNode = matchingElement;
+        if(wi !== undefined){
+            switch(wi){
+                case 'rootNode':
+                    elToClone = (matchingElement.getRootNode() as DocumentFragment).querySelector(cssQry)!;
+                    break;
+                case 'upShadowHost':
+                    elToClone= (await import('../lib/upShadowSearch.js')).upShadowSearch(matchingElement, cssQry);
+                    break;
+                default:
+                    elToClone = matchingElement.querySelector(cssQry);
+            }
+            
+        }
         if(elToClone instanceof HTMLTemplateElement){
             this.#templ = elToClone;
         }else{
