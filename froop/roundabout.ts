@@ -60,13 +60,14 @@ export class RoundAbout{
             const val = actions[key];
             if(val === undefined) continue;
             
-            const {ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf, debug, delay} = val;
+            const {ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf, ifNotAllOf, debug, delay} = val;
             const check: SetLogicOps = {delay, debug};
             if(ifAllOf) check.ifAllOf = this.#toSet(ifAllOf);
             if(ifAtLeastOneOf) check.ifAtLeastOneOf = this.#toSet(ifAtLeastOneOf);
             if(ifEquals) check.ifEquals = this.#toSet(ifEquals);
             if(ifNoneOf) check.ifNoneOf = this.#toSet(ifNoneOf);
             if(ifKeyIn) check.ifKeyIn = this.#toSet(ifKeyIn);
+            if(ifNotAllOf) check.ifNotAllOf = this.#toSet(ifNotAllOf);
             checks[key] = check;
         }
 

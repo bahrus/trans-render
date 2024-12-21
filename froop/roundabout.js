@@ -59,7 +59,7 @@ export class RoundAbout {
             const val = actions[key];
             if (val === undefined)
                 continue;
-            const { ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf, debug, delay } = val;
+            const { ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf, ifNotAllOf, debug, delay } = val;
             const check = { delay, debug };
             if (ifAllOf)
                 check.ifAllOf = this.#toSet(ifAllOf);
@@ -71,6 +71,8 @@ export class RoundAbout {
                 check.ifNoneOf = this.#toSet(ifNoneOf);
             if (ifKeyIn)
                 check.ifKeyIn = this.#toSet(ifKeyIn);
+            if (ifNotAllOf)
+                check.ifNotAllOf = this.#toSet(ifNotAllOf);
             checks[key] = check;
         }
         if (handlers !== undefined) {
