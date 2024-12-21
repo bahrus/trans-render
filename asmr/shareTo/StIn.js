@@ -36,7 +36,9 @@ export class StdIn {
                             displayProp = 'ariaValueText';
                             break;
                         default:
-                            displayProp = 'textContent';
+                            if (valueProp === undefined) {
+                                displayProp = 'textContent';
+                            }
                             break;
                     }
             }

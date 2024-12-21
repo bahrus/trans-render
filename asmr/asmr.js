@@ -72,7 +72,7 @@ export class ASMR {
     }
     static getValueProp(el, valueType) {
         const { localName } = el;
-        let valueProp = 'value';
+        let valueProp = undefined;
         if (valueType === 'Boolean') {
             if ('checked' in el) {
                 valueProp = 'checked';

@@ -71,7 +71,7 @@ export class ASMR {
     }
     static getValueProp(el: Element, valueType?:  ValueType): ValueProp {
         const {localName} = el;
-        let valueProp: ValueProp = 'value';
+        let valueProp: ValueProp | undefined = undefined;
         if(valueType === 'Boolean'){
             if('checked' in el){
                 valueProp = 'checked';

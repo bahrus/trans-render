@@ -37,7 +37,10 @@ export class StdIn<TProp = any> implements SharingObject{
                             displayProp = 'ariaValueText';
                             break;
                         default:
-                            displayProp = 'textContent';
+                            if(valueProp === undefined){
+                                displayProp = 'textContent';
+                            }
+                            
                             break;
                     }
             }
