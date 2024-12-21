@@ -69,7 +69,7 @@ export class ASMR {
         }
         return absorbingObj;
     }
-    static getValueProp(el: Element, valueType?:  ValueType): ValueProp {
+    static getValueProp(el: Element, valueType?:  ValueType): ValueProp | undefined {
         const {localName} = el;
         let valueProp: ValueProp | undefined = undefined;
         if(valueType === 'Boolean'){
