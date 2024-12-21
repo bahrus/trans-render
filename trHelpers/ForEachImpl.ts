@@ -30,7 +30,7 @@ export class ForEachImpl implements ForEachInterface{
                 case 'rootNode':
                     elToClone = (matchingElement.getRootNode() as DocumentFragment).querySelector(cssQry)!;
                     break;
-                case 'upShadowHost':
+                case 'upShadowSearch':
                     elToClone= (await import('../lib/upShadowSearch.js')).upShadowSearch(matchingElement, cssQry);
                     break;
                 default:

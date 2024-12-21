@@ -25,7 +25,7 @@ export class ForEachImpl {
                 case 'rootNode':
                     elToClone = matchingElement.getRootNode().querySelector(cssQry);
                     break;
-                case 'upShadowHost':
+                case 'upShadowSearch':
                     elToClone = (await import('../lib/upShadowSearch.js')).upShadowSearch(matchingElement, cssQry);
                     break;
                 default:
