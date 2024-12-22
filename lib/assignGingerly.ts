@@ -21,7 +21,7 @@ export async function assignGingerly(dest: any, src: any){
             const selector = srcKey.substring(2, end);
             const el = dest.querySelector(selector);
             if(el){
-                await assignGingerly(el, src[srcKey]);
+                await assignGingerly(el, src);
             }else{
                 //console.warn(`Element not found using selector: ${selector}`);
             }
