@@ -15,6 +15,17 @@ export async function assignGingerly(dest: any, src: any){
             const values = await when(guid);
             await assignGingerly(dest, values);
             continue;
+        }else if(dest instanceof Element && srcKey.startsWith('${')){
+            //find next } and do a querySelector on the dest element and recursively call assignGingerly
+            const end = srcKey.indexOf('}');
+            const selector = srcKey.substring(2, end);
+            const el = dest.querySelector(selector);
+            if(el){
+                await assignGingerly(el, src[srcKey]);
+            }else{
+                //console.warn(`Element not found using selector: ${selector}`);
+            }
+            continue;
         }
         //if target prop exists and isn't an instance of a class,  but the src prop is of type EventType
         //merge what is there first...
