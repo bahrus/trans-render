@@ -98,6 +98,10 @@
       "default": "./lib/arr.js",
       "types": "./lib/arr.ts"
     },
+    "./lib/assignGingerly.js":{
+      "default": "./lib/assignGingerly.js",
+      "types": "./lib/assignGingerly.ts"
+    },
     "./lib/beBeckoned.js": "./lib/beBeckoned.js",
     "./lib/bePropagating.js": "./lib/bePropagating.js",
     "./lib/bePropagating2.js": "./lib/bePropagating2.js",
