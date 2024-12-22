@@ -59,7 +59,7 @@
       "default": "./dss/find.js",
       "types": "./dss/find.ts"
     },
-    "./lib/findR.js":{
+    "./dss/findR.js":{
       "default": "./lib/findR.js",
       "types": "./lib/findR.ts"
     },
