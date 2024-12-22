@@ -63,6 +63,10 @@
       "default": "./lib/findR.js",
       "types": "./lib/findR.ts"
     },
+    "./dss/getHostish.js": {
+      "default": "./dss/getHostish.js",
+      "types": "./dss/getHostish.ts"
+    },
     "./dss/tref/getChildren.js": {
       "default": "./dss/tref/getChildren.js",
       "types": "./dss/tref/getChildren.ts"
