@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.873",
+  "version": "0.0.874",
   "description": "Instantiate an HTML Template",
   "type": "module",
   "main": "trans-render.js",
@@ -59,7 +59,7 @@
       "default": "./dss/find.js",
       "types": "./dss/find.ts"
     },
-    "./dss/findR.js":{
+    "./dss/findR.js": {
       "default": "./lib/findR.js",
       "types": "./lib/findR.ts"
     },
@@ -151,7 +151,7 @@
     "./lib/setEnhProp.js": "./lib/setEnhProp.js",
     "./lib/setProp.js": "./lib/setProp.js",
     "./lib/specialKeys.js": "./lib/specialKeys.js",
-    "./lib/splitOnce.js":{
+    "./lib/splitOnce.js": {
       "default": "./lib/splitOnce.js",
       "types": "./lib/splitOnce.ts"
     },
