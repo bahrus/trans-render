@@ -1,7 +1,7 @@
 import { Specifier } from "../ts-refs/trans-render/dss/types";
 import {ZeroOrMore} from '../ts-refs/trans-render/types';
 
-async function getHostish(el: Element, prop?: string){
+async function getHostish(el: Element){
     let {localName, ish} = el as any;
     if(localName.includes('-')){
         await customElements.whenDefined(localName);
@@ -43,7 +43,7 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
                 }
 
                 if(host && closest){
-                    const hostish = await getHostish(closest, prop);
+                    const hostish = await getHostish(closest);
                     if(hostish) return hostish;
                 }
                 if(elS === undefined) return closest;

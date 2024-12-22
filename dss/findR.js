@@ -1,4 +1,4 @@
-async function getHostish(el, prop) {
+async function getHostish(el) {
     let { localName, ish } = el;
     if (localName.includes('-')) {
         await customElements.whenDefined(localName);
@@ -40,7 +40,7 @@ export async function findR(element, specifier, scopeE) {
                     closest = parentElement?.closest(scopeS);
                 }
                 if (host && closest) {
-                    const hostish = await getHostish(closest, prop);
+                    const hostish = await getHostish(closest);
                     if (hostish)
                         return hostish;
                 }

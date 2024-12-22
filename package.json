@@ -59,6 +59,10 @@
       "default": "./dss/find.js",
       "types": "./dss/find.ts"
     },
+    "./lib/findR.js":{
+      "default": "./lib/findR.js",
+      "types": "./lib/findR.ts"
+    },
     "./dss/tref/getChildren.js": {
       "default": "./dss/tref/getChildren.js",
       "types": "./dss/tref/getChildren.ts"
@@ -143,6 +147,10 @@
     "./lib/setEnhProp.js": "./lib/setEnhProp.js",
     "./lib/setProp.js": "./lib/setProp.js",
     "./lib/specialKeys.js": "./lib/specialKeys.js",
+    "./lib/splitOnce.js":{
+      "default": "./lib/splitOnce.js",
+      "types": "./lib/splitOnce.ts"
+    },
     "./lib/subscribe.js": "./lib/subscribe.js",
     "./lib/tou.js": "./lib/tou.js",
     "./lib/tsChecker.js": "./lib/tsChecker.js",
