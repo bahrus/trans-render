@@ -20,19 +20,19 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
                     const {parentElement} = seed;
                     closest = parentElement?.closest(scopeS);
                 }
-
-                if(host && closest){
-                    const hostish = await getHostish(closest);
-                    if(hostish) return hostish;
-                }
-                if(elS === undefined) return closest;
-                if(s === '~'){
+                if(s === '~' && elS !== undefined){
                     const peerCE = ((closest || element.getRootNode()) as DocumentFragment).querySelector(elS);
                     if(peerCE){
                         await customElements.whenDefined(elS);
                         return peerCE;
                     }
                 }
+                if(host && closest){
+                    const hostish = await getHostish(closest);
+                    if(hostish) return hostish;
+                }
+                if(elS === undefined) return closest;
+
                 if(rnf){
                     const rn = element.getRootNode() as DocumentFragment;
                     if(host && rn instanceof ShadowRoot){

@@ -19,6 +19,13 @@ export async function findR(element, specifier, scopeE) {
                     const { parentElement } = seed;
                     closest = parentElement?.closest(scopeS);
                 }
+                if (s === '~' && elS !== undefined) {
+                    const peerCE = (closest || element.getRootNode()).querySelector(elS);
+                    if (peerCE) {
+                        await customElements.whenDefined(elS);
+                        return peerCE;
+                    }
+                }
                 if (host && closest) {
                     const hostish = await getHostish(closest);
                     if (hostish)
@@ -26,13 +33,6 @@ export async function findR(element, specifier, scopeE) {
                 }
                 if (elS === undefined)
                     return closest;
-                if (s === '~') {
-                    const peerCE = (closest || element.getRootNode()).querySelector(elS);
-                    if (peerCE) {
-                        await customElements.whenDefined(elS);
-                        return peerCE;
-                    }
-                }
                 if (rnf) {
                     const rn = element.getRootNode();
                     if (host && rn instanceof ShadowRoot) {
