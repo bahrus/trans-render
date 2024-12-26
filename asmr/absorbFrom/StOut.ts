@@ -1,4 +1,4 @@
-import { AbsOptions, AbsorbingObject, BuiltInEditables, SharingObject } from '../../ts-refs/trans-render/asmr/types.js';
+import { AbsOptions, AbsorbingObject, BuiltInEditables as BuiltInValuables, SharingObject } from '../../ts-refs/trans-render/asmr/types.js';
 import { ASMR } from '../asmr.js';
 
 export class StOut<TProp=any> extends EventTarget implements 
@@ -57,7 +57,7 @@ export class StOut<TProp=any> extends EventTarget implements
     async readMind(sourceEl: Element){
         const {localName} = sourceEl;
         const ao = this.ao;
-        const isBuiltInEditable = builtInEditables.includes(localName);
+        const isBuiltInEditable = builtInValuables.includes(localName);
         const {propToAbsorb, propToAbsorbValueType} = ao;
         const p2aUn = propToAbsorb === undefined;
         if(isBuiltInEditable || sourceEl.hasAttribute('contentEditable')){
@@ -143,5 +143,5 @@ export class StOut<TProp=any> extends EventTarget implements
     
 }
 
-const builtInEditables: Array<BuiltInEditables> = ['input', 'select', 'textarea'];
+const builtInValuables: Array<BuiltInValuables> = ['input', 'select', 'textarea', 'button'];
 

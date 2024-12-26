@@ -51,7 +51,7 @@ export class StOut extends EventTarget {
     async readMind(sourceEl) {
         const { localName } = sourceEl;
         const ao = this.ao;
-        const isBuiltInEditable = builtInEditables.includes(localName);
+        const isBuiltInEditable = builtInValuables.includes(localName);
         const { propToAbsorb, propToAbsorbValueType } = ao;
         const p2aUn = propToAbsorb === undefined;
         if (isBuiltInEditable || sourceEl.hasAttribute('contentEditable')) {
@@ -134,4 +134,4 @@ export class StOut extends EventTarget {
         });
     }
 }
-const builtInEditables = ['input', 'select', 'textarea'];
+const builtInValuables = ['input', 'select', 'textarea', 'button'];
