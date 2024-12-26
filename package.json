@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.874",
+  "version": "0.0.875",
   "description": "Instantiate an HTML Template",
   "type": "module",
   "main": "trans-render.js",
@@ -98,7 +98,7 @@
       "default": "./lib/arr.js",
       "types": "./lib/arr.ts"
     },
-    "./lib/assignGingerly.js":{
+    "./lib/assignGingerly.js": {
       "default": "./lib/assignGingerly.js",
       "types": "./lib/assignGingerly.ts"
     },
