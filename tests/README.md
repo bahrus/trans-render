@@ -1491,7 +1491,7 @@ Any web server that can serve static files will do, but...
 4.  Open command window to folder where you cloned this repo.
 5.  > npm install
 6.  > npm run serve
-7.  Open http://localhost:3030/demo/ in a modern browser.
+7.  Open http://localhost:8000/demo/ in a modern browser.
 
 ## Running Tests
 

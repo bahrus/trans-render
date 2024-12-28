@@ -40,5 +40,17 @@ export function hookUp<T extends HTMLElement>(jsExpr: string){
         }
     }
     
+    const prototype = mnt.prototype;
+    for(const key in commands){
+        let handler = commands[key];
+        let commandType = key;
+        if(Array.isArray(handler)){
+            commandType = handler[0];
+            handler = handler[1];
+        }
+        (<any>prototype)[key] = handler;
+    }
+
+    return mnt;
     
 }

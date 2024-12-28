@@ -11,7 +11,7 @@
     "test": "playwright test",
     "doc": "wca analyze trans-render.js --outFile custom-elements.json",
     "package-check": "package-check",
-    "safari": "npx playwright wk http://localhost:3030",
+    "safari": "npx playwright wk http://localhost:8000",
     "update": "ncu -u && npm install"
   },
   "exports": {
@@ -135,6 +135,10 @@
     "./lib/getValFromEvent.js": "./lib/getValFromEvent.js",
     "./lib/Hashit.js": "./lib/Hashit.js",
     "./lib/homeInOn.js": "./lib/homeInOn.js",
+    "./lib/hookUp.js": {
+      "default": "./lib/hookUp.js",
+      "types": "./lib/hookUp.ts"
+    },
     "./lib/html.js": "./lib/html.js",
     "./lib/interpolate.js": "./lib/interpolate.js",
     "./lib/isContainedIn.js": "./lib/isContainedIn.js",
