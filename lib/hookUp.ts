@@ -7,11 +7,8 @@ export function hookUp<T extends HTMLElement>(jsExpr: string){
     if(cache.has(jsExpr)) return;
     const guid = `a_${crypto.randomUUID()}`;
     const JSExpr = `
-    document.currentScript['${guid}'] = e => {
-        with(e.target){
-            ${jsExpr}
-        }
-    }
+    document.currentScript['${guid}'] = 
+        ${jsExpr}
     `;
     const script = document.createElement('script');
     script.innerHTML = JSExpr;
