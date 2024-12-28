@@ -15,12 +15,17 @@ export function hookUp<T extends HTMLElement>(jsExpr: string){
     document.head.appendChild(script);
     const commands = (<any>script)[guid] as HookupConfig;
     cache.set(jsExpr, true);
+    return hookUpCmds(commands);
+    
+}
+
+export function hookUpCmds<T extends HTMLElement>(cmds: HookupConfig){
     const mnt = class extends Mount implements EventListenerObject {
         #commandToMethodLookup = new Map<string, string>();
         async connectedCallback(){
             await super.connectedCallback();
-            for(const key in commands){
-                let handler = commands[key];
+            for(const key in cmds){
+                let handler = cmds[key];
                 let commandType = key;
                 if(Array.isArray(handler)){
                     commandType = handler[0];
@@ -38,8 +43,8 @@ export function hookUp<T extends HTMLElement>(jsExpr: string){
     }
     
     const prototype = mnt.prototype;
-    for(const key in commands){
-        let handler = commands[key];
+    for(const key in cmds){
+        let handler = cmds[key];
         let commandType = key;
         if(Array.isArray(handler)){
             commandType = handler[0];
