@@ -325,8 +325,10 @@ export class MountOrchestrator extends EventTarget {
         const { skipInit } = options;
         const { isRootQry } = queryInfo;
         if (isRootQry) {
+            const target = transformer.target;
+            this.#matchingElements.push(new WeakRef(target));
             const { onMount } = await import('./trHelpers/onMount.js');
-            await onMount(transformer, this, transformer.target, this.#unitsOfWork, !!skipInit, { initializing: true }, this.#matchingElements);
+            await onMount(transformer, this, target, this.#unitsOfWork, !!skipInit, { initializing: true }, this.#matchingElements);
             return;
         }
         const info = xform;
@@ -337,6 +339,7 @@ export class MountOrchestrator extends EventTarget {
             on,
             do: {
                 mount: async (matchingElement, observer, ctx) => {
+                    this.#matchingElements.push(new WeakRef(matchingElement));
                     const { onMount } = await import('./trHelpers/onMount.js');
                     await onMount(transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, this.#matchingElements, observer, this.#mountObserver);
                 },

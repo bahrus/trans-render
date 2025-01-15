@@ -1,6 +1,6 @@
 import { arr0 } from '../Transform.js';
 export async function onMount(transformer, mo, matchingElement, uows, skipInit, ctx, matchingElements, observer, mountObserver) {
-    matchingElements.push(new WeakRef(matchingElement));
+    //matchingElements.push(new WeakRef(matchingElement));
     const { queryInfo } = mo;
     const { hostPropToAttrMap } = queryInfo;
     if (hostPropToAttrMap !== undefined && hostPropToAttrMap.length === 1) {
