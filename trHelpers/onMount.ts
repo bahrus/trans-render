@@ -9,6 +9,7 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
     mo: MountOrchestrator<TProps, TMethods, TElement>, matchingElement: Element, uows: Array<QuenitOfWork<TProps, TMethods, TElement>>,
     skipInit: boolean, ctx: MountContext,matchingElements: WeakRef<Element>[],  observer?: IMountObserver, mountObserver?: MountObserver
     ){
+    matchingElements.push(new WeakRef(matchingElement));
     const {queryInfo} = mo;
     const {hostPropToAttrMap} = queryInfo;
     if(hostPropToAttrMap !== undefined && hostPropToAttrMap.length === 1){
@@ -56,7 +57,7 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
         }
 
         
-        matchingElements.push(new WeakRef(matchingElement));
+        
         await transformer.engage(matchingElement, 'onMount', uow, observer, ctx);
         const {a, m} = uow;
         if(a !== undefined){

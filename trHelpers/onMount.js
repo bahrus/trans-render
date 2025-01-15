@@ -1,5 +1,6 @@
 import { arr0 } from '../Transform.js';
 export async function onMount(transformer, mo, matchingElement, uows, skipInit, ctx, matchingElements, observer, mountObserver) {
+    matchingElements.push(new WeakRef(matchingElement));
     const { queryInfo } = mo;
     const { hostPropToAttrMap } = queryInfo;
     if (hostPropToAttrMap !== undefined && hostPropToAttrMap.length === 1) {
@@ -46,7 +47,6 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
                 await mo.doUpdate(matchingElement, uow);
             }
         }
-        matchingElements.push(new WeakRef(matchingElement));
         await transformer.engage(matchingElement, 'onMount', uow, observer, ctx);
         const { a, m } = uow;
         if (a !== undefined) {
