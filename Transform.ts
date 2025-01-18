@@ -75,7 +75,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
             options = {};
             this.options = options;
         }
-        let {propagator} = options;
+        let {propagator, useViewTransition} = options;
         if(propagator === undefined){
             propagator = new EventTarget() as MarkedUpEventTarget;
             options.propagator = propagator;
@@ -173,7 +173,14 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
                 uow.d = 0;
             }
             const newProcessor = new MountOrchestrator(this, uow, qi);
-            await newProcessor.do();
+            if(!useViewTransition || !document.startViewTransition){
+                await newProcessor.do();
+            }else{
+                document.startViewTransition(async () => {
+                    await newProcessor.do();
+                });
+            }
+            
             this.#mountOrchestrators.push(newProcessor);
             await newProcessor.subscribe();
         }
@@ -388,7 +395,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
     async do(){
         const {transformer, queryInfo} = this;   
         const {options, xform} = transformer;
-        const {skipInit} = options;
+        const {skipInit, useViewTransition} = options;
         const {isRootQry} = queryInfo;
         if(isRootQry){
             const target = transformer.target as Element;
@@ -409,10 +416,20 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
                 mount: async (matchingElement, observer, ctx) => {
                     this.#matchingElements.push(new WeakRef(matchingElement));
                     const {onMount} = await import('./trHelpers/onMount.js');
-                    await onMount(
-                        transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, this.#matchingElements, observer, 
-                        this.#mountObserver!, 
-                    )
+                    if(!useViewTransition || !document.startViewTransition){
+                        await onMount(
+                            transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, this.#matchingElements, observer, 
+                            this.#mountObserver!, 
+                        )
+                    }else{
+                        document.startViewTransition(async () => {
+                            await onMount(
+                                transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, this.#matchingElements, observer, 
+                                this.#mountObserver!, 
+                            )
+                        })
+                    }
+
 
 
                 },
@@ -437,6 +454,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
             let {o} = uow;
             const p = arr0(o) as string[];
             const {target, options, model} = this.transformer;
+            const {useViewTransition} = options;
             const propagator = ((<any>model).propagator || options.propagator) as EventTarget;
             const propagatorIsReady = (<any>model).propagator ? true : options.propagatorIsReady;
             
@@ -455,11 +473,17 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
                 }
                 //I'm thinking this event handler doesn't access any memory, hence 
                 //risk of memory leaks seems really low.
-                propagator!.addEventListener(propName, e => {
+                propagator!.addEventListener(propName, async e => {
                     const all = this.#cleanUp();
                     for(const matchingElement of all){
+                        if(!useViewTransition || !document.startViewTransition){
+                            await this.doUpdate(matchingElement, uow);
+                        }else{
+                            document.startViewTransition(async () => {
+                                await this.doUpdate(matchingElement, uow);
+                            })
+                        }
                         
-                        this.doUpdate(matchingElement, uow);
                     }
                 });
 
