@@ -59,7 +59,7 @@ export class Transformer extends EventTarget {
             options = {};
             this.options = options;
         }
-        let { propagator } = options;
+        let { propagator, useViewTransition } = options;
         if (propagator === undefined) {
             propagator = new EventTarget();
             options.propagator = propagator;
@@ -155,7 +155,14 @@ export class Transformer extends EventTarget {
                 uow.d = 0;
             }
             const newProcessor = new MountOrchestrator(this, uow, qi);
-            await newProcessor.do();
+            if (!useViewTransition || !document.startViewTransition) {
+                await newProcessor.do();
+            }
+            else {
+                document.startViewTransition(async () => {
+                    await newProcessor.do();
+                });
+            }
             this.#mountOrchestrators.push(newProcessor);
             await newProcessor.subscribe();
         }
@@ -322,7 +329,7 @@ export class MountOrchestrator extends EventTarget {
     async do() {
         const { transformer, queryInfo } = this;
         const { options, xform } = transformer;
-        const { skipInit } = options;
+        const { skipInit, useViewTransition } = options;
         const { isRootQry } = queryInfo;
         if (isRootQry) {
             const target = transformer.target;
@@ -341,7 +348,14 @@ export class MountOrchestrator extends EventTarget {
                 mount: async (matchingElement, observer, ctx) => {
                     this.#matchingElements.push(new WeakRef(matchingElement));
                     const { onMount } = await import('./trHelpers/onMount.js');
-                    await onMount(transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, this.#matchingElements, observer, this.#mountObserver);
+                    if (!useViewTransition || !document.startViewTransition) {
+                        await onMount(transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, this.#matchingElements, observer, this.#mountObserver);
+                    }
+                    else {
+                        document.startViewTransition(async () => {
+                            await onMount(transformer, this, matchingElement, this.#unitsOfWork, !!skipInit, ctx, this.#matchingElements, observer, this.#mountObserver);
+                        });
+                    }
                 },
                 dismount: async (matchingElement, ctx, stage) => {
                     for (const uow of this.#unitsOfWork) {
@@ -364,6 +378,7 @@ export class MountOrchestrator extends EventTarget {
             let { o } = uow;
             const p = arr0(o);
             const { target, options, model } = this.transformer;
+            const { useViewTransition } = options;
             const propagator = (model.propagator || options.propagator);
             const propagatorIsReady = model.propagator ? true : options.propagatorIsReady;
             for (const propName of p) {
@@ -382,10 +397,17 @@ export class MountOrchestrator extends EventTarget {
                 }
                 //I'm thinking this event handler doesn't access any memory, hence 
                 //risk of memory leaks seems really low.
-                propagator.addEventListener(propName, e => {
+                propagator.addEventListener(propName, async (e) => {
                     const all = this.#cleanUp();
                     for (const matchingElement of all) {
-                        this.doUpdate(matchingElement, uow);
+                        if (!useViewTransition || !document.startViewTransition) {
+                            await this.doUpdate(matchingElement, uow);
+                        }
+                        else {
+                            document.startViewTransition(async () => {
+                                await this.doUpdate(matchingElement, uow);
+                            });
+                        }
                     }
                 });
             }
