@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <dtr-counter id=test1></dtr-counter>
+    <script>
+        test1.count = 24000;
+    </script>
+    <button onclick=testp1()>test1</button>
+    <button onclick=testp2()>test2</button>
+    <!-- <dtr-counter count="2000"></dtr-counter> -->
+    <!-- <dtr-counter defer-hydration id='test' count="1000"></dtr-counter>
+    <button onclick='changeTemplate()'>change template</button> -->
+    <script type=importmap>{
+        "imports":{
+            "mount-observer/": "/node_modules/mount-observer/",
+            "trans-render/": "/node_modules/trans-render/"
+        }
+    }</script>
+    <script type=module>
+        import './dtr-counter2.js';
+    </script>
+    <style>
+        @property --attrs-to-reflect {
+            syntax: '<custom-ident>+';
+            inherits: false;
+        }
+        dtr-counter {
+            --attrs-to-reflect: count, test;
+            --custom-state-exports: count,
+            is26 if count % 4 == 1
+            ;
+        }
+        /* dtr-counter:state(count){
+            color: red;
+        } */
+
+        dtr-counter:state(is26){
+            color: red;
+        }
+
+    </style>
+    <script>
+        const styles = getComputedStyle(test1);
+        const attrsToReflect = styles.getPropertyValue('--attrs-to-reflect')
+        console.log({attrsToReflect, styles});
+    </script>
+</body>
+</html>
