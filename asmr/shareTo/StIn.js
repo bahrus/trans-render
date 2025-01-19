@@ -30,6 +30,9 @@ export class StdIn {
                 case 'a':
                     //no value
                     break;
+                case 'data':
+                    displayProp = 'textContent';
+                    break;
                 default:
                     switch (valueType) {
                         case 'NumericRange':
@@ -71,6 +74,14 @@ export class StdIn {
                     else {
                         throw 'NI';
                     }
+                    break;
+                case 'object':
+                    const { value, textContent } = val;
+                    if (valueProp !== undefined) {
+                        el[valueProp] = value;
+                    }
+                    el[displayProp] = textContent;
+                    return;
                     break;
                 default:
                     throw 'NI';

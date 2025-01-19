@@ -31,6 +31,9 @@ export class StdIn<TProp = any> implements SharingObject{
                 case 'a':
                     //no value
                     break;
+                case 'data':
+                    displayProp = 'textContent';
+                    break;
                 default:
                     switch(valueType){
                         case 'NumericRange':
@@ -74,8 +77,14 @@ export class StdIn<TProp = any> implements SharingObject{
                         throw 'NI';
                     }
                     break;
-                
-
+                case 'object':
+                    const {value, textContent} = val as {value: any, textContent: string};
+                    if(valueProp !== undefined){
+                        (<any>el)[valueProp] = value;
+                    }
+                    (<any>el)[displayProp!] = textContent;
+                    return;
+                    break;
                 default:
                     throw 'NI';
             }

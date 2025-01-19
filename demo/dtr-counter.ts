@@ -15,8 +15,8 @@ export class DTRCounter extends Mount{
         shadowRootInit:{
             mode: 'open'
         },
-        //mainTemplate: String.raw `<button part=down data-d=-1>-</button><data part=count aria-live=polite></data><button part=up data-d=1>+</button>`,
-        mainTemplate: String.raw `<button part=down data-d=-1>-</button><span part=count aria-live=polite></span><button part=up data-d=1>+</button>`,
+        mainTemplate: String.raw `<button part=down data-d=-1>-</button><data part=count aria-live=polite></data><button part=up data-d=1>+</button>`,
+        //mainTemplate: String.raw `<button part=down data-d=-1>-</button><span part=count aria-live=polite></span><button part=up data-d=1>+</button>`,
         propDefaults:{
             count: 30,
         },
