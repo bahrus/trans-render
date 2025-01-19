@@ -21,7 +21,7 @@ export class Mod<TProps, TMethods, TElement = {}>{
                 let valToIncBy = 0;
                 switch(typeof byAmt){
                     case 'string':
-                        if(byAmt[0] === '.'){
+                        if(byAmt[0] === '?'){
                             const {getVal} = await import('../lib/getVal.js');
                             const sVal = await getVal({host: matchingElement}, byAmt);
                             valToIncBy = Number(sVal);
