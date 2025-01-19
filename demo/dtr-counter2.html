@@ -45,6 +45,12 @@
         }
 
     </style>
+    <style>
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation-duration: 2s;
+    }
+    </style>
     <script>
         const styles = getComputedStyle(test1);
         const attrsToReflect = styles.getPropertyValue('--attrs-to-reflect')

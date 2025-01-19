@@ -28,7 +28,8 @@ export class Mount<TProps extends {}, TActions = TProps, ETProps = TProps>
                 ifAllOf: 'csr'
             },
             initCSRXform: {
-                ifAllOf: ['clonedTemplate', 'xform'],
+                ifAllOf: ['clonedTemplate'],
+                ifAtLeastOneOf: ['xform', 'xxform'],
                 ifNoneOf: ['deferHydration'],
             },
             mountClone: {
@@ -57,6 +58,9 @@ export class Mount<TProps extends {}, TActions = TProps, ETProps = TProps>
     // }
     get xform(){
         return this.config.xform;
+    }
+    get xxform(){
+        return this.config.xxform;
     }
     constructor(){
         super();
@@ -126,12 +130,21 @@ export class Mount<TProps extends {}, TActions = TProps, ETProps = TProps>
         } as Partial<MountProps>
     }
     async initCSRXform(self: this): ProPMP<TProps, TActions, ETProps> {
-        const {clonedTemplate, xform, propagator} = self;
+        const {clonedTemplate, xform, propagator, xxform} = self;
         const {Transform} = await import('./Transform.js');
-        await Transform<any, any>(clonedTemplate!, this, xform!, {
-            propagator,
-            propagatorIsReady: true,
-        });
+        if(xform !== undefined){
+            await Transform<any, any>(clonedTemplate!, this, xform, {
+                propagator,
+                propagatorIsReady: true,
+            });
+        }
+        if(xxform !== undefined){
+            await Transform<any, any>(clonedTemplate!, this, xxform, {
+                propagator,
+                propagatorIsReady: true,
+                useViewTransition: true,
+            });
+        }
         return {
             hydrated: true,
         }
@@ -145,11 +158,18 @@ export class Mount<TProps extends {}, TActions = TProps, ETProps = TProps>
     }
     async initSSRXform(self: this): ProPMP<TProps, TActions, ETProps> {
         const root = self.#root;
-        const {xform, propagator} = self;
+        const {xform, propagator, xxform} = self;
         const {Transform} = await import('./Transform.js');
-        await Transform<any, any>(root, this, xform!, {
-            propagator
-        });
+        if(xform !== undefined){
+            await Transform<any, any>(root, this, xform!, {
+                propagator
+            });
+        }
+        if(xxform !== undefined){
+            await Transform<any, any>(root, this, xform!, {
+                propagator, useViewTransition: true
+            });
+        }
         return {
             hydrated: true
         }

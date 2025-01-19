@@ -24,7 +24,7 @@ export class DTRCounter extends Mount {
         actions: {
             ...super.mntCfgMxn.actions
         },
-        xform: {
+        xxform: {
             '% count': 'localize',
             button: {
                 m: {

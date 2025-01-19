@@ -155,16 +155,29 @@ export class Transformer extends EventTarget {
                 uow.d = 0;
             }
             const newProcessor = new MountOrchestrator(this, uow, qi);
-            if (!useViewTransition || !document.startViewTransition) {
-                await newProcessor.do();
-            }
-            else {
-                document.startViewTransition(async () => {
-                    await newProcessor.do();
-                });
-            }
+            //for some reason, view transition logic doesn't work here
+            await newProcessor.do();
             this.#mountOrchestrators.push(newProcessor);
             await newProcessor.subscribe();
+            // if(true || !useViewTransition || !document.startViewTransition){
+            //     console.log('start new Processor');
+            //     await newProcessor.do();
+            //     console.log('push mount orchestrators')
+            //     this.#mountOrchestrators.push(newProcessor);
+            //     console.log('subscribe');
+            //     await newProcessor.subscribe();
+            //     console.log('done');
+            // }else{
+            //     document.startViewTransition(async () => {
+            //         console.log('start new Processor');
+            //         await newProcessor.do();
+            //         console.log('push mount orchestrators')
+            //         this.#mountOrchestrators.push(newProcessor);
+            //         console.log('subscribe');
+            //         await newProcessor.subscribe();
+            //         console.log('done');
+            //     });
+            // }
         }
     }
     async calcQI(pqe) {
