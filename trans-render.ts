@@ -26,6 +26,9 @@ export class TransRender extends HTMLElement implements TransRenderMethods{
             return JSON.parse(xform) as XForm<any, any>;
         }
     }
+    getUseViewTransition(){
+        return this.hasAttribute('use-view-transition');
+    }
     async getModel(){
         const modelSrc = this.getAttribute('model-src');
         let model: any;
@@ -51,7 +54,8 @@ export class TransRender extends HTMLElement implements TransRenderMethods{
         const model = await this.getModel();
         const {Transform} = await import('./Transform.js');
         Transform(documentFragment, model, xform, {
-            skipInit: this.skipInit
+            skipInit: this.skipInit,
+            useViewTransition: this.getUseViewTransition()
         });
     }
 }

@@ -26,6 +26,9 @@ export class TransRender extends HTMLElement {
             return JSON.parse(xform);
         }
     }
+    getUseViewTransition() {
+        return this.hasAttribute('use-view-transition');
+    }
     async getModel() {
         const modelSrc = this.getAttribute('model-src');
         let model;
@@ -50,7 +53,8 @@ export class TransRender extends HTMLElement {
         const model = await this.getModel();
         const { Transform } = await import('./Transform.js');
         Transform(documentFragment, model, xform, {
-            skipInit: this.skipInit
+            skipInit: this.skipInit,
+            useViewTransition: this.getUseViewTransition()
         });
     }
 }
