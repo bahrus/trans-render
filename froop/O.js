@@ -92,6 +92,9 @@ export class O extends HTMLElement {
         this.#disconnectedAbortController.abort();
     }
     #internals;
+    /**
+     * provided for debugging purposes
+     */
     #roundabout;
     get #config() {
         return this.constructor.config;

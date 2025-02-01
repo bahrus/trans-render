@@ -105,6 +105,9 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
 
     #internals: ElementInternals;
 
+    /**
+     * provided for debugging purposes
+     */
     #roundabout: RoundAbout | undefined;
 
     get #config(){
