@@ -98,15 +98,21 @@ export class O extends HTMLElement {
     }
     async #instantiateRoundaboutIfApplicable() {
         const config = this.#config;
-        const { actions, compacts, infractions, handlers, positractions } = config;
+        const { actions, compacts, infractions, handlers, positractions, isSleepless } = config;
         if ((actions || compacts || infractions || handlers || positractions) !== undefined) {
+            let mountObservers;
+            if (!isSleepless) {
+                const { guid } = await import('mount-observer/MountObserver.js');
+                mountObservers = this[guid];
+            }
             const { roundabout } = await import('./roundabout.js');
             const [vm, ra] = await roundabout({
                 vm: this,
                 actions,
                 compacts,
                 handlers,
-                positractions
+                positractions,
+                mountObservers
             }, infractions);
             this.#roundabout = ra;
         }

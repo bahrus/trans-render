@@ -2,6 +2,7 @@ import {RoundaboutReady, BaseProps, PropInfo, PropInfoTypes, PropLookup, OConfig
 export {OConfig} from '../ts-refs/trans-render/froop/types.js';
 import {assignGingerly} from '../lib/assignGingerly.js';
 import { RoundAbout } from './roundabout.js';
+import { MountObserver } from '../../mount-observer/MountObserver.js';
 const publicPrivateStore = Symbol();
 
 export class O<TProps=any, TActions=TProps> extends HTMLElement implements RoundaboutReady{
@@ -113,15 +114,21 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     async #instantiateRoundaboutIfApplicable(){
         
         const config = this.#config;
-        const {actions, compacts, infractions, handlers, positractions} = config;
+        const {actions, compacts, infractions, handlers, positractions, isSleepless} = config;
         if((actions || compacts || infractions || handlers || positractions) !== undefined){
+            let mountObservers: Set<MountObserver> | undefined;
+            if(!isSleepless){
+                const {guid} = await import('mount-observer/MountObserver.js');
+                mountObservers = (<any>this)[guid];
+            }
             const {roundabout} = await import('./roundabout.js');
             const [vm, ra] = await roundabout({
                 vm: this,
                 actions,
                 compacts,
                 handlers,
-                positractions
+                positractions,
+                mountObservers
             }, infractions);
             this.#roundabout = ra;
         }
