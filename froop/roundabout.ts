@@ -1,5 +1,6 @@
 import {roundaboutOptions, RoundaboutReady, Busses, SetLogicOps, Checks, Keysh, ICompact, Infractions, PropsToPartialProps, Routers, LogicOp} from '../ts-refs/trans-render/froop/types.js';
 import {EventHandler} from '../EventHandler.js';
+import { MountEvent } from '../../mount-observer/MountObserver.js';
 export async function roundabout<TProps = any, TActions = TProps>(
     options: roundaboutOptions<TProps, TActions>,
     infractions?: Infractions<TProps>
@@ -54,7 +55,7 @@ export class RoundAbout{
         this.#busses = newBusses;
         this.#routers = routers;
         //TODO:  memoize this whole logic, keyed off of options
-        const {actions, handlers, positractions, compacts} = options;
+        const {actions, handlers, positractions, compacts, mountObservers} = options;
         for(const key in actions){
             newBusses[key] = new Set();
             const val = actions[key];
@@ -91,9 +92,9 @@ export class RoundAbout{
                 router.push(newRouter);
             }
         }
-        if(positractions !== undefined){
-            const {options} = this;
-            const {vm} = options;
+        const vm = options.vm as RoundaboutReady | undefined;
+        if(positractions !== undefined && vm !== undefined){
+            //const {options} = this;
             const infractionLookup = this.#infractionsLookup;
             for(const positraction of positractions){
                 const {
@@ -104,7 +105,7 @@ export class RoundAbout{
                 if(passR === undefined) throw 500;
                 let fn: Function;
                 if(typeof d === 'string'){
-                    fn = vm[d] as Function;
+                    fn = (<any>vm)[d] as Function;
                 }else{
                     fn = d;
                 }
@@ -174,6 +175,18 @@ export class RoundAbout{
                 //console.log({tbd: parsedCompact});
             }
             //const invokingCompacts = Object.keys(compacts).filter(x => x.indexOf())
+        }
+        if(mountObservers !== undefined && vm !== undefined){
+            const arr = Array.from(mountObservers);
+            
+            for(const mo of arr){
+                mo.addEventListener('mount', e => {
+                    vm.awake();
+                });
+                mo.addEventListener('dismount', e => {
+                    vm.nudge();
+                });
+            }
         }
     }
 

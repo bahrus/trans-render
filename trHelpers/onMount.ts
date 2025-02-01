@@ -7,7 +7,7 @@ import {QuenitOfWork, AddEventListener, ForEachInterface} from '../ts-refs/trans
 export async function onMount<TProps extends {}, TMethods = TProps, TElement = {}>(
     transformer: Transformer<TProps, TMethods, TElement>,
     mo: MountOrchestrator<TProps, TMethods, TElement>, matchingElement: Element, uows: Array<QuenitOfWork<TProps, TMethods, TElement>>,
-    skipInit: boolean, ctx: MountContext,matchingElements: WeakRef<Element>[],  observer?: IMountObserver, mountObserver?: MountObserver
+    skipInit: boolean, ctx: MountContext, matchingElements: WeakRef<Element>[],  observer?: IMountObserver, mountObserver?: MountObserver
     ){
     //matchingElements.push(new WeakRef(matchingElement));
     const {queryInfo} = mo;
