@@ -5,7 +5,7 @@ export async function roundabout<TProps = any, TActions = TProps>(
     options: roundaboutOptions<TProps, TActions>,
     infractions?: Infractions<TProps>
     ){
-    const {vm} = options;
+    const vm = options;
     const {sleep} = vm!;
     if(sleep){
         await vm?.awake();
@@ -47,7 +47,19 @@ export class RoundAbout{
         return new Set([k]);
     }
 
+    get #vm(){
+        const test = this.options.vm?.deref() as RoundaboutReady | undefined;
+        if(test === undefined){
+            this.#unsubscribe();
+        }
+        return test;
+    }
+
     constructor(public options: roundaboutOptions, public infractions?: Infractions){
+        const vm = options.vm as RoundaboutReady | undefined;
+        if(vm !== undefined && !(vm instanceof WeakRef)){
+            options.vm = new WeakRef(vm);
+        }
         const newBusses : Busses = {};
         const routers: Routers = {};
         const checks: Checks = {};
@@ -92,7 +104,7 @@ export class RoundAbout{
                 router.push(newRouter);
             }
         }
-        const vm = options.vm as RoundaboutReady | undefined;
+        
         if(positractions !== undefined && vm !== undefined){
             //const {options} = this;
             const infractionLookup = this.#infractionsLookup;
@@ -188,6 +200,7 @@ export class RoundAbout{
                 });
             }
         }
+
     }
 
     async init(){
@@ -229,7 +242,8 @@ export class RoundAbout{
     async hydrate(keysToPropagate: Set<string>){
         //const clone = structuredClone(keysToPropagate);// new Set(keysToPropagate);
         const {options} = this;
-        const {vm} = options;
+        const vm = this.#vm;
+        if(vm === undefined) throw 'NI';
         const {sleep} = vm;
         if(sleep) await vm.awake();
         const checks = this.#checks;

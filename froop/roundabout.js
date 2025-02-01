@@ -1,6 +1,6 @@
 import { EventHandler } from '../EventHandler.js';
 export async function roundabout(options, infractions) {
-    const { vm } = options;
+    const vm = options;
     const { sleep } = vm;
     if (sleep) {
         await vm?.awake();
@@ -43,9 +43,20 @@ export class RoundAbout {
             return new Set(k);
         return new Set([k]);
     }
+    get #vm() {
+        const test = this.options.vm?.deref();
+        if (test === undefined) {
+            this.#unsubscribe();
+        }
+        return test;
+    }
     constructor(options, infractions) {
         this.options = options;
         this.infractions = infractions;
+        const vm = options.vm;
+        if (vm !== undefined && !(vm instanceof WeakRef)) {
+            options.vm = new WeakRef(vm);
+        }
         const newBusses = {};
         const routers = {};
         const checks = {};
@@ -95,7 +106,6 @@ export class RoundAbout {
                 router.push(newRouter);
             }
         }
-        const vm = options.vm;
         if (positractions !== undefined && vm !== undefined) {
             //const {options} = this;
             const infractionLookup = this.#infractionsLookup;
@@ -232,7 +242,9 @@ export class RoundAbout {
     async hydrate(keysToPropagate) {
         //const clone = structuredClone(keysToPropagate);// new Set(keysToPropagate);
         const { options } = this;
-        const { vm } = options;
+        const vm = this.#vm;
+        if (vm === undefined)
+            throw 'NI';
         const { sleep } = vm;
         if (sleep)
             await vm.awake();
