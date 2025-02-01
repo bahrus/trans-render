@@ -56,6 +56,10 @@ export class O extends HTMLElement {
         const { sleep } = this;
         this.sleep = sleep ? sleep - 1 : 0;
     }
+    rock() {
+        const { sleep } = this;
+        this.sleep = sleep === undefined ? 1 : sleep + 1;
+    }
     /**
      * Keep internals reference private, but allow subclasses to get a handle to the internal "singleton"
      */

@@ -53,7 +53,7 @@ export class RoundAbout {
         this.#busses = newBusses;
         this.#routers = routers;
         //TODO:  memoize this whole logic, keyed off of options
-        const { actions, handlers, positractions, compacts } = options;
+        const { actions, handlers, positractions, compacts, mountObservers } = options;
         for (const key in actions) {
             newBusses[key] = new Set();
             const val = actions[key];
@@ -95,9 +95,9 @@ export class RoundAbout {
                 router.push(newRouter);
             }
         }
-        if (positractions !== undefined) {
-            const { options } = this;
-            const { vm } = options;
+        const vm = options.vm;
+        if (positractions !== undefined && vm !== undefined) {
+            //const {options} = this;
             const infractionLookup = this.#infractionsLookup;
             for (const positraction of positractions) {
                 const { ifKeyIn, ifAllOf, ifAtLeastOneOf, ifEquals, ifNoneOf, ifNotAllOf, pass, do: d, assignTo, debug } = positraction;
@@ -183,6 +183,17 @@ export class RoundAbout {
                 //console.log({tbd: parsedCompact});
             }
             //const invokingCompacts = Object.keys(compacts).filter(x => x.indexOf())
+        }
+        if (mountObservers !== undefined && vm !== undefined) {
+            const arr = Array.from(mountObservers);
+            for (const mo of arr) {
+                mo.addEventListener('mount', e => {
+                    vm.nudge();
+                });
+                mo.addEventListener('dismount', e => {
+                    vm.rock();
+                });
+            }
         }
     }
     async init() {
