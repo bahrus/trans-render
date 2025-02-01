@@ -65,6 +65,10 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
         const {sleep} = this;
         this.sleep = sleep ? sleep - 1 : 0;
     }
+    rock(){
+        const {sleep} = this;
+        this.sleep = sleep=== undefined ? 1 : sleep + 1;
+    }
     /**
      * Keep internals reference private, but allow subclasses to get a handle to the internal "singleton"
      */

@@ -181,10 +181,10 @@ export class RoundAbout{
             
             for(const mo of arr){
                 mo.addEventListener('mount', e => {
-                    vm.awake();
+                    vm.nudge();
                 });
                 mo.addEventListener('dismount', e => {
-                    vm.nudge();
+                    vm.rock();
                 });
             }
         }
