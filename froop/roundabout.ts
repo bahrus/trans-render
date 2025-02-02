@@ -5,10 +5,13 @@ export async function roundabout<TProps = any, TActions = TProps>(
     options: roundaboutOptions<TProps, TActions>,
     infractions?: Infractions<TProps>
     ){
-    const vm = options;
-    const {sleep} = vm!;
-    if(sleep){
-        await vm?.awake();
+    const {vm} = options;
+    if(!(vm instanceof WeakRef)){
+
+        const {sleep} = vm!;
+        if(sleep){
+            await vm?.awake();
+        }
     }
     const ra = new RoundAbout(options, infractions);
     const keysToPropagate = new Set<string>();
@@ -533,6 +536,3 @@ const reInvoke = new RegExp(String.raw `${whenSrcKeyChanges}invoke_(?<destKey>[\
 
 export class RoundAboutEvent extends Event{}
 
-// export class ActionBus{
-//     bus = new Set<string>();
-// }

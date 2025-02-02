@@ -1,9 +1,11 @@
 import { EventHandler } from '../EventHandler.js';
 export async function roundabout(options, infractions) {
-    const vm = options;
-    const { sleep } = vm;
-    if (sleep) {
-        await vm?.awake();
+    const { vm } = options;
+    if (!(vm instanceof WeakRef)) {
+        const { sleep } = vm;
+        if (sleep) {
+            await vm?.awake();
+        }
     }
     const ra = new RoundAbout(options, infractions);
     const keysToPropagate = new Set();
@@ -534,6 +536,3 @@ export const whenSrcKeyChanges = String.raw `^when_(?<srcKey>[\w]+)_changes_`;
 const reInvoke = new RegExp(String.raw `${whenSrcKeyChanges}invoke_(?<destKey>[\w]+)`);
 export class RoundAboutEvent extends Event {
 }
-// export class ActionBus{
-//     bus = new Set<string>();
-// }
