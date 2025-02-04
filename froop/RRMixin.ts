@@ -6,7 +6,6 @@ export const publicPrivateStore = Symbol();
 export function RRMixin<T extends Constructor, TProps=any>(Base: T) {
   abstract class RR extends Base implements RoundaboutReady {
     propagator = new EventTarget();
-    [publicPrivateStore]: Partial<TProps> = {}; 
 
     #disconnectedAbortController: AbortController;
 
@@ -28,7 +27,7 @@ export function RRMixin<T extends Constructor, TProps=any>(Base: T) {
                 resolve();
                 return;
             }
-            const ac = new AbortController();
+            const ac = this.#disconnectedAbortController;
             //I'm thinking this one isn't worth wrapping in an EventHandler, as the "closure"
             //isn't accessing anything other than the resolve and abort controller, doesn't seem worth it.
             this.propagator.addEventListener('sleep', e => {

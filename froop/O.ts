@@ -3,9 +3,10 @@ export {OConfig} from '../ts-refs/trans-render/froop/types.js';
 import {assignGingerly} from '../lib/assignGingerly.js';
 import { RoundAbout } from './roundabout.js';
 import { MountObserver } from '../../mount-observer/MountObserver.js';
+import {RRMixin} from './RRMixin.js';
 const publicPrivateStore = Symbol();
 
-export class O<TProps=any, TActions=TProps> extends HTMLElement implements RoundaboutReady{
+export class O<TProps=any, TActions=TProps> extends RRMixin(HTMLElement) implements RoundaboutReady{
     propagator = new EventTarget();
     [publicPrivateStore]: Partial<TProps> = {};
 
@@ -30,46 +31,21 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
 
     }
 
-    #disconnectedAbortController: AbortController;
+    // #disconnectedAbortController: AbortController;
 
-    get disconnectedSignal(){
-        return this.#disconnectedAbortController.signal;
-    }
+    // get disconnectedSignal(){
+    //     return this.#disconnectedAbortController.signal;
+    // }
 
     constructor(){
         super();
         const internals = this.attachInternals();
         this.#internals = internals;
         this.copyInternals(internals);
-        this.#disconnectedAbortController = new AbortController();
+        //this.#disconnectedAbortController = new AbortController();
     }
     
-    sleep?: number | undefined;
-    awake() : Promise<void> {
-        return new Promise((resolve, reject) => {
-            if(!this.sleep) {
-                resolve();
-                return;
-            }
-            const ac = new AbortController();
-            //I'm thinking this one isn't worth wrapping in an EventHandler, as the "closure"
-            //isn't accessing anything other than the resolve and abort controller, doesn't seem worth it.
-            this.propagator.addEventListener('sleep', e => {
-                if(!this.sleep){
-                    ac.abort();
-                    resolve();
-                }
-            }, {signal: ac.signal});
-        })
-    }
-    nudge() {
-        const {sleep} = this;
-        this.sleep = sleep ? sleep - 1 : 0;
-    }
-    rock(){
-        const {sleep} = this;
-        this.sleep = sleep=== undefined ? 1 : sleep + 1;
-    }
+
     /**
      * Keep internals reference private, but allow subclasses to get a handle to the internal "singleton"
      */
@@ -100,7 +76,7 @@ export class O<TProps=any, TActions=TProps> extends HTMLElement implements Round
     }
 
     disconnectedCallback(): any {
-        this.#disconnectedAbortController.abort();
+        this.disconnectedSignal!.
     }
 
     #internals: ElementInternals;

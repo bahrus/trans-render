@@ -1,6 +1,7 @@
 import { assignGingerly } from '../lib/assignGingerly.js';
+import { RRMixin } from './RRMixin.js';
 const publicPrivateStore = Symbol();
-export class O extends HTMLElement {
+export class O extends RRMixin(HTMLElement) {
     propagator = new EventTarget();
     [publicPrivateStore] = {};
     async covertAssignment(obj) {
@@ -23,42 +24,16 @@ export class O extends HTMLElement {
         }
         await assignGingerly(this[publicPrivateStore], extObj);
     }
-    #disconnectedAbortController;
-    get disconnectedSignal() {
-        return this.#disconnectedAbortController.signal;
-    }
+    // #disconnectedAbortController: AbortController;
+    // get disconnectedSignal(){
+    //     return this.#disconnectedAbortController.signal;
+    // }
     constructor() {
         super();
         const internals = this.attachInternals();
         this.#internals = internals;
         this.copyInternals(internals);
-        this.#disconnectedAbortController = new AbortController();
-    }
-    sleep;
-    awake() {
-        return new Promise((resolve, reject) => {
-            if (!this.sleep) {
-                resolve();
-                return;
-            }
-            const ac = new AbortController();
-            //I'm thinking this one isn't worth wrapping in an EventHandler, as the "closure"
-            //isn't accessing anything other than the resolve and abort controller, doesn't seem worth it.
-            this.propagator.addEventListener('sleep', e => {
-                if (!this.sleep) {
-                    ac.abort();
-                    resolve();
-                }
-            }, { signal: ac.signal });
-        });
-    }
-    nudge() {
-        const { sleep } = this;
-        this.sleep = sleep ? sleep - 1 : 0;
-    }
-    rock() {
-        const { sleep } = this;
-        this.sleep = sleep === undefined ? 1 : sleep + 1;
+        //this.#disconnectedAbortController = new AbortController();
     }
     /**
      * Keep internals reference private, but allow subclasses to get a handle to the internal "singleton"
@@ -89,7 +64,8 @@ export class O extends HTMLElement {
         }
     }
     disconnectedCallback() {
-        this.#disconnectedAbortController.abort();
+        this.disconnectedSignal.
+        ;
     }
     #internals;
     /**
