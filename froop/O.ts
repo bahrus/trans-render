@@ -52,8 +52,8 @@ export class O<TProps=any, TActions=TProps> extends RRMixin(HTMLElement) impleme
     copyInternals(internals: ElementInternals){}
     static observedAttributes: Array<string> = [];
     async connectedCallback(){
-        if(this.#disconnectedAbortController.signal.aborted){
-            this.#disconnectedAbortController = new AbortController();
+        if(this.RAController.signal.aborted){
+            this.RAController = new AbortController();
         }
         const props = (<any>this.constructor).props as PropLookup;
         this.#propUp(props);
@@ -76,7 +76,7 @@ export class O<TProps=any, TActions=TProps> extends RRMixin(HTMLElement) impleme
     }
 
     disconnectedCallback(): any {
-        this.disconnectedSignal!.
+        this.RAController!.abort();
     }
 
     #internals: ElementInternals;

@@ -41,8 +41,8 @@ export class O extends RRMixin(HTMLElement) {
     copyInternals(internals) { }
     static observedAttributes = [];
     async connectedCallback() {
-        if (this.#disconnectedAbortController.signal.aborted) {
-            this.#disconnectedAbortController = new AbortController();
+        if (this.RAController.signal.aborted) {
+            this.RAController = new AbortController();
         }
         const props = this.constructor.props;
         this.#propUp(props);
@@ -64,8 +64,7 @@ export class O extends RRMixin(HTMLElement) {
         }
     }
     disconnectedCallback() {
-        this.disconnectedSignal.
-        ;
+        this.RAController.abort();
     }
     #internals;
     /**

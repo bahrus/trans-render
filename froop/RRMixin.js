@@ -3,13 +3,10 @@ export const publicPrivateStore = Symbol();
 export function RRMixin(Base) {
     class RR extends Base {
         propagator = new EventTarget();
-        #disconnectedAbortController;
-        get disconnectedSignal() {
-            return this.#disconnectedAbortController.signal;
-        }
+        RAController;
         constructor(...rest) {
             super();
-            this.#disconnectedAbortController = new AbortController();
+            this.RAController = new AbortController();
         }
         sleep;
         awake() {
@@ -18,7 +15,7 @@ export function RRMixin(Base) {
                     resolve();
                     return;
                 }
-                const ac = this.#disconnectedAbortController;
+                const ac = this.RAController;
                 //I'm thinking this one isn't worth wrapping in an EventHandler, as the "closure"
                 //isn't accessing anything other than the resolve and abort controller, doesn't seem worth it.
                 this.propagator.addEventListener('sleep', e => {

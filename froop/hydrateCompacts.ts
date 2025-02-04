@@ -73,10 +73,10 @@ class CompactManager{
         const {srcKey} = cc;
         const {options} = ra;
         const {vm} = options;
-        const {propagator, disconnectedSignal} = (vm as RoundaboutReady);
+        const {propagator, RAController} = (vm as RoundaboutReady);
         propagator?.addEventListener(srcKey, this, {signal: this.#ac.signal});
         this.#doAction(false, true);
-        disconnectedSignal?.addEventListener('abort', this, {once: true});
+        RAController.signal.addEventListener('abort', this, {once: true});
     }
 
     handleEvent(e: Event){

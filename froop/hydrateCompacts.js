@@ -67,10 +67,10 @@ class CompactManager {
         const { srcKey } = cc;
         const { options } = ra;
         const { vm } = options;
-        const { propagator, disconnectedSignal } = vm;
+        const { propagator, RAController } = vm;
         propagator?.addEventListener(srcKey, this, { signal: this.#ac.signal });
         this.#doAction(false, true);
-        disconnectedSignal?.addEventListener('abort', this, { once: true });
+        RAController.signal.addEventListener('abort', this, { once: true });
     }
     handleEvent(e) {
         switch (e.type) {

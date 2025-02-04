@@ -27,7 +27,7 @@ export class CustStSvc {
             .split(',')
             .map(s => s.trim().split(' if ').map(t => t.trim()));
         const simpleOnes = splitSplit.filter(x => x.length === 1);
-        const { propagator, disconnectedSignal } = instance;
+        const { propagator, RAController } = instance;
         //Use flatten?
         for (const propName of simpleOnes.map(x => x[0])) {
             const ac = new AbortController();
@@ -36,7 +36,7 @@ export class CustStSvc {
             propagator.addEventListener(propName, reflector, { signal: ac.signal });
         }
         //TODO:  make sure no memory leak from this
-        disconnectedSignal.addEventListener('abort', e => {
+        RAController.signal.addEventListener('abort', e => {
             this.#disconnect();
         }, { once: true });
         const complexOnes = splitSplit.filter(x => x.length > 1);

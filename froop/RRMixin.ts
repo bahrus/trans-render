@@ -7,15 +7,11 @@ export function RRMixin<T extends Constructor, TProps=any>(Base: T) {
   abstract class RR extends Base implements RoundaboutReady {
     propagator = new EventTarget();
 
-    #disconnectedAbortController: AbortController;
-
-    get disconnectedSignal(){
-        return this.#disconnectedAbortController.signal;
-    }
+    RAController: AbortController;
 
     constructor(...rest: any[]){
         super();
-        this.#disconnectedAbortController = new AbortController();
+        this.RAController = new AbortController();
     }
 
     abstract covertAssignment(obj: TProps): Promise<void>;
@@ -27,7 +23,7 @@ export function RRMixin<T extends Constructor, TProps=any>(Base: T) {
                 resolve();
                 return;
             }
-            const ac = this.#disconnectedAbortController;
+            const ac = this.RAController;
             //I'm thinking this one isn't worth wrapping in an EventHandler, as the "closure"
             //isn't accessing anything other than the resolve and abort controller, doesn't seem worth it.
             this.propagator.addEventListener('sleep', e => {

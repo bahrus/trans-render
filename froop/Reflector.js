@@ -29,7 +29,7 @@ export class Reflector {
     constructor(instance, attrsToReflect) {
         this.instance = instance;
         this.attrsToReflect = attrsToReflect;
-        const { propagator, disconnectedSignal } = instance;
+        const { propagator, RAController } = instance;
         const attrs = instance.constructor.attrs;
         const reflectAll = attrsToReflect === '*';
         let parsedAttrsToReflect;
@@ -49,7 +49,7 @@ export class Reflector {
         }
         //I'm thinking this event handler doesn't access any shared memory
         // so no need to use EventHandler
-        disconnectedSignal.addEventListener('abort', e => {
+        RAController.signal.addEventListener('abort', e => {
             this.#disconnect();
         }, { once: true });
     }
