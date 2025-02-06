@@ -90,6 +90,10 @@
       "default": "./froop/roundabout.js",
       "types": "./froop/roundabout.ts"
     },
+    "./froop/RRMixin.js": {
+      "default": "./froop/RRMixin.js",
+      "types": "./froop/RRMixin.ts"
+    },
     "./lib/activate.js": {
       "default": "./lib/activate.js",
       "types": "./lib/activate.ts"
