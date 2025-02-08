@@ -72,7 +72,8 @@ class CompactManager{
         this.#ra = ra;
         const {srcKey} = cc;
         const {options} = ra;
-        const {vm} = options;
+        let {vm} = options;
+        if(vm instanceof WeakRef) vm = vm.deref();
         const {propagator, RAController} = (vm as RoundaboutReady);
         propagator?.addEventListener(srcKey, this, {signal: this.#ac.signal});
         this.#doAction(false, true);

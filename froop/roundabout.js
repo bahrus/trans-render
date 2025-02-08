@@ -1,11 +1,9 @@
 import { EventHandler } from '../EventHandler.js';
 export async function roundabout(options, infractions) {
     const { vm } = options;
-    if (!(vm instanceof WeakRef)) {
-        const { sleep } = vm;
-        if (sleep) {
-            await vm?.awake();
-        }
+    const { sleep } = vm;
+    if (sleep) {
+        await vm?.awake();
     }
     const ra = new RoundAbout(options, infractions);
     const keysToPropagate = new Set();
@@ -45,20 +43,9 @@ export class RoundAbout {
             return new Set(k);
         return new Set([k]);
     }
-    get #vm() {
-        const test = this.options.vm?.deref();
-        if (test === undefined) {
-            this.#unsubscribe();
-        }
-        return test;
-    }
     constructor(options, infractions) {
         this.options = options;
         this.infractions = infractions;
-        const vm = options.vm;
-        if (vm !== undefined && !(vm instanceof WeakRef)) {
-            options.vm = new WeakRef(vm);
-        }
         const newBusses = {};
         const routers = {};
         const checks = {};
@@ -108,6 +95,7 @@ export class RoundAbout {
                 router.push(newRouter);
             }
         }
+        const vm = options.vm;
         if (positractions !== undefined && vm !== undefined) {
             //const {options} = this;
             const infractionLookup = this.#infractionsLookup;
@@ -200,10 +188,10 @@ export class RoundAbout {
             const arr = Array.from(mountObservers);
             for (const mo of arr) {
                 mo.addEventListener('mount', e => {
-                    vm.nudge();
+                    vm.awake();
                 });
                 mo.addEventListener('dismount', e => {
-                    vm.rock();
+                    vm.nudge();
                 });
             }
         }
@@ -244,9 +232,7 @@ export class RoundAbout {
     async hydrate(keysToPropagate) {
         //const clone = structuredClone(keysToPropagate);// new Set(keysToPropagate);
         const { options } = this;
-        const vm = this.#vm;
-        if (vm === undefined)
-            throw 'NI';
+        const { vm } = options;
         const { sleep } = vm;
         if (sleep)
             await vm.awake();
@@ -536,3 +522,6 @@ export const whenSrcKeyChanges = String.raw `^when_(?<srcKey>[\w]+)_changes_`;
 const reInvoke = new RegExp(String.raw `${whenSrcKeyChanges}invoke_(?<destKey>[\w]+)`);
 export class RoundAboutEvent extends Event {
 }
+// export class ActionBus{
+//     bus = new Set<string>();
+// }
