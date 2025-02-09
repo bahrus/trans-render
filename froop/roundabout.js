@@ -317,10 +317,10 @@ export class RoundAbout {
     async subscribe() {
         const { options } = this;
         const { vm } = options;
-        const { propagator, disconnectedSignal } = vm;
+        const { propagator, RAController } = vm;
         if (!(propagator instanceof EventTarget))
             return;
-        disconnectedSignal.addEventListener('abort', () => {
+        RAController.signal.addEventListener('abort', () => {
             //do inline as long as no external variable access other than this, I think
             this.#unsubscribe();
         }, { once: true });
