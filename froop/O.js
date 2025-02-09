@@ -24,16 +24,11 @@ export class O extends RRMixin(HTMLElement) {
         }
         await assignGingerly(this[publicPrivateStore], extObj);
     }
-    // #disconnectedAbortController: AbortController;
-    // get disconnectedSignal(){
-    //     return this.#disconnectedAbortController.signal;
-    // }
     constructor() {
         super();
         const internals = this.attachInternals();
         this.#internals = internals;
         this.copyInternals(internals);
-        //this.#disconnectedAbortController = new AbortController();
     }
     /**
      * Keep internals reference private, but allow subclasses to get a handle to the internal "singleton"
@@ -47,11 +42,6 @@ export class O extends RRMixin(HTMLElement) {
         const props = this.constructor.props;
         this.#propUp(props);
         await this.#instantiateRoundaboutIfApplicable();
-        // const states = (<any>this.constructor).states as PropLookup;
-        // if(Object.keys(states).length > 0){
-        //     const {CustStSvc} = await import('./CustStSvc.js');
-        //     new CustStSvc(states, this, this.#internals);
-        // }
         const customStatesToReflect = getComputedStyle(this).getPropertyValue('--custom-state-exports');
         if (customStatesToReflect !== '') {
             const { CustStSvc } = await import('./CustStSvc.js');
@@ -69,6 +59,7 @@ export class O extends RRMixin(HTMLElement) {
     #internals;
     /**
      * provided for debugging purposes
+     * so don't remove it even though no references to it other than initialization
      */
     #roundabout;
     get #config() {
