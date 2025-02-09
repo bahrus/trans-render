@@ -380,6 +380,8 @@ export class RoundAbout {
             const controller = handlerControllers[handlerKey];
             controller.abort();
         }
+        //wipe out the reference to the element to hopefully reduce the chance of memory leak
+        delete this.options;
     }
     async doCoreEvt(key, evtCount) {
         let compactKeysToPropagate;

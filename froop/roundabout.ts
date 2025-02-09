@@ -379,6 +379,8 @@ export class RoundAbout{
             const controller = handlerControllers[handlerKey];
             controller.abort();
         }
+        //wipe out the reference to the element to hopefully reduce the chance of memory leak
+        delete (<any>this).options;
     }
 
     async doCoreEvt(key: string, evtCount: number){
