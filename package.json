@@ -31,6 +31,10 @@
       "default": "./EventHandler.js",
       "types": "./EventHandler.ts"
     },
+    "./MntCfgMxn.js": {
+      "default": "./MntCfgMxn.js",
+      "types": "./MntCfgMxn.ts"
+    },
     "./Mount.js": {
       "default": "./Mount.js",
       "types": "./Mount.ts"
