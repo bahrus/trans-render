@@ -30,7 +30,8 @@ export class Mod<TProps, TMethods, TElement = {}>{
                         }
                         break;
                     case 'number':
-                        throw 'NI';
+                        valToIncBy = byAmt;
+                        break;
                     default:
                         throw 'NI';
                 }

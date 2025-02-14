@@ -24,7 +24,8 @@ export class Mod {
                         }
                         break;
                     case 'number':
-                        throw 'NI';
+                        valToIncBy = byAmt;
+                        break;
                     default:
                         throw 'NI';
                 }
