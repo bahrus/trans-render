@@ -59,6 +59,8 @@ export class Mod<TProps, TMethods, TElement = {}>{
                             throw 'NI';
                     }
 
+                }else if(to !== undefined){
+                    valToSet = to;
                 }else{
                     throw 'NI';
                 }

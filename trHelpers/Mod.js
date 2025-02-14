@@ -54,6 +54,9 @@ export class Mod {
                             throw 'NI';
                     }
                 }
+                else if (to !== undefined) {
+                    valToSet = to;
+                }
                 else {
                     throw 'NI';
                 }
