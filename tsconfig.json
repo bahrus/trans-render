@@ -28,7 +28,7 @@
 		"MyCustomElement/*",
 		"positractions/*",
 		"funions/Localizer.ts",
-		"asmr/*",
+		"asmr/",
 		"lib/weave.ts"
 	],
 	"exclude":[
