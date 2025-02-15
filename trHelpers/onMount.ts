@@ -17,7 +17,13 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
         const {type, name} = first;
         if(type === '$'){
             const {model} = transformer;
-            const subModel = (<any>model)[name]
+            const subModel = (<any>model)[name];
+            if(subModel === undefined) {
+                model.propagator.addEventListener(name, e => {
+                    onMount(transformer, mo, matchingElement, uows, skipInit, ctx, matchingElements, observer, mountObserver);
+                }, {once: true})
+                return;
+            }
             if(Array.isArray(subModel)){
                 const {ForEachImpl, forEachImpls} = await import('./ForEachImpl.js');
                 let forEachImpl: ForEachInterface | undefined;

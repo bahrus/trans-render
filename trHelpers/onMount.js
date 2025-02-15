@@ -9,6 +9,12 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
         if (type === '$') {
             const { model } = transformer;
             const subModel = model[name];
+            if (subModel === undefined) {
+                model.propagator.addEventListener(name, e => {
+                    onMount(transformer, mo, matchingElement, uows, skipInit, ctx, matchingElements, observer, mountObserver);
+                }, { once: true });
+                return;
+            }
             if (Array.isArray(subModel)) {
                 const { ForEachImpl, forEachImpls } = await import('./ForEachImpl.js');
                 let forEachImpl;
