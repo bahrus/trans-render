@@ -75,7 +75,12 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
         A({[sa]: val}, matchingElement);
     }else if(ss !== undefined){
         if(ss.startsWith('--')){
-            (matchingElement as HTMLElement).style.setProperty(ss, val);
+            if(val === undefined){
+                (matchingElement as HTMLElement).style.removeProperty(ss);
+            }else{
+                (matchingElement as HTMLElement).style.setProperty(ss, val);
+            }
+            
         }else{
             const {setProp} = await import('../lib/setProp.js');
             setProp((matchingElement as HTMLElement).style, ss, val);

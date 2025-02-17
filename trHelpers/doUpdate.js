@@ -77,7 +77,12 @@ export async function doUpdate(transformer, matchingElement, uow) {
     }
     else if (ss !== undefined) {
         if (ss.startsWith('--')) {
-            matchingElement.style.setProperty(ss, val);
+            if (val === undefined) {
+                matchingElement.style.removeProperty(ss);
+            }
+            else {
+                matchingElement.style.setProperty(ss, val);
+            }
         }
         else {
             const { setProp } = await import('../lib/setProp.js');
