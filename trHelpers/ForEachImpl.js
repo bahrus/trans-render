@@ -1,4 +1,6 @@
 export const forEachImpls = new WeakMap();
+export const updateInProgress = new WeakSet();
+export const doItAgain = new WeakSet();
 export class ForEachImpl {
     #ref;
     #config;
@@ -48,14 +50,20 @@ export class ForEachImpl {
         const matchingElement = this.#ref.deref();
         if (matchingElement === undefined)
             throw 'NI';
+        if (updateInProgress.has(matchingElement)) {
+            doItAgain.add(matchingElement);
+            return;
+        }
+        updateInProgress.add(matchingElement);
         const { xform, appendTo, indexProp, timestampProp, outOfRangeAction, outOfRangeProp } = config;
         const instances = [];
-        const transformerLookup = new Map();
+        //const transformerLookup = new Map<Node, Transformer<any>>();
         const { Transform } = await import('../Transform.js');
         let cnt = 1;
         for (const item of subModel) {
             const ithTransformer = this.#transforms.get(cnt - 1);
             if (ithTransformer !== undefined) {
+                //already generated initial item, so update the bindings
                 cnt++;
                 const { item: i, timeStampVal } = ithTransformer;
                 if (outOfRangeProp) {
@@ -81,6 +89,7 @@ export class ForEachImpl {
                 }
                 continue;
             }
+            //need to create the item for the first time.
             const { getBlowDriedTempl } = await import('../lib/getBlowDriedTempl.js');
             const blowDriedTempl = getBlowDriedTempl(templ);
             const instance = blowDriedTempl.content.cloneNode(true);
@@ -90,12 +99,12 @@ export class ForEachImpl {
                 const transformer = await Transform(child, item, xform);
                 transformers.push(transformer);
             }
-            instances.push(instance);
-            this.#transforms.set(cnt - 1, {
-                item,
+            const ithTransformer2 = {
                 transformers,
-                timeStampVal: timestampProp !== undefined ? item[timestampProp] : undefined,
-            });
+                item,
+            };
+            this.#transforms.set(cnt - 1, ithTransformer2);
+            instances.push(instance);
             cnt++;
         }
         if (outOfRangeAction !== undefined || outOfRangeProp !== undefined) {
@@ -123,5 +132,10 @@ export class ForEachImpl {
             elToAppendTo?.append(instance);
             //debugger;
         }
+        updateInProgress.delete(matchingElement);
+        // if(doItAgain.has(matchingElement)){
+        //     doItAgain.delete(matchingElement);
+        //     this.update(subModel);
+        // }
     }
 }

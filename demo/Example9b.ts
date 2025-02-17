@@ -30,6 +30,7 @@ const div = document.querySelector('div')!;
 Transform<Props, Methods>(div, model, {
     '$ list': {
         f:{
+            wi: 'node',
             xform:{
                 '| myProp': 0
             },

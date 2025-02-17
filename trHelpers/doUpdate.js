@@ -52,9 +52,9 @@ export async function doUpdate(transformer, matchingElement, uow) {
     if (f !== undefined) {
         const { forEachImpls } = await import('./ForEachImpl.js');
         const forEachImpl = forEachImpls.get(matchingElement);
-        const { model } = transformer;
-        const subModel = model[o[0]];
         if (forEachImpl !== undefined) {
+            const { model } = transformer;
+            const subModel = model[o[0]];
             await forEachImpl.update(subModel);
         }
         return;

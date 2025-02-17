@@ -54,9 +54,9 @@ export async function doUpdate<TProps extends {}, TMethods = TProps, TElement = 
     if(f !== undefined){
         const {forEachImpls} = await import('./ForEachImpl.js');
         const forEachImpl = forEachImpls.get(matchingElement);
-        const {model} = transformer;
-        const subModel = (<any>model)[(o as Array<string>)[0]];
         if(forEachImpl !== undefined){
+            const {model} = transformer;
+            const subModel = (<any>model)[(o as Array<string>)[0]];
             await forEachImpl.update(subModel);
         }
         return;
