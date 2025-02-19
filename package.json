@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.884",
+  "version": "0.0.885",
   "description": "Instantiate an HTML Template",
   "type": "module",
   "main": "trans-render.js",
@@ -46,7 +46,7 @@
       "default": "./asmr/asmr.js",
       "types": "./asmr/asmr.ts"
     },
-    "./asmr/extractData/fromList.js":{
+    "./asmr/extractData/fromList.js": {
       "default": "./asmr/extractData/fromList.js",
       "types": "./asmr/extractData/fromList.ts"
     },
