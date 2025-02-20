@@ -1,4 +1,5 @@
 import {Transform} from '../Transform.js';
+import { RoundaboutReady } from '../ts-refs/trans-render/froop/types.js';
 
 interface Props {
     greeting: string,
@@ -6,9 +7,9 @@ interface Props {
 interface Methods{
     
 }
-const model: Props & Methods = {
+const model= {
     greeting: ''
-}
+} as Props & Methods & RoundaboutReady;
 
 const div = document.querySelector('div')!;
 

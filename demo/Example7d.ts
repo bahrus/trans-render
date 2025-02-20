@@ -1,4 +1,5 @@
 import {Transform} from '../Transform.js';
+import { RoundaboutReady } from '../ts-refs/trans-render/froop/types.js';
 
 interface Props {
     typeToEdit: string,
@@ -6,9 +7,10 @@ interface Props {
 interface Methods{
     
 }
-const model: Props & Methods = {
+const model = {
     typeToEdit: 'boolean',
-}
+} as Props & Methods & RoundaboutReady;
+
 const div = document.querySelector('div')!;
 
 Transform<Props, Methods>(div, model, {

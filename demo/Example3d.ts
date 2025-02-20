@@ -1,4 +1,5 @@
 import {Transform} from '../Transform.js';
+import { RoundaboutReady } from '../ts-refs/trans-render/froop/types.js';
 
 interface Props{
     myDate: Date;
@@ -15,10 +16,10 @@ myTemplate.innerHTML = String.raw `
     <span>Some Template Content</span>
 </div>
 `;
-const model: Props = {
+const model ={
     myDate: new Date(),
     myTemplate
-};
+} as Props & RoundaboutReady;
 
 Transform<Props & Methods>(div, model, {
     span: {

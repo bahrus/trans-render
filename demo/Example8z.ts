@@ -1,4 +1,5 @@
 import {Transform} from '../Transform.js';
+import { RoundaboutReady } from '../ts-refs/trans-render/froop/types.js';
 
 interface Props {
     count: number,
@@ -9,9 +10,10 @@ interface Parts{
 interface Methods{
     
 }
-const model: Props & Methods = {
+const model = {
     count: 30000,
-}
+} as Props & Methods & RoundaboutReady;
+
 const div = document.querySelector('div')!;
 
 

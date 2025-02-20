@@ -1,4 +1,5 @@
 import {Transform} from '../Transform.js';
+import { RoundaboutReady } from '../ts-refs/trans-render/froop/types.js';
 
 interface Model{
     msg1: string;
@@ -9,13 +10,13 @@ interface Model{
 }
 
 const div = document.querySelector('div')!;
-const model: Model = {
+const model = {
     msg1: '123',
     rO: true,
     num: 7,
     propName: 'test',
     color: 'red'
-};
+} as Model & RoundaboutReady;
 
 Transform<Model>(div, model, {
     input: [

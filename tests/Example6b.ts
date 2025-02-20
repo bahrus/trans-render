@@ -1,4 +1,5 @@
 import {Transform, EngagementCtx} from '../Transform.js';
+import { RoundaboutReady } from '../ts-refs/trans-render/froop/types.js';
 
 interface Props{
     msg1: string;
@@ -11,7 +12,7 @@ interface Methods{
 }
 
 const div = document.querySelector('div')!;
-const model: Props & Methods = {
+const model = {
     msg1: '123',
     rO: true,
     num: 7,
@@ -19,7 +20,7 @@ const model: Props & Methods = {
         console.log({model, el, ctx});
         ((<any>window)['target'] as HTMLElement).setAttribute('mark', 'good');
     }
-};
+} as Props & Methods & RoundaboutReady;
 
 Transform<Props, Methods>(div, model, {
     input: [

@@ -1,4 +1,5 @@
 import {Transform} from '../Transform.js';
+import { RoundaboutReady } from '../ts-refs/trans-render/froop/types.js';
 
 interface Props{
     msg1: string;
@@ -10,13 +11,13 @@ interface Methods{
 }
 
 const div = document.querySelector('div')!;
-const model: Props & Methods = {
+const model = {
     msg1: 'hello',
     msg2: 'world',
     computeMessage: ({msg1, msg2}: Props & Methods) => {
         return `msg1: ${msg1}, msg2: ${msg2}`
     }
-};
+} as Props & Methods & RoundaboutReady;
 
 Transform<Props & Methods>(div, model, {
     span: {

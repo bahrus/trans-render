@@ -1,4 +1,5 @@
 import {Transform, ITransformer} from '../Transform.js';
+import { RoundaboutReady } from '../ts-refs/trans-render/froop/types.js';
 
 interface Props {
     isHappy: boolean,
@@ -6,13 +7,14 @@ interface Props {
 interface Actions {
     handleInput: (e: Event, transformer: ITransformer<Props, Actions>) => void;
 }
-const model: Props & Actions = {
+const model = {
     isHappy: false,
     handleInput: (e: Event, {model}) => {
         model.isHappy = !model.isHappy;
         
     }
-}
+} as Props & Actions & RoundaboutReady;
+
 const form = document.querySelector('form')!;
 
 Transform<Props, Actions>(form, model, {

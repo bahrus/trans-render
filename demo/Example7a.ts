@@ -1,11 +1,12 @@
 import {Transform} from '../Transform.js';
+import { RoundaboutReady } from '../ts-refs/trans-render/froop/types.js';
 
 interface Model {
     typeToEdit: string,
 }
 const model = {
     typeToEdit: 'boolean'
-}
+} as Model & RoundaboutReady
 const form = document.querySelector('form')!;
 
 Transform<Model>(form, model, {

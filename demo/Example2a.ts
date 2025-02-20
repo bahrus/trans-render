@@ -1,4 +1,5 @@
 import {Transform} from '../Transform.js';
+import { RoundaboutReady } from '../ts-refs/trans-render/froop/types.js';
 import { LHS } from '../ts-refs/trans-render/types.js';
 
 interface Model{
@@ -6,9 +7,9 @@ interface Model{
 }
 
 const form = document.querySelector('form')!;
-const model: Model = {
+const model = {
     greeting: 'hello'
-};
+} as Model & RoundaboutReady;
 
 Transform<Model>(form, model, {
     '@ greeting': 0

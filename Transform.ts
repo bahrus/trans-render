@@ -1,4 +1,5 @@
 import {MountObserver} from 'mount-observer/MountObserver.js';
+import {RoundaboutReady} from './ts-refs/trans-render/froop/types.js';
 import {
     PropAttrQueryType, QuenitOfWork, Derivative, 
     IMountOrchestrator, NumberExpression, InterpolatingExpression,
@@ -15,7 +16,7 @@ export {UnitOfWork, ITransformer, EngagementCtx, XForm} from './ts-refs/trans-re
 
 export async function Transform<TProps extends {}, TMethods = TProps, TElement = {}>(
     target: TransformerTarget,
-    model: TProps & TMethods,
+    model: TProps & TMethods & RoundaboutReady,
     xform: XForm<TProps, TMethods, TElement> & Info,
     options?: TransformOptions
 ){
@@ -26,12 +27,12 @@ export async function Transform<TProps extends {}, TMethods = TProps, TElement =
 
 export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> extends EventTarget implements ITransformer<TProps, TMethods, TElement>{
     #mountOrchestrators: Array<MountOrchestrator<TProps, TMethods, TElement>> = [];
-    #model: TProps & TMethods;
+    #model: TProps & TMethods & RoundaboutReady;
     initializedMods: Set<ModificationUnitOfWork<TProps, TMethods, TElement>> = new Set();
     get model(){
         return this.#model;
     }
-    async updateModel(newModel: TProps & TMethods){
+    async updateModel(newModel: TProps & TMethods & RoundaboutReady){
         const {options} = this;
         const {propagator} = options;
         const {___props, ___nestedProps} = propagator!;
@@ -58,7 +59,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
     }
     constructor(
         public target: TransformerTarget,
-        model: TProps & TMethods,
+        model: TProps & TMethods & RoundaboutReady,
         public xform: XForm<TProps, TMethods, TElement> & Info,
         public options: TransformOptions, 
     ){
