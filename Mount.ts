@@ -81,7 +81,7 @@ export class Mount<TProps extends {}, TActions = TProps, ETProps = TProps>
 
     cloneMT(self: this): Partial<MountProps> {
         const {config} = this;
-        let {mainTemplate} = config;
+        let {mainTemplate, appendOnClone} = config;
         if(typeof mainTemplate === 'string'){
             const templ = document.createElement('template');
             templ.innerHTML = mainTemplate;
@@ -89,6 +89,9 @@ export class Mount<TProps extends {}, TActions = TProps, ETProps = TProps>
             mainTemplate = templ;
         }
         const clonedTemplate = mainTemplate.content.cloneNode(true);
+        if(appendOnClone){
+            this.#root.appendChild(clonedTemplate);
+        }
         return {
             clonedTemplate
         } as Partial<MountProps>
@@ -114,8 +117,11 @@ export class Mount<TProps extends {}, TActions = TProps, ETProps = TProps>
         }
     }
     mountClone(self: this): PMP<TProps, TActions, ETProps> {
-        const {clonedTemplate} = self;
-        this.#root.appendChild(clonedTemplate!);
+        const {clonedTemplate, config} = self;
+        const {appendOnClone} = config;
+        if(!appendOnClone){
+            this.#root.appendChild(clonedTemplate!);
+        }
         return {
 
         }

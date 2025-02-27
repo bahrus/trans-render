@@ -71,7 +71,7 @@ export class Mount extends O {
     }
     cloneMT(self) {
         const { config } = this;
-        let { mainTemplate } = config;
+        let { mainTemplate, appendOnClone } = config;
         if (typeof mainTemplate === 'string') {
             const templ = document.createElement('template');
             templ.innerHTML = mainTemplate;
@@ -79,6 +79,9 @@ export class Mount extends O {
             mainTemplate = templ;
         }
         const clonedTemplate = mainTemplate.content.cloneNode(true);
+        if (appendOnClone) {
+            this.#root.appendChild(clonedTemplate);
+        }
         return {
             clonedTemplate
         };
@@ -104,8 +107,11 @@ export class Mount extends O {
         };
     }
     mountClone(self) {
-        const { clonedTemplate } = self;
-        this.#root.appendChild(clonedTemplate);
+        const { clonedTemplate, config } = self;
+        const { appendOnClone } = config;
+        if (!appendOnClone) {
+            this.#root.appendChild(clonedTemplate);
+        }
         return {};
     }
     async initSSRXform(self) {
