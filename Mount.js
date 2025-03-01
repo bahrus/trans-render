@@ -78,9 +78,10 @@ export class Mount extends O {
             config.mainTemplate = templ;
             mainTemplate = templ;
         }
-        const clonedTemplate = mainTemplate.content.cloneNode(true);
+        let clonedTemplate = mainTemplate.content.cloneNode(true);
         if (appendOnClone) {
             this.#root.appendChild(clonedTemplate);
+            clonedTemplate = this.#root;
         }
         return {
             clonedTemplate
