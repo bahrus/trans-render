@@ -29,10 +29,14 @@ export class Mount<TProps extends {}, TActions = TProps, ETProps = TProps>
     constructor(){
         super();
         const {config} = this;
-        const {shadowRootInit, styles} = config;
+        const {shadowRootInit, styles, mainTemplate, appendOnClone} = config;
         if(shadowRootInit){
             if(this.shadowRoot === null){
                 this.attachShadow(shadowRootInit);
+                if(appendOnClone){
+                    const compiledTemplate = this.#compileTemplate(mainTemplate!, config);
+                    this.shadowRoot!.appendChild(compiledTemplate.content.cloneNode(true));
+                }
                 this.#csr = true;
             }else if(!styles){
                 const declarativeStyles = Array.from(this.shadowRoot.querySelectorAll('style[adopt]'));
@@ -79,20 +83,32 @@ export class Mount<TProps extends {}, TActions = TProps, ETProps = TProps>
 
     }
 
-    cloneMT(self: this): Partial<MountProps> {
-        const {config} = this;
-        let {mainTemplate, appendOnClone} = config;
+    #compileTemplate(mainTemplate: HTMLTemplateElement | string, config: MntCfg){
         if(typeof mainTemplate === 'string'){
             const templ = document.createElement('template');
             templ.innerHTML = mainTemplate;
             config.mainTemplate = templ;
-            mainTemplate = templ;
+            return templ;
         }
-        let clonedTemplate = mainTemplate.content.cloneNode(true);
+        return mainTemplate;
+    }
+
+    cloneMT(self: this): Partial<MountProps> {
+        const {config} = this;
+        let {mainTemplate, appendOnClone} = config;
         if(appendOnClone){
-            this.#root.appendChild(clonedTemplate);
-            clonedTemplate = this.#root;
+            return {
+                clonedTemplate: this.#root
+            } as Partial<MountProps>
         }
+        const compiledTemplate = this.#compileTemplate(mainTemplate!, config);
+        // if(typeof mainTemplate === 'string'){
+        //     const templ = document.createElement('template');
+        //     templ.innerHTML = mainTemplate;
+        //     config.mainTemplate = templ;
+        //     mainTemplate = templ;
+        // }
+        const clonedTemplate = compiledTemplate.content.cloneNode(true);
         return {
             clonedTemplate
         } as Partial<MountProps>
