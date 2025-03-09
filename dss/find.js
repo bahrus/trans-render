@@ -1,5 +1,5 @@
 export async function find(element, specifier, within) {
-    const { self, s } = specifier;
+    const { self, s, path } = specifier;
     if (self)
         return element;
     if (s === '#' || within !== undefined) {

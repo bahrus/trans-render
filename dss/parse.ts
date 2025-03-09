@@ -91,7 +91,14 @@ async function parseNonEventPart(
     const fullPath = nonEventPart.substring(iPosOfQuestionPeriod);
     //optimize?
     const split = fullPath.split('?.');
-    specifier.prop = split.at(-1);
+    const prop = split.at(-1);
+    //specifier.prop = split.at(-1);
+    if(prop === '$0'){
+        //TODO:  might not always be + 1;
+        specifier.prop = nonEventPart.substring(tailStart + 1, iPosOfQuestionPeriod);
+    }else{
+        specifier.prop = prop;
+    }
     specifier.path = split.length === 1 ? specifier.prop : fullPath;
     
 
