@@ -5,7 +5,7 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
     const {scopeS, elS, isModulo} = specifier;
     
     if(scopeS !== undefined){
-        const {dss, rec, rnf, host, s, prop, isiss} = specifier;
+        const {dss, rec, rnf, host, s, prop, isiss, scopeS} = specifier;
         switch(dss){
             case '^':
                 let closest: Element | null | undefined;
@@ -23,7 +23,9 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
                 if(s === '~' && elS !== undefined){
                     const peerCE = ((closest || element.getRootNode()) as DocumentFragment).querySelector(elS);
                     if(peerCE){
-                        await customElements.whenDefined(elS);
+                        if(elS.includes('-')){
+                            await customElements.whenDefined(elS);
+                        }
                         return peerCE;
                     }
                 }
@@ -56,7 +58,20 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
             case '?':
                 throw 'NI';
             case 'Y':
-                throw 'NI'
+                {
+                    let ns = element.nextElementSibling;
+                    if(scopeS === undefined) throw 'NI';
+                    while(ns){
+                        if(ns.matches(scopeS)){
+                            if(elS !== undefined){
+                                return ns.querySelector(elS);
+                            }
+                            return ns;
+                        }
+                        ns = ns.nextElementSibling;
+                    }
+                }
+                throw 404;
         }
     }else if(isModulo){
         const {modulo: m, elS} = specifier;

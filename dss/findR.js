@@ -2,7 +2,7 @@ import { getHostish } from './getHostish.js';
 export async function findR(element, specifier, scopeE) {
     const { scopeS, elS, isModulo } = specifier;
     if (scopeS !== undefined) {
-        const { dss, rec, rnf, host, s, prop, isiss } = specifier;
+        const { dss, rec, rnf, host, s, prop, isiss, scopeS } = specifier;
         switch (dss) {
             case '^':
                 let closest;
@@ -22,7 +22,9 @@ export async function findR(element, specifier, scopeE) {
                 if (s === '~' && elS !== undefined) {
                     const peerCE = (closest || element.getRootNode()).querySelector(elS);
                     if (peerCE) {
-                        await customElements.whenDefined(elS);
+                        if (elS.includes('-')) {
+                            await customElements.whenDefined(elS);
+                        }
                         return peerCE;
                     }
                 }
@@ -55,7 +57,21 @@ export async function findR(element, specifier, scopeE) {
             case '?':
                 throw 'NI';
             case 'Y':
-                throw 'NI';
+                {
+                    let ns = element.nextElementSibling;
+                    if (scopeS === undefined)
+                        throw 'NI';
+                    while (ns) {
+                        if (ns.matches(scopeS)) {
+                            if (elS !== undefined) {
+                                return ns.querySelector(elS);
+                            }
+                            return ns;
+                        }
+                        ns = ns.nextElementSibling;
+                    }
+                }
+                throw 404;
         }
     }
     else if (isModulo) {
