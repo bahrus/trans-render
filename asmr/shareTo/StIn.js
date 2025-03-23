@@ -56,7 +56,7 @@ export class StdIn {
             return;
         }
         this.pureValue = val;
-        const { valueType, displayProp, valueProp, path, allowUnsafe } = this.so;
+        const { valueType, displayProp, valueProp, path, allowUnsafe, action } = this.so;
         if (!allowUnsafe) {
             if (displayProp?.endsWith('HTML') || valueProp?.endsWith('HTML')) {
                 throw 403;
@@ -88,6 +88,11 @@ export class StdIn {
             }
         }
         if (valueProp !== undefined) {
+            switch (action) {
+                case 'toggle':
+                    el[valueProp] = !el[valueProp] || false;
+                    return;
+            }
             const isGingerly = valueProp.startsWith('?.');
             switch (valueProp) {
                 case 'ariaChecked':

@@ -59,7 +59,7 @@ export class StdIn<TProp = any> implements SharingObject{
             return;
         }
         this.pureValue = val;
-        const {valueType, displayProp, valueProp, path, allowUnsafe} = this.so;
+        const {valueType, displayProp, valueProp, path, allowUnsafe, action} = this.so;
         if(!allowUnsafe){
             if(displayProp?.endsWith('HTML') || valueProp?.endsWith('HTML')){
                 throw 403;
@@ -90,6 +90,11 @@ export class StdIn<TProp = any> implements SharingObject{
             }
         }
         if(valueProp !== undefined){
+            switch(action){
+                case 'toggle':
+                    (<any>el)[valueProp!] = !(<any>el)[valueProp!] || false;
+                    return;
+            }
             const isGingerly = valueProp.startsWith('?.');
             switch(valueProp!){
                 case 'ariaChecked':
