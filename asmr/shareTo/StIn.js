@@ -92,6 +92,12 @@ export class StdIn {
                 case 'toggle':
                     el[valueProp] = !el[valueProp] || false;
                     return;
+                case 'increment':
+                    el[valueProp] = (Number(el[valueProp]) || 0) + 1;
+                    return;
+                case 'decrement':
+                    el[valueProp] = (Number(el[valueProp]) || 0) - 1;
+                    return;
             }
             const isGingerly = valueProp.startsWith('?.');
             switch (valueProp) {

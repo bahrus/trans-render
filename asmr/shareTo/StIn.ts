@@ -94,6 +94,12 @@ export class StdIn<TProp = any> implements SharingObject{
                 case 'toggle':
                     (<any>el)[valueProp!] = !(<any>el)[valueProp!] || false;
                     return;
+                case 'increment':
+                    (<any>el)[valueProp!] = (Number((<any>el)[valueProp!]) || 0) + 1;
+                    return;
+                case 'decrement':
+                    (<any>el)[valueProp!] = (Number((<any>el)[valueProp!]) || 0) - 1;
+                    return;
             }
             const isGingerly = valueProp.startsWith('?.');
             switch(valueProp!){
