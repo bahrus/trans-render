@@ -99,23 +99,41 @@ export class StdIn {
                     el[valueProp] = (Number(el[valueProp]) || 0) - 1;
                     return;
                 case 'set-class':
+                case 'set-part':
                     const splitValueProp = valueProp.split(':');
-                    const [yesClass, noClass] = splitValueProp;
-                    if (val) {
-                        el.classList.add(yesClass);
-                        if (noClass === undefined)
-                            return;
-                        el.classList.remove(noClass);
-                        return;
+                    const [yes, no] = splitValueProp;
+                    switch (action) {
+                        case 'set-class':
+                            if (val) {
+                                el.classList.add(yes);
+                                if (no === undefined)
+                                    return;
+                                el.classList.remove(no);
+                                return;
+                            }
+                            else {
+                                el.classList.remove(yes);
+                                if (no === undefined)
+                                    return;
+                                el.classList.add(no);
+                                return;
+                            }
+                        case 'set-part':
+                            if (val) {
+                                el.part.add(yes);
+                                if (no === undefined)
+                                    return;
+                                el.part.remove(no);
+                                return;
+                            }
+                            else {
+                                el.part.remove(yes);
+                                if (no === undefined)
+                                    return;
+                                el.part.add(no);
+                                return;
+                            }
                     }
-                    else {
-                        el.classList.remove(yesClass);
-                        if (noClass === undefined)
-                            return;
-                        el.classList.add(noClass);
-                        return;
-                    }
-                    console.log({ val, valueProp });
                     return;
             }
             const isGingerly = valueProp.startsWith('?.');
