@@ -98,6 +98,25 @@ export class StdIn {
                 case 'decrement':
                     el[valueProp] = (Number(el[valueProp]) || 0) - 1;
                     return;
+                case 'set-class':
+                    const splitValueProp = valueProp.split(':');
+                    const [yesClass, noClass] = splitValueProp;
+                    if (val) {
+                        el.classList.add(yesClass);
+                        if (noClass === undefined)
+                            return;
+                        el.classList.remove(noClass);
+                        return;
+                    }
+                    else {
+                        el.classList.remove(yesClass);
+                        if (noClass === undefined)
+                            return;
+                        el.classList.add(noClass);
+                        return;
+                    }
+                    console.log({ val, valueProp });
+                    return;
             }
             const isGingerly = valueProp.startsWith('?.');
             switch (valueProp) {
