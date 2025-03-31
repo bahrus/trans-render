@@ -1,5 +1,4 @@
 export {waitForEvent} from '../lib/waitForEvent.js';
-export const listItems = Symbol.for('+JFxuQL/Okm6QU36kmvXbw');
 export class Newish extends EventTarget{
     queue: Array<any> = [];
     isResolved = false;
@@ -57,7 +56,7 @@ export class Newish extends EventTarget{
             const fi = this.queue.shift();
             //TODO: Provide support for a virtual slice of a very large list
             if(Array.isArray(fi)){
-                (<any>ce)[listItems] = fi;
+                (<any>ce)['ishList'] = fi;
             }else{
                 await assignGingerly(ce, fi);
             }
