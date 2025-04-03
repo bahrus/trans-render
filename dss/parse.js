@@ -55,6 +55,7 @@ export async function parse(s) {
             switch (head0) {
                 case '^':
                 case 'Y':
+                case '$':
                     specifier.dss = head0;
                     tailStart = 1;
                 // default:
@@ -93,6 +94,14 @@ async function parseNonEventPart(nonEventPart, tailStart, specifier) {
     await parseNonEventNonPath(nonEventPart.substring(0, iPosOfQuestionPeriod), tailStart, specifier);
 }
 function parseScope(nonEventPart, tailStart, specifier) {
+    // const {dss} = specifier;
+    // switch(dss){
+    //     case '$':{
+    //     }
+    //         break;
+    //     default:{
+    //     }
+    // }
     const openingSymbol = nonEventPart.substring(tailStart, tailStart + 1);
     let iPosOfClosedBrace;
     switch (openingSymbol) {

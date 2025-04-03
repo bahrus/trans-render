@@ -61,6 +61,7 @@ export async function parse(s: string) : Promise<Specifier>{
             switch(head0){
                 case '^':
                 case 'Y':
+                case '$':
                     specifier.dss = head0;
                     tailStart = 1;
                 // default:
@@ -109,6 +110,17 @@ async function parseNonEventPart(
 function parseScope(
     nonEventPart: string, tailStart: number, specifier: Specifier
 ) : {tailStart: number}{
+    // const {dss} = specifier;
+    // switch(dss){
+    //     case '$':{
+            
+    //     }
+    //         break;
+    //     default:{
+
+    //     }
+    // }
+    
     const openingSymbol = nonEventPart.substring(tailStart, tailStart + 1);
     let iPosOfClosedBrace: number;
     switch(openingSymbol){
