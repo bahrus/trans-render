@@ -110,42 +110,43 @@ async function parseNonEventPart(
 function parseScope(
     nonEventPart: string, tailStart: number, specifier: Specifier
 ) : {tailStart: number}{
-    // const {dss} = specifier;
-    // switch(dss){
-    //     case '$':{
-            
-    //     }
-    //         break;
-    //     default:{
-
-    //     }
-    // }
-    
-    const openingSymbol = nonEventPart.substring(tailStart, tailStart + 1);
+    const {dss} = specifier;
     let iPosOfClosedBrace: number;
-    switch(openingSymbol){
-        case '{':
-            iPosOfClosedBrace = nonEventPart.indexOf('}', tailStart + 2);
-            if(iPosOfClosedBrace === -1) throw 'PE'; // parsing error
-            let scopeS = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace);
-            if(scopeS.startsWith('(') && scopeS.endsWith(')')){
-                specifier.isiss = true;
-                scopeS = scopeS.substring(1, scopeS.length - 1);
+    switch(dss){
+        //TODO:  remove switch statement if no differentiation.
+        // case '$':{
+            
+        // }
+        default:{
+            const openingSymbol = nonEventPart.substring(tailStart, tailStart + 1);
+            switch(openingSymbol){
+                case '{':
+                    iPosOfClosedBrace = nonEventPart.indexOf('}', tailStart + 2);
+                    if(iPosOfClosedBrace === -1) throw 'PE'; // parsing error
+                    let scopeS = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace);
+                    if(scopeS.startsWith('(') && scopeS.endsWith(')')){
+                        specifier.isiss = true;
+                        scopeS = scopeS.substring(1, scopeS.length - 1);
+                    }
+                    specifier.scopeS = scopeS;
+                    break;
+                case '[':
+                    iPosOfClosedBrace = nonEventPart.indexOf(']', tailStart + 2);
+                    specifier.isModulo = true;
+                    specifier.modulo = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace).toLowerCase() as Modulo;
+                    break;
+                default:
+                    throw 'PE'; //Parsing error
             }
-            specifier.scopeS = scopeS;
-            break;
-        case '[':
-            iPosOfClosedBrace = nonEventPart.indexOf(']', tailStart + 2);
-            specifier.isModulo = true;
-            specifier.modulo = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace).toLowerCase() as Modulo;
-            break;
-        default:
-            throw 'PE'; //Parsing error
+            return {
+                tailStart: iPosOfClosedBrace + 1
+            }
+        }
     }
+
+
     
-    return {
-        tailStart: iPosOfClosedBrace + 1
-    }
+
 }
 
 async function parseNonEventNonPath(
