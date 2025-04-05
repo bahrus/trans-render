@@ -96,37 +96,44 @@ async function parseNonEventPart(nonEventPart, tailStart, specifier) {
 function parseScope(nonEventPart, tailStart, specifier) {
     const { dss } = specifier;
     let iPosOfClosedBrace;
-    switch (dss) {
-        //TODO:  remove switch statement if no differentiation.
-        // case '$':{
-        // }
-        default: {
-            const openingSymbol = nonEventPart.substring(tailStart, tailStart + 1);
-            switch (openingSymbol) {
-                case '{':
-                    iPosOfClosedBrace = nonEventPart.indexOf('}', tailStart + 2);
-                    if (iPosOfClosedBrace === -1)
-                        throw 'PE'; // parsing error
-                    let scopeS = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace);
-                    if (scopeS.startsWith('(') && scopeS.endsWith(')')) {
-                        specifier.isiss = true;
-                        scopeS = scopeS.substring(1, scopeS.length - 1);
-                    }
-                    specifier.scopeS = scopeS;
-                    break;
-                case '[':
-                    iPosOfClosedBrace = nonEventPart.indexOf(']', tailStart + 2);
-                    specifier.isModulo = true;
-                    specifier.modulo = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace).toLowerCase();
-                    break;
-                default:
-                    throw 'PE'; //Parsing error
+    const openingSymbol = nonEventPart.substring(tailStart, tailStart + 1);
+    switch (openingSymbol) {
+        case '{':
+            iPosOfClosedBrace = nonEventPart.indexOf('}', tailStart + 2);
+            if (iPosOfClosedBrace === -1)
+                throw 'PE'; // parsing error
+            let scopeS = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace);
+            if (scopeS.startsWith('(') && scopeS.endsWith(')')) {
+                specifier.isiss = true;
+                scopeS = scopeS.substring(1, scopeS.length - 1);
             }
-            return {
-                tailStart: iPosOfClosedBrace + 1
-            };
-        }
+            specifier.scopeS = scopeS;
+            break;
+        case '[':
+            iPosOfClosedBrace = nonEventPart.indexOf(']', tailStart + 2);
+            const stuffBetweenBraces = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace);
+            switch (dss) {
+                case '$': {
+                    const split = stuffBetweenBraces.split('|');
+                    const [ceName, itemProp] = split;
+                    specifier.is$cope = true;
+                    specifier.$copeDetail = {
+                        ceName, itemProp
+                    };
+                    break;
+                }
+                case '%': {
+                    specifier.isModulo = true;
+                    specifier.modulo = stuffBetweenBraces.toLowerCase();
+                    break;
+                }
+            }
+        default:
+            throw 'PE'; //Parsing error
     }
+    return {
+        tailStart: iPosOfClosedBrace + 1
+    };
 }
 async function parseNonEventNonPath(nonEventNonPathPart, tailStart, specifier) {
     const sigil = (specifier.self ? '$0' : nonEventNonPathPart.substring(tailStart, tailStart + 1));
