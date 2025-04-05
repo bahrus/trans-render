@@ -18,7 +18,7 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
                     closest = upSearch(prev, css);
                 }else{
                     const {parentElement} = seed;
-                    closest = parentElement?.closest(scopeS);
+                    closest = parentElement?.closest(scopeS!);
                 }
                 if(s === '~' && elS !== undefined){
                     const peerCE = ((closest || element.getRootNode()) as DocumentFragment).querySelector(elS);
@@ -84,6 +84,8 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
 
     }else if(is$cope){
         const {$copeDetail} = specifier;
-        throw 'NI';
+        const {$cope} = await import('./$cope.js');
+        const $copeHierarchy = $cope(element, $copeDetail!);
+        return $copeHierarchy;
     }
 }

@@ -85,6 +85,8 @@ export async function findR(element, specifier, scopeE) {
     }
     else if (is$cope) {
         const { $copeDetail } = specifier;
-        throw 'NI';
+        const { $cope } = await import('./$cope.js');
+        const $copeHierarchy = $cope(element, $copeDetail);
+        return $copeHierarchy;
     }
 }
