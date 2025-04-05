@@ -112,42 +112,50 @@ function parseScope(
 ) : {tailStart: number}{
     const {dss} = specifier;
     let iPosOfClosedBrace: number;
-    switch(dss){
-        //TODO:  remove switch statement if no differentiation.
-        // case '$':{
-            
-        // }
-        default:{
-            const openingSymbol = nonEventPart.substring(tailStart, tailStart + 1);
-            switch(openingSymbol){
-                case '{':
-                    iPosOfClosedBrace = nonEventPart.indexOf('}', tailStart + 2);
-                    if(iPosOfClosedBrace === -1) throw 'PE'; // parsing error
-                    let scopeS = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace);
-                    if(scopeS.startsWith('(') && scopeS.endsWith(')')){
-                        specifier.isiss = true;
-                        scopeS = scopeS.substring(1, scopeS.length - 1);
-                    }
-                    specifier.scopeS = scopeS;
+
+    const openingSymbol = nonEventPart.substring(tailStart, tailStart + 1);
+    switch(openingSymbol){
+        case '{':
+            iPosOfClosedBrace = nonEventPart.indexOf('}', tailStart + 2);
+            if(iPosOfClosedBrace === -1) throw 'PE'; // parsing error
+            let scopeS = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace);
+            if(scopeS.startsWith('(') && scopeS.endsWith(')')){
+                specifier.isiss = true;
+                scopeS = scopeS.substring(1, scopeS.length - 1);
+            }
+            specifier.scopeS = scopeS;
+            break;
+        case '[':
+            iPosOfClosedBrace = nonEventPart.indexOf(']', tailStart + 2);
+            const stuffBetweenBraces = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace);
+            switch(dss){
+                case '$':{
+                    const split = stuffBetweenBraces.split('|');
+                    const [ceName, itemProp] = split;
+                    specifier.is$cope = true;
+                    specifier.$copeDetail = {
+                        ceName, itemProp
+                    };
                     break;
-                case '[':
-                    iPosOfClosedBrace = nonEventPart.indexOf(']', tailStart + 2);
+                }
+                case '%':{
                     specifier.isModulo = true;
-                    specifier.modulo = nonEventPart.substring(tailStart + 1, iPosOfClosedBrace).toLowerCase() as Modulo;
+                    specifier.modulo = stuffBetweenBraces.toLowerCase() as Modulo;
                     break;
-                default:
-                    throw 'PE'; //Parsing error
+                }
             }
-            return {
-                tailStart: iPosOfClosedBrace + 1
-            }
-        }
+            
+        default:
+            throw 'PE'; //Parsing error
     }
+    return {
+        tailStart: iPosOfClosedBrace + 1
+    }
+}
 
 
     
 
-}
 
 async function parseNonEventNonPath(
     nonEventNonPathPart: string, 

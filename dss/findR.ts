@@ -2,7 +2,7 @@ import { Specifier } from "../ts-refs/trans-render/dss/types";
 import {getHostish} from './getHostish.js';
 
 export async function findR(element: Element, specifier: Specifier, scopeE?: Element | undefined){
-    const {scopeS, elS, isModulo} = specifier;
+    const {scopeS, elS, isModulo, is$cope} = specifier;
     
     if(scopeS !== undefined){
         const {dss, rec, rnf, host, s, prop, isiss, scopeS} = specifier;
@@ -82,5 +82,8 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
 
         //within
 
+    }else if(is$cope){
+        const {$copeDetail} = specifier;
+        throw 'NI';
     }
 }
