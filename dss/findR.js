@@ -87,6 +87,21 @@ export async function findR(element, specifier, scopeE) {
         const { $copeDetail } = specifier;
         const { $cope } = await import('./$cope.js');
         const $copeHierarchy = $cope(element, $copeDetail);
+        if ($copeHierarchy === null)
+            return $copeHierarchy;
+        if (elS !== undefined) {
+            const { home, satellites } = $copeHierarchy;
+            const test1 = home.querySelector(elS);
+            if (test1 !== null)
+                return test1;
+            if (satellites === undefined)
+                return null;
+            for (const satellite of satellites) {
+                const test2 = satellite.querySelector(elS);
+                if (test2 !== null)
+                    return test2;
+            }
+        }
         return $copeHierarchy;
     }
 }

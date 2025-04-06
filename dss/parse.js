@@ -128,6 +128,7 @@ function parseScope(nonEventPart, tailStart, specifier) {
                     break;
                 }
             }
+            break;
         default:
             throw 'PE'; //Parsing error
     }
@@ -143,7 +144,7 @@ async function parseNonEventNonPath(nonEventNonPathPart, tailStart, specifier) {
             specifier.prop = '$0';
         return;
     }
-    const { scopeS, isModulo } = specifier;
+    const { scopeS, isModulo, is$cope } = specifier;
     tailStart += specifier.self ? 2 : 1;
     //const propAndPath = nonEventPart.substring(tailStart);
     let propInference = nonEventNonPathPart.substring(tailStart);
@@ -202,7 +203,7 @@ async function parseNonEventNonPath(nonEventNonPathPart, tailStart, specifier) {
             break;
         case '@':
             specifier.elS = `[name="${propInference}"]`;
-            if (scopeS === undefined && !isModulo) {
+            if (scopeS === undefined && !isModulo && !is$cope) {
                 if (specifier.dss === undefined)
                     specifier.dss = '^';
                 specifier.scopeS = 'form';
