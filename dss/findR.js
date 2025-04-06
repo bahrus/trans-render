@@ -81,7 +81,6 @@ export async function findR(element, specifier, scopeE) {
         if (elS !== undefined)
             throw 'NI'; //not implemented
         return within;
-        //within
     }
     else if (is$cope) {
         const { $copeDetail } = specifier;

@@ -79,9 +79,6 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
         const within = modulo(element, m!);
         if(elS !== undefined) throw 'NI'; //not implemented
         return within;
-
-        //within
-
     }else if(is$cope){
         const {$copeDetail} = specifier;
         const {$cope} = await import('./$cope.js');
