@@ -89,6 +89,7 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
         if($copeHierarchy === null) return $copeHierarchy;
         if(elS !== undefined){
             const {home, satellites} = $copeHierarchy;
+            //TODO:  exclude inner itemscope once all browsers support donut hole scoped queries
             const test1 = home.querySelector(elS);
             if(test1 !== null) return test1;
             if(satellites === undefined) return null;
