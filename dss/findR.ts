@@ -89,6 +89,9 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
         if(ceName && !((<any>home).ish instanceof HTMLElement)){
             const {Newish, waitForEvent} = await import('./Newish.js');
             const ah = new Newish(home, ceName);
+            if(!ah.isResolved){
+                await waitForEvent(ah, 'resolved');
+            }
         }
         if(elS !== undefined){
             const {home, satellites} = $copeHierarchy;
