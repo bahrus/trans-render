@@ -3,14 +3,17 @@ export function $cope(el, $copeDetail) {
     const { id } = el;
     const itemScopeVal = ceName ? `="${ceName}"` : '';
     const itemPropVal = itemProp ? `[itemprop="${itemProp}"]` : '';
-    const qry = `[itemscope${itemScopeVal}]${itemPropVal}`;
+    const itemScopeAttrQry = `[itemscope${itemScopeVal}]${itemPropVal}`;
+    const ceNameAttrQry = ceName ? `, ${ceName}[itemscope]${itemPropVal}` : '';
+    const combinedQry = `${itemScopeAttrQry}${ceNameAttrQry}`;
     let test1 = null;
     if (id) {
-        const qry1 = `${qry}[itemref~=${id}]`;
+        const qry1 = `${itemScopeAttrQry}[itemref~=${id}], ${ceNameAttrQry}[itemref~=${id}]`;
+        console.log({ qry1 });
         test1 = el.getRootNode().querySelector(qry1);
     }
     if (test1 === null) {
-        test1 = el.closest(qry);
+        test1 = el.closest(combinedQry);
     }
     if (test1 === null)
         return test1;
