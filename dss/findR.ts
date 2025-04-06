@@ -84,6 +84,12 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
         const {$cope} = await import('./$cope.js');
         const $copeHierarchy = $cope(element, $copeDetail!);
         if($copeHierarchy === null) return $copeHierarchy;
+        const {home, satellites} = $copeHierarchy;
+        const {ceName} = $copeDetail!;
+        if(ceName && !((<any>home).ish instanceof HTMLElement)){
+            const {Newish, waitForEvent} = await import('./Newish.js');
+            const ah = new Newish(home, ceName);
+        }
         if(elS !== undefined){
             const {home, satellites} = $copeHierarchy;
             //TODO:  exclude inner itemscope once all browsers support donut hole scoped queries
