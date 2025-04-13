@@ -17,7 +17,7 @@ export async function findR(element, specifier, scopeE) {
                 }
                 else {
                     const { parentElement } = seed;
-                    closest = parentElement?.closest(scopeS);
+                    closest = parentElement?.closest(scopeS) || null;
                 }
                 if (s === '~' && elS !== undefined) {
                     const peerCE = (closest || element.getRootNode()).querySelector(elS);
@@ -45,7 +45,7 @@ export async function findR(element, specifier, scopeE) {
                             return h;
                         }
                     }
-                    return rn?.querySelector(elS);
+                    return rn?.querySelector(elS) || null;
                 }
                 const found = closest?.querySelector(elS);
                 if (found) {
@@ -90,12 +90,9 @@ export async function findR(element, specifier, scopeE) {
             return $copeHierarchy;
         const { home, satellites } = $copeHierarchy;
         const { ceName } = $copeDetail;
-        if (ceName && !(home.ish instanceof HTMLElement)) {
-            const { Newish, waitForEvent } = await import('./Newish.js');
-            const ah = new Newish(home, ceName);
-            if (!ah.isResolved) {
-                await waitForEvent(ah, 'resolved');
-            }
+        const { waitForEvent } = await import('mount-observer/waitForEvent.js');
+        if (!(home.ish instanceof HTMLElement)) {
+            waitForEvent(home, 'ish-resolved');
         }
         if (elS !== undefined) {
             const { home, satellites } = $copeHierarchy;

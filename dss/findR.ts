@@ -8,7 +8,7 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
         const {dss, rec, rnf, host, s, prop, isiss, scopeS} = specifier;
         switch(dss){
             case '^':
-                let closest: Element | null | undefined;
+                let closest: Element | null;
                 const seed = (scopeE || element)
                 if(isiss){
                     const prev = seed.previousElementSibling || seed.parentElement;
@@ -18,7 +18,7 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
                     closest = upSearch(prev, css);
                 }else{
                     const {parentElement} = seed;
-                    closest = parentElement?.closest(scopeS!);
+                    closest = parentElement?.closest(scopeS!) || null;
                 }
                 if(s === '~' && elS !== undefined){
                     const peerCE = ((closest || element.getRootNode()) as DocumentFragment).querySelector(elS);
@@ -45,7 +45,7 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
                             return h;
                         }
                     }
-                    return rn?.querySelector(elS);
+                    return rn?.querySelector(elS) || null;
                 }
 
                 const found = closest?.querySelector(elS);
@@ -86,12 +86,9 @@ export async function findR(element: Element, specifier: Specifier, scopeE?: Ele
         if($copeHierarchy === null) return $copeHierarchy;
         const {home, satellites} = $copeHierarchy;
         const {ceName} = $copeDetail!;
-        if(ceName && !((<any>home).ish instanceof HTMLElement)){
-            const {Newish, waitForEvent} = await import('./Newish.js');
-            const ah = new Newish(home, ceName);
-            if(!ah.isResolved){
-                await waitForEvent(ah, 'resolved');
-            }
+        const {waitForEvent} = await import('mount-observer/waitForEvent.js');
+        if(!((<any>home).ish instanceof HTMLElement)){
+            waitForEvent(home, 'ish-resolved');
         }
         if(elS !== undefined){
             const {home, satellites} = $copeHierarchy;
