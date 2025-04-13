@@ -426,6 +426,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
         const w = info?.[411]?.w;
         const x = w || '';
         const on = queryInfo.css + x;// transformer.calcCSS(queryInfo);
+        const {assignGingerly: assigner} = await import('./lib/assignGingerly.js');
         this.#mountObserver = new MountObserver({
             on,
             do:{
@@ -462,7 +463,8 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
                         await transformer.engage(matchingElement, 'onDisconnect', uow, ctx, stage);
                     }
                 }
-            }
+            },
+            assigner,
         });
     }
     async subscribe(){
