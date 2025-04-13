@@ -58,10 +58,6 @@
       "default": "./asmr/stdEvt.js",
       "types": "./asmr/stdEvt.ts"
     },
-    "./dss/Newish.js": {
-      "default": "./dss/Newish.js",
-      "types": "./dss/Newish.ts"
-    },
     "./dss/parse.js": "./dss/parse.js",
     "./dss/find.js": {
       "default": "./dss/find.js",
@@ -183,10 +179,6 @@
     "./lib/waitForAttributeChange.js": {
       "default": "./lib/waitForAttributeChange.js",
       "types": "./lib/waitForAttributeChange.ts"
-    },
-    "./lib/waitForEvent.js": {
-      "default": "./lib/waitForEvent.js",
-      "types": "./lib/waitForEvent.ts"
     },
     "./lib/waitForMatchingEvent.js": {
       "default": "./lib/waitForMatchingEvent.js",

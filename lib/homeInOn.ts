@@ -5,7 +5,7 @@ export async function homeInOn(host: Element, path: string, resolvedEventPath?: 
     let returnObj = await getVal({host}, path);
     if(returnObj !== undefined) return returnObj;
     if(resolvedEventPath !== undefined){
-        const {waitForEvent} = await import('./waitForEvent.js');
+        const {waitForEvent} = await import('mount-observer/waitForEvent.js');
         await waitForEvent(host, resolvedEventPath);
         return await getVal({host}, path);
     }else{
