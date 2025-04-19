@@ -159,7 +159,7 @@ export class O extends RRMixin(HTMLElement) {
             if (key in proto)
                 continue;
             const prop = props[key];
-            const { ro, parse, attrName, farop, farom, ip, fawm } = prop;
+            const { ro, parse, attrName, farop, farom, ip, fawm, adjuster } = prop;
             if (ro || farop) {
                 Object.defineProperty(proto, key, {
                     get() {
@@ -189,10 +189,19 @@ export class O extends RRMixin(HTMLElement) {
                             this.#internals[key] = nv;
                         }
                         else {
+                            let adjustedNV = nv;
+                            if (adjuster !== undefined) {
+                                if (typeof adjuster === 'function') {
+                                    adjustedNV = adjuster(nv);
+                                }
+                                else {
+                                    adjustedNV = this[adjuster](nv);
+                                }
+                            }
                             const ov = this[publicPrivateStore][key];
-                            if (prop.dry && ov === nv)
+                            if (prop.dry && ov === adjustedNV)
                                 return;
-                            this[publicPrivateStore][key] = nv;
+                            this[publicPrivateStore][key] = adjustedNV;
                         }
                         if (fawm !== undefined) {
                             this.#internals[fawm](nv);

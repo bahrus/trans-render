@@ -182,7 +182,7 @@ export class O<TProps=any, TActions=TProps> extends RRMixin(HTMLElement) impleme
         for(const key in props){
             if(key in proto) continue;
             const prop = props[key]!;
-            const {ro, parse, attrName, farop, farom, ip, fawm} = prop;
+            const {ro, parse, attrName, farop, farom, ip, fawm, adjuster} = prop;
             if(ro || farop){
                 Object.defineProperty(proto, key, {
                     get(){
@@ -209,11 +209,18 @@ export class O<TProps=any, TActions=TProps> extends RRMixin(HTMLElement) impleme
                     set(nv: any){
                         if(ip){
                             (<any>(this as O).#internals)[key] = nv;
-                            
                         }else{
+                            let adjustedNV = nv;
+                            if(adjuster !== undefined){
+                                if(typeof adjuster === 'function'){
+                                    adjustedNV = adjuster(nv);
+                                }else{
+                                    adjustedNV = this[adjuster](nv);
+                                }
+                            }
                             const ov = this[publicPrivateStore][key];
-                            if(prop.dry && ov === nv) return;
-                            this[publicPrivateStore][key] = nv;
+                            if(prop.dry && ov === adjustedNV) return;
+                            this[publicPrivateStore][key] = adjustedNV;
                         }
                         if(fawm !== undefined){
                             (<any>(this as O).#internals)[fawm](nv);

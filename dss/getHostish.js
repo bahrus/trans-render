@@ -8,11 +8,7 @@ export async function getHostish(el) {
         return ish;
     const itemScopeAttr = el.getAttribute('itemscope');
     if (itemScopeAttr) {
-        const { waitForEvent } = await import('mount-observer/waitForEvent.js');
-        let ish = el.ish;
-        if (ish instanceof HTMLElement)
-            return ish;
-        await waitForEvent(el, 'ish-resolved');
-        return el.ish;
+        const { waitForIsh } = await import('mount-observer/waitForIsh.js');
+        return await waitForIsh(el);
     }
 }
