@@ -90,10 +90,8 @@ export async function findR(element, specifier, scopeE) {
             return $copeHierarchy;
         const { home, satellites } = $copeHierarchy;
         const { ceName } = $copeDetail;
-        const { waitForEvent } = await import('mount-observer/waitForEvent.js');
-        if (!(home.ish instanceof HTMLElement)) {
-            waitForEvent(home, 'ish-resolved');
-        }
+        const { waitForIsh } = await import('mount-observer/waitForIsh.js');
+        await waitForIsh(home);
         if (elS !== undefined) {
             const { home, satellites } = $copeHierarchy;
             //TODO:  exclude inner itemscope once all browsers support donut hole scoped queries
