@@ -88,8 +88,18 @@
       "types": "./dss/tref/splitRefs.ts"
     },
     "./funions/Localizer.js": "./functions/Localizer.js",
-    "./froop/CE.js": "./froop/CE.js",
-    "./froop/O.js": "./froop/O.js",
+    "./froop/CE.js": {
+      "default": "./froop/CE.js",
+      "types": "./froop/CE.ts"
+    },
+    "./froop/Scope.js":{
+      "default": "./froop/Scope.js",
+      "types": "./froop/Scope.ts"
+    },
+    "./froop/O.js": {
+      "default": "./froop/O.js",
+      "types": "./froop/O.ts"
+    },
     "./froop/roundabout.js": {
       "default": "./froop/roundabout.js",
       "types": "./froop/roundabout.ts"
