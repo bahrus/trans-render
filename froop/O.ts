@@ -2,7 +2,7 @@ import {RoundaboutReady, BaseProps, PropInfo, PropInfoTypes, PropLookup, OConfig
 export {OConfig} from '../ts-refs/trans-render/froop/types.js';
 import {assignGingerly} from '../lib/assignGingerly.js';
 import { RoundAbout } from './roundabout.js';
-import { MountObserver } from '../../mount-observer/MountObserver.js';
+import { MountObserver } from 'mount-observer/MountObserver.js';
 import {RRMixin} from './RRMixin.js';
 const publicPrivateStore = Symbol();
 

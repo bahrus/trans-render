@@ -4,6 +4,7 @@ import {
     RoundaboutReady, BaseProps, PropInfo, PropInfoTypes, 
     IshPropLookup, IshConfig} from '../ts-refs/trans-render/froop/types.js';
 import { RoundAbout } from './roundabout.js';
+import { MountObserver } from 'mount-observer/MountObserver.js';
 
 const publicPrivateStore = Symbol();
 
@@ -25,11 +26,39 @@ export class Scope<TProps = any, TActions = TProps>
 
     }
 
+    async #instantiateRoundaboutIfApplicable(){
+        
+        const config = this.#config;
+        const {actions, compacts, infractions, handlers, positractions, isSleepless} = config;
+        if((actions || compacts || infractions || handlers || positractions) !== undefined){
+            let mountObservers: Set<MountObserver> | undefined;
+            if(!isSleepless){
+                const {guid} = await import('mount-observer/MountObserver.js');
+                mountObservers = (<any>this)[guid];
+            }
+            const {roundabout} = await import('./roundabout.js');
+            const [vm, ra] = await roundabout({
+                vm: this,
+                actions,
+                compacts,
+                handlers,
+                positractions,
+                mountObservers
+            }, infractions);
+            this.#roundabout = ra;
+        }
+        
+    }
+
     /**
      * provided for debugging purposes
      * so don't remove it even though no references to it other than initialization
      */
     #roundabout: RoundAbout | undefined;
+
+    get #config(){
+        return (<any>this.constructor).config as IshConfig;
+    }
 
     static addProps(newClass: {new(): Scope}, props: IshPropLookup){
         const proto = newClass.prototype;
@@ -75,4 +104,69 @@ export class Scope<TProps = any, TActions = TProps>
     }
 
     static config: IshConfig | undefined;
+
+    static async bootUp(){
+        const config = this.config!;
+        const {propDefaults, propInfo, wrappers} = config;
+        const props = {...this.props as IshPropLookup};
+        Object.assign(props, propInfo);
+        if(propDefaults !== undefined){
+            for(const key in propDefaults){
+                const def = propDefaults[key];
+                const propInfo = {
+                    ...defaultProp,
+                    def,
+                    propName: key
+                } as PropInfo;
+                this.setType(propInfo, def);
+                if(propInfo.type !== 'Object' && def !== true){
+                    propInfo.parse = true;
+                    const {camelToLisp} = await import('../lib/camelToLisp.js');
+                    propInfo.attrName = camelToLisp(key);
+                }
+                props[key] = propInfo;
+
+            }
+            
+        }
+        if(propInfo !== undefined){
+            for(const key in propInfo){
+                const prop = propInfo[key]!;
+                const mergedPropInfo = {
+                    ...props[key],
+                    ...defaultProp,
+                    ...prop,
+                    propName: key
+                } as PropInfo
+                props[key] = mergedPropInfo;
+                const {parse, attrName} = mergedPropInfo;
+
+            }
+        }
+        this.props = props;
+        this.addProps(this, props);
+        if(wrappers !== undefined){
+            const {addWrappers} = await import('./addWrappers.js');
+            await addWrappers(this, wrappers);
+        }
+    }
+    static setType(prop: PropInfo, val: any){
+        if(val !== undefined){
+            if(val instanceof RegExp){
+                prop.type = 'RegExp';
+            }else{
+                let t: string = typeof(val);
+                t = t[0].toUpperCase() + t.substr(1);
+                prop.type = t as PropInfoTypes;
+            }
+
+        }
+    }
+    static props: IshPropLookup = {};
 }
+
+const defaultProp: PropInfo = {
+    type: 'Object',
+    dry: true,
+    parse: false,
+};
