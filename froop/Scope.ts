@@ -26,6 +26,28 @@ export class Scope<TProps = any, TActions = TProps>
 
     }
 
+    /**
+     * This gets called when an element is adorned by the itemscope=my-element
+     * @param el
+     */
+    async attachedCallback(el: HTMLElement){
+
+    }
+
+    async detachedCallback(el: HTMLElement){}
+
+    /**
+     * This get invoked if the element with the itemscope=my-element
+     * attribute has an itemref attribute, and one of the elements with id matching 
+     * the itemref is found.
+     * @param el 
+     */
+    async inScopeCallback(el: HTMLElement){
+    }
+
+    async outOfScopeCallback(el: HTMLElement){
+    }
+
     async #instantiateRoundaboutIfApplicable(){
         
         const config = this.#config;
