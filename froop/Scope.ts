@@ -31,7 +31,14 @@ export class Scope<TProps = any, TActions = TProps>
      * @param el
      */
     async attachedCallback(el: Element){
-
+        const xform = this.#config.xform;
+        if(xform !== undefined){
+            const {Transform} = await import('../Transform.js');
+            await Transform(el, this, xform, {
+                propagator: this.propagator,
+                propagatorIsReady: true,
+            });
+        }
     }
 
     async detachedCallback(el: Element){}
@@ -45,6 +52,12 @@ export class Scope<TProps = any, TActions = TProps>
     async inScopeCallback(el: Element){
     }
 
+    /**
+     * This get invoked if the element with the itemscope=my-element
+     * attribute has an itemref attribute, and one of the elements with id matching 
+     * the itemref is removed from the DOM tree.
+     * @param el 
+     */
     async outOfScopeCallback(el: Element){
     }
 
