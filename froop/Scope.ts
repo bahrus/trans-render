@@ -30,11 +30,11 @@ export class Scope<TProps = any, TActions = TProps>
      * This gets called when an element is adorned by the itemscope=my-element
      * @param el
      */
-    async attachedCallback(el: HTMLElement){
+    async attachedCallback(el: Element){
 
     }
 
-    async detachedCallback(el: HTMLElement){}
+    async detachedCallback(el: Element){}
 
     /**
      * This get invoked if the element with the itemscope=my-element
@@ -42,10 +42,10 @@ export class Scope<TProps = any, TActions = TProps>
      * the itemref is found.
      * @param el 
      */
-    async inScopeCallback(el: HTMLElement){
+    async inScopeCallback(el: Element){
     }
 
-    async outOfScopeCallback(el: HTMLElement){
+    async outOfScopeCallback(el: Element){
     }
 
     async #instantiateRoundaboutIfApplicable(){
