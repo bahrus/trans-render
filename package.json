@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.892",
+  "version": "0.0.893",
   "description": "Instantiate an HTML Template",
   "type": "module",
   "main": "trans-render.js",
@@ -92,7 +92,7 @@
       "default": "./froop/CE.js",
       "types": "./froop/CE.ts"
     },
-    "./froop/Scope.js":{
+    "./froop/Scope.js": {
       "default": "./froop/Scope.js",
       "types": "./froop/Scope.ts"
     },
