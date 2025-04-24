@@ -31,18 +31,19 @@ export class Scope<TProps = any, TActions = TProps>
      * @param el
      */
     async attachedCallback(el: Element){
+        await this.#instantiateRoundaboutIfApplicable();
         const xform = this.#config.xform;
-        if(xform !== undefined){
-            const {Transform} = await import('../Transform.js');
-            await Transform(el, this, xform, {
-                propagator: this.propagator,
-                propagatorIsReady: true,
-            });
-        }
+        if(xform === undefined) return;
+        const {Transform} = await import('../Transform.js');
+        await Transform(el, this, xform, {
+            propagator: this.propagator,
+            propagatorIsReady: true,
+        });
     }
 
     async detachedCallback(el: Element){}
 
+    #scopeIndex = 0;
     /**
      * This get invoked if the element with the itemscope=my-element
      * attribute has an itemref attribute, and one of the elements with id matching 
@@ -50,6 +51,15 @@ export class Scope<TProps = any, TActions = TProps>
      * @param el 
      */
     async inScopeCallback(el: Element){
+        const inScopeXForms = this.#config.inScopeXForms;
+        if(inScopeXForms === undefined) return;
+        const xform = inScopeXForms[this.#scopeIndex++];
+        if(xform === undefined) return;
+        const {Transform} = await import('../Transform.js');
+        await Transform(el, this, xform, {
+            propagator: this.propagator,
+            propagatorIsReady: true,
+        });
     }
 
     /**
@@ -127,7 +137,7 @@ export class Scope<TProps = any, TActions = TProps>
                         const ov = this[publicPrivateStore][key];
                         if(prop.dry && ov === adjustedNV) return;
                         this[publicPrivateStore][key] = adjustedNV;
-                        (this as Mo).propagator.dispatchEvent(new Event(key));
+                        (this as Scope).propagator.dispatchEvent(new Event(key));
                         
                     },
                     enumerable: true,
