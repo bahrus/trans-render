@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Check</title>
+    <script type=importmap>
+        {
+            "imports": {
+                "mount-observer/": "mount-observer/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id=div>
+        <span id=span itemscope=my-element></span>
+    </div>
+    <div id=target></div>
+    <script type=module>
+        import {MountObserver} from 'mount-observer/MountObserver.js';
+        import  './MyElement.js';
+        const mo = new MountObserver({
+            on: 'h3',
+            do:{
+                mount: (el, ctx) => {
+                }
+            }
+        });
+        span.addEventListener('ishAttached', e => {
+            if(e.target.ish.test === 'hello'){
+                target.setAttribute('mark', 'good');
+            }
+        });
+        mo.observe(div);
+
+    </script>
+</body>
+</html>
