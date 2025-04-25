@@ -8,9 +8,9 @@ const srcToDest = String.raw `(?<srcKey>[\w]+)_to_(?<destKey>[\w]+)`;
 
 const reCompacts: Array<RegExpOrRegExpExt<CompactStatement>> = [
     {
-        regExp: new RegExp(String.raw `${whenSrcKeyChanges}invoke_(?<destKey>[\w\_]+)`),
+        regExp: new RegExp(String.raw `${whenSrcKeyChanges}call_(?<destKey>[\w\_]+)`),
         defaultVals:{
-            op: 'invoke'
+            op: 'call'
         }
     },
     {
@@ -118,7 +118,7 @@ class CompactManager{
             case 'inc':
                 vm[destKey] += rhs;
                 break;
-            case 'invoke':
+            case 'call':
                 //taken care of from actions
                 //this.#ra.doKey(destKey, vm, new Set());
                 break;
