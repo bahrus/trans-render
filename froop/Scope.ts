@@ -31,11 +31,12 @@ export class Scope<TProps = any, TActions = TProps>
      * @param el
      */
     async attachedCallback(el: Element){
-        await this.#instantiateRoundaboutIfApplicable();
         const {propDefaults, propInfo} = this.#config;
         if(propInfo !== undefined){
             this.#propUp(propInfo);
         }
+        await this.#instantiateRoundaboutIfApplicable();
+
         
         const xform = this.#config.xform;
         if(xform === undefined) return;
