@@ -5,22 +5,22 @@ interface Props {
     ishList: Array<any>
 }
 
-interface Actions {
-    //disp(self: Props): void;
-}
+interface Actions {}
+
 export class MyElement extends Scope<Props> implements Actions {
     static config : IshConfig<Props, Actions> = {
         propInfo: {
-            ishList: {},
+            ishList: {
+                def: [{
+                    name: 'default',
+                    value: [],
+                }]
+            },
         },
         compacts: {
-            //when_ishList_changes_call_disp: 0,
             when_ishList_changes_dispatch: 'ishListChanged',
         }
     }
-    // disp(self: Props): void {
-    //     this.dispatchEvent(new Event('ishListChanged'));
-    // }
 }
 
 MyElement.bootUp();

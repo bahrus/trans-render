@@ -2,7 +2,7 @@ import {RRMixin} from './RRMixin.js';
 import {assignGingerly} from '../lib/assignGingerly.js';
 import {
     RoundaboutReady, BaseProps, PropInfo, PropInfoTypes, 
-    IshPropLookup, IshConfig} from '../ts-refs/trans-render/froop/types.js';
+    IshPropLookup, IshConfig, PropLookup} from '../ts-refs/trans-render/froop/types.js';
 import { RoundAbout } from './roundabout.js';
 import { MountObserver } from 'mount-observer/MountObserver.js';
 
@@ -32,6 +32,11 @@ export class Scope<TProps = any, TActions = TProps>
      */
     async attachedCallback(el: Element){
         await this.#instantiateRoundaboutIfApplicable();
+        const {propDefaults, propInfo} = this.#config;
+        if(propInfo !== undefined){
+            this.#propUp(propInfo);
+        }
+        
         const xform = this.#config.xform;
         if(xform === undefined) return;
         const {Transform} = await import('../Transform.js');
@@ -93,6 +98,19 @@ export class Scope<TProps = any, TActions = TProps>
             this.#roundabout = ra;
         }
         
+    }
+
+    #propUp<T>(props: PropLookup){
+        for(const key in props){
+            const propInfo = props[key]!;
+            let value = (<any>this)[key];
+            if(value === undefined){
+                value = propInfo.def;
+            }
+            if(value !== undefined){
+                (<any>this[publicPrivateStore])[key] = value;
+            }
+        }
     }
 
     /**

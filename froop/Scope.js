@@ -22,6 +22,10 @@ export class Scope extends RRMixin(HTMLElement) {
      */
     async attachedCallback(el) {
         await this.#instantiateRoundaboutIfApplicable();
+        const { propDefaults, propInfo } = this.#config;
+        if (propInfo !== undefined) {
+            this.#propUp(propInfo);
+        }
         const xform = this.#config.xform;
         if (xform === undefined)
             return;
@@ -79,6 +83,18 @@ export class Scope extends RRMixin(HTMLElement) {
                 mountObservers
             }, infractions);
             this.#roundabout = ra;
+        }
+    }
+    #propUp(props) {
+        for (const key in props) {
+            const propInfo = props[key];
+            let value = this[key];
+            if (value === undefined) {
+                value = propInfo.def;
+            }
+            if (value !== undefined) {
+                this[publicPrivateStore][key] = value;
+            }
         }
     }
     /**
