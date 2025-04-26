@@ -14,4 +14,3 @@ export class MyElement extends Scope {
 }
 MyElement.bootUp();
 customElements.define('my-element', MyElement);
-;

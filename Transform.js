@@ -159,25 +159,6 @@ export class Transformer extends EventTarget {
             await newProcessor.do();
             this.#mountOrchestrators.push(newProcessor);
             await newProcessor.subscribe();
-            // if(true || !useViewTransition || !document.startViewTransition){
-            //     console.log('start new Processor');
-            //     await newProcessor.do();
-            //     console.log('push mount orchestrators')
-            //     this.#mountOrchestrators.push(newProcessor);
-            //     console.log('subscribe');
-            //     await newProcessor.subscribe();
-            //     console.log('done');
-            // }else{
-            //     document.startViewTransition(async () => {
-            //         console.log('start new Processor');
-            //         await newProcessor.do();
-            //         console.log('push mount orchestrators')
-            //         this.#mountOrchestrators.push(newProcessor);
-            //         console.log('subscribe');
-            //         await newProcessor.subscribe();
-            //         console.log('done');
-            //     });
-            // }
         }
     }
     async calcQI(pqe) {
@@ -214,7 +195,6 @@ export class Transformer extends EventTarget {
             switch (first) {
                 case '-s': {
                     qi.localPropCamelCase = second;
-                    //qi.s = [second];
                     break;
                 }
                 default: {
@@ -279,10 +259,6 @@ export class Transformer extends EventTarget {
         const { doIfs } = await import('./trHelpers/doIfs.js');
         return await doIfs(this, matchingElement, uow, i);
     }
-    // async doYield(matchingElement: Element, uow: UnitOfWork<TProps, TMethods, TElement>, y: YieldSettings<TProps>){
-    //     const {doYield} = await import('./trHelpers/doYield.js');
-    //     return await doYield(this, matchingElement, uow, y);
-    // }
     async engage(matchingElement, type, uow, observer, mountContext) {
         const { e } = uow;
         if (e === undefined)

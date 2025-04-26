@@ -178,25 +178,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
             await newProcessor.do();
             this.#mountOrchestrators.push(newProcessor);
             await newProcessor.subscribe();
-            // if(true || !useViewTransition || !document.startViewTransition){
-            //     console.log('start new Processor');
-            //     await newProcessor.do();
-            //     console.log('push mount orchestrators')
-            //     this.#mountOrchestrators.push(newProcessor);
-            //     console.log('subscribe');
-            //     await newProcessor.subscribe();
-            //     console.log('done');
-            // }else{
-            //     document.startViewTransition(async () => {
-            //         console.log('start new Processor');
-            //         await newProcessor.do();
-            //         console.log('push mount orchestrators')
-            //         this.#mountOrchestrators.push(newProcessor);
-            //         console.log('subscribe');
-            //         await newProcessor.subscribe();
-            //         console.log('done');
-            //     });
-            // }
+            
             
 
         }
@@ -236,7 +218,6 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
             switch(first){
                 case '-s': {
                     qi.localPropCamelCase = second;
-                    //qi.s = [second];
                     break;
                 }
                 default:{
@@ -306,10 +287,6 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
         return await doIfs(this, matchingElement, uow, i);
     }
 
-    // async doYield(matchingElement: Element, uow: UnitOfWork<TProps, TMethods, TElement>, y: YieldSettings<TProps>){
-    //     const {doYield} = await import('./trHelpers/doYield.js');
-    //     return await doYield(this, matchingElement, uow, y);
-    // }
 
     async engage(matchingElement: Element, type: onMountStatusChange, uow: UnitOfWork<TProps, TMethods, TElement>, observer: IMountObserver | undefined, mountContext: MountContext){
         const {e} = uow;
@@ -358,38 +335,6 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
         return pOrC;
     }
 
-    // setPrimeValue(matchingElement: Element, val: any){
-    //     if(typeof val === 'object'  && !Array.isArray(val)){
-    //         Object.assign(matchingElement, val);
-    //         return;
-            
-    //     }
-    //     const defaultProp = this.getDefaultProp(matchingElement);
-    //     switch(defaultProp){
-    //         case 'href':
-    //             if(matchingElement instanceof HTMLLinkElement && typeof val === 'boolean'){
-    //                 matchingElement.href = 'https://schema.org/' + (val ? 'True' : 'False');
-    //                 return;
-    //             }
-    //     }
-    //     (<any>matchingElement)[defaultProp] = val;
-    // }
-
-    // getDefaultProp(matchingElement: Element){
-    //     if('href' in matchingElement) return 'href';
-    //     if('value' in matchingElement && !('button-li'.includes(matchingElement.localName))) {
-    //         if(matchingElement instanceof HTMLInputElement){
-    //             const {type} = matchingElement;
-    //             switch(type){
-    //                 case 'checkbox':
-    //                     return 'checked';
-                    
-    //             }
-    //         }
-    //         return 'value';
-    //     } 
-    //     return 'textContent';
-    // }
 
 }
 
