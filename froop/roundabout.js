@@ -170,7 +170,7 @@ export class RoundAbout {
         }
         if (compacts !== undefined) {
             for (const key in compacts) {
-                const parsedCompact = reInvoke.exec(key);
+                const parsedCompact = reCall.exec(key);
                 if (parsedCompact !== null) {
                     const grps = parsedCompact.groups;
                     const { destKey, srcKey } = grps;
@@ -521,7 +521,7 @@ export class RoundAbout {
     }
 }
 export const whenSrcKeyChanges = String.raw `^when_(?<srcKey>[\w]+)_changes_`;
-const reInvoke = new RegExp(String.raw `${whenSrcKeyChanges}invoke_(?<destKey>[\w]+)`);
+const reCall = new RegExp(String.raw `${whenSrcKeyChanges}call_(?<destKey>[\w]+)`);
 export class RoundAboutEvent extends Event {
 }
 // export class ActionBus{

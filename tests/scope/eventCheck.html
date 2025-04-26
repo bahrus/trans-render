@@ -7,7 +7,7 @@
     <script type=importmap>
         {
             "imports": {
-                "mount-observer/": "mount-observer/"
+                "mount-observer/": "/node_modules/mount-observer/"
             }
         }
     </script>
@@ -28,9 +28,16 @@
             }
         });
         span.addEventListener('ishAttached', e => {
-            if(e.target.ish.test === 'hello'){
+            console.log('ishAttached', e.target.ish);
+            const ish = e.target.ish;
+            ish.addEventListener('ishListChanged', e => {
+                console.log('ishListChanged');
                 target.setAttribute('mark', 'good');
-            }
+            });
+            ish.ishList = [{
+                name: 'test',
+                value: 'test'
+            }];
         });
         mo.observe(div);
 
