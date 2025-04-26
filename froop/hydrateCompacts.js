@@ -44,6 +44,12 @@ const reCompacts = [
         defaultVals: {
             op: 'inc'
         }
+    },
+    {
+        regExp: new RegExp(String.raw `${whenSrcKeyChanges}dispatch`),
+        defaultVals: {
+            op: 'dispatch'
+        }
     }
 ];
 export async function hydrateCompacts(compacts, ra) {
@@ -122,6 +128,9 @@ class CompactManager {
                 break;
             case 'toggle':
                 vm[destKey] = !vm[destKey];
+                break;
+            case 'dispatch':
+                vm.dispatchEvent(new Event(rhs));
                 break;
         }
     }

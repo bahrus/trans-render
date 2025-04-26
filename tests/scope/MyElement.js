@@ -5,12 +5,10 @@ export class MyElement extends Scope {
             ishList: {},
         },
         compacts: {
-            when_ishList_changes_call_disp: 0,
+            //when_ishList_changes_call_disp: 0,
+            when_ishList_changes_dispatch: 'ishListChanged',
         }
     };
-    disp(self) {
-        this.dispatchEvent(new Event('ishListChanged'));
-    }
 }
 MyElement.bootUp();
 customElements.define('my-element', MyElement);

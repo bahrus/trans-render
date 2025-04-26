@@ -6,7 +6,7 @@ interface Props {
 }
 
 interface Actions {
-    disp(self: Props): void;
+    //disp(self: Props): void;
 }
 export class MyElement extends Scope<Props> implements Actions {
     static config : IshConfig<Props, Actions> = {
@@ -14,12 +14,13 @@ export class MyElement extends Scope<Props> implements Actions {
             ishList: {},
         },
         compacts: {
-            when_ishList_changes_call_disp: 0,
+            //when_ishList_changes_call_disp: 0,
+            when_ishList_changes_dispatch: 'ishListChanged',
         }
     }
-    disp(self: Props): void {
-        this.dispatchEvent(new Event('ishListChanged'));
-    }
+    // disp(self: Props): void {
+    //     this.dispatchEvent(new Event('ishListChanged'));
+    // }
 }
 
 MyElement.bootUp();
