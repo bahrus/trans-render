@@ -45,6 +45,7 @@ export class Scope<TProps = any, TActions = TProps>
             propagator: this.propagator,
             propagatorIsReady: true,
         });
+        this.dispatchEvent(new Event('resolved'));
     }
 
     async detachedCallback(el: Element){}
