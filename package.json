@@ -75,6 +75,10 @@
       "default": "./dss/tref/getChildren.js",
       "types": "./dss/tref/getChildren.ts"
     },
+    "./dss/tref/getCount.js": {
+      "default": "./dss/tref/getCount.js",
+      "types": "./dss/tref/getCount.ts"
+    },
     "./dss/tref/tagTempl.js": {
       "default": "./dss/tref/tagTempl.js",
       "types": "./dss/tref/tagTempl.ts"
