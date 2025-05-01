@@ -280,7 +280,7 @@
     "XV/*.ts"
   ],
   "dependencies": {
-    "mount-observer": "0.0.54"
+    "mount-observer": "0.0.55"
   },
   "devDependencies": {
     "@playwright/test": "1.52.0",

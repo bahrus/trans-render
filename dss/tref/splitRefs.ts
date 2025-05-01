@@ -1,3 +1,4 @@
+//TODO:  deprecate (moved to mount-observer)
 export function splitRefs(refs: string){
     return refs
     .split(' ')
