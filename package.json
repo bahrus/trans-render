@@ -83,10 +83,6 @@
       "default": "./dss/tref/querySelector.js",
       "types": "./dss/tref/querySelector.ts"
     },
-    "./dss/tref/splitRefs.js": {
-      "default": "./dss/tref/splitRefs.js",
-      "types": "./dss/tref/splitRefs.ts"
-    },
     "./funions/Localizer.js": "./functions/Localizer.js",
     "./froop/CE.js": {
       "default": "./froop/CE.js",

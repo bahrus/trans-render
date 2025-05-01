@@ -1,4 +1,4 @@
-import {splitRefs} from './splitRefs.js';
+import {splitRefs} from 'mount-observer/itemRefUtils/splitRefs.js';
 import {CSSQuery} from '../../ts-refs/trans-render/types.js';
 
 export function querySelector(templ: HTMLTemplateElement, refs: string, qry: CSSQuery){

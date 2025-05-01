@@ -1,4 +1,4 @@
-import { splitRefs } from './splitRefs.js';
+import { splitRefs } from 'mount-observer/itemRefUtils/splitRefs.js';
 export function getChildren(templ, refs) {
     const rn = templ.getRootNode();
     return splitRefs(refs)

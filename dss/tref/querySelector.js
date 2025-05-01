@@ -1,4 +1,4 @@
-import { splitRefs } from './splitRefs.js';
+import { splitRefs } from 'mount-observer/itemRefUtils/splitRefs.js';
 export function querySelector(templ, refs, qry) {
     const ids = splitRefs(refs);
     const rn = templ.getRootNode();
