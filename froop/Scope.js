@@ -48,14 +48,16 @@ export class Scope extends RRMixin(HTMLElement) {
         const inScopeXForms = this.#config.inScopeXForms;
         if (inScopeXForms === undefined)
             return;
-        const xform = inScopeXForms[this.#scopeIndex++];
-        if (xform === undefined)
-            return;
         const { Transform } = await import('../Transform.js');
-        await Transform(el, this, xform, {
-            propagator: this.propagator,
-            propagatorIsReady: true,
-        });
+        for (const cssQuery in inScopeXForms) {
+            if (!el.matches(cssQuery))
+                continue;
+            const xform = inScopeXForms[cssQuery];
+            await Transform(el, this, xform, {
+                propagator: this.propagator,
+                propagatorIsReady: true,
+            });
+        }
     }
     /**
      * This get invoked if the element with the itemscope=my-element
