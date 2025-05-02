@@ -71,6 +71,10 @@
       "default": "./dss/getHostish.js",
       "types": "./dss/getHostish.ts"
     },
+    "./dss/tref/deleteEl.js": {
+      "default": "./dss/tref/deleteEl.js",
+      "types": "./dss/tref/deleteEl.ts"
+    },
     "./dss/tref/getChildren.js": {
       "default": "./dss/tref/getChildren.js",
       "types": "./dss/tref/getChildren.ts"

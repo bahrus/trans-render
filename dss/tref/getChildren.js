@@ -1,4 +1,4 @@
-import { splitRefs } from 'mount-observer/itemRefUtils/splitRefs.js';
+import { splitRefs } from 'mount-observer/refid/splitRefs.js';
 export function getChildren(el, refs, baseID) {
     const rn = el.getRootNode();
     if (refs === undefined || refs === null) {

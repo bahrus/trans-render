@@ -1,4 +1,4 @@
-import {getChildren} from './getChildren.js'
+import {getChildren} from './getChildren.js';
 export function deleteEl(el: Element){
     const children = getChildren(el);
     for(const child of children){
