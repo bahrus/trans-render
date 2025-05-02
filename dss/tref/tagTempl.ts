@@ -31,9 +31,10 @@ export function tagTempl(templToTag: HTMLTemplateElement, baseID: string){
         }
         keys.push(child.id);
     }
-    if(templToTag.id && keys.length > 0){
+    const id = templToTag.id;
+    if(id && keys.length > 0){
         const rn = templToTag.getRootNode() as DocumentFragment;
-        const scopes = rn.querySelectorAll(`[itemscope][itemref~="${templToTag.id}"]`);
+        const scopes = rn.querySelectorAll(`[itemscope][itemref~="${id}"]`);
         for(const scope of scopes){
             const refs = scope.getAttribute('itemref') || '';
             //const newRefs = refs.split(' ').filter(x => x !== templToTag.id).concat(keys).join(' ');
