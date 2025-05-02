@@ -27,6 +27,16 @@ export function tagTempl(templToTag, baseID) {
         }
         keys.push(child.id);
     }
+    if (templToTag.id && keys.length > 0) {
+        const rn = templToTag.getRootNode();
+        const scopes = rn.querySelectorAll(`[itemscope][itemref~="${templToTag.id}"]`);
+        for (const scope of scopes) {
+            const refs = scope.getAttribute('itemref') || '';
+            //const newRefs = refs.split(' ').filter(x => x !== templToTag.id).concat(keys).join(' ');
+            const newRefs = refs + ' ' + keys.join(' ');
+            scope.setAttribute('itemref', newRefs);
+        }
+    }
     templToTag.setAttribute('itemref', keys.join(' '));
     if (!templToTag.hasAttribute('itemscope'))
         templToTag.setAttribute('itemscope', '');
