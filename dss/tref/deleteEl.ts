@@ -1,4 +1,5 @@
 import {getChildren} from './getChildren.js';
+import {splitRefs} from 'mount-observer/refid/splitRefs.js';
 export function deleteEl(el: Element){
     const children = getChildren(el);
     for(const child of children){
@@ -10,7 +11,8 @@ export function deleteEl(el: Element){
         const scopes = rn.querySelectorAll(`[itemscope][itemref~="${id}"]`);
         for(const scope of scopes){
             const refs = scope.getAttribute('itemref') || '';
-            const newRefs = refs.split(' ').filter(x => x !== id).join(' ');
+            //const newRefs = refs.split(' ').filter(x => x !== id).join(' ');
+            const newRefs = splitRefs(refs).filter(x => x !== id).join(' ');
             scope.setAttribute('itemref', newRefs);
         }
     }
