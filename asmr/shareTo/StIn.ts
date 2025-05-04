@@ -85,6 +85,8 @@ export class StdIn<TProp = any> implements SharingObject{
                     (<any>el)[displayProp!] = textContent;
                     return;
                     break;
+                case 'undefined':
+                    break;  
                 default:
                     throw 'NI';
             }

@@ -83,6 +83,8 @@ export class StdIn {
                     el[displayProp] = textContent;
                     return;
                     break;
+                case 'undefined':
+                    break;
                 default:
                     throw 'NI';
             }
