@@ -60,7 +60,7 @@ export class RoundAbout{
             const val = actions[key];
             if(val === undefined) continue;
             
-            const {ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf, ifNotAllOf, debug, delay} = val;
+            const {ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf, ifNotAllOf, debug, delay, do: d} = val;
             const check: SetLogicOps = {delay, debug};
             if(ifAllOf) check.ifAllOf = this.#toSet(ifAllOf);
             if(ifAtLeastOneOf) check.ifAtLeastOneOf = this.#toSet(ifAtLeastOneOf);
@@ -68,6 +68,7 @@ export class RoundAbout{
             if(ifNoneOf) check.ifNoneOf = this.#toSet(ifNoneOf);
             if(ifKeyIn) check.ifKeyIn = this.#toSet(ifKeyIn);
             if(ifNotAllOf) check.ifNotAllOf = this.#toSet(ifNotAllOf);
+            checks.do = d;
             checks[key] = check;
         }
 
@@ -239,7 +240,7 @@ export class RoundAbout{
             const checkVal = await this.#doChecks(check!, true);
             check!.a = checkVal;
             if(checkVal){
-                await this.doKey(key, vm, keysToPropagate);
+                await this.doKey(key, vm, keysToPropagate, undefined, check);
             }
         }
         const routers = this.#routers;
@@ -279,7 +280,7 @@ export class RoundAbout{
                 }
                 didNothing = false;
                 busses[busKey] = new Set<string>();
-                await this.doKey(busKey, vm, keysToPropagate);
+                await this.doKey(busKey, vm, keysToPropagate, undefined, check);
             }
 
         }
@@ -490,8 +491,8 @@ export class RoundAbout{
         return true;
     }
 
-    async doKey(key: string, vm: any, keysToPropagate: Set<string>, e?: Event){
-        const method = vm[key] || this.#infractionsLookup[key];
+    async doKey(key: string, vm: any, keysToPropagate: Set<string>, e?: Event, check?: SetLogicOps){
+        const method = check && check.do ? check.do : vm[key] || this.#infractionsLookup[key];
         const isAsync = method.constructor.name === 'AsyncFunction';
         const ret = isAsync ? await method.apply(vm, [vm, e, this]) : method.apply(vm, [vm, e, this]);
         

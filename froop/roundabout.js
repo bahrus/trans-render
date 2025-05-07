@@ -59,7 +59,7 @@ export class RoundAbout {
             const val = actions[key];
             if (val === undefined)
                 continue;
-            const { ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf, ifNotAllOf, debug, delay } = val;
+            const { ifAllOf, ifAtLeastOneOf, ifEquals, ifKeyIn, ifNoneOf, ifNotAllOf, debug, delay, do: d } = val;
             const check = { delay, debug };
             if (ifAllOf)
                 check.ifAllOf = this.#toSet(ifAllOf);
@@ -73,6 +73,7 @@ export class RoundAbout {
                 check.ifKeyIn = this.#toSet(ifKeyIn);
             if (ifNotAllOf)
                 check.ifNotAllOf = this.#toSet(ifNotAllOf);
+            checks.do = d;
             checks[key] = check;
         }
         if (handlers !== undefined) {
@@ -245,7 +246,7 @@ export class RoundAbout {
             const checkVal = await this.#doChecks(check, true);
             check.a = checkVal;
             if (checkVal) {
-                await this.doKey(key, vm, keysToPropagate);
+                await this.doKey(key, vm, keysToPropagate, undefined, check);
             }
         }
         const routers = this.#routers;
@@ -285,7 +286,7 @@ export class RoundAbout {
                 }
                 didNothing = false;
                 busses[busKey] = new Set();
-                await this.doKey(busKey, vm, keysToPropagate);
+                await this.doKey(busKey, vm, keysToPropagate, undefined, check);
             }
         }
         if (didNothing) {
@@ -500,8 +501,8 @@ export class RoundAbout {
         }
         return true;
     }
-    async doKey(key, vm, keysToPropagate, e) {
-        const method = vm[key] || this.#infractionsLookup[key];
+    async doKey(key, vm, keysToPropagate, e, check) {
+        const method = check && check.do ? check.do : vm[key] || this.#infractionsLookup[key];
         const isAsync = method.constructor.name === 'AsyncFunction';
         const ret = isAsync ? await method.apply(vm, [vm, e, this]) : method.apply(vm, [vm, e, this]);
         const busses = this.#busses;
