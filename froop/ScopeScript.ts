@@ -6,6 +6,11 @@ export async function ScopeScript(script: HTMLScriptElement){
     const {upShadowSearch} = await import('../lib/upShadowSearch.js');
     const ref = upShadowSearch(script, id) as HTMLScriptElement;
     if(!(ref instanceof HTMLScriptElement)) throw 404;
+    tbd(ref);
+    
+}
+
+export function tbd(ref: HTMLScriptElement){
     const inner = ref.innerHTML;
     const ceName = ref.id;
     if(!ceName) throw 300;

@@ -8,6 +8,9 @@ export async function ScopeScript(script) {
     const ref = upShadowSearch(script, id);
     if (!(ref instanceof HTMLScriptElement))
         throw 404;
+    tbd(ref);
+}
+export function tbd(ref) {
     const inner = ref.innerHTML;
     const ceName = ref.id;
     if (!ceName)
