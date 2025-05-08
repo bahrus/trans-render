@@ -4,13 +4,13 @@ export async function ScopeScript(script) {
     if (href === null || !href.startsWith('#'))
         throw 300;
     const id = href.substring(1);
+    await tbd(script, id);
+}
+export async function tbd(script, id) {
     const { upShadowSearch } = await import('../lib/upShadowSearch.js');
     const ref = upShadowSearch(script, id);
     if (!(ref instanceof HTMLScriptElement))
         throw 404;
-    tbd(ref);
-}
-export function tbd(ref) {
     const inner = ref.innerHTML;
     const ceName = ref.id;
     if (!ceName)
