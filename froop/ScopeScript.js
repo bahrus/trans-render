@@ -2,11 +2,11 @@
 export async function ScopeScript(script) {
     const href = script.getAttribute('href');
     if (href === null || !href.startsWith('#'))
-        throw 300;
+        return;
     const id = href.substring(1);
     await ScopeScriptImpl(script, id);
 }
-export async function ScopeScriptImpl(script, id) {
+async function ScopeScriptImpl(script, id) {
     const scriptImplId = `${id}-impl`;
     if (document.getElementById(scriptImplId) !== null)
         return;
@@ -34,4 +34,5 @@ customElements.define('${ceName}', s);
     scriptImpl.id = scriptImplId;
     scriptImpl.textContent = scriptImplInner;
     document.head.appendChild(scriptImpl);
+    await ScopeScript(ref);
 }

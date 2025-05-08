@@ -1,13 +1,13 @@
 //TODO:  support scoped shadow DOM
 export async function ScopeScript(script: HTMLScriptElement){
     const href = script.getAttribute('href');
-    if(href === null || !href.startsWith('#')) throw 300;
+    if(href === null || !href.startsWith('#')) return;
     const id = href.substring(1);
     await ScopeScriptImpl(script, id);
     
 }
 
-export async function ScopeScriptImpl(script: HTMLScriptElement, id: string){
+async function ScopeScriptImpl(script: HTMLScriptElement, id: string){
     const scriptImplId = `${id}-impl`;
     if(document.getElementById(scriptImplId) !== null) return;
     const {upShadowSearch} = await import('../lib/upShadowSearch.js');
@@ -31,4 +31,5 @@ customElements.define('${ceName}', s);
     scriptImpl.id = scriptImplId;
     scriptImpl.textContent = scriptImplInner;
     document.head.appendChild(scriptImpl);
+    await ScopeScript(ref);
 }
