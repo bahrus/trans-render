@@ -100,6 +100,10 @@
       "default": "./froop/Scope.js",
       "types": "./froop/Scope.ts"
     },
+    "./froop/ScopeScript.js": {
+      "default": "./froop/ScopeScript.js",
+      "types": "./froop/ScopeScript.ts"
+    },
     "./froop/O.js": {
       "default": "./froop/O.js",
       "types": "./froop/O.ts"

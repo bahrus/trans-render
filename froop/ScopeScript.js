@@ -1,8 +1,7 @@
 //TODO:  support scoped shadow DOM
-export async function scopeScript(script) {
-    const href = script.href;
-    ;
-    if (href === undefined || !href.startsWith('#'))
+export async function ScopeScript(script) {
+    const href = script.getAttribute('href');
+    if (href === null || !href.startsWith('#'))
         throw 300;
     const id = href.substring(1);
     const { upShadowSearch } = await import('../lib/upShadowSearch.js');

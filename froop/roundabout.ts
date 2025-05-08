@@ -68,7 +68,7 @@ export class RoundAbout{
             if(ifNoneOf) check.ifNoneOf = this.#toSet(ifNoneOf);
             if(ifKeyIn) check.ifKeyIn = this.#toSet(ifKeyIn);
             if(ifNotAllOf) check.ifNotAllOf = this.#toSet(ifNotAllOf);
-            checks.do = d;
+            //checks.do = d;
             checks[key] = check;
         }
 
