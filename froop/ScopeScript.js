@@ -4,18 +4,23 @@ export async function ScopeScript(script) {
     if (href === null || !href.startsWith('#'))
         throw 300;
     const id = href.substring(1);
-    await tbd(script, id);
+    await ScopeScriptImpl(script, id);
 }
-export async function tbd(script, id) {
+export async function ScopeScriptImpl(script, id) {
+    const scriptImplId = `${id}-impl`;
+    if (document.getElementById(scriptImplId) !== null)
+        return;
     const { upShadowSearch } = await import('../lib/upShadowSearch.js');
     const ref = upShadowSearch(script, id);
     if (!(ref instanceof HTMLScriptElement))
         throw 404;
+    if (document.getElementById(scriptImplId) !== null)
+        return;
     const inner = ref.innerHTML;
     const ceName = ref.id;
     if (!ceName)
         throw 300;
-    const scriptRewrite = `
+    const scriptImplInner = `
 import {Scope} from 'trans-render/froop/Scope.js';
 
 class s extends Scope {
@@ -24,8 +29,9 @@ static config = ${inner};
 s.bootUp();
 customElements.define('${ceName}', s);
     `;
-    const scriptEl = document.createElement('script');
-    scriptEl.type = 'module';
-    scriptEl.textContent = scriptRewrite;
-    document.head.appendChild(scriptEl);
+    const scriptImpl = document.createElement('script');
+    scriptImpl.type = 'module';
+    scriptImpl.id = scriptImplId;
+    scriptImpl.textContent = scriptImplInner;
+    document.head.appendChild(scriptImpl);
 }
