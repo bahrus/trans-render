@@ -68,7 +68,15 @@ export class RoundAbout{
             if(ifNoneOf) check.ifNoneOf = this.#toSet(ifNoneOf);
             if(ifKeyIn) check.ifKeyIn = this.#toSet(ifKeyIn);
             if(ifNotAllOf) check.ifNotAllOf = this.#toSet(ifNotAllOf);
-            //checks.do = d;
+            if(d !== undefined){
+                // if(typeof d === 'string'){
+                //     check.do = d;
+                // }else{
+                //     check.do = (<any>options.vm)[d];
+                // }
+                check.do = d;
+            }
+            
             checks[key] = check;
         }
 

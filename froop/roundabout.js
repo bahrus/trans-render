@@ -73,7 +73,14 @@ export class RoundAbout {
                 check.ifKeyIn = this.#toSet(ifKeyIn);
             if (ifNotAllOf)
                 check.ifNotAllOf = this.#toSet(ifNotAllOf);
-            //checks.do = d;
+            if (d !== undefined) {
+                // if(typeof d === 'string'){
+                //     check.do = d;
+                // }else{
+                //     check.do = (<any>options.vm)[d];
+                // }
+                check.do = d;
+            }
             checks[key] = check;
         }
         if (handlers !== undefined) {
