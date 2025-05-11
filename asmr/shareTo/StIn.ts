@@ -78,6 +78,14 @@ export class StdIn<TProp = any> implements SharingObject{
                     }
                     break;
                 case 'object':
+                    if(val instanceof Date){
+                        if(valueType === undefined){
+                            (<any>el)[displayProp!] = val.toLocaleString();
+                            break;
+                        }else{
+                            throw 'NI';
+                        }
+                    }
                     const {value, textContent} = val as {value: any, textContent: string};
                     if(valueProp !== undefined){
                         (<any>el)[valueProp] = value;

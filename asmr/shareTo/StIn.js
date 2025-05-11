@@ -76,6 +76,15 @@ export class StdIn {
                     }
                     break;
                 case 'object':
+                    if (val instanceof Date) {
+                        if (valueType === undefined) {
+                            el[displayProp] = val.toLocaleString();
+                            break;
+                        }
+                        else {
+                            throw 'NI';
+                        }
+                    }
                     const { value, textContent } = val;
                     if (valueProp !== undefined) {
                         el[valueProp] = value;

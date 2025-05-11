@@ -2,11 +2,13 @@ import { Transform } from '../Transform.js';
 const div = document.querySelector('div');
 const model = {
     greeting: 'hello',
-    count: 123456
+    count: 123456,
+    now: new Date(),
 };
 Transform(div, model, {
-    //span: 'greeting',
+    span: 'greeting',
     data: 'count',
+    time: 'now',
 });
 setTimeout(() => {
     const span = document.createElement('span');
