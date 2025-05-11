@@ -30,6 +30,7 @@ export class StdIn {
                 case 'a':
                     //no value
                     break;
+                case 'time':
                 case 'data':
                     displayProp = 'textContent';
                     break;
@@ -158,7 +159,12 @@ export class StdIn {
                         assignGingerly(el, { [valueProp]: val });
                     }
                     else {
-                        el[valueProp] = val;
+                        if (el instanceof HTMLTimeElement) {
+                            el.dateTime = val.toISOString();
+                        }
+                        else {
+                            el[valueProp] = val;
+                        }
                     }
             }
         }

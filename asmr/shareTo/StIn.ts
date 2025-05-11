@@ -31,6 +31,7 @@ export class StdIn<TProp = any> implements SharingObject{
                 case 'a':
                     //no value
                     break;
+                case 'time':
                 case 'data':
                     displayProp = 'textContent';
                     break;
@@ -154,7 +155,11 @@ export class StdIn<TProp = any> implements SharingObject{
                         const {assignGingerly} = await import('trans-render/lib/assignGingerly.js');
                         assignGingerly(el, {[valueProp!]: val});
                     }else{
-                        (<any>el)[valueProp!] = val;
+                        if(el instanceof HTMLTimeElement){
+                            el.dateTime = (val as Date).toISOString();
+                        }else{
+                            (<any>el)[valueProp!] = val;
+                        }
                     }
                     
             }

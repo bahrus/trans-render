@@ -107,6 +107,9 @@ export class ASMR {
                 case 'meta':
                     valueProp = 'content';
                     break;
+                case 'time':
+                    valueProp = 'dateTime';
+                    break;
                 default:
                     if ('value' in el && !'button-li'.includes(localName)) { //example 'input', 'output'
                         valueProp = 'value';
