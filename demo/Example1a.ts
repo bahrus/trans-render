@@ -3,15 +3,18 @@ import { RoundaboutReady } from '../ts-refs/trans-render/froop/types.js';
 
 interface Model{
     greeting: string;
+    count: number;
 }
 
 const div = document.querySelector('div')!;
 const model = {
-    greeting: 'hello'
+    greeting: 'hello',
+    count: 123456
 } as Model & RoundaboutReady;
 
 Transform<Model>(div, model, {
-    span: 'greeting',
+    //span: 'greeting',
+    data: 'count',
 });
 setTimeout(() => {
     const span = document.createElement('span');

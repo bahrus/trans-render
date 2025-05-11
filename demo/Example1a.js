@@ -1,10 +1,12 @@
 import { Transform } from '../Transform.js';
 const div = document.querySelector('div');
 const model = {
-    greeting: 'hello'
+    greeting: 'hello',
+    count: 123456
 };
 Transform(div, model, {
-    span: 'greeting',
+    //span: 'greeting',
+    data: 'count',
 });
 setTimeout(() => {
     const span = document.createElement('span');

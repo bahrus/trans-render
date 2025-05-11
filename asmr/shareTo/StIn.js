@@ -69,7 +69,7 @@ export class StdIn {
                 case 'boolean':
                 case 'number':
                     if (valueType === undefined) {
-                        el[displayProp] = val;
+                        el[displayProp] = val.toLocaleString();
                     }
                     else {
                         throw 'NI';

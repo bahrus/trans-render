@@ -72,7 +72,7 @@ export class StdIn<TProp = any> implements SharingObject{
                 case 'boolean':
                 case 'number':
                     if(valueType === undefined){
-                        (<any>el)[displayProp!] = val;
+                        (<any>el)[displayProp!] = val.toLocaleString();
                     }else{
                         throw 'NI';
                     }
