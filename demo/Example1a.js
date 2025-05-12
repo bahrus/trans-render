@@ -1,10 +1,10 @@
 import { Transform } from '../Transform.js';
-const div = document.querySelector('div');
 const model = {
     greeting: 'hello',
     count: 123456,
     now: new Date(),
 };
+const div = document.querySelector('div');
 Transform(div, model, {
     span: 'greeting',
     data: 'count',

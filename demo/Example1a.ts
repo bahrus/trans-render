@@ -7,12 +7,14 @@ interface Model{
     now: Date;
 }
 
-const div = document.querySelector('div')!;
+
 const model = {
     greeting: 'hello',
     count: 123456,
     now: new Date(),
 } as Model & RoundaboutReady;
+
+const div = document.querySelector('div')!;
 
 Transform<Model>(div, model, {
     span: 'greeting',
