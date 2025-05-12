@@ -54,7 +54,7 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
             }
         }
         await transformer.engage(matchingElement, 'onMount', uow, observer, ctx);
-        const { a, m } = uow;
+        const { a, m, $ } = uow;
         if (a !== undefined) {
             let transpiledActions;
             if (typeof a === 'string') {
@@ -75,6 +75,9 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
             for (const mi of transpiledMs) {
                 new Mod(mountObserver, transformer, matchingElement, mi);
             }
+        }
+        if ($ !== undefined) {
+            const { do$ } = await import('./do$.js');
         }
     }
 }

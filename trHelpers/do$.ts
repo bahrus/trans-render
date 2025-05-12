@@ -1,0 +1,22 @@
+import { MountObserver } from 'mount-observer/MountObserver.js';
+import { IMountObserver, MountContext } from '../ts-refs/mount-observer/types.js';
+import {Transformer, MountOrchestrator, arr0} from '../Transform.js';
+import {QuenitOfWork, ScopeInstructions} from '../ts-refs/trans-render/types.js';
+import {Scope} from '../froop/Scope.js';
+
+export async function do$<TProps, TMethods>(
+    mountObserver: MountObserver | undefined,
+    matchingElement: Element,
+    scopingInstructions: ScopeInstructions,
+    uow: QuenitOfWork<TProps, TMethods>
+){
+    const {name, config} = scopingInstructions;
+    matchingElement.setAttribute('itemscope', name);
+    if(config !== null){
+        class s extends Scope {
+            static config = config;
+        }
+        s.bootUp();
+        customElements.define('${ceName}', s);
+    }
+}
