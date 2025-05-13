@@ -55,10 +55,11 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
         if(y !== undefined){
             const {doYield} = await import('./doYield.js');
             await doYield(transformer, matchingElement, uow, y);
-        }else if($ !== undefined){
-            const {do$} = await import('./do$.js');
-            await do$(transformer, matchingElement, $, uow);
         }else{
+            if($ !== undefined){
+                const {do$} = await import('./do$.js');
+                await do$(transformer, matchingElement, $, uow);
+            }
             //this is where we could look to see if we need to do update if already updated by server
             if(!skipInit || !ctx.initializing){
                 await mo.doUpdate(matchingElement, uow);
