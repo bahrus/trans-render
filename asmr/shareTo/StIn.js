@@ -93,12 +93,13 @@ export class StdIn {
                                 el[valueProp] = value;
                             }
                             el[displayProp] = textContent;
+                            return;
                         }
                         else if ('ish' in el || (el.hasAttribute('itemscope') && el.getAttribute('itemscope')?.includes('-'))) {
+                            console.log({ valueProp, displayProp, path });
                             el.ish = val;
                         }
                     }
-                    return;
                     break;
                 case 'undefined':
                     break;
