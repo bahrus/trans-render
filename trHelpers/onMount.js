@@ -35,7 +35,7 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
         }
     }
     for (const uow of uows) {
-        const { w, y } = uow;
+        const { w, y, $ } = uow;
         if (w !== undefined) {
             switch (typeof w) {
                 case 'string':
@@ -47,6 +47,10 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
             const { doYield } = await import('./doYield.js');
             await doYield(transformer, matchingElement, uow, y);
         }
+        else if ($ !== undefined) {
+            const { do$ } = await import('./do$.js');
+            await do$(mountObserver, matchingElement, $, uow);
+        }
         else {
             //this is where we could look to see if we need to do update if already updated by server
             if (!skipInit || !ctx.initializing) {
@@ -54,7 +58,7 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
             }
         }
         await transformer.engage(matchingElement, 'onMount', uow, observer, ctx);
-        const { a, m, $ } = uow;
+        const { a, m } = uow;
         if (a !== undefined) {
             let transpiledActions;
             if (typeof a === 'string') {
@@ -75,10 +79,6 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
             for (const mi of transpiledMs) {
                 new Mod(mountObserver, transformer, matchingElement, mi);
             }
-        }
-        if ($ !== undefined) {
-            const { do$ } = await import('./do$.js');
-            await do$(mountObserver, matchingElement, $, uow);
         }
     }
 }
