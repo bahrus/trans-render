@@ -96,7 +96,7 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
         }
         if($ !== undefined){
             const {do$} = await import('./do$.js');
-
+            await do$(mountObserver, matchingElement, $, uow);
         }
 
     }

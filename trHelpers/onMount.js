@@ -78,6 +78,7 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
         }
         if ($ !== undefined) {
             const { do$ } = await import('./do$.js');
+            await do$(mountObserver, matchingElement, $, uow);
         }
     }
 }

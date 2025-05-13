@@ -17,6 +17,6 @@ export async function do$<TProps, TMethods>(
             static config = config;
         }
         s.bootUp();
-        customElements.define('${ceName}', s);
+        customElements.define(name, s);
     }
 }

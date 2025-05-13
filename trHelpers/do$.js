@@ -7,6 +7,6 @@ export async function do$(mountObserver, matchingElement, scopingInstructions, u
             static config = config;
         }
         s.bootUp();
-        customElements.define('${ceName}', s);
+        customElements.define(name, s);
     }
 }
