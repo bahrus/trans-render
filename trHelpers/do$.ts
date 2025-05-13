@@ -5,13 +5,16 @@ import {QuenitOfWork, ScopeInstructions} from '../ts-refs/trans-render/types.js'
 import {Scope} from '../froop/Scope.js';
 
 export async function do$<TProps, TMethods>(
-    mountObserver: MountObserver | undefined,
+    transformer: Transformer<TProps, TMethods>,
     matchingElement: Element,
     scopingInstructions: ScopeInstructions,
     uow: QuenitOfWork<TProps, TMethods>
 ){
     const {name, config} = scopingInstructions;
     matchingElement.setAttribute('itemscope', name);
+    const {model} = transformer;
+    const prop = model[uow.o[0]];
+    matchingElement.ish = prop;
     if(config !== null){
         class s extends Scope {
             static config = config;

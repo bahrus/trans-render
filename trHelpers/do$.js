@@ -1,7 +1,10 @@
 import { Scope } from '../froop/Scope.js';
-export async function do$(mountObserver, matchingElement, scopingInstructions, uow) {
+export async function do$(transformer, matchingElement, scopingInstructions, uow) {
     const { name, config } = scopingInstructions;
     matchingElement.setAttribute('itemscope', name);
+    const { model } = transformer;
+    const prop = model[uow.o[0]];
+    matchingElement.ish = prop;
     if (config !== null) {
         class s extends Scope {
             static config = config;

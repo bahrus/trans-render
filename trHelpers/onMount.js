@@ -49,7 +49,7 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
         }
         else if ($ !== undefined) {
             const { do$ } = await import('./do$.js');
-            await do$(mountObserver, matchingElement, $, uow);
+            await do$(transformer, matchingElement, $, uow);
         }
         else {
             //this is where we could look to see if we need to do update if already updated by server
