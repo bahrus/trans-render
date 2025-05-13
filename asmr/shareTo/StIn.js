@@ -86,11 +86,18 @@ export class StdIn {
                             throw 'NI';
                         }
                     }
-                    const { value, textContent } = val;
-                    if (valueProp !== undefined) {
-                        el[valueProp] = value;
+                    if (val) {
+                        if ('value' in val && 'textContent' in val) {
+                            const { value, textContent } = val;
+                            if (valueProp !== undefined) {
+                                el[valueProp] = value;
+                            }
+                            el[displayProp] = textContent;
+                        }
+                        else if ('ish' in el || (el.hasAttribute('itemscope') && el.getAttribute('itemscope')?.includes('-'))) {
+                            el.ish = val;
+                        }
                     }
-                    el[displayProp] = textContent;
                     return;
                     break;
                 case 'undefined':

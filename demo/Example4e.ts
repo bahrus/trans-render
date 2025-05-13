@@ -43,3 +43,10 @@ Transform<Props & Methods>(div, model, {
         }
     }
 });
+
+setTimeout(() => {
+    model.address = {
+        zipCode: '54321',
+    }
+    //model.address.zipCode = '54321';
+}, 2000);

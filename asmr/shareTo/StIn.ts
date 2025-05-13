@@ -87,11 +87,19 @@ export class StdIn<TProp = any> implements SharingObject{
                             throw 'NI';
                         }
                     }
-                    const {value, textContent} = val as {value: any, textContent: string};
-                    if(valueProp !== undefined){
-                        (<any>el)[valueProp] = value;
+                    if(val){
+                        if('value' in val && 'textContent' in val){
+                            const {value, textContent} = val as {value: any, textContent: string};
+                            if(valueProp !== undefined){
+                                (<any>el)[valueProp] = value;
+                            }
+                            (<any>el)[displayProp!] = textContent;
+                        }else if('ish' in el || (el.hasAttribute('itemscope') && el.getAttribute('itemscope')?.includes('-'))){
+                            (<any>el).ish = val;
+                        }
                     }
-                    (<any>el)[displayProp!] = textContent;
+                    
+
                     return;
                     break;
                 case 'undefined':
