@@ -95,10 +95,6 @@ export class StdIn {
                             el[displayProp] = textContent;
                             return;
                         }
-                        else if ('ish' in el || (el.hasAttribute('itemscope') && el.getAttribute('itemscope')?.includes('-'))) {
-                            console.log({ valueProp, displayProp, path });
-                            el.ish = val;
-                        }
                     }
                     break;
                 case 'undefined':
@@ -179,6 +175,10 @@ export class StdIn {
         else if (path !== undefined) {
             const { setProp } = await import('../../lib/setProp.js');
             setProp(el, path, val);
+        }
+        else if ('ish' in el || (el.hasAttribute('itemscope') && el.getAttribute('itemscope')?.includes('-'))) {
+            console.log({ valueProp, displayProp, path });
+            el.ish = val;
         }
     }
 }

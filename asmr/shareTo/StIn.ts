@@ -95,9 +95,6 @@ export class StdIn<TProp = any> implements SharingObject{
                             }
                             (<any>el)[displayProp!] = textContent;
                             return;
-                        }else if('ish' in el || (el.hasAttribute('itemscope') && el.getAttribute('itemscope')?.includes('-'))){
-                            console.log({valueProp, displayProp, path});
-                            (<any>el).ish = val;
                         }
                     }
                     
@@ -177,6 +174,9 @@ export class StdIn<TProp = any> implements SharingObject{
         }else if(path !== undefined){
             const {setProp} = await import('../../lib/setProp.js');
             setProp(el, path, val);
+        }else if('ish' in el || (el.hasAttribute('itemscope') && el.getAttribute('itemscope')?.includes('-'))){
+            console.log({valueProp, displayProp, path});
+            (<any>el).ish = val;
         }
     }
 }
