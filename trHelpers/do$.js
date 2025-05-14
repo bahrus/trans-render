@@ -9,4 +9,9 @@ export async function do$(transformer, matchingElement, scopingInstructions, uow
         s.bootUp();
         customElements.define(name, s);
     }
+    // const {model} = transformer;
+    // const prop = uow.o[0];
+    // const ish = await waitForIsh(matchingElement);
+    // model[prop] = ish;
+    // console.log({model, prop, ish});
 }
