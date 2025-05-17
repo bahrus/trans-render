@@ -8,7 +8,7 @@ import { match } from '../lib/specialKeys.js';
 
 //import {waitForIsh} from 'mount-observer/waitForIsh.js';
 
-export async function do$<TProps, TMethods>(
+export async function do$<TProps extends {}, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>,
     matchingElement: Element,
     scopingInstructions: ScopeInstructions,
@@ -24,13 +24,19 @@ export async function do$<TProps, TMethods>(
         s.bootUp();
         const {regIsh} = await import('mount-observer/refid/regIsh.js');
         const {target} = transformer;
-        const vm = new s();
+        
         const {model} = transformer as {model: any};
         const {o} = uow as {o: string[]}; //TODO, less of a hack
         const prop = o[0];
-        Object.assign(vm, model[prop]);
-        model[prop] = vm;
-        (<any>matchingElement).ish = vm;
+        if(typeof(model[prop]) !== 'function'){
+            const vm = new s();
+            Object.assign(vm, model[prop]);
+            model[prop] = vm;
+            (<any>matchingElement).ish = vm;
+        }else{
+            (<any>matchingElement).ish = model[prop];
+        }
+
         regIsh(target as Element, name, s);
 
     }
