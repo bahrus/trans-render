@@ -22,9 +22,8 @@ Transform(div, model, {
     }
 });
 setTimeout(() => {
-    model.address = {
-        zipCode: '54321',
-    };
-    //model.address.zipCode = '54321';
-    //or model.addressIsh.zipCode = '54321'?
+    // model.address = {
+    //     zipCode: '54321',
+    // }
+    model.address.zipCode = '54321';
 }, 2000);

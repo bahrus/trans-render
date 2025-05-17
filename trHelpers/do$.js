@@ -13,7 +13,8 @@ export async function do$(transformer, matchingElement, scopingInstructions, uow
         const { target } = transformer;
         const vm = new s();
         const { model } = transformer;
-        const prop = uow.o[0];
+        const { o } = uow; //TODO, less of a hack
+        const prop = o[0];
         Object.assign(vm, model[prop]);
         model[prop] = vm;
         matchingElement.ish = vm;

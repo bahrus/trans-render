@@ -25,8 +25,9 @@ export async function do$<TProps, TMethods>(
         const {regIsh} = await import('mount-observer/refid/regIsh.js');
         const {target} = transformer;
         const vm = new s();
-        const {model} = transformer;
-        const prop = uow.o[0];
+        const {model} = transformer as {model: any};
+        const {o} = uow as {o: string[]}; //TODO, less of a hack
+        const prop = o[0];
         Object.assign(vm, model[prop]);
         model[prop] = vm;
         (<any>matchingElement).ish = vm;
