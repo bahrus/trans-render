@@ -11,11 +11,12 @@ export async function do$(transformer, matchingElement, scopingInstructions, uow
         s.bootUp();
         const { regIsh } = await import('mount-observer/refid/regIsh.js');
         const { target } = transformer;
+        const vm = new s();
+        const { model } = transformer;
+        const prop = uow.o[0];
+        Object.assign(vm, model[prop]);
+        model[prop] = vm;
+        matchingElement.ish = vm;
         regIsh(target, name, s);
     }
-    // const {model} = transformer;
-    // const prop = uow.o[0];
-    // const ish = await waitForIsh(matchingElement);
-    // model[prop] = ish;
-    // console.log({model, prop, ish});
 }

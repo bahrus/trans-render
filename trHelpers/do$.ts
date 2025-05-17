@@ -3,6 +3,7 @@ import { IMountObserver, MountContext } from '../ts-refs/mount-observer/types.js
 import {Transformer, MountOrchestrator, arr0} from '../Transform.js';
 import {QuenitOfWork, ScopeInstructions} from '../ts-refs/trans-render/types.js';
 import {Scope} from '../froop/Scope.js';
+import { match } from '../lib/specialKeys.js';
 //import { tagTempl } from '../dss/tref/tagTempl.js';
 
 //import {waitForIsh} from 'mount-observer/waitForIsh.js';
@@ -23,12 +24,15 @@ export async function do$<TProps, TMethods>(
         s.bootUp();
         const {regIsh} = await import('mount-observer/refid/regIsh.js');
         const {target} = transformer;
+        const vm = new s();
+        const {model} = transformer;
+        const prop = uow.o[0];
+        Object.assign(vm, model[prop]);
+        model[prop] = vm;
+        (<any>matchingElement).ish = vm;
         regIsh(target as Element, name, s);
+
     }
 
-    // const {model} = transformer;
-    // const prop = uow.o[0];
-    // const ish = await waitForIsh(matchingElement);
-    // model[prop] = ish;
-    // console.log({model, prop, ish});
+
 }
