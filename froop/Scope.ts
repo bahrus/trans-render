@@ -5,11 +5,12 @@ import {
     IshPropLookup, IshConfig, PropLookup} from '../ts-refs/trans-render/froop/types.js';
 import { RoundAbout } from './roundabout.js';
 import { MountObserver } from 'mount-observer/MountObserver.js';
+import {Ishcycle} from '../ts-refs/mount-observer/types.js';
 
 const publicPrivateStore = Symbol();
 
 export class Scope<TProps = any, TActions = TProps> 
-    extends RRMixin(HTMLElement){
+    extends RRMixin(EventTarget) implements Ishcycle{
     propagator = new EventTarget();
     [publicPrivateStore]: Partial<TProps> = {};
 
@@ -30,7 +31,7 @@ export class Scope<TProps = any, TActions = TProps>
      * This gets called when an element is adorned by the itemscope=my-element
      * @param el
      */
-    async attachedCallback(el: Element){
+    async '<mount>'(self: this, el: Element){
         const {propDefaults, propInfo} = this.#config;
         if(propInfo !== undefined){
             this.#propUp(propInfo);
@@ -48,7 +49,7 @@ export class Scope<TProps = any, TActions = TProps>
         this.dispatchEvent(new Event('resolved'));
     }
 
-    async detachedCallback(el: Element){}
+    // async detachedCallback(el: Element){}
 
     #scopeIndex = 0;
     /**
@@ -57,7 +58,7 @@ export class Scope<TProps = any, TActions = TProps>
      * the itemref is found.
      * @param el 
      */
-    async inScopeCallback(el: Element){
+    async '<inScope>'(self: this, el: Element){
         const inScopeXForms = this.#config.inScopeXForms;
         if(inScopeXForms === undefined) return;
         const {Transform} = await import('../Transform.js');
@@ -73,14 +74,14 @@ export class Scope<TProps = any, TActions = TProps>
         
     }
 
-    /**
-     * This get invoked if the element with the itemscope=my-element
-     * attribute has an itemref attribute, and one of the elements with id matching 
-     * the itemref is removed from the DOM tree.
-     * @param el 
-     */
-    async outOfScopeCallback(el: Element){
-    }
+    // /**
+    //  * This get invoked if the element with the itemscope=my-element
+    //  * attribute has an itemref attribute, and one of the elements with id matching 
+    //  * the itemref is removed from the DOM tree.
+    //  * @param el 
+    //  */
+    // async outOfScopeCallback(el: Element){
+    // }
 
     async #instantiateRoundaboutIfApplicable(){
         

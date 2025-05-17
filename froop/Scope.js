@@ -1,7 +1,7 @@
 import { RRMixin } from './RRMixin.js';
 import { assignGingerly } from '../lib/assignGingerly.js';
 const publicPrivateStore = Symbol();
-export class Scope extends RRMixin(HTMLElement) {
+export class Scope extends RRMixin(EventTarget) {
     propagator = new EventTarget();
     [publicPrivateStore] = {};
     async covertAssignment(obj) {
@@ -20,7 +20,7 @@ export class Scope extends RRMixin(HTMLElement) {
      * This gets called when an element is adorned by the itemscope=my-element
      * @param el
      */
-    async attachedCallback(el) {
+    async '<mount>'(self, el) {
         const { propDefaults, propInfo } = this.#config;
         if (propInfo !== undefined) {
             this.#propUp(propInfo);
@@ -36,7 +36,7 @@ export class Scope extends RRMixin(HTMLElement) {
         });
         this.dispatchEvent(new Event('resolved'));
     }
-    async detachedCallback(el) { }
+    // async detachedCallback(el: Element){}
     #scopeIndex = 0;
     /**
      * This get invoked if the element with the itemscope=my-element
@@ -44,7 +44,7 @@ export class Scope extends RRMixin(HTMLElement) {
      * the itemref is found.
      * @param el
      */
-    async inScopeCallback(el) {
+    async '<inScope>'(self, el) {
         const inScopeXForms = this.#config.inScopeXForms;
         if (inScopeXForms === undefined)
             return;
@@ -59,14 +59,14 @@ export class Scope extends RRMixin(HTMLElement) {
             });
         }
     }
-    /**
-     * This get invoked if the element with the itemscope=my-element
-     * attribute has an itemref attribute, and one of the elements with id matching
-     * the itemref is removed from the DOM tree.
-     * @param el
-     */
-    async outOfScopeCallback(el) {
-    }
+    // /**
+    //  * This get invoked if the element with the itemscope=my-element
+    //  * attribute has an itemref attribute, and one of the elements with id matching 
+    //  * the itemref is removed from the DOM tree.
+    //  * @param el 
+    //  */
+    // async outOfScopeCallback(el: Element){
+    // }
     async #instantiateRoundaboutIfApplicable() {
         const config = this.#config;
         const { actions, compacts, infractions, handlers, positractions, isSleepless } = config;
