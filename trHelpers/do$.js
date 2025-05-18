@@ -16,12 +16,24 @@ export async function do$(transformer, matchingElement, scopingInstructions, uow
         const prop = o[0];
         if (typeof (model[prop]) !== 'function') {
             const vm = new s();
-            Object.assign(vm, model[prop]);
+            const val = model[prop];
+            if (Array.isArray(val)) {
+                vm.ishList = val;
+            }
+            else {
+                Object.assign(vm, val);
+            }
             model[prop] = vm;
             matchingElement.ish = vm;
         }
         else {
-            matchingElement.ish = model[prop];
+            const val = model[prop];
+            if (Array.isArray(val)) {
+                matchingElement.ishList = val;
+            }
+            else {
+                Object.assign(matchingElement, val);
+            }
         }
         regIsh(target, name, s);
     }

@@ -30,11 +30,22 @@ export async function do$<TProps extends {}, TMethods = TProps>(
         const prop = o[0];
         if(typeof(model[prop]) !== 'function'){
             const vm = new s();
-            Object.assign(vm, model[prop]);
+            const val = model[prop];
+            if(Array.isArray(val)){
+                (<any>vm).ishList = val;
+            }else{
+                Object.assign(vm, val);
+            }
+            
             model[prop] = vm;
             (<any>matchingElement).ish = vm;
         }else{
-            (<any>matchingElement).ish = model[prop];
+            const val = model[prop];
+            if(Array.isArray(val)){
+                (<any>matchingElement).ishList = val;
+            }else{
+                Object.assign(<any>matchingElement, val);
+            }
         }
 
         regIsh(target as Element, name, s);

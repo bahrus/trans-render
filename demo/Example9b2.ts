@@ -32,4 +32,32 @@ const model= {
 } as Model & RoundaboutReady;
 
 Transform<Props, Methods>(div, model, {
+    '| list':{
+        $: {
+            name: 'NationalMedalList',
+            config:{
+                propInfo: {
+                    ishList: {},
+                    totalMedalCount: {
+                        def: 0,
+                    },
+                },
+                compacts:{
+                    when_ishList_changes_dispatch: 'ishListChanged'
+                },
+                actions:{
+                    calcTotal: {
+                        do: ({ishList}) => ({
+                            totalMedalCount: ishList.reduce((acc, item) => acc + item.total, 0)
+                        }),
+                        ifAllOf: ['ishList']
+                    }
+                },
+                xform:{
+                    '-o totalMedalCount': 0
+                }                
+                    
+            }
+        }
+    } 
 });
