@@ -22,12 +22,13 @@ async function ScopeScriptImpl(script, id) {
         throw 300;
     const scriptImplInner = `
 import {Scope} from 'trans-render/froop/Scope.js';
+import {regIsh} from 'mount-observer/refid/regIsh.js'; 
 
 class s extends Scope {
 static config = ${inner};
 }
 s.bootUp();
-customElements.define('${ceName}', s);
+regIsh(document.body, '${ceName}', s);
     `;
     const scriptImpl = document.createElement('script');
     scriptImpl.type = 'module';
