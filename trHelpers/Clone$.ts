@@ -1,14 +1,5 @@
 import {HasIsh, HasIshList} from '../ts-refs/trans-render/dss/types';
-interface Clone$Options{
-    ish: EventTarget & HasIshList
-    seedEl: Element,
-    idxStart: number,
-    itemProp: string,
-    mapIdxTo?: string,
-    itemTemplate: HTMLTemplateElement;
-    baseCrumb: string,
-    idleTimeout: number,
-}
+import {Clone$Options} from '../ts-refs/trans-render/types.js';
 export class Clone$ implements EventListenerObject{
     #clone$Options: Clone$Options;
     constructor(options: Clone$Options){
