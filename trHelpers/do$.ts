@@ -1,9 +1,8 @@
-import { MountObserver } from 'mount-observer/MountObserver.js';
-import { IMountObserver, MountContext } from '../ts-refs/mount-observer/types.js';
+// import { MountObserver } from 'mount-observer/MountObserver.js';
+// import { IMountObserver, MountContext } from '../ts-refs/mount-observer/types.js';
 import {Transformer, MountOrchestrator, arr0} from '../Transform.js';
 import {QuenitOfWork, ScopeInstructions} from '../ts-refs/trans-render/types.js';
 import {Scope} from '../froop/Scope.js';
-import { match } from '../lib/specialKeys.js';
 //import { tagTempl } from '../dss/tref/tagTempl.js';
 
 //import {waitForIsh} from 'mount-observer/waitForIsh.js';
@@ -28,9 +27,10 @@ export async function do$<TProps extends {}, TMethods = TProps>(
         const {model} = transformer as {model: any};
         const {o} = uow as {o: string[]}; //TODO, less of a hack
         const prop = o[0];
+        const val = model[prop];
         if(typeof(model[prop]) !== 'function'){
             const vm = new s();
-            const val = model[prop];
+            
             if(Array.isArray(val)){
                 (<any>vm).ishList = val;
             }else{
@@ -40,7 +40,6 @@ export async function do$<TProps extends {}, TMethods = TProps>(
             model[prop] = vm;
             (<any>matchingElement).ish = vm;
         }else{
-            const val = model[prop];
             if(Array.isArray(val)){
                 (<any>matchingElement).ishList = val;
             }else{

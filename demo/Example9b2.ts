@@ -54,7 +54,8 @@ Transform<Props, Methods>(div, model, {
                     }
                 },
                 xform:{
-                    '-o totalMedalCount': 0
+                    '-o totalMedalCount': 0,
+                    
                 }                
                     
             }
