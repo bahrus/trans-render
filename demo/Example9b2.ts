@@ -60,5 +60,29 @@ Transform<Props, Methods>(div, model, {
                     
             }
         }
-    } 
+    },
+    '* tbody>tr:first-child': {
+        $$: {
+            config: {
+                propInfo:{
+                    rank: {}, noc: {}, gold: {}, silver: {}, bronze: {}, total: {}, idx: {},
+                },
+                xform: {
+                    ':root': [
+                        {o: 'idx', s: 'ariaRowIndex'},
+                    ],
+                    '| rank': 0, '| noc': 0, '| gold': 0, '| silver': 0, '| bronze': 0, '| total': 0,
+                },
+                inScopeXForms: {
+                    '.totals': {
+                        '| total': 0
+                    }
+                }                
+            },
+            options: {
+                itemProp: 'CountryMedalCount',
+
+            }
+        }
+    }
 });

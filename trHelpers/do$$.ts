@@ -1,5 +1,5 @@
 import {Transformer, MountOrchestrator, arr0} from '../Transform.js';
-import {QuenitOfWork, ScopedLoop, ScopeInstructions} from '../ts-refs/trans-render/types.js';
+import {Clone$Options, QuenitOfWork, ScopedLoop, ScopeInstructions} from '../ts-refs/trans-render/types.js';
 import {Scope} from '../froop/Scope.js';
 
 export async function do$$<TProps extends {}, TMethods = TProps>(
@@ -52,6 +52,13 @@ export async function do$$<TProps extends {}, TMethods = TProps>(
 
     }
     const {Clone$} = await import('./Clone$.js');
-    options.itemTemplate = templ;
-    const clone$ = new Clone$(options);
+    const mergedOptions = {...defaultOptions, ...options};
+    mergedOptions.seedEl = matchingElement;
+    mergedOptions.itemTemplate = templ;
+    const clone$ = new Clone$(options as Clone$Options);
+}
+
+const defaultOptions: Partial<Clone$Options> = {
+    baseCrumb: 'trans-render-',
+    idxStart: 0,
 }
