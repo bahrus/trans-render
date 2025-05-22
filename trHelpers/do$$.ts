@@ -1,11 +1,11 @@
 import {Transformer, MountOrchestrator, arr0} from '../Transform.js';
-import {QuenitOfWork, ScopeInstructions} from '../ts-refs/trans-render/types.js';
+import {QuenitOfWork, ScopedLoop, ScopeInstructions} from '../ts-refs/trans-render/types.js';
 import {Scope} from '../froop/Scope.js';
 
 export async function do$$<TProps extends {}, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>,
     matchingElement: Element,
-    scopingInstructions: ScopeInstructions,
+    scopedLoop: ScopedLoop,
     uow: QuenitOfWork<TProps, TMethods>
 ){
     let templ: HTMLTemplateElement;
@@ -15,5 +15,43 @@ export async function do$$<TProps extends {}, TMethods = TProps>(
     }else{
         templ = matchingElement;
     }
-    
+    const {config, options} = scopedLoop;
+    if(config !== null){
+        //TODO:  consolidate
+        class s extends Scope {
+            static config = config;
+        }
+        s.bootUp();
+        const {regIsh} = await import('mount-observer/refid/regIsh.js');
+        const {target} = transformer;
+        
+        const {model} = transformer as {model: any};
+        const {o} = uow as {o: string[]}; //TODO, less of a hack
+        const prop = o[0];
+        const val = model[prop];
+        if(typeof(model[prop]) !== 'function'){
+            const vm = new s();
+            
+            if(Array.isArray(val)){
+                (<any>vm).ishList = val;
+            }else{
+                Object.assign(vm, val);
+            }
+            
+            model[prop] = vm;
+            (<any>matchingElement).ish = vm;
+        }else{
+            if(Array.isArray(val)){
+                (<any>matchingElement).ishList = val;
+            }else{
+                Object.assign(<any>matchingElement, val);
+            }
+        }
+
+        regIsh(target as Element, options.itemProp, s);
+
+    }
+    const {Clone$} = await import('./Clone$.js');
+    options.itemTemplate = templ;
+    const clone$ = new Clone$(options);
 }
