@@ -14,9 +14,9 @@ export async function do$(transformer, matchingElement, scopingInstructions, uow
         const { model } = transformer;
         const { o } = uow; //TODO, less of a hack
         const prop = o[0];
+        const val = model[prop];
         if (typeof (model[prop]) !== 'function') {
             const vm = new s();
-            const val = model[prop];
             if (Array.isArray(val)) {
                 vm.ishList = val;
             }
@@ -27,7 +27,6 @@ export async function do$(transformer, matchingElement, scopingInstructions, uow
             matchingElement.ish = vm;
         }
         else {
-            const val = model[prop];
             if (Array.isArray(val)) {
                 matchingElement.ishList = val;
             }

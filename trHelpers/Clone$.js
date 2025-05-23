@@ -1,32 +1,28 @@
-import {HasIsh, HasIshList} from '../ts-refs/trans-render/dss/types';
-import {Clone$Options} from '../ts-refs/trans-render/types.js';
-export class Clone$ implements EventListenerObject{
-    #clone$Options: Clone$Options;
-    constructor(options: Clone$Options){
+export class Clone$ {
+    #clone$Options;
+    constructor(options) {
         this.#clone$Options = options;
         this.hydrate();
     }
-    async hydrate(){
-        const {ish} = this.#clone$Options;
+    async hydrate() {
+        const { ish } = this.#clone$Options;
         ish.addEventListener('ishListChanged', this);
         this.handleEvent();
     }
-    async handleEvent(){
-        const {
-            ish, idxStart, seedEl, itemProp, mapIdxTo,
-            itemTemplate, baseCrumb, idleTimeout
-        } = this.#clone$Options;
-        const {ishList} = ish;
-        if(ishList === undefined) return;
-        const {bindish} = await import('mount-observer/bindish.js');
+    async handleEvent() {
+        const { ish, idxStart, seedEl, itemProp, mapIdxTo, itemTemplate, baseCrumb, idleTimeout } = this.#clone$Options;
+        const { ishList } = ish;
+        if (ishList === undefined)
+            return;
+        const { bindish } = await import('mount-observer/bindish.js');
         let idx = idxStart;
-        const {waitForIdleNodes} = await import('mount-observer/MountObserver.js');
+        const { waitForIdleNodes } = await import('mount-observer/MountObserver.js');
         const fragment = document.createDocumentFragment();
-        const nodesWeWantToWaitFor  = [] as Array<Node>;
-        const existingIshNodes = [] as Array<any>;
-        let ns = seedEl as Element | null;
-        while(ns !== null){
-            if(ns.getAttribute('itemscope') === itemProp){
+        const nodesWeWantToWaitFor = [];
+        const existingIshNodes = [];
+        let ns = seedEl;
+        while (ns !== null) {
+            if (ns.getAttribute('itemscope') === itemProp) {
                 existingIshNodes.push(ns);
             }
             ns = ns.nextElementSibling;
@@ -34,45 +30,47 @@ export class Clone$ implements EventListenerObject{
         let absIdx = 0;
         let isOutOfRange = false;
         let lastExisting = seedEl;
-        const {assignGingerly} = await import('../lib/assignGingerly.js')
-        for(const item of ishList){
-            if(!isOutOfRange){
+        const { assignGingerly } = await import('../lib/assignGingerly.js');
+        for (const item of ishList) {
+            if (!isOutOfRange) {
                 const existingIshNode = existingIshNodes[absIdx];
-                if(existingIshNode !== undefined){
+                if (existingIshNode !== undefined) {
                     existingIshNode.ish = item;
-                    if(mapIdxTo !== undefined){
+                    if (mapIdxTo !== undefined) {
                         existingIshNode.ish[mapIdxTo] = idx++;
                     }
                     lastExisting = existingIshNode;
                     absIdx++;
                     continue;
-                }else{
+                }
+                else {
                     isOutOfRange = true;
                 }
             }
             absIdx++;
             let templToClone = itemTemplate;
             const externalRefId = templToClone.dataset.blowDryRef;
-            if (externalRefId){
+            if (externalRefId) {
                 templToClone = window[externalRefId];
             }
-            const clone =  itemTemplate.content.cloneNode(true) as DocumentFragment;
+            const clone = itemTemplate.content.cloneNode(true);
             const children = Array.from(clone.children);
-            children.forEach(c => {nodesWeWantToWaitFor.push(c)});
+            children.forEach(c => { nodesWeWantToWaitFor.push(c); });
             //TODO:  modify template element so don't have to do this with every loop
-            const firstElementChild = clone.firstElementChild as HasIsh & Element;
-            if(firstElementChild === null) throw 404;
+            const firstElementChild = clone.firstElementChild;
+            if (firstElementChild === null)
+                throw 404;
             firstElementChild.ish = item;
-            if(mapIdxTo !== undefined){
+            if (mapIdxTo !== undefined) {
                 firstElementChild.ish[mapIdxTo] = idx++;
             }
             firstElementChild.setAttribute('itemscope', itemProp);
-            if(children.length > 1){
+            if (children.length > 1) {
                 let itemref = firstElementChild.getAttribute('itemref') || '';
-                for(let i = 1, ii = children.length; i < ii; i++){
+                for (let i = 1, ii = children.length; i < ii; i++) {
                     const child = children[i];
-                    if(!child.id){
-                        const {getCount} = await import('trans-render/dss/tref/getCount.js');
+                    if (!child.id) {
+                        const { getCount } = await import('trans-render/dss/tref/getCount.js');
                         child.id = `${baseCrumb}-${getCount(baseCrumb)}`;
                         itemref += ' ' + child.id;
                     }
@@ -86,22 +84,22 @@ export class Clone$ implements EventListenerObject{
             //TODO:  max buffer size
             fragment.appendChild(clone);
         }
-        if(absIdx < existingIshNodes.length){
-            const {deleteEl} = await import('trans-render/dss/tref/deleteEl.js');
-            for(let i = absIdx; i < existingIshNodes.length; i++){
+        if (absIdx < existingIshNodes.length) {
+            const { deleteEl } = await import('trans-render/dss/tref/deleteEl.js');
+            for (let i = absIdx; i < existingIshNodes.length; i++) {
                 const existingIshNode = existingIshNodes[i];
-                if(existingIshNode.hasAttribute('itemref')){
+                if (existingIshNode.hasAttribute('itemref')) {
                     deleteEl(existingIshNode);
-                }else{
+                }
+                else {
                     existingIshNode.remove();
                 }
-                
             }
         }
         await waitForIdleNodes(nodesWeWantToWaitFor, idleTimeout);
-        if(lastExisting.hasAttribute('itemref')){
-            const {tail} = await import('../dss/tref/tail.js');
-            lastExisting = tail(lastExisting)!;
+        if (lastExisting.hasAttribute('itemref')) {
+            const { tail } = await import('../dss/tref/tail.js');
+            lastExisting = tail(lastExisting);
         }
         lastExisting.after(fragment);
     }

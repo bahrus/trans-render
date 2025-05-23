@@ -1,43 +1,33 @@
-import {Transformer, MountOrchestrator, arr0} from '../Transform.js';
-import {Clone$Options, QuenitOfWork, ScopedLoop, ScopeInstructions} from '../ts-refs/trans-render/types.js';
-import {Scope} from '../froop/Scope.js';
-
-export async function do$$<TProps extends {}, TMethods = TProps>(
-    transformer: Transformer<TProps, TMethods>,
-    matchingElement: Element,
-    scopedLoop: ScopedLoop,
-    uow: QuenitOfWork<TProps, TMethods>
-){
-    let templ: HTMLTemplateElement;
-    if(!(matchingElement instanceof HTMLTemplateElement)){
-        const {templify} = await import('./templify.js');
+import { Scope } from '../froop/Scope.js';
+export async function do$$(transformer, matchingElement, scopedLoop, uow) {
+    let templ;
+    if (!(matchingElement instanceof HTMLTemplateElement)) {
+        const { templify } = await import('./templify.js');
         templ = templify(matchingElement);
-    }else{
+    }
+    else {
         templ = matchingElement;
     }
-    const {config, options} = scopedLoop;
-    if(config !== null){
+    const { config, options } = scopedLoop;
+    if (config !== null) {
         //TODO:  consolidate
         class s extends Scope {
             static config = config;
         }
         s.bootUp();
-        const {regIsh} = await import('mount-observer/refid/regIsh.js');
-        const {target} = transformer;
-        
+        const { regIsh } = await import('mount-observer/refid/regIsh.js');
+        const { target } = transformer;
         // const {model} = transformer as {model: any};
         // const {o} = uow as {o: string[]}; //TODO, less of a hack
         // const prop = o[0];
         // const val = model[prop];
         // if(typeof(model[prop]) !== 'function'){
         //     const vm = new s();
-            
         //     if(Array.isArray(val)){
         //         (<any>vm).ishList = val;
         //     }else{
         //         Object.assign(vm, val);
         //     }
-            
         //     model[prop] = vm;
         //     (<any>matchingElement).ish = vm;
         // }else{
@@ -47,18 +37,15 @@ export async function do$$<TProps extends {}, TMethods = TProps>(
         //         Object.assign(<any>matchingElement, val);
         //     }
         // }
-
-        regIsh(target as Element, options.itemProp, s);
-
+        regIsh(target, options.itemProp, s);
     }
-    const {Clone$} = await import('./Clone$.js');
-    const mergedOptions = {...defaultOptions, ...options};
+    const { Clone$ } = await import('./Clone$.js');
+    const mergedOptions = { ...defaultOptions, ...options };
     mergedOptions.seedEl = matchingElement;
     mergedOptions.itemTemplate = templ;
-    const clone$ = new Clone$(options as Clone$Options);
+    const clone$ = new Clone$(options);
 }
-
-const defaultOptions: Partial<Clone$Options> = {
+const defaultOptions = {
     baseCrumb: 'trans-render-',
     idxStart: 0,
-}
+};

@@ -35,7 +35,7 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
         }
     }
     for (const uow of uows) {
-        const { w, y, $ } = uow;
+        const { w, y, $, $$ } = uow;
         if (w !== undefined) {
             switch (typeof w) {
                 case 'string':
@@ -51,6 +51,10 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
             if ($ !== undefined) {
                 const { do$ } = await import('./do$.js');
                 await do$(transformer, matchingElement, $, uow);
+            }
+            if ($$ !== undefined) {
+                const { do$$ } = await import('./do$$.js');
+                await do$$(transformer, matchingElement, $$, uow);
             }
             //this is where we could look to see if we need to do update if already updated by server
             if (!skipInit || !ctx.initializing) {
