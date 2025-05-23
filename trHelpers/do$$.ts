@@ -55,7 +55,11 @@ export async function do$$<TProps extends {}, TMethods = TProps>(
     const mergedOptions = {...defaultOptions, ...options};
     mergedOptions.seedEl = matchingElement;
     mergedOptions.itemTemplate = templ;
-    const clone$ = new Clone$(options as Clone$Options);
+    const ishListContainer = matchingElement.closest('[itemscope]:not([itemscope=""])');
+    if(ishListContainer !== null){
+        mergedOptions.ish = ishListContainer.ish;
+    }
+    const clone$ = new Clone$(mergedOptions as Clone$Options);
 }
 
 const defaultOptions: Partial<Clone$Options> = {

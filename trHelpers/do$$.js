@@ -43,7 +43,11 @@ export async function do$$(transformer, matchingElement, scopedLoop, uow) {
     const mergedOptions = { ...defaultOptions, ...options };
     mergedOptions.seedEl = matchingElement;
     mergedOptions.itemTemplate = templ;
-    const clone$ = new Clone$(options);
+    const ishListContainer = matchingElement.closest('[itemscope]:not([itemscope=""])');
+    if (ishListContainer !== null) {
+        mergedOptions.ish = ishListContainer.ish;
+    }
+    const clone$ = new Clone$(mergedOptions);
 }
 const defaultOptions = {
     baseCrumb: 'trans-render-',
