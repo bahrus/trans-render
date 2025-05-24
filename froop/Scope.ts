@@ -28,7 +28,17 @@ export class Scope<TProps = any, TActions = TProps>
 
     }
 
-    
+    async #calcLength(ishListCountProp: string){
+        const {sym} = await import('mount-observer/refid/regIsh.js');
+        let arr: any[] = (<any>this)[sym];
+        if(Array.isArray(arr)){
+            (<any>this)[ishListCountProp] = arr.length;
+        }else{
+            arr = Array.from((<any>this));
+        }
+        
+           
+    }
 
     /**
      * This gets called when an element is adorned by the itemscope=my-element
@@ -41,14 +51,12 @@ export class Scope<TProps = any, TActions = TProps>
         }
         await this.#instantiateRoundaboutIfApplicable();
         if(ishListCountProp !== undefined){
-            const arr = Array.from((<any>this));
-            (<any>this)[ishListCountProp] = arr.length;
+            this.#calcLength(ishListCountProp);
             //TODO:  cleanup
             el.addEventListener('ish', e => {
                 const {actions} = e as IshEvent;
                 if(actions.includes('ishListAssigned')){
-                    const arr = Array.from((<any>this));
-                    (<any>this)[ishListCountProp] = arr.length;
+                    this.#calcLength(ishListCountProp);
                 }
             });
         }

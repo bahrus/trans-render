@@ -16,6 +16,16 @@ export class Scope extends RRMixin(EventTarget) {
         }
         await assignGingerly(this[publicPrivateStore], extObj);
     }
+    async #calcLength(ishListCountProp) {
+        const { sym } = await import('mount-observer/refid/regIsh.js');
+        let arr = this[sym];
+        if (Array.isArray(arr)) {
+            this[ishListCountProp] = arr.length;
+        }
+        else {
+            arr = Array.from(this);
+        }
+    }
     /**
      * This gets called when an element is adorned by the itemscope=my-element
      * @param el
@@ -27,14 +37,12 @@ export class Scope extends RRMixin(EventTarget) {
         }
         await this.#instantiateRoundaboutIfApplicable();
         if (ishListCountProp !== undefined) {
-            const arr = Array.from(this);
-            this[ishListCountProp] = arr.length;
+            this.#calcLength(ishListCountProp);
             //TODO:  cleanup
             el.addEventListener('ish', e => {
                 const { actions } = e;
                 if (actions.includes('ishListAssigned')) {
-                    const arr = Array.from(this);
-                    this[ishListCountProp] = arr.length;
+                    this.#calcLength(ishListCountProp);
                 }
             });
         }
