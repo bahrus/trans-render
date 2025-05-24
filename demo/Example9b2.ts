@@ -1,6 +1,7 @@
 import {Transform, XForm} from '../Transform.js';
 import { RoundaboutReady } from '../ts-refs/trans-render/froop/types.js';
-
+import {sym} from 'mount-observer/refid/regIsh.js';
+ 
 const div = document.querySelector('div')!;
 
 interface MedalCountRank{
@@ -37,7 +38,7 @@ Transform<Props, Methods>(div, model, {
             name: 'NationalMedalList',
             config:{
                 propInfo: {
-                    ishList: {},
+                    [sym]: {},
                     totalMedalCount: {
                         def: 0,
                     },

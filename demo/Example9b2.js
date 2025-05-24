@@ -1,4 +1,5 @@
 import { Transform } from '../Transform.js';
+import { sym } from 'mount-observer/refid/regIsh.js';
 const div = document.querySelector('div');
 const model = {
     list: [
@@ -13,7 +14,7 @@ Transform(div, model, {
             name: 'NationalMedalList',
             config: {
                 propInfo: {
-                    ishList: {},
+                    [sym]: {},
                     totalMedalCount: {
                         def: 0,
                     },
