@@ -18,9 +18,9 @@ Transform(div, model, {
                         def: 0,
                     },
                 },
-                compacts: {
-                    when_ishList_changes_dispatch: 'ishListChanged'
-                },
+                // compacts:{
+                //     when_ishList_changes_dispatch: 'ishListChanged'
+                // },
                 actions: {
                     calcTotal: {
                         do: ({ ishList }) => ({

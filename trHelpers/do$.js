@@ -9,7 +9,7 @@ export async function do$(transformer, matchingElement, scopingInstructions, uow
             static config = config;
         }
         s.bootUp();
-        const { regIsh } = await import('mount-observer/refid/regIsh.js');
+        const { regIsh, sym } = await import('mount-observer/refid/regIsh.js');
         const { target } = transformer;
         const { model } = transformer;
         const { o } = uow; //TODO, less of a hack
@@ -18,7 +18,7 @@ export async function do$(transformer, matchingElement, scopingInstructions, uow
         if (typeof (model[prop]) !== 'function') {
             const vm = new s();
             if (Array.isArray(val)) {
-                vm.ishList = val;
+                vm[sym] = val;
             }
             else {
                 Object.assign(vm, val);

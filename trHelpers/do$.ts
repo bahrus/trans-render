@@ -21,7 +21,7 @@ export async function do$<TProps extends {}, TMethods = TProps>(
             static config = config;
         }
         s.bootUp();
-        const {regIsh} = await import('mount-observer/refid/regIsh.js');
+        const {regIsh, sym} = await import('mount-observer/refid/regIsh.js');
         const {target} = transformer;
         
         const {model} = transformer as {model: any};
@@ -32,7 +32,7 @@ export async function do$<TProps extends {}, TMethods = TProps>(
             const vm = new s();
             
             if(Array.isArray(val)){
-                (<any>vm).ishList = val;
+                (<any>vm)[sym] = val;
             }else{
                 Object.assign(vm, val);
             }
