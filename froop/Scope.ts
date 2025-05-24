@@ -35,6 +35,7 @@ export class Scope<TProps = any, TActions = TProps>
             (<any>this)[ishListCountProp] = arr.length;
         }else{
             arr = Array.from((<any>this));
+            (<any>this)[ishListCountProp] = arr.length;
         }
         
            

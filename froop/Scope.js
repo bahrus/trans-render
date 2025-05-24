@@ -24,6 +24,7 @@ export class Scope extends RRMixin(EventTarget) {
         }
         else {
             arr = Array.from(this);
+            this[ishListCountProp] = arr.length;
         }
     }
     /**
