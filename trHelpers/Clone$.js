@@ -1,3 +1,4 @@
+import { IshEvent } from 'mount-observer/Newish.js';
 export class Clone$ {
     #clone$Options;
     constructor(options) {
@@ -6,14 +7,17 @@ export class Clone$ {
     }
     async hydrate() {
         const { ish } = this.#clone$Options;
-        ish.addEventListener('ishListChanged', this);
+        ish.addEventListener('ish', this);
         this.handleEvent();
     }
-    async handleEvent() {
+    async handleEvent(e) {
+        if (e instanceof IshEvent) {
+            if (!e.actions.includes('ishListAssigned'))
+                return;
+        }
         const { ish, idxStart, seedEl, itemProp, mapIdxTo, itemTemplate, baseCrumb, idleTimeout } = this.#clone$Options;
-        const { ishList } = ish;
-        if (ishList === undefined)
-            return;
+        //const {ishList} = ish;
+        //if(ishList === undefined) return;
         const { bindish } = await import('mount-observer/bindish.js');
         let idx = idxStart;
         const { waitForIdleNodes } = await import('mount-observer/MountObserver.js');
@@ -31,7 +35,7 @@ export class Clone$ {
         let isOutOfRange = false;
         let lastExisting = seedEl;
         const { assignGingerly } = await import('../lib/assignGingerly.js');
-        for (const item of ishList) {
+        for (const item of ish) {
             if (!isOutOfRange) {
                 const existingIshNode = existingIshNodes[absIdx];
                 if (existingIshNode !== undefined) {

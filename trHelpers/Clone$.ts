@@ -1,6 +1,6 @@
 import {HasIsh, HasIshList} from '../ts-refs/trans-render/dss/types';
 import {Clone$Options} from '../ts-refs/trans-render/types.js';
-import {IshEvent} from 'mount-observer/newish.js';
+import {IshEvent} from 'mount-observer/Newish.js';
 export class Clone$ implements EventListenerObject{
     #clone$Options: Clone$Options;
     constructor(options: Clone$Options){
@@ -20,8 +20,8 @@ export class Clone$ implements EventListenerObject{
             ish, idxStart, seedEl, itemProp, mapIdxTo,
             itemTemplate, baseCrumb, idleTimeout
         } = this.#clone$Options;
-        const {ishList} = ish;
-        if(ishList === undefined) return;
+        //const {ishList} = ish;
+        //if(ishList === undefined) return;
         const {bindish} = await import('mount-observer/bindish.js');
         let idx = idxStart;
         const {waitForIdleNodes} = await import('mount-observer/MountObserver.js');
@@ -39,7 +39,7 @@ export class Clone$ implements EventListenerObject{
         let isOutOfRange = false;
         let lastExisting = seedEl;
         const {assignGingerly} = await import('../lib/assignGingerly.js')
-        for(const item of ishList){
+        for(const item of ish){
             if(!isOutOfRange){
                 const existingIshNode = existingIshNodes[absIdx];
                 if(existingIshNode !== undefined){
