@@ -1,5 +1,6 @@
 import {HasIsh, HasIshList} from '../ts-refs/trans-render/dss/types';
 import {Clone$Options} from '../ts-refs/trans-render/types.js';
+import {IshEvent} from 'mount-observer/newish.js';
 export class Clone$ implements EventListenerObject{
     #clone$Options: Clone$Options;
     constructor(options: Clone$Options){
@@ -8,10 +9,13 @@ export class Clone$ implements EventListenerObject{
     }
     async hydrate(){
         const {ish} = this.#clone$Options;
-        ish.addEventListener('ishListChanged', this);
+        ish.addEventListener('ish', this);
         this.handleEvent();
     }
-    async handleEvent(){
+    async handleEvent(e?: Event){
+        if(e instanceof IshEvent){
+            if(!e.actions.includes('ishListAssigned')) return;
+        }
         const {
             ish, idxStart, seedEl, itemProp, mapIdxTo,
             itemTemplate, baseCrumb, idleTimeout
