@@ -6,6 +6,7 @@ import {
 import { RoundAbout } from './roundabout.js';
 import { MountObserver } from 'mount-observer/MountObserver.js';
 import {Ishcycle} from '../ts-refs/mount-observer/types.js';
+import { IshEvent } from 'mount-observer/Newish.js';
 
 const publicPrivateStore = Symbol();
 
@@ -27,17 +28,30 @@ export class Scope<TProps = any, TActions = TProps>
 
     }
 
+    
+
     /**
      * This gets called when an element is adorned by the itemscope=my-element
      * @param el
      */
     async '<mount>'(self: this, el: Element){
-        const {propDefaults, propInfo} = this.#config;
+        const {propDefaults, propInfo, ishListCountProp} = this.#config;
         if(propInfo !== undefined){
             this.#propUp(propInfo);
         }
         await this.#instantiateRoundaboutIfApplicable();
-
+        if(ishListCountProp !== undefined){
+            const arr = Array.from((<any>this));
+            (<any>this)[ishListCountProp] = arr.length;
+            //TODO:  cleanup
+            el.addEventListener('ish', e => {
+                const {actions} = e as IshEvent;
+                if(actions.includes('ishListAssigned')){
+                    const arr = Array.from((<any>this));
+                    (<any>this)[ishListCountProp] = arr.length;
+                }
+            });
+        }
         
         const xform = this.#config.xform;
         if(xform === undefined) return;

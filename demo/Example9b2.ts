@@ -15,7 +15,9 @@ interface MedalCountRank{
 }
 
 interface Props{
-    list: Array<MedalCountRank>
+    list: Array<MedalCountRank>,
+    totalMedalCount?: number,
+    itemCount?: number,
 }
 
 interface Methods{
@@ -37,21 +39,22 @@ Transform<Props, Methods>(div, model, {
         $: {
             name: 'NationalMedalList',
             config:{
+                ishListCountProp: 'itemCount',
                 propInfo: {
-                    [sym]: {},
                     totalMedalCount: {
                         def: 0,
                     },
+                    itemCount:{}
                 },
                 // compacts:{
                 //     when_ishList_changes_dispatch: 'ishListChanged'
                 // },
                 actions:{
                     calcTotal: {
-                        do: ({ishList}) => ({
-                            totalMedalCount: ishList.reduce((acc, item) => acc + item.total, 0)
+                        do: (self) => ({
+                            totalMedalCount: Array.from(self).reduce((acc, item) => acc + item.total, 0)
                         }),
-                        ifAllOf: ['ishList']
+                        ifKeyIn: ['itemCount']
                     }
                 },
                 xform:{

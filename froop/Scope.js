@@ -21,11 +21,23 @@ export class Scope extends RRMixin(EventTarget) {
      * @param el
      */
     async '<mount>'(self, el) {
-        const { propDefaults, propInfo } = this.#config;
+        const { propDefaults, propInfo, ishListCountProp } = this.#config;
         if (propInfo !== undefined) {
             this.#propUp(propInfo);
         }
         await this.#instantiateRoundaboutIfApplicable();
+        if (ishListCountProp !== undefined) {
+            const arr = Array.from(this);
+            this[ishListCountProp] = arr.length;
+            //TODO:  cleanup
+            el.addEventListener('ish', e => {
+                const { actions } = e;
+                if (actions.includes('ishListAssigned')) {
+                    const arr = Array.from(this);
+                    this[ishListCountProp] = arr.length;
+                }
+            });
+        }
         const xform = this.#config.xform;
         if (xform === undefined)
             return;
