@@ -16,15 +16,14 @@ export class Scope extends RRMixin(EventTarget) {
         }
         await assignGingerly(this[publicPrivateStore], extObj);
     }
-    async #calcLength(ishListCountProp) {
-        const { sym } = await import('mount-observer/refid/regIsh.js');
-        let arr = this[sym];
-        if (Array.isArray(arr)) {
-            this[ishListCountProp] = arr.length;
-        }
-        else {
-            arr = Array.from(this);
-            this[ishListCountProp] = arr.length;
+    async 'arr=>'(self, arr) {
+        const { ishListCountProp } = this.#config;
+        if (ishListCountProp !== undefined) {
+            console.log({ arr });
+            // const {ishList} = this;
+            // if(ishList !== undefined){
+            //     this.#calcLength(ishListCountProp);
+            // }
         }
     }
     /**
@@ -37,16 +36,16 @@ export class Scope extends RRMixin(EventTarget) {
             this.#propUp(propInfo);
         }
         await this.#instantiateRoundaboutIfApplicable();
-        if (ishListCountProp !== undefined) {
-            this.#calcLength(ishListCountProp);
-            //TODO:  cleanup
-            el.addEventListener('ish', e => {
-                const { actions } = e;
-                if (actions.includes('ishListAssigned')) {
-                    this.#calcLength(ishListCountProp);
-                }
-            });
-        }
+        // if(ishListCountProp !== undefined){
+        //     this.#calcLength(ishListCountProp);
+        //     //TODO:  cleanup
+        //     el.addEventListener('ish', e => {
+        //         const {actions} = e as IshEvent;
+        //         if(actions.includes('ishListAssigned')){
+        //             this.#calcLength(ishListCountProp);
+        //         }
+        //     });
+        // }
         const xform = this.#config.xform;
         if (xform === undefined)
             return;

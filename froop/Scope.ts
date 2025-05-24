@@ -28,17 +28,15 @@ export class Scope<TProps = any, TActions = TProps>
 
     }
 
-    async #calcLength(ishListCountProp: string){
-        const {sym} = await import('mount-observer/refid/regIsh.js');
-        let arr: any[] = (<any>this)[sym];
-        if(Array.isArray(arr)){
-            (<any>this)[ishListCountProp] = arr.length;
-        }else{
-            arr = Array.from((<any>this));
-            (<any>this)[ishListCountProp] = arr.length;
+    async 'arr=>'(self: this, arr: any[]){
+        const {ishListCountProp} = this.#config;
+        if(ishListCountProp !== undefined){
+            console.log({arr});
+            // const {ishList} = this;
+            // if(ishList !== undefined){
+            //     this.#calcLength(ishListCountProp);
+            // }
         }
-        
-           
     }
 
     /**
@@ -51,16 +49,16 @@ export class Scope<TProps = any, TActions = TProps>
             this.#propUp(propInfo);
         }
         await this.#instantiateRoundaboutIfApplicable();
-        if(ishListCountProp !== undefined){
-            this.#calcLength(ishListCountProp);
-            //TODO:  cleanup
-            el.addEventListener('ish', e => {
-                const {actions} = e as IshEvent;
-                if(actions.includes('ishListAssigned')){
-                    this.#calcLength(ishListCountProp);
-                }
-            });
-        }
+        // if(ishListCountProp !== undefined){
+        //     this.#calcLength(ishListCountProp);
+        //     //TODO:  cleanup
+        //     el.addEventListener('ish', e => {
+        //         const {actions} = e as IshEvent;
+        //         if(actions.includes('ishListAssigned')){
+        //             this.#calcLength(ishListCountProp);
+        //         }
+        //     });
+        // }
         
         const xform = this.#config.xform;
         if(xform === undefined) return;
