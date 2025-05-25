@@ -17,6 +17,7 @@ export class Scope extends RRMixin(EventTarget) {
         await assignGingerly(this[publicPrivateStore], extObj);
     }
     async 'arr=>'(self, arr) {
+        console.log('arr=>');
         const { ishListCountProp } = this.#config;
         if (ishListCountProp !== undefined) {
             this[ishListCountProp] = arr.length;

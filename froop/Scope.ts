@@ -29,6 +29,7 @@ export class Scope<TProps = any, TActions = TProps>
     }
 
     async 'arr=>'(self: Scope, arr: any[]){
+        console.log('arr=>');
         const {ishListCountProp} = this.#config;
         if(ishListCountProp !== undefined){
             (<any>this)[ishListCountProp] = arr.length;;
