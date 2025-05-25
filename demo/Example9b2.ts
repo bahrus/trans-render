@@ -90,3 +90,8 @@ Transform<Props, Methods>(div, model, {
     },
 
 });
+
+setTimeout(() => {
+    //Array.from(model.list)[0].gold = 12345678;
+    model.list[0].gold = 12345678;
+}, 2000);

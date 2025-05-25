@@ -25,7 +25,9 @@ export async function do$(transformer, matchingElement, scopingInstructions, uow
             initPropVals: val,
         });
         const ce = await n.do();
-        model[prop] = ce;
+        if (!Array.isArray(val)) {
+            model[prop] = ce;
+        }
         //should this be done before the ish event is raised in Newish.#assignGingerly?
         matchingElement.setAttribute('itemscope', name);
     }
