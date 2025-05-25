@@ -1,6 +1,7 @@
 import { Scope } from '../froop/Scope.js';
 export async function do$(transformer, matchingElement, scopingInstructions, uow) {
     const { name, config } = scopingInstructions;
+    console.log('do$');
     if (config !== null) {
         class s extends Scope {
             static config = config;
@@ -15,13 +16,17 @@ export async function do$(transformer, matchingElement, scopingInstructions, uow
         const { o } = uow; //TODO, less of a hack
         const prop = o[0];
         const val = model[prop];
+        if (val instanceof s)
+            return;
         const n = new Newish(matchingElement, matchingElement, name, {
             ctr: s,
             assigner: assignGingerly,
             csr: true,
             initPropVals: val,
         });
-        await n.do();
+        const ce = await n.do();
+        model[prop] = ce;
+        //should this be done before the ish event is raised in Newish.#assignGingerly?
         matchingElement.setAttribute('itemscope', name);
     }
 }

@@ -51,6 +51,7 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
             if ($ !== undefined) {
                 const { do$ } = await import('./do$.js');
                 await do$(transformer, matchingElement, $, uow);
+                continue;
             }
             if ($$ !== undefined) {
                 const { do$$ } = await import('./do$$.js');

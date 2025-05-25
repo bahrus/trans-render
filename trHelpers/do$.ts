@@ -10,7 +10,7 @@ export async function do$<TProps extends {}, TMethods = TProps>(
     uow: QuenitOfWork<TProps, TMethods>
 ){
     const {name, config} = scopingInstructions;
-    
+    console.log('do$');
 
     if(config !== null){
         class s extends Scope {
@@ -26,15 +26,17 @@ export async function do$<TProps extends {}, TMethods = TProps>(
         const {o} = uow as {o: string[]}; //TODO, less of a hack
         const prop = o[0];
         const val = model[prop];
+        if(val instanceof s) return;
         const n = new Newish(matchingElement, matchingElement, name, {
             ctr: s,
             assigner: assignGingerly,
             csr: true,
             initPropVals: val,
         });
-        await n.do();
+        const ce = await n.do();
+        model[prop] = ce;
+        //should this be done before the ish event is raised in Newish.#assignGingerly?
         matchingElement.setAttribute('itemscope', name);
-
 
     }
 

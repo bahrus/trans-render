@@ -59,6 +59,7 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
             if($ !== undefined){
                 const {do$} = await import('./do$.js');
                 await do$(transformer, matchingElement, $, uow);
+                continue;
             }
             if($$ !== undefined){
                 const {do$$} = await import('./do$$.js');

@@ -28,7 +28,7 @@ export class Scope<TProps = any, TActions = TProps>
 
     }
 
-    async 'arr=>'(self: this, arr: any[]){
+    async 'arr=>'(self: Scope, arr: any[]){
         const {ishListCountProp} = this.#config;
         if(ishListCountProp !== undefined){
             (<any>this)[ishListCountProp] = arr.length;;
@@ -41,7 +41,7 @@ export class Scope<TProps = any, TActions = TProps>
      * This gets called when an element is adorned by the itemscope=my-element
      * @param el
      */
-    async '<mount>'(self: this, el: Element){
+    async '<mount>'(self: Scope, el: Element){
         const {propDefaults, propInfo, ishListCountProp} = this.#config;
         if(propInfo !== undefined){
             this.#propUp(propInfo);
@@ -67,7 +67,7 @@ export class Scope<TProps = any, TActions = TProps>
      * the itemref is found.
      * @param el 
      */
-    async '<inScope>'(self: this, el: Element){
+    async '<inScope>'(self: Scope, el: Element){
         const inScopeXForms = this.#config.inScopeXForms;
         if(inScopeXForms === undefined) return;
         const {Transform} = await import('../Transform.js');
