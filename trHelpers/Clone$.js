@@ -16,7 +16,11 @@ export class Clone$ {
                 return;
         }
         const { ish, idxStart, seedEl, itemProp, mapIdxTo, itemTemplate, baseCrumb, idleTimeout } = this.#clone$Options;
-        const { bindish } = await import('mount-observer/bindish.js');
+        const { getIsh } = await import('mount-observer/refid/getIsh.js');
+        const ctr = await getIsh(seedEl, itemProp);
+        console.log({ itemProp, ctr });
+        //const {bindish} = await import('mount-observer/bindish.js');
+        const { Newish } = await import('mount-observer/Newish.js');
         let idx = idxStart;
         const { waitForIdleNodes } = await import('mount-observer/MountObserver.js');
         const fragment = document.createDocumentFragment();
@@ -33,6 +37,7 @@ export class Clone$ {
         let isOutOfRange = false;
         let lastExisting = seedEl;
         const { assignGingerly } = await import('../lib/assignGingerly.js');
+        //const newArr = [];
         for (const item of ish) {
             if (!isOutOfRange) {
                 const existingIshNode = existingIshNodes[absIdx];
@@ -62,9 +67,17 @@ export class Clone$ {
             const firstElementChild = clone.firstElementChild;
             if (firstElementChild === null)
                 throw 404;
-            firstElementChild.ish = item;
+            const n = new Newish(firstElementChild, firstElementChild, itemProp, {
+                ctr,
+                assigner: assignGingerly,
+                csr: true,
+                initPropVals: item,
+            });
+            const ce = await n.do();
+            //TODO: insert into arr
+            //firstElementChild.ish = item;
             if (mapIdxTo !== undefined) {
-                firstElementChild.ish[mapIdxTo] = idx++;
+                ce[mapIdxTo] = idx++;
             }
             firstElementChild.setAttribute('itemscope', itemProp);
             if (children.length > 1) {
@@ -79,10 +92,10 @@ export class Clone$ {
                 }
                 firstElementChild.setAttribute('itemref', itemref.trim());
             }
-            await bindish(clone, seedEl, {
-                assigner: assignGingerly,
-                csr: true,
-            }); //TODO assign gingerly
+            // await bindish(clone, seedEl, {
+            //     assigner: assignGingerly,
+            //     csr: true,
+            // }); //TODO assign gingerly
             //TODO:  max buffer size
             fragment.appendChild(clone);
         }

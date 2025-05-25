@@ -20,8 +20,12 @@ export class Clone$ implements EventListenerObject{
             ish, idxStart, seedEl, itemProp, mapIdxTo,
             itemTemplate, baseCrumb, idleTimeout
         } = this.#clone$Options;
-
-        const {bindish} = await import('mount-observer/bindish.js');
+        
+        const {getIsh} = await import('mount-observer/refid/getIsh.js');
+        const ctr = await getIsh(seedEl, itemProp);
+        console.log({itemProp, ctr});
+        //const {bindish} = await import('mount-observer/bindish.js');
+        const {Newish} = await import('mount-observer/Newish.js');
         let idx = idxStart;
         const {waitForIdleNodes} = await import('mount-observer/MountObserver.js');
         const fragment = document.createDocumentFragment();
@@ -37,7 +41,8 @@ export class Clone$ implements EventListenerObject{
         let absIdx = 0;
         let isOutOfRange = false;
         let lastExisting = seedEl;
-        const {assignGingerly} = await import('../lib/assignGingerly.js')
+        const {assignGingerly} = await import('../lib/assignGingerly.js');
+        //const newArr = [];
         for(const item of ish){
             if(!isOutOfRange){
                 const existingIshNode = existingIshNodes[absIdx];
@@ -65,10 +70,19 @@ export class Clone$ implements EventListenerObject{
             //TODO:  modify template element so don't have to do this with every loop
             const firstElementChild = clone.firstElementChild as HasIsh & Element;
             if(firstElementChild === null) throw 404;
-            firstElementChild.ish = item;
+            const n = new Newish(firstElementChild, firstElementChild, itemProp, {
+                ctr,
+                assigner: assignGingerly,
+                csr: true,
+                initPropVals: item,
+            });
+            const ce = await n.do();
+            //TODO: insert into arr
+            //firstElementChild.ish = item;
             if(mapIdxTo !== undefined){
-                firstElementChild.ish[mapIdxTo] = idx++;
+                ce[mapIdxTo] = idx++;
             }
+            
             firstElementChild.setAttribute('itemscope', itemProp);
             if(children.length > 1){
                 let itemref = firstElementChild.getAttribute('itemref') || '';
@@ -82,10 +96,10 @@ export class Clone$ implements EventListenerObject{
                 }
                 firstElementChild.setAttribute('itemref', itemref.trim());
             }
-            await bindish(clone, seedEl, {
-                assigner: assignGingerly,
-                csr: true,
-            }); //TODO assign gingerly
+            // await bindish(clone, seedEl, {
+            //     assigner: assignGingerly,
+            //     csr: true,
+            // }); //TODO assign gingerly
             //TODO:  max buffer size
             fragment.appendChild(clone);
         }
