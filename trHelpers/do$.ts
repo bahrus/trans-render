@@ -13,41 +13,54 @@ export async function do$<TProps extends {}, TMethods = TProps>(
     scopingInstructions: ScopeInstructions,
     uow: QuenitOfWork<TProps, TMethods>
 ){
+    console.log('starting do$');
     const {name, config} = scopingInstructions;
-    matchingElement.setAttribute('itemscope', name);
+    
 
     if(config !== null){
         class s extends Scope {
             static config = config;
         }
         s.bootUp();
-        const {regIsh, sym} = await import('mount-observer/refid/regIsh.js');
+        const {regIsh} = await import('mount-observer/refid/regIsh.js');
         const {target} = transformer;
-        
-        const {model} = transformer as {model: any};
+        regIsh(target as Element, name, s);
+        const {Newish} = await import('mount-observer/Newish.js');
+        const {assignGingerly} = await import('../lib/assignGingerly.js');
+                const {model} = transformer as {model: any};
         const {o} = uow as {o: string[]}; //TODO, less of a hack
         const prop = o[0];
         const val = model[prop];
-        if(typeof(model[prop]) !== 'function'){
-            const vm = new s();
+        const n = new Newish(matchingElement, matchingElement, name, {
+            ctr: s,
+            assigner: assignGingerly,
+            csr: true,
+            initPropVals: val,
+        });
+        await n.do();
+        matchingElement.setAttribute('itemscope', name);
+        console.log('done with do$');
+        // if(typeof(model[prop]) !== 'function'){
+        //     const vm = new s();
             
-            if(Array.isArray(val)){
-                (<any>vm)[sym] = val;
-            }else{
-                Object.assign(vm, val);
-            }
+        //     if(Array.isArray(val)){
+        //         (<any>vm)[sym] = val;
+        //     }else{
+        //         Object.assign(vm, val);
+        //     }
             
-            model[prop] = vm;
-            (<any>matchingElement).ish = vm;
-        }else{
-            if(Array.isArray(val)){
-                (<any>matchingElement).ishList = val;
-            }else{
-                Object.assign(<any>matchingElement, val);
-            }
-        }
+        //     model[prop] = vm;
+        //     (<any>matchingElement).ish = vm;
+        // }else{
+        //     if(Array.isArray(val)){
+        //         throw 'NI';
+        //         (<any>matchingElement).ishList = val;
+        //     }else{
+        //         Object.assign(<any>matchingElement, val);
+        //     }
+        // }
 
-        regIsh(target as Element, name, s);
+        
 
     }
 

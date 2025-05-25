@@ -20,11 +20,10 @@ export class Scope extends RRMixin(EventTarget) {
         const { ishListCountProp } = this.#config;
         if (ishListCountProp !== undefined) {
             console.log({ arr });
-            // const {ishList} = this;
-            // if(ishList !== undefined){
-            //     this.#calcLength(ishListCountProp);
-            // }
+            this[ishListCountProp] = arr.length;
+            ;
         }
+        return arr;
     }
     /**
      * This gets called when an element is adorned by the itemscope=my-element

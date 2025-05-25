@@ -35,6 +35,7 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
         }
     }
     for (const uow of uows) {
+        console.log({ uow });
         const { w, y, $, $$ } = uow;
         if (w !== undefined) {
             switch (typeof w) {
@@ -49,10 +50,12 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
         }
         else {
             if ($ !== undefined) {
+                console.log('do$');
                 const { do$ } = await import('./do$.js');
                 await do$(transformer, matchingElement, $, uow);
             }
             if ($$ !== undefined) {
+                console.log('do$$');
                 const { do$$ } = await import('./do$$.js');
                 await do$$(transformer, matchingElement, $$, uow);
             }

@@ -8,6 +8,7 @@ export async function do$$<TProps extends {}, TMethods = TProps>(
     scopedLoop: ScopedLoop,
     uow: QuenitOfWork<TProps, TMethods>
 ){
+    console.log('starting do$$');
     let templ: HTMLTemplateElement;
     if(!(matchingElement instanceof HTMLTemplateElement)){
         const {templify} = await import('./templify.js');
@@ -48,18 +49,25 @@ export async function do$$<TProps extends {}, TMethods = TProps>(
         //     }
         // }
 
-        regIsh(target as Element, options.itemProp, s);
+        regIsh(target as Element, options.itemProp!, s);
 
     }
     const {Clone$} = await import('./Clone$.js');
     const mergedOptions = {...defaultOptions, ...options};
     mergedOptions.seedEl = matchingElement;
     mergedOptions.itemTemplate = templ;
-    const ishListContainer = matchingElement.closest('[itemscope]:not([itemscope=""])');
+    const ishListContainer = matchingElement.closest('[itemscope]:not([itemscope=""])') as any;
     if(ishListContainer !== null){
+        if(ishListContainer.ish === undefined){
+            const {waitForIsh} = await import('mount-observer/waitForIsh.js');
+            console.log('waiting for ish');
+            await waitForIsh(ishListContainer);
+        }
+        console.log('finished waiting for ish');
         mergedOptions.ish = ishListContainer.ish;
+        const clone$ = new Clone$(mergedOptions as Clone$Options);
     }
-    const clone$ = new Clone$(mergedOptions as Clone$Options);
+    
 }
 
 const defaultOptions: Partial<Clone$Options> = {

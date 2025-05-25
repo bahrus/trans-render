@@ -1,5 +1,6 @@
 import { Scope } from '../froop/Scope.js';
 export async function do$$(transformer, matchingElement, scopedLoop, uow) {
+    console.log('starting do$$');
     let templ;
     if (!(matchingElement instanceof HTMLTemplateElement)) {
         const { templify } = await import('./templify.js');
@@ -45,9 +46,15 @@ export async function do$$(transformer, matchingElement, scopedLoop, uow) {
     mergedOptions.itemTemplate = templ;
     const ishListContainer = matchingElement.closest('[itemscope]:not([itemscope=""])');
     if (ishListContainer !== null) {
+        if (ishListContainer.ish === undefined) {
+            const { waitForIsh } = await import('mount-observer/waitForIsh.js');
+            console.log('waiting for ish');
+            await waitForIsh(ishListContainer);
+        }
+        console.log('finished waiting for ish');
         mergedOptions.ish = ishListContainer.ish;
+        const clone$ = new Clone$(mergedOptions);
     }
-    const clone$ = new Clone$(mergedOptions);
 }
 const defaultOptions = {
     baseCrumb: 'trans-render-',

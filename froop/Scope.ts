@@ -32,11 +32,10 @@ export class Scope<TProps = any, TActions = TProps>
         const {ishListCountProp} = this.#config;
         if(ishListCountProp !== undefined){
             console.log({arr});
-            // const {ishList} = this;
-            // if(ishList !== undefined){
-            //     this.#calcLength(ishListCountProp);
-            // }
+            (<any>this)[ishListCountProp] = arr.length;;
+
         }
+        return arr;
     }
 
     /**
