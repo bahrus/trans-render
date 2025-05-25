@@ -1,11 +1,7 @@
-// import { MountObserver } from 'mount-observer/MountObserver.js';
-// import { IMountObserver, MountContext } from '../ts-refs/mount-observer/types.js';
 import {Transformer, MountOrchestrator, arr0} from '../Transform.js';
 import {QuenitOfWork, ScopeInstructions} from '../ts-refs/trans-render/types.js';
 import {Scope} from '../froop/Scope.js';
-//import { tagTempl } from '../dss/tref/tagTempl.js';
 
-//import {waitForIsh} from 'mount-observer/waitForIsh.js';
 
 export async function do$<TProps extends {}, TMethods = TProps>(
     transformer: Transformer<TProps, TMethods>,
@@ -13,7 +9,6 @@ export async function do$<TProps extends {}, TMethods = TProps>(
     scopingInstructions: ScopeInstructions,
     uow: QuenitOfWork<TProps, TMethods>
 ){
-    console.log('starting do$');
     const {name, config} = scopingInstructions;
     
 
@@ -39,28 +34,7 @@ export async function do$<TProps extends {}, TMethods = TProps>(
         });
         await n.do();
         matchingElement.setAttribute('itemscope', name);
-        console.log('done with do$');
-        // if(typeof(model[prop]) !== 'function'){
-        //     const vm = new s();
-            
-        //     if(Array.isArray(val)){
-        //         (<any>vm)[sym] = val;
-        //     }else{
-        //         Object.assign(vm, val);
-        //     }
-            
-        //     model[prop] = vm;
-        //     (<any>matchingElement).ish = vm;
-        // }else{
-        //     if(Array.isArray(val)){
-        //         throw 'NI';
-        //         (<any>matchingElement).ishList = val;
-        //     }else{
-        //         Object.assign(<any>matchingElement, val);
-        //     }
-        // }
 
-        
 
     }
 

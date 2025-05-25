@@ -19,7 +19,6 @@ export class Scope extends RRMixin(EventTarget) {
     async 'arr=>'(self, arr) {
         const { ishListCountProp } = this.#config;
         if (ishListCountProp !== undefined) {
-            console.log({ arr });
             this[ishListCountProp] = arr.length;
             ;
         }
@@ -35,16 +34,6 @@ export class Scope extends RRMixin(EventTarget) {
             this.#propUp(propInfo);
         }
         await this.#instantiateRoundaboutIfApplicable();
-        // if(ishListCountProp !== undefined){
-        //     this.#calcLength(ishListCountProp);
-        //     //TODO:  cleanup
-        //     el.addEventListener('ish', e => {
-        //         const {actions} = e as IshEvent;
-        //         if(actions.includes('ishListAssigned')){
-        //             this.#calcLength(ishListCountProp);
-        //         }
-        //     });
-        // }
         const xform = this.#config.xform;
         if (xform === undefined)
             return;
@@ -55,7 +44,6 @@ export class Scope extends RRMixin(EventTarget) {
         });
         this.dispatchEvent(new Event('resolved'));
     }
-    // async detachedCallback(el: Element){}
     #scopeIndex = 0;
     /**
      * This get invoked if the element with the itemscope=my-element
@@ -78,14 +66,6 @@ export class Scope extends RRMixin(EventTarget) {
             });
         }
     }
-    // /**
-    //  * This get invoked if the element with the itemscope=my-element
-    //  * attribute has an itemref attribute, and one of the elements with id matching 
-    //  * the itemref is removed from the DOM tree.
-    //  * @param el 
-    //  */
-    // async outOfScopeCallback(el: Element){
-    // }
     async #instantiateRoundaboutIfApplicable() {
         const config = this.#config;
         const { actions, compacts, infractions, handlers, positractions, isSleepless } = config;

@@ -32,7 +32,4 @@ export class AddEventListener<TProps, TMethods, TElement = {}>{
         });
     }
 
-    // onDisconnect(){
-    //     this.#abortController.abort();
-    // }
 }

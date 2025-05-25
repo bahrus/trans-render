@@ -45,7 +45,6 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
     } 
         
     for(const uow of uows){
-        console.log({uow});
         const {w, y, $, $$} = uow;
         if(w !== undefined){
             switch(typeof w){
@@ -58,12 +57,10 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
             await doYield(transformer, matchingElement, uow, y);
         }else{
             if($ !== undefined){
-                console.log('do$');
                 const {do$} = await import('./do$.js');
                 await do$(transformer, matchingElement, $, uow);
             }
             if($$ !== undefined){
-                console.log('do$$');
                 const {do$$} = await import('./do$$.js');
                 await do$$(transformer, matchingElement, $$, uow);
             }

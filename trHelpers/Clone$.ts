@@ -20,8 +20,7 @@ export class Clone$ implements EventListenerObject{
             ish, idxStart, seedEl, itemProp, mapIdxTo,
             itemTemplate, baseCrumb, idleTimeout
         } = this.#clone$Options;
-        //const {ishList} = ish;
-        //if(ishList === undefined) return;
+
         const {bindish} = await import('mount-observer/bindish.js');
         let idx = idxStart;
         const {waitForIdleNodes} = await import('mount-observer/MountObserver.js');

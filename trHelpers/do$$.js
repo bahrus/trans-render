@@ -1,6 +1,5 @@
 import { Scope } from '../froop/Scope.js';
 export async function do$$(transformer, matchingElement, scopedLoop, uow) {
-    console.log('starting do$$');
     let templ;
     if (!(matchingElement instanceof HTMLTemplateElement)) {
         const { templify } = await import('./templify.js');
@@ -18,29 +17,8 @@ export async function do$$(transformer, matchingElement, scopedLoop, uow) {
         s.bootUp();
         const { regIsh } = await import('mount-observer/refid/regIsh.js');
         const { target } = transformer;
-        // const {model} = transformer as {model: any};
-        // const {o} = uow as {o: string[]}; //TODO, less of a hack
-        // const prop = o[0];
-        // const val = model[prop];
-        // if(typeof(model[prop]) !== 'function'){
-        //     const vm = new s();
-        //     if(Array.isArray(val)){
-        //         (<any>vm).ishList = val;
-        //     }else{
-        //         Object.assign(vm, val);
-        //     }
-        //     model[prop] = vm;
-        //     (<any>matchingElement).ish = vm;
-        // }else{
-        //     if(Array.isArray(val)){
-        //         (<any>matchingElement).ishList = val;
-        //     }else{
-        //         Object.assign(<any>matchingElement, val);
-        //     }
-        // }
         regIsh(target, options.itemProp, s);
     }
-    const { Clone$ } = await import('./Clone$.js');
     const mergedOptions = { ...defaultOptions, ...options };
     mergedOptions.seedEl = matchingElement;
     mergedOptions.itemTemplate = templ;
@@ -51,8 +29,8 @@ export async function do$$(transformer, matchingElement, scopedLoop, uow) {
             console.log('waiting for ish');
             await waitForIsh(ishListContainer);
         }
-        console.log('finished waiting for ish');
         mergedOptions.ish = ishListContainer.ish;
+        const { Clone$ } = await import('./Clone$.js');
         const clone$ = new Clone$(mergedOptions);
     }
 }

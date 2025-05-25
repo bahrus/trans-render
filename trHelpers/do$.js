@@ -1,8 +1,5 @@
 import { Scope } from '../froop/Scope.js';
-//import { tagTempl } from '../dss/tref/tagTempl.js';
-//import {waitForIsh} from 'mount-observer/waitForIsh.js';
 export async function do$(transformer, matchingElement, scopingInstructions, uow) {
-    console.log('starting do$');
     const { name, config } = scopingInstructions;
     if (config !== null) {
         class s extends Scope {
@@ -26,23 +23,5 @@ export async function do$(transformer, matchingElement, scopingInstructions, uow
         });
         await n.do();
         matchingElement.setAttribute('itemscope', name);
-        console.log('done with do$');
-        // if(typeof(model[prop]) !== 'function'){
-        //     const vm = new s();
-        //     if(Array.isArray(val)){
-        //         (<any>vm)[sym] = val;
-        //     }else{
-        //         Object.assign(vm, val);
-        //     }
-        //     model[prop] = vm;
-        //     (<any>matchingElement).ish = vm;
-        // }else{
-        //     if(Array.isArray(val)){
-        //         throw 'NI';
-        //         (<any>matchingElement).ishList = val;
-        //     }else{
-        //         Object.assign(<any>matchingElement, val);
-        //     }
-        // }
     }
 }
