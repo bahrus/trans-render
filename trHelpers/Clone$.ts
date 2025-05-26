@@ -83,7 +83,7 @@ export class Clone$ implements EventListenerObject{
             //TODO: insert into arr
             //firstElementChild.ish = item;
             if(mapIdxTo !== undefined){
-                ce[mapIdxTo] = idx++;
+                (<any>ce)[mapIdxTo] = idx++;
             }
             
             firstElementChild.setAttribute('itemscope', itemProp);

@@ -3,11 +3,11 @@ import {QuenitOfWork, ScopeInstructions} from '../ts-refs/trans-render/types.js'
 import {Scope} from '../froop/Scope.js';
 
 
-export async function do$<TProps extends {}, TMethods = TProps>(
-    transformer: Transformer<TProps, TMethods>,
+export async function do$<TProps extends {}, TMethods = TProps, TElement = {}>(
+    transformer: Transformer<TProps, TMethods, TElement>,
     matchingElement: Element,
     scopingInstructions: ScopeInstructions,
-    uow: QuenitOfWork<TProps, TMethods>
+    uow: QuenitOfWork<TProps, TMethods, TElement>
 ){
     const {name, config} = scopingInstructions;
     console.log('do$');
