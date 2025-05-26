@@ -1,6 +1,5 @@
 import {Transform, XForm} from '../Transform.js';
 import { RoundaboutReady } from '../ts-refs/trans-render/froop/types.js';
-import {sym} from 'mount-observer/refid/regIsh.js';
  
 const div = document.querySelector('div')!;
 
@@ -52,7 +51,7 @@ Transform<Props, Methods>(div, model, {
                 actions:{
                     calcTotal: {
                         do: (self) => ({
-                            totalMedalCount: Array.from(self).reduce((acc, item) => acc + item.total, 0)
+                            totalMedalCount: Array.from(self).reduce((acc, item) => acc + (item as any).total, 0)
                         }),
                         ifKeyIn: ['itemCount']
                     }
