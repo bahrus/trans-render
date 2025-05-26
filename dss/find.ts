@@ -20,7 +20,7 @@ export async function find(element: Element, specifier: Specifier, within?: Zero
         throw 404;
     }
     const {findR} = await import('./findR.js');
-    return await findR(element, specifier, undefined);
+    return await findR(element, specifier, undefined) as Element;
 }
 
 export function getSubProp(specifier: Specifier, el: HTMLElement){

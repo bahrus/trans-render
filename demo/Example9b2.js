@@ -19,9 +19,6 @@ Transform(div, model, {
                     },
                     itemCount: {}
                 },
-                // compacts:{
-                //     when_ishList_changes_dispatch: 'ishListChanged'
-                // },
                 actions: {
                     calcTotal: {
                         do: (self) => ({
@@ -61,6 +58,5 @@ Transform(div, model, {
     },
 });
 setTimeout(() => {
-    //Array.from(model.list)[0].gold = 12345678;
     model.list[0].gold = 12345678;
 }, 2000);
