@@ -64,7 +64,7 @@ export class Clone$ implements EventListenerObject{
             let templToClone = itemTemplate;
             const externalRefId = templToClone.dataset.blowDryRef;
             if (externalRefId){
-                templToClone = window[externalRefId];
+                templToClone = (<any>window)[externalRefId];
             }
             const clone =  itemTemplate.content.cloneNode(true) as DocumentFragment;
             const children = Array.from(clone.children);
