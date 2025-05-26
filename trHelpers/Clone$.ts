@@ -106,9 +106,9 @@ export class Clone$ implements EventListenerObject{
             //TODO:  max buffer size
             fragment.appendChild(clone);
         }
-        const {model, listProp} = this.#clone$Options;
-        if(model !== undefined && listProp !== undefined){
-            model[modelSym][listProp] = newArr;
+        const {listProp} = this.#clone$Options;
+        if(listProp !== undefined && ish[modelSym] !== undefined){
+            ish[modelSym][listProp] = newArr;
         }
         if(absIdx < existingIshNodes.length){
             const {deleteEl} = await import('trans-render/dss/tref/deleteEl.js');
