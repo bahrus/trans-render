@@ -38,7 +38,8 @@ export async function do$<TProps extends {}, TMethods = TProps>(
             model[prop] = ce;
             
         }else{
-            ce.model = model; //TODO use symbol
+            const {modelSym} = await import('./Clone$.js');
+            (<any>ce)[modelSym] = model; //TODO use symbol
             //debugger;
             //model[prop] = Array.from(ce);
         }

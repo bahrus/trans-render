@@ -29,7 +29,8 @@ export async function do$(transformer, matchingElement, scopingInstructions, uow
             model[prop] = ce;
         }
         else {
-            ce.model = model; //TODO use symbol
+            const { modelSym } = await import('./Clone$.js');
+            ce[modelSym] = model; //TODO use symbol
             //debugger;
             //model[prop] = Array.from(ce);
         }

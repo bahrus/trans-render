@@ -1,6 +1,7 @@
-import {HasIsh, HasIshList} from '../ts-refs/trans-render/dss/types';
+import {HasIshList} from '../ts-refs/trans-render/dss/types';
 import {Clone$Options} from '../ts-refs/trans-render/types.js';
 import {IshEvent} from 'mount-observer/Newish.js';
+export const modelSym = Symbol();
 export class Clone$ implements EventListenerObject{
     #clone$Options: Clone$Options;
     constructor(options: Clone$Options){
@@ -107,7 +108,7 @@ export class Clone$ implements EventListenerObject{
         }
         const {model, listProp} = this.#clone$Options;
         if(model !== undefined && listProp !== undefined){
-            model.model[listProp] = newArr;
+            model[modelSym][listProp] = newArr;
         }
         if(absIdx < existingIshNodes.length){
             const {deleteEl} = await import('trans-render/dss/tref/deleteEl.js');

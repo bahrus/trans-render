@@ -1,4 +1,5 @@
 import { IshEvent } from 'mount-observer/Newish.js';
+export const modelSym = Symbol();
 export class Clone$ {
     #clone$Options;
     constructor(options) {
@@ -103,7 +104,7 @@ export class Clone$ {
         }
         const { model, listProp } = this.#clone$Options;
         if (model !== undefined && listProp !== undefined) {
-            model.model[listProp] = newArr;
+            model[modelSym][listProp] = newArr;
         }
         if (absIdx < existingIshNodes.length) {
             const { deleteEl } = await import('trans-render/dss/tref/deleteEl.js');
