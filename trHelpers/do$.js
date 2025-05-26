@@ -28,6 +28,11 @@ export async function do$(transformer, matchingElement, scopingInstructions, uow
         if (!Array.isArray(val)) {
             model[prop] = ce;
         }
+        else {
+            ce.model = model; //TODO use symbol
+            //debugger;
+            //model[prop] = Array.from(ce);
+        }
         //should this be done before the ish event is raised in Newish.#assignGingerly?
         matchingElement.setAttribute('itemscope', name);
     }

@@ -37,12 +37,13 @@ export class Clone$ {
         let isOutOfRange = false;
         let lastExisting = seedEl;
         const { assignGingerly } = await import('../lib/assignGingerly.js');
-        //const newArr = [];
+        const newArr = [];
         for (const item of ish) {
             if (!isOutOfRange) {
                 const existingIshNode = existingIshNodes[absIdx];
                 if (existingIshNode !== undefined) {
                     existingIshNode.ish = item;
+                    newArr.push(existingIshNode.ish);
                     if (mapIdxTo !== undefined) {
                         existingIshNode.ish[mapIdxTo] = idx++;
                     }
@@ -74,6 +75,7 @@ export class Clone$ {
                 initPropVals: item,
             });
             const ce = await n.do();
+            newArr.push(ce);
             //TODO: insert into arr
             //firstElementChild.ish = item;
             if (mapIdxTo !== undefined) {
@@ -98,6 +100,10 @@ export class Clone$ {
             // }); //TODO assign gingerly
             //TODO:  max buffer size
             fragment.appendChild(clone);
+        }
+        const { model, listProp } = this.#clone$Options;
+        if (model !== undefined && listProp !== undefined) {
+            model.model[listProp] = newArr;
         }
         if (absIdx < existingIshNodes.length) {
             const { deleteEl } = await import('trans-render/dss/tref/deleteEl.js');

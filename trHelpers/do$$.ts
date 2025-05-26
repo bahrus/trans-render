@@ -42,6 +42,8 @@ export async function do$$<TProps extends {}, TMethods = TProps>(
             await waitForIsh(ishListContainer);
         }
         mergedOptions.ish = ishListContainer.ish;
+        mergedOptions.listProp = ishListContainer.getAttribute('itemprop');
+        mergedOptions.model = transformer.model;
         const {Clone$} = await import('./Clone$.js');
         const clone$ = new Clone$(mergedOptions as Clone$Options);
     }

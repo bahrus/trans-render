@@ -30,6 +30,8 @@ export async function do$$(transformer, matchingElement, scopedLoop, uow) {
             await waitForIsh(ishListContainer);
         }
         mergedOptions.ish = ishListContainer.ish;
+        mergedOptions.listProp = ishListContainer.getAttribute('itemprop');
+        mergedOptions.model = transformer.model;
         const { Clone$ } = await import('./Clone$.js');
         const clone$ = new Clone$(mergedOptions);
     }
