@@ -24,4 +24,3 @@ export class MyElement extends Scope<Props> implements Actions {
 }
 
 MyElement.bootUp();
-customElements.define('my-element', MyElement);
