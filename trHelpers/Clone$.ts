@@ -70,7 +70,7 @@ export class Clone$ implements EventListenerObject{
             const children = Array.from(clone.children);
             children.forEach(c => {nodesWeWantToWaitFor.push(c)});
             //TODO:  modify template element so don't have to do this with every loop
-            const firstElementChild = clone.firstElementChild as HasIsh & Element;
+            const firstElementChild = clone.firstElementChild as  Element;
             if(firstElementChild === null) throw 404;
             const n = new Newish(firstElementChild, firstElementChild, itemProp, {
                 ctr,
