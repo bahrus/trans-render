@@ -17,12 +17,13 @@ export class Scope extends RRMixin(EventTarget) {
         await assignGingerly(this[publicPrivateStore], extObj);
     }
     async 'arr=>'(self, arr) {
-        const { ishListCountProp } = this.#config;
+        const { ishListCountProp, defaultIshList } = this.#config;
+        const returnArr = arr || defaultIshList;
         if (ishListCountProp !== undefined) {
-            this[ishListCountProp] = arr.length;
+            this[ishListCountProp] = returnArr === undefined ? 0 : returnArr.length;
             ;
         }
-        return arr;
+        return returnArr;
     }
     /**
      * This gets called when an element is adorned by the itemscope=my-element

@@ -29,12 +29,12 @@ export class Scope<TProps = any, TActions = TProps>
     }
 
     async 'arr=>'(self: Scope, arr: any[]){
-        const {ishListCountProp} = this.#config;
+        const {ishListCountProp, defaultIshList} = this.#config;
+        const returnArr = arr || defaultIshList;
         if(ishListCountProp !== undefined){
-            (<any>this)[ishListCountProp] = arr.length;;
-
+            (<any>this)[ishListCountProp] = returnArr === undefined ? 0 : returnArr.length;;
         }
-        return arr;
+        return returnArr;
     }
 
     /**
