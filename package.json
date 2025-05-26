@@ -1,6 +1,6 @@
 {
   "name": "trans-render",
-  "version": "0.0.903",
+  "version": "0.0.904",
   "description": "Instantiate an HTML Template",
   "type": "module",
   "main": "trans-render.js",
@@ -202,7 +202,7 @@
       "default": "./lib/waitForMatchingEvent.js",
       "types": "./lib/waitForMatchingEvent.ts"
     },
-    "./trHelpers/Clone$.js":{
+    "./trHelpers/Clone$.js": {
       "default": "./trHelpers/Clone$.js",
       "types": "./trHelpers/Clone$.ts"
     },
