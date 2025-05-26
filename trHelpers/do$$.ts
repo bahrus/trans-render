@@ -4,11 +4,11 @@ import {Scope} from '../froop/Scope.js';
 
 
 
-export async function do$$<TProps extends {}, TMethods = TProps>(
-    transformer: Transformer<TProps, TMethods>,
+export async function do$$<TProps extends {}, TMethods = TProps, TElement = {}>(
+    transformer: Transformer<TProps, TMethods, TElement>,
     matchingElement: Element,
     scopedLoop: ScopedLoop,
-    uow: QuenitOfWork<TProps, TMethods>
+    uow: QuenitOfWork<TProps, TMethods, TElement>
 ){
     let templ: HTMLTemplateElement;
     if(!(matchingElement instanceof HTMLTemplateElement)){
