@@ -36,7 +36,7 @@ const model= {
 Transform<Props, Methods>(div, model, {
     '| list':{
         $: {
-            name: 'NationalMedalList',
+            name: 'WorldRankingList',
             config:{
                 ishListCountProp: 'itemCount',
                 propInfo: {
