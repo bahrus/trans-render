@@ -7,8 +7,8 @@ export class Clone$ {
         this.hydrate();
     }
     async hydrate() {
-        const { ish } = this.#clone$Options;
-        ish.addEventListener('ish', this);
+        const { ishContainer } = this.#clone$Options;
+        ishContainer.addEventListener('ish', this);
         this.handleEvent();
     }
     async handleEvent(e) {
@@ -16,10 +16,10 @@ export class Clone$ {
             if (!e.actions.includes('ishListAssigned'))
                 return;
         }
-        const { ish, idxStart, seedEl, itemProp, mapIdxTo, itemTemplate, baseCrumb, idleTimeout } = this.#clone$Options;
+        const { ish, idxStart, seedEl, itemProp, mapIdxTo, itemTemplate, baseCrumb, idleTimeout, } = this.#clone$Options;
         const { getIsh } = await import('mount-observer/refid/getIsh.js');
         const ctr = await getIsh(seedEl, itemProp);
-        console.log({ itemProp, ctr });
+        //console.log({itemProp, ctr});
         //const {bindish} = await import('mount-observer/bindish.js');
         const { Newish } = await import('mount-observer/Newish.js');
         let idx = idxStart;

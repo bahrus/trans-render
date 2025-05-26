@@ -202,6 +202,10 @@
       "default": "./lib/waitForMatchingEvent.js",
       "types": "./lib/waitForMatchingEvent.ts"
     },
+    "./trHelpers/Clone$.js":{
+      "default": "./trHelpers/Clone$.js",
+      "types": "./trHelpers/Clone$.ts"
+    },
     "./weave.js": {
       "default": "./weave.js",
       "types": "./weave.ts"
