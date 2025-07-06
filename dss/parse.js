@@ -25,7 +25,7 @@ export async function parse(s) {
     const lenNonEventPart = nonEventPart.length;
     const head2 = nonEventPart.substring(0, 2);
     let tailStart = 0;
-    let hasDss = false;
+    //let hasDss = false;
     switch (head2) {
         case '$0':
             specifier.self = true;
@@ -49,6 +49,11 @@ export async function parse(s) {
         case '%[':
             specifier.dss = '%';
             tailStart = 1;
+            break;
+        case '/*':
+            specifier.dss = '/**/';
+            specifier.cmtWrap = true;
+            tailStart = 2;
             break;
         default:
             const head0 = head2[0];
@@ -94,7 +99,11 @@ async function parseNonEventPart(nonEventPart, tailStart, specifier) {
     await parseNonEventNonPath(nonEventPart.substring(0, iPosOfQuestionPeriod), tailStart, specifier);
 }
 function parseScope(nonEventPart, tailStart, specifier) {
-    const { dss } = specifier;
+    const { dss, cmtWrap } = specifier;
+    if (cmtWrap) {
+        specifier.scopeS = nonEventPart.substring(tailStart, nonEventPart.length - 2);
+        debugger;
+    }
     let iPosOfClosedBrace;
     const openingSymbol = nonEventPart.substring(tailStart, tailStart + 1);
     switch (openingSymbol) {
