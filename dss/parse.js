@@ -102,6 +102,9 @@ function parseScope(nonEventPart, tailStart, specifier) {
     const { dss, cmtWrap } = specifier;
     if (cmtWrap) {
         specifier.scopeS = nonEventPart.substring(tailStart, nonEventPart.length - 2);
+        return {
+            tailStart: nonEventPart.length
+        };
     }
     let iPosOfClosedBrace;
     const openingSymbol = nonEventPart.substring(tailStart, tailStart + 1);
