@@ -27,8 +27,8 @@
                 }
             }
         });
-        span.addEventListener('ishAttached', e => {
-            console.log('ishAttached', e.target.ish);
+        span.addEventListener('ish', e => {
+            console.log({e});
             const ish = e.target.ish;
             ish.addEventListener('ishListChanged', e => {
                 console.log('ishListChanged');
