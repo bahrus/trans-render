@@ -292,10 +292,10 @@
     "XV/*.ts"
   ],
   "dependencies": {
-    "mount-observer": "0.0.68"
+    "mount-observer": "0.0.76"
   },
   "devDependencies": {
-    "@playwright/test": "1.52.0",
+    "@playwright/test": "1.53.2",
     "ssi-server": "0.0.1"
   },
   "repository": {
