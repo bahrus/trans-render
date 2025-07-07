@@ -118,7 +118,6 @@ function parseScope(
     const {dss, cmtWrap} = specifier;
     if(cmtWrap){
         specifier.scopeS = nonEventPart.substring(tailStart, nonEventPart.length - 2);
-        debugger;
     }
     let iPosOfClosedBrace: number;
 
