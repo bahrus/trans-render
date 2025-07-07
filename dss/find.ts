@@ -11,8 +11,10 @@ export async function find(element: Element, specifier: Specifier, within?: Zero
         for(const rn of rns){
             let el: Element | null = null;
             if(s === '#'){
+                if(rn.id === elS) return rn;
                 el = (rn instanceof DocumentFragment) ? rn.getElementById(elS!) : rn.querySelector('#' + elS);
             }else{
+                if(rn.matches(elS!)) return rn;
                 el = rn.querySelector(elS!);
             }
             if(el !== null) return el;
