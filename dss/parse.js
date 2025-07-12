@@ -17,7 +17,19 @@ export async function parse(s) {
     }
     //let nonEventPart = eventSplit[0];
     if (nonEventPart[0] === '`' && nonEventPart.endsWith('`')) {
-        const inside = nonEventPart.substring(1, nonEventPart.length - 1);
+        let inside = nonEventPart.substring(1, nonEventPart.length - 1);
+        if (specifier.as) {
+            switch (specifier.as) {
+                case 'number':
+                case 'boolean':
+                case 'object':
+                case 'boolean|number':
+                    inside = JSON.parse(inside);
+                    break;
+                default:
+                    throw 'NI';
+            }
+        }
         specifier.constVal = inside;
         return specifier;
     }
