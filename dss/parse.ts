@@ -21,6 +21,11 @@ export async function parse(s: string) : Promise<Specifier>{
     }
     
     //let nonEventPart = eventSplit[0];
+    if(nonEventPart[0] === '`' && nonEventPart.endsWith('`')){
+        const inside = nonEventPart.substring(1, nonEventPart.length - 1);
+        specifier.constVal = inside;
+        return specifier;
+    }
     if(!nonEventPart.startsWith('Y{')){
         const firstChar = nonEventPart[0];
         if(firstChar >= 'A'  && firstChar <= 'Z' || firstChar >= 'a' && firstChar <= 'z'){
