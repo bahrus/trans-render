@@ -134,4 +134,4 @@ export class StOut extends EventTarget {
         });
     }
 }
-const builtInValuables = ['input', 'select', 'textarea', 'button'];
+const builtInValuables = ['input', 'select', 'textarea', 'button', 'details'];

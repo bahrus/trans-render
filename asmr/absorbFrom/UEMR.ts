@@ -56,6 +56,12 @@ export function UEMR(el: Element, ao: AbsOptions) {
                 ao.propToAbsorb = 'formData'
             }
             break;
+        case 'details':
+            if (evt === undefined) ao.evt = 'toggle';
+            if (propToAbsorb === undefined) {
+                ao.propToAbsorb = 'open';
+            }
+            break;
         default:
             //content editable
             if (evt === undefined) ao.evt = 'input';

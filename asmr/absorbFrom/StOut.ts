@@ -143,5 +143,5 @@ export class StOut<TProp=any> extends EventTarget implements
     
 }
 
-const builtInValuables: Array<BuiltInValuables> = ['input', 'select', 'textarea', 'button'];
+const builtInValuables: Array<BuiltInValuables> = ['input', 'select', 'textarea', 'button', 'details'];
 
