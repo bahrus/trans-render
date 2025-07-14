@@ -19,6 +19,11 @@ export async function parse(s: string) : Promise<Specifier>{
         }
         specifier.raps = rest;
     }
+
+    const enhancementSplit = nonEventPart.split('+');
+    let [nonEnhancementPart, enhancement] = enhancementSplit;
+    specifier.enhBase = enhancement;
+    nonEventPart = nonEnhancementPart;
     
     //let nonEventPart = eventSplit[0];
     if(nonEventPart[0] === '`' && nonEventPart.endsWith('`')){
