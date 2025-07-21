@@ -256,6 +256,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
                 case '#':
                     return `#${name}`;
                 case '|':
+                    qi.outside = '[itemscope]';
                     return `[itemprop~="${name}"]`;
                 case '%':
                     return `[part~="${name}"]`;
@@ -370,10 +371,12 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
         const info = xform as Info;
         const w = info?.[411]?.w;
         const x = w || '';
-        const on = queryInfo.css + x;// transformer.calcCSS(queryInfo);
+        const {css, outside} = queryInfo;
+        const on = css + x;// transformer.calcCSS(queryInfo);
         const {assignGingerly: assigner} = await import('./lib/assignGingerly.js');
         this.#mountObserver = new MountObserver({
             on,
+            outside,
             do:{
                 mount: async (matchingElement, observer, ctx) => {
                     this.#matchingElements.push(new WeakRef(matchingElement));
