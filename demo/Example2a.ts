@@ -1,6 +1,5 @@
 import {Transform} from '../Transform.js';
 import { RoundaboutReady } from '../ts-refs/trans-render/froop/types.js';
-import { LHS } from '../ts-refs/trans-render/types.js';
 
 interface Model{
     greeting: string;
