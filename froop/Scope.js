@@ -39,10 +39,12 @@ export class Scope extends RRMixin(EventTarget) {
         if (xform === undefined)
             return;
         const { Transform } = await import('../Transform.js');
-        await Transform(el, this, xform, {
+        const transform = await Transform(el, this, xform, {
             propagator: this.propagator,
             propagatorIsReady: true,
         });
+        //[TODO] make this private so can troubleshoot better
+        //this.transform = transform;
         this.dispatchEvent(new Event('resolved'));
     }
     #scopeIndex = 0;
