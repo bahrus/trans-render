@@ -160,19 +160,23 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
         }
 
         for(const uow of uows){
-            let {q, qi, y} = uow;
+            let {q, qi, y, o: orig} = uow;
             if(qi === undefined) qi = await this.calcQI(q);
-            //qi.w = w;
-            const {o, s} = qi;
-            if(o!== undefined){
-                uow.o = o as PropOrComputedProp<TProps, TMethods>[];
+            if(!Array.isArray(orig)){
+                
+                //qi.w = w;
+                const {o, s} = qi;
+                if(o!== undefined){
+                    uow.o = o as PropOrComputedProp<TProps, TMethods>[];
+                }
+                if(s !== undefined){
+                    uow.s = s[0];
+                }
+                if(y !== undefined){
+                    uow.d = 0;
+                }
             }
-            if(s !== undefined){
-                uow.s = s[0];
-            }
-            if(y !== undefined){
-                uow.d = 0;
-            }
+
             const newProcessor = new MountOrchestrator(this, uow, qi);
             //for some reason, view transition logic doesn't work here
             await newProcessor.do();
@@ -368,6 +372,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
             )
             return;
         }
+
         const info = xform as Info;
         const w = info?.[411]?.w;
         const x = w || '';

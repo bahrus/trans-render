@@ -6,5 +6,8 @@ const model = {
 };
 const oMenuItem = document.querySelector('menu-item');
 Transform(oMenuItem, model, {
-    '@ openSesame': { a: 0 }
+    '@ openSesame': {
+        o: [],
+        a: 0
+    }
 });
