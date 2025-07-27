@@ -30,12 +30,12 @@ export class Scope extends RRMixin(EventTarget) {
      * @param el
      */
     async '<mount>'(self, el) {
-        const { propDefaults, propInfo, ishListCountProp } = this.#config;
+        const config = this.#config;
+        const { propDefaults, propInfo, xform, mapParentScopeRefTo } = config;
         if (propInfo !== undefined) {
             this.#propUp(propInfo);
         }
         await this.#instantiateRoundaboutIfApplicable();
-        const xform = this.#config.xform;
         if (xform === undefined)
             return;
         const { Transform } = await import('../Transform.js');
@@ -46,6 +46,14 @@ export class Scope extends RRMixin(EventTarget) {
         //[TODO] make this private so can troubleshoot better
         //this.transform = transform;
         this.dispatchEvent(new Event('resolved'));
+        if (mapParentScopeRefTo !== undefined) {
+            //for now, assume that the parent scope will be an ancestor of el
+            const parentScope = el.parentElement?.closest('[itemscope]:not([itemscope=""])');
+            if (parentScope) {
+                const ish = await (await import('mount-observer/waitForIsh.js')).waitForIsh(parentScope);
+                self[mapParentScopeRefTo] = new WeakRef(ish);
+            }
+        }
     }
     #scopeIndex = 0;
     /**
