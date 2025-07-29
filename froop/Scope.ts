@@ -43,7 +43,7 @@ export class Scope<TProps = any, TActions = TProps>
      */
     async '<mount>'(self: Scope, el: Element){
         const config = this.#config;
-        const {propDefaults, propInfo, xform, mapParentScopeRefTo} = config;
+        const {propDefaults, propInfo, xform, mapParentScopeRefTo, ignoreItemProp} = config;
         if(propInfo !== undefined){
             this.#propUp(propInfo);
         }
@@ -59,12 +59,30 @@ export class Scope<TProps = any, TActions = TProps>
         //[TODO] make this private so can troubleshoot better
         //this.transform = transform;
         this.dispatchEvent(new Event('resolved'));
-        if(mapParentScopeRefTo !== undefined){
+        const hasItemProp = el.hasAttribute('itemprop');
+        if(mapParentScopeRefTo !== undefined || (hasItemProp && !ignoreItemProp)){
             //for now, assume that the parent scope will be an ancestor of el
             const parentScope = el.parentElement?.closest('[itemscope]:not([itemscope=""])');
             if(parentScope){
                 const ish = await (await import('mount-observer/waitForIsh.js')).waitForIsh(parentScope);
-                (<any>self)[mapParentScopeRefTo] = new WeakRef(ish);
+                if(mapParentScopeRefTo !== undefined){
+                    (<any>self)[mapParentScopeRefTo] = new WeakRef(ish);
+                }
+                if(hasItemProp && !ignoreItemProp){
+                    //if the parent scope has an itemprop, then we need to set it
+                    //on the current scope
+                    const itemProp = el.getAttribute('itemprop');
+                    if(itemProp !== null){
+                        (<any>el)['ish'] = (<any>ish)[itemProp];
+                        (<any>ish).propagator.addEventListener(itemProp, (ev: IshEvent) => {
+                            //TODO need to be able to do cleanup here
+                            (<any>el)['ish'] = (<any>ish)[itemProp];
+                        }
+                    }
+                }
+                if(ish instanceof RRMixin){
+                    
+                }
             }
         }
     }

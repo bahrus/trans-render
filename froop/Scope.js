@@ -31,7 +31,7 @@ export class Scope extends RRMixin(EventTarget) {
      */
     async '<mount>'(self, el) {
         const config = this.#config;
-        const { propDefaults, propInfo, xform, mapParentScopeRefTo } = config;
+        const { propDefaults, propInfo, xform, mapParentScopeRefTo, ignoreItemProp } = config;
         if (propInfo !== undefined) {
             this.#propUp(propInfo);
         }
@@ -46,12 +46,29 @@ export class Scope extends RRMixin(EventTarget) {
         //[TODO] make this private so can troubleshoot better
         //this.transform = transform;
         this.dispatchEvent(new Event('resolved'));
-        if (mapParentScopeRefTo !== undefined) {
+        const hasItemProp = el.hasAttribute('itemprop');
+        if (mapParentScopeRefTo !== undefined || (hasItemProp && !ignoreItemProp)) {
             //for now, assume that the parent scope will be an ancestor of el
             const parentScope = el.parentElement?.closest('[itemscope]:not([itemscope=""])');
             if (parentScope) {
                 const ish = await (await import('mount-observer/waitForIsh.js')).waitForIsh(parentScope);
-                self[mapParentScopeRefTo] = new WeakRef(ish);
+                if (mapParentScopeRefTo !== undefined) {
+                    self[mapParentScopeRefTo] = new WeakRef(ish);
+                }
+                if (hasItemProp && !ignoreItemProp) {
+                    //if the parent scope has an itemprop, then we need to set it
+                    //on the current scope
+                    const itemProp = el.getAttribute('itemprop');
+                    if (itemProp !== null) {
+                        el['ish'] = ish[itemProp];
+                        ish.propagator.addEventListener(itemProp, (ev) => {
+                            //TODO need to be able to do cleanup here
+                            el['ish'] = ish[itemProp];
+                        });
+                    }
+                }
+                if (ish instanceof RRMixin) {
+                }
             }
         }
     }
