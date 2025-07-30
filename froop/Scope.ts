@@ -77,12 +77,10 @@ export class Scope<TProps = any, TActions = TProps>
                         (<any>ish).propagator.addEventListener(itemProp, (ev: IshEvent) => {
                             //TODO need to be able to do cleanup here
                             (<any>el)['ish'] = (<any>ish)[itemProp];
-                        }
+                        });
                     }
                 }
-                if(ish instanceof RRMixin){
-                    
-                }
+
             }
         }
     }

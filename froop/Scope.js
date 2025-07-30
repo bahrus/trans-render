@@ -67,8 +67,6 @@ export class Scope extends RRMixin(EventTarget) {
                         });
                     }
                 }
-                if (ish instanceof RRMixin) {
-                }
             }
         }
     }
