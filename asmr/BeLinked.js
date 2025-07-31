@@ -6,18 +6,26 @@ export class BeLinked {
     constructor(src, srcPath, dest, destPath) {
         this.srcPath = srcPath;
         this.destPath = destPath;
-        dest[destPath] = src[srcPath];
+        //dest[destPath] = (<any>src)[srcPath];
         this.#srcRef = new WeakRef(src);
         this.#destRef = new WeakRef(dest);
         src.propagator.addEventListener(srcPath, this);
+        this.handleEvent();
     }
-    handleEvent(object) {
+    async handleEvent() {
         const src = this.#srcRef.deref();
         if (!src)
             return;
         const dest = this.#destRef.deref();
         if (!dest)
             return;
-        dest[this.destPath] = src[this.srcPath];
+        const { srcPath, destPath } = this;
+        const val = src[srcPath];
+        if (destPath.startsWith(('?.'))) {
+            (await import('../lib/setProp.js')).setProp(dest, destPath, val);
+        }
+        else {
+            dest[this.destPath] = val;
+        }
     }
 }
