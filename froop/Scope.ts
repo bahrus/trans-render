@@ -276,8 +276,7 @@ export class Scope<TProps = any, TActions = TProps>
     static props: IshPropLookup = {};
 }
 
-export interface Scope extends RoundaboutReady {
-}
+export interface Scope extends RoundaboutReady {}
 
 const defaultProp: PropInfo = {
     type: 'Object',
