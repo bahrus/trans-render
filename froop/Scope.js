@@ -60,31 +60,25 @@ export class Scope extends RRMixin(EventTarget) {
                     //on the current scope
                     const itemProp = el.getAttribute('itemprop');
                     if (itemProp !== null) {
-                        this.#itemprop = itemProp;
-                        this.#parentIsh = new WeakRef(ish);
-                        this.#ref = new WeakRef(el);
                         el['ish'] = ish[itemProp];
-                        ish.propagator.addEventListener(itemProp, this.#handleItemPropUpdate.bind(this));
+                        new (await import('../asmr/BeLinked.js')).BeLinked(ish, itemProp, el, 'ish');
                     }
                 }
             }
         }
     }
-    #ref;
-    #parentIsh;
-    #itemprop;
-    #handleItemPropUpdate() {
-        const el = this.#ref?.deref();
-        if (el === undefined)
-            return;
-        const parentIsh = this.#parentIsh?.deref();
-        if (parentIsh === undefined)
-            return;
-        const itemProp = this.#itemprop;
-        if (itemProp === undefined)
-            return;
-        el['ish'] = parentIsh[itemProp];
-    }
+    // #ref: WeakRef<Scope> | undefined;
+    // #parentIsh: WeakRef<Scope> | undefined;
+    // #itemprop: string | undefined;
+    // #handleItemPropUpdate(){
+    //     const el = this.#ref?.deref();
+    //     if(el === undefined) return;
+    //     const parentIsh = this.#parentIsh?.deref();
+    //     if(parentIsh === undefined) return;
+    //     const itemProp = this.#itemprop;
+    //     if(itemProp === undefined) return;
+    //     (<any>el)['ish'] = (<any>parentIsh)[itemProp];
+    // }
     #scopeIndex = 0;
     /**
      * This get invoked if the element with the itemscope=my-element

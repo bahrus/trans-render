@@ -73,11 +73,10 @@ export class Scope<TProps = any, TActions = TProps>
                     //on the current scope
                     const itemProp = el.getAttribute('itemprop');
                     if(itemProp !== null){
-                        this.#itemprop = itemProp;
-                        this.#parentIsh = new WeakRef<Scope>(ish as Scope);
-                        this.#ref = new WeakRef<Scope>(el as any as Scope);
                         (<any>el)['ish'] = (<any>ish)[itemProp];
-                        (<any>ish).propagator.addEventListener(itemProp, this.#handleItemPropUpdate.bind(this));
+                        new (await import('../asmr/BeLinked.js')).BeLinked(
+                            ish as any as RoundaboutReady, itemProp, el, 'ish'
+                        );
                     }
                 }
 
@@ -85,19 +84,19 @@ export class Scope<TProps = any, TActions = TProps>
         }
     }
 
-    #ref: WeakRef<Scope> | undefined;
-    #parentIsh: WeakRef<Scope> | undefined;
-    #itemprop: string | undefined;
+    // #ref: WeakRef<Scope> | undefined;
+    // #parentIsh: WeakRef<Scope> | undefined;
+    // #itemprop: string | undefined;
 
-    #handleItemPropUpdate(){
-        const el = this.#ref?.deref();
-        if(el === undefined) return;
-        const parentIsh = this.#parentIsh?.deref();
-        if(parentIsh === undefined) return;
-        const itemProp = this.#itemprop;
-        if(itemProp === undefined) return;
-        (<any>el)['ish'] = (<any>parentIsh)[itemProp];
-    }
+    // #handleItemPropUpdate(){
+    //     const el = this.#ref?.deref();
+    //     if(el === undefined) return;
+    //     const parentIsh = this.#parentIsh?.deref();
+    //     if(parentIsh === undefined) return;
+    //     const itemProp = this.#itemprop;
+    //     if(itemProp === undefined) return;
+    //     (<any>el)['ish'] = (<any>parentIsh)[itemProp];
+    // }
 
 
     #scopeIndex = 0;
