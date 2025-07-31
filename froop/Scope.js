@@ -55,20 +55,35 @@ export class Scope extends RRMixin(EventTarget) {
                 if (mapParentScopeRefTo !== undefined) {
                     self[mapParentScopeRefTo] = new WeakRef(ish);
                 }
-                if (hasItemProp && !ignoreItemProp) {
+                if (hasItemProp && !ignoreItemProp && ish.propagator instanceof EventTarget) {
                     //if the parent scope has an itemprop, then we need to set it
                     //on the current scope
                     const itemProp = el.getAttribute('itemprop');
                     if (itemProp !== null) {
+                        this.#itemprop = itemProp;
+                        this.#parentIsh = new WeakRef(ish);
+                        this.#ref = new WeakRef(el);
                         el['ish'] = ish[itemProp];
-                        ish.propagator.addEventListener(itemProp, (ev) => {
-                            //TODO need to be able to do cleanup here
-                            el['ish'] = ish[itemProp];
-                        });
+                        ish.propagator.addEventListener(itemProp, this.#handleItemPropUpdate.bind(this));
                     }
                 }
             }
         }
+    }
+    #ref;
+    #parentIsh;
+    #itemprop;
+    #handleItemPropUpdate() {
+        const el = this.#ref?.deref();
+        if (el === undefined)
+            return;
+        const parentIsh = this.#parentIsh?.deref();
+        if (parentIsh === undefined)
+            return;
+        const itemProp = this.#itemprop;
+        if (itemProp === undefined)
+            return;
+        el['ish'] = parentIsh[itemProp];
     }
     #scopeIndex = 0;
     /**

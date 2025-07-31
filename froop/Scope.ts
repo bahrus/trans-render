@@ -68,21 +68,35 @@ export class Scope<TProps = any, TActions = TProps>
                 if(mapParentScopeRefTo !== undefined){
                     (<any>self)[mapParentScopeRefTo] = new WeakRef(ish);
                 }
-                if(hasItemProp && !ignoreItemProp){
+                if(hasItemProp && !ignoreItemProp && (<any>ish).propagator instanceof EventTarget){
                     //if the parent scope has an itemprop, then we need to set it
                     //on the current scope
                     const itemProp = el.getAttribute('itemprop');
                     if(itemProp !== null){
+                        this.#itemprop = itemProp;
+                        this.#parentIsh = new WeakRef<Scope>(ish as Scope);
+                        this.#ref = new WeakRef<Scope>(el as any as Scope);
                         (<any>el)['ish'] = (<any>ish)[itemProp];
-                        (<any>ish).propagator.addEventListener(itemProp, (ev: IshEvent) => {
-                            //TODO need to be able to do cleanup here
-                            (<any>el)['ish'] = (<any>ish)[itemProp];
-                        });
+                        (<any>ish).propagator.addEventListener(itemProp, this.#handleItemPropUpdate.bind(this));
                     }
                 }
 
             }
         }
+    }
+
+    #ref: WeakRef<Scope> | undefined;
+    #parentIsh: WeakRef<Scope> | undefined;
+    #itemprop: string | undefined;
+
+    #handleItemPropUpdate(){
+        const el = this.#ref?.deref();
+        if(el === undefined) return;
+        const parentIsh = this.#parentIsh?.deref();
+        if(parentIsh === undefined) return;
+        const itemProp = this.#itemprop;
+        if(itemProp === undefined) return;
+        (<any>el)['ish'] = (<any>parentIsh)[itemProp];
     }
 
 
