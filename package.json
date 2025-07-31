@@ -46,6 +46,10 @@
       "default": "./asmr/asmr.js",
       "types": "./asmr/asmr.ts"
     },
+    "./asmr/BeLinked.js": {
+      "default": "./asmr/BeLinked.js",
+      "types": "./asmr/BeLinked.ts"
+    },
     "./asmr/extractData/fromList.js": {
       "default": "./asmr/extractData/fromList.js",
       "types": "./asmr/extractData/fromList.ts"
