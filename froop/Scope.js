@@ -1,9 +1,5 @@
 import { RRMixin } from './RRMixin.js';
 import { assignGingerly } from '../lib/assignGingerly.js';
-/**
- * shortcut for common action pointer
- */
-export const _ = { a: 0, o: [] };
 const publicPrivateStore = Symbol();
 export class Scope extends RRMixin(EventTarget) {
     propagator = new EventTarget();
