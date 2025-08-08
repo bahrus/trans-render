@@ -6,7 +6,10 @@ import {
 import { RoundAbout } from './roundabout.js';
 import { MountObserver } from 'mount-observer/MountObserver.js';
 import {Ishcycle} from '../ts-refs/mount-observer/types.js';
-import { IshEvent } from 'mount-observer/Newish.js';
+/**
+ * shortcut for common action pointer
+ */
+export const _ = {a: 0, o: []};
 
 const publicPrivateStore = Symbol();
 
