@@ -120,7 +120,7 @@ export class Transformer extends EventTarget {
                                 ...rhsPart,
                                 q: key
                             };
-                            const { m, e, a, f } = uow;
+                            const { m, e, a, f, data } = uow;
                             if ((m || e || a || f) === undefined) {
                                 if (uow.o === undefined) {
                                     const qi = await this.calcQI(key);
@@ -134,6 +134,17 @@ export class Transformer extends EventTarget {
                                     uow.d = 0;
                             }
                             uows.push(uow);
+                            if (data !== undefined) {
+                                console.log('iah');
+                                for (const x of data) {
+                                    uows.push({
+                                        o: x,
+                                        s: `?.dataset?.${x}`
+                                    });
+                                }
+                                // const uowsToAdd = data.map(x => ({
+                                // }))
+                            }
                         }
                     }
                     break;

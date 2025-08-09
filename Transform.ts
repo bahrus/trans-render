@@ -137,7 +137,7 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
                                 ...rhsPart!,
                                 q: key
                             };
-                            const {m, e, a, f} = uow;
+                            const {m, e, a, f, data} = uow;
                             if((m || e || a || f) === undefined){
                                 if(uow.o === undefined){
                                     const qi = await this.calcQI(key);
@@ -150,7 +150,18 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
                                 if(o !== undefined && !(Array.isArray(o) && o.length === 0) && uow.d === undefined) uow.d = 0;
                             }
                             uows.push(uow);
-
+                            if(data !== undefined){
+                                console.log('iah');
+                                for(const x of data){
+                                    uows.push({
+                                        o: x,
+                                        s: `?.dataset?.${x}`
+                                    } as any as QuenitOfWork<TProps, TMethods, TElement>);
+                                }
+                                // const uowsToAdd = data.map(x => ({
+                                    
+                                // }))
+                            }
                         }
 
                     }
