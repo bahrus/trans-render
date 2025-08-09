@@ -135,7 +135,6 @@ export class Transformer extends EventTarget {
                             }
                             uows.push(uow);
                             if (data !== undefined) {
-                                console.log('iah');
                                 for (const x of data) {
                                     uows.push({
                                         o: x,
