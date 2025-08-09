@@ -139,7 +139,9 @@ export class Transformer extends EventTarget {
                                 for (const x of data) {
                                     uows.push({
                                         o: x,
-                                        s: `?.dataset?.${x}`
+                                        s: `?.dataset?.${x}`,
+                                        q: key,
+                                        d: 0,
                                     });
                                 }
                                 // const uowsToAdd = data.map(x => ({

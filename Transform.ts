@@ -155,7 +155,9 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
                                 for(const x of data){
                                     uows.push({
                                         o: x,
-                                        s: `?.dataset?.${x}`
+                                        s: `?.dataset?.${x}`,
+                                        q: key,
+                                        d: 0,
                                     } as any as QuenitOfWork<TProps, TMethods, TElement>);
                                 }
                                 // const uowsToAdd = data.map(x => ({
