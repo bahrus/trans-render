@@ -67,6 +67,8 @@ export class Clone$ implements EventListenerObject{
                 templToClone = (<any>window)[externalRefId];
             }
             const clone =  itemTemplate.content.cloneNode(true) as DocumentFragment;
+            const rn = seedEl.getRootNode();
+            (<any>clone).targetFragment = rn;
             const children = Array.from(clone.children);
             children.forEach(c => {nodesWeWantToWaitFor.push(c)});
             //TODO:  modify template element so don't have to do this with every loop
