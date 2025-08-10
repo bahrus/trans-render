@@ -273,7 +273,7 @@ If no such markers are needed, then it seems to me there will be some inevitable
 ```html
 <ul>
     <data itemprop=isUSAddress value=true></data>
-    <template itemscope itemprop="USAddress" itemref="a23241 c72389"></template>
+    <template itemscope itemprop="USAddress" itemref="a23241 c72389" ifexpr="isUSAddress"></template>
     <li id="a23241" itemprop=addresseeName>Bob</li>
     <ul id="c72389" itemscope itemprop=address>
         <li itemprop=streetAddress>123 Penny Lane</li>
