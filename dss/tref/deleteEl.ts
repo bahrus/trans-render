@@ -1,20 +1,7 @@
-import {getChildren} from './getChildren.js';
-import {splitRefs} from 'mount-observer/refid/splitRefs.js';
 export function deleteEl(el: Element){
-    const children = getChildren(el);
+    const children = (<any>el).via.itemref.children as Array<Element>;
     for(const child of children){
         deleteEl(child);
-    }
-    const id = el.id;
-    if(id){
-        const rn = el.getRootNode() as DocumentFragment;
-        const scopes = rn.querySelectorAll(`[itemscope][itemref~="${id}"]`);
-        for(const scope of scopes){
-            const refs = scope.getAttribute('itemref') || '';
-            //const newRefs = refs.split(' ').filter(x => x !== id).join(' ');
-            const newRefs = splitRefs(refs).filter(x => x !== id).join(' ');
-            scope.setAttribute('itemref', newRefs);
-        }
     }
     el.remove();
 }
