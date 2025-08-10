@@ -1,4 +1,5 @@
 import { IshEvent } from 'mount-observer/Newish.js';
+import 'mount-observer/preloadContent.js';
 export const modelSym = Symbol();
 export class Clone$ {
     #clone$Options;
@@ -57,12 +58,7 @@ export class Clone$ {
                 }
             }
             absIdx++;
-            let templToClone = itemTemplate;
-            const externalRefId = templToClone.dataset.blowDryRef;
-            if (externalRefId) {
-                templToClone = window[externalRefId];
-            }
-            const clone = itemTemplate.content.cloneNode(true);
+            const clone = itemTemplate.remoteContent.cloneNode(true);
             const rn = seedEl.getRootNode();
             clone.targetFragment = rn;
             const children = Array.from(clone.children);

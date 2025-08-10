@@ -1,6 +1,7 @@
 import {HasIshList} from '../ts-refs/trans-render/dss/types';
 import {Clone$Options} from '../ts-refs/trans-render/types.js';
 import {IshEvent} from 'mount-observer/Newish.js';
+import 'mount-observer/preloadContent.js';
 export const modelSym = Symbol();
 export class Clone$ implements EventListenerObject{
     #clone$Options: Clone$Options;
@@ -61,12 +62,7 @@ export class Clone$ implements EventListenerObject{
                 }
             }
             absIdx++;
-            let templToClone = itemTemplate;
-            const externalRefId = templToClone.dataset.blowDryRef;
-            if (externalRefId){
-                templToClone = (<any>window)[externalRefId];
-            }
-            const clone =  itemTemplate.content.cloneNode(true) as DocumentFragment;
+            const clone =  ((<any>itemTemplate).remoteContent as DocumentFragment).cloneNode(true) as DocumentFragment;
             const rn = seedEl.getRootNode();
             (<any>clone).targetFragment = rn;
             const children = Array.from(clone.children);
