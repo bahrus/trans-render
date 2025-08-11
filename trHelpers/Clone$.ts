@@ -2,8 +2,11 @@ import {Clone$Options} from '../ts-refs/trans-render/types.js';
 import {IshEvent} from 'mount-observer/Newish.js';
 import {getCount} from '../dss/tref/getCount.js'
 import 'mount-observer/preloadContent.js';
-import { get } from '../XV/Storage';
+import 'mount-observer/refid/via.js';
+import {lispToCamel} from '../lib/lispToCamel.js';
 export const modelSym = Symbol();
+const refIDAttr = 'data-trans-render-idrefs';
+const refIDProp = lispToCamel(refIDAttr);
 export class Clone$ implements EventListenerObject{
     #clone$Options: Clone$Options;
     constructor(options: Clone$Options){
@@ -32,14 +35,16 @@ export class Clone$ implements EventListenerObject{
         const {waitForIdleNodes} = await import('mount-observer/MountObserver.js');
         const fragment = document.createDocumentFragment();
         const nodesWeWantToWaitFor  = [] as Array<Node>;
-        const existingIshNodes = [] as Array<any>;
-        let ns = seedEl as Element | null;
-        while(ns !== null){
-            if(ns.getAttribute('itemscope') === itemProp){
-                existingIshNodes.push(ns);
-            }
-            ns = ns.nextElementSibling;
-        }
+        // const existingIshNodes = [] as Array<any>;
+        // let ns = seedEl as Element | null;
+        // while(ns !== null){
+        //     if(ns.getAttribute('itemscope') === itemProp){
+        //         existingIshNodes.push(ns);
+        //     }
+        //     ns = ns.nextElementSibling;
+        // }
+        
+        const existingIshNodes = (<any>seedEl).via[refIDProp].children as Array<Element>;
         let absIdx = 0;
         let isOutOfRange = false;
         let lastExisting = seedEl;
@@ -49,6 +54,7 @@ export class Clone$ implements EventListenerObject{
             if(!isOutOfRange){
                 const existingIshNode = existingIshNodes[absIdx];
                 if(existingIshNode !== undefined){
+                    idRefs.push(existingIshNode.id);
                     existingIshNode.ish = item;
                     newArr.push(existingIshNode.ish);
                     if(mapIdxTo !== undefined){
@@ -63,8 +69,7 @@ export class Clone$ implements EventListenerObject{
             }
             absIdx++;
             const clone =  ((<any>itemTemplate).remoteContent as DocumentFragment).cloneNode(true) as DocumentFragment;
-            const rn = seedEl.getRootNode();
-            (<any>clone).targetFragment = rn;
+            (<any>clone).targetFragment = seedEl.getRootNode();
             const children = Array.from(clone.children);
             children.forEach(c => {nodesWeWantToWaitFor.push(c)});
             //TODO:  modify template element so don't have to do this with every loop
@@ -128,6 +133,6 @@ export class Clone$ implements EventListenerObject{
             lastExisting = tail(lastExisting)!;
         }
         lastExisting.after(fragment);
-        seedEl.setAttribute('data-trans-render-idrefs', idRefs.join(' '));
+        seedEl.setAttribute(refIDAttr, idRefs.join(' '));
     }
 }
