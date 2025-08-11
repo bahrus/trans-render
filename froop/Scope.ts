@@ -43,7 +43,7 @@ export class Scope<TProps = any, TActions = TProps>
      */
     async '<mount>'(self: Scope, el: Element){
         const config = this.#config;
-        const {propDefaults, propInfo, xform, mapParentScopeRefTo, ignoreItemProp} = config;
+        const {propDefaults, propInfo, xform, mapParentScopeRefTo, ignoreItemProp, mapElTo} = config;
         if(propInfo !== undefined){
             this.#propUp(propInfo);
         }
@@ -81,6 +81,9 @@ export class Scope<TProps = any, TActions = TProps>
                 }
 
             }
+        }
+        if(mapElTo !== undefined){
+             (<any>self)[mapElTo] = new WeakRef(el);
         }
     }
 

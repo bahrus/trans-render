@@ -31,7 +31,7 @@ export class Scope extends RRMixin(EventTarget) {
      */
     async '<mount>'(self, el) {
         const config = this.#config;
-        const { propDefaults, propInfo, xform, mapParentScopeRefTo, ignoreItemProp } = config;
+        const { propDefaults, propInfo, xform, mapParentScopeRefTo, ignoreItemProp, mapElTo } = config;
         if (propInfo !== undefined) {
             this.#propUp(propInfo);
         }
@@ -65,6 +65,9 @@ export class Scope extends RRMixin(EventTarget) {
                     }
                 }
             }
+        }
+        if (mapElTo !== undefined) {
+            self[mapElTo] = new WeakRef(el);
         }
     }
     // #ref: WeakRef<Scope> | undefined;
