@@ -1,7 +1,8 @@
-import {HasIshList} from '../ts-refs/trans-render/dss/types';
 import {Clone$Options} from '../ts-refs/trans-render/types.js';
 import {IshEvent} from 'mount-observer/Newish.js';
+import {getCount} from '../dss/tref/getCount.js'
 import 'mount-observer/preloadContent.js';
+import { get } from '../XV/Storage';
 export const modelSym = Symbol();
 export class Clone$ implements EventListenerObject{
     #clone$Options: Clone$Options;
@@ -25,8 +26,7 @@ export class Clone$ implements EventListenerObject{
         
         const {getIsh} = await import('mount-observer/refid/getIsh.js');
         const ctr = await getIsh(seedEl, itemProp);
-        //console.log({itemProp, ctr});
-        //const {bindish} = await import('mount-observer/bindish.js');
+        const idRefs: Array<string> = [];
         const {Newish} = await import('mount-observer/Newish.js');
         let idx = idxStart;
         const {waitForIdleNodes} = await import('mount-observer/MountObserver.js');
@@ -70,6 +70,9 @@ export class Clone$ implements EventListenerObject{
             //TODO:  modify template element so don't have to do this with every loop
             const firstElementChild = clone.firstElementChild as  Element;
             if(firstElementChild === null) throw 404;
+            const id = `${baseCrumb}-${getCount(baseCrumb)}`;
+            firstElementChild.id = id;
+            idRefs.push(id);
             const n = new Newish(firstElementChild, firstElementChild, itemProp, {
                 ctr,
                 assigner: assignGingerly,
@@ -90,7 +93,6 @@ export class Clone$ implements EventListenerObject{
                 for(let i = 1, ii = children.length; i < ii; i++){
                     const child = children[i];
                     if(!child.id){
-                        const {getCount} = await import('trans-render/dss/tref/getCount.js');
                         child.id = `${baseCrumb}-${getCount(baseCrumb)}`;
                         itemref += ' ' + child.id;
                     }
@@ -126,5 +128,6 @@ export class Clone$ implements EventListenerObject{
             lastExisting = tail(lastExisting)!;
         }
         lastExisting.after(fragment);
+        seedEl.setAttribute('data-trans-render-idrefs', idRefs.join(' '));
     }
 }

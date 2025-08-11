@@ -1,4 +1,5 @@
 import { IshEvent } from 'mount-observer/Newish.js';
+import { getCount } from '../dss/tref/getCount.js';
 import 'mount-observer/preloadContent.js';
 export const modelSym = Symbol();
 export class Clone$ {
@@ -20,8 +21,7 @@ export class Clone$ {
         const { ish, idxStart, seedEl, itemProp, mapIdxTo, itemTemplate, baseCrumb, idleTimeout, } = this.#clone$Options;
         const { getIsh } = await import('mount-observer/refid/getIsh.js');
         const ctr = await getIsh(seedEl, itemProp);
-        //console.log({itemProp, ctr});
-        //const {bindish} = await import('mount-observer/bindish.js');
+        const idRefs = [];
         const { Newish } = await import('mount-observer/Newish.js');
         let idx = idxStart;
         const { waitForIdleNodes } = await import('mount-observer/MountObserver.js');
@@ -67,6 +67,9 @@ export class Clone$ {
             const firstElementChild = clone.firstElementChild;
             if (firstElementChild === null)
                 throw 404;
+            const id = `${baseCrumb}-${getCount(baseCrumb)}`;
+            firstElementChild.id = id;
+            idRefs.push(id);
             const n = new Newish(firstElementChild, firstElementChild, itemProp, {
                 ctr,
                 assigner: assignGingerly,
@@ -86,7 +89,6 @@ export class Clone$ {
                 for (let i = 1, ii = children.length; i < ii; i++) {
                     const child = children[i];
                     if (!child.id) {
-                        const { getCount } = await import('trans-render/dss/tref/getCount.js');
                         child.id = `${baseCrumb}-${getCount(baseCrumb)}`;
                         itemref += ' ' + child.id;
                     }
@@ -122,5 +124,6 @@ export class Clone$ {
             lastExisting = tail(lastExisting);
         }
         lastExisting.after(fragment);
+        seedEl.setAttribute('data-trans-render-idrefs', idRefs.join(' '));
     }
 }
