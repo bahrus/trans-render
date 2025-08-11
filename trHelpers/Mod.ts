@@ -13,7 +13,8 @@ export class Mod<TProps, TMethods, TElement = {}>{
         //I'm thinking there's no memory access issues here 
         //so keeping as a closure for now.
         matchingElement.addEventListener(on, async e => {
-            const {inc, byAmt, s, toggle} = m;
+            const {inc, byAmt, s, toggle, stopPropagation} = m;
+            if(stopPropagation) e.stopPropagation();
             const {model, options} = transformer;
             //const {propagator} = options;
             //const isPropagating = !(model instanceof EventTarget) && propagator !== undefined;
