@@ -207,13 +207,13 @@ To help with this, I propose:
 
 ```html
 <template>
-    {{#each items}}
+    {{#each item of items with generated-ids(myId)}}
         <span
         role="checkbox"
         aria-checked="false"
         tabindex="0"
-        aria-labelledby="{{idref(Y)}}"></span>
-        <span id="terms_and_conditions_{{item_id}}">I agree to the Terms and Conditions.</span>
+        aria-labelledby="{{myId}}"></span>
+        <span id="{{myId}}">I agree to the Terms and Conditions.</span>
     {{/each}}
 </template>
 ```
