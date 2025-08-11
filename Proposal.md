@@ -265,7 +265,7 @@ If no such markers are needed, then it seems to me there will be some inevitable
 
 So we use itemref to maintain a hierarchical tree logical structure, even though the DOM structure is flat. 
 
-Also, the template instantiation would automatically add the equivalent of id={{generate-id()}} to all elements inside the condition, unless the developer specifies an id.
+Also, the template instantiation would automatically add the equivalent of generated-ids(...) to all elements inside the condition, unless the developer specifies an id.
 
 ## Loops
 
