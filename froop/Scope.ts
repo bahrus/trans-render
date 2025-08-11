@@ -29,6 +29,7 @@ export class Scope<TProps = any, TActions = TProps>
     }
 
     async 'arr=>'(self: Scope, arr: any[]){
+        if(!this.#config) return arr;
         const {ishListCountProp, defaultIshList} = this.#config;
         const returnArr = arr || defaultIshList;
         if(ishListCountProp !== undefined){
@@ -42,7 +43,7 @@ export class Scope<TProps = any, TActions = TProps>
      * @param el
      */
     async '<mount>'(self: Scope, el: Element){
-        const config = this.#config;
+        const config = this.#config || {};
         const {propDefaults, propInfo, xform, mapParentScopeRefTo, ignoreItemProp, mapElTo} = config;
         if(propInfo !== undefined){
             this.#propUp(propInfo);
@@ -131,7 +132,7 @@ export class Scope<TProps = any, TActions = TProps>
 
     async #instantiateRoundaboutIfApplicable(){
         
-        const config = this.#config;
+        const config = this.#config || {};
         const {actions, compacts, infractions, handlers, positractions, isSleepless} = config;
         if((actions || compacts || infractions || handlers || positractions) !== undefined){
             let mountObservers: Set<MountObserver> | undefined;
@@ -222,7 +223,8 @@ export class Scope<TProps = any, TActions = TProps>
     static config: IshConfig | undefined;
 
     static async bootUp(){
-        const config = this.config!;
+        const config = this.config;
+        if(config === undefined) return;
         const {propDefaults, propInfo, wrappers} = config;
         const props = {...this.props as IshPropLookup};
         Object.assign(props, propInfo);

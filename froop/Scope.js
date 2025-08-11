@@ -17,6 +17,8 @@ export class Scope extends RRMixin(EventTarget) {
         await assignGingerly(this[publicPrivateStore], extObj);
     }
     async 'arr=>'(self, arr) {
+        if (!this.#config)
+            return arr;
         const { ishListCountProp, defaultIshList } = this.#config;
         const returnArr = arr || defaultIshList;
         if (ishListCountProp !== undefined) {
@@ -30,7 +32,7 @@ export class Scope extends RRMixin(EventTarget) {
      * @param el
      */
     async '<mount>'(self, el) {
-        const config = this.#config;
+        const config = this.#config || {};
         const { propDefaults, propInfo, xform, mapParentScopeRefTo, ignoreItemProp, mapElTo } = config;
         if (propInfo !== undefined) {
             this.#propUp(propInfo);
@@ -106,7 +108,7 @@ export class Scope extends RRMixin(EventTarget) {
         }
     }
     async #instantiateRoundaboutIfApplicable() {
-        const config = this.#config;
+        const config = this.#config || {};
         const { actions, compacts, infractions, handlers, positractions, isSleepless } = config;
         if ((actions || compacts || infractions || handlers || positractions) !== undefined) {
             let mountObservers;
@@ -192,6 +194,8 @@ export class Scope extends RRMixin(EventTarget) {
     static config;
     static async bootUp() {
         const config = this.config;
+        if (config === undefined)
+            return;
         const { propDefaults, propInfo, wrappers } = config;
         const props = { ...this.props };
         Object.assign(props, propInfo);
