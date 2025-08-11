@@ -203,11 +203,11 @@ It [often arises](https://github.com/whatwg/html/issues/10143) that the id for o
 
 Examples are the label's for attribute, numerous aria- attributes, and microdata's itemref attributes.  In many cases (itemref, output's for attribute) we allow for a space delimited list of id's.
 
-To help with this, I propose:
+To help with this, [I propose](https://blog.vuejs.org/posts/vue-3-5#useid):
 
 ```html
 <template>
-    {{#each item of items with generated-ids(myId)}}
+    {{#each item of items with generated-ids(myId, yourId)}}
         <span
         role="checkbox"
         aria-checked="false"
@@ -225,28 +225,10 @@ To help with this, I propose:
     role="checkbox"
     aria-checked="false"
     tabindex="0"
-    aria-labelledby="terms_and_conditions_17811"></span>
-<span id="terms_and_conditions_17811">I agree to the Terms and Conditions.</span>
+    aria-labelledby="a-31662-567"></span>
+<span id="a-31662-567">I agree to the Terms and Conditions.</span>
 ```
 
-Maybe the Y symbol should be followed by a \*, but the point is, what follows the Y symbol, if anything, could be a css query to match for everything *below* the adorned element.  To reference the previous element, use ^, followed by a css query if applicable.  In either case, stop at the first match.  
-
-We could also perform a general css search inside the idref function, that would need to be done carefully within the #each block, so that if multiple elements are found matching the css query within that block, then the attribute is a space delimited list of all the id's of matching elements. In this case, instead of using ^ or v, the tentative recommendation is to start with query with a * followed by a space.  If we want to specify a query based on one of the special symbols listed in the table at the top of this document, this could be done as well. Examples of such rules are spelled out in more detail [here (WIP)](https://github.com/bahrus/be-switched), where we are trying to make that userland library conform with this proposal, basically a POC of sorts.
-
-### Referential support with auto-generated id's.
-
-```html
-<template>
-    {{#each items}}
-        <span
-        role="checkbox"
-        aria-checked="false"
-        tabindex="0"
-        aria-labelledby="{{idref(Y)}}"></span>
-        <span id={{generate-id()}}>I agree to the Terms and Conditions.</span>
-    {{/each}}
-</template>
-```
 
 ## Conditions with microdata
 
