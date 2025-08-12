@@ -1,7 +1,7 @@
 # Template Instantiation Developer Productivity Proposal
 
 Author:  Bruce B. Anderson
-Last Updated: 2024-3-10
+Last Updated: Aug 11, 2025
 
 The following outlines some productivity, and higher reliability enhancement proposals, that would make template instantiation more effective.
 
@@ -119,9 +119,6 @@ As mentioned above, what we want to do is allow developers to easily emit the na
 | $      | itemscope + itemprop  | Combination of S for Scope and Pipe which resembles itemprop a bit                                                                               |
 | %      | part                  | Starts with p, percent is used for indicating what proportion something is.                                                                      |
 | .      | class                 | css selector                                                                                                                                     |
-| ^      | "upsearch"            | Points upward.  Look to previous siblings, then parent, then previous siblings of parent until a match is found.  Stops at first match.          |
-| Y      | "downsearch"          | Point downward.  Look for downstream sibling.  Stands for Yertdrift.  Stops at first match.   |
-| *      | free form css match   | Used in css, regular expressions for roughly this purpose.  Searches everywhere within the helper block of markup i.e. within each {{#each}} or {{#if}}                                                                 |
 
 Let's see some examples of this in action:
 
