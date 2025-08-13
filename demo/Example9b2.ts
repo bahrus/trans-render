@@ -74,7 +74,7 @@ Transform<Props, Methods>(div, model, {
                                 }                
                             },
                             options: {
-                                itemProp: 'CountryMedalCount',
+                                itemScopes: ['CountryMedalCount'],
 
                             }
                         }

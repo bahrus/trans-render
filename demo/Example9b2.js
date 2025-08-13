@@ -48,7 +48,7 @@ Transform(div, model, {
                                 }
                             },
                             options: {
-                                itemProp: 'CountryMedalCount',
+                                itemScopes: ['CountryMedalCount'],
                             }
                         }
                     },

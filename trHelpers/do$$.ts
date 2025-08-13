@@ -27,15 +27,20 @@ export async function do$$<TProps extends {}, TMethods = TProps, TElement = {}>(
         const {regIsh} = await import('mount-observer/refid/regIsh.js');
         const {target} = transformer;
         
-
-
-        regIsh(target as Element, options.itemProp!, s);
+        const itemScopes = options.itemScopes;
+        if(itemScopes){
+            for(let i = 0; i < itemScopes.length; i++){
+                regIsh(target as Element, itemScopes[i], s);
+            }
+            
+        }
+        
 
     }
     
     const mergedOptions = {...defaultOptions, ...options};
     mergedOptions.seedEl = matchingElement;
-    mergedOptions.itemTemplate = templ;
+    mergedOptions.itemTemplates = templ;
     const ishListContainer = matchingElement.closest('[itemscope]:not([itemscope=""])') as any;
     if(ishListContainer !== null){
         if(ishListContainer.ish === undefined){
@@ -44,7 +49,7 @@ export async function do$$<TProps extends {}, TMethods = TProps, TElement = {}>(
             await waitForIsh(ishListContainer);
         }
         mergedOptions.ish = ishListContainer.ish;
-        mergedOptions.listProp = ishListContainer.getAttribute('itemprop');
+        mergedOptions.listScope: string, = ishListContainer.getAttribute('itemprop');
         //mergedOptions.model = transformer.model;
         const {Clone$} = await import('./Clone$.js');
         const clone$ = new Clone$(mergedOptions as Clone$Options);
