@@ -67,10 +67,11 @@ export class Clone$ implements EventListenerObject{
         const absIdx: Array<number> = new Array(templLen).fill(0);
         let isOutOfRange = new Array(templLen).fill(false);
         let lastExisting = seedEl;
-        const skipNewCreation: Array<boolean> = new Array(templLen).fill(false);
+        
         const targetFragment = seedEl.getRootNode();
         //const newArr = [];
         for(const item of ish){
+            const skipNewCreation: Array<boolean> = new Array(templLen).fill(false);
             for(let i = 0; i < templLen; i++){
                 if(!isOutOfRange[i]){
                     const existingIshNode = existingIshNodes[i][absIdx[i]];
