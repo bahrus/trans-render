@@ -4,7 +4,7 @@ import 'mount-observer/preloadContent.js';
 import 'mount-observer/refid/via.js';
 import { lispToCamel } from '../lib/lispToCamel.js';
 export const modelSym = Symbol();
-const refIDAttrBase = 'data-trans-render-idrefs';
+const refIDAttrBase = 'data-trans-render-idrefs-a';
 //const refIDProp = lispToCamel(refIDAttrBase);
 export class Clone$ {
     #clone$Options;
@@ -51,7 +51,7 @@ export class Clone$ {
         // }
         const existingIshNodes = [];
         for (let i = 0; i < templLen; i++) {
-            const refIDProp = lispToCamel(`${refIDAttrBase}-${i}`);
+            const refIDProp = lispToCamel(`${refIDAttrBase}${i}`);
             existingIshNodes[i] = seedEl.via[refIDProp].children;
         }
         const absIdx = new Array(templLen).fill(0);
@@ -80,9 +80,9 @@ export class Clone$ {
                     }
                 }
             }
-            for (let i = 0; i < templLen; i++) {
-                absIdx[i]++;
-            }
+            // for(let i = 0; i < templLen; i++){
+            //     absIdx[i]++;
+            // }
             //Create new nodes when necessary
             for (let i = 0; i < templLen; i++) {
                 if (skipNewCreation[i])
@@ -137,7 +137,7 @@ export class Clone$ {
         //     ish[modelSym][listProp] = newArr;
         // }
         for (let i = 0; i < templLen; i++) {
-            if (absIdx[i] < existingIshNodes[i].length) {
+            if (absIdx[i] <= existingIshNodes[i].length) {
                 const { deleteEl } = await import('trans-render/dss/tref/deleteEl.js');
                 for (let j = absIdx[i]; j < existingIshNodes[i].length; j++) {
                     const existingIshNode = existingIshNodes[i][j];
@@ -158,7 +158,7 @@ export class Clone$ {
         }
         lastExisting.after(fragment);
         for (let i = 0; i < templLen; i++) {
-            seedEl.setAttribute(`${refIDAttrBase}-${i}`, idRefs[i].join(' '));
+            seedEl.setAttribute(`${refIDAttrBase}${i}`, idRefs[i].join(' '));
         }
     }
 }
