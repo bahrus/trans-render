@@ -6,7 +6,9 @@ export class Mod {
         //I'm thinking there's no memory access issues here 
         //so keeping as a closure for now.
         matchingElement.addEventListener(on, async (e) => {
-            const { inc, byAmt, s, toggle, stopPropagation } = m;
+            const { inc, byAmt, s, toggle, stopPropagation, instanceOf } = m;
+            if (instanceOf !== undefined && !(e instanceof instanceOf))
+                return;
             if (stopPropagation)
                 e.stopPropagation();
             const { model, options } = transformer;
