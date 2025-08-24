@@ -40,7 +40,7 @@ export async function do$$<TProps extends {}, TMethods = TProps, TElement = {}>(
     
     const mergedOptions = {...defaultOptions, ...options};
     mergedOptions.seedEl = matchingElement;
-    mergedOptions.itemTemplates = templ;
+    mergedOptions.itemTemplates = [templ];
     const ishListContainer = matchingElement.closest('[itemscope]:not([itemscope=""])') as any;
     if(ishListContainer !== null){
         if(ishListContainer.ish === undefined){
@@ -49,7 +49,7 @@ export async function do$$<TProps extends {}, TMethods = TProps, TElement = {}>(
             await waitForIsh(ishListContainer);
         }
         mergedOptions.ish = ishListContainer.ish;
-        mergedOptions.listScope: string, = ishListContainer.getAttribute('itemprop');
+        mergedOptions.listScope = ishListContainer.getAttribute('itemprop');
         //mergedOptions.model = transformer.model;
         const {Clone$} = await import('./Clone$.js');
         const clone$ = new Clone$(mergedOptions as Clone$Options);

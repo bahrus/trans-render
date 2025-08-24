@@ -187,6 +187,15 @@ async function parseNonEventNonPath(nonEventNonPathPart, tailStart, specifier) {
     //     specifier.s = sigil;
     // }
     switch (sigil) {
+        case '':
+            if (scopeS !== undefined) {
+                //define regular expression that tests if scopeS matches  kebab-case lower case words 
+                const re = /^[a-z]+(-[a-z]+)*$/;
+                if (re.test(scopeS)) {
+                    specifier.host = true;
+                }
+            }
+            break;
         case '$0':
             break;
         case '#':
