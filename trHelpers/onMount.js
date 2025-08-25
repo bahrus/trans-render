@@ -83,7 +83,7 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
             const { AddEventListener } = await import('./AddEventListener.js');
             for (const transpiledAction of transpiledActions) {
                 const { on, do: action, options } = transpiledAction;
-                new AddEventListener(mountObserver, transformer, uow, matchingElement, on, action);
+                new AddEventListener(mountObserver, transformer, uow, matchingElement, on, action, options);
             }
         }
         if (m !== undefined) {

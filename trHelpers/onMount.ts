@@ -99,7 +99,8 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
                     uow,
                     matchingElement,
                     on,
-                    action
+                    action,
+                    options,
                 );
             }
         }
