@@ -25,7 +25,7 @@ export class AddEventListener<TProps, TMethods, TElement = {}>{
         }
         const transpiledAction = typeof action === 'string' ? transformer.model[action] : action;
         matchingElement.addEventListener(type, e => {
-            (<any>transpiledAction)(e, transformer, uow);
+            (<any>transpiledAction)(e, transformer, uow, matchingElement);
         }, options);
         mountObserver?.addEventListener('disconnect', e => {
             this.#abortController.abort();
