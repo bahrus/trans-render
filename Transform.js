@@ -336,7 +336,7 @@ export class MountOrchestrator extends EventTarget {
     async do() {
         const { transformer, queryInfo } = this;
         const { options, xform } = transformer;
-        const { skipInit, useViewTransition } = options;
+        const { skipInit, useViewTransition, outside: oOutside } = options;
         const { isRootQry } = queryInfo;
         if (isRootQry) {
             const target = transformer.target;
@@ -348,7 +348,8 @@ export class MountOrchestrator extends EventTarget {
         const info = xform;
         const w = info?.[411]?.w;
         const x = w || '';
-        const { css, outside } = queryInfo;
+        const { css, outside: iOutside } = queryInfo;
+        const outside = iOutside || oOutside;
         const on = css + x; // transformer.calcCSS(queryInfo);
         const { assignGingerly: assigner } = await import('./lib/assignGingerly.js');
         this.#mountObserver = new MountObserver({

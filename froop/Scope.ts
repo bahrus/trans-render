@@ -56,6 +56,7 @@ export class Scope<TProps = any, TActions = TProps>
             const transform = await Transform(el, this, xform, {
                 propagator: this.propagator,
                 propagatorIsReady: true,
+                outside: '[itemscope]',
             });
         };
 

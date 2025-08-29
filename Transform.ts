@@ -376,7 +376,7 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
     async do(){
         const {transformer, queryInfo} = this;   
         const {options, xform} = transformer;
-        const {skipInit, useViewTransition} = options;
+        const {skipInit, useViewTransition, outside: oOutside} = options;
         const {isRootQry} = queryInfo;
         if(isRootQry){
             const target = transformer.target as Element;
@@ -391,7 +391,8 @@ export class MountOrchestrator<TProps extends {}, TMethods = TProps, TElement = 
         const info = xform as Info;
         const w = info?.[411]?.w;
         const x = w || '';
-        const {css, outside} = queryInfo;
+        const {css, outside: iOutside} = queryInfo;
+        const outside = iOutside || oOutside;
         const on = css + x;// transformer.calcCSS(queryInfo);
         const {assignGingerly: assigner} = await import('./lib/assignGingerly.js');
         this.#mountObserver = new MountObserver({

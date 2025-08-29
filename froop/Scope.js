@@ -43,6 +43,7 @@ export class Scope extends RRMixin(EventTarget) {
             const transform = await Transform(el, this, xform, {
                 propagator: this.propagator,
                 propagatorIsReady: true,
+                outside: '[itemscope]',
             });
         }
         ;
