@@ -115,6 +115,9 @@ export class Transformer extends EventTarget {
                     {
                         const rhses = arr0(rhs);
                         for (const rhsPart of rhses) {
+                            if (rhsPart.o !== undefined && !Array.isArray(rhsPart.o)) {
+                                rhsPart.o = [rhsPart.o];
+                            }
                             const uow = {
                                 //d: 0,
                                 ...rhsPart,

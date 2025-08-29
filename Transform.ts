@@ -131,7 +131,10 @@ export class Transformer<TProps extends {}, TMethods = TProps, TElement = {}> ex
                     {
                         const rhses = arr0(rhs) as Array<UnitOfWork<TProps, TMethods, TElement>>;
                         for(const rhsPart of rhses){
-                            
+                            if(rhsPart.o !== undefined && !Array.isArray(rhsPart.o)){
+                                rhsPart.o = [rhsPart.o];
+                            }
+                        
                             const uow: QuenitOfWork<TProps, TMethods, TElement> = {
                                 //d: 0,
                                 ...rhsPart!,
