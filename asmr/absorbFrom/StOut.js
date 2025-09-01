@@ -43,7 +43,22 @@ export class StOut extends EventTarget {
             case 'boolean':
             case 'number':
             case 'boolean|number':
-                val = JSON.parse(val);
+                try {
+                    val = JSON.parse(val);
+                }
+                catch {
+                    switch (as) {
+                        case 'boolean':
+                            val = null;
+                            break;
+                        case 'number':
+                            val = NaN;
+                            break;
+                        case 'boolean|number':
+                            val = null;
+                            break;
+                    }
+                }
                 break;
         }
         return val;
