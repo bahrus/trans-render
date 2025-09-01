@@ -120,6 +120,10 @@
       "default": "./froop/RRMixin.js",
       "types": "./froop/RRMixin.ts"
     },
+    "./ipe/parse.js": {
+      "default": "./ipe/parse.js",
+      "types": "./ipe/parse.ts"
+    },
     "./lib/activate.js": {
       "default": "./lib/activate.js",
       "types": "./lib/activate.ts"
@@ -276,6 +280,8 @@
     "dss/tref/*.ts",
     "funions/*.js",
     "funions/*.ts",
+    "ipe/*.js",
+    "ipe/*.ts",
     "lib/*.js",
     "lib/*.ts",
     "lib/mixins/*.js",
