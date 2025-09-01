@@ -11,16 +11,25 @@ export async function tryParse<TParsedObj = any>(
     for(const reOrRegExt of reArr){
         let re: RegExp | undefined;
         let defaultVals: Partial<TParsedObj> | undefined;
+        //deprecated
         let dssKeys: [string, string][] | undefined;
+        // deprecated
         let dssArrayKeys: [string, string][] | undefined;
+        let ipeKeys: [string, string][] | undefined;
+        let ipeArrayKeys: [string, string][] | undefined;
         let statementPartParser: StatementPartParser | undefined;
         if(reOrRegExt instanceof RegExp){
             re = reOrRegExt;
         }else{
             re = reOrRegExt.regExp as RegExp;
+            ({defaultVals} = reOrRegExt);
             defaultVals = reOrRegExt.defaultVals;
+            //#region deprecated
             dssKeys = reOrRegExt.dssKeys;
             dssArrayKeys = reOrRegExt.dssArrayKeys;
+            //#endregion
+            ipeKeys = reOrRegExt.ipeKeys;
+            ipeArrayKeys = reOrRegExt.ipeArrayKeys;
             statementPartParser = reOrRegExt.statementPartParser;
         }
         const test = re.exec(s);
@@ -64,6 +73,7 @@ export async function tryParse<TParsedObj = any>(
         if(defaultVals !== undefined){
             Object.assign(parsedObj, defaultVals);
         }
+        //#region deprecated
         if(dssKeys!== undefined){
             const { parse } = await import ('../../dss/parse.js');
             if(dssKeys !== undefined){
@@ -85,6 +95,27 @@ export async function tryParse<TParsedObj = any>(
                 const dssArrayParser = new DSSArray(propVal);
                 await dssArrayParser.parse();
                 parsedObj[destProp] = dssArrayParser.arrVal;
+            }
+        }
+        //#endregion
+        if(ipeKeys !== undefined){
+            const { parse } = await import ('../../ipe/parse.js');
+            for(const ipeKey of ipeKeys){
+                const [partName, destProp] = ipeKey;
+                const propVal = parsedObj[partName] as string;
+                if(propVal === undefined) continue;
+                parsedObj[destProp] = await parse(propVal);
+            }
+        }
+        if(ipeArrayKeys !== undefined){
+            const {splitRefs} = await import('mount-observer/refid/splitRefs.js');
+            const { parse } = await import ('../../ipe/parse.js');
+            for(const ipeArrayKey of ipeArrayKeys){
+                const [partName, destProp] = ipeArrayKey;
+                const propVal = parsedObj[partName] as string;
+                if(propVal === undefined) continue;
+                const refs = splitRefs(propVal);
+                parsedObj[destProp] = refs.map(r => parse(r)); // TODO: make async if needed
             }
         }
 
