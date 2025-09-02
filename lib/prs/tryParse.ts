@@ -114,7 +114,7 @@ export async function tryParse<TParsedObj = any>(
                 const [partName, destProp] = ipeArrayKey;
                 const propVal = parsedObj[partName] as string;
                 if(propVal === undefined) continue;
-                const refs = splitRefs(propVal);
+                const refs = splitRefs(propVal).filter(x => x !== 'and');
                 parsedObj[destProp] = refs.map(r => parse(r)); // TODO: make async if needed
             }
         }
