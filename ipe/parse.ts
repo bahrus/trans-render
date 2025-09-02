@@ -4,10 +4,17 @@ export function parse(s: string) : IPE {
     const [nonAsPart, asOrUndefined] = splitOnce(s, ' as ');
     const [nonEvtPart, evtName] = splitOnce(nonAsPart, '::');
     const [id, path] = splitOnce(nonEvtPart, '.?');
+    let revisedID =  id === '' ? undefined : id.substring(1);
+    let constVal = undefined;
+    if(revisedID?.startsWith('`') && revisedID.endsWith('`')){
+        constVal = revisedID.substring(1, revisedID.length - 1);
+        revisedID = undefined;
+    }
     return {
-        id: id === '' ? undefined : id.substring(1),
+        id: revisedID,
         path: path === undefined ? undefined : `.?${path}`,
         evtName,
-        as: asOrUndefined as asOptions
+        as: asOrUndefined as asOptions,
+        constVal,
     };
 }
