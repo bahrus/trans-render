@@ -3,7 +3,8 @@ import { splitOnce } from "../lib/splitOnce.js";
 export function parse(s: string) : IPE {
     const [nonAsPart, asOrUndefined] = splitOnce(s, ' as ');
     const [nonEvtPart, evtName] = splitOnce(nonAsPart, '::');
-    const [id, propPath] = splitOnce(nonEvtPart, '?.');
+    const [nonPropPath, propPath] = splitOnce(nonEvtPart, '?.');
+    const [id, ext] = splitOnce(nonPropPath, '+');
     let revisedID = id as string | undefined;
     let constVal = undefined;
     if(id.startsWith('`') && id.endsWith('`')){
@@ -16,10 +17,18 @@ export function parse(s: string) : IPE {
     }
     let prop: string | undefined;
     let path: string | undefined;
+    let enhKey: string | undefined;
+    let ish = false;
     if(propPath !== undefined){
         [prop, path] = splitOnce(propPath, '?.');
     }
-    
+    if(ext !== undefined){
+        if(ext === 'ish'){
+            ish = true;
+        }else{
+            enhKey = ext;
+        }
+    }
     return {
         id: revisedID,
         path,
@@ -27,5 +36,7 @@ export function parse(s: string) : IPE {
         evtName,
         as: asOrUndefined as asOptions,
         constVal,
+        ish,
+        enhKey
     };
 }
