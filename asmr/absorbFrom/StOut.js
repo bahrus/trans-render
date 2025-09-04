@@ -90,16 +90,17 @@ export class StOut extends EventTarget {
             else {
                 const { beRR, props } = await import('../../froop/beRR.js');
                 const ret = beRR(sourceEl);
-                if (ret) {
+                if (this.#propagator === undefined) {
+                    //if(ret){
                     ao.isRAE = true;
                     this.#propagator = sourceEl[props[0]];
                     if (p2aUn) {
                         ao.propToAbsorb = ASMR.getValueProp(sourceEl, propToAbsorbValueType);
                     }
                     sourceEl[props[2]](ao.propToAbsorb);
-                }
-                else {
-                    throw 'NI';
+                    // }else{
+                    //     throw 'NI';
+                    // }
                 }
             }
         }
