@@ -1,4 +1,5 @@
-const ttGuid = '0j9qIjjR+UWYLrZ3FskVig'
+//deprecated - use mount-observer/refid/getCount.js
+const ttGuid = '0j9qIjjR+UWYLrZ3FskVig';
 export function getCount(baseID: string){
     const key = Symbol.for(ttGuid + baseID);
     let returnCnt = (<any>window)[key] || 0;
