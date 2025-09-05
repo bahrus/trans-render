@@ -4,16 +4,22 @@ export function parse(s: string) : IPE {
     const [nonAsPart, asOrUndefined] = splitOnce(s, ' as ');
     const [nonEvtPart, evtName] = splitOnce(nonAsPart, '::');
     const [nonPropPath, propPath] = splitOnce(nonEvtPart, '?.');
-    const [id, ext] = splitOnce(nonPropPath, '+');
-    let revisedID = id as string | undefined;
+    let [targetAndPath, ext] = splitOnce(nonPropPath, '+');
+    let revisedID = targetAndPath as string | undefined;
     let constVal = undefined;
-    if(id.startsWith('`') && id.endsWith('`')){
-        constVal = id.substring(1, id.length - 1);
+    let targetHost = false;
+    if(targetAndPath.startsWith('`') && targetAndPath.endsWith('`')){
+        constVal = targetAndPath.substring(1, targetAndPath.length - 1);
         revisedID = undefined;
-    }else if(id.startsWith('#')){
-        revisedID = id.substring(1);
+    }else if(targetAndPath.startsWith('#')){
+        revisedID = targetAndPath.substring(1);
     }else{
         revisedID = undefined;
+        const host = ':host()';
+        if(targetAndPath.startsWith(host)){
+            targetHost = true;
+            targetAndPath = targetAndPath.substring(host.length);
+        }
     }
     let prop: string | undefined;
     let path: string | undefined;
@@ -37,6 +43,7 @@ export function parse(s: string) : IPE {
         as: asOrUndefined as asOptions,
         constVal,
         ish,
-        enhKey
+        enhKey,
+        host: targetHost
     };
 }
