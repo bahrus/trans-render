@@ -1,4 +1,4 @@
-async function find(el, specifier) {
+export async function find(el, specifier) {
     const { id, host } = specifier;
     if (id !== undefined)
         return el.getRootNode().getElementById(id);
@@ -6,4 +6,3 @@ async function find(el, specifier) {
         return el.getRootNode().host;
     return (await el.getHostish());
 }
-export {};
