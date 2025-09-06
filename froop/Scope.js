@@ -1,5 +1,6 @@
 import { RRMixin } from './RRMixin.js';
 import { assignGingerly } from '../lib/assignGingerly.js';
+export { regIsh } from 'mount-observer/refid/regIsh.js';
 const publicPrivateStore = Symbol();
 export class Scope extends RRMixin(EventTarget) {
     propagator = new EventTarget();
