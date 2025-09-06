@@ -54,10 +54,11 @@ export async function onMount(transformer, mo, matchingElement, uows, skipInit, 
                 await do$(transformer, matchingElement, $, uow);
                 continue;
             }
-            if ($$ !== undefined) {
-                const { do$$ } = await import('./do$$.js');
-                await do$$(transformer, matchingElement, $$, uow);
-            }
+            //TODO
+            // if($$ !== undefined){
+            //     const {do$$} = await import('./do$$.js');
+            //     await do$$(transformer, matchingElement, $$, uow);
+            // }
             //this is where we could look to see if we need to do update if already updated by server
             if (!no && (!skipInit || !ctx.initializing)) {
                 await mo.doUpdate(matchingElement, uow);

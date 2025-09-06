@@ -1,5 +1,5 @@
 import { IshEvent } from 'mount-observer/Newish.js';
-import { getCount } from '../dss/tref/getCount.js';
+import { getCount } from 'mount-observer/refid/getCount.js';
 import 'mount-observer/preloadContent.js';
 import 'mount-observer/refid/via.js';
 import { lispToCamel } from '../lib/lispToCamel.js';
@@ -152,9 +152,10 @@ export class Clone$ {
         }
         await waitForIdleNodes(nodesWeWantToWaitFor, idleTimeout);
         if (lastExisting.hasAttribute('itemref')) {
+            throw 'NI';
             //TODO:  use children?
-            const { tail } = await import('../dss/tref/tail.js');
-            lastExisting = tail(lastExisting);
+            // const {tail} = await import('../deprecated/tref/tail.js');
+            // lastExisting = tail(lastExisting)!;
         }
         lastExisting.after(fragment);
         for (let i = 0; i < templLen; i++) {

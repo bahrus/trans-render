@@ -9,13 +9,12 @@
 		"skipLibCheck": true
 	},
 	"include": [
-		"DSSArray.ts",
 		"Object$tring.ts",
 		"Object$entences.ts",
 		"Transform.ts",
 		"Mount.ts",
 		"dss/*",
-		"dss/tref/*",
+		"deprecated/tref/*",
 		"XV/*",
 		"XV/pull/*",
 		"lib/*",
@@ -31,7 +30,7 @@
 		"funions/Localizer.ts",
 		"asmr/",
 		"lib/weave.ts"
-	],
+, "deprecated/$cope.ts", "deprecated/find.ts", "deprecated/findR.ts", "deprecated/getHostish.ts", "deprecated/modulo.ts", "deprecated/$cope.js", "deprecated/find.js", "deprecated/findR.js", "deprecated/getHostish.js", "deprecated/modulo.js", "deprecated/parse.js", "deprecated/ip", "deprecated/pip", "deprecated/parse.ts"	],
 	"exclude":[
 		"node_modules/*"
 	]
