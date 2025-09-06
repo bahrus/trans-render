@@ -1,6 +1,6 @@
 import { splitOnce } from "../lib/splitOnce.js";
 export function parse(s) {
-    const [nonAsPart, asOrUndefined] = splitOnce(s, ' as ');
+    const [nonAsPart, asOrUndefined] = splitOnce(s, '-as-');
     const [nonEvtPart, evtName] = splitOnce(nonAsPart, '::');
     const [nonPropPath, propPath] = splitOnce(nonEvtPart, '?.');
     let [targetAndPath, ext] = splitOnce(nonPropPath, '+');
