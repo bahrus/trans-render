@@ -4,5 +4,5 @@ export async function find(el, specifier) {
         return el.getRootNode().getElementById(id);
     if (host === true)
         return el.getRootNode().host;
-    return (await el.getHostish());
+    return (await el.hostish());
 }
