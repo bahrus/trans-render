@@ -5,10 +5,10 @@ export class StOut<TProp=any> extends EventTarget implements
     AbsorbingObject, EventListenerObject {
     #so: SharingObject | undefined;
     #propagator: EventTarget | undefined;
-    #ref: WeakRef<Element>;
+    #ref: WeakRef<EventTarget>;
 
     constructor(
-        sourceEl: Element, 
+        sourceEl: EventTarget, 
         public ao: AbsOptions, 
         public disconnectedSignal?: AbortSignal,
     ){
@@ -69,9 +69,23 @@ export class StOut<TProp=any> extends EventTarget implements
 
     
 
-    async readMind(sourceEl: Element){
-        const {localName} = sourceEl;
+    async readMind(sourceEl: EventTarget){
         const ao = this.ao;
+        if(!(sourceEl instanceof Element)){
+            const propagator = (<any>sourceEl).propagator;
+            if(propagator instanceof EventTarget){
+                this.#propagator = propagator;
+                ao.isRAR = true;
+                let {propToAbsorb, propToAbsorbValueType} = ao; 
+                if(propToAbsorb == undefined) throw 'NI';
+                return;
+            }else{
+                throw 'NI';
+            }
+                    
+        };
+        const {localName} = sourceEl;
+        
         const isBuiltInEditable = builtInValuables.includes(localName);
         const {propToAbsorb, propToAbsorbValueType} = ao;
         const p2aUn = propToAbsorb === undefined;
@@ -126,10 +140,10 @@ export class StOut<TProp=any> extends EventTarget implements
         //this.dispatchEvent(new Event('readMind'));
     }
     #ac: AbortController | undefined;
-    async hydrate(sourceEl: Element){
+    async hydrate(sourceEl: EventTarget){
         const {ao} = this;
         const {propToAbsorb, isUE, evt, sota} = ao;
-        if(sota !== undefined){
+        if(sota !== undefined && sourceEl instanceof Element){
             const {hac} = await import('../../lib/hac.js');
             hac(sourceEl, sota, this);
             return;

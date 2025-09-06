@@ -64,8 +64,23 @@ export class StOut extends EventTarget {
         return val;
     }
     async readMind(sourceEl) {
-        const { localName } = sourceEl;
         const ao = this.ao;
+        if (!(sourceEl instanceof Element)) {
+            const propagator = sourceEl.propagator;
+            if (propagator instanceof EventTarget) {
+                this.#propagator = propagator;
+                ao.isRAR = true;
+                let { propToAbsorb, propToAbsorbValueType } = ao;
+                if (propToAbsorb == undefined)
+                    throw 'NI';
+                return;
+            }
+            else {
+                throw 'NI';
+            }
+        }
+        ;
+        const { localName } = sourceEl;
         const isBuiltInEditable = builtInValuables.includes(localName);
         const { propToAbsorb, propToAbsorbValueType } = ao;
         const p2aUn = propToAbsorb === undefined;
@@ -124,7 +139,7 @@ export class StOut extends EventTarget {
     async hydrate(sourceEl) {
         const { ao } = this;
         const { propToAbsorb, isUE, evt, sota } = ao;
-        if (sota !== undefined) {
+        if (sota !== undefined && sourceEl instanceof Element) {
             const { hac } = await import('../../lib/hac.js');
             hac(sourceEl, sota, this);
             return;

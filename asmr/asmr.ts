@@ -14,12 +14,12 @@ if(nonEmptyOptionsSharingObjMap === undefined){
     (<any>globalThis)[nonEmptyOptionsSharingSym] = nonEmptyOptionsSharingObjMap = new Map<SetOptions, WeakMap<Element, SharingObject>>();
 }
 
-let emptyOptionsAbsObjMap = (<any>globalThis)[emptyOptionsAbsorbingSym] as WeakMap<Element, AbsorbingObject>;
+let emptyOptionsAbsObjMap = (<any>globalThis)[emptyOptionsAbsorbingSym] as WeakMap<EventTarget, AbsorbingObject>;
 if(emptyOptionsAbsObjMap === undefined){
     (<any>globalThis)[emptyOptionsAbsorbingSym] = emptyOptionsAbsObjMap = new WeakMap<Element, AbsorbingObject>(); 
 }
 
-let nonEmptyOptionsAbsObjMap = (<any>globalThis)[nonEmptyOptionsAbsorbingSym] as Map<AbsOptions, WeakMap<Element, AbsorbingObject>>;
+let nonEmptyOptionsAbsObjMap = (<any>globalThis)[nonEmptyOptionsAbsorbingSym] as Map<AbsOptions, WeakMap<EventTarget, AbsorbingObject>>;
 if(nonEmptyOptionsAbsObjMap === undefined){
     (<any>globalThis)[nonEmptyOptionsAbsorbingSym] = nonEmptyOptionsAbsObjMap = new Map<AbsOptions, WeakMap<Element, AbsorbingObject>>();
 }
@@ -47,7 +47,7 @@ export class ASMR {
         
         return sharingObj;
     }
-    static async getAO(element: Element, options?: AbsOptions){
+    static async getAO(element: EventTarget, options?: AbsOptions){
         const optionsIsUndefined = options === undefined;
         if(optionsIsUndefined){
             if(emptyOptionsAbsObjMap.has(element)) return emptyOptionsAbsObjMap.get(element)!;
