@@ -62,7 +62,14 @@
       "default": "./asmr/stdEvt.js",
       "types": "./asmr/stdEvt.ts"
     },
-    "./dss/parse.js": "./dss/parse.js",
+    "./dss/find.js": {
+      "default": "./dss/find.js",
+      "types": "./dss/find.ts"
+    },
+    "./dss/parse.js": {
+      "default": "./dss/parse.js",
+      "types": "./dss/parse.ts"
+    },
     "./dss/tref/deleteEl.js": {
       "default": "./dss/tref/deleteEl.js",
       "types": "./dss/tref/deleteEl.ts"
@@ -274,7 +281,7 @@
     "XV/*.ts"
   ],
   "dependencies": {
-    "mount-observer": "0.0.94"
+    "mount-observer": "0.0.95"
   },
   "devDependencies": {
     "@playwright/test": "1.55.0",
