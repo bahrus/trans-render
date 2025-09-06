@@ -63,37 +63,9 @@
       "types": "./asmr/stdEvt.ts"
     },
     "./dss/parse.js": "./dss/parse.js",
-    "./dss/find.js": {
-      "default": "./dss/find.js",
-      "types": "./dss/find.ts"
-    },
-    "./dss/findR.js": {
-      "default": "./lib/findR.js",
-      "types": "./lib/findR.ts"
-    },
-    "./dss/getHostish.js": {
-      "default": "./dss/getHostish.js",
-      "types": "./dss/getHostish.ts"
-    },
     "./dss/tref/deleteEl.js": {
       "default": "./dss/tref/deleteEl.js",
       "types": "./dss/tref/deleteEl.ts"
-    },
-    "./dss/tref/getChildren.js": {
-      "default": "./dss/tref/getChildren.js",
-      "types": "./dss/tref/getChildren.ts"
-    },
-    "./dss/tref/getCount.js": {
-      "default": "./dss/tref/getCount.js",
-      "types": "./dss/tref/getCount.ts"
-    },
-    "./dss/tref/tagTempl.js": {
-      "default": "./dss/tref/tagTempl.js",
-      "types": "./dss/tref/tagTempl.ts"
-    },
-    "./dss/tref/querySelector.js": {
-      "default": "./dss/tref/querySelector.js",
-      "types": "./dss/tref/querySelector.ts"
     },
     "./funions/Localizer.js": "./functions/Localizer.js",
     "./froop/CE.js": {
