@@ -2,6 +2,7 @@ import { arr } from '../arr.js';
 import { RegExpExt, RegExpOrRegExpExt, StatementPartParser } from '../../ts-refs/trans-render/lib/prs/types.js'; 
 export { RegExpOrRegExpExt } from '../../ts-refs/trans-render/lib/prs/types.js'; 
 import {reNormalize} from '../../Object$entences.js'
+import { DSS } from '../../ts-refs/trans-render/dss/types.js';
 
 export async function tryParse<TParsedObj = any>(
     s: string, 
@@ -78,7 +79,7 @@ export async function tryParse<TParsedObj = any>(
             const { parse } = await import ('../../dss/parse.js');
             for(const dssKey of dssKeys){
                 const [partName, destProp] = dssKey;
-                const propVal = parsedObj[partName] as string;
+                const propVal = parsedObj[partName] as DSS;
                 if(propVal === undefined) continue;
                 parsedObj[destProp] = await parse(propVal);
             }
@@ -91,7 +92,7 @@ export async function tryParse<TParsedObj = any>(
                 const propVal = parsedObj[partName] as string;
                 if(propVal === undefined) continue;
                 const refs = splitRefs(propVal).filter(x => x !== 'and');
-                parsedObj[destProp] = refs.map(r => parse(r)); // TODO: make async if needed
+                parsedObj[destProp] = refs.map(r => parse(r as DSS)); // TODO: make async if needed
             }
         }
         //#endregion
