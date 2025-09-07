@@ -1,4 +1,4 @@
-import 'mount-observer/rifid/hostish.js';
+import 'mount-observer/refid/hostish.js';
 import { Specifier } from "../ts-refs/trans-render/dss/types";
 
 export async function find(el: Element, specifier: Specifier){
