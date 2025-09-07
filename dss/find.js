@@ -1,3 +1,4 @@
+import 'mount-observer/rifid/hostish.js';
 export async function find(el, specifier) {
     const { id, host } = specifier;
     if (id !== undefined)
