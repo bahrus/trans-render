@@ -1,47 +1,49 @@
 import { splitOnce } from "../lib/splitOnce.js";
+const host = ':host()';
+const oc = '?.';
 export function parse(s) {
-    const [nonAsPart, asOrUndefined] = splitOnce(s, '-as-');
-    const [nonEvtPart, evtName] = splitOnce(nonAsPart, '::');
-    const [nonPropPath, propPath] = splitOnce(nonEvtPart, '?.');
-    let [targetAndPath, ext] = splitOnce(nonPropPath, '+');
-    let revisedID = targetAndPath;
-    let constVal = undefined;
-    let targetHost = false;
-    if (targetAndPath.startsWith('`') && targetAndPath.endsWith('`')) {
-        constVal = targetAndPath.substring(1, targetAndPath.length - 1);
-        revisedID = undefined;
-    }
-    else if (targetAndPath.startsWith('#')) {
-        revisedID = targetAndPath.substring(1);
-    }
-    else {
-        revisedID = undefined;
-        const host = ':host()';
-        if (targetAndPath.startsWith(host)) {
-            targetHost = true;
-            targetAndPath = targetAndPath.substring(host.length);
-        }
-    }
+    const [beforeEvtPart, evtNameOrUndefined] = splitOnce(s, '::');
+    const [beforeAsPart, asOrUndefined] = splitOnce(beforeEvtPart, '-as-');
+    let revisedID;
+    let constVal;
     let prop;
     let path;
     let enhKey;
     let ish = false;
-    if (propPath !== undefined) {
-        [prop, path] = splitOnce(propPath, '?.');
+    let targetHost = false;
+    let ext;
+    if (beforeAsPart.startsWith('`') && beforeAsPart.endsWith('`')) {
+        constVal = beforeAsPart.substring(1, beforeAsPart.length - 1);
     }
-    if (ext !== undefined) {
-        if (ext === 'ish') {
-            ish = true;
+    else if (beforeAsPart.startsWith('#') || beforeAsPart.startsWith(host)) {
+        const [beforePropPath, propPath] = splitOnce(beforeAsPart, oc);
+        if (propPath !== undefined)
+            [prop, path] = splitOnce(propPath, oc);
+        if (beforeAsPart.startsWith('#')) {
+            revisedID = beforePropPath.substring(1);
+            [revisedID, ext] = splitOnce(revisedID, '+'); //untested
+            if (ext !== undefined) {
+                if (ext === 'ish') {
+                    ish = true;
+                }
+                else {
+                    enhKey = ext;
+                }
+            }
         }
         else {
-            enhKey = ext;
+            targetHost = true;
         }
+    }
+    else {
+        //hostish scenario
+        [prop, path] = splitOnce(beforeAsPart.substring(beforeAsPart.startsWith(oc) ? 2 : 0), '?.');
     }
     return {
         id: revisedID,
         path,
         prop,
-        evtName,
+        evtName: evtNameOrUndefined,
         as: asOrUndefined,
         constVal,
         ish,
