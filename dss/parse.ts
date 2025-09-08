@@ -1,9 +1,11 @@
 import { DSS, Specifier, asOptions } from "../ts-refs/trans-render/dss/types";
 import { splitOnce } from "../lib/splitOnce.js";
+const host = ':host()';
 export function parse(s: DSS) : Specifier {
     const [nonAsPart, asOrUndefined] = splitOnce(s, '-as-');
     const [nonEvtPart, evtName] = splitOnce(nonAsPart, '::');
     const [nonPropPath, propPath] = splitOnce(nonEvtPart, '?.');
+    //see if we 
     let [targetAndPath, ext] = splitOnce(nonPropPath, '+');
     let revisedID = targetAndPath as string | undefined;
     let constVal = undefined;
@@ -13,13 +15,12 @@ export function parse(s: DSS) : Specifier {
         revisedID = undefined;
     }else if(targetAndPath.startsWith('#')){
         revisedID = targetAndPath.substring(1);
-    }else{
+    }else if(targetAndPath.startsWith(host)){
         revisedID = undefined;
-        const host = ':host()';
-        if(targetAndPath.startsWith(host)){
-            targetHost = true;
-            targetAndPath = targetAndPath.substring(host.length);
-        }
+        targetHost = true;
+        targetAndPath = targetAndPath.substring(host.length);
+    }else{
+        //starts with path
     }
     let prop: string | undefined;
     let path: string | undefined;
