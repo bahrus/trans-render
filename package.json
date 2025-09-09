@@ -54,6 +54,10 @@
       "default": "./asmr/extractData/fromList.js",
       "types": "./asmr/extractData/fromList.ts"
     },
+    "./asmr/getConstVal.js": {
+      "default": "./asmr/getConstVal.js",
+      "types": "./asmr/getConstVal.js"
+    },
     "./asmr/stdProp.js": {
       "default": "./asmr/stdProp.js",
       "types": "./asmr/stdProp.ts"

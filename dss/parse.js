@@ -4,14 +4,7 @@ const oc = '?.';
 export function parse(s) {
     const [beforeEvtPart, evtNameOrUndefined] = splitOnce(s, '::');
     const [beforeAsPart, asOrUndefined] = splitOnce(beforeEvtPart, '-as-');
-    let revisedID;
-    let constVal;
-    let prop;
-    let path;
-    let enhKey;
-    let ish = false;
-    let targetHost = false;
-    let ext;
+    let revisedID, constVal, prop, path, enhKey, ish = false, targetHost = false, ext;
     if (beforeAsPart.startsWith('`') && beforeAsPart.endsWith('`')) {
         constVal = beforeAsPart.substring(1, beforeAsPart.length - 1);
     }
