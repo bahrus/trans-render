@@ -5,14 +5,11 @@ const oc = '?.';
 export function parse(s: DSS) : Specifier {
     const [beforeEvtPart, evtNameOrUndefined] = splitOnce(s, '::');
     const [beforeAsPart, asOrUndefined] = splitOnce(beforeEvtPart, '-as-');
-    let revisedID: string | undefined;
-    let constVal: string | undefined;
-    let prop: string | undefined;
-    let path: string | undefined;
-    let enhKey: string | undefined;
-    let ish = false;
-    let targetHost = false;
-    let ext: string | undefined;
+    let revisedID: string | undefined, constVal: string | undefined, prop: string | undefined, 
+        path: string | undefined, enhKey: string | undefined, ish = false, 
+        targetHost = false, ext: string | undefined
+    ;
+
     if(beforeAsPart.startsWith('`') && beforeAsPart.endsWith('`')){
         constVal = beforeAsPart.substring(1, beforeAsPart.length - 1);
     }else if(beforeAsPart.startsWith('#') || beforeAsPart.startsWith(host)){
