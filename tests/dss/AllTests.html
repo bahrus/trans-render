@@ -22,11 +22,12 @@
 
         async function runTest(){
             const test1 = await parse('$0+ish?.handle');
-            console.log('$0', test1);
-            if(!compare({self: true, host: false, prop: 'handle', ish: true}, test1)) return;;
-            //if(!test1.self || test1.host || test1.prop !== 'handle' || !test1.ish) return;
-
+            console.log({test1});
+            if(!compare({self: true, host: false, ish: true, prop: 'handle'}, test1)) return;;
             
+            const test2 = await parse('#abc');
+            console.log({test2});
+            if(!compare({self: false, host: false, ish: false, id: 'abc'}, test2)) return;
 
             target.setAttribute('mark', 'good');
         }
