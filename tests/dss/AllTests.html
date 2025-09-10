@@ -9,10 +9,24 @@
     <div id=target></div>
     <script type=module>
         import {parse} from '/dss/parse.js';
+
+        function compare(lhs, rhs){
+            for(const key in lhs){
+                if(lhs[key] !== rhs[key]) return false;
+            }
+            for(const key in rhs){
+                if(lhs[key] !== rhs[key]) return false;
+            }
+            return true;
+        }
+
         async function runTest(){
             const test1 = await parse('$0+ish?.handle');
             console.log('$0', test1);
-            if(!test1.self || test1.host || test1.prop !== 'handle' || !test1.ish) return;
+            if(!compare({self: true, host: false, prop: 'handle', ish: true}, test1)) return;;
+            //if(!test1.self || test1.host || test1.prop !== 'handle' || !test1.ish) return;
+
+            
 
             target.setAttribute('mark', 'good');
         }
