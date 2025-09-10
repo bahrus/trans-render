@@ -29,6 +29,10 @@
             console.log({test2});
             if(!compare({self: false, host: false, ish: false, id: 'abc'}, test2)) return;
 
+            const test3 = await parse('#abc?.prop1');
+            console.log({test3});
+            if(!compare({self: false, host: false, ish: false, id: 'abc', prop: 'prop1'}, test3)) return;
+
             target.setAttribute('mark', 'good');
         }
         runTest();
