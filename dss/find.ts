@@ -3,7 +3,7 @@ import { Specifier } from "../ts-refs/trans-render/dss/types";
 
 function getByIdInclusive(fragment: Node, id: string){
     if(fragment instanceof Element && fragment.id === id) return fragment;
-    if(fragment instanceof DocumentFragment) return fragment.getElementById(id);
+    if(fragment instanceof DocumentFragment || fragment instanceof Document) return fragment.getElementById(id);
     if(fragment instanceof Element) return fragment.querySelector(`#${id}`);
     throw 'NI';
 }
