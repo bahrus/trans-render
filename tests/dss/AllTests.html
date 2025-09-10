@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All DSS Tests</title>
+</head>
+<body>
+    <div id=target></div>
+    <script type=module>
+        import {parse} from '/dss/parse.js';
+        async function runTest(){
+            const test1 = await parse('$0+ish?.handle');
+            console.log('$0', test1);
+            if(!test1.self || test1.host || test1.prop !== 'handle' || !test1.ish) return;
+
+            target.setAttribute('mark', 'good');
+        }
+        runTest();
+
+    </script>
+</body>
+</html>
