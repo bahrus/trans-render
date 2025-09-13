@@ -5,6 +5,7 @@ const publicPrivateStore = Symbol();
 export class Scope extends RRMixin(EventTarget) {
     propagator = new EventTarget();
     [publicPrivateStore] = {};
+    #elRef;
     async covertAssignment(obj) {
         const props = this.constructor.props;
         const extObj = {};
@@ -16,6 +17,10 @@ export class Scope extends RRMixin(EventTarget) {
             extObj[key] = val;
         }
         await assignGingerly(this[publicPrivateStore], extObj);
+    }
+    channelEvent(event) {
+        event.enh = 'ish';
+        this.#elRef?.deref()?.dispatchEvent(event);
     }
     async 'arr=>'(self, arr) {
         if (!this.#config)
@@ -33,6 +38,7 @@ export class Scope extends RRMixin(EventTarget) {
      * @param el
      */
     async '<mount>'(self, el) {
+        this.#elRef = new WeakRef(el);
         const config = this.#config || {};
         const { propDefaults, propInfo, xform, mapParentScopeRefTo, ignoreItemProp, mapElTo } = config;
         if (propInfo !== undefined) {

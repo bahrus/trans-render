@@ -1,4 +1,4 @@
-//TODO:  support scoped shadow DOM
+//TODO:  Deprecate
 export async function ScopeScript(script) {
     const href = script.getAttribute('href');
     if (href === null || !href.startsWith('#'))

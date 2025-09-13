@@ -15,6 +15,8 @@ export class Scope<TProps = any, TActions = TProps>
     propagator = new EventTarget();
     [publicPrivateStore]: Partial<TProps> = {};
 
+    #elRef: WeakRef<Element> | undefined;
+
     async covertAssignment(obj: TProps){
         const props = (<any>this.constructor).props as IshPropLookup;
         const extObj: any = {};
@@ -26,6 +28,11 @@ export class Scope<TProps = any, TActions = TProps>
         }
         await assignGingerly(this[publicPrivateStore], extObj);
 
+    }
+
+    channelEvent(event: Event){
+        (<any>event).enh = 'ish';
+        this.#elRef?.deref()?.dispatchEvent(event);
     }
 
     async 'arr=>'(self: Scope, arr: any[]){
@@ -43,6 +50,7 @@ export class Scope<TProps = any, TActions = TProps>
      * @param el
      */
     async '<mount>'(self: Scope, el: Element){
+        this.#elRef = new WeakRef(el);
         const config = this.#config || {};
         const {propDefaults, propInfo, xform, mapParentScopeRefTo, ignoreItemProp, mapElTo} = config;
         if(propInfo !== undefined){
