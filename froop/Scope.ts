@@ -7,7 +7,6 @@ import {
 import { RoundAbout } from './roundabout.js';
 import { MountObserver } from 'mount-observer/MountObserver.js';
 import {Ishcycle} from '../ts-refs/mount-observer/types.js';
-import { splitOnce } from '../lib/splitOnce.js';
 export {regIsh} from 'mount-observer/refid/regIsh.js';
 
 const publicPrivateStore = Symbol();

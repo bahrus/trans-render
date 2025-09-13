@@ -1,4 +1,4 @@
-import { splitOnce } from "../lib/splitOnce";
+import { splitOnce } from "../lib/splitOnce.js";
 export class ExtHandler {
     key;
     options;
