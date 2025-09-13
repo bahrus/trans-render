@@ -40,7 +40,8 @@ export class Scope extends RRMixin(EventTarget) {
     async '<mount>'(self, el) {
         this.#elRef = new WeakRef(el);
         const config = this.#config || {};
-        const { propDefaults, propInfo, xform, mapParentScopeRefTo, ignoreItemProp, mapElTo } = config;
+        const { propDefaults, propInfo, xform, mapParentScopeRefTo, ignoreItemProp, mapElTo, extHandlers } = config;
+        //TODO: support propDefaults
         if (propInfo !== undefined) {
             this.#propUp(propInfo);
         }
@@ -54,6 +55,12 @@ export class Scope extends RRMixin(EventTarget) {
             });
         }
         ;
+        if (extHandlers !== undefined) {
+            const { ExtHandler } = await import('./ExtHandler.js');
+            for (const key in extHandlers) {
+                new ExtHandler(el, self, key, extHandlers[key]);
+            }
+        }
         //[TODO] make this private so can troubleshoot better
         //this.transform = transform;
         this.dispatchEvent(new Event('resolved'));

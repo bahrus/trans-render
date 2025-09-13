@@ -2,10 +2,12 @@ import {RRMixin} from './RRMixin.js';
 import {assignGingerly} from '../lib/assignGingerly.js';
 import {
     RoundaboutReady, BaseProps, PropInfo, PropInfoTypes, 
-    IshPropLookup, IshConfig, PropLookup} from '../ts-refs/trans-render/froop/types.js';
+    IshPropLookup, IshConfig, PropLookup,
+    ExtHandlerOptions} from '../ts-refs/trans-render/froop/types.js';
 import { RoundAbout } from './roundabout.js';
 import { MountObserver } from 'mount-observer/MountObserver.js';
 import {Ishcycle} from '../ts-refs/mount-observer/types.js';
+import { splitOnce } from '../lib/splitOnce.js';
 export {regIsh} from 'mount-observer/refid/regIsh.js';
 
 const publicPrivateStore = Symbol();
@@ -52,7 +54,8 @@ export class Scope<TProps = any, TActions = TProps>
     async '<mount>'(self: Scope, el: Element){
         this.#elRef = new WeakRef(el);
         const config = this.#config || {};
-        const {propDefaults, propInfo, xform, mapParentScopeRefTo, ignoreItemProp, mapElTo} = config;
+        const {propDefaults, propInfo, xform, mapParentScopeRefTo, ignoreItemProp, mapElTo, extHandlers} = config;
+        //TODO: support propDefaults
         if(propInfo !== undefined){
             this.#propUp(propInfo);
         }
@@ -67,6 +70,14 @@ export class Scope<TProps = any, TActions = TProps>
                 outside: '[itemscope]',
             });
         };
+
+        if(extHandlers !== undefined){
+            const {ExtHandler} = await import('./ExtHandler.js');
+            for(const key in extHandlers){
+                new ExtHandler(el, self, key, extHandlers[key] as ExtHandlerOptions);
+            }
+             
+        }
 
         //[TODO] make this private so can troubleshoot better
         //this.transform = transform;
@@ -97,6 +108,8 @@ export class Scope<TProps = any, TActions = TProps>
         if(mapElTo !== undefined){
              (<any>self)[mapElTo] = new WeakRef(el);
         }
+
+
     }
 
     // #ref: WeakRef<Scope> | undefined;
