@@ -61,7 +61,7 @@ export class Scope<TProps = any, TActions = TProps>
         
         if(xform !== undefined) {
             const {Transform} = await import('../Transform.js');
-            const transform = await Transform(el, this, xform, {
+            await Transform(el, this, xform, {
                 propagator: this.propagator,
                 propagatorIsReady: true,
                 outside: '[itemscope]',
