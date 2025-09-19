@@ -7,7 +7,7 @@
   "module": "trans-render.js",
   "types": "./ts-refs/trans-render/types.d.ts",
   "scripts": {
-    "serve": "python ./node_modules/ssi-server/ssi_server.py",
+    "serve": "node ./node_modules/spa-ssi/serve.js",
     "test": "playwright test",
     "doc": "wca analyze trans-render.js --outFile custom-elements.json",
     "package-check": "package-check",
@@ -281,11 +281,11 @@
     "XV/*.ts"
   ],
   "dependencies": {
-    "mount-observer": "0.0.98"
+    "mount-observer": "0.0.102"
   },
   "devDependencies": {
     "@playwright/test": "1.55.0",
-    "ssi-server": "0.0.1"
+    "spa-ssi": "0.0.9"
   },
   "repository": {
     "type": "git",
