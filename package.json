@@ -27,6 +27,10 @@
       "default": "./arr.js",
       "types": "./arr.ts"
     },
+    "./DSSArray.js": {
+      "default": "./DSSArray.js",
+      "types": "./DSSArray.ts"
+    },
     "./EventHandler.js": {
       "default": "./EventHandler.js",
       "types": "./EventHandler.ts"
@@ -39,8 +43,14 @@
       "default": "./Mount.js",
       "types": "./Mount.ts"
     },
-    "./Object$tring.js": "./Object$tring.js",
-    "./Object$entences.js": "./Object$entences.js",
+    "./Object$tring.js": {
+      "default": "./Object$tring.js",
+      "types": "./Object$tring.ts"
+    },
+    "./Object$entences.js": {
+      "default": "./Object$entences.js",
+      "types": "./Object$entences.ts"
+    },
     "./trans-render.js": "./trans-render.js",
     "./asmr/asmr.js": {
       "default": "./asmr/asmr.js",
