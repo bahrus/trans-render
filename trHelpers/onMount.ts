@@ -45,13 +45,16 @@ export async function onMount<TProps extends {}, TMethods = TProps, TElement = {
     } 
         
     for(const uow of uows){
-        const {w, y, $, $$, o} = uow;
+        const {w, y, $, $$, o, nudge} = uow;
         const no = o === undefined || (Array.isArray(o) && o.length === 0);
         if(w !== undefined){
             switch(typeof w){
                 case 'string':
                     if(!matchingElement.matches(w)) continue;
             }
+        }
+        if(nudge){
+            (await import('mount-observer/refid/nudge.js')).nudge(matchingElement);
         }
         if(y !== undefined){
             const {doYield} = await import('./doYield.js');

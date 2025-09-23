@@ -294,8 +294,8 @@
     "mount-observer": "0.0.102"
   },
   "devDependencies": {
-    "@playwright/test": "1.55.0",
-    "spa-ssi": "0.0.9"
+    "@playwright/test": "1.55.1",
+    "spa-ssi": "0.0.19"
   },
   "repository": {
     "type": "git",
