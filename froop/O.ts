@@ -60,7 +60,9 @@ export class O<TProps=any, TActions=TProps> extends RRMixin(HTMLElement) impleme
             new CustStSvc(this, this.#internals, customStatesToReflect);
         }
         const attrsToReflect = getComputedStyle(this).getPropertyValue('--attrs-to-reflect');
-        if(attrsToReflect !== ''){
+        const attrs = (<any>this.constructor).attrs as {[key: string] : PropInfo};
+        const propsToReflect = Object.values(attrs).filter(p => p!== undefined && p.reflect) as PropInfo[];
+        if(attrsToReflect !== '' || propsToReflect.length > 0){
             const {Reflector} = await import('./Reflector.js');
             const r = new Reflector(this, attrsToReflect);
         }

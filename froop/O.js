@@ -48,7 +48,9 @@ export class O extends RRMixin(HTMLElement) {
             new CustStSvc(this, this.#internals, customStatesToReflect);
         }
         const attrsToReflect = getComputedStyle(this).getPropertyValue('--attrs-to-reflect');
-        if (attrsToReflect !== '') {
+        const attrs = this.constructor.attrs;
+        const propsToReflect = Object.values(attrs).filter(p => p !== undefined && p.reflect);
+        if (attrsToReflect !== '' || propsToReflect.length > 0) {
             const { Reflector } = await import('./Reflector.js');
             const r = new Reflector(this, attrsToReflect);
         }

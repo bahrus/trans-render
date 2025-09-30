@@ -37,11 +37,11 @@ export class Reflector {
             parsedAttrsToReflect = attrsToReflect.split(',').map(s => s.trim());
         }
         for (const attr in attrs) {
-            if (!reflectAll && !parsedAttrsToReflect.includes(attr))
+            const propInfo = attrs[attr];
+            if (!reflectAll && !parsedAttrsToReflect.includes(attr) && !propInfo.reflect)
                 continue;
             const ac = new AbortController();
             this.#acs.push(ac);
-            const propInfo = attrs[attr];
             const { propName } = propInfo;
             const attrReflector = new AttrReflector(instance, attr, propName);
             propagator.addEventListener(propName, attrReflector, { signal: ac.signal });

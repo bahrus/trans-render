@@ -6,8 +6,8 @@ import {
     ExtHandlerOptions} from '../ts-refs/trans-render/froop/types.js';
 import { RoundAbout } from './roundabout.js';
 import { MountObserver } from 'mount-observer/MountObserver.js';
-import {Ishcycle} from '../ts-refs/mount-observer/types.js';
-export {regIsh} from 'mount-observer/refid/regIsh.js';
+import { Ishcycle } from '../ts-refs/mount-observer/types.js';
+export { regIsh } from 'mount-observer/refid/regIsh.js';
 
 const publicPrivateStore = Symbol();
 
