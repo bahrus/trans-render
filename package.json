@@ -88,7 +88,6 @@
       "default": "./dss/tref/deleteEl.js",
       "types": "./dss/tref/deleteEl.ts"
     },
-    "./funions/Localizer.js": "./functions/Localizer.js",
     "./froop/CE.js": {
       "default": "./froop/CE.js",
       "types": "./froop/CE.ts"
@@ -108,6 +107,10 @@
     "./froop/RRMixin.js": {
       "default": "./froop/RRMixin.js",
       "types": "./froop/RRMixin.ts"
+    },
+    "./funions/Localizer.js": {
+      "default": "./funions/Localizer.js",
+      "types": "./funions/Localizer.ts"
     },
     "./ipe/parse.js": {
       "default": "./ipe/parse.js",
@@ -294,7 +297,7 @@
     "mount-observer": "0.0.105"
   },
   "devDependencies": {
-    "@playwright/test": "1.55.1",
+    "@playwright/test": "1.56.1",
     "spa-ssi": "0.0.23"
   },
   "repository": {
