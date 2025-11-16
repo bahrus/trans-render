@@ -391,7 +391,7 @@ Template instantiation could help generate these mappings with reliability:
 
 ## Why the need for a separate script tag to support attribute mapping?
 
-Think about this example belo, and try to find a better way to avoid making the HTML markup huge (maybe there's a better way, but I think this balances several considerations fairly well);
+Think about this example below, and try to find a better way to avoid making the HTML markup huge (maybe there's a better way, but I think this balances several considerations fairly well):
 
 
 ```html
