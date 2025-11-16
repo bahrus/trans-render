@@ -364,17 +364,115 @@ Suppose WHATWG adopted another microdata attribute, say itempropmap, that would 
 
 
 ```html
+<script type=itempropmap id=images-mapping>
+    {
+        "alt": "imageDescription",
+        "data-date-of-image": "imageDateTime",
+    }
+</script>
+...
 <img
      alt="description of image" 
      data-date-of-image=2011-11-18T14:54:39.929Z 
-     itempropmap="alt:imageDescription;data-date-of-image:imageDateTime;"
+     itempropmap="images-mapping"
 >
 ```
 
 Template instantiation could help generate these mappings with reliability:
 
 ```html
-<template>
+<template generate-itempropmap=images-mapping>
     <img alt="{{i imageDescription}}" data-date-of-image="{{i imageDateTime}}">
 </template>
+```
+
+## Why the need for a separate script tag to support attribute mapping?
+
+Think about this example belo, and try to find a better way to avoid making the HTML markup huge (maybe there's a better way, but I think this balances several considerations fairly well);
+
+
+```html
+<script type=itempropmap id=animal-map>
+    {
+        "data-scientific-classification": {
+            "mapsTo": "taxonomy", 
+            "instanceOf": "Object"
+        },
+        "data-binomial-name": "species",
+        "data-population": {
+            "mapsTo": "totalCount",
+            "instanceOf": "Number"
+        },
+        "value": "key"
+    }
+</script>
+<select itemscope=animals id="pet-select" >
+    <button>
+        <selectedcontent></selectedcontent>
+    </button>
+
+    <option  value="">Please select a pet</option>
+    <option 
+      itemprop=animal
+      itempropmap=animal-map
+      itemscope 
+      value="cat" 
+      data-scientific-classification='{
+        "Kingdom": "Animalia", 
+        "Phylum": "Chordata",
+        "Class": "Mammalia",
+        "Order": "Carnivora",
+        "Family": "Felidae",
+        "Genus":  "Felis",
+        "Species":	"F. catus"
+      }'
+      data-binomial-name='Felis catus'
+      data-population=600_000_000
+    >
+        <span class="icon" 
+          aria-hidden="true"
+        itemprop="emoji">🐱</span>
+        <span itemprop="displayName" class="option-label">Cat</span>
+    </option>
+    <option 
+        itemprop=animal
+        itempropmap=animal-map
+        itemscope
+        value="dog"
+        data-scientific-classification='{
+            "Kingdom":	"Animalia",
+            "Phylum":	"Chordata",
+            "Class":	"Mammalia",
+            "Order":	"Carnivora",
+            "Family":	"Canidae",
+            "Genus":	"Canis",    
+            "Species":	"C. familiaris"
+        }'
+        data-binomial-name='Canis familiaris'
+        >
+        <span class="icon" 
+            itemprop=emoji  
+            aria-hidden="true">🐶</span>
+        <span class="option-label" itemprop=displayName>Dog</span>
+    </option>
+    <option
+        itemprop=animal
+        itempropmap=animal-map
+        itemscope 
+        value="hamster"
+        data-scientific-classification='{
+            "Kingdom":	    "Animalia",
+            "Phylum":	    "Chordata",
+            "Class":	    "Mammalia",
+            "Order":	    "Rodentia",
+            "Family":	    "Cricetidae",
+            "Subfamily":	"Cricetinae"
+        }'
+    >
+        <span class="icon"  
+            itemprop=emoji 
+            aria-hidden="true">🐹</span>
+        <span class="option-label" itemprop=displayName>Hamster</span>
+    </option>
+</select>
 ```
