@@ -1,7 +1,7 @@
 # Template Instantiation Developer Productivity Proposal
 
 Author:  Bruce B. Anderson
-Last Updated: Aug 11, 2025
+Last Updated: Nov 16, 2025
 
 The following outlines some productivity, and higher reliability enhancement proposals, that would make template instantiation more effective.
 
@@ -200,7 +200,10 @@ It [often arises](https://github.com/whatwg/html/issues/10143) that the id for o
 
 Examples are the label's for attribute, numerous aria- attributes, and microdata's itemref attributes.  In many cases (itemref, output's for attribute) we allow for a space delimited list of id's.
 
-To help with this, [I propose](https://blog.vuejs.org/posts/vue-3-5#useid):
+To help with this, I have two proposals:
+
+1.  For non looping content, support [auto id generation during initial parsing](https://github.com/whatwg/html/issues/11585).
+2.  For looping content with no parent element per loop, provide support thusly:
 
 ```html
 <template>
