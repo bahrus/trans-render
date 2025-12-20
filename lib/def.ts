@@ -23,28 +23,12 @@ export async function def(tagName: string, MyElementClass: any, cssImporter?: ()
     }
     if (cssImporter) {
         const styles = await cssImporter();
+        const { nestStyleSheet } = await import('./nestStyleSheet.js');
         document.adoptedStyleSheets = [nestStyleSheet(styles.default, name)];
     }
 
 }
 
-function nestStyleSheet(originalSheet: CSSStyleSheet, outerSelector: string): CSSStyleSheet {
-    const newSheet = new CSSStyleSheet();
 
-    // Build nested CSS text
-    let nestedRules = [];
-
-    for (const rule of originalSheet.cssRules) {
-        nestedRules.push(rule.cssText);
-    }
-
-    // Wrap all rules in the outer selector using nested CSS syntax
-    const nestedCSS = `${outerSelector} {
-        ${nestedRules.join('\n  ')}
-    }`;
-
-    newSheet.replaceSync(nestedCSS);
-    return newSheet;
-}
 
 
