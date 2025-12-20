@@ -16,7 +16,7 @@ export async function def(tagName: string, MyElementClass: any, cssImporter?: ()
             break;;
         } else {
             if (test === MyElementClass) {
-                break;
+                return;
             }
         }
         n++;
