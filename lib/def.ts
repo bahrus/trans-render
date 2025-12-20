@@ -1,4 +1,10 @@
 //TODO support scoped registries
+/**
+ * 
+ * @param tagName 
+ * @param MyElementClass 
+ * @param cssImporter 
+ */
 export async function def(tagName: string, MyElementClass: any, cssImporter?: () => Promise<string>){
     let n = 0;
     let name = tagName;
