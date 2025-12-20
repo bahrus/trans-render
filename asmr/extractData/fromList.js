@@ -1,4 +1,4 @@
-import { stdVal } from '../stdVal.js';
+import { stdVal } from 'mount-observer/refid/stdVal.js';
 export function fromList(el, itemprops) {
     const data = [];
     const itemScopes = el.querySelectorAll('[itemscope]');

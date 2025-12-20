@@ -1,3 +1,4 @@
+/** @deprecated -- use mount-observier/refid/stdVal.js */
 export function stdVal(el: Element){
     const {localName} = el;
     switch(localName){

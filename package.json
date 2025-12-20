@@ -294,11 +294,11 @@
     "XV/*.ts"
   ],
   "dependencies": {
-    "mount-observer": "0.0.105"
+    "mount-observer": "0.0.112"
   },
   "devDependencies": {
-    "@playwright/test": "1.56.1",
-    "spa-ssi": "0.0.23"
+    "@playwright/test": "1.57.0",
+    "spa-ssi": "0.0.25"
   },
   "repository": {
     "type": "git",
