@@ -1,4 +1,5 @@
-export function def(tagName: string, MyElementClass: any, ){
+//TODO support scoped registries
+export async function def(tagName: string, MyElementClass: any, cssImporter?: () => Promise<string>){
     let n = 0;
     let name = tagName;
     while(true){
@@ -14,4 +15,11 @@ export function def(tagName: string, MyElementClass: any, ){
         }
         n++;
     }
+    if(cssImporter){
+        const css = await cssImporter();
+        const style = document.createElement('style');
+        style.innerHTML = `${name} { ${css} }`;
+        document.head.appendChild(style);
+    }
+    
 }
